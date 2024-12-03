@@ -102,11 +102,11 @@ func (OrgMembership) Interceptors() []ent.Interceptor {
 func (OrgMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.OrgMembershipQuery](),
+			entfga.CheckReadAccess[*generated.OrgMembershipQuery](),
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
-			policy.CheckEditAccess[*generated.OrgMembershipMutation](),
+			entfga.CheckEditAccess[*generated.OrgMembershipMutation](),
 		),
 	)
 }

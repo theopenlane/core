@@ -102,10 +102,10 @@ func (Feature) Interceptors() []ent.Interceptor {
 func (Feature) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.FeatureQuery](),
+			entfga.CheckReadAccess[*generated.FeatureQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.FeatureMutation](),
+			entfga.CheckEditAccess[*generated.FeatureMutation](),
 		),
 	)
 }

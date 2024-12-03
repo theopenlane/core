@@ -85,10 +85,10 @@ func (Note) Interceptors() []ent.Interceptor {
 func (Note) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.NoteQuery](),
+			entfga.CheckReadAccess[*generated.NoteQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.NoteMutation](),
+			entfga.CheckEditAccess[*generated.NoteMutation](),
 		),
 	)
 }

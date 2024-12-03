@@ -101,11 +101,11 @@ func (Template) Annotations() []schema.Annotation {
 func (Template) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.TemplateQuery](),
+			entfga.CheckReadAccess[*generated.TemplateQuery](),
 		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			policy.CheckEditAccess[*generated.TemplateMutation](),
+			entfga.CheckEditAccess[*generated.TemplateMutation](),
 		),
 	)
 }

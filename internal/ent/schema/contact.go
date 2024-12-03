@@ -119,10 +119,10 @@ func (Contact) Interceptors() []ent.Interceptor {
 func (Contact) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.ContactQuery](),
+			entfga.CheckReadAccess[*generated.ContactQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.ContactMutation](),
+			entfga.CheckEditAccess[*generated.ContactMutation](),
 		),
 	)
 }

@@ -125,7 +125,7 @@ func (File) Annotations() []schema.Annotation {
 func (File) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.FileQuery](),
+			entfga.CheckReadAccess[*generated.FileQuery](),
 		),
 		policy.WithMutationRules(
 			privacy.OnMutationOperation(

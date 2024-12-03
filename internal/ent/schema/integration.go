@@ -80,10 +80,10 @@ func (Integration) Mixin() []ent.Mixin {
 func (Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.IntegrationQuery](),
+			entfga.CheckReadAccess[*generated.IntegrationQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.IntegrationMutation](),
+			entfga.CheckEditAccess[*generated.IntegrationMutation](),
 		),
 	)
 }

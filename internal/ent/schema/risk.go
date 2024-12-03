@@ -108,12 +108,12 @@ func (Risk) Annotations() []schema.Annotation {
 func (Risk) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.RiskQuery](),
+			entfga.CheckReadAccess[*generated.RiskQuery](),
 		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
-			policy.CheckEditAccess[*generated.RiskMutation](),
+			entfga.CheckEditAccess[*generated.RiskMutation](),
 		),
 	)
 }

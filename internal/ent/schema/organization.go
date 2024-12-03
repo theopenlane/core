@@ -229,7 +229,7 @@ func (Organization) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}), // Allow invite tokens to query the org ID they are invited to
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),    // Allow sign-up tokens to query the org ID they are subscribing to
-			policy.CheckReadAccess[*generated.OrganizationQuery](),            // access based on query context
+			entfga.CheckReadAccess[*generated.OrganizationQuery](),            // access based on query context
 			policy.CheckOrgReadAccess(),                                       // access based on auth context
 		),
 		policy.WithMutationRules(

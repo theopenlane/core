@@ -90,10 +90,10 @@ func (GroupMembership) Hooks() []ent.Hook {
 func (GroupMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.GroupMembershipQuery](),
+			entfga.CheckReadAccess[*generated.GroupMembershipQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.GroupMembershipMutation](),
+			entfga.CheckEditAccess[*generated.GroupMembershipMutation](),
 		),
 	)
 }

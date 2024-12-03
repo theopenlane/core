@@ -73,10 +73,10 @@ func (DocumentData) Annotations() []schema.Annotation {
 func (DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.DocumentDataQuery](),
+			entfga.CheckReadAccess[*generated.DocumentDataQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.DocumentDataMutation](),
+			entfga.CheckEditAccess[*generated.DocumentDataMutation](),
 		),
 	)
 }

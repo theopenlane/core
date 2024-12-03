@@ -180,11 +180,11 @@ func (Group) Hooks() []ent.Hook {
 func (Group) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.GroupQuery](),
+			entfga.CheckReadAccess[*generated.GroupQuery](),
 		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			policy.CheckEditAndDeleteAccess[*generated.GroupMutation](),
+			entfga.CheckEditAccess[*generated.GroupMutation](),
 		),
 	)
 }

@@ -145,11 +145,11 @@ func (Program) Interceptors() []ent.Interceptor {
 func (Program) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.ProgramQuery](),
+			entfga.CheckReadAccess[*generated.ProgramQuery](),
 		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			policy.CheckEditAndDeleteAccess[*generated.ProgramMutation](),
+			entfga.CheckEditAccess[*generated.ProgramMutation](),
 		),
 	)
 }

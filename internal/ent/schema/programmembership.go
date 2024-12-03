@@ -89,10 +89,10 @@ func (ProgramMembership) Hooks() []ent.Hook {
 func (ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.ProgramMembershipQuery](),
+			entfga.CheckReadAccess[*generated.ProgramMembershipQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.ProgramMembershipMutation](),
+			entfga.CheckEditAccess[*generated.ProgramMembershipMutation](),
 		),
 	)
 }

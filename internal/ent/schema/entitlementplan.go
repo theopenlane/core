@@ -104,10 +104,10 @@ func (EntitlementPlan) Hooks() []ent.Hook {
 func (EntitlementPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.EntitlementPlanQuery](),
+			entfga.CheckReadAccess[*generated.EntitlementPlanQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.EntitlementPlanMutation](),
+			entfga.CheckEditAccess[*generated.EntitlementPlanMutation](),
 		),
 	)
 }

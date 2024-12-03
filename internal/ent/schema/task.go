@@ -121,10 +121,10 @@ func (Task) Interceptors() []ent.Interceptor {
 func (Task) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.TaskQuery](),
+			entfga.CheckReadAccess[*generated.TaskQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.TaskMutation](),
+			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)
 }

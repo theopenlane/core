@@ -112,12 +112,12 @@ func (Procedure) Interceptors() []ent.Interceptor {
 func (Procedure) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.ProcedureQuery](),
+			entfga.CheckReadAccess[*generated.ProcedureQuery](),
 		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
-			policy.CheckEditAndDeleteAccess[*generated.ProcedureMutation](),
+			entfga.CheckEditAccess[*generated.ProcedureMutation](),
 		),
 	)
 }

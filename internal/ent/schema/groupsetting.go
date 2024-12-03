@@ -77,10 +77,10 @@ func (GroupSetting) Mixin() []ent.Mixin {
 func (GroupSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.GroupSettingQuery](),
+			entfga.CheckReadAccess[*generated.GroupSettingQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.GroupSettingMutation](),
+			entfga.CheckEditAccess[*generated.GroupSettingMutation](),
 		),
 	)
 }

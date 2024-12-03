@@ -38,18 +38,14 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 			return err
 		}
 
-		log.Debug().
-			Str("relation", relation).
-			Str("organization_id", oID).
-			Str("user_id", userID).
-			Msg("checking relationship tuples")
-
 		ac := fgax.AccessCheck{
 			SubjectID:   userID,
 			SubjectType: auth.GetAuthzSubjectType(ctx),
 			ObjectID:    oID,
 			Relation:    relation,
 		}
+
+		log.Debug().Interface("tuple", ac).Msg("checking relationship tuples")
 
 		access, err := m.Authz.CheckOrgAccess(ctx, ac)
 		if err != nil {

@@ -110,11 +110,11 @@ func (OrganizationSetting) Mixin() []ent.Mixin {
 func (OrganizationSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.OrganizationSettingQuery](), // access based on query context
+			entfga.CheckReadAccess[*generated.OrganizationSettingQuery](), // access based on query context
 			policy.CheckOrgReadAccess(),                                   // access based on auth context
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.OrganizationSettingMutation](),
+			entfga.CheckEditAccess[*generated.OrganizationSettingMutation](),
 			policy.CheckOrgWriteAccess(), // access based on auth context
 		),
 	)

@@ -99,10 +99,10 @@ func (EntitlementPlanFeature) Interceptors() []ent.Interceptor {
 func (EntitlementPlanFeature) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.EntitlementPlanFeatureQuery](),
+			entfga.CheckReadAccess[*generated.EntitlementPlanFeatureQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.EntitlementPlanFeatureMutation](),
+			entfga.CheckEditAccess[*generated.EntitlementPlanFeatureMutation](),
 		),
 	)
 }

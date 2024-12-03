@@ -56,6 +56,7 @@ func (q *APITokenQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -86,7 +87,7 @@ func (q *APITokenQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -94,20 +95,22 @@ func (q *APITokenQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *APITokenMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).APIToken.Get(reqCtx, id)
+
+			ob, err := m.Client().APIToken.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -140,7 +143,7 @@ func (m *APITokenMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -183,7 +186,7 @@ func (m *APITokenMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -227,6 +230,7 @@ func (q *ContactQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -257,7 +261,7 @@ func (q *ContactQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -265,20 +269,22 @@ func (q *ContactQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Contact.Get(reqCtx, id)
+
+			ob, err := m.Client().Contact.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -311,7 +317,7 @@ func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -354,7 +360,7 @@ func (m *ContactMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -398,6 +404,7 @@ func (q *ContactHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -428,7 +435,7 @@ func (q *ContactHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -485,7 +492,7 @@ func (q *ControlObjectiveQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -493,6 +500,7 @@ func (q *ControlObjectiveQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *ControlObjectiveMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -528,7 +536,7 @@ func (m *ControlObjectiveMutation) CheckAccessForEdit(ctx context.Context) error
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -571,7 +579,7 @@ func (m *ControlObjectiveMutation) CheckAccessForDelete(ctx context.Context) err
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -615,6 +623,7 @@ func (q *ControlObjectiveHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -645,7 +654,7 @@ func (q *ControlObjectiveHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -687,6 +696,7 @@ func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -717,7 +727,7 @@ func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -725,20 +735,22 @@ func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).DocumentData.Get(reqCtx, id)
+
+			ob, err := m.Client().DocumentData.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -771,7 +783,7 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -814,7 +826,7 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -858,6 +870,7 @@ func (q *DocumentDataHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -888,7 +901,7 @@ func (q *DocumentDataHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -930,6 +943,7 @@ func (q *EntitlementQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -960,7 +974,7 @@ func (q *EntitlementQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -968,20 +982,22 @@ func (q *EntitlementQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *EntitlementMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Entitlement.Get(reqCtx, id)
+
+			ob, err := m.Client().Entitlement.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -1014,7 +1030,7 @@ func (m *EntitlementMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1057,7 +1073,7 @@ func (m *EntitlementMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1101,6 +1117,7 @@ func (q *EntitlementHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -1131,7 +1148,7 @@ func (q *EntitlementHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1173,6 +1190,7 @@ func (q *EntitlementPlanQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -1203,7 +1221,7 @@ func (q *EntitlementPlanQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1211,20 +1229,22 @@ func (q *EntitlementPlanQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *EntitlementPlanMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).EntitlementPlan.Get(reqCtx, id)
+
+			ob, err := m.Client().EntitlementPlan.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -1257,7 +1277,7 @@ func (m *EntitlementPlanMutation) CheckAccessForEdit(ctx context.Context) error 
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1300,7 +1320,7 @@ func (m *EntitlementPlanMutation) CheckAccessForDelete(ctx context.Context) erro
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1344,6 +1364,7 @@ func (q *EntitlementPlanFeatureQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -1374,7 +1395,7 @@ func (q *EntitlementPlanFeatureQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1382,20 +1403,22 @@ func (q *EntitlementPlanFeatureQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *EntitlementPlanFeatureMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).EntitlementPlanFeature.Get(reqCtx, id)
+
+			ob, err := m.Client().EntitlementPlanFeature.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -1428,7 +1451,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForEdit(ctx context.Context)
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1471,7 +1494,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForDelete(ctx context.Contex
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1515,6 +1538,7 @@ func (q *EntitlementPlanFeatureHistoryQuery) CheckAccess(ctx context.Context) er
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -1545,7 +1569,7 @@ func (q *EntitlementPlanFeatureHistoryQuery) CheckAccess(ctx context.Context) er
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1587,6 +1611,7 @@ func (q *EntitlementPlanHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -1617,7 +1642,7 @@ func (q *EntitlementPlanHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1659,6 +1684,7 @@ func (q *EntityQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -1689,7 +1715,7 @@ func (q *EntityQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1697,20 +1723,22 @@ func (q *EntityQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Entity.Get(reqCtx, id)
+
+			ob, err := m.Client().Entity.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -1743,7 +1771,7 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1786,7 +1814,7 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1830,6 +1858,7 @@ func (q *EntityHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -1860,7 +1889,7 @@ func (q *EntityHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1902,6 +1931,7 @@ func (q *EntityTypeQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -1932,7 +1962,7 @@ func (q *EntityTypeQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -1940,20 +1970,22 @@ func (q *EntityTypeQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *EntityTypeMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).EntityType.Get(reqCtx, id)
+
+			ob, err := m.Client().EntityType.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -1986,7 +2018,7 @@ func (m *EntityTypeMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2029,7 +2061,7 @@ func (m *EntityTypeMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2073,6 +2105,7 @@ func (q *EntityTypeHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -2103,7 +2136,7 @@ func (q *EntityTypeHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2145,6 +2178,7 @@ func (q *FeatureQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -2175,7 +2209,7 @@ func (q *FeatureQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2183,20 +2217,22 @@ func (q *FeatureQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *FeatureMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Feature.Get(reqCtx, id)
+
+			ob, err := m.Client().Feature.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -2229,7 +2265,7 @@ func (m *FeatureMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2272,7 +2308,7 @@ func (m *FeatureMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2316,6 +2352,7 @@ func (q *FeatureHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -2346,7 +2383,7 @@ func (q *FeatureHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2403,7 +2440,7 @@ func (q *FileQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2411,6 +2448,7 @@ func (q *FileQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *FileMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -2446,7 +2484,7 @@ func (m *FileMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2489,7 +2527,7 @@ func (m *FileMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2533,6 +2571,7 @@ func (q *FileHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -2563,7 +2602,7 @@ func (q *FileHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2620,7 +2659,7 @@ func (q *GroupQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2628,6 +2667,7 @@ func (q *GroupQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -2663,7 +2703,7 @@ func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2706,7 +2746,7 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2750,6 +2790,7 @@ func (q *GroupHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -2780,7 +2821,7 @@ func (q *GroupHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2822,6 +2863,7 @@ func (q *GroupMembershipQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["groupid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -2852,7 +2894,7 @@ func (q *GroupMembershipQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2860,6 +2902,7 @@ func (q *GroupMembershipQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -2891,7 +2934,7 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 		if ok {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).GroupMembership.Query().Where(groupmembership.ID(id)).Only(reqCtx)
+			ob, err := m.Client().GroupMembership.Query().Where(groupmembership.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
@@ -2919,7 +2962,7 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -2962,7 +3005,7 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3006,6 +3049,7 @@ func (q *GroupMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["groupid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -3036,7 +3080,7 @@ func (q *GroupMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3078,6 +3122,7 @@ func (q *GroupSettingQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["groupid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -3108,7 +3153,7 @@ func (q *GroupSettingQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3116,6 +3161,7 @@ func (q *GroupSettingQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -3147,7 +3193,7 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 		if ok {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).GroupSetting.Query().Where(groupsetting.ID(id)).Only(reqCtx)
+			ob, err := m.Client().GroupSetting.Query().Where(groupsetting.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
@@ -3175,7 +3221,7 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3218,7 +3264,7 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3262,6 +3308,7 @@ func (q *GroupSettingHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["groupid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -3292,7 +3339,7 @@ func (q *GroupSettingHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3334,6 +3381,7 @@ func (q *IntegrationQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -3364,7 +3412,7 @@ func (q *IntegrationQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3372,20 +3420,22 @@ func (q *IntegrationQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *IntegrationMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Integration.Get(reqCtx, id)
+
+			ob, err := m.Client().Integration.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -3418,7 +3468,7 @@ func (m *IntegrationMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3461,7 +3511,7 @@ func (m *IntegrationMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3505,6 +3555,7 @@ func (q *IntegrationHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -3535,7 +3586,7 @@ func (q *IntegrationHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3592,7 +3643,7 @@ func (q *InternalPolicyQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3600,6 +3651,7 @@ func (q *InternalPolicyQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *InternalPolicyMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -3635,7 +3687,7 @@ func (m *InternalPolicyMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3678,7 +3730,7 @@ func (m *InternalPolicyMutation) CheckAccessForDelete(ctx context.Context) error
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3722,6 +3774,7 @@ func (q *InternalPolicyHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -3752,7 +3805,7 @@ func (q *InternalPolicyHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3794,6 +3847,7 @@ func (q *InviteQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -3824,7 +3878,7 @@ func (q *InviteQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3832,20 +3886,22 @@ func (q *InviteQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *InviteMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Invite.Get(reqCtx, id)
+
+			ob, err := m.Client().Invite.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -3878,7 +3934,7 @@ func (m *InviteMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3921,7 +3977,7 @@ func (m *InviteMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3980,7 +4036,7 @@ func (q *NarrativeQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -3988,6 +4044,7 @@ func (q *NarrativeQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *NarrativeMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -4023,7 +4080,7 @@ func (m *NarrativeMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4066,7 +4123,7 @@ func (m *NarrativeMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4110,6 +4167,7 @@ func (q *NarrativeHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -4140,7 +4198,7 @@ func (q *NarrativeHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4182,6 +4240,7 @@ func (q *NoteQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -4212,7 +4271,7 @@ func (q *NoteQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4220,20 +4279,22 @@ func (q *NoteQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Note.Get(reqCtx, id)
+
+			ob, err := m.Client().Note.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -4266,7 +4327,7 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4309,7 +4370,7 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4353,6 +4414,7 @@ func (q *NoteHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -4383,7 +4445,7 @@ func (q *NoteHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4425,6 +4487,7 @@ func (q *OauthProviderQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -4455,7 +4518,7 @@ func (q *OauthProviderQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4463,20 +4526,22 @@ func (q *OauthProviderQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *OauthProviderMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).OauthProvider.Get(reqCtx, id)
+
+			ob, err := m.Client().OauthProvider.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -4509,7 +4574,7 @@ func (m *OauthProviderMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4552,7 +4617,7 @@ func (m *OauthProviderMutation) CheckAccessForDelete(ctx context.Context) error 
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4596,6 +4661,7 @@ func (q *OauthProviderHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -4626,7 +4692,7 @@ func (q *OauthProviderHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4668,6 +4734,7 @@ func (q *OrgMembershipQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["organizationid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -4698,7 +4765,7 @@ func (q *OrgMembershipQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4706,6 +4773,7 @@ func (q *OrgMembershipQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -4737,7 +4805,7 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 		if ok {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).OrgMembership.Query().Where(orgmembership.ID(id)).Only(reqCtx)
+			ob, err := m.Client().OrgMembership.Query().Where(orgmembership.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
@@ -4765,7 +4833,7 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4808,7 +4876,7 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4852,6 +4920,7 @@ func (q *OrgMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["organizationid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -4882,7 +4951,7 @@ func (q *OrgMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4939,7 +5008,7 @@ func (q *OrganizationQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -4947,6 +5016,7 @@ func (q *OrganizationQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -4982,7 +5052,7 @@ func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5025,7 +5095,7 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5069,6 +5139,7 @@ func (q *OrganizationHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -5099,7 +5170,7 @@ func (q *OrganizationHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5141,6 +5212,7 @@ func (q *OrganizationSettingQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["organizationid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -5171,7 +5243,7 @@ func (q *OrganizationSettingQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5179,6 +5251,7 @@ func (q *OrganizationSettingQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -5210,7 +5283,7 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 		if ok {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).OrganizationSetting.Query().Where(organizationsetting.ID(id)).Only(reqCtx)
+			ob, err := m.Client().OrganizationSetting.Query().Where(organizationsetting.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
@@ -5238,7 +5311,7 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5281,7 +5354,7 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5325,6 +5398,7 @@ func (q *OrganizationSettingHistoryQuery) CheckAccess(ctx context.Context) error
 	if objectID == "" {
 		objectID, _ = gCtx.Args["organizationid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -5355,7 +5429,7 @@ func (q *OrganizationSettingHistoryQuery) CheckAccess(ctx context.Context) error
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5412,7 +5486,7 @@ func (q *ProcedureQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5420,6 +5494,7 @@ func (q *ProcedureQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *ProcedureMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -5455,7 +5530,7 @@ func (m *ProcedureMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5498,7 +5573,7 @@ func (m *ProcedureMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5542,6 +5617,7 @@ func (q *ProcedureHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -5572,7 +5648,7 @@ func (q *ProcedureHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5629,7 +5705,7 @@ func (q *ProgramQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5637,6 +5713,7 @@ func (q *ProgramQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *ProgramMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -5672,7 +5749,7 @@ func (m *ProgramMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5715,7 +5792,7 @@ func (m *ProgramMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5759,6 +5836,7 @@ func (q *ProgramHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -5789,7 +5867,7 @@ func (q *ProgramHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5831,6 +5909,7 @@ func (q *ProgramMembershipQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["programid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -5861,7 +5940,7 @@ func (q *ProgramMembershipQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5869,6 +5948,7 @@ func (q *ProgramMembershipQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -5900,7 +5980,7 @@ func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) erro
 		if ok {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).ProgramMembership.Query().Where(programmembership.ID(id)).Only(reqCtx)
+			ob, err := m.Client().ProgramMembership.Query().Where(programmembership.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
@@ -5928,7 +6008,7 @@ func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) erro
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -5971,7 +6051,7 @@ func (m *ProgramMembershipMutation) CheckAccessForDelete(ctx context.Context) er
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6015,6 +6095,7 @@ func (q *ProgramMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["programid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -6045,7 +6126,7 @@ func (q *ProgramMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6102,7 +6183,7 @@ func (q *RiskQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6110,6 +6191,7 @@ func (q *RiskQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *RiskMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -6145,7 +6227,7 @@ func (m *RiskMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6188,7 +6270,7 @@ func (m *RiskMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6232,6 +6314,7 @@ func (q *RiskHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -6262,7 +6345,7 @@ func (q *RiskHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6304,6 +6387,7 @@ func (q *SubscriberQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -6334,7 +6418,7 @@ func (q *SubscriberQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6342,20 +6426,22 @@ func (q *SubscriberQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *SubscriberMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Subscriber.Get(reqCtx, id)
+
+			ob, err := m.Client().Subscriber.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -6388,7 +6474,7 @@ func (m *SubscriberMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6431,7 +6517,7 @@ func (m *SubscriberMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6490,7 +6576,7 @@ func (q *TaskQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6498,6 +6584,7 @@ func (q *TaskQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *TaskMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -6533,7 +6620,7 @@ func (m *TaskMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6576,7 +6663,7 @@ func (m *TaskMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6620,6 +6707,7 @@ func (q *TaskHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ref"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -6650,7 +6738,7 @@ func (q *TaskHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6692,6 +6780,7 @@ func (q *TemplateQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -6722,7 +6811,7 @@ func (q *TemplateQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6730,20 +6819,22 @@ func (q *TemplateQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
-	orgID, oErr := auth.GetOrganizationIDFromContext(ctx)
 
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens when using a personal access token since it is authorized for multiple orgs
-	if orgID == "" || oErr != nil {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if orgID == "" || err != nil {
+		// if we still don't have an object id, run the query and grab the object ID
+		// from the result
+		// this happens when using a personal access token since it is authorized for multiple orgs
 		id, _ := m.ID()
 
 		if id != "" {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Template.Get(reqCtx, id)
+
+			ob, err := m.Client().Template.Get(reqCtx, id)
 			if err != nil {
 				log.Debug().Err(err).Msg("error getting object")
 
@@ -6776,7 +6867,7 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6819,7 +6910,7 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6863,6 +6954,7 @@ func (q *TemplateHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -6893,7 +6985,7 @@ func (q *TemplateHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6935,6 +7027,7 @@ func (q *WebhookQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -6965,7 +7058,7 @@ func (q *WebhookQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -6973,6 +7066,7 @@ func (q *WebhookQuery) CheckAccess(ctx context.Context) error {
 	// Skip to the next privacy rule (equivalent to return nil)
 	return privacy.Skip
 }
+
 func (m *WebhookMutation) CheckAccessForEdit(ctx context.Context) error {
 	var objectID string
 
@@ -7004,7 +7098,7 @@ func (m *WebhookMutation) CheckAccessForEdit(ctx context.Context) error {
 		if ok {
 			// allow this query to run
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := FromContext(ctx).Webhook.Query().Where(webhook.ID(id)).Only(reqCtx)
+			ob, err := m.Client().Webhook.Query().Where(webhook.ID(id)).Only(reqCtx)
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
@@ -7032,7 +7126,7 @@ func (m *WebhookMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -7075,7 +7169,7 @@ func (m *WebhookMutation) CheckAccessForDelete(ctx context.Context) error {
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}
@@ -7119,6 +7213,7 @@ func (q *WebhookHistoryQuery) CheckAccess(ctx context.Context) error {
 	if objectID == "" {
 		objectID, _ = gCtx.Args["ownerid"].(string)
 	}
+
 	// if we still don't have an object id, run the query and grab the object ID
 	// from the result
 	// this happens on join tables where we have the join ID (for updates and deletes)
@@ -7149,7 +7244,7 @@ func (q *WebhookHistoryQuery) CheckAccess(ctx context.Context) error {
 		ObjectID:    objectID,
 	}
 
-	access, err := FromContext(ctx).Authz.CheckAccess(ctx, ac)
+	access, err := q.Authz.CheckAccess(ctx, ac)
 	if err == nil && access {
 		return privacy.Allow
 	}

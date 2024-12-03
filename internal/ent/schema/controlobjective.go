@@ -111,12 +111,12 @@ func (ControlObjective) Annotations() []schema.Annotation {
 func (ControlObjective) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.ControlObjectiveQuery](),
+			entfga.CheckReadAccess[*generated.ControlObjectiveQuery](),
 		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
-			policy.CheckEditAccess[*generated.ControlObjectiveMutation](),
+			entfga.CheckEditAccess[*generated.ControlObjectiveMutation](),
 		),
 	)
 }

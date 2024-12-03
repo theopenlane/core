@@ -125,10 +125,10 @@ func (APIToken) Interceptors() []ent.Interceptor {
 func (APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.APITokenQuery](),
+			entfga.CheckReadAccess[*generated.APITokenQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.APITokenMutation](),
+			entfga.CheckEditAccess[*generated.APITokenMutation](),
 		),
 	)
 }

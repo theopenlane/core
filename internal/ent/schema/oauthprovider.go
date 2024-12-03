@@ -80,10 +80,10 @@ func (OauthProvider) Mixin() []ent.Mixin {
 func (OauthProvider) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.OauthProviderQuery](),
+			entfga.CheckReadAccess[*generated.OauthProviderQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.OauthProviderMutation](),
+			entfga.CheckEditAccess[*generated.OauthProviderMutation](),
 		),
 	)
 }

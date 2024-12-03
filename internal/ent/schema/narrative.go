@@ -88,12 +88,12 @@ func (Narrative) Annotations() []schema.Annotation {
 func (Narrative) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.NarrativeQuery](),
+			entfga.CheckReadAccess[*generated.NarrativeQuery](),
 		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
-			policy.CheckEditAccess[*generated.NarrativeMutation](),
+			entfga.CheckEditAccess[*generated.NarrativeMutation](),
 		),
 	)
 }

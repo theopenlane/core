@@ -90,10 +90,10 @@ func (EntityType) Interceptors() []ent.Interceptor {
 func (EntityType) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckReadAccess[*generated.EntityTypeQuery](),
+			entfga.CheckReadAccess[*generated.EntityTypeQuery](),
 		),
 		policy.WithMutationRules(
-			policy.CheckEditAccess[*generated.EntityTypeMutation](),
+			entfga.CheckEditAccess[*generated.EntityTypeMutation](),
 		),
 	)
 }

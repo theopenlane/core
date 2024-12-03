@@ -141,12 +141,12 @@ func (Subscriber) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
-			policy.CheckReadAccess[*generated.SubscriberQuery](),
+			entfga.CheckReadAccess[*generated.SubscriberQuery](),
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
-			policy.CheckEditAccess[*generated.SubscriberMutation](),
+			entfga.CheckEditAccess[*generated.SubscriberMutation](),
 		),
 	)
 }
