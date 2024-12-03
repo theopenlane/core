@@ -12,8 +12,26 @@ func (sc *StripeClient) CreateCustomer(email string) (*stripe.Customer, error) {
 	return customer, nil
 }
 
+func (sc *StripeClient) CreateNewCustomer(c *OrganizationCustomer) (*stripe.Customer, error) {
+	customer, err := sc.Client.Customers.New(&stripe.CustomerParams{
+		Email: &c.BillingEmail,
+		Name:  &c.OrganizationID,
+		Phone: &c.BillingPhone,
+		Metadata: map[string]string{
+			"organization_id":          c.OrganizationID,
+			"organization_settings_id": c.OrganizationSettingsID,
+			"organization_name":        c.OrganizationName,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return customer, nil
+}
+
 // GetCustomerByID gets a customer by ID
-func (sc *StripeClient) GetCustomerByID(id string) (*stripe.Customer, error) {
+func (sc *StripeClient) GetCustomerByStripeID(id string) (*stripe.Customer, error) {
 	customer, err := sc.Client.Customers.Get(id, nil)
 	if err != nil {
 		return nil, err

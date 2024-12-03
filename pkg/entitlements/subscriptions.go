@@ -79,8 +79,8 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 	params := &stripe.SubscriptionParams{
 		Customer: stripe.String(customerID),
 		Items: []*stripe.SubscriptionItemsParams{
-			{ // the other available option beyond using a config parameter / config option is to use the lookup key but given we intend to have all trial customers on the same "tier" to start that seemed excessive
-				Price: &sc.trialSubscriptionPriceID,
+			{
+				Price: &sc.config.TrialSubscriptionPriceID,
 			},
 		},
 		TrialPeriodDays: stripe.Int64(trialdays),
@@ -152,4 +152,28 @@ func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscr
 	}
 
 	return subscription
+}
+
+// CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
+func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  &custID,
+		ReturnURL: &sc.config.StripeBillingPortalSuccessURL,
+		FlowData: &stripe.BillingPortalSessionFlowDataParams{
+			Type: stripe.String("subscription_update"),
+			SubscriptionUpdate: &stripe.BillingPortalSessionFlowDataSubscriptionUpdateParams{
+				Subscription: &subsID,
+			},
+		},
+	}
+
+	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
+	if err != nil {
+		return Checkout{}, err
+	}
+
+	return Checkout{
+		ID:  billingPortalSession.ID,
+		URL: billingPortalSession.URL,
+	}, nil
 }

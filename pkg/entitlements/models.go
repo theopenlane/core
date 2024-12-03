@@ -14,6 +14,15 @@ type Customer struct {
 	StripeCustomer []stripe.Customer
 }
 
+type OrganizationCustomer struct {
+	OrganizationID         string `json:"organization_id" yaml:"organization_id"`
+	OrganizationSettingsID string `json:"organization_settings_id" yaml:"organization_settings_id"`
+	StripeCustomerID       string `json:"stripe_customer_id" yaml:"stripe_customer_id"`
+	BillingEmail           string `json:"billing_email" yaml:"billing_email"`
+	BillingPhone           string `json:"billing_phone" yaml:"billing_phone"`
+	OrganizationName       string `json:"organization_name" yaml:"organization_name"`
+}
+
 // Plan is the recurring context that holds the payment information
 type Plan struct {
 	ID                 string `json:"plan_id" yaml:"plan_id"`

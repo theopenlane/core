@@ -9,19 +9,80 @@ import (
 	"entgo.io/ent"
 
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v81"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
 
-// EventID is a struct to hold the ID of an event
+type Eventer struct {
+	Emitter   *soiree.EventPool
+	Event     soiree.BaseEvent
+	EventID   string `json:"id,omitempty"`
+	HookFuncs []EventHookFunc
+	EntClient *entgen.Client
+}
+
+type EventerOpts (func(*Eventer))
+
+type EventHookFunc func(ctx context.Context, m ent.Mutation) error
+
+func NewEventer(opts ...EventerOpts) *Eventer {
+	e := &Eventer{}
+
+	for _, opt := range opts {
+		opt(e)
+	}
+
+	return e
+}
+
+func WithEventerEmitter(emitter *soiree.EventPool) EventerOpts {
+	return func(e *Eventer) {
+		e.Emitter = emitter
+	}
+}
+
+// InitEventPool initializes an event pool with a client and a error handler
+func NewEventerPool(client interface{}) *Eventer {
+	pool := soiree.NewEventPool(
+		soiree.WithPool(
+			soiree.NewPondPool(
+				soiree.WithMaxWorkers(100),
+				soiree.WithName("ent_event_pool"))),
+		soiree.WithClient(client))
+
+	return NewEventer(WithEventerEmitter(pool))
+}
+
+func (e *Eventer) AddHookFunc(fn EventHookFunc) {
+	e.HookFuncs = append(e.HookFuncs, fn)
+}
+
 type EventID struct {
 	ID string `json:"id,omitempty"`
 }
 
+func parseEventID(retVal ent.Value) (*EventID, error) {
+	out, err := json.Marshal(retVal)
+	if err != nil {
+		log.Err(err).Msg("Failed to marshal return value")
+		return nil, err
+	}
+
+	event := EventID{}
+	if err := json.Unmarshal(out, &event); err != nil {
+		log.Err(err).Msg("Failed to unmarshal return value")
+		return nil, err
+	}
+
+	return &event, nil
+}
+
 // EmitEventHook emits an event to the event pool when a mutation is performed
-func EmitEventHook(pool *soiree.EventPool) ent.Hook {
+func EmitEventHook(e *Eventer) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
 			retVal, err := next.Mutate(ctx, mutation)
@@ -29,60 +90,58 @@ func EmitEventHook(pool *soiree.EventPool) ent.Hook {
 				return nil, err
 			}
 
-			// if the return value is an int, it's a count of the number of rows affected
-			// and we don't want to emit an event for that
 			if reflect.TypeOf(retVal).Kind() == reflect.Int {
 				log.Debug().Interface("value", retVal).Msg("mutation returned an int, skipping event emission")
 
 				return retVal, err
 			}
 
-			op := mutation.Op()
-			typ := mutation.Type()
-			fields := mutation.Fields()
+			emit := func() {
+				eventID, err := parseEventID(retVal)
+				if err != nil {
+					return
+				}
 
-			out, err := json.Marshal(retVal)
-			if err != nil {
-				log.Err(err).Msg("Failed to marshal return value")
-			}
+				event := soiree.NewBaseEvent(fmt.Sprintf("%s.%s", mutation.Type(), mutation.Op()), mutation)
+				event.Properties().Set("ID", eventID.ID)
 
-			other := EventID{}
-			if err := json.Unmarshal(out, &other); err != nil {
-				log.Err(err).Msg("Failed to unmarshal return value")
-			}
+				for _, field := range mutation.Fields() {
+					value, exists := mutation.Field(field)
+					if exists {
+						event.Properties().Set(field, value)
+					}
+				}
 
-			// create a new event unfilitered for every mutation
-			// this pushes events into the pool but they are only actioned against if there is a listener
-			event := soiree.NewBaseEvent(fmt.Sprintf("%s.%s", typ, op), mutation)
-			event.Properties().Set("ID", other.ID)
+				event.SetContext(context.WithoutCancel(ctx))
+				event.SetClient(e.Emitter.GetClient())
 
-			for _, field := range fields {
-				value, exists := mutation.Field(field)
-				if exists {
-					event.Properties().Set(field, value)
+				if err := e.Emitter.Emit(event.Topic(), event); err != nil {
+					if emitErr := <-err; emitErr != nil {
+						log.Err(emitErr).Msg("cannot emit event")
+					}
+				} else {
+					log.Warn().Msg("event emitted")
 				}
 			}
 
-			event.SetContext(context.WithoutCancel(ctx))
-			event.SetClient(pool.GetClient())
-			pool.Emit(event.Topic(), event)
+			if tx := entgen.TxFromContext(ctx); tx != nil {
+				tx.OnCommit(func(next entgen.Committer) entgen.Committer {
+					return entgen.CommitFunc(func(ctx context.Context, tx *entgen.Tx) error {
+						err := next.Commit(ctx, tx)
+						if err == nil {
+							emit()
+						}
+
+						return err
+					})
+				})
+			} else {
+				emit()
+			}
 
 			return retVal, err
 		})
 	}
-}
-
-// RegisterGlobalHooks registers global hooks for the ent client with the initialized event pool
-func RegisterGlobalHooks(client *entgen.Client, pool *soiree.EventPool) {
-	client.Use(EmitEventHook(pool))
-}
-
-// InitEventPool initializes an event pool with a client and a error handler
-func InitEventPool(client interface{}) *soiree.EventPool {
-	return soiree.NewEventPool(soiree.WithPool(soiree.NewPondPool(soiree.WithMaxWorkers(100), soiree.WithName("ent_event_pool"))), soiree.WithErrorHandler(func(event soiree.Event, err error) error { // nolint: mnd
-		log.Printf("Error encountered during event '%s': %v, with payload: %v", event.Topic(), err, event.Payload())
-		return nil
-	}), soiree.WithClient(client))
 }
 
 // TODO: template out listeners for all mutation types and create hooks that allow functions to be easily called from within the codebase to perform actions on those events
@@ -243,4 +302,27 @@ func checkForBillingUpdate(props map[string]interface{}, stripeCustomer *stripe.
 	}
 
 	return
+}
+
+func HasFields(m ent.Mutation, err error, fields ...string) bool {
+	_, ok := lo.Find(fields, func(field string) bool {
+		_, ok := m.Field(field)
+		return ok
+	})
+
+	return ok
+}
+
+func HasFieldHook(err error, fields ...string) ent.Hook {
+	return hook.If(hook.FixedError(err),
+		func(ctx context.Context, m ent.Mutation) bool {
+			_, ok := lo.Find(fields, func(field string) bool {
+				_, ok := m.Field(field)
+
+				return ok
+			})
+
+			return ok
+		},
+	)
 }

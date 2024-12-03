@@ -114,31 +114,6 @@ func (sc *StripeClient) GetPrices() []Price {
 	return prices
 }
 
-// TODO determine what return URL is needed (if any) and move to a more accessible location vs. hardcoded
-// CreateCheckoutSession creates a new checkout session for the customer portal and given product and price
-func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
-	params := &stripe.BillingPortalSessionParams{
-		Customer:  &custID,
-		ReturnURL: stripe.String("http://localhost:3001/organization-settings/billing-usage/pricing"),
-		FlowData: &stripe.BillingPortalSessionFlowDataParams{
-			Type: stripe.String("subscription_update"),
-			SubscriptionUpdate: &stripe.BillingPortalSessionFlowDataSubscriptionUpdateParams{
-				Subscription: &subsID,
-			},
-		},
-	}
-
-	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
-	if err != nil {
-		return Checkout{}, err
-	}
-
-	return Checkout{
-		ID:  billingPortalSession.ID,
-		URL: billingPortalSession.URL,
-	}, nil
-}
-
 // WritePlansToYAML writes the []Product information into a YAML file.
 func WritePlansToYAML(product []Product, filename string) error {
 	// Marshal the []Product information into YAML
