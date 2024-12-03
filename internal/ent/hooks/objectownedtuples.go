@@ -71,10 +71,10 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
 					return nil, err
 				}
-			}
 
-			log.Debug().Interface("tuples", addTuples).Msg("added object permissions")
-			log.Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
+				log.Debug().Interface("tuples", addTuples).Msg("added object permissions")
+				log.Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
+			}
 
 			return retVal, err
 		},
@@ -118,10 +118,10 @@ func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.H
 				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
 					return nil, err
 				}
-			}
 
-			log.Debug().Interface("tuples", addTuples).Msg("added tuples")
-			log.Debug().Interface("tuples", removeTuples).Msg("removed tuples")
+				log.Debug().Interface("tuples", addTuples).Msg("added tuples")
+				log.Debug().Interface("tuples", removeTuples).Msg("removed tuples")
+			}
 
 			return retVal, err
 		},
