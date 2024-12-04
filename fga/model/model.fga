@@ -52,6 +52,8 @@ type organization
 
     define control_creator: [group#member]
     define can_create_control: can_edit or control_creator
+    # subcontrols inherit access from their parent control
+    define can_create_subcontrol: can_edit or control_creator
 
     define control_objective_creator: [group#member]
     define can_create_control_objective: can_edit or control_objective_creator
@@ -148,17 +150,14 @@ type control
     define viewer: [group#member]
     define editor: [group#member]
     define blocked: [user, group#member]
-# subcontrols inherit access from their parent control or from associated groups
-# the subcontrol author will be assigned as an admin of the subcontrol
+# subcontrols are associated with an organization but do not inherit access from the organization
+# subcontrols inherit access from the their parent control(s)
 type subcontrol
   relations
-    define can_view: [user] or ((can_view from parent or viewer) but not blocked)
-    define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
-    define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
     define parent: [user, service, control]
-    define viewer: [group#member]
-    define editor: [group#member]
-    define blocked: [user, group#member]
 # control objectives inherit access from the associated program or from associated groups
 # the control objective author will be assigned as an admin of the control objective
 type controlobjective

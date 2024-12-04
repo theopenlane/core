@@ -122,6 +122,20 @@ func (shu *SubcontrolHistoryUpdate) ClearTags() *SubcontrolHistoryUpdate {
 	return shu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (shu *SubcontrolHistoryUpdate) SetOwnerID(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetOwnerID(s)
+	return shu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableOwnerID(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetOwnerID(*s)
+	}
+	return shu
+}
+
 // SetName sets the "name" field.
 func (shu *SubcontrolHistoryUpdate) SetName(s string) *SubcontrolHistoryUpdate {
 	shu.mutation.SetName(s)
@@ -435,7 +449,9 @@ func (shu *SubcontrolHistoryUpdate) Mutation() *SubcontrolHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (shu *SubcontrolHistoryUpdate) Save(ctx context.Context) (int, error) {
-	shu.defaults()
+	if err := shu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
 }
 
@@ -462,11 +478,15 @@ func (shu *SubcontrolHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shu *SubcontrolHistoryUpdate) defaults() {
+func (shu *SubcontrolHistoryUpdate) defaults() error {
 	if _, ok := shu.mutation.UpdatedAt(); !ok && !shu.mutation.UpdatedAtCleared() {
+		if subcontrolhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.UpdateDefaultUpdatedAt()
 		shu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -527,6 +547,9 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	}
 	if shu.mutation.TagsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := shu.mutation.OwnerID(); ok {
+		_spec.SetField(subcontrolhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if value, ok := shu.mutation.Name(); ok {
 		_spec.SetField(subcontrolhistory.FieldName, field.TypeString, value)
@@ -732,6 +755,20 @@ func (shuo *SubcontrolHistoryUpdateOne) AppendTags(s []string) *SubcontrolHistor
 // ClearTags clears the value of the "tags" field.
 func (shuo *SubcontrolHistoryUpdateOne) ClearTags() *SubcontrolHistoryUpdateOne {
 	shuo.mutation.ClearTags()
+	return shuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetOwnerID(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetOwnerID(s)
+	return shuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableOwnerID(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetOwnerID(*s)
+	}
 	return shuo
 }
 
@@ -1061,7 +1098,9 @@ func (shuo *SubcontrolHistoryUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated SubcontrolHistory entity.
 func (shuo *SubcontrolHistoryUpdateOne) Save(ctx context.Context) (*SubcontrolHistory, error) {
-	shuo.defaults()
+	if err := shuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
 }
 
@@ -1088,11 +1127,15 @@ func (shuo *SubcontrolHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shuo *SubcontrolHistoryUpdateOne) defaults() {
+func (shuo *SubcontrolHistoryUpdateOne) defaults() error {
 	if _, ok := shuo.mutation.UpdatedAt(); !ok && !shuo.mutation.UpdatedAtCleared() {
+		if subcontrolhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.UpdateDefaultUpdatedAt()
 		shuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -1170,6 +1213,9 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	}
 	if shuo.mutation.TagsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := shuo.mutation.OwnerID(); ok {
+		_spec.SetField(subcontrolhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if value, ok := shuo.mutation.Name(); ok {
 		_spec.SetField(subcontrolhistory.FieldName, field.TypeString, value)

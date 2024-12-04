@@ -29,12 +29,12 @@ func init() {
 	createCmd.Flags().StringP("version", "v", "", "version of the control")
 	createCmd.Flags().StringP("number", "u", "", "number of the control")
 	createCmd.Flags().StringP("family", "f", "", "family of the control")
-	createCmd.Flags().StringP("class", "c", "", "class of the control")
+	createCmd.Flags().StringP("class", "l", "", "class of the control")
 	createCmd.Flags().StringP("source", "o", "", "source of the control")
 	createCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks with the control")
 	createCmd.Flags().StringP("satisfies", "a", "", "control objectives satisfied by the control")
 
-	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the risk")
+	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the control")
 }
 
 // createValidation validates the required fields for the command

@@ -70,6 +70,10 @@ mutation CreateControl($input: CreateControlInput!) {
       updatedAt
       updatedBy
       version
+      subcontrols {
+        id
+        name
+      }
       programs {
         id
         name
@@ -118,6 +122,10 @@ query GetAllControls {
         updatedAt
         updatedBy
         version
+        subcontrols {
+          id
+          name
+        }
         programs {
           id
           name
@@ -158,6 +166,10 @@ query GetControlByID($controlId: ID!) {
     updatedAt
     updatedBy
     version
+    subcontrols {
+      id
+      name
+    }
     programs {
       id
       name
@@ -199,6 +211,10 @@ query GetControls($where: ControlWhereInput) {
         updatedAt
         updatedBy
         version
+        subcontrols {
+          id
+          name
+       }
         programs {
           id
           name
@@ -240,6 +256,10 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       updatedAt
       updatedBy
       version
+      subcontrols {
+        id
+        name
+      }
       programs {
         id
         name

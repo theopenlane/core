@@ -82,6 +82,10 @@ mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
       updatedAt
       updatedBy
       version
+      controls {
+        id
+        name
+      }
     }
   }
 }
@@ -118,6 +122,10 @@ query GetAllSubcontrols {
         updatedAt
         updatedBy
         version
+        controls {
+          id
+          name
+        }
       }
     }
   }
@@ -146,6 +154,10 @@ query GetSubcontrolByID($subcontrolId: ID!) {
     updatedAt
     updatedBy
     version
+    controls {
+      id
+      name
+    }
   }
 }
 
@@ -175,6 +187,10 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
         updatedAt
         updatedBy
         version
+        controls {
+          id
+          name
+        }
       }
     }
   }
@@ -204,6 +220,10 @@ mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInpu
       updatedAt
       updatedBy
       version
+      controls {
+        id
+        name
+      }
     }
   }
 }

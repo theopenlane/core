@@ -159,6 +159,12 @@ func (shc *SubcontrolHistoryCreate) SetTags(s []string) *SubcontrolHistoryCreate
 	return shc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (shc *SubcontrolHistoryCreate) SetOwnerID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetOwnerID(s)
+	return shc
+}
+
 // SetName sets the "name" field.
 func (shc *SubcontrolHistoryCreate) SetName(s string) *SubcontrolHistoryCreate {
 	shc.mutation.SetName(s)
@@ -388,7 +394,9 @@ func (shc *SubcontrolHistoryCreate) Mutation() *SubcontrolHistoryMutation {
 
 // Save creates the SubcontrolHistory in the database.
 func (shc *SubcontrolHistoryCreate) Save(ctx context.Context) (*SubcontrolHistory, error) {
-	shc.defaults()
+	if err := shc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
 }
 
@@ -415,20 +423,32 @@ func (shc *SubcontrolHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *SubcontrolHistoryCreate) defaults() {
+func (shc *SubcontrolHistoryCreate) defaults() error {
 	if _, ok := shc.mutation.HistoryTime(); !ok {
+		if subcontrolhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.DefaultHistoryTime()
 		shc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := shc.mutation.CreatedAt(); !ok {
+		if subcontrolhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.DefaultCreatedAt()
 		shc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := shc.mutation.UpdatedAt(); !ok {
+		if subcontrolhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.DefaultUpdatedAt()
 		shc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := shc.mutation.MappingID(); !ok {
+		if subcontrolhistory.DefaultMappingID == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultMappingID (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.DefaultMappingID()
 		shc.mutation.SetMappingID(v)
 	}
@@ -437,9 +457,13 @@ func (shc *SubcontrolHistoryCreate) defaults() {
 		shc.mutation.SetTags(v)
 	}
 	if _, ok := shc.mutation.ID(); !ok {
+		if subcontrolhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.DefaultID()
 		shc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -457,6 +481,9 @@ func (shc *SubcontrolHistoryCreate) check() error {
 	}
 	if _, ok := shc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "SubcontrolHistory.mapping_id"`)}
+	}
+	if _, ok := shc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "SubcontrolHistory.owner_id"`)}
 	}
 	if _, ok := shc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "SubcontrolHistory.name"`)}
@@ -540,6 +567,10 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 	if value, ok := shc.mutation.Tags(); ok {
 		_spec.SetField(subcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := shc.mutation.OwnerID(); ok {
+		_spec.SetField(subcontrolhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := shc.mutation.Name(); ok {
 		_spec.SetField(subcontrolhistory.FieldName, field.TypeString, value)
