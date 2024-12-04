@@ -133,6 +133,22 @@ server:
       - https://studio.apollographql.com
 ```
 
+In the apollo settings you will need to configure your connection settings:
+1. Endpoint: `http://localhost:17608/query`
+1. Shared Headers: `Authorization` `Bearer tolp_REDCATED`
+
+You can obtain a local personal access token or api token against your local api by running:
+
+```
+task cli:token:create
+```
+
+```
+task cli:pat:create
+```
+
+These are also created automatically when you setup the test user using `task cli:user:all`
+
 ### OpenFGA Playground
 
 You can load up a local openFGA environment with the compose setup in this
