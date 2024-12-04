@@ -57,7 +57,7 @@ func TestAuthOptionsOverride(t *testing.T) {
 		auth.WithAuthOptions(opts),
 	)
 
-	require.NotSame(t, opts, conf, "expected a new configuration object to be created")
+	require.NotSame(t, &opts, &conf, "expected a new configuration object to be created")
 	assert.Equal(t, opts.KeysURL, conf.KeysURL)
 	assert.Equal(t, opts.Audience, conf.Audience)
 	assert.Equal(t, opts.Issuer, conf.Issuer)

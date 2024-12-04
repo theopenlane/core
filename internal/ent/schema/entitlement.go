@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"context"
 	"time" // Add this import
 
 	"entgo.io/contrib/entgql"
@@ -16,9 +15,9 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Entitlement holds the schema definition for the Entitlement entity.
@@ -110,13 +109,7 @@ func (Entitlement) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			NillableIDField: true,
-			OrgOwnedField:   true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(),
 	}
 }
 
@@ -140,19 +133,12 @@ func (Entitlement) Hooks() []ent.Hook {
 
 // Policy of the Entitlement
 func (Entitlement) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.EntitlementMutationRuleFunc(func(ctx context.Context, m *generated.EntitlementMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.EntitlementQueryRuleFunc(func(ctx context.Context, q *generated.EntitlementQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.EntitlementQuery](),
+		),
+		policy.WithMutationRules(
+			entfga.CheckEditAccess[*generated.EntitlementMutation](),
+		),
+	)
 }

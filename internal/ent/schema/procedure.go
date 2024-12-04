@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -13,9 +11,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
@@ -91,10 +89,7 @@ func (Procedure) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:   "procedure",
-			IncludeHooks: false,
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -115,31 +110,14 @@ func (Procedure) Interceptors() []ent.Interceptor {
 
 // Policy of the Procedure
 func (Procedure) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				rule.CanCreateObjectsInOrg(),
-				ent.OpCreate,
-			),
-			privacy.OnMutationOperation(
-				privacy.ProcedureMutationRuleFunc(func(ctx context.Context, m *generated.ProcedureMutation) error {
-					return m.CheckAccessForEdit(ctx)
-				}),
-				ent.OpUpdate|ent.OpUpdateOne|ent.OpUpdate,
-			),
-			privacy.OnMutationOperation(
-				privacy.ProcedureMutationRuleFunc(func(ctx context.Context, m *generated.ProcedureMutation) error {
-					return m.CheckAccessForDelete(ctx)
-				}),
-				ent.OpDelete|ent.OpDeleteOne,
-			),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.ProcedureQueryRuleFunc(func(ctx context.Context, q *generated.ProcedureQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.ProcedureQuery](),
+		),
+		policy.WithMutationRules(
+			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.ProcedureMutation](),
+		),
+	)
 }

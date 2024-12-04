@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -12,8 +10,8 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
@@ -114,23 +112,14 @@ func (Control) Annotations() []schema.Annotation {
 
 // Policy of the Control
 func (Control) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.ControlQuery](),
+		),
+		policy.WithMutationRules(
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
-			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
-				rule.CanCreateObjectsInOrg(), // TODO (sfunk): update to allow create access based on groups
-				ent.OpCreate,
-			),
-			privacy.ControlMutationRuleFunc(func(ctx context.Context, m *generated.ControlMutation) error {
-				return m.CheckAccessForEdit(ctx) // check access for edit
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.ControlQueryRuleFunc(func(ctx context.Context, q *generated.ControlQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.ControlMutation](),
+		),
+	)
 }

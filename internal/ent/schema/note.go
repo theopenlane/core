@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -14,8 +12,8 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Note holds the schema definition for the Note entity
@@ -66,13 +64,7 @@ func (Note) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			NillableIDField: true,
-			OrgOwnedField:   true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(), //  TODO (sfunk): update to be object owned checks
 		// skip generating the schema for this type, this schema is used through extended types
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
@@ -91,19 +83,12 @@ func (Note) Interceptors() []ent.Interceptor {
 
 // Policy of the Note
 func (Note) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.NoteMutationRuleFunc(func(ctx context.Context, m *generated.NoteMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.NoteQueryRuleFunc(func(ctx context.Context, q *generated.NoteQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.NoteQuery](),
+		),
+		policy.WithMutationRules(
+			entfga.CheckEditAccess[*generated.NoteMutation](),
+		),
+	)
 }

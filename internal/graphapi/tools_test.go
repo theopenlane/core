@@ -68,6 +68,10 @@ type client struct {
 func (suite *GraphTestSuite) SetupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
+	if testing.Verbose() {
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	}
+
 	// setup db container
 	suite.tf = entdb.NewTestFixture()
 

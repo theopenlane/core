@@ -61,7 +61,7 @@ tasks:
     desc: runs and outputs results of created go tests with coverage
     aliases: [cover]
     cmds:
-      - go test -v ./... -coverprofile=coverage.out
+      - go test ./... -coverprofile=coverage.out
 
   go:test:coverout:
     desc: runs and outputs results of created go tests with coverage

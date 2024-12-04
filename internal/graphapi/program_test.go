@@ -167,11 +167,12 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		request     openlaneclient.CreateProgramInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name          string
+		request       openlaneclient.CreateProgramInput
+		addGroupToOrg bool
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -246,14 +247,22 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "user now authorized, added to group with creator permissions",
+			request: openlaneclient.CreateProgramInput{
+				Name: "mitb program",
+			},
+			addGroupToOrg: true,
+			client:        suite.client.api,
+			ctx:           viewOnlyUser.UserCtx,
+		},
+		{
 			name: "user not authorized, no permissions",
 			request: openlaneclient.CreateProgramInput{
 				Name:    "mitb program",
 				OwnerID: &testUser1.OrganizationID,
 			},
-			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg, // testUser2 is not a a member of that organization
+			client: suite.client.api,
+			ctx:    testUser2.UserCtx,
 		},
 		{
 			name: "missing required field",
@@ -268,6 +277,14 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			if tc.addGroupToOrg {
+				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+					openlaneclient.UpdateOrganizationInput{
+						AddProgramCreatorIDs: []string{viewOnlyUser.GroupID},
+					})
+				require.NoError(t, err)
+			}
+
 			resp, err := tc.client.CreateProgram(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -282,6 +299,11 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 
 			// check required fields
 			assert.Equal(t, tc.request.Name, resp.CreateProgram.Program.Name)
+
+			// ensure the owner is set to the user's organization, not the  input
+			if tc.request.OwnerID != nil && tc.ctx == testUser2.UserCtx {
+				assert.Equal(t, testUser2.OrganizationID, *resp.CreateProgram.Program.OwnerID)
+			}
 
 			// check optional fields
 			if tc.request.Description == nil {

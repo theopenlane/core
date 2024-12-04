@@ -48,9 +48,15 @@ func ({{ . }}) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+
         // the above annotations create all the graphQL goodness; if you need the schema only and not the endpoints, use the below annotation instead
         // if you do not need the graphql bits, also be certain to add an exclusion to scripts/files_to_skip.txt
-		entgql.Skip(entgql.SkipAll),
+		// entgql.Skip(entgql.SkipAll),
+
+		// the below annotation adds the entfga policy that will check access to the entity
+		// remove this annotation (or replace with another policy) if you want checks to be defined
+		// by another object
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -62,4 +68,21 @@ func ({{ . }}) Hooks() []ent.Hook {
 // Interceptors of the {{ . }}
 func ({{ . }}) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{}
+}
+
+// Policy of the {{ . }}
+func ({{ . }}) Policy() ent.Policy {
+	// add the new policy here, the default post-policy is to deny all
+	// so you need to ensure there are rules in place to allow the actions you want
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			// add query rules here, the below is the recommended default
+			entfga.CheckReadAccess[*generated.{{ . }}Query](),
+		),
+		policy.WithMutationRules(
+			// add mutation rules here, the below is the recommended default
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.{{ . }}Mutation](),
+		),
+	)
 }

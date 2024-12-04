@@ -1,0 +1,39 @@
+-- +goose Up
+-- create "organization_control_creators" table
+CREATE TABLE "organization_control_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_control_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_control_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "organization_control_objective_creators" table
+CREATE TABLE "organization_control_objective_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_control_objective_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_control_objective_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "organization_group_creators" table
+CREATE TABLE "organization_group_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_group_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_group_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "organization_internal_policy_creators" table
+CREATE TABLE "organization_internal_policy_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_internal_policy_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_internal_policy_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "organization_narrative_creators" table
+CREATE TABLE "organization_narrative_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_narrative_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_narrative_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "organization_procedure_creators" table
+CREATE TABLE "organization_procedure_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_procedure_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_procedure_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "organization_program_creators" table
+CREATE TABLE "organization_program_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_program_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_program_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "organization_risk_creators" table
+CREATE TABLE "organization_risk_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_risk_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_risk_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "organization_template_creators" table
+CREATE TABLE "organization_template_creators" ("organization_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("organization_id", "group_id"), CONSTRAINT "organization_template_creators_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "organization_template_creators_organization_id" FOREIGN KEY ("organization_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+
+-- +goose Down
+-- reverse: create "organization_template_creators" table
+DROP TABLE "organization_template_creators";
+-- reverse: create "organization_risk_creators" table
+DROP TABLE "organization_risk_creators";
+-- reverse: create "organization_program_creators" table
+DROP TABLE "organization_program_creators";
+-- reverse: create "organization_procedure_creators" table
+DROP TABLE "organization_procedure_creators";
+-- reverse: create "organization_narrative_creators" table
+DROP TABLE "organization_narrative_creators";
+-- reverse: create "organization_internal_policy_creators" table
+DROP TABLE "organization_internal_policy_creators";
+-- reverse: create "organization_group_creators" table
+DROP TABLE "organization_group_creators";
+-- reverse: create "organization_control_objective_creators" table
+DROP TABLE "organization_control_objective_creators";
+-- reverse: create "organization_control_creators" table
+DROP TABLE "organization_control_creators";

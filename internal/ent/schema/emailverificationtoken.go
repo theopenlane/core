@@ -6,7 +6,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/entql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -15,11 +14,11 @@ import (
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -105,34 +104,19 @@ func (EmailVerificationToken) Hooks() []ent.Hook {
 
 // Policy of the EmailVerificationToken
 func (EmailVerificationToken) Policy() ent.Policy {
-	return privacy.Policy{
-		Query: privacy.QueryPolicy{
-			rule.AllowAfterApplyingPrivacyTokenFilter(
-				&token.VerifyToken{},
-				func(t token.PrivacyToken, filter privacy.Filter) {
-					actualToken := t.(*token.VerifyToken)
-					tokenFilter := filter.(*generated.EmailVerificationTokenFilter)
-					tokenFilter.WhereToken(entql.StringEQ(actualToken.GetToken()))
-				},
-			),
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.AllowAfterApplyingPrivacyTokenFilter[*token.VerifyToken](&token.VerifyToken{}),
 			privacy.AlwaysAllowRule(),
-		},
-		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				privacy.MutationPolicy{
-					rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
-					rule.AllowMutationAfterApplyingOwnerFilter(),
-					privacy.AlwaysDenyRule(),
-				},
-				ent.OpCreate,
-			),
-			privacy.OnMutationOperation(
-				privacy.MutationPolicy{
-					rule.AllowMutationAfterApplyingOwnerFilter(),
-					privacy.AlwaysDenyRule(),
-				},
-				ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete,
-			),
-		},
-	}
+		),
+		policy.WithOnMutationRules(
+			ent.OpCreate,
+			rule.AllowIfContextHasPrivacyTokenOfType(&token.ResetToken{}),
+			rule.AllowMutationAfterApplyingOwnerFilter(),
+		),
+		policy.WithOnMutationRules(
+			ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete,
+			rule.AllowMutationAfterApplyingOwnerFilter(),
+		),
+	)
 }

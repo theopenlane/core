@@ -2,6 +2,7 @@ model
   schema 1.1
 
 # user is a human with access to the system
+# the _self relation is used for when the user is the parent of another object
 type user
   relations
     define _self: [user]
@@ -10,6 +11,7 @@ type user
     define can_delete: _self
 
 # service is not associated to a particular user, but instead to an organization
+# the _self relation is used for when the service is the parent of another object
 type service
   relations
     define _self: [service]
@@ -37,18 +39,52 @@ type organization
     define can_edit: [service] or admin or owner or can_edit from parent
     define can_view: [service] or member or admin or owner or can_edit or can_view from parent
     # additional fine-grained permissions
-    ## allow owner and assigned users to view audit logs
+    # allow owner and assigned users to view audit logs
     define audit_log_viewer: [user] or owner or audit_log_viewer from parent
-    ## allow members to invite other members
+    # allow members to invite other members
     define can_invite_members: [user] or member or can_edit or can_invite_members from parent
-    ## only allow users with edit access to the org to invite other admins
+    # only allow users with edit access to the org to invite other admins
     define can_invite_admins: [user] or can_edit or can_invite_admins from parent
+    # object creation permissions
+    # these permissions should all be defined as:
+    #     define [object]_creator: [group#member]
+    #     define can_create_[object]: can_edit or [object]_creator
+
+    define control_creator: [group#member]
+    define can_create_control: can_edit or control_creator
+
+    define control_objective_creator: [group#member]
+    define can_create_control_objective: can_edit or control_objective_creator
+
+    define group_creator: [group#member]
+    define can_create_group: can_edit or group_creator
+
+    define internal_policy_creator: [group#member]
+    define can_create_internal_policy: can_edit or internal_policy_creator
+
+    define narrative_creator: [group#member]
+    define can_create_narrative: can_edit or narrative_creator
+
+    define procedure_creator: [group#member]
+    define can_create_procedure: can_edit or procedure_creator
+
+    define program_creator: [group#member]
+    define can_create_program: can_edit or program_creator
+
+    define risk_creator: [group#member]
+    define can_create_risk: can_edit or risk_creator
+
+    define template_creator: [group#member]
+    define can_create_template: can_edit or template_creator
+
+
     # additional relations
     define user_in_context: [user]
 # groups are a subset of an organization that can be used to define more fine-grained access to objects
 # users must be members of the organization to be members of a group
 # groups are all visible to all members of the organization, unless they are blocked
 # groups can only be edited by admins of the group or the parent organization owner
+# groups are commonly used to assigned view/edit permissions to other objects within the organization for group members
 type group
   relations
     # main roles
@@ -61,6 +97,7 @@ type group
     define can_view: [service] or member or admin or can_view from parent
     # additional fine-grained permissions
     define audit_log_viewer: [user] or audit_log_viewer from parent
+# files have their permissions defined by the parent object (like a control or a procedure), users with access to the parent object will have access to the file
 type file
   relations
     define can_view: [user] or can_delete or can_edit or can_view from parent
@@ -70,7 +107,7 @@ type file
 # programs are associated with an organization but do not inherit access from the organization with
 # the exception of the owner of the organization who will have access to all programs
 # the program creator will be made the admin of the program and all other access with be assigned directly
-# or via groups
+# as program members or via groups
 type program
   relations
     # main roles
@@ -91,14 +128,17 @@ type program
     define viewer: [group#member]
     # allow users or groups to be blocked from view + edit access
     define blocked: [user, group#member]
-    ## allow owner and assigned users to view audit logs
+    # allow owner and assigned users to view audit logs
     define audit_log_viewer: [user] or admin
-    ## allow members to invite other members
+    # allow members to invite other members
     define can_invite_members: [user] or member or can_edit
-    ## only allow users with edit access to the org to invite other admins
+    # only allow users with edit access to the org to invite other admins
     define can_invite_admins: [user] or can_edit
     # additional relations
     define user_in_context: [user]
+# controls are associated with an organization but do not inherit access from the organization
+# controls inherit access from the associated program(s) or from associated groups
+# the control author will be assigned as an admin of the control
 type control
   relations
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
@@ -108,15 +148,19 @@ type control
     define viewer: [group#member]
     define editor: [group#member]
     define blocked: [user, group#member]
+# subcontrols inherit access from their parent control or from associated groups
+# the subcontrol author will be assigned as an admin of the subcontrol
 type subcontrol
   relations
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
     define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
-    define parent: [user, service, program]
+    define parent: [user, service, control]
     define viewer: [group#member]
     define editor: [group#member]
     define blocked: [user, group#member]
+# control objectives inherit access from the associated program or from associated groups
+# the control objective author will be assigned as an admin of the control objective
 type controlobjective
   relations
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
@@ -138,6 +182,9 @@ type risk
     define viewer: [group#member]
     define editor: [group#member]
     define blocked: [user, group#member]
+# narratives are associated with an organization but do not inherit access from the organization
+# the narrative creator will be made the admin of the narrative and all other access will be assigned via
+# a program or a group
 type narrative
   relations
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
@@ -184,7 +231,7 @@ type procedure
     # allow users or groups to be blocked from view + edit access
     define blocked: [user, group#member]
 # templates (this encompasses things like questionnaires or jsonschemas) should be able to be
-# created by any user in the parent (organization) with edit access
+# created by any user in the parent (organization) with edit access (directly or via a group on the organization)
 # all users in the organization should have view access, unless they are excluded (by a user or group)
 # editors will be assigned by groups and can be excluded by users or groups
 type template
@@ -198,6 +245,8 @@ type template
     define viewer: [group#member]
     # allow users or groups to be blocked from view + edit access
     define blocked: [user, group#member]
+# documentdata is the json data that is associated to a template
+# access to the documentdata is inherited from the template
 type documentdata
   relations
     define can_view: [user] or  ((can_view from parent or viewer) but not blocked)
@@ -210,7 +259,7 @@ type documentdata
     # allow users or groups to be blocked from view + edit access
     define blocked: [user, group#member]
 # contacts are always assigned to an organization and permissions are inherited from the organization
-# individual users can also be given permission to a contact but they must be a member of the organization
+# individual users or groups can also be given permission to a contact but they must be a member of the organization
 type contact
   relations
     define can_view: ([user] and member from parent) or ((can_view from parent or viewer) but not blocked)

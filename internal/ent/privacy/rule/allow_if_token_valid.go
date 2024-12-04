@@ -4,6 +4,8 @@ import (
 	"context"
 	"reflect"
 
+	"entgo.io/ent/entql"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -36,22 +38,33 @@ func ContextHasPrivacyTokenOfType(ctx context.Context, emptyToken token.PrivacyT
 	return actualTokenType == expectedTokenType
 }
 
+type PrivacyToken interface {
+	GetContextKey() interface{}
+	GetToken() string
+}
+
 // AllowAfterApplyingPrivacyTokenFilter allows the mutation to proceed
 // if a privacy token of a specific type is found in the context. It
 // also applies a privacy filter to the token before allowing the
 // mutation to proceed
-func AllowAfterApplyingPrivacyTokenFilter(
-	emptyToken token.PrivacyToken,
-	applyFilter func(t token.PrivacyToken, filter privacy.Filter),
-) privacy.QueryMutationRule {
+func AllowAfterApplyingPrivacyTokenFilter[T PrivacyToken](emptyToken PrivacyToken) privacy.QueryMutationRule {
+	type Filter interface {
+		WhereToken(p entql.StringP)
+	}
+
 	return privacy.FilterFunc(
-		func(ctx context.Context, filter privacy.Filter) error {
+		func(ctx context.Context, f privacy.Filter) error {
+			tokenFilter, ok := f.(Filter)
+			if !ok {
+				return privacy.Deny
+			}
+
 			actualToken := ctx.Value(emptyToken.GetContextKey())
 			actualTokenType := reflect.TypeOf(actualToken)
 			expectedTokenType := reflect.TypeOf(emptyToken)
 
 			if actualTokenType == expectedTokenType {
-				applyFilter(actualToken.(token.PrivacyToken), filter)
+				tokenFilter.WhereToken(entql.StringEQ(actualToken.(T).GetToken()))
 
 				return privacy.Allowf("applied privacy token filter")
 			}

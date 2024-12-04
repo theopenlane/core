@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"context"
 	"net/mail"
 	"time"
 
@@ -18,9 +17,9 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
@@ -121,13 +120,7 @@ func (Invite) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			NillableIDField: true,
-			OrgOwnedField:   true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -144,22 +137,16 @@ func (Invite) Hooks() []ent.Hook {
 
 // Policy of the Invite
 func (Invite) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
+			entfga.CheckReadAccess[*generated.InviteQuery](),
+		),
+		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
 			rule.CanInviteUsers(),
-			privacy.InviteMutationRuleFunc(func(ctx context.Context, m *generated.InviteMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
+			entfga.CheckEditAccess[*generated.InviteMutation](),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
-			privacy.InviteQueryRuleFunc(func(ctx context.Context, q *generated.InviteQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+		),
+	)
 }

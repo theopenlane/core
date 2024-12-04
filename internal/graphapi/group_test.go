@@ -187,15 +187,16 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 	t := suite.T()
 
 	testCases := []struct {
-		name        string
-		groupName   string
-		description string
-		displayName string
-		owner       string
-		settings    *openlaneclient.CreateGroupSettingInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		errorMsg    string
+		name          string
+		groupName     string
+		description   string
+		displayName   string
+		owner         string
+		settings      *openlaneclient.CreateGroupSettingInput
+		addGroupToOrg bool
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		errorMsg      string
 	}{
 		{
 			name:        "happy path group",
@@ -234,14 +235,27 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name:        "no access to owner",
+			name:      "no access to create group",
+			groupName: gofakeit.Name(),
+			client:    suite.client.api,
+			ctx:       viewOnlyUser.UserCtx,
+			errorMsg:  notAuthorizedErrorMsg,
+		},
+		{
+			name:          "group create access added",
+			groupName:     gofakeit.Name(),
+			addGroupToOrg: true,
+			client:        suite.client.api,
+			ctx:           viewOnlyUser.UserCtx,
+		},
+		{
+			name:        "no access to owner, should ignore the input org",
 			groupName:   gofakeit.Name(),
 			displayName: gofakeit.LetterN(50),
 			description: gofakeit.HipsterSentence(10),
 			owner:       testUser1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			errorMsg:    "not authorized", // TODO look at this
 		},
 		{
 			name:      "happy path group, minimum fields",
@@ -259,6 +273,14 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			if tc.addGroupToOrg {
+				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+					openlaneclient.UpdateOrganizationInput{
+						AddGroupCreatorIDs: []string{viewOnlyUser.GroupID},
+					})
+				require.NoError(t, err)
+			}
+
 			input := openlaneclient.CreateGroupInput{
 				Name:        tc.groupName,
 				Description: &tc.description,
@@ -304,6 +326,11 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 
 			if tc.settings != nil {
 				assert.Equal(t, resp.CreateGroup.Group.Setting.JoinPolicy, enums.JoinPolicyInviteOnly)
+			}
+
+			if tc.owner != "" && tc.ctx == testUser2.UserCtx {
+				// make sure the owner is ignored if the user doesn't have access
+				assert.NotEqual(t, tc.owner, resp.CreateGroup.Group.Owner.ID)
 			}
 		})
 	}

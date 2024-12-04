@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -16,8 +14,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -95,31 +93,19 @@ func (Template) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			NillableIDField: true,
-			OrgOwnedField:   true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(),
 	}
 }
 
 // Policy of the Template
 func (Template) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.TemplateMutationRuleFunc(func(ctx context.Context, m *generated.TemplateMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.TemplateQueryRuleFunc(func(ctx context.Context, q *generated.TemplateQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.TemplateQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.TemplateMutation](),
+		),
+	)
 }

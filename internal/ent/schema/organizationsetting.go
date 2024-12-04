@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"context"
 	"net/mail"
 	"regexp"
 
@@ -13,13 +12,11 @@ import (
 
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -88,12 +85,7 @@ func (OrganizationSetting) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			IDField:         "OrganizationID",
-			NillableIDField: true,
-		},
+		entfga.SettingsChecks("organization"),
 	}
 }
 
@@ -116,24 +108,14 @@ func (OrganizationSetting) Mixin() []ent.Mixin {
 
 // Policy defines the privacy policy of the OrganizationSetting
 func (OrganizationSetting) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OrganizationSettingMutationRuleFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-			privacy.OrganizationSettingMutationRuleFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) error {
-				return rule.CheckOrgAccess(ctx, fgax.CanEdit)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.OrganizationSettingQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationSettingQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.OrganizationSettingQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationSettingQuery) error {
-				return rule.CheckOrgAccess(ctx, fgax.CanView)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.OrganizationSettingQuery](), // access based on query context
+			policy.CheckOrgReadAccess(),                                   // access based on auth context
+		),
+		policy.WithMutationRules(
+			entfga.CheckEditAccess[*generated.OrganizationSettingMutation](),
+			policy.CheckOrgWriteAccess(), // access based on auth context
+		),
+	)
 }
