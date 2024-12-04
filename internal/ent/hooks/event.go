@@ -85,6 +85,45 @@ func parseEventID(retVal ent.Value) (*EventID, error) {
 	return &event, nil
 }
 
+func (e *Eventer) emit(ctx context.Context, eventID *EventID, mutation ent.Mutation) {
+	emit := func() {
+		name := fmt.Sprintf("%s.%s", mutation.Type(), mutation.Op())
+		event := soiree.NewBaseEvent(name, mutation)
+
+		log.Debug().Msg("base event created with topic name" + name)
+
+		event.Properties().Set("ID", eventID.ID)
+
+		for _, field := range mutation.Fields() {
+			value, exists := mutation.Field(field)
+			if exists {
+				event.Properties().Set(field, value)
+			}
+		}
+
+		event.SetContext(context.WithoutCancel(ctx))
+		event.SetClient(e.Emitter.GetClient())
+
+		e.Emitter.Emit(event.Topic(), event)
+		log.Debug().Msg("event emitted")
+	}
+
+	if tx := entgen.TxFromContext(ctx); tx != nil {
+		tx.OnCommit(func(next entgen.Committer) entgen.Committer {
+			return entgen.CommitFunc(func(ctx context.Context, tx *entgen.Tx) error {
+				err := next.Commit(ctx, tx)
+				if err == nil {
+					defer emit()
+				}
+
+				return err
+			})
+		})
+	} else {
+		defer emit()
+	}
+}
+
 // EmitEventHook emits an event to the event pool when a mutation is performed
 func EmitEventHook(e *Eventer) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {

@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -219,6 +220,46 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 	// reset the original org id in the auth context if it was previously set
 	if originalOrg != "" {
 		if err := auth.SetOrganizationIDInAuthContext(ctx, originalOrg); err != nil {
+			return err
+		}
+	}
+
+	// create a stripe customer for the organization
+	if err := createStripeCustomer(ctx, orgCreated, m); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// createStripeCustomer creates a stripe customer for the organization
+func createStripeCustomer(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
+	orgSetting, err := orgCreated.Setting(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error fetching organization settings")
+
+		return err
+	}
+
+	mappedOrg := entitlements.OrganizationCustomer{
+		OrganizationID:   orgCreated.ID,
+		OrganizationName: orgCreated.Name,
+		BillingEmail:     orgSetting.BillingEmail,
+	}
+
+	// create the stripe customer
+	orgCust, err := m.Client().EntitlementManager.FindorCreateCustomer(ctx, &mappedOrg)
+	if err != nil {
+		log.Error().Err(err).Msg("error creating stripe customer")
+
+		return err
+	}
+
+	// update the organization settings with the stripe customer id
+	if orgSettingID, exists := m.SettingID(); exists {
+		if err := updateOrganizationSettingWithCustomerID(ctx, orgSettingID, orgCust.StripeCustomerID, m.Client()); err != nil {
+			log.Error().Err(err).Msg("error updating organization settings with stripe customer id")
+
 			return err
 		}
 	}

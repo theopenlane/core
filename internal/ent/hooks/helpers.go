@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
-	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/entx"
 )
 
@@ -15,8 +14,13 @@ func isDeleteOp(ctx context.Context, m ent.Mutation) bool {
 	return entx.CheckIsSoftDelete(ctx) || m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne)
 }
 
+// runtimeHooks is a list of post-mutation hooks that are executed after a mutation operation is performed
 var runtimeHooks []func(ent.Mutator) ent.Mutator
 
+// The `AddPostMutationHook` function is used to add a post-mutation hook to the list of runtime hooks.
+// This function takes a hook function as a parameter, which will be executed after a mutation
+// operation is performed. The hook function is expected to take a context and a value of type `T` as
+// input parameters and return an error if any
 func AddPostMutationHook[T any](hook func(ctx context.Context, v T) error) {
 	runtimeHooks = append(runtimeHooks, func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -37,32 +41,4 @@ func AddPostMutationHook[T any](hook func(ctx context.Context, v T) error) {
 			return v, err
 		})
 	})
-}
-
-func AddPreMutationHook[T any](hook func(ctx context.Context, v T) error) {
-	runtimeHooks = append(runtimeHooks, func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			entvalue, ok := m.(T)
-			if ok {
-				err := hook(ctx, entvalue)
-				if err != nil {
-					return nil, err
-				}
-			}
-
-			return next.Mutate(ctx, m)
-		})
-	})
-}
-
-func AddMutationHook(hook ent.Hook) {
-	runtimeHooks = append(runtimeHooks, func(next ent.Mutator) ent.Mutator {
-		return hook(next)
-	})
-}
-
-func AddMutationHooks(client *entgen.Client) {
-	for _, hook := range runtimeHooks {
-		client.Use(hook)
-	}
 }
