@@ -13,7 +13,8 @@ import (
 	"github.com/stripe/stripe-go/v81"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
 
@@ -50,7 +51,7 @@ func NewEventerPool(client interface{}) *Eventer {
 	pool := soiree.NewEventPool(
 		soiree.WithPool(
 			soiree.NewPondPool(
-				soiree.WithMaxWorkers(100),
+				soiree.WithMaxWorkers(100), // noling:mnd
 				soiree.WithName("ent_event_pool"))),
 		soiree.WithClient(client))
 
@@ -92,17 +93,22 @@ func EmitEventHook(e *Eventer) ent.Hook {
 
 			if reflect.TypeOf(retVal).Kind() == reflect.Int {
 				log.Debug().Interface("value", retVal).Msg("mutation returned an int, skipping event emission")
-
+				// TODO: determine if we need to emit events for mutations that return an int
 				return retVal, err
 			}
 
 			emit := func() {
 				eventID, err := parseEventID(retVal)
 				if err != nil {
+					log.Err(err).Msg("Failed to parse event ID")
 					return
 				}
 
-				event := soiree.NewBaseEvent(fmt.Sprintf("%s.%s", mutation.Type(), mutation.Op()), mutation)
+				name := fmt.Sprintf("%s.%s", mutation.Type(), mutation.Op())
+				event := soiree.NewBaseEvent(name, mutation)
+
+				log.Debug().Msg("base event created with topic name" + name)
+
 				event.Properties().Set("ID", eventID.ID)
 
 				for _, field := range mutation.Fields() {
@@ -115,13 +121,8 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				event.SetContext(context.WithoutCancel(ctx))
 				event.SetClient(e.Emitter.GetClient())
 
-				if err := e.Emitter.Emit(event.Topic(), event); err != nil {
-					if emitErr := <-err; emitErr != nil {
-						log.Err(emitErr).Msg("cannot emit event")
-					}
-				} else {
-					log.Warn().Msg("event emitted")
-				}
+				e.Emitter.Emit(event.Topic(), event)
+				log.Debug().Msg("event emitted")
 			}
 
 			if tx := entgen.TxFromContext(ctx); tx != nil {
@@ -129,14 +130,14 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					return entgen.CommitFunc(func(ctx context.Context, tx *entgen.Tx) error {
 						err := next.Commit(ctx, tx)
 						if err == nil {
-							emit()
+							defer emit()
 						}
 
 						return err
 					})
 				})
 			} else {
-				emit()
+				defer emit()
 			}
 
 			return retVal, err
@@ -144,19 +145,66 @@ func EmitEventHook(e *Eventer) ent.Hook {
 	}
 }
 
-// TODO: template out listeners for all mutation types and create hooks that allow functions to be easily called from within the codebase to perform actions on those events
-// RegisterListeners registers listeners for events on the event pool and is registered with the dbclient
-func RegisterListeners(pool *soiree.EventPool) {
-	_, err := pool.On("OrganizationSetting.OpCreate", handleCustomerCreate)
-	if err != nil {
-		log.Error().Err(ErrFailedToRegisterListener)
-	}
+func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
+	client.Use(EmitEventHook(e))
+}
 
-	for _, event := range []string{"OrganizationSetting.OpUpdate", "OrganizationSetting.OpUpdateOne"} {
-		_, err = pool.On(event, handleCustomerCreate)
-		if err != nil {
-			log.Error().Err(ErrFailedToRegisterListener)
+// OrganizationSettingCreated and OrganizationSettingUpdated are the topics for OrganizationSetting creation and update events
+var OrganizationSettingCreated = "OrganizationSetting.OpCreate"
+var OrganizationSettingUpdated = "OrganizationSetting.OpUpdateOne"
+
+type EntitlementEvent struct {
+	OpType          string
+	listener        []soiree.Listener
+	client          interface{}
+	customerwrapper *entitlements.OrganizationCustomer
+}
+
+func mapEntitlementEvent(e *EntitlementEvent) soiree.Listener {
+	return func(event soiree.Event) error {
+		client := event.Client().(*entgen.Client)
+
+		if client.EntitlementManager == nil {
+			log.Info().Msg("EntitlementManager not found on client, skipping customer creation")
+
+			return nil
 		}
+
+		props := event.Properties()
+
+		org, err := fetchOrganizationIDbyOrgSettingID(event.Context(), props["ID"].(string), client)
+		if err != nil {
+			log.Err(err).Msg("Failed to fetch organization by organization setting ID")
+			return err
+		}
+
+		e.customerwrapper = &entitlements.OrganizationCustomer{
+			OrganizationID:   org.ID,
+			StripeCustomerID: props["stripe_id"].(string),
+			BillingEmail:     props["billing_email"].(string),
+			BillingPhone:     props["billing_phone"].(string),
+			OrganizationName: props["billing_address"].(string),
+		}
+
+		if e.OpType == OrganizationSettingCreated {
+			if err := handleCustomerCreate(event); err != nil {
+				log.Err(err).Msg("Failed to handle customer creation")
+				return
+			}
+
+			return nil
+		}
+
+		if e.OpType == OrganizationSettingUpdated {
+			if err := handleCustomerUpdate(event); err != nil {
+				log.Err(err).Msg("Failed to handle customer update")
+				return
+			}
+
+			return nil
+		}
+
+		return nil
 	}
 }
 
@@ -266,6 +314,30 @@ func updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, 
 	return nil
 }
 
+// fetchOrganizationIDbyOrgSettingID fetches the organization ID by the organization setting ID
+func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string, client interface{}) (*entitlements.OrganizationCustomer, error) {
+	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
+	if err != nil {
+		log.Err(err).Msgf("Failed to fetch organization setting by ID %s", orgsettingID)
+		return nil, err
+	}
+
+	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSetting.OrganizationID)).Only(ctx)
+	if err != nil {
+		log.Err(err).Msgf("Failed to fetch organization by organization setting ID %s", orgsettingID)
+		return nil, err
+	}
+
+	return &entitlements.OrganizationCustomer{
+		OrganizationID:         org.ID,
+		StripeCustomerID:       orgSetting.StripeID,
+		BillingEmail:           orgSetting.BillingEmail,
+		BillingPhone:           orgSetting.BillingPhone,
+		OrganizationName:       org.Name,
+		OrganizationSettingsID: orgSetting.ID,
+	}, nil
+}
+
 // checkForBillingUpdate checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
 // and a boolean indicating whether there are updates
 func checkForBillingUpdate(props map[string]interface{}, stripeCustomer *stripe.Customer) (params *stripe.CustomerParams, hasUpdate bool) {
@@ -311,18 +383,4 @@ func HasFields(m ent.Mutation, err error, fields ...string) bool {
 	})
 
 	return ok
-}
-
-func HasFieldHook(err error, fields ...string) ent.Hook {
-	return hook.If(hook.FixedError(err),
-		func(ctx context.Context, m ent.Mutation) bool {
-			_, ok := lo.Find(fields, func(field string) bool {
-				_, ok := m.Field(field)
-
-				return ok
-			})
-
-			return ok
-		},
-	)
 }

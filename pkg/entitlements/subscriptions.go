@@ -39,7 +39,11 @@ func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscript
 
 // GetSubscriptionByID gets a subscription by ID
 func (sc *StripeClient) GetSubscriptionByID(id string) (*stripe.Subscription, error) {
-	subscription, err := sc.Client.Subscriptions.Get(id, nil)
+	subscription, err := sc.Client.Subscriptions.Get(id, &stripe.SubscriptionParams{
+		Params: stripe.Params{
+			Expand: []*string{stripe.String("customer")},
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
