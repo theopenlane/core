@@ -19,6 +19,11 @@ func HookSubcontrolUpdate() ent.Hook {
 				return retVal, err
 			}
 
+			// do not check if the operation is a delete operation (soft delete)
+			if isDeleteOp(ctx, m) {
+				return retVal, nil
+			}
+
 			scID, ok := m.ID()
 			if !ok {
 				return retVal, nil
