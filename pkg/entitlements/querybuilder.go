@@ -13,6 +13,7 @@ const clausesPerQuery = 10
 type QueryBuilder struct {
 	operator string
 	keys     map[string]string
+	OrgCust  *OrganizationCustomer
 }
 
 func NewQueryBuilder(options ...func(*QueryBuilder)) *QueryBuilder {
@@ -38,6 +39,12 @@ func WithKeys(keys map[string]string) func(*QueryBuilder) {
 	}
 }
 
+func WithOrganizationCustomer(orgCust *OrganizationCustomer) func(*QueryBuilder) {
+	return func(qb *QueryBuilder) {
+		qb.OrgCust = orgCust
+	}
+}
+
 func (qb *QueryBuilder) BuildQuery() []string {
 	var queries []string
 	var currentQuery strings.Builder
@@ -53,7 +60,7 @@ func (qb *QueryBuilder) BuildQuery() []string {
 	for i, k := range keys {
 		v := qb.keys[k]
 		if clausesCount > 0 {
-			currentQuery.WriteString(" " + qb.operator + " ")
+			currentQuery.WriteString(qb.operator)
 		}
 		currentQuery.WriteString(fmt.Sprintf(metadataFormat, k, v))
 		clausesCount++

@@ -3,6 +3,8 @@ package soiree
 import (
 	"sort"
 	"sync"
+
+	"github.com/cenkalti/backoff/v4"
 )
 
 // Topic represents an event channel to which listeners can subscribe
@@ -55,6 +57,26 @@ func (t *Topic) AddListener(id string, listener Listener, opts ...ListenerOption
 	item := &listenerItem{
 		listener: listener,
 		priority: Normal, // Default priority if none is specified
+	}
+
+	for _, opt := range opts {
+		opt(item)
+	}
+
+	t.listeners[id] = item
+	t.addSortedListenerID(id, item.priority)
+}
+
+// AddListener adds a new listener to the topic with a specified priority and returns an identifier for the listener
+func (t *Topic) AddListenerWithRetries(id string, listener Listener, opts ...ListenerOption) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
+	item := &listenerItem{
+		listener: listener,
+		priority: Normal, // Default priority if none is specified
+		retries:  3,      // Default number of retries
+		backoff:  backoff.NewExponentialBackOff(),
 	}
 
 	for _, opt := range opts {

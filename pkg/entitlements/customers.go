@@ -8,17 +8,7 @@ import (
 	"github.com/stripe/stripe-go/v81"
 )
 
-// CreateCustomer creates a new customer
-func (sc *StripeClient) CreateCustomer(email string) (*stripe.Customer, error) {
-	customer, err := sc.Client.Customers.New(&stripe.CustomerParams{Email: &email})
-	if err != nil {
-		return nil, err
-	}
-
-	return customer, nil
-}
-
-func (sc *StripeClient) CreateNewCustomer(c *OrganizationCustomer) (*stripe.Customer, error) {
+func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Customer, error) {
 	customer, err := sc.Client.Customers.New(&stripe.CustomerParams{
 		Email: &c.BillingEmail,
 		Name:  &c.OrganizationID,
@@ -60,6 +50,36 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 	return customers, nil
 }
 
+// FindorCreateCustomer finds or creates a customer
+func (sc *StripeClient) FindorCreateCustomer(ctx context.Context, o *OrganizationCustomer) (*OrganizationCustomer, error) {
+	//	qb := NewQueryBuilder(WithKeys(map[string]string{"organization_id": o.OrganizationID}))
+	withName := fmt.Sprintf("name: '%s'", o.OrganizationID)
+
+	customers, err := sc.SearchCustomers(ctx, withName)
+	if err != nil {
+		return nil, err
+	}
+
+	switch len(customers) {
+	case 0:
+		customer, err := sc.CreateCustomer(o)
+		if err != nil {
+			return nil, err
+		}
+
+		o.StripeCustomerID = customer.ID
+
+		return o, nil
+	case 1:
+		o.StripeCustomerID = customers[0].ID
+
+		return o, nil
+	default:
+		return nil, fmt.Errorf("found multiple customers with the same name %s", o.OrganizationID)
+	}
+
+}
+
 // GetCustomerByStripeID gets a customer by ID
 func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID string) (*stripe.Customer, error) {
 	customer, err := sc.Client.Customers.Get(customerID, &stripe.CustomerParams{
@@ -81,24 +101,6 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 	}
 
 	return customer, nil
-}
-
-// GetCustomerByOrganizationID gets a customer by organization ID
-func (sc *StripeClient) GetCustomerByOrganizationID(ctx context.Context, organizationID string) (*stripe.Customer, error) {
-	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("metadata.organization_id:%s", organizationID))
-	if err != nil {
-		return nil, err
-	}
-
-	if len(customers) == 0 {
-		return nil, fmt.Errorf("customer with organization ID %s not found", organizationID)
-	}
-
-	if len(customers) > 1 {
-		return nil, fmt.Errorf("multiple customers found with organization ID %s", organizationID)
-	}
-
-	return customers[0], nil
 }
 
 // UpdateCustomer updates a customer

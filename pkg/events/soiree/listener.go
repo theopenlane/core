@@ -1,5 +1,7 @@
 package soiree
 
+import "github.com/cenkalti/backoff/v4"
+
 // Listener is a function type that can handle events of any type
 // Listener takes an `Event` as a parameter and returns an `error`. This
 // allows you to define functions that conform to this specific signature, making it easier to work
@@ -11,6 +13,8 @@ type listenerItem struct {
 	listener Listener
 	priority Priority
 	client   interface{}
+	retries  int
+	backoff  backoff.BackOff
 }
 
 // ListenerOption is a function type that configures listener behavior
@@ -27,5 +31,17 @@ func WithPriority(priority Priority) ListenerOption {
 func WithListenerClient(client interface{}) ListenerOption {
 	return func(item *listenerItem) {
 		item.client = client
+	}
+}
+
+func WithRetry(retry int) ListenerOption {
+	return func(item *listenerItem) {
+		item.client = retry
+	}
+}
+
+func WithBackoff(backoff backoff.BackOff) ListenerOption {
+	return func(item *listenerItem) {
+		item.backoff = backoff
 	}
 }

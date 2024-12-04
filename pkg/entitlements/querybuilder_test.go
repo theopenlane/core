@@ -46,7 +46,7 @@ func TestBuildQuery(t *testing.T) {
 	}
 	qb := NewQueryBuilder(WithOperator(" AND "), WithKeys(keys))
 	expectedQueries := []string{
-		"metadata['key1']:'value1' AND metadata['key2']:'value2' AND metadata['key3']:'value3' AND metadata['key4']:'value4' AND metadata['key5']:'value5' AND metadata['key6']:'value6' AND metadata['key7']:'value7' AND metadata['key8']:'value8' AND metadata['key9']:'value9' AND metadata['key10']:'value10'",
+		"metadata['key1']:'value1' AND metadata['key10']:'value10' AND metadata['key2']:'value2' AND metadata['key3']:'value3' AND metadata['key4']:'value4' AND metadata['key5']:'value5' AND metadata['key6']:'value6' AND metadata['key7']:'value7' AND metadata['key8']:'value8' AND metadata['key9']:'value9'",
 	}
 	queries := qb.BuildQuery()
 	if !reflect.DeepEqual(queries, expectedQueries) {

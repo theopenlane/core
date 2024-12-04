@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"time"
 
 	"entgo.io/ent"
 
 	"github.com/rs/zerolog/log"
-	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v81"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
@@ -20,15 +20,15 @@ import (
 
 type Eventer struct {
 	Emitter   *soiree.EventPool
-	Event     soiree.BaseEvent
 	EventID   string `json:"id,omitempty"`
-	HookFuncs []EventHookFunc
-	EntClient *entgen.Client
+	Listeners []soiree.Listener
+}
+
+type EventID struct {
+	ID string `json:"id,omitempty"`
 }
 
 type EventerOpts (func(*Eventer))
-
-type EventHookFunc func(ctx context.Context, m ent.Mutation) error
 
 func NewEventer(opts ...EventerOpts) *Eventer {
 	e := &Eventer{}
@@ -46,6 +46,17 @@ func WithEventerEmitter(emitter *soiree.EventPool) EventerOpts {
 	}
 }
 
+func WithEventerListeners(topic string, listeners []soiree.Listener) EventerOpts {
+	return func(e *Eventer) {
+		for _, listener := range listeners {
+			_, err := e.Emitter.On(topic, listener)
+			if err != nil {
+				log.Panic().Msg("Failed to add listener")
+			}
+		}
+	}
+}
+
 // InitEventPool initializes an event pool with a client and a error handler
 func NewEventerPool(client interface{}) *Eventer {
 	pool := soiree.NewEventPool(
@@ -56,14 +67,6 @@ func NewEventerPool(client interface{}) *Eventer {
 		soiree.WithClient(client))
 
 	return NewEventer(WithEventerEmitter(pool))
-}
-
-func (e *Eventer) AddHookFunc(fn EventHookFunc) {
-	e.HookFuncs = append(e.HookFuncs, fn)
-}
-
-type EventID struct {
-	ID string `json:"id,omitempty"`
 }
 
 func parseEventID(retVal ent.Value) (*EventID, error) {
@@ -149,158 +152,74 @@ func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
 	client.Use(EmitEventHook(e))
 }
 
-// OrganizationSettingCreated and OrganizationSettingUpdated are the topics for OrganizationSetting creation and update events
-var OrganizationSettingCreated = "OrganizationSetting.OpCreate"
-var OrganizationSettingUpdated = "OrganizationSetting.OpUpdateOne"
-
-type EntitlementEvent struct {
-	OpType          string
-	listener        []soiree.Listener
-	client          interface{}
-	customerwrapper *entitlements.OrganizationCustomer
-}
-
-func mapEntitlementEvent(e *EntitlementEvent) soiree.Listener {
-	return func(event soiree.Event) error {
-		client := event.Client().(*entgen.Client)
-
-		if client.EntitlementManager == nil {
-			log.Info().Msg("EntitlementManager not found on client, skipping customer creation")
-
-			return nil
-		}
-
-		props := event.Properties()
-
-		org, err := fetchOrganizationIDbyOrgSettingID(event.Context(), props["ID"].(string), client)
+func RegisterListeners(e *Eventer) error {
+	for _, event := range []string{"OrganizationSetting.OpCreate", "OrganizationSetting.OpUpdateOne"} {
+		_, err := e.Emitter.On(event, handleOrganizationSettingEvents, soiree.WithRetry(3))
 		if err != nil {
-			log.Err(err).Msg("Failed to fetch organization by organization setting ID")
+			log.Error().Err(ErrFailedToRegisterListener)
 			return err
 		}
 
-		e.customerwrapper = &entitlements.OrganizationCustomer{
-			OrganizationID:   org.ID,
-			StripeCustomerID: props["stripe_id"].(string),
-			BillingEmail:     props["billing_email"].(string),
-			BillingPhone:     props["billing_phone"].(string),
-			OrganizationName: props["billing_address"].(string),
-		}
+		log.Debug().Msg("Listener registered for " + event)
 
-		if e.OpType == OrganizationSettingCreated {
-			if err := handleCustomerCreate(event); err != nil {
-				log.Err(err).Msg("Failed to handle customer creation")
-				return
-			}
-
-			return nil
-		}
-
-		if e.OpType == OrganizationSettingUpdated {
-			if err := handleCustomerUpdate(event); err != nil {
-				log.Err(err).Msg("Failed to handle customer update")
-				return
-			}
-
-			return nil
-		}
-
-		return nil
 	}
+
+	return nil
 }
 
 // handleCustomerCreate handles the creation of a customer in Stripe when an OrganizationSetting is created or updated
-func handleCustomerCreate(event soiree.Event) error {
+func handleOrganizationSettingEvents(event soiree.Event) error {
 	client := event.Client().(*entgen.Client)
+	entMgr := client.EntitlementManager
 
-	if client.EntitlementManager == nil {
+	if entMgr == nil {
 		log.Info().Msg("EntitlementManager not found on client, skipping customer creation")
 
 		return nil
 	}
 
 	props := event.Properties()
-	// TODO: add funcs for default unmarshalling of props and send all props to stripe
+
 	orgSettingID, exists := props["ID"]
 	if !exists {
 		log.Info().Msg("organizationSetting ID not found in event properties")
 		return nil
 	}
 
-	// if stripe ID is being added to the properties, we enumerate through any other fields in the update and ensure they match
-	stripeID, exists := props["stripe_id"]
-	if exists && stripeID != "" {
-		stripes := stripeID.(string)
+	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), orgSettingID.(string), client)
+	if err != nil {
+		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
 
-		stripeCustomer, err := client.EntitlementManager.Client.Customers.Get(stripes, nil)
-		if err != nil {
-			log.Err(err).Msg("Failed to retrieve Stripe customer by ID")
-			return err
-		}
-
-		// check for updates to billing information and update the Stripe customer if necessary
-		if params, hasUpdate := checkForBillingUpdate(props, stripeCustomer); hasUpdate {
-			if _, err := client.EntitlementManager.Client.Customers.Update(stripes, params); err != nil {
-				log.Err(err).Interface("params", params).Msg("failed to update Stripe customer with new billing information")
-
-				return err
-			}
-		}
+		return err
 	}
 
-	billingEmail, exists := props["billing_email"]
-	if exists && billingEmail != "" {
-		email := billingEmail.(string)
+	if orgCust.StripeCustomerID == "" {
+		customer, err := entMgr.FindorCreateCustomer(event.Context(), orgCust)
+		if err != nil {
+			log.Err(err).Msg("Failed to create customer")
 
-		i := client.EntitlementManager.Client.Customers.List(&stripe.CustomerListParams{Email: &email})
+			return err
+		}
 
-		var customerID string
+		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgCust.OrganizationSettingsID, customer.StripeCustomerID, client); err != nil {
+			log.Err(err).Msg("Failed to update organization setting with customer ID")
 
-		if i.Next() {
-			customerID = i.Customer().ID
-		} else {
-			// if there is no customer with the email, create one
-			customer, err := client.EntitlementManager.CreateCustomer(email)
-			if err != nil {
-				log.Err(err).Msg("Failed to create Stripe customer")
+			return err
+		}
+
+		return nil
+	} else {
+		if params, hasUpdate := checkForBillingUpdate(event.Properties(), orgCust); hasUpdate {
+			if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
+				log.Err(err).Msg("Failed to update customer")
+
 				return err
 			}
-
-			customerID = customer.ID
-
-			log.Debug().Msgf("Created Stripe customer with ID: %s", customer.ID)
-
-			if err := updateOrganizationSettingWithCustomerID(event.Context(), orgSettingID.(string), customer.ID, event.Client()); err != nil {
-				log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
-				return err
-			}
-
-			log.Debug().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", customer.ID)
 		}
-
-		// TODO create ent db records / corresponding feature / plan records
-		subs, err := client.EntitlementManager.ListOrCreateSubscriptions(customerID)
-		if err != nil {
-			log.Err(err).Msg("failed to list or create Stripe subscriptions")
-			return err
-		}
-
-		checkout, err := client.EntitlementManager.CreateBillingPortalUpdateSession(subs.ID, customerID)
-		if err != nil {
-			log.Err(err).Msg("failed to create billing portal update session")
-			return err
-		}
-
-		log.Debug().Msgf("Created billing portal update session with URL %s", checkout.URL)
-
-		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgSettingID.(string), customerID, event.Client()); err != nil {
-			log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
-			return err
-		}
-
-		log.Debug().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", customerID)
 	}
 
 	return nil
+
 }
 
 // updateOrganizationSettingWithCustomerID updates an OrganizationSetting with a Stripe customer ID
@@ -316,18 +235,49 @@ func updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, 
 
 // fetchOrganizationIDbyOrgSettingID fetches the organization ID by the organization setting ID
 func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string, client interface{}) (*entitlements.OrganizationCustomer, error) {
-	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
+	var orgSetting *entgen.OrganizationSetting
+
+	var err error
+
+	// Retry fetching organization setting
+	for i := 0; i < 3; i++ {
+		time.Sleep(2 * time.Second) // nolint:mnd
+
+		orgSetting, err = client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
+		if err == nil {
+			break
+		}
+
+		log.Warn().Msgf("Retrying fetch organization setting by ID %s, attempt %d", orgsettingID, i+1)
+
+	}
+
 	if err != nil {
-		log.Err(err).Msgf("Failed to fetch organization setting by ID %s", orgsettingID)
+		log.Err(err).Msgf("Failed to fetch organization setting by ID %s after 3 attempts", orgsettingID)
 		return nil, err
 	}
 
-	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSetting.OrganizationID)).Only(ctx)
+	var org *entgen.Organization
+
+	// Retry fetching organization
+	for i := 0; i < 3; i++ {
+		time.Sleep(2 * time.Second) // nolint:mnd
+
+		org, err = client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSetting.OrganizationID)).Only(ctx)
+		if err == nil {
+			break
+		}
+
+		log.Warn().Msgf("Retrying fetch organization by organization setting ID %s, attempt %d", orgsettingID, i+1)
+
+	}
+
 	if err != nil {
-		log.Err(err).Msgf("Failed to fetch organization by organization setting ID %s", orgsettingID)
+		log.Err(err).Msgf("Failed to fetch organization by organization setting ID %s after 3 attempts", orgsettingID)
 		return nil, err
 	}
 
+	//if !org.PersonalOrg {
 	return &entitlements.OrganizationCustomer{
 		OrganizationID:         org.ID,
 		StripeCustomerID:       orgSetting.StripeID,
@@ -336,17 +286,18 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 		OrganizationName:       org.Name,
 		OrganizationSettingsID: orgSetting.ID,
 	}, nil
+
 }
 
 // checkForBillingUpdate checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
 // and a boolean indicating whether there are updates
-func checkForBillingUpdate(props map[string]interface{}, stripeCustomer *stripe.Customer) (params *stripe.CustomerParams, hasUpdate bool) {
+func checkForBillingUpdate(props map[string]interface{}, stripeCustomer *entitlements.OrganizationCustomer) (params *stripe.CustomerParams, hasUpdate bool) {
 	params = &stripe.CustomerParams{}
 
 	billingEmail, exists := props["billing_email"]
 	if exists && billingEmail != "" {
 		email := billingEmail.(string)
-		if stripeCustomer.Email != email {
+		if stripeCustomer.BillingEmail != email {
 			params.Email = &email
 			hasUpdate = true
 		}
@@ -355,32 +306,11 @@ func checkForBillingUpdate(props map[string]interface{}, stripeCustomer *stripe.
 	billingPhone, exists := props["billing_phone"]
 	if exists && billingPhone != "" {
 		phone := billingPhone.(string)
-		if stripeCustomer.Phone != phone {
+		if stripeCustomer.BillingPhone != phone {
 			params.Phone = &phone
 			hasUpdate = true
 		}
 	}
 
-	// TODO: split out address fields in ent schema
-	billingAddress, exists := props["billing_address"]
-	if exists && billingAddress != "" {
-		address := billingAddress.(string)
-		if stripeCustomer.Address.Line1 != address {
-			params.Address = &stripe.AddressParams{
-				Line1: &address,
-			}
-			hasUpdate = true
-		}
-	}
-
-	return
-}
-
-func HasFields(m ent.Mutation, err error, fields ...string) bool {
-	_, ok := lo.Find(fields, func(field string) bool {
-		_, ok := m.Field(field)
-		return ok
-	})
-
-	return ok
+	return params, hasUpdate
 }
