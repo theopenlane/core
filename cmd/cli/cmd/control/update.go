@@ -31,13 +31,13 @@ func init() {
 	updateCmd.Flags().StringP("version", "v", "", "version of the control")
 	updateCmd.Flags().StringP("number", "u", "", "number of the control")
 	updateCmd.Flags().StringP("family", "f", "", "family of the control")
-	updateCmd.Flags().StringP("class", "c", "", "class of the control")
+	updateCmd.Flags().StringP("class", "l", "", "class of the control")
 	updateCmd.Flags().StringP("source", "o", "", "source of the control")
 	updateCmd.Flags().StringP("mapped-frameworks", "m", "", "mapped frameworks with the control")
 	updateCmd.Flags().StringP("satisfies", "a", "", "control objectives satisfied by the control")
 
-	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the risk")
-	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the risk")
+	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the control")
+	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the control")
 }
 
 // updateValidation validates the required fields for the command

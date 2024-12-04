@@ -11965,6 +11965,25 @@ func (c *OrganizationClient) QueryControls(o *Organization) *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols queries the subcontrols edge of a Organization.
+func (c *OrganizationClient) QuerySubcontrols(o *Organization) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubcontrolsTable, organization.SubcontrolsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -15054,15 +15073,34 @@ func (c *SubcontrolClient) GetX(ctx context.Context, id string) *Subcontrol {
 	return obj
 }
 
-// QueryControl queries the control edge of a Subcontrol.
-func (c *SubcontrolClient) QueryControl(s *Subcontrol) *ControlQuery {
+// QueryOwner queries the owner edge of a Subcontrol.
+func (c *SubcontrolClient) QueryOwner(s *Subcontrol) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subcontrol.OwnerTable, subcontrol.OwnerColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Subcontrol.
+func (c *SubcontrolClient) QueryControls(s *Subcontrol) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ControlTable, subcontrol.ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ControlsTable, subcontrol.ControlsPrimaryKey...),
 		)
 		schemaConfig := s.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -15286,12 +15324,14 @@ func (c *SubcontrolHistoryClient) GetX(ctx context.Context, id string) *Subcontr
 
 // Hooks returns the client hooks.
 func (c *SubcontrolHistoryClient) Hooks() []Hook {
-	return c.hooks.SubcontrolHistory
+	hooks := c.hooks.SubcontrolHistory
+	return append(hooks[:len(hooks):len(hooks)], subcontrolhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *SubcontrolHistoryClient) Interceptors() []Interceptor {
-	return c.inters.SubcontrolHistory
+	inters := c.inters.SubcontrolHistory
+	return append(inters[:len(inters):len(inters)], subcontrolhistory.Interceptors[:]...)
 }
 
 func (c *SubcontrolHistoryClient) mutate(ctx context.Context, m *SubcontrolHistoryMutation) (Value, error) {

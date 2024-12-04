@@ -4781,6 +4781,7 @@ input CreateOrganizationInput {
 	controlobjectiveIDs: [ID!]
 	narrativeIDs: [ID!]
 	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -5163,7 +5164,8 @@ input CreateSubcontrolInput {
 	json data details of the subcontrol
 	"""
 	details: Map
-	controlIDs: [ID!]
+	ownerID: ID!
+	controlIDs: [ID!]!
 	userIDs: [ID!]
 	taskIDs: [ID!]
 	notesID: ID
@@ -20427,6 +20429,7 @@ type Organization implements Node {
 	controlobjectives: [ControlObjective!]
 	narratives: [Narrative!]
 	controls: [Control!]
+	subcontrols: [Subcontrol!]
 	members: [OrgMembership!]
 }
 """
@@ -21986,6 +21989,11 @@ input OrganizationWhereInput {
 	"""
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -29370,6 +29378,10 @@ type Subcontrol implements Node {
 	"""
 	tags: [String!]
 	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID!
+	"""
 	the name of the subcontrol
 	"""
 	name: String!
@@ -29433,7 +29445,8 @@ type Subcontrol implements Node {
 	json data details of the subcontrol
 	"""
 	details: Map
-	control: [Control!]
+	owner: Organization!
+	controls: [Control!]!
 	user: [User!]
 	tasks: [Task!]
 	notes: Note
@@ -29511,6 +29524,10 @@ type SubcontrolHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: String!
 	"""
 	the name of the subcontrol
 	"""
@@ -29764,6 +29781,22 @@ input SubcontrolHistoryWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -30150,6 +30183,22 @@ input SubcontrolWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
 	name field predicates
 	"""
 	name: String
@@ -30408,10 +30457,15 @@ input SubcontrolWhereInput {
 	implementationVerificationDateIsNil: Boolean
 	implementationVerificationDateNotNil: Boolean
 	"""
-	control edge predicates
+	owner edge predicates
 	"""
-	hasControl: Boolean
-	hasControlWith: [ControlWhereInput!]
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
 	user edge predicates
 	"""
@@ -33741,6 +33795,9 @@ input UpdateOrganizationInput {
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	updateOrgSettings: UpdateOrganizationSettingInput
 }
@@ -34270,9 +34327,9 @@ input UpdateSubcontrolInput {
 	"""
 	details: Map
 	clearDetails: Boolean
+	ownerID: ID
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
-	clearControl: Boolean
 	addUserIDs: [ID!]
 	removeUserIDs: [ID!]
 	clearUser: Boolean

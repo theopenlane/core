@@ -7,8 +7,13 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Subcontrol defines the file schema.
@@ -20,6 +25,7 @@ type Subcontrol struct {
 func (Subcontrol) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
+			NotEmpty().
 			Comment("the name of the subcontrol"),
 		field.Text("description").
 			Optional().
@@ -72,7 +78,9 @@ func (Subcontrol) Fields() []ent.Field {
 // Edges of the Subcontrol
 func (Subcontrol) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("control", Control.Type).
+		// subcontorls have to have a parent control
+		edge.From("controls", Control.Type).
+			Required().
 			Ref("subcontrols"),
 		edge.From("user", User.Type).
 			Ref("subcontrols"),
@@ -92,6 +100,12 @@ func (Subcontrol) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+		// subcontrols can inherit permissions from the parent control
+		NewObjectOwnedMixin(ObjectOwnedMixin{
+			FieldNames:            []string{"control_id"},
+			WithOrganizationOwner: true,
+			Ref:                   "subcontrols",
+		}),
 	}
 }
 
@@ -101,5 +115,27 @@ func (Subcontrol) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.SelfAccessChecks(),
 	}
+}
+
+// Hooks of the Subcontrol
+func (Subcontrol) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookSubcontrolUpdate(),
+	}
+}
+
+// Policy of the Subcontrol
+func (Subcontrol) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.SubcontrolQuery](),
+		),
+		policy.WithMutationRules(
+			rule.CanCreateObjectsUnderParent[*generated.SubcontrolMutation](rule.ControlParent), // if mutation contains control_id, check access
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.SubcontrolMutation](),
+		),
+	)
 }

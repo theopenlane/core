@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -124,6 +125,20 @@ func (su *SubcontrolUpdate) AppendTags(s []string) *SubcontrolUpdate {
 // ClearTags clears the value of the "tags" field.
 func (su *SubcontrolUpdate) ClearTags() *SubcontrolUpdate {
 	su.mutation.ClearTags()
+	return su
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (su *SubcontrolUpdate) SetOwnerID(s string) *SubcontrolUpdate {
+	su.mutation.SetOwnerID(s)
+	return su
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableOwnerID(s *string) *SubcontrolUpdate {
+	if s != nil {
+		su.SetOwnerID(*s)
+	}
 	return su
 }
 
@@ -433,14 +448,19 @@ func (su *SubcontrolUpdate) ClearDetails() *SubcontrolUpdate {
 	return su
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// SetOwner sets the "owner" edge to the Organization entity.
+func (su *SubcontrolUpdate) SetOwner(o *Organization) *SubcontrolUpdate {
+	return su.SetOwnerID(o.ID)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (su *SubcontrolUpdate) AddControlIDs(ids ...string) *SubcontrolUpdate {
 	su.mutation.AddControlIDs(ids...)
 	return su
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (su *SubcontrolUpdate) AddControl(c ...*Control) *SubcontrolUpdate {
+// AddControls adds the "controls" edges to the Control entity.
+func (su *SubcontrolUpdate) AddControls(c ...*Control) *SubcontrolUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -517,20 +537,26 @@ func (su *SubcontrolUpdate) Mutation() *SubcontrolMutation {
 	return su.mutation
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (su *SubcontrolUpdate) ClearControl() *SubcontrolUpdate {
-	su.mutation.ClearControl()
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (su *SubcontrolUpdate) ClearOwner() *SubcontrolUpdate {
+	su.mutation.ClearOwner()
 	return su
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// ClearControls clears all "controls" edges to the Control entity.
+func (su *SubcontrolUpdate) ClearControls() *SubcontrolUpdate {
+	su.mutation.ClearControls()
+	return su
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (su *SubcontrolUpdate) RemoveControlIDs(ids ...string) *SubcontrolUpdate {
 	su.mutation.RemoveControlIDs(ids...)
 	return su
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (su *SubcontrolUpdate) RemoveControl(c ...*Control) *SubcontrolUpdate {
+// RemoveControls removes "controls" edges to Control entities.
+func (su *SubcontrolUpdate) RemoveControls(c ...*Control) *SubcontrolUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -649,6 +675,24 @@ func (su *SubcontrolUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (su *SubcontrolUpdate) check() error {
+	if v, ok := su.mutation.OwnerID(); ok {
+		if err := subcontrol.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := su.mutation.Name(); ok {
+		if err := subcontrol.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.name": %w`, err)}
+		}
+	}
+	if su.mutation.OwnerCleared() && len(su.mutation.OwnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Subcontrol.owner"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (su *SubcontrolUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubcontrolUpdate {
 	su.modifiers = append(su.modifiers, modifiers...)
@@ -656,6 +700,9 @@ func (su *SubcontrolUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Sub
 }
 
 func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := su.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(subcontrol.Table, subcontrol.Columns, sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString))
 	if ps := su.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -798,12 +845,43 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.DetailsCleared() {
 		_spec.ClearField(subcontrol.FieldDetails, field.TypeJSON)
 	}
-	if su.mutation.ControlCleared() {
+	if su.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.OwnerTable,
+			Columns: []string{subcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.OwnerTable,
+			Columns: []string{subcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   subcontrol.ControlTable,
-			Columns: subcontrol.ControlPrimaryKey,
+			Table:   subcontrol.ControlsTable,
+			Columns: subcontrol.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -812,12 +890,12 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = su.schemaConfig.ControlSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedControlIDs(); len(nodes) > 0 && !su.mutation.ControlCleared() {
+	if nodes := su.mutation.RemovedControlsIDs(); len(nodes) > 0 && !su.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   subcontrol.ControlTable,
-			Columns: subcontrol.ControlPrimaryKey,
+			Table:   subcontrol.ControlsTable,
+			Columns: subcontrol.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -829,12 +907,12 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := su.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   subcontrol.ControlTable,
-			Columns: subcontrol.ControlPrimaryKey,
+			Table:   subcontrol.ControlsTable,
+			Columns: subcontrol.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -1132,6 +1210,20 @@ func (suo *SubcontrolUpdateOne) AppendTags(s []string) *SubcontrolUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (suo *SubcontrolUpdateOne) ClearTags() *SubcontrolUpdateOne {
 	suo.mutation.ClearTags()
+	return suo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (suo *SubcontrolUpdateOne) SetOwnerID(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetOwnerID(s)
+	return suo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableOwnerID(s *string) *SubcontrolUpdateOne {
+	if s != nil {
+		suo.SetOwnerID(*s)
+	}
 	return suo
 }
 
@@ -1441,14 +1533,19 @@ func (suo *SubcontrolUpdateOne) ClearDetails() *SubcontrolUpdateOne {
 	return suo
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// SetOwner sets the "owner" edge to the Organization entity.
+func (suo *SubcontrolUpdateOne) SetOwner(o *Organization) *SubcontrolUpdateOne {
+	return suo.SetOwnerID(o.ID)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (suo *SubcontrolUpdateOne) AddControlIDs(ids ...string) *SubcontrolUpdateOne {
 	suo.mutation.AddControlIDs(ids...)
 	return suo
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (suo *SubcontrolUpdateOne) AddControl(c ...*Control) *SubcontrolUpdateOne {
+// AddControls adds the "controls" edges to the Control entity.
+func (suo *SubcontrolUpdateOne) AddControls(c ...*Control) *SubcontrolUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1525,20 +1622,26 @@ func (suo *SubcontrolUpdateOne) Mutation() *SubcontrolMutation {
 	return suo.mutation
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (suo *SubcontrolUpdateOne) ClearControl() *SubcontrolUpdateOne {
-	suo.mutation.ClearControl()
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (suo *SubcontrolUpdateOne) ClearOwner() *SubcontrolUpdateOne {
+	suo.mutation.ClearOwner()
 	return suo
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// ClearControls clears all "controls" edges to the Control entity.
+func (suo *SubcontrolUpdateOne) ClearControls() *SubcontrolUpdateOne {
+	suo.mutation.ClearControls()
+	return suo
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (suo *SubcontrolUpdateOne) RemoveControlIDs(ids ...string) *SubcontrolUpdateOne {
 	suo.mutation.RemoveControlIDs(ids...)
 	return suo
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (suo *SubcontrolUpdateOne) RemoveControl(c ...*Control) *SubcontrolUpdateOne {
+// RemoveControls removes "controls" edges to Control entities.
+func (suo *SubcontrolUpdateOne) RemoveControls(c ...*Control) *SubcontrolUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1670,6 +1773,24 @@ func (suo *SubcontrolUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (suo *SubcontrolUpdateOne) check() error {
+	if v, ok := suo.mutation.OwnerID(); ok {
+		if err := subcontrol.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := suo.mutation.Name(); ok {
+		if err := subcontrol.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.name": %w`, err)}
+		}
+	}
+	if suo.mutation.OwnerCleared() && len(suo.mutation.OwnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Subcontrol.owner"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (suo *SubcontrolUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubcontrolUpdateOne {
 	suo.modifiers = append(suo.modifiers, modifiers...)
@@ -1677,6 +1798,9 @@ func (suo *SubcontrolUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) 
 }
 
 func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, err error) {
+	if err := suo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(subcontrol.Table, subcontrol.Columns, sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString))
 	id, ok := suo.mutation.ID()
 	if !ok {
@@ -1836,12 +1960,43 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	if suo.mutation.DetailsCleared() {
 		_spec.ClearField(subcontrol.FieldDetails, field.TypeJSON)
 	}
-	if suo.mutation.ControlCleared() {
+	if suo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.OwnerTable,
+			Columns: []string{subcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.OwnerTable,
+			Columns: []string{subcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   subcontrol.ControlTable,
-			Columns: subcontrol.ControlPrimaryKey,
+			Table:   subcontrol.ControlsTable,
+			Columns: subcontrol.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -1850,12 +2005,12 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 		edge.Schema = suo.schemaConfig.ControlSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedControlIDs(); len(nodes) > 0 && !suo.mutation.ControlCleared() {
+	if nodes := suo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !suo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   subcontrol.ControlTable,
-			Columns: subcontrol.ControlPrimaryKey,
+			Table:   subcontrol.ControlsTable,
+			Columns: subcontrol.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -1867,12 +2022,12 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := suo.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   subcontrol.ControlTable,
-			Columns: subcontrol.ControlPrimaryKey,
+			Table:   subcontrol.ControlsTable,
+			Columns: subcontrol.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),

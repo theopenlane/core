@@ -2487,6 +2487,7 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "note_subcontrols", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 	}
 	// SubcontrolsTable holds the schema information for the "subcontrols" table.
 	SubcontrolsTable = &schema.Table{
@@ -2506,6 +2507,12 @@ var (
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
+			{
+				Symbol:     "subcontrols_organizations_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[27]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
 		},
 	}
 	// SubcontrolHistoryColumns holds the columns for the "subcontrol_history" table.
@@ -2522,6 +2529,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -5834,6 +5842,7 @@ func init() {
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	SubcontrolsTable.ForeignKeys[1].RefTable = NotesTable
+	SubcontrolsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}

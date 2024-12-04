@@ -91,7 +91,7 @@ func (Narrative) Policy() ent.Policy {
 			entfga.CheckReadAccess[*generated.NarrativeQuery](),
 		),
 		policy.WithMutationRules(
-			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.NarrativeMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.NarrativeMutation](),
 		),

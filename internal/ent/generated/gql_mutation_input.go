@@ -5151,6 +5151,7 @@ type CreateOrganizationInput struct {
 	ControlobjectiveIDs        []string
 	NarrativeIDs               []string
 	ControlIDs                 []string
+	SubcontrolIDs              []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5297,6 +5298,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -5435,6 +5439,9 @@ type UpdateOrganizationInput struct {
 	ClearControls                    bool
 	AddControlIDs                    []string
 	RemoveControlIDs                 []string
+	ClearSubcontrols                 bool
+	AddSubcontrolIDs                 []string
+	RemoveSubcontrolIDs              []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5822,6 +5829,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 }
 
@@ -7424,6 +7440,7 @@ type CreateSubcontrolInput struct {
 	ImplementationVerification     *string
 	ImplementationVerificationDate *time.Time
 	Details                        map[string]interface{}
+	OwnerID                        string
 	ControlIDs                     []string
 	UserIDs                        []string
 	TaskIDs                        []string
@@ -7482,6 +7499,7 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
+	m.SetOwnerID(i.OwnerID)
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -7541,7 +7559,7 @@ type UpdateSubcontrolInput struct {
 	ImplementationVerificationDate      *time.Time
 	ClearDetails                        bool
 	Details                             map[string]interface{}
-	ClearControl                        bool
+	OwnerID                             *string
 	AddControlIDs                       []string
 	RemoveControlIDs                    []string
 	ClearUser                           bool
@@ -7661,8 +7679,8 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
-	if i.ClearControl {
-		m.ClearControl()
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.AddControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)

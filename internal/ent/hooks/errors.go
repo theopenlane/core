@@ -38,6 +38,8 @@ var (
 	ErrTooManyAvatarFiles = errors.New("too many avatar files uploaded, only one is allowed")
 	// ErrFailedToRegisterListener is returned when a listener fails to register
 	ErrFailedToRegisterListener = errors.New("failed to register listener")
+	// ErrNoControls is returned when a subcontrol has no controls assigned
+	ErrNoControls = errors.New("subcontrol must have at least one control assigned")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

@@ -115,7 +115,7 @@ func (Procedure) Policy() ent.Policy {
 			entfga.CheckReadAccess[*generated.ProcedureQuery](),
 		),
 		policy.WithMutationRules(
-			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.ProcedureMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProcedureMutation](),
 		),

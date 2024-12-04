@@ -143,13 +143,15 @@ type OrganizationEdges struct {
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [44]bool
+	loadedTypes [45]bool
 	// totalCount holds the count of the edges above.
-	totalCount [44]map[string]int
+	totalCount [45]map[string]int
 
 	namedControlCreators          map[string][]*Group
 	namedControlObjectiveCreators map[string][]*Group
@@ -192,6 +194,7 @@ type OrganizationEdges struct {
 	namedControlobjectives        map[string][]*ControlObjective
 	namedNarratives               map[string][]*Narrative
 	namedControls                 map[string][]*Control
+	namedSubcontrols              map[string][]*Subcontrol
 	namedMembers                  map[string][]*OrgMembership
 }
 
@@ -586,10 +589,19 @@ func (e OrganizationEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[43] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[43] {
+	if e.loadedTypes[44] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -948,6 +960,11 @@ func (o *Organization) QueryNarratives() *NarrativeQuery {
 // QueryControls queries the "controls" edge of the Organization entity.
 func (o *Organization) QueryControls() *ControlQuery {
 	return NewOrganizationClient(o.config).QueryControls(o)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the Organization entity.
+func (o *Organization) QuerySubcontrols() *SubcontrolQuery {
+	return NewOrganizationClient(o.config).QuerySubcontrols(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2009,6 +2026,30 @@ func (o *Organization) appendNamedControls(name string, edges ...*Control) {
 		o.Edges.namedControls[name] = []*Control{}
 	} else {
 		o.Edges.namedControls[name] = append(o.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if o.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if o.Edges.namedSubcontrols == nil {
+		o.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		o.Edges.namedSubcontrols[name] = append(o.Edges.namedSubcontrols[name], edges...)
 	}
 }
 

@@ -540,6 +540,16 @@ func (su *StandardUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (su *StandardUpdate) check() error {
+	if v, ok := su.mutation.Name(); ok {
+		if err := standard.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (su *StandardUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardUpdate {
 	su.modifiers = append(su.modifiers, modifiers...)
@@ -547,6 +557,9 @@ func (su *StandardUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Stand
 }
 
 func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := su.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(standard.Table, standard.Columns, sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString))
 	if ps := su.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -1433,6 +1446,16 @@ func (suo *StandardUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (suo *StandardUpdateOne) check() error {
+	if v, ok := suo.mutation.Name(); ok {
+		if err := standard.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (suo *StandardUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardUpdateOne {
 	suo.modifiers = append(suo.modifiers, modifiers...)
@@ -1440,6 +1463,9 @@ func (suo *StandardUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *S
 }
 
 func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err error) {
+	if err := suo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(standard.Table, standard.Columns, sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString))
 	id, ok := suo.mutation.ID()
 	if !ok {

@@ -3,6 +3,7 @@ package rule
 import (
 	"context"
 
+	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -12,17 +13,24 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
-// CanCreateObjectsInProgram is a rule that returns allow decision if user has edit access in the program(s)
-// which allows them to create objects associated with the program
-func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
+const (
+	// ProgramParent is the parent type for program
+	ProgramParent = "program"
+	// ControlParent is the parent type for control
+	ControlParent = "control"
+)
+
+// CanCreateObjectsUnderParent is a rule that returns allow decision if user has edit access in the parent(s)
+// which allows them to create objects associated with the parent
+func CanCreateObjectsUnderParent[T generated.Mutation](parentType string) privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
-		pIDs, err := getProgramIDFromEntMutation(m)
+		pIDs, err := getParentIDFromEntMutation[T](m, parentType)
 		if err != nil {
-			return privacy.Denyf("unable to get program id from mutation, %s", err.Error())
+			return privacy.Denyf("unable to get parent id from mutation, %s", err.Error())
 		}
 
 		if len(pIDs) == 0 {
-			return privacy.Skipf("no program set on request, skipping")
+			return privacy.Skipf("no parent set on request, skipping")
 		}
 
 		relation := fgax.CanEdit
@@ -33,7 +41,7 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 		}
 
 		log.Debug().Str("relation", relation).
-			Strs("program_ids", pIDs).
+			Strs("parent_ids", pIDs).
 			Msg("checking relationship tuples")
 
 		for _, pID := range pIDs {
@@ -41,7 +49,7 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 				SubjectID:   userID,
 				SubjectType: auth.GetAuthzSubjectType(ctx),
 				ObjectID:    pID,
-				ObjectType:  "program",
+				ObjectType:  fgax.Kind(parentType),
 				Relation:    relation,
 			}
 
@@ -51,8 +59,7 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 			}
 
 			if !access {
-				log.Debug().Str("relation", relation).
-					Str("program_id", pID).
+				log.Debug().Interface("access_check", ac).
 					Msg("access not allowed")
 
 				// no matter the operation, if the user does not have access to the program
@@ -73,25 +80,34 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 	})
 }
 
-// getProgramIDFromEntMutation extracts the program id from a the mutation
-// by attempting to cast the mutation to a risk mutation
-// if additional object types are needed, they should be added to this function
-func getProgramIDFromEntMutation(m generated.Mutation) ([]string, error) {
-	if o, ok := m.(*generated.RiskMutation); ok {
-		return o.ProgramsIDs(), nil
+// ProgramParentMutation is an interface that defines the method to get the program ids from the mutation
+type ProgramParentMutation interface {
+	ProgramsIDs() []string
+}
+
+// getProgramIDFromEntMutation returns the program ids from the mutation
+func getProgramIDFromEntMutation[T ProgramParentMutation](m generated.Mutation) ([]string, error) {
+	return m.(T).ProgramsIDs(), nil
+}
+
+// ControlParentMutation is an interface that defines the method to get the control ids from the mutation
+type ControlParentMutation interface {
+	ControlsIDs() []string
+}
+
+// getProgramIDFromEntMutation returns the program ids from the mutation
+func getControlIDFromEntMutation[T ControlParentMutation](m generated.Mutation) ([]string, error) {
+	return m.(T).ControlsIDs(), nil
+}
+
+// getParentIDFromEntMutation returns the parent ids from the mutation
+func getParentIDFromEntMutation[T ent.Mutation](m generated.Mutation, parentType string) ([]string, error) {
+	switch parentType {
+	case ProgramParent:
+		return getProgramIDFromEntMutation[ProgramParentMutation](m)
+	case ControlParent:
+		return getControlIDFromEntMutation[ControlParentMutation](m)
 	}
 
-	if o, ok := m.(*generated.ControlObjectiveMutation); ok {
-		return o.ProgramsIDs(), nil
-	}
-
-	if o, ok := m.(*generated.NarrativeMutation); ok {
-		return o.ProgramsIDs(), nil
-	}
-
-	if o, ok := m.(*generated.ControlMutation); ok {
-		return o.ProgramsIDs(), nil
-	}
-
-	return nil, nil
+	return []string{}, nil
 }

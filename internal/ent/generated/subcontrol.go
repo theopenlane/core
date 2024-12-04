@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
 
@@ -35,6 +36,8 @@ type Subcontrol struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the subcontrol
 	Name string `json:"name,omitempty"`
 	// description of the subcontrol
@@ -77,8 +80,10 @@ type Subcontrol struct {
 
 // SubcontrolEdges holds the relations/edges for other nodes in the graph.
 type SubcontrolEdges struct {
-	// Control holds the value of the control edge.
-	Control []*Control `json:"control,omitempty"`
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
 	// User holds the value of the user edge.
 	User []*User `json:"user,omitempty"`
 	// Tasks holds the value of the tasks edge.
@@ -89,29 +94,40 @@ type SubcontrolEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
-	namedControl  map[string][]*Control
+	namedControls map[string][]*Control
 	namedUser     map[string][]*User
 	namedTasks    map[string][]*Task
 	namedPrograms map[string][]*Program
 }
 
-// ControlOrErr returns the Control value or an error if the edge
-// was not loaded in eager-loading.
-func (e SubcontrolEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[0] {
-		return e.Control, nil
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
 	}
-	return nil, &NotLoadedError{edge: "control"}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[1] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
 }
 
 // UserOrErr returns the User value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.User, nil
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -120,7 +136,7 @@ func (e SubcontrolEdges) UserOrErr() ([]*User, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -131,7 +147,7 @@ func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
 func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
 	if e.Notes != nil {
 		return e.Notes, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: note.Label}
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -140,7 +156,7 @@ func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -153,7 +169,7 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subcontrol.FieldTags, subcontrol.FieldDetails:
 			values[i] = new([]byte)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldMappingID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldMappingID, subcontrol.FieldOwnerID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification:
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt, subcontrol.FieldImplementationDate, subcontrol.FieldImplementationVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -231,6 +247,12 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &s.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case subcontrol.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				s.OwnerID = value.String
 			}
 		case subcontrol.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -357,9 +379,14 @@ func (s *Subcontrol) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
-// QueryControl queries the "control" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryControl() *ControlQuery {
-	return NewSubcontrolClient(s.config).QueryControl(s)
+// QueryOwner queries the "owner" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryOwner() *OrganizationQuery {
+	return NewSubcontrolClient(s.config).QueryOwner(s)
+}
+
+// QueryControls queries the "controls" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryControls() *ControlQuery {
+	return NewSubcontrolClient(s.config).QueryControls(s)
 }
 
 // QueryUser queries the "user" edge of the Subcontrol entity.
@@ -429,6 +456,9 @@ func (s *Subcontrol) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", s.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(s.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(s.Name)
 	builder.WriteString(", ")
@@ -480,27 +510,27 @@ func (s *Subcontrol) String() string {
 	return builder.String()
 }
 
-// NamedControl returns the Control named value or an error if the edge was not
+// NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedControl(name string) ([]*Control, error) {
-	if s.Edges.namedControl == nil {
+func (s *Subcontrol) NamedControls(name string) ([]*Control, error) {
+	if s.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedControl[name]
+	nodes, ok := s.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedControl(name string, edges ...*Control) {
-	if s.Edges.namedControl == nil {
-		s.Edges.namedControl = make(map[string][]*Control)
+func (s *Subcontrol) appendNamedControls(name string, edges ...*Control) {
+	if s.Edges.namedControls == nil {
+		s.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedControl[name] = []*Control{}
+		s.Edges.namedControls[name] = []*Control{}
 	} else {
-		s.Edges.namedControl[name] = append(s.Edges.namedControl[name], edges...)
+		s.Edges.namedControls[name] = append(s.Edges.namedControls[name], edges...)
 	}
 }
 

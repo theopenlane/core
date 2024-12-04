@@ -3693,6 +3693,7 @@ type CreateOrganizationInput struct {
 	ControlobjectiveIDs        []string                        `json:"controlobjectiveIDs,omitempty"`
 	NarrativeIDs               []string                        `json:"narrativeIDs,omitempty"`
 	ControlIDs                 []string                        `json:"controlIDs,omitempty"`
+	SubcontrolIDs              []string                        `json:"subcontrolIDs,omitempty"`
 	CreateOrgSettings          *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -3925,7 +3926,8 @@ type CreateSubcontrolInput struct {
 	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
 	// json data details of the subcontrol
 	Details    map[string]interface{} `json:"details,omitempty"`
-	ControlIDs []string               `json:"controlIDs,omitempty"`
+	OwnerID    string                 `json:"ownerID"`
+	ControlIDs []string               `json:"controlIDs"`
 	UserIDs    []string               `json:"userIDs,omitempty"`
 	TaskIDs    []string               `json:"taskIDs,omitempty"`
 	NotesID    *string                `json:"notesID,omitempty"`
@@ -14312,6 +14314,7 @@ type Organization struct {
 	Controlobjectives       []*ControlObjective       `json:"controlobjectives,omitempty"`
 	Narratives              []*Narrative              `json:"narratives,omitempty"`
 	Controls                []*Control                `json:"controls,omitempty"`
+	Subcontrols             []*Subcontrol             `json:"subcontrols,omitempty"`
 	Members                 []*OrgMembership          `json:"members,omitempty"`
 }
 
@@ -15496,6 +15499,9 @@ type OrganizationWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -18762,6 +18768,8 @@ type Subcontrol struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"ownerID"`
 	// the name of the subcontrol
 	Name string `json:"name"`
 	// description of the subcontrol
@@ -18794,7 +18802,8 @@ type Subcontrol struct {
 	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
 	// json data details of the subcontrol
 	Details  map[string]interface{} `json:"details,omitempty"`
-	Control  []*Control             `json:"control,omitempty"`
+	Owner    *Organization          `json:"owner"`
+	Controls []*Control             `json:"controls"`
 	User     []*User                `json:"user,omitempty"`
 	Tasks    []*Task                `json:"tasks,omitempty"`
 	Notes    *Note                  `json:"notes,omitempty"`
@@ -18852,6 +18861,8 @@ type SubcontrolHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"ownerID"`
 	// the name of the subcontrol
 	Name string `json:"name"`
 	// description of the subcontrol
@@ -19034,6 +19045,20 @@ type SubcontrolHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -19374,6 +19399,20 @@ type SubcontrolWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -19602,9 +19641,12 @@ type SubcontrolWhereInput struct {
 	ImplementationVerificationDateLte    *time.Time   `json:"implementationVerificationDateLTE,omitempty"`
 	ImplementationVerificationDateIsNil  *bool        `json:"implementationVerificationDateIsNil,omitempty"`
 	ImplementationVerificationDateNotNil *bool        `json:"implementationVerificationDateNotNil,omitempty"`
-	// control edge predicates
-	HasControl     *bool                `json:"hasControl,omitempty"`
-	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
@@ -22179,6 +22221,9 @@ type UpdateOrganizationInput struct {
 	AddControlIDs                    []string                        `json:"addControlIDs,omitempty"`
 	RemoveControlIDs                 []string                        `json:"removeControlIDs,omitempty"`
 	ClearControls                    *bool                           `json:"clearControls,omitempty"`
+	AddSubcontrolIDs                 []string                        `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs              []string                        `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols                 *bool                           `json:"clearSubcontrols,omitempty"`
 	AddOrgMembers                    []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	UpdateOrgSettings                *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
 }
@@ -22560,9 +22605,9 @@ type UpdateSubcontrolInput struct {
 	// json data details of the subcontrol
 	Details          map[string]interface{} `json:"details,omitempty"`
 	ClearDetails     *bool                  `json:"clearDetails,omitempty"`
+	OwnerID          *string                `json:"ownerID,omitempty"`
 	AddControlIDs    []string               `json:"addControlIDs,omitempty"`
 	RemoveControlIDs []string               `json:"removeControlIDs,omitempty"`
-	ClearControl     *bool                  `json:"clearControl,omitempty"`
 	AddUserIDs       []string               `json:"addUserIDs,omitempty"`
 	RemoveUserIDs    []string               `json:"removeUserIDs,omitempty"`
 	ClearUser        *bool                  `json:"clearUser,omitempty"`

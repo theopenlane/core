@@ -31,6 +31,8 @@ const (
 	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -63,8 +65,10 @@ const (
 	FieldImplementationVerificationDate = "implementation_verification_date"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
-	// EdgeControl holds the string denoting the control edge name in mutations.
-	EdgeControl = "control"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
@@ -75,11 +79,18 @@ const (
 	EdgePrograms = "programs"
 	// Table holds the table name of the subcontrol in the database.
 	Table = "subcontrols"
-	// ControlTable is the table that holds the control relation/edge. The primary key declared below.
-	ControlTable = "control_subcontrols"
-	// ControlInverseTable is the table name for the Control entity.
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "subcontrols"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "control_subcontrols"
+	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlInverseTable = "controls"
+	ControlsInverseTable = "controls"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
 	UserTable = "user_subcontrols"
 	// UserInverseTable is the table name for the User entity.
@@ -115,6 +126,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldMappingID,
 	FieldTags,
+	FieldOwnerID,
 	FieldName,
 	FieldDescription,
 	FieldStatus,
@@ -141,9 +153,9 @@ var ForeignKeys = []string{
 }
 
 var (
-	// ControlPrimaryKey and ControlColumn2 are the table columns denoting the
-	// primary key for the control relation (M2M).
-	ControlPrimaryKey = []string{"control_id", "subcontrol_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"control_id", "subcontrol_id"}
 	// UserPrimaryKey and UserColumn2 are the table columns denoting the
 	// primary key for the user relation (M2M).
 	UserPrimaryKey = []string{"user_id", "subcontrol_id"}
@@ -176,8 +188,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [2]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Hooks        [7]ent.Hook
+	Interceptors [2]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -188,6 +201,10 @@ var (
 	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -233,6 +250,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByMappingID orders the results by the mapping_id field.
 func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -310,17 +332,24 @@ func ByImplementationVerificationDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImplementationVerificationDate, opts...).ToFunc()
 }
 
-// ByControlCount orders the results by control count.
-func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlStep(), opts...)
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
 
-// ByControl orders the results by control terms.
-func ByControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
+	}
+}
+
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -372,11 +401,18 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newControlStep() *sqlgraph.Step {
+func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
 func newUserStep() *sqlgraph.Step {
