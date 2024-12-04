@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -12,8 +10,8 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
@@ -105,31 +103,20 @@ func (ControlObjective) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType: "controlobjective", // check access to the controlobjective for update/delete
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the ControlObjective
 func (ControlObjective) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.ControlObjectiveQuery](),
+		),
+		policy.WithMutationRules(
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
-			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
-				rule.CanCreateObjectsInOrg(),
-				ent.OpCreate,
-			),
-			privacy.ControlObjectiveMutationRuleFunc(func(ctx context.Context, m *generated.ControlObjectiveMutation) error {
-				return m.CheckAccessForEdit(ctx) // check access for edit
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.ControlObjectiveQueryRuleFunc(func(ctx context.Context, q *generated.ControlObjectiveQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.ControlObjectiveMutation](),
+		),
+	)
 }

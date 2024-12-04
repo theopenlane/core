@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -16,27 +14,15 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Group holds the schema definition for the Group entity
 type Group struct {
 	ent.Schema
-}
-
-// Mixin of the Group
-func (Group) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("groups"),
-	}
 }
 
 // Fields of the Group
@@ -94,44 +80,59 @@ func (Group) Edges() []ent.Edge {
 		edge.To("integrations", Integration.Type),
 		edge.To("files", File.Type),
 		edge.To("tasks", Task.Type),
-		edge.From("procedure_editors", Procedure.Type).
-			Ref("editors"),
-		edge.From("procedure_blocked_groups", Procedure.Type).
-			Ref("blocked_groups"),
-		edge.From("internalpolicy_editors", InternalPolicy.Type).
-			Ref("editors"),
-		edge.From("internalpolicy_blocked_groups", InternalPolicy.Type).
-			Ref("blocked_groups"),
-		edge.From("program_viewers", Program.Type).
-			Ref("viewers"),
-		edge.From("program_editors", Program.Type).
-			Ref("editors"),
-		edge.From("program_blocked_groups", Program.Type).
-			Ref("blocked_groups"),
-		edge.From("risk_viewers", Risk.Type).
-			Ref("viewers"),
-		edge.From("risk_editors", Risk.Type).
-			Ref("editors"),
-		edge.From("risk_blocked_groups", Risk.Type).
-			Ref("blocked_groups"),
-		edge.From("controlobjective_viewers", ControlObjective.Type).
-			Ref("viewers"),
-		edge.From("controlobjective_editors", ControlObjective.Type).
-			Ref("editors"),
-		edge.From("controlobjective_blocked_groups", ControlObjective.Type).
-			Ref("blocked_groups"),
-		edge.From("narrative_viewers", Narrative.Type).
-			Ref("viewers"),
-		edge.From("narrative_editors", Narrative.Type).
-			Ref("editors"),
-		edge.From("narrative_blocked_groups", Narrative.Type).
-			Ref("blocked_groups"),
-		edge.From("control_viewers", Control.Type).
-			Ref("viewers"),
-		edge.From("control_editors", Control.Type).
-			Ref("editors"),
-		edge.From("control_blocked_groups", Control.Type).
-			Ref("blocked_groups"),
+	}
+}
+
+// Mixin of the Group
+func (Group) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		emixin.AuditMixin{},
+		mixin.SoftDeleteMixin{},
+		emixin.IDMixin{},
+		emixin.TagMixin{},
+		NewOrgOwnMixinWithRef("groups"),
+		// add group based create permissions, back reference to the organization
+		NewGroupBasedCreateAccessMixin(false),
+		// Add the reverse edges for m:m relationships permissions based on the groups
+		GroupPermissionsEdgesMixin{
+			EdgeInfo: []EdgeInfo{
+				{
+					Name:            "procedure",
+					Type:            Procedure.Type,
+					ViewPermissions: false,
+				},
+				{
+					Name:            "internalpolicy",
+					Type:            InternalPolicy.Type,
+					ViewPermissions: false,
+				},
+				{
+					Name:            "program",
+					Type:            Program.Type,
+					ViewPermissions: true,
+				},
+				{
+					Name:            "risk",
+					Type:            Risk.Type,
+					ViewPermissions: true,
+				},
+				{
+					Name:            "controlobjective",
+					Type:            ControlObjective.Type,
+					ViewPermissions: true,
+				},
+				{
+					Name:            "control",
+					Type:            Control.Type,
+					ViewPermissions: true,
+				},
+				{
+					Name:            "narrative",
+					Type:            Narrative.Type,
+					ViewPermissions: true,
+				},
+			},
+		},
 	}
 }
 
@@ -161,41 +162,7 @@ func (Group) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entfga.Annotations{
-			ObjectType:   "group",
-			IncludeHooks: false,
-		},
-	}
-}
-
-// Policy of the group
-func (Group) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				rule.CanCreateObjectsInOrg(),
-				ent.OpCreate,
-			),
-			privacy.OnMutationOperation(
-				privacy.GroupMutationRuleFunc(func(ctx context.Context, m *generated.GroupMutation) error {
-					return m.CheckAccessForEdit(ctx)
-				}),
-				ent.OpUpdate|ent.OpUpdateOne,
-			),
-			privacy.OnMutationOperation(
-				privacy.GroupMutationRuleFunc(func(ctx context.Context, m *generated.GroupMutation) error {
-					return m.CheckAccessForDelete(ctx)
-				}),
-				ent.OpDelete|ent.OpDeleteOne,
-			),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.GroupQueryRuleFunc(func(ctx context.Context, q *generated.GroupQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -212,4 +179,17 @@ func (Group) Hooks() []ent.Hook {
 		hooks.HookGroupAuthz(),
 		hooks.HookGroup(),
 	}
+}
+
+// Policy of the group
+func (Group) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.GroupQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.GroupMutation](),
+		),
+	)
 }

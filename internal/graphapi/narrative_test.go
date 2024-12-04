@@ -180,11 +180,12 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		request     openlaneclient.CreateNarrativeInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name          string
+		request       openlaneclient.CreateNarrativeInput
+		addGroupToOrg bool
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -244,6 +245,15 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "user now authorized, added to group with creator permissions",
+			request: openlaneclient.CreateNarrativeInput{
+				Name: "Narrative",
+			},
+			addGroupToOrg: true,
+			client:        suite.client.api,
+			ctx:           viewOnlyUser.UserCtx,
+		},
+		{
 			name: "user authorized, they were added to the program",
 			request: openlaneclient.CreateNarrativeInput{
 				Name:       "Narrative",
@@ -283,6 +293,14 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			if tc.addGroupToOrg {
+				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+					openlaneclient.UpdateOrganizationInput{
+						AddNarrativeCreatorIDs: []string{viewOnlyUser.GroupID},
+					})
+				require.NoError(t, err)
+			}
+
 			resp, err := tc.client.CreateNarrative(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)

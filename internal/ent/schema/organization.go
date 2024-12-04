@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"context"
 	"net/url"
 
 	"entgo.io/contrib/entgql"
@@ -15,13 +14,13 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -154,6 +153,8 @@ func (Organization) Edges() []ent.Edge {
 		edge.To("secrets", Hush.Type),
 		edge.To("features", Feature.Type),
 		edge.To("files", File.Type),
+
+		// Organization owns the following entities
 		edge.To("entitlementplans", EntitlementPlan.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("entitlementplanfeatures", EntitlementPlanFeature.Type).
@@ -208,10 +209,7 @@ func (Organization) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entfga.Annotations{
-			ObjectType:   "organization",
-			IncludeHooks: false,
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -222,28 +220,25 @@ func (Organization) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
+		// add group based create permissions
+		NewGroupBasedCreateAccessMixin(true),
 	}
 }
 
 // Policy defines the privacy policy of the Organization.
 func (Organization) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			rule.HasOrgMutationAccess(), // Requires edit for Update, and delete for Delete mutations
-			privacy.AlwaysAllowRule(),   // Allow all other users (e.g. a user with a JWT should be able to create a new org)
-		},
-		Query: privacy.QueryPolicy{
+	return policy.NewPolicy(
+		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}), // Allow invite tokens to query the org ID they are invited to
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),    // Allow sign-up tokens to query the org ID they are subscribing to
-			privacy.OrganizationQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.OrganizationQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationQuery) error {
-				return rule.CheckOrgAccess(ctx, fgax.CanView)
-			}),
-			privacy.AlwaysDenyRule(), // Deny all other users
-		},
-	}
+			entfga.CheckReadAccess[*generated.OrganizationQuery](),            // access based on query context
+			policy.CheckOrgReadAccess(),                                       // access based on auth context
+		),
+		policy.WithMutationRules(
+			rule.HasOrgMutationAccess(), // Requires edit for Update, and delete for Delete mutations
+			privacy.AlwaysAllowRule(),   // Allow all other users (e.g. a user with a JWT should be able to create a new org)
+		),
+	)
 }
 
 // Interceptors of the Organization

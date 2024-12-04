@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -13,9 +11,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
@@ -87,10 +85,7 @@ func (InternalPolicy) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:   "internalpolicy",
-			IncludeHooks: false,
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -111,31 +106,14 @@ func (InternalPolicy) Interceptors() []ent.Interceptor {
 
 // Policy of the InternalPolicy
 func (InternalPolicy) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				rule.CanCreateObjectsInOrg(),
-				ent.OpCreate,
-			),
-			privacy.OnMutationOperation(
-				privacy.InternalPolicyMutationRuleFunc(func(ctx context.Context, m *generated.InternalPolicyMutation) error {
-					return m.CheckAccessForEdit(ctx)
-				}),
-				ent.OpUpdate|ent.OpUpdateOne|ent.OpUpdate,
-			),
-			privacy.OnMutationOperation(
-				privacy.InternalPolicyMutationRuleFunc(func(ctx context.Context, m *generated.InternalPolicyMutation) error {
-					return m.CheckAccessForDelete(ctx)
-				}),
-				ent.OpDelete|ent.OpDeleteOne,
-			),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.InternalPolicyQueryRuleFunc(func(ctx context.Context, q *generated.InternalPolicyQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.InternalPolicyQuery](),
+		),
+		policy.WithMutationRules(
+			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.InternalPolicyMutation](),
+		),
+	)
 }

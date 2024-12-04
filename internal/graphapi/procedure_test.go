@@ -146,11 +146,12 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		request     openlaneclient.CreateProcedureInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name          string
+		request       openlaneclient.CreateProcedureInput
+		addGroupToOrg bool
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -225,6 +226,15 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "user now authorized, add group to org first",
+			request: openlaneclient.CreateProcedureInput{
+				Name: "Test Procedure",
+			},
+			addGroupToOrg: true,
+			client:        suite.client.api,
+			ctx:           viewOnlyUser.UserCtx,
+		},
+		{
 			name: "missing required field",
 			request: openlaneclient.CreateProcedureInput{
 				Description: lo.ToPtr("instructions on how to release a new version"),
@@ -237,6 +247,14 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			if tc.addGroupToOrg {
+				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+					openlaneclient.UpdateOrganizationInput{
+						AddProcedureCreatorIDs: []string{viewOnlyUser.GroupID},
+					})
+				require.NoError(t, err)
+			}
+
 			resp, err := tc.client.CreateProcedure(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)

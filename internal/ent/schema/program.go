@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -10,11 +8,10 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
@@ -126,10 +123,7 @@ func (Program) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entfga.Annotations{
-			ObjectType:   "program",
-			IncludeHooks: false,
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -149,31 +143,13 @@ func (Program) Interceptors() []ent.Interceptor {
 
 // Policy of the program
 func (Program) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				rule.CanCreateObjectsInOrg(),
-				ent.OpCreate,
-			),
-			privacy.OnMutationOperation(
-				privacy.ProgramMutationRuleFunc(func(ctx context.Context, m *generated.ProgramMutation) error {
-					return m.CheckAccessForEdit(ctx)
-				}),
-				ent.OpUpdate|ent.OpUpdateOne|ent.OpUpdate,
-			),
-			privacy.OnMutationOperation(
-				privacy.ProgramMutationRuleFunc(func(ctx context.Context, m *generated.ProgramMutation) error {
-					return m.CheckAccessForDelete(ctx)
-				}),
-				ent.OpDelete|ent.OpDeleteOne,
-			),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.ProgramQueryRuleFunc(func(ctx context.Context, q *generated.ProgramQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.ProgramQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.ProgramMutation](),
+		),
+	)
 }

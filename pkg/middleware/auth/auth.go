@@ -265,6 +265,10 @@ func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*a
 
 // getSubjectName returns the subject name for the user
 func getSubjectName(user *ent.User) string {
+	if user == nil {
+		return ""
+	}
+
 	subjectName := user.FirstName + " " + user.LastName
 	if subjectName == "" {
 		subjectName = user.DisplayName

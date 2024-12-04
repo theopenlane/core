@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -13,8 +11,8 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -61,12 +59,7 @@ func (GroupSetting) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:      "group",
-			IncludeHooks:    false,
-			IDField:         "GroupID",
-			NillableIDField: true,
-		},
+		entfga.SettingsChecks("group"),
 	}
 }
 
@@ -82,18 +75,12 @@ func (GroupSetting) Mixin() []ent.Mixin {
 
 // Policy defines the privacy policy of the GroupSetting
 func (GroupSetting) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.GroupSettingMutationRuleFunc(func(ctx context.Context, m *generated.GroupSettingMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.GroupSettingQueryRuleFunc(func(ctx context.Context, q *generated.GroupSettingQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			entfga.CheckReadAccess[*generated.GroupSettingQuery](),
+		),
+		policy.WithMutationRules(
+			entfga.CheckEditAccess[*generated.GroupSettingMutation](),
+		),
+	)
 }

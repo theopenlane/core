@@ -2938,31 +2938,40 @@ type CreateGroupInput struct {
 	LogoURL                         *string
 	DisplayName                     *string
 	OwnerID                         *string
+	ControlCreatorIDs               []string
+	ControlObjectiveCreatorIDs      []string
+	GroupCreatorIDs                 []string
+	InternalPolicyCreatorIDs        []string
+	NarrativeCreatorIDs             []string
+	ProcedureCreatorIDs             []string
+	ProgramCreatorIDs               []string
+	RiskCreatorIDs                  []string
+	TemplateCreatorIDs              []string
+	ProcedureEditorIDs              []string
+	ProcedureBlockedGroupIDs        []string
+	InternalpolicyEditorIDs         []string
+	InternalpolicyBlockedGroupIDs   []string
+	ProgramEditorIDs                []string
+	ProgramBlockedGroupIDs          []string
+	ProgramViewerIDs                []string
+	RiskEditorIDs                   []string
+	RiskBlockedGroupIDs             []string
+	RiskViewerIDs                   []string
+	ControlobjectiveEditorIDs       []string
+	ControlobjectiveBlockedGroupIDs []string
+	ControlobjectiveViewerIDs       []string
+	ControlEditorIDs                []string
+	ControlBlockedGroupIDs          []string
+	ControlViewerIDs                []string
+	NarrativeEditorIDs              []string
+	NarrativeBlockedGroupIDs        []string
+	NarrativeViewerIDs              []string
 	SettingID                       string
 	UserIDs                         []string
 	EventIDs                        []string
 	IntegrationIDs                  []string
 	FileIDs                         []string
 	TaskIDs                         []string
-	ProcedureEditorIDs              []string
-	ProcedureBlockedGroupIDs        []string
-	InternalpolicyEditorIDs         []string
-	InternalpolicyBlockedGroupIDs   []string
-	ProgramViewerIDs                []string
-	ProgramEditorIDs                []string
-	ProgramBlockedGroupIDs          []string
-	RiskViewerIDs                   []string
-	RiskEditorIDs                   []string
-	RiskBlockedGroupIDs             []string
-	ControlobjectiveViewerIDs       []string
-	ControlobjectiveEditorIDs       []string
-	ControlobjectiveBlockedGroupIDs []string
-	NarrativeViewerIDs              []string
-	NarrativeEditorIDs              []string
-	NarrativeBlockedGroupIDs        []string
-	ControlViewerIDs                []string
-	ControlEditorIDs                []string
-	ControlBlockedGroupIDs          []string
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -2986,6 +2995,90 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.ControlCreatorIDs; len(v) > 0 {
+		m.AddControlCreatorIDs(v...)
+	}
+	if v := i.ControlObjectiveCreatorIDs; len(v) > 0 {
+		m.AddControlObjectiveCreatorIDs(v...)
+	}
+	if v := i.GroupCreatorIDs; len(v) > 0 {
+		m.AddGroupCreatorIDs(v...)
+	}
+	if v := i.InternalPolicyCreatorIDs; len(v) > 0 {
+		m.AddInternalPolicyCreatorIDs(v...)
+	}
+	if v := i.NarrativeCreatorIDs; len(v) > 0 {
+		m.AddNarrativeCreatorIDs(v...)
+	}
+	if v := i.ProcedureCreatorIDs; len(v) > 0 {
+		m.AddProcedureCreatorIDs(v...)
+	}
+	if v := i.ProgramCreatorIDs; len(v) > 0 {
+		m.AddProgramCreatorIDs(v...)
+	}
+	if v := i.RiskCreatorIDs; len(v) > 0 {
+		m.AddRiskCreatorIDs(v...)
+	}
+	if v := i.TemplateCreatorIDs; len(v) > 0 {
+		m.AddTemplateCreatorIDs(v...)
+	}
+	if v := i.ProcedureEditorIDs; len(v) > 0 {
+		m.AddProcedureEditorIDs(v...)
+	}
+	if v := i.ProcedureBlockedGroupIDs; len(v) > 0 {
+		m.AddProcedureBlockedGroupIDs(v...)
+	}
+	if v := i.InternalpolicyEditorIDs; len(v) > 0 {
+		m.AddInternalpolicyEditorIDs(v...)
+	}
+	if v := i.InternalpolicyBlockedGroupIDs; len(v) > 0 {
+		m.AddInternalpolicyBlockedGroupIDs(v...)
+	}
+	if v := i.ProgramEditorIDs; len(v) > 0 {
+		m.AddProgramEditorIDs(v...)
+	}
+	if v := i.ProgramBlockedGroupIDs; len(v) > 0 {
+		m.AddProgramBlockedGroupIDs(v...)
+	}
+	if v := i.ProgramViewerIDs; len(v) > 0 {
+		m.AddProgramViewerIDs(v...)
+	}
+	if v := i.RiskEditorIDs; len(v) > 0 {
+		m.AddRiskEditorIDs(v...)
+	}
+	if v := i.RiskBlockedGroupIDs; len(v) > 0 {
+		m.AddRiskBlockedGroupIDs(v...)
+	}
+	if v := i.RiskViewerIDs; len(v) > 0 {
+		m.AddRiskViewerIDs(v...)
+	}
+	if v := i.ControlobjectiveEditorIDs; len(v) > 0 {
+		m.AddControlobjectiveEditorIDs(v...)
+	}
+	if v := i.ControlobjectiveBlockedGroupIDs; len(v) > 0 {
+		m.AddControlobjectiveBlockedGroupIDs(v...)
+	}
+	if v := i.ControlobjectiveViewerIDs; len(v) > 0 {
+		m.AddControlobjectiveViewerIDs(v...)
+	}
+	if v := i.ControlEditorIDs; len(v) > 0 {
+		m.AddControlEditorIDs(v...)
+	}
+	if v := i.ControlBlockedGroupIDs; len(v) > 0 {
+		m.AddControlBlockedGroupIDs(v...)
+	}
+	if v := i.ControlViewerIDs; len(v) > 0 {
+		m.AddControlViewerIDs(v...)
+	}
+	if v := i.NarrativeEditorIDs; len(v) > 0 {
+		m.AddNarrativeEditorIDs(v...)
+	}
+	if v := i.NarrativeBlockedGroupIDs; len(v) > 0 {
+		m.AddNarrativeBlockedGroupIDs(v...)
+	}
+	if v := i.NarrativeViewerIDs; len(v) > 0 {
+		m.AddNarrativeViewerIDs(v...)
+	}
 	m.SetSettingID(i.SettingID)
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
@@ -3001,63 +3094,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
-	}
-	if v := i.ProcedureEditorIDs; len(v) > 0 {
-		m.AddProcedureEditorIDs(v...)
-	}
-	if v := i.ProcedureBlockedGroupIDs; len(v) > 0 {
-		m.AddProcedureBlockedGroupIDs(v...)
-	}
-	if v := i.InternalpolicyEditorIDs; len(v) > 0 {
-		m.AddInternalpolicyEditorIDs(v...)
-	}
-	if v := i.InternalpolicyBlockedGroupIDs; len(v) > 0 {
-		m.AddInternalpolicyBlockedGroupIDs(v...)
-	}
-	if v := i.ProgramViewerIDs; len(v) > 0 {
-		m.AddProgramViewerIDs(v...)
-	}
-	if v := i.ProgramEditorIDs; len(v) > 0 {
-		m.AddProgramEditorIDs(v...)
-	}
-	if v := i.ProgramBlockedGroupIDs; len(v) > 0 {
-		m.AddProgramBlockedGroupIDs(v...)
-	}
-	if v := i.RiskViewerIDs; len(v) > 0 {
-		m.AddRiskViewerIDs(v...)
-	}
-	if v := i.RiskEditorIDs; len(v) > 0 {
-		m.AddRiskEditorIDs(v...)
-	}
-	if v := i.RiskBlockedGroupIDs; len(v) > 0 {
-		m.AddRiskBlockedGroupIDs(v...)
-	}
-	if v := i.ControlobjectiveViewerIDs; len(v) > 0 {
-		m.AddControlobjectiveViewerIDs(v...)
-	}
-	if v := i.ControlobjectiveEditorIDs; len(v) > 0 {
-		m.AddControlobjectiveEditorIDs(v...)
-	}
-	if v := i.ControlobjectiveBlockedGroupIDs; len(v) > 0 {
-		m.AddControlobjectiveBlockedGroupIDs(v...)
-	}
-	if v := i.NarrativeViewerIDs; len(v) > 0 {
-		m.AddNarrativeViewerIDs(v...)
-	}
-	if v := i.NarrativeEditorIDs; len(v) > 0 {
-		m.AddNarrativeEditorIDs(v...)
-	}
-	if v := i.NarrativeBlockedGroupIDs; len(v) > 0 {
-		m.AddNarrativeBlockedGroupIDs(v...)
-	}
-	if v := i.ControlViewerIDs; len(v) > 0 {
-		m.AddControlViewerIDs(v...)
-	}
-	if v := i.ControlEditorIDs; len(v) > 0 {
-		m.AddControlEditorIDs(v...)
-	}
-	if v := i.ControlBlockedGroupIDs; len(v) > 0 {
-		m.AddControlBlockedGroupIDs(v...)
 	}
 }
 
@@ -3082,6 +3118,90 @@ type UpdateGroupInput struct {
 	DisplayName                           *string
 	ClearOwner                            bool
 	OwnerID                               *string
+	ClearControlCreators                  bool
+	AddControlCreatorIDs                  []string
+	RemoveControlCreatorIDs               []string
+	ClearControlObjectiveCreators         bool
+	AddControlObjectiveCreatorIDs         []string
+	RemoveControlObjectiveCreatorIDs      []string
+	ClearGroupCreators                    bool
+	AddGroupCreatorIDs                    []string
+	RemoveGroupCreatorIDs                 []string
+	ClearInternalPolicyCreators           bool
+	AddInternalPolicyCreatorIDs           []string
+	RemoveInternalPolicyCreatorIDs        []string
+	ClearNarrativeCreators                bool
+	AddNarrativeCreatorIDs                []string
+	RemoveNarrativeCreatorIDs             []string
+	ClearProcedureCreators                bool
+	AddProcedureCreatorIDs                []string
+	RemoveProcedureCreatorIDs             []string
+	ClearProgramCreators                  bool
+	AddProgramCreatorIDs                  []string
+	RemoveProgramCreatorIDs               []string
+	ClearRiskCreators                     bool
+	AddRiskCreatorIDs                     []string
+	RemoveRiskCreatorIDs                  []string
+	ClearTemplateCreators                 bool
+	AddTemplateCreatorIDs                 []string
+	RemoveTemplateCreatorIDs              []string
+	ClearProcedureEditors                 bool
+	AddProcedureEditorIDs                 []string
+	RemoveProcedureEditorIDs              []string
+	ClearProcedureBlockedGroups           bool
+	AddProcedureBlockedGroupIDs           []string
+	RemoveProcedureBlockedGroupIDs        []string
+	ClearInternalpolicyEditors            bool
+	AddInternalpolicyEditorIDs            []string
+	RemoveInternalpolicyEditorIDs         []string
+	ClearInternalpolicyBlockedGroups      bool
+	AddInternalpolicyBlockedGroupIDs      []string
+	RemoveInternalpolicyBlockedGroupIDs   []string
+	ClearProgramEditors                   bool
+	AddProgramEditorIDs                   []string
+	RemoveProgramEditorIDs                []string
+	ClearProgramBlockedGroups             bool
+	AddProgramBlockedGroupIDs             []string
+	RemoveProgramBlockedGroupIDs          []string
+	ClearProgramViewers                   bool
+	AddProgramViewerIDs                   []string
+	RemoveProgramViewerIDs                []string
+	ClearRiskEditors                      bool
+	AddRiskEditorIDs                      []string
+	RemoveRiskEditorIDs                   []string
+	ClearRiskBlockedGroups                bool
+	AddRiskBlockedGroupIDs                []string
+	RemoveRiskBlockedGroupIDs             []string
+	ClearRiskViewers                      bool
+	AddRiskViewerIDs                      []string
+	RemoveRiskViewerIDs                   []string
+	ClearControlobjectiveEditors          bool
+	AddControlobjectiveEditorIDs          []string
+	RemoveControlobjectiveEditorIDs       []string
+	ClearControlobjectiveBlockedGroups    bool
+	AddControlobjectiveBlockedGroupIDs    []string
+	RemoveControlobjectiveBlockedGroupIDs []string
+	ClearControlobjectiveViewers          bool
+	AddControlobjectiveViewerIDs          []string
+	RemoveControlobjectiveViewerIDs       []string
+	ClearControlEditors                   bool
+	AddControlEditorIDs                   []string
+	RemoveControlEditorIDs                []string
+	ClearControlBlockedGroups             bool
+	AddControlBlockedGroupIDs             []string
+	RemoveControlBlockedGroupIDs          []string
+	ClearControlViewers                   bool
+	AddControlViewerIDs                   []string
+	RemoveControlViewerIDs                []string
+	ClearNarrativeEditors                 bool
+	AddNarrativeEditorIDs                 []string
+	RemoveNarrativeEditorIDs              []string
+	ClearNarrativeBlockedGroups           bool
+	AddNarrativeBlockedGroupIDs           []string
+	RemoveNarrativeBlockedGroupIDs        []string
+	ClearNarrativeViewers                 bool
+	AddNarrativeViewerIDs                 []string
+	RemoveNarrativeViewerIDs              []string
 	SettingID                             *string
 	ClearUsers                            bool
 	AddUserIDs                            []string
@@ -3098,63 +3218,6 @@ type UpdateGroupInput struct {
 	ClearTasks                            bool
 	AddTaskIDs                            []string
 	RemoveTaskIDs                         []string
-	ClearProcedureEditors                 bool
-	AddProcedureEditorIDs                 []string
-	RemoveProcedureEditorIDs              []string
-	ClearProcedureBlockedGroups           bool
-	AddProcedureBlockedGroupIDs           []string
-	RemoveProcedureBlockedGroupIDs        []string
-	ClearInternalpolicyEditors            bool
-	AddInternalpolicyEditorIDs            []string
-	RemoveInternalpolicyEditorIDs         []string
-	ClearInternalpolicyBlockedGroups      bool
-	AddInternalpolicyBlockedGroupIDs      []string
-	RemoveInternalpolicyBlockedGroupIDs   []string
-	ClearProgramViewers                   bool
-	AddProgramViewerIDs                   []string
-	RemoveProgramViewerIDs                []string
-	ClearProgramEditors                   bool
-	AddProgramEditorIDs                   []string
-	RemoveProgramEditorIDs                []string
-	ClearProgramBlockedGroups             bool
-	AddProgramBlockedGroupIDs             []string
-	RemoveProgramBlockedGroupIDs          []string
-	ClearRiskViewers                      bool
-	AddRiskViewerIDs                      []string
-	RemoveRiskViewerIDs                   []string
-	ClearRiskEditors                      bool
-	AddRiskEditorIDs                      []string
-	RemoveRiskEditorIDs                   []string
-	ClearRiskBlockedGroups                bool
-	AddRiskBlockedGroupIDs                []string
-	RemoveRiskBlockedGroupIDs             []string
-	ClearControlobjectiveViewers          bool
-	AddControlobjectiveViewerIDs          []string
-	RemoveControlobjectiveViewerIDs       []string
-	ClearControlobjectiveEditors          bool
-	AddControlobjectiveEditorIDs          []string
-	RemoveControlobjectiveEditorIDs       []string
-	ClearControlobjectiveBlockedGroups    bool
-	AddControlobjectiveBlockedGroupIDs    []string
-	RemoveControlobjectiveBlockedGroupIDs []string
-	ClearNarrativeViewers                 bool
-	AddNarrativeViewerIDs                 []string
-	RemoveNarrativeViewerIDs              []string
-	ClearNarrativeEditors                 bool
-	AddNarrativeEditorIDs                 []string
-	RemoveNarrativeEditorIDs              []string
-	ClearNarrativeBlockedGroups           bool
-	AddNarrativeBlockedGroupIDs           []string
-	RemoveNarrativeBlockedGroupIDs        []string
-	ClearControlViewers                   bool
-	AddControlViewerIDs                   []string
-	RemoveControlViewerIDs                []string
-	ClearControlEditors                   bool
-	AddControlEditorIDs                   []string
-	RemoveControlEditorIDs                []string
-	ClearControlBlockedGroups             bool
-	AddControlBlockedGroupIDs             []string
-	RemoveControlBlockedGroupIDs          []string
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -3197,6 +3260,258 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if i.ClearControlCreators {
+		m.ClearControlCreators()
+	}
+	if v := i.AddControlCreatorIDs; len(v) > 0 {
+		m.AddControlCreatorIDs(v...)
+	}
+	if v := i.RemoveControlCreatorIDs; len(v) > 0 {
+		m.RemoveControlCreatorIDs(v...)
+	}
+	if i.ClearControlObjectiveCreators {
+		m.ClearControlObjectiveCreators()
+	}
+	if v := i.AddControlObjectiveCreatorIDs; len(v) > 0 {
+		m.AddControlObjectiveCreatorIDs(v...)
+	}
+	if v := i.RemoveControlObjectiveCreatorIDs; len(v) > 0 {
+		m.RemoveControlObjectiveCreatorIDs(v...)
+	}
+	if i.ClearGroupCreators {
+		m.ClearGroupCreators()
+	}
+	if v := i.AddGroupCreatorIDs; len(v) > 0 {
+		m.AddGroupCreatorIDs(v...)
+	}
+	if v := i.RemoveGroupCreatorIDs; len(v) > 0 {
+		m.RemoveGroupCreatorIDs(v...)
+	}
+	if i.ClearInternalPolicyCreators {
+		m.ClearInternalPolicyCreators()
+	}
+	if v := i.AddInternalPolicyCreatorIDs; len(v) > 0 {
+		m.AddInternalPolicyCreatorIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyCreatorIDs; len(v) > 0 {
+		m.RemoveInternalPolicyCreatorIDs(v...)
+	}
+	if i.ClearNarrativeCreators {
+		m.ClearNarrativeCreators()
+	}
+	if v := i.AddNarrativeCreatorIDs; len(v) > 0 {
+		m.AddNarrativeCreatorIDs(v...)
+	}
+	if v := i.RemoveNarrativeCreatorIDs; len(v) > 0 {
+		m.RemoveNarrativeCreatorIDs(v...)
+	}
+	if i.ClearProcedureCreators {
+		m.ClearProcedureCreators()
+	}
+	if v := i.AddProcedureCreatorIDs; len(v) > 0 {
+		m.AddProcedureCreatorIDs(v...)
+	}
+	if v := i.RemoveProcedureCreatorIDs; len(v) > 0 {
+		m.RemoveProcedureCreatorIDs(v...)
+	}
+	if i.ClearProgramCreators {
+		m.ClearProgramCreators()
+	}
+	if v := i.AddProgramCreatorIDs; len(v) > 0 {
+		m.AddProgramCreatorIDs(v...)
+	}
+	if v := i.RemoveProgramCreatorIDs; len(v) > 0 {
+		m.RemoveProgramCreatorIDs(v...)
+	}
+	if i.ClearRiskCreators {
+		m.ClearRiskCreators()
+	}
+	if v := i.AddRiskCreatorIDs; len(v) > 0 {
+		m.AddRiskCreatorIDs(v...)
+	}
+	if v := i.RemoveRiskCreatorIDs; len(v) > 0 {
+		m.RemoveRiskCreatorIDs(v...)
+	}
+	if i.ClearTemplateCreators {
+		m.ClearTemplateCreators()
+	}
+	if v := i.AddTemplateCreatorIDs; len(v) > 0 {
+		m.AddTemplateCreatorIDs(v...)
+	}
+	if v := i.RemoveTemplateCreatorIDs; len(v) > 0 {
+		m.RemoveTemplateCreatorIDs(v...)
+	}
+	if i.ClearProcedureEditors {
+		m.ClearProcedureEditors()
+	}
+	if v := i.AddProcedureEditorIDs; len(v) > 0 {
+		m.AddProcedureEditorIDs(v...)
+	}
+	if v := i.RemoveProcedureEditorIDs; len(v) > 0 {
+		m.RemoveProcedureEditorIDs(v...)
+	}
+	if i.ClearProcedureBlockedGroups {
+		m.ClearProcedureBlockedGroups()
+	}
+	if v := i.AddProcedureBlockedGroupIDs; len(v) > 0 {
+		m.AddProcedureBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveProcedureBlockedGroupIDs; len(v) > 0 {
+		m.RemoveProcedureBlockedGroupIDs(v...)
+	}
+	if i.ClearInternalpolicyEditors {
+		m.ClearInternalpolicyEditors()
+	}
+	if v := i.AddInternalpolicyEditorIDs; len(v) > 0 {
+		m.AddInternalpolicyEditorIDs(v...)
+	}
+	if v := i.RemoveInternalpolicyEditorIDs; len(v) > 0 {
+		m.RemoveInternalpolicyEditorIDs(v...)
+	}
+	if i.ClearInternalpolicyBlockedGroups {
+		m.ClearInternalpolicyBlockedGroups()
+	}
+	if v := i.AddInternalpolicyBlockedGroupIDs; len(v) > 0 {
+		m.AddInternalpolicyBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveInternalpolicyBlockedGroupIDs; len(v) > 0 {
+		m.RemoveInternalpolicyBlockedGroupIDs(v...)
+	}
+	if i.ClearProgramEditors {
+		m.ClearProgramEditors()
+	}
+	if v := i.AddProgramEditorIDs; len(v) > 0 {
+		m.AddProgramEditorIDs(v...)
+	}
+	if v := i.RemoveProgramEditorIDs; len(v) > 0 {
+		m.RemoveProgramEditorIDs(v...)
+	}
+	if i.ClearProgramBlockedGroups {
+		m.ClearProgramBlockedGroups()
+	}
+	if v := i.AddProgramBlockedGroupIDs; len(v) > 0 {
+		m.AddProgramBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveProgramBlockedGroupIDs; len(v) > 0 {
+		m.RemoveProgramBlockedGroupIDs(v...)
+	}
+	if i.ClearProgramViewers {
+		m.ClearProgramViewers()
+	}
+	if v := i.AddProgramViewerIDs; len(v) > 0 {
+		m.AddProgramViewerIDs(v...)
+	}
+	if v := i.RemoveProgramViewerIDs; len(v) > 0 {
+		m.RemoveProgramViewerIDs(v...)
+	}
+	if i.ClearRiskEditors {
+		m.ClearRiskEditors()
+	}
+	if v := i.AddRiskEditorIDs; len(v) > 0 {
+		m.AddRiskEditorIDs(v...)
+	}
+	if v := i.RemoveRiskEditorIDs; len(v) > 0 {
+		m.RemoveRiskEditorIDs(v...)
+	}
+	if i.ClearRiskBlockedGroups {
+		m.ClearRiskBlockedGroups()
+	}
+	if v := i.AddRiskBlockedGroupIDs; len(v) > 0 {
+		m.AddRiskBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveRiskBlockedGroupIDs; len(v) > 0 {
+		m.RemoveRiskBlockedGroupIDs(v...)
+	}
+	if i.ClearRiskViewers {
+		m.ClearRiskViewers()
+	}
+	if v := i.AddRiskViewerIDs; len(v) > 0 {
+		m.AddRiskViewerIDs(v...)
+	}
+	if v := i.RemoveRiskViewerIDs; len(v) > 0 {
+		m.RemoveRiskViewerIDs(v...)
+	}
+	if i.ClearControlobjectiveEditors {
+		m.ClearControlobjectiveEditors()
+	}
+	if v := i.AddControlobjectiveEditorIDs; len(v) > 0 {
+		m.AddControlobjectiveEditorIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveEditorIDs; len(v) > 0 {
+		m.RemoveControlobjectiveEditorIDs(v...)
+	}
+	if i.ClearControlobjectiveBlockedGroups {
+		m.ClearControlobjectiveBlockedGroups()
+	}
+	if v := i.AddControlobjectiveBlockedGroupIDs; len(v) > 0 {
+		m.AddControlobjectiveBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveControlobjectiveBlockedGroupIDs(v...)
+	}
+	if i.ClearControlobjectiveViewers {
+		m.ClearControlobjectiveViewers()
+	}
+	if v := i.AddControlobjectiveViewerIDs; len(v) > 0 {
+		m.AddControlobjectiveViewerIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveViewerIDs; len(v) > 0 {
+		m.RemoveControlobjectiveViewerIDs(v...)
+	}
+	if i.ClearControlEditors {
+		m.ClearControlEditors()
+	}
+	if v := i.AddControlEditorIDs; len(v) > 0 {
+		m.AddControlEditorIDs(v...)
+	}
+	if v := i.RemoveControlEditorIDs; len(v) > 0 {
+		m.RemoveControlEditorIDs(v...)
+	}
+	if i.ClearControlBlockedGroups {
+		m.ClearControlBlockedGroups()
+	}
+	if v := i.AddControlBlockedGroupIDs; len(v) > 0 {
+		m.AddControlBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveControlBlockedGroupIDs; len(v) > 0 {
+		m.RemoveControlBlockedGroupIDs(v...)
+	}
+	if i.ClearControlViewers {
+		m.ClearControlViewers()
+	}
+	if v := i.AddControlViewerIDs; len(v) > 0 {
+		m.AddControlViewerIDs(v...)
+	}
+	if v := i.RemoveControlViewerIDs; len(v) > 0 {
+		m.RemoveControlViewerIDs(v...)
+	}
+	if i.ClearNarrativeEditors {
+		m.ClearNarrativeEditors()
+	}
+	if v := i.AddNarrativeEditorIDs; len(v) > 0 {
+		m.AddNarrativeEditorIDs(v...)
+	}
+	if v := i.RemoveNarrativeEditorIDs; len(v) > 0 {
+		m.RemoveNarrativeEditorIDs(v...)
+	}
+	if i.ClearNarrativeBlockedGroups {
+		m.ClearNarrativeBlockedGroups()
+	}
+	if v := i.AddNarrativeBlockedGroupIDs; len(v) > 0 {
+		m.AddNarrativeBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveNarrativeBlockedGroupIDs; len(v) > 0 {
+		m.RemoveNarrativeBlockedGroupIDs(v...)
+	}
+	if i.ClearNarrativeViewers {
+		m.ClearNarrativeViewers()
+	}
+	if v := i.AddNarrativeViewerIDs; len(v) > 0 {
+		m.AddNarrativeViewerIDs(v...)
+	}
+	if v := i.RemoveNarrativeViewerIDs; len(v) > 0 {
+		m.RemoveNarrativeViewerIDs(v...)
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
@@ -3245,177 +3560,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
-	}
-	if i.ClearProcedureEditors {
-		m.ClearProcedureEditors()
-	}
-	if v := i.AddProcedureEditorIDs; len(v) > 0 {
-		m.AddProcedureEditorIDs(v...)
-	}
-	if v := i.RemoveProcedureEditorIDs; len(v) > 0 {
-		m.RemoveProcedureEditorIDs(v...)
-	}
-	if i.ClearProcedureBlockedGroups {
-		m.ClearProcedureBlockedGroups()
-	}
-	if v := i.AddProcedureBlockedGroupIDs; len(v) > 0 {
-		m.AddProcedureBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveProcedureBlockedGroupIDs; len(v) > 0 {
-		m.RemoveProcedureBlockedGroupIDs(v...)
-	}
-	if i.ClearInternalpolicyEditors {
-		m.ClearInternalpolicyEditors()
-	}
-	if v := i.AddInternalpolicyEditorIDs; len(v) > 0 {
-		m.AddInternalpolicyEditorIDs(v...)
-	}
-	if v := i.RemoveInternalpolicyEditorIDs; len(v) > 0 {
-		m.RemoveInternalpolicyEditorIDs(v...)
-	}
-	if i.ClearInternalpolicyBlockedGroups {
-		m.ClearInternalpolicyBlockedGroups()
-	}
-	if v := i.AddInternalpolicyBlockedGroupIDs; len(v) > 0 {
-		m.AddInternalpolicyBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveInternalpolicyBlockedGroupIDs; len(v) > 0 {
-		m.RemoveInternalpolicyBlockedGroupIDs(v...)
-	}
-	if i.ClearProgramViewers {
-		m.ClearProgramViewers()
-	}
-	if v := i.AddProgramViewerIDs; len(v) > 0 {
-		m.AddProgramViewerIDs(v...)
-	}
-	if v := i.RemoveProgramViewerIDs; len(v) > 0 {
-		m.RemoveProgramViewerIDs(v...)
-	}
-	if i.ClearProgramEditors {
-		m.ClearProgramEditors()
-	}
-	if v := i.AddProgramEditorIDs; len(v) > 0 {
-		m.AddProgramEditorIDs(v...)
-	}
-	if v := i.RemoveProgramEditorIDs; len(v) > 0 {
-		m.RemoveProgramEditorIDs(v...)
-	}
-	if i.ClearProgramBlockedGroups {
-		m.ClearProgramBlockedGroups()
-	}
-	if v := i.AddProgramBlockedGroupIDs; len(v) > 0 {
-		m.AddProgramBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveProgramBlockedGroupIDs; len(v) > 0 {
-		m.RemoveProgramBlockedGroupIDs(v...)
-	}
-	if i.ClearRiskViewers {
-		m.ClearRiskViewers()
-	}
-	if v := i.AddRiskViewerIDs; len(v) > 0 {
-		m.AddRiskViewerIDs(v...)
-	}
-	if v := i.RemoveRiskViewerIDs; len(v) > 0 {
-		m.RemoveRiskViewerIDs(v...)
-	}
-	if i.ClearRiskEditors {
-		m.ClearRiskEditors()
-	}
-	if v := i.AddRiskEditorIDs; len(v) > 0 {
-		m.AddRiskEditorIDs(v...)
-	}
-	if v := i.RemoveRiskEditorIDs; len(v) > 0 {
-		m.RemoveRiskEditorIDs(v...)
-	}
-	if i.ClearRiskBlockedGroups {
-		m.ClearRiskBlockedGroups()
-	}
-	if v := i.AddRiskBlockedGroupIDs; len(v) > 0 {
-		m.AddRiskBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveRiskBlockedGroupIDs; len(v) > 0 {
-		m.RemoveRiskBlockedGroupIDs(v...)
-	}
-	if i.ClearControlobjectiveViewers {
-		m.ClearControlobjectiveViewers()
-	}
-	if v := i.AddControlobjectiveViewerIDs; len(v) > 0 {
-		m.AddControlobjectiveViewerIDs(v...)
-	}
-	if v := i.RemoveControlobjectiveViewerIDs; len(v) > 0 {
-		m.RemoveControlobjectiveViewerIDs(v...)
-	}
-	if i.ClearControlobjectiveEditors {
-		m.ClearControlobjectiveEditors()
-	}
-	if v := i.AddControlobjectiveEditorIDs; len(v) > 0 {
-		m.AddControlobjectiveEditorIDs(v...)
-	}
-	if v := i.RemoveControlobjectiveEditorIDs; len(v) > 0 {
-		m.RemoveControlobjectiveEditorIDs(v...)
-	}
-	if i.ClearControlobjectiveBlockedGroups {
-		m.ClearControlobjectiveBlockedGroups()
-	}
-	if v := i.AddControlobjectiveBlockedGroupIDs; len(v) > 0 {
-		m.AddControlobjectiveBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveControlobjectiveBlockedGroupIDs; len(v) > 0 {
-		m.RemoveControlobjectiveBlockedGroupIDs(v...)
-	}
-	if i.ClearNarrativeViewers {
-		m.ClearNarrativeViewers()
-	}
-	if v := i.AddNarrativeViewerIDs; len(v) > 0 {
-		m.AddNarrativeViewerIDs(v...)
-	}
-	if v := i.RemoveNarrativeViewerIDs; len(v) > 0 {
-		m.RemoveNarrativeViewerIDs(v...)
-	}
-	if i.ClearNarrativeEditors {
-		m.ClearNarrativeEditors()
-	}
-	if v := i.AddNarrativeEditorIDs; len(v) > 0 {
-		m.AddNarrativeEditorIDs(v...)
-	}
-	if v := i.RemoveNarrativeEditorIDs; len(v) > 0 {
-		m.RemoveNarrativeEditorIDs(v...)
-	}
-	if i.ClearNarrativeBlockedGroups {
-		m.ClearNarrativeBlockedGroups()
-	}
-	if v := i.AddNarrativeBlockedGroupIDs; len(v) > 0 {
-		m.AddNarrativeBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveNarrativeBlockedGroupIDs; len(v) > 0 {
-		m.RemoveNarrativeBlockedGroupIDs(v...)
-	}
-	if i.ClearControlViewers {
-		m.ClearControlViewers()
-	}
-	if v := i.AddControlViewerIDs; len(v) > 0 {
-		m.AddControlViewerIDs(v...)
-	}
-	if v := i.RemoveControlViewerIDs; len(v) > 0 {
-		m.RemoveControlViewerIDs(v...)
-	}
-	if i.ClearControlEditors {
-		m.ClearControlEditors()
-	}
-	if v := i.AddControlEditorIDs; len(v) > 0 {
-		m.AddControlEditorIDs(v...)
-	}
-	if v := i.RemoveControlEditorIDs; len(v) > 0 {
-		m.RemoveControlEditorIDs(v...)
-	}
-	if i.ClearControlBlockedGroups {
-		m.ClearControlBlockedGroups()
-	}
-	if v := i.AddControlBlockedGroupIDs; len(v) > 0 {
-		m.AddControlBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveControlBlockedGroupIDs; len(v) > 0 {
-		m.RemoveControlBlockedGroupIDs(v...)
 	}
 }
 
@@ -4966,6 +5110,15 @@ type CreateOrganizationInput struct {
 	PersonalOrg                *bool
 	AvatarRemoteURL            *string
 	DedicatedDb                *bool
+	ControlCreatorIDs          []string
+	ControlObjectiveCreatorIDs []string
+	GroupCreatorIDs            []string
+	InternalPolicyCreatorIDs   []string
+	NarrativeCreatorIDs        []string
+	ProcedureCreatorIDs        []string
+	ProgramCreatorIDs          []string
+	RiskCreatorIDs             []string
+	TemplateCreatorIDs         []string
 	ParentID                   *string
 	GroupIDs                   []string
 	TemplateIDs                []string
@@ -5020,6 +5173,33 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.DedicatedDb; v != nil {
 		m.SetDedicatedDb(*v)
+	}
+	if v := i.ControlCreatorIDs; len(v) > 0 {
+		m.AddControlCreatorIDs(v...)
+	}
+	if v := i.ControlObjectiveCreatorIDs; len(v) > 0 {
+		m.AddControlObjectiveCreatorIDs(v...)
+	}
+	if v := i.GroupCreatorIDs; len(v) > 0 {
+		m.AddGroupCreatorIDs(v...)
+	}
+	if v := i.InternalPolicyCreatorIDs; len(v) > 0 {
+		m.AddInternalPolicyCreatorIDs(v...)
+	}
+	if v := i.NarrativeCreatorIDs; len(v) > 0 {
+		m.AddNarrativeCreatorIDs(v...)
+	}
+	if v := i.ProcedureCreatorIDs; len(v) > 0 {
+		m.AddProcedureCreatorIDs(v...)
+	}
+	if v := i.ProgramCreatorIDs; len(v) > 0 {
+		m.AddProgramCreatorIDs(v...)
+	}
+	if v := i.RiskCreatorIDs; len(v) > 0 {
+		m.AddRiskCreatorIDs(v...)
+	}
+	if v := i.TemplateCreatorIDs; len(v) > 0 {
+		m.AddTemplateCreatorIDs(v...)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -5136,6 +5316,33 @@ type UpdateOrganizationInput struct {
 	Description                      *string
 	ClearAvatarRemoteURL             bool
 	AvatarRemoteURL                  *string
+	ClearControlCreators             bool
+	AddControlCreatorIDs             []string
+	RemoveControlCreatorIDs          []string
+	ClearControlObjectiveCreators    bool
+	AddControlObjectiveCreatorIDs    []string
+	RemoveControlObjectiveCreatorIDs []string
+	ClearGroupCreators               bool
+	AddGroupCreatorIDs               []string
+	RemoveGroupCreatorIDs            []string
+	ClearInternalPolicyCreators      bool
+	AddInternalPolicyCreatorIDs      []string
+	RemoveInternalPolicyCreatorIDs   []string
+	ClearNarrativeCreators           bool
+	AddNarrativeCreatorIDs           []string
+	RemoveNarrativeCreatorIDs        []string
+	ClearProcedureCreators           bool
+	AddProcedureCreatorIDs           []string
+	RemoveProcedureCreatorIDs        []string
+	ClearProgramCreators             bool
+	AddProgramCreatorIDs             []string
+	RemoveProgramCreatorIDs          []string
+	ClearRiskCreators                bool
+	AddRiskCreatorIDs                []string
+	RemoveRiskCreatorIDs             []string
+	ClearTemplateCreators            bool
+	AddTemplateCreatorIDs            []string
+	RemoveTemplateCreatorIDs         []string
 	ClearGroups                      bool
 	AddGroupIDs                      []string
 	RemoveGroupIDs                   []string
@@ -5258,6 +5465,87 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
+	}
+	if i.ClearControlCreators {
+		m.ClearControlCreators()
+	}
+	if v := i.AddControlCreatorIDs; len(v) > 0 {
+		m.AddControlCreatorIDs(v...)
+	}
+	if v := i.RemoveControlCreatorIDs; len(v) > 0 {
+		m.RemoveControlCreatorIDs(v...)
+	}
+	if i.ClearControlObjectiveCreators {
+		m.ClearControlObjectiveCreators()
+	}
+	if v := i.AddControlObjectiveCreatorIDs; len(v) > 0 {
+		m.AddControlObjectiveCreatorIDs(v...)
+	}
+	if v := i.RemoveControlObjectiveCreatorIDs; len(v) > 0 {
+		m.RemoveControlObjectiveCreatorIDs(v...)
+	}
+	if i.ClearGroupCreators {
+		m.ClearGroupCreators()
+	}
+	if v := i.AddGroupCreatorIDs; len(v) > 0 {
+		m.AddGroupCreatorIDs(v...)
+	}
+	if v := i.RemoveGroupCreatorIDs; len(v) > 0 {
+		m.RemoveGroupCreatorIDs(v...)
+	}
+	if i.ClearInternalPolicyCreators {
+		m.ClearInternalPolicyCreators()
+	}
+	if v := i.AddInternalPolicyCreatorIDs; len(v) > 0 {
+		m.AddInternalPolicyCreatorIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyCreatorIDs; len(v) > 0 {
+		m.RemoveInternalPolicyCreatorIDs(v...)
+	}
+	if i.ClearNarrativeCreators {
+		m.ClearNarrativeCreators()
+	}
+	if v := i.AddNarrativeCreatorIDs; len(v) > 0 {
+		m.AddNarrativeCreatorIDs(v...)
+	}
+	if v := i.RemoveNarrativeCreatorIDs; len(v) > 0 {
+		m.RemoveNarrativeCreatorIDs(v...)
+	}
+	if i.ClearProcedureCreators {
+		m.ClearProcedureCreators()
+	}
+	if v := i.AddProcedureCreatorIDs; len(v) > 0 {
+		m.AddProcedureCreatorIDs(v...)
+	}
+	if v := i.RemoveProcedureCreatorIDs; len(v) > 0 {
+		m.RemoveProcedureCreatorIDs(v...)
+	}
+	if i.ClearProgramCreators {
+		m.ClearProgramCreators()
+	}
+	if v := i.AddProgramCreatorIDs; len(v) > 0 {
+		m.AddProgramCreatorIDs(v...)
+	}
+	if v := i.RemoveProgramCreatorIDs; len(v) > 0 {
+		m.RemoveProgramCreatorIDs(v...)
+	}
+	if i.ClearRiskCreators {
+		m.ClearRiskCreators()
+	}
+	if v := i.AddRiskCreatorIDs; len(v) > 0 {
+		m.AddRiskCreatorIDs(v...)
+	}
+	if v := i.RemoveRiskCreatorIDs; len(v) > 0 {
+		m.RemoveRiskCreatorIDs(v...)
+	}
+	if i.ClearTemplateCreators {
+		m.ClearTemplateCreators()
+	}
+	if v := i.AddTemplateCreatorIDs; len(v) > 0 {
+		m.AddTemplateCreatorIDs(v...)
+	}
+	if v := i.RemoveTemplateCreatorIDs; len(v) > 0 {
+		m.RemoveTemplateCreatorIDs(v...)
 	}
 	if i.ClearGroups {
 		m.ClearGroups()
