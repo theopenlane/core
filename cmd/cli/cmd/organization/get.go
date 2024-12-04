@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 var getCmd = &cobra.Command{
@@ -21,6 +22,7 @@ func init() {
 	command.AddCommand(getCmd)
 
 	getCmd.Flags().StringP("id", "i", "", "get a specific organization by ID")
+	getCmd.Flags().BoolP("include-personal-orgs", "p", false, "include personal organizations in the output")
 }
 
 // get an organization in the platform
@@ -41,7 +43,21 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
-	o, err := client.GetAllOrganizations(ctx)
+	includePersonalOrgs := cmd.Config.Bool("include-personal-orgs")
+
+	if includePersonalOrgs {
+		o, err := client.GetAllOrganizations(ctx)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+	}
+
+	// don't include personal orgs
+	where := &openlaneclient.OrganizationWhereInput{
+		PersonalOrg: &includePersonalOrgs,
+	}
+
+	o, err := client.GetOrganizations(ctx, where)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

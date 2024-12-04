@@ -3,6 +3,7 @@ version: "3"
 env:
   DEFAULT_USER_EMAIL: "mitb@theopenlane.io"
   SECOND_USER_EMAIL: "funk@theopenlane.io"
+  DEFAULT_ORG_NAME: "meowmeow"
 
 tasks:
   generate:all:history:
@@ -38,14 +39,31 @@ tasks:
   org:create:
     desc: creates an organization against a running local instance of the server - see the CLI help commands for other variables
     aliases: [createorg]
+    vars:
+      ORG_NAME: meowmeow
     cmds:
-      - go run main.go org create -n meowmeow -d "my meow org"
+      - go run main.go org create -n {{ .ORG_NAME | default .DEFAULT_ORG_NAME }} -d "my meow org"
 
   orgsetting:get:
     desc: gets the org setting
     aliases: [getorgsetting]
     cmds:
       - go run main.go organization-setting get
+
+  token:create:
+    desc: creates an api token against a running local instance of the server
+    aliases: [tokencreate]
+    cmds:
+      - go run main.go token create -n development --scopes=read,write
+
+  pat:create:
+    desc: creates a personal access token against a running local instance of the server
+    aliases: [patcreate]
+    cmds:
+      - go run main.go pat create -n development -o {{.ORG_ID}}
+    vars:
+      ORG_ID:
+        sh: go run main.go org get  -z json  | jq -r '.organizations.edges.[0].node.id'
 
   program:create:
     desc: creates an program against a running local instance of the server
@@ -76,7 +94,8 @@ tasks:
       - task: login
       - task: createorg
       - task: program:create
-      - sleep 2
+      - task: token:create
+      - task: pat:create
       - task: getorgsetting
 
 
