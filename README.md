@@ -92,12 +92,6 @@ See the [README](/config/README.md) in the `config` directory.
 1. Update the configuration with whatever respective settings you desire; the
    defaults inside should allow you to run the server without a problem
 
-1. Create the openlane.fga
-
-    ```bash
-    cp fga/model/model.fga fga/model/openlane.fga
-    ```
-
 1. Use the task commands to start the server
 
    Run the core server in development mode with dependencies in docker

@@ -85,7 +85,7 @@ data:
   CORE_AUTHZ_STOREID: {{ .Values.core.authz.storeId }}
   CORE_AUTHZ_MODELID: {{ .Values.core.authz.modelId }}
   CORE_AUTHZ_CREATENEWMODEL: {{ .Values.core.authz.createNewModel | default false }}
-  CORE_AUTHZ_MODELFILE: {{ .Values.core.authz.modelFile | default "fga/model/openlane.fga" }}
+  CORE_AUTHZ_MODELFILE: {{ .Values.core.authz.modelFile | default "fga/model/model.fga" }}
   CORE_AUTHZ_CREDENTIALS_APITOKEN: {{ .Values.core.authz.credentials.apiToken }}
   CORE_AUTHZ_CREDENTIALS_CLIENTID: {{ .Values.core.authz.credentials.clientId }}
   CORE_AUTHZ_CREDENTIALS_CLIENTSECRET: {{ .Values.core.authz.credentials.clientSecret }}
