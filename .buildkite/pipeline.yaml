@@ -49,6 +49,8 @@ steps:
                 - "GOTOOLCHAIN=auto"
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
+        agents:
+          queue: "hosted-large"
         key: "go_test"
         cancel_on_build_failing: true
         env:
