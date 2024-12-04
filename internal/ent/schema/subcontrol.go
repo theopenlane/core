@@ -78,7 +78,7 @@ func (Subcontrol) Fields() []ent.Field {
 // Edges of the Subcontrol
 func (Subcontrol) Edges() []ent.Edge {
 	return []ent.Edge{
-		// subcontorls have to have a parent control
+		// subcontrols are required to have at least one parent control
 		edge.From("controls", Control.Type).
 			Required().
 			Ref("subcontrols"),

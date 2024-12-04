@@ -269,7 +269,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			ctx:                 adminUser.UserCtx,
 		},
 		{
-			name: "user authorized, user not authorized to one of the controls",
+			name: "user not authorized to one of the controls",
 			request: openlaneclient.CreateSubcontrolInput{
 				Name:       "SC-1",
 				ControlIDs: []string{control1.ID, control2.ID},
