@@ -95,18 +95,18 @@ func NewPolicy(opts ...PolicyOption) ent.Policy {
 	}
 }
 
-func (policies policies) queryPolicy() privacy.QueryPolicy {
-	policy := append(privacy.QueryPolicy(nil), policies.pre.Query...)
-	policy = append(policy, policies.query...)
-	policy = append(policy, policies.post.Query...)
+func (p policies) queryPolicy() privacy.QueryPolicy {
+	policy := append(privacy.QueryPolicy(nil), p.pre.Query...)
+	policy = append(policy, p.query...)
+	policy = append(policy, p.post.Query...)
 
 	return policy
 }
 
-func (policies policies) mutationPolicy() privacy.MutationPolicy {
-	policy := append(privacy.MutationPolicy(nil), policies.pre.Mutation...)
-	policy = append(policy, policies.mutation...)
-	policy = append(policy, policies.post.Mutation...)
+func (p policies) mutationPolicy() privacy.MutationPolicy {
+	policy := append(privacy.MutationPolicy(nil), p.pre.Mutation...)
+	policy = append(policy, p.mutation...)
+	policy = append(policy, p.post.Mutation...)
 
 	return policy
 }

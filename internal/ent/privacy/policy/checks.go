@@ -38,7 +38,7 @@ func CheckOrgWriteAccess() privacy.MutationRule {
 // DenyQueryIfNotAuthenticated denies a query if the user is not authenticated
 func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
-		if _, err := auth.GetAuthenticatedUserContext(ctx); err != nil {
+		if res, err := auth.GetAuthenticatedUserContext(ctx); err != nil || res == nil {
 			log.Err(err).Msg("unable to get authenticated user context")
 
 			return err
@@ -51,7 +51,7 @@ func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 // DenyMutationIfNotAuthenticated denies a mutation if the user is not authenticated
 func DenyMutationIfNotAuthenticated() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		if _, err := auth.GetAuthenticatedUserContext(ctx); err != nil {
+		if res, err := auth.GetAuthenticatedUserContext(ctx); err != nil || res == nil {
 			log.Err(err).Msg("unable to get authenticated user context")
 
 			return err
