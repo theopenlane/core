@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -126,6 +127,12 @@ func (sc *SubcontrolCreate) SetNillableMappingID(s *string) *SubcontrolCreate {
 // SetTags sets the "tags" field.
 func (sc *SubcontrolCreate) SetTags(s []string) *SubcontrolCreate {
 	sc.mutation.SetTags(s)
+	return sc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (sc *SubcontrolCreate) SetOwnerID(s string) *SubcontrolCreate {
+	sc.mutation.SetOwnerID(s)
 	return sc
 }
 
@@ -351,14 +358,19 @@ func (sc *SubcontrolCreate) SetNillableID(s *string) *SubcontrolCreate {
 	return sc
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// SetOwner sets the "owner" edge to the Organization entity.
+func (sc *SubcontrolCreate) SetOwner(o *Organization) *SubcontrolCreate {
+	return sc.SetOwnerID(o.ID)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (sc *SubcontrolCreate) AddControlIDs(ids ...string) *SubcontrolCreate {
 	sc.mutation.AddControlIDs(ids...)
 	return sc
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (sc *SubcontrolCreate) AddControl(c ...*Control) *SubcontrolCreate {
+// AddControls adds the "controls" edges to the Control entity.
+func (sc *SubcontrolCreate) AddControls(c ...*Control) *SubcontrolCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -507,8 +519,27 @@ func (sc *SubcontrolCreate) check() error {
 	if _, ok := sc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Subcontrol.mapping_id"`)}
 	}
+	if _, ok := sc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Subcontrol.owner_id"`)}
+	}
+	if v, ok := sc.mutation.OwnerID(); ok {
+		if err := subcontrol.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := sc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Subcontrol.name"`)}
+	}
+	if v, ok := sc.mutation.Name(); ok {
+		if err := subcontrol.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.name": %w`, err)}
+		}
+	}
+	if len(sc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Subcontrol.owner"`)}
+	}
+	if len(sc.mutation.ControlsIDs()) == 0 {
+		return &ValidationError{Name: "controls", err: errors.New(`generated: missing required edge "Subcontrol.controls"`)}
 	}
 	return nil
 }
@@ -642,12 +673,30 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
-	if nodes := sc.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.OwnerTable,
+			Columns: []string{subcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   subcontrol.ControlTable,
-			Columns: subcontrol.ControlPrimaryKey,
+			Table:   subcontrol.ControlsTable,
+			Columns: subcontrol.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),

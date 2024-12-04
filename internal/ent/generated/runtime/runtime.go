@@ -3664,6 +3664,10 @@ func init() {
 	standardDescTags := standardMixinFields3[0].Descriptor()
 	// standard.DefaultTags holds the default value on creation for the tags field.
 	standard.DefaultTags = standardDescTags.Default.([]string)
+	// standardDescName is the schema descriptor for name field.
+	standardDescName := standardFields[0].Descriptor()
+	// standard.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	standard.NameValidator = standardDescName.Validators[0].(func(string) error)
 	// standardDescID is the schema descriptor for id field.
 	standardDescID := standardMixinFields2[0].Descriptor()
 	// standard.DefaultID holds the default value on creation for the id field.
@@ -3697,18 +3701,43 @@ func init() {
 	// standardhistory.DefaultID holds the default value on creation for the id field.
 	standardhistory.DefaultID = standardhistoryDescID.Default.(func() string)
 	subcontrolMixin := schema.Subcontrol{}.Mixin()
+	subcontrol.Policy = privacy.NewPolicies(schema.Subcontrol{})
+	subcontrol.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := subcontrol.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	subcontrolMixinHooks0 := subcontrolMixin[0].Hooks()
 	subcontrolMixinHooks1 := subcontrolMixin[1].Hooks()
-	subcontrol.Hooks[0] = subcontrolMixinHooks0[0]
-	subcontrol.Hooks[1] = subcontrolMixinHooks1[0]
+	subcontrolMixinHooks4 := subcontrolMixin[4].Hooks()
+	subcontrolHooks := schema.Subcontrol{}.Hooks()
+
+	subcontrol.Hooks[1] = subcontrolMixinHooks0[0]
+
+	subcontrol.Hooks[2] = subcontrolMixinHooks1[0]
+
+	subcontrol.Hooks[3] = subcontrolMixinHooks4[0]
+
+	subcontrol.Hooks[4] = subcontrolMixinHooks4[1]
+
+	subcontrol.Hooks[5] = subcontrolMixinHooks4[2]
+
+	subcontrol.Hooks[6] = subcontrolHooks[0]
 	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
+	subcontrolMixinInters4 := subcontrolMixin[4].Interceptors()
 	subcontrol.Interceptors[0] = subcontrolMixinInters1[0]
+	subcontrol.Interceptors[1] = subcontrolMixinInters4[0]
 	subcontrolMixinFields0 := subcontrolMixin[0].Fields()
 	_ = subcontrolMixinFields0
 	subcontrolMixinFields2 := subcontrolMixin[2].Fields()
 	_ = subcontrolMixinFields2
 	subcontrolMixinFields3 := subcontrolMixin[3].Fields()
 	_ = subcontrolMixinFields3
+	subcontrolMixinFields4 := subcontrolMixin[4].Fields()
+	_ = subcontrolMixinFields4
 	subcontrolFields := schema.Subcontrol{}.Fields()
 	_ = subcontrolFields
 	// subcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -3729,10 +3758,29 @@ func init() {
 	subcontrolDescTags := subcontrolMixinFields3[0].Descriptor()
 	// subcontrol.DefaultTags holds the default value on creation for the tags field.
 	subcontrol.DefaultTags = subcontrolDescTags.Default.([]string)
+	// subcontrolDescOwnerID is the schema descriptor for owner_id field.
+	subcontrolDescOwnerID := subcontrolMixinFields4[0].Descriptor()
+	// subcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	subcontrol.OwnerIDValidator = subcontrolDescOwnerID.Validators[0].(func(string) error)
+	// subcontrolDescName is the schema descriptor for name field.
+	subcontrolDescName := subcontrolFields[0].Descriptor()
+	// subcontrol.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	subcontrol.NameValidator = subcontrolDescName.Validators[0].(func(string) error)
 	// subcontrolDescID is the schema descriptor for id field.
 	subcontrolDescID := subcontrolMixinFields2[0].Descriptor()
 	// subcontrol.DefaultID holds the default value on creation for the id field.
 	subcontrol.DefaultID = subcontrolDescID.Default.(func() string)
+	subcontrolhistory.Policy = privacy.NewPolicies(schema.SubcontrolHistory{})
+	subcontrolhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := subcontrolhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	subcontrolhistoryInters := schema.SubcontrolHistory{}.Interceptors()
+	subcontrolhistory.Interceptors[0] = subcontrolhistoryInters[0]
 	subcontrolhistoryFields := schema.SubcontrolHistory{}.Fields()
 	_ = subcontrolhistoryFields
 	// subcontrolhistoryDescHistoryTime is the schema descriptor for history_time field.

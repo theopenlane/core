@@ -2441,6 +2441,18 @@ func (o *Organization) Controls(ctx context.Context) (result []*Control, err err
 	return result, err
 }
 
+func (o *Organization) Subcontrols(ctx context.Context) (result []*Subcontrol, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedSubcontrols(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.SubcontrolsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QuerySubcontrols().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2989,14 +3001,22 @@ func (s *Standard) Programs(ctx context.Context) (result []*Program, err error) 
 	return result, err
 }
 
-func (s *Subcontrol) Control(ctx context.Context) (result []*Control, err error) {
+func (s *Subcontrol) Owner(ctx context.Context) (*Organization, error) {
+	result, err := s.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryOwner().Only(ctx)
+	}
+	return result, err
+}
+
+func (s *Subcontrol) Controls(ctx context.Context) (result []*Control, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = s.NamedControl(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = s.NamedControls(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = s.Edges.ControlOrErr()
+		result, err = s.Edges.ControlsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = s.QueryControl().All(ctx)
+		result, err = s.QueryControls().All(ctx)
 	}
 	return result, err
 }

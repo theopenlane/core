@@ -183,6 +183,8 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("controls", Control.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("subcontrols", Subcontrol.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
 	}
 }
 

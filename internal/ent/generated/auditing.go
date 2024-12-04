@@ -2250,6 +2250,9 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(sh.Tags, new.Tags) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldTags, sh.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(sh.Name, new.Name) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldName, sh.Name, new.Name))
 	}

@@ -96,7 +96,7 @@ func tableOutput(out []openlaneclient.Control) {
 			programs = append(programs, p.Name)
 		}
 
-		writer.AddRow(i.ID, i.Name, *i.Description, *i.Status, *i.ControlType, *i.Version, *i.ControlNumber, *i.Family, *i.Class, *i.Source, *i.MappedFrameworks, *i.Satisfies, programs)
+		writer.AddRow(i.ID, i.Name, *i.Description, *i.Status, *i.ControlType, *i.Version, *i.ControlNumber, *i.Family, *i.Class, *i.Source, *i.MappedFrameworks, *i.Satisfies, strings.Join(programs, ","))
 	}
 
 	writer.Render()

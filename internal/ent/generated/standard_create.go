@@ -422,6 +422,11 @@ func (sc *StandardCreate) check() error {
 	if _, ok := sc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Standard.name"`)}
 	}
+	if v, ok := sc.mutation.Name(); ok {
+		if err := standard.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
+		}
+	}
 	return nil
 }
 

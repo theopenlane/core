@@ -2040,6 +2040,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldDeletedBy:                      {Type: field.TypeString, Column: subcontrol.FieldDeletedBy},
 			subcontrol.FieldMappingID:                      {Type: field.TypeString, Column: subcontrol.FieldMappingID},
 			subcontrol.FieldTags:                           {Type: field.TypeJSON, Column: subcontrol.FieldTags},
+			subcontrol.FieldOwnerID:                        {Type: field.TypeString, Column: subcontrol.FieldOwnerID},
 			subcontrol.FieldName:                           {Type: field.TypeString, Column: subcontrol.FieldName},
 			subcontrol.FieldDescription:                    {Type: field.TypeString, Column: subcontrol.FieldDescription},
 			subcontrol.FieldStatus:                         {Type: field.TypeString, Column: subcontrol.FieldStatus},
@@ -2080,6 +2081,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldDeletedBy:                      {Type: field.TypeString, Column: subcontrolhistory.FieldDeletedBy},
 			subcontrolhistory.FieldMappingID:                      {Type: field.TypeString, Column: subcontrolhistory.FieldMappingID},
 			subcontrolhistory.FieldTags:                           {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
+			subcontrolhistory.FieldOwnerID:                        {Type: field.TypeString, Column: subcontrolhistory.FieldOwnerID},
 			subcontrolhistory.FieldName:                           {Type: field.TypeString, Column: subcontrolhistory.FieldName},
 			subcontrolhistory.FieldDescription:                    {Type: field.TypeString, Column: subcontrolhistory.FieldDescription},
 			subcontrolhistory.FieldStatus:                         {Type: field.TypeString, Column: subcontrolhistory.FieldStatus},
@@ -5070,6 +5072,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubcontrolsTable,
+			Columns: []string{organization.SubcontrolsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5658,12 +5672,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
-		"control",
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.OwnerTable,
+			Columns: []string{subcontrol.OwnerColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Organization",
+	)
+	graph.MustAddE(
+		"controls",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   subcontrol.ControlTable,
-			Columns: subcontrol.ControlPrimaryKey,
+			Table:   subcontrol.ControlsTable,
+			Columns: subcontrol.ControlsPrimaryKey,
 			Bidi:    false,
 		},
 		"Subcontrol",
@@ -15301,6 +15327,20 @@ func (f *OrganizationFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	})))
 }
 
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *OrganizationFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -17972,6 +18012,11 @@ func (f *SubcontrolFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldTags))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SubcontrolFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldOwnerID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *SubcontrolFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldName))
@@ -18052,14 +18097,28 @@ func (f *SubcontrolFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldDetails))
 }
 
-// WhereHasControl applies a predicate to check if query has an edge control.
-func (f *SubcontrolFilter) WhereHasControl() {
-	f.Where(entql.HasEdge("control"))
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *SubcontrolFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
 }
 
-// WhereHasControlWith applies a predicate to check if query has an edge control with a given conditions (other predicates).
-func (f *SubcontrolFilter) WhereHasControlWith(preds ...predicate.Control) {
-	f.Where(entql.HasEdgeWith("control", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *SubcontrolFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -18215,6 +18274,11 @@ func (f *SubcontrolHistoryFilter) WhereMappingID(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *SubcontrolHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subcontrolhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SubcontrolHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldOwnerID))
 }
 
 // WhereName applies the entql string predicate on the name field.

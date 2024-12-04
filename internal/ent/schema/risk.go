@@ -111,7 +111,7 @@ func (Risk) Policy() ent.Policy {
 			entfga.CheckReadAccess[*generated.RiskQuery](),
 		),
 		policy.WithMutationRules(
-			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.RiskMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.RiskMutation](),
 		),
