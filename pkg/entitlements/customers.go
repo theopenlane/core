@@ -75,7 +75,7 @@ func (sc *StripeClient) FindorCreateCustomer(ctx context.Context, o *Organizatio
 
 		return o, nil
 	default:
-		return nil, fmt.Errorf("found multiple customers with the same name %s", o.OrganizationID)
+		return nil, ErrFoundMultipleCustomers
 	}
 
 }
@@ -91,13 +91,12 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 
 	if err != nil {
 		if stripeErr, ok := err.(*stripe.Error); ok {
-			switch stripeErr.Code {
-			case stripe.ErrorCodeMissing:
-				return nil, fmt.Errorf("customer %s does not exist in stripe", customerID)
+			if stripeErr.Code == stripe.ErrorCodeMissing {
+				return nil, ErrCustomerNotFound
 			}
 		}
 
-		return nil, fmt.Errorf("failed to get customer by customer ID %s", customerID)
+		return nil, ErrCustomerLookupFailed
 	}
 
 	return customer, nil

@@ -5,11 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
-	"time"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v81"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
@@ -85,45 +86,6 @@ func parseEventID(retVal ent.Value) (*EventID, error) {
 	return &event, nil
 }
 
-func (e *Eventer) emit(ctx context.Context, eventID *EventID, mutation ent.Mutation) {
-	emit := func() {
-		name := fmt.Sprintf("%s.%s", mutation.Type(), mutation.Op())
-		event := soiree.NewBaseEvent(name, mutation)
-
-		log.Debug().Msg("base event created with topic name" + name)
-
-		event.Properties().Set("ID", eventID.ID)
-
-		for _, field := range mutation.Fields() {
-			value, exists := mutation.Field(field)
-			if exists {
-				event.Properties().Set(field, value)
-			}
-		}
-
-		event.SetContext(context.WithoutCancel(ctx))
-		event.SetClient(e.Emitter.GetClient())
-
-		e.Emitter.Emit(event.Topic(), event)
-		log.Debug().Msg("event emitted")
-	}
-
-	if tx := entgen.TxFromContext(ctx); tx != nil {
-		tx.OnCommit(func(next entgen.Committer) entgen.Committer {
-			return entgen.CommitFunc(func(ctx context.Context, tx *entgen.Tx) error {
-				err := next.Commit(ctx, tx)
-				if err == nil {
-					defer emit()
-				}
-
-				return err
-			})
-		})
-	} else {
-		defer emit()
-	}
-}
-
 // EmitEventHook emits an event to the event pool when a mutation is performed
 func EmitEventHook(e *Eventer) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
@@ -160,7 +122,8 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					}
 				}
 
-				event.SetContext(context.WithoutCancel(ctx))
+				privContext := privacy.DecisionContext(ctx, privacy.Allow)
+				event.SetContext(context.WithoutCancel(privContext))
 				event.SetClient(e.Emitter.GetClient())
 
 				e.Emitter.Emit(event.Topic(), event)
@@ -217,11 +180,10 @@ func handleOrganizationSettingEvents(event soiree.Event) error {
 		return nil
 	}
 
-	props := event.Properties()
+	orgSettingID := lo.ValueOr(event.Properties(), "ID", "")
+	if orgSettingID == "" {
+		log.Warn().Msg("OrganizationSetting ID not found in event properties, skipping customer creation")
 
-	orgSettingID, exists := props["ID"]
-	if !exists {
-		log.Info().Msg("organizationSetting ID not found in event properties")
 		return nil
 	}
 
@@ -274,49 +236,18 @@ func updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, 
 
 // fetchOrganizationIDbyOrgSettingID fetches the organization ID by the organization setting ID
 func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string, client interface{}) (*entitlements.OrganizationCustomer, error) {
-	var orgSetting *entgen.OrganizationSetting
-
-	var err error
-
-	// Retry fetching organization setting
-	for i := 0; i < 3; i++ {
-		time.Sleep(2 * time.Second) // nolint:mnd
-
-		orgSetting, err = client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
-		if err == nil {
-			break
-		}
-
-		log.Warn().Msgf("Retrying fetch organization setting by ID %s, attempt %d", orgsettingID, i+1)
-
-	}
-
+	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
 	if err != nil {
-		log.Err(err).Msgf("Failed to fetch organization setting by ID %s after 3 attempts", orgsettingID)
+		log.Err(err).Msgf("Failed to fetch organization setting ID %s", orgsettingID)
 		return nil, err
 	}
 
-	var org *entgen.Organization
-
-	// Retry fetching organization
-	for i := 0; i < 3; i++ {
-		time.Sleep(2 * time.Second) // nolint:mnd
-
-		org, err = client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSetting.OrganizationID)).Only(ctx)
-		if err == nil {
-			break
-		}
-
-		log.Warn().Msgf("Retrying fetch organization by organization setting ID %s, attempt %d", orgsettingID, i+1)
-
-	}
-
+	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSetting.OrganizationID)).Only(ctx)
 	if err != nil {
 		log.Err(err).Msgf("Failed to fetch organization by organization setting ID %s after 3 attempts", orgsettingID)
 		return nil, err
 	}
 
-	//if !org.PersonalOrg {
 	return &entitlements.OrganizationCustomer{
 		OrganizationID:         org.ID,
 		StripeCustomerID:       orgSetting.StripeID,

@@ -75,7 +75,7 @@ func (t *Topic) AddListenerWithRetries(id string, listener Listener, opts ...Lis
 	item := &listenerItem{
 		listener: listener,
 		priority: Normal, // Default priority if none is specified
-		retries:  3,      // Default number of retries
+		retries:  3,      // nolint:mnd
 		backoff:  backoff.NewExponentialBackOff(),
 	}
 

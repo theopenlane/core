@@ -73,11 +73,6 @@ func (sc *StripeClient) CancelSubscription(id string, params *stripe.Subscriptio
 
 var trialdays int64 = 30
 
-type Subs struct {
-	SubsID string
-	Prices []Price
-}
-
 // CreateTrialSubscription creates a trial subscription with the configured price
 func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscription, error) {
 	params := &stripe.SubscriptionParams{
@@ -102,14 +97,41 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 	subs, err := sc.CreateSubscription(params)
 	if err != nil {
 		log.Err(err).Msg("Failed to create trial subscription")
+		return nil, err
 	}
 
-	log.Info().Msgf("Created trial subscription with ID: %s", subs.ID)
+	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
 
 	mappedsubscription := sc.mapStripeSubscription(subs)
 
 	return mappedsubscription, nil
 }
+
+// CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
+func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  &custID,
+		ReturnURL: &sc.config.StripeBillingPortalSuccessURL,
+		FlowData: &stripe.BillingPortalSessionFlowDataParams{
+			Type: stripe.String("subscription_update"),
+			SubscriptionUpdate: &stripe.BillingPortalSessionFlowDataSubscriptionUpdateParams{
+				Subscription: &subsID,
+			},
+		},
+	}
+
+	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
+	if err != nil {
+		return Checkout{}, err
+	}
+
+	return Checkout{
+		ID:  billingPortalSession.ID,
+		URL: billingPortalSession.URL,
+	}, nil
+}
+
+// probably unused =====
 
 // mapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
 func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscription {
@@ -158,26 +180,7 @@ func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscr
 	return subscription
 }
 
-// CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
-func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
-	params := &stripe.BillingPortalSessionParams{
-		Customer:  &custID,
-		ReturnURL: &sc.config.StripeBillingPortalSuccessURL,
-		FlowData: &stripe.BillingPortalSessionFlowDataParams{
-			Type: stripe.String("subscription_update"),
-			SubscriptionUpdate: &stripe.BillingPortalSessionFlowDataSubscriptionUpdateParams{
-				Subscription: &subsID,
-			},
-		},
-	}
-
-	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
-	if err != nil {
-		return Checkout{}, err
-	}
-
-	return Checkout{
-		ID:  billingPortalSession.ID,
-		URL: billingPortalSession.URL,
-	}, nil
+type Subs struct {
+	SubsID string
+	Prices []Price
 }

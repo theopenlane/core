@@ -131,7 +131,7 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 
 	eventer := hooks.NewEventerPool(db)
 	hooks.RegisterGlobalHooks(db, eventer)
-	//	hooks.RegisterListeners(eventer)
+	hooks.RegisterListeners(eventer)
 
 	return db, nil
 }

@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -127,6 +128,7 @@ func (OrganizationSetting) Policy() ent.Policy {
 			privacy.AlwaysDenyRule(),
 		},
 		Query: privacy.QueryPolicy{
+			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
 			privacy.OrganizationSettingQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationSettingQuery) error {
 				return q.CheckAccess(ctx)
 			}),

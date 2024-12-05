@@ -38,6 +38,8 @@ var (
 	ErrTooManyAvatarFiles = errors.New("too many avatar files uploaded, only one is allowed")
 	// ErrFailedToRegisterListener is returned when a listener fails to register
 	ErrFailedToRegisterListener = errors.New("failed to register listener")
+	// ErrUnableToCast is returned when a type assertion fails
+	ErrUnableToCast = errors.New("unable to cast")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

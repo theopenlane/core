@@ -2,18 +2,6 @@ package entitlements
 
 import "github.com/stripe/stripe-go/v81"
 
-// NOTE: these are incomplete and are only meant to be used as a reference currently - they will be updated as the project progresses
-// Customer holds the customer information
-type Customer struct {
-	ID             string `json:"customer_id" yaml:"customer_id"`
-	Email          string `json:"email" yaml:"email"`
-	Phone          string `json:"phone" yaml:"phone"`
-	Address        string `json:"address" yaml:"address"`
-	Plans          []Plan `json:"plans" yaml:"plans"`
-	StripeParams   *stripe.CustomerParams
-	StripeCustomer []stripe.Customer
-}
-
 type OrganizationCustomer struct {
 	OrganizationID         string `json:"organization_id"`
 	OrganizationSettingsID string `json:"organization_settings_id"`
@@ -23,7 +11,7 @@ type OrganizationCustomer struct {
 	OrganizationName       string `json:"organization_name"`
 }
 
-func (c *OrganizationCustomer) mapToStripeCustomer() *stripe.CustomerParams {
+func (c *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 	return &stripe.CustomerParams{
 		Email: &c.BillingEmail,
 		Name:  &c.OrganizationID,
@@ -34,6 +22,19 @@ func (c *OrganizationCustomer) mapToStripeCustomer() *stripe.CustomerParams {
 			"organization_name":        c.OrganizationName,
 		},
 	}
+}
+
+// ======= actually used structs above the line
+
+// Customer holds the customer information
+type Customer struct {
+	ID             string `json:"customer_id" yaml:"customer_id"`
+	Email          string `json:"email" yaml:"email"`
+	Phone          string `json:"phone" yaml:"phone"`
+	Address        string `json:"address" yaml:"address"`
+	Plans          []Plan `json:"plans" yaml:"plans"`
+	StripeParams   *stripe.CustomerParams
+	StripeCustomer []stripe.Customer
 }
 
 // Plan is the recurring context that holds the payment information

@@ -45,6 +45,7 @@ func CheckOrgAccess(ctx context.Context, relation string) error {
 		return privacy.Allow
 	}
 
+	log.Debug().Str("relation", relation).Msg("access denied for organization")
 	// deny if it was a mutation is not allowed
 	return privacy.Deny
 }
@@ -92,6 +93,8 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 				}
 			}
 
+			log.Debug().Msgf("skipping permission checks on creation of organization")
+
 			return privacy.Skip
 		}
 
@@ -125,6 +128,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 			return privacy.Allow
 		}
 
+		log.Debug().Msgf("access denied to organization")
 		// deny if it was a mutation is not allowed
 		return generated.ErrPermissionDenied
 	})
@@ -180,6 +184,7 @@ func CanCreateObjectsInOrg() privacy.MutationRuleFunc {
 			return privacy.Allow
 		}
 
+		log.Debug().Msgf("access denied to organization")
 		// deny if it was a mutation is not allowed
 		return generated.ErrPermissionDenied
 	})

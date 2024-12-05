@@ -225,9 +225,9 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 	}
 
 	// create a stripe customer for the organization
-	if err := createStripeCustomer(ctx, orgCreated, m); err != nil {
-		return err
-	}
+	//	if err := createStripeCustomer(ctx, orgCreated, m); err != nil {
+	//		return err
+	//	}
 
 	return nil
 }
