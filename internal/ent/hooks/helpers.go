@@ -5,6 +5,8 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/entx"
 )
 
@@ -12,6 +14,20 @@ import (
 // which includes soft delete, delete, and delete one.
 func isDeleteOp(ctx context.Context, m ent.Mutation) bool {
 	return entx.CheckIsSoftDelete(ctx) || m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne)
+}
+
+// transactionFromContext returns the transaction from the context if it exists
+func transactionFromContext(ctx context.Context) *generated.Tx {
+	// check if the transaction is in the context
+	// this is returned from all graphql requests
+	tx := generated.TxFromContext(ctx)
+	if tx != nil {
+		return tx
+	}
+
+	// check if the transaction is in the context
+	// from the REST middleware
+	return transaction.FromContext(ctx)
 }
 
 // runtimeHooks is a list of post-mutation hooks that are executed after a mutation operation is performed

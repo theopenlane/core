@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
-	"time"
 
 	"entgo.io/ent"
 
@@ -129,7 +128,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				log.Debug().Msg("event emitted")
 			}
 
-			if tx := entgen.TxFromContext(ctx); tx != nil {
+			if tx := transactionFromContext(ctx); tx != nil {
 				tx.OnCommit(func(next entgen.Committer) entgen.Committer {
 					return entgen.CommitFunc(func(ctx context.Context, tx *entgen.Tx) error {
 						err := next.Commit(ctx, tx)
@@ -228,7 +227,6 @@ func updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, 
 
 // fetchOrganizationIDbyOrgSettingID fetches the organization ID by the organization setting ID
 func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string, client interface{}) (*entitlements.OrganizationCustomer, error) {
-	time.Sleep(3 * time.Second)
 	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
 	if err != nil {
 		log.Err(err).Msgf("Failed to fetch organization setting ID %s", orgsettingID)
