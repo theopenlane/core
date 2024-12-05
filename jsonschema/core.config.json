@@ -323,6 +323,12 @@
         },
         "trialSubscriptionPriceID": {
           "type": "string"
+        },
+        "stripeWebhookURL": {
+          "type": "string"
+        },
+        "stripeBillingPortalSuccessURL": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

@@ -464,7 +464,6 @@ func WithEntitlements() ServerOption {
 
 			client := entitlements.NewStripeClient(
 				entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey),
-				entitlements.WithWebhookSecret(s.Config.Settings.Entitlements.StripeWebhookSecret),
 				entitlements.WithConfig(*config))
 
 			s.Config.Handler.Entitlements = client

@@ -10,19 +10,8 @@ type StripeClient struct {
 	Client *client.API
 	// apikey is the Stripe API key
 	apikey string
-	// webhooksecret is the stripe signing secret to verify webhook signatures
-	webhooksecret string
-
+	// config is the configuration for the Stripe client
 	config Config
-	// TODO[MKA] cleanup these fields and determine if an interface is easier to use than internal struct mapping and how to mock out the use of the stripe client
-	// Customer is a ref to a generic Customer struct used to wrap Stripe customer and Openlane Organizations (typically)
-	Cust Customer
-	// Plans are a nomenclature for the recurring context that holds the payment information and is synonymous with Stripe subscriptions
-	Plan Plan
-	// Product is a stripe product; also know as a "tier"
-	Product Product
-	// Price holds the interval and amount to be billed
-	Price Price
 }
 
 // NewStripeClient creates a new Stripe client
@@ -51,12 +40,5 @@ func WithConfig(config Config) StripeOptions {
 func WithAPIKey(apiKey string) StripeOptions {
 	return func(sc *StripeClient) {
 		sc.apikey = apiKey
-	}
-}
-
-// WithWebhookSecret sets the webhook secret for the Stripe client
-func WithWebhookSecret(webhookSecret string) StripeOptions {
-	return func(sc *StripeClient) {
-		sc.webhooksecret = webhookSecret
 	}
 }

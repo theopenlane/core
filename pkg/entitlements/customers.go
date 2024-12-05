@@ -9,6 +9,10 @@ import (
 )
 
 func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Customer, error) {
+	if err := c.Validate(); err != nil {
+		return nil, err
+	}
+
 	customer, err := sc.Client.Customers.New(&stripe.CustomerParams{
 		Email: &c.BillingEmail,
 		Name:  &c.OrganizationID,

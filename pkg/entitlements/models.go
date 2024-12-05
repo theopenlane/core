@@ -1,6 +1,11 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v81"
+import (
+	"strings"
+
+	"github.com/stripe/stripe-go/v81"
+	"github.com/theopenlane/utils/rout"
+)
 
 type OrganizationCustomer struct {
 	OrganizationID         string `json:"organization_id"`
@@ -22,6 +27,20 @@ func (c *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 			"organization_name":        c.OrganizationName,
 		},
 	}
+}
+
+func (o *OrganizationCustomer) Validate() error {
+	o.OrganizationID = strings.TrimSpace(o.OrganizationID)
+	o.BillingEmail = strings.TrimSpace(o.BillingEmail)
+
+	switch {
+	case o.OrganizationID == "":
+		return rout.NewMissingRequiredFieldError("organization_id")
+	case o.BillingEmail == "":
+		return rout.NewMissingRequiredFieldError("billing_email")
+	}
+
+	return nil
 }
 
 // ======= actually used structs above the line

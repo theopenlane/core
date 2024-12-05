@@ -149,6 +149,10 @@ func EmitEventHook(e *Eventer) ent.Hook {
 	}
 }
 
+var OrganizationSettingCreate = "OrganizationSetting.OpCreate"
+var OrganizationSettingUpdateOne = "OrganizationSetting.OpUpdateOne"
+
+// RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
 func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
 	client.Use(EmitEventHook(e))
 }
