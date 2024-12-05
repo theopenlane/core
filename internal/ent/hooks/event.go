@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
@@ -121,7 +122,8 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					}
 				}
 
-				event.SetContext(context.WithoutCancel(ctx))
+				privContext := privacy.DecisionContext(ctx, privacy.Allow)
+				event.SetContext(context.WithoutCancel(privContext))
 				event.SetClient(e.Emitter.GetClient())
 
 				e.Emitter.Emit(event.Topic(), event)

@@ -59,8 +59,9 @@ func CanCreateObjectsUnderParent[T generated.Mutation](parentType string) privac
 			}
 
 			if !access {
-				log.Debug().Interface("access_check", ac).
-					Msg("access not allowed")
+				log.Debug().Str("relation", relation).
+					Str("program_id", pID).
+					Msg("access denied")
 
 				// no matter the operation, if the user does not have access to the program
 				// deny the mutation
