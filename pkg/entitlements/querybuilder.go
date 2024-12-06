@@ -50,6 +50,7 @@ func WithKeys(keys map[string]string) func(*QueryBuilder) {
 // BuildQuery builds the query from the keys
 func (qb *QueryBuilder) BuildQuery() []string {
 	var queries []string
+
 	var currentQuery strings.Builder
 
 	clausesCount := 0
