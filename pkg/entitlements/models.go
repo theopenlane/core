@@ -16,15 +16,15 @@ type OrganizationCustomer struct {
 	OrganizationName       string `json:"organization_name"`
 }
 
-func (c *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
+func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 	return &stripe.CustomerParams{
-		Email: &c.BillingEmail,
-		Name:  &c.OrganizationID,
-		Phone: &c.BillingPhone,
+		Email: &o.BillingEmail,
+		Name:  &o.OrganizationID,
+		Phone: &o.BillingPhone,
 		Metadata: map[string]string{
-			"organization_id":          c.OrganizationID,
-			"organization_settings_id": c.OrganizationSettingsID,
-			"organization_name":        c.OrganizationName,
+			"organization_id":          o.OrganizationID,
+			"organization_settings_id": o.OrganizationSettingsID,
+			"organization_name":        o.OrganizationName,
 		},
 	}
 }

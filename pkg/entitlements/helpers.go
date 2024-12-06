@@ -8,6 +8,32 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// checkForBillingUpdate checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
+// and a boolean indicating whether there are updates
+func CheckForBillingUpdate(props map[string]interface{}, stripeCustomer *OrganizationCustomer) (params *stripe.CustomerParams, hasUpdate bool) {
+	params = &stripe.CustomerParams{}
+
+	billingEmail, exists := props["billing_email"]
+	if exists && billingEmail != "" {
+		email := billingEmail.(string)
+		if stripeCustomer.BillingEmail != email {
+			params.Email = &email
+			hasUpdate = true
+		}
+	}
+
+	billingPhone, exists := props["billing_phone"]
+	if exists && billingPhone != "" {
+		phone := billingPhone.(string)
+		if stripeCustomer.BillingPhone != phone {
+			params.Phone = &phone
+			hasUpdate = true
+		}
+	}
+
+	return params, hasUpdate
+}
+
 // GetProducts retrieves all products from stripe which are active
 func (sc *StripeClient) GetProducts() []Product {
 	productParams := &stripe.ProductListParams{}

@@ -70,7 +70,6 @@ func WithStripeBillingPortalSuccessURL(stripeBillingPortalSuccessURL string) Con
 
 // NewConfig creates a new entitlements config
 func NewConfig(opts ...ConfigOpts) *Config {
-
 	c := &Config{}
 	for _, opt := range opts {
 		opt(c)

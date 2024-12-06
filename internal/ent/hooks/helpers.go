@@ -5,9 +5,10 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/entx"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/entx"
 )
 
 // isDeleteOp checks if the mutation is a deletion operation.

@@ -11,7 +11,6 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v81"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -19,18 +18,22 @@ import (
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
 
+// Eventer is a wrapper struct for having a soiree as well as a list of listeners
 type Eventer struct {
 	Emitter   *soiree.EventPool
-	EventID   string `json:"id,omitempty"`
 	Listeners []soiree.Listener
+	Topics    map[string]interface{}
 }
 
+// EventID is used to marshall and unmarshall the ID out of a ent mutation
 type EventID struct {
 	ID string `json:"id,omitempty"`
 }
 
+// EventerOpts is a functional options wrapper
 type EventerOpts (func(*Eventer))
 
+// NewEventer creates a new Eventer with the provided options
 func NewEventer(opts ...EventerOpts) *Eventer {
 	e := &Eventer{}
 
@@ -41,12 +44,21 @@ func NewEventer(opts ...EventerOpts) *Eventer {
 	return e
 }
 
+// WithEventerEmitter sets the emitter for the Eventer if there's an existing soiree pool that needs to be passed in
 func WithEventerEmitter(emitter *soiree.EventPool) EventerOpts {
 	return func(e *Eventer) {
 		e.Emitter = emitter
 	}
 }
 
+// WithEventerTopics sets the topics for the Eventer
+func WithEventerTopics(topics map[string]interface{}) EventerOpts {
+	return func(e *Eventer) {
+		e.Topics = topics
+	}
+}
+
+// WithEventerListeners takes a single topic and appends an array of listeners to the Eventer
 func WithEventerListeners(topic string, listeners []soiree.Listener) EventerOpts {
 	return func(e *Eventer) {
 		for _, listener := range listeners {
@@ -58,7 +70,7 @@ func WithEventerListeners(topic string, listeners []soiree.Listener) EventerOpts
 	}
 }
 
-// InitEventPool initializes an event pool with a client and a error handler
+// NewEventerPool initializes a new Eventer and takes a client to be used as the client for the soiree pool
 func NewEventerPool(client interface{}) *Eventer {
 	pool := soiree.NewEventPool(
 		soiree.WithPool(
@@ -70,6 +82,7 @@ func NewEventerPool(client interface{}) *Eventer {
 	return NewEventer(WithEventerEmitter(pool))
 }
 
+// parseEventID parses the event ID from the return value of an ent mutation
 func parseEventID(retVal ent.Value) (*EventID, error) {
 	out, err := json.Marshal(retVal)
 	if err != nil {
@@ -111,8 +124,6 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				name := fmt.Sprintf("%s.%s", mutation.Type(), mutation.Op())
 				event := soiree.NewBaseEvent(name, mutation)
 
-				log.Debug().Msg("base event created with topic name" + name)
-
 				event.Properties().Set("ID", eventID.ID)
 
 				for _, field := range mutation.Fields() {
@@ -124,9 +135,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 
 				event.SetContext(context.WithoutCancel(ctx))
 				event.SetClient(e.Emitter.GetClient())
-
 				e.Emitter.Emit(event.Topic(), event)
-				log.Debug().Msg("event emitted")
 			}
 
 			if tx := transactionFromContext(ctx); tx != nil {
@@ -149,6 +158,8 @@ func EmitEventHook(e *Eventer) ent.Hook {
 	}
 }
 
+// TODO [MKA]: create better methods for constructing object + event topic names; possibly update soiree to make topic management more friendly
+// OrganizationSettingCreate and OrganizationSettingUpdateOne are the topics for the organization setting events
 var OrganizationSettingCreate = "OrganizationSetting.OpCreate"
 var OrganizationSettingUpdateOne = "OrganizationSetting.OpUpdateOne"
 
@@ -157,8 +168,9 @@ func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
 	client.Use(EmitEventHook(e))
 }
 
+// RegisterListeners is currently used to globally register what listeners get applied on the entdb client
 func RegisterListeners(e *Eventer) error {
-	for _, event := range []string{"OrganizationSetting.OpCreate", "OrganizationSetting.OpUpdateOne"} {
+	for _, event := range []string{OrganizationSettingCreate, OrganizationSettingUpdateOne} {
 		_, err := e.Emitter.On(event, handleOrganizationSettingEvents)
 		if err != nil {
 			log.Error().Err(ErrFailedToRegisterListener)
@@ -166,7 +178,6 @@ func RegisterListeners(e *Eventer) error {
 		}
 
 		log.Debug().Msg("Listener registered for " + event)
-
 	}
 
 	return nil
@@ -206,7 +217,7 @@ func handleOrganizationSettingEvents(event soiree.Event) error {
 
 		return nil
 	} else {
-		if params, hasUpdate := checkForBillingUpdate(event.Properties(), orgCust); hasUpdate {
+		if params, hasUpdate := entitlements.CheckForBillingUpdate(event.Properties(), orgCust); hasUpdate {
 			if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
 				log.Err(err).Msg("Failed to update customer")
 
@@ -216,7 +227,6 @@ func handleOrganizationSettingEvents(event soiree.Event) error {
 	}
 
 	return nil
-
 }
 
 // updateOrganizationSettingWithCustomerID updates an OrganizationSetting with a Stripe customer ID
@@ -253,31 +263,4 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 		OrganizationName:       org.Name,
 		OrganizationSettingsID: orgSetting.ID,
 	}, nil
-
-}
-
-// checkForBillingUpdate checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
-// and a boolean indicating whether there are updates
-func checkForBillingUpdate(props map[string]interface{}, stripeCustomer *entitlements.OrganizationCustomer) (params *stripe.CustomerParams, hasUpdate bool) {
-	params = &stripe.CustomerParams{}
-
-	billingEmail, exists := props["billing_email"]
-	if exists && billingEmail != "" {
-		email := billingEmail.(string)
-		if stripeCustomer.BillingEmail != email {
-			params.Email = &email
-			hasUpdate = true
-		}
-	}
-
-	billingPhone, exists := props["billing_phone"]
-	if exists && billingPhone != "" {
-		phone := billingPhone.(string)
-		if stripeCustomer.BillingPhone != phone {
-			params.Phone = &phone
-			hasUpdate = true
-		}
-	}
-
-	return params, hasUpdate
 }

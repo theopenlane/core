@@ -8,6 +8,9 @@ import (
 	"github.com/stripe/stripe-go/v81"
 )
 
+// CreateCustomer creates a customer leveraging the openlane organization ID
+// as the organization name, and the email provided as the billing email
+// we assume that the billing email will be changed, so lookups are performed by the organization ID
 func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Customer, error) {
 	if err := c.Validate(); err != nil {
 		return nil, err
@@ -31,6 +34,8 @@ func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Custome
 }
 
 // SearchCustomers searches for customers with a structured stripe query as input
+// leverage QueryBuilder to construct more complex queries, otherwise see:
+// https://docs.stripe.com/search#search-query-language
 func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (customers []*stripe.Customer, err error) {
 	params := &stripe.CustomerSearchParams{
 		SearchParams: stripe.SearchParams{
@@ -54,12 +59,10 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 	return customers, nil
 }
 
-// FindorCreateCustomer finds or creates a customer
+// FindorCreateCustomer attempts to lookup a customer by the organization ID which is set in both the
+// name field attribute as well as in the object metadata field
 func (sc *StripeClient) FindorCreateCustomer(ctx context.Context, o *OrganizationCustomer) (*OrganizationCustomer, error) {
-	//	qb := NewQueryBuilder(WithKeys(map[string]string{"organization_id": o.OrganizationID}))
-	withName := fmt.Sprintf("name: '%s'", o.OrganizationID)
-
-	customers, err := sc.SearchCustomers(ctx, withName)
+	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", o.OrganizationID))
 	if err != nil {
 		return nil, err
 	}
@@ -81,11 +84,14 @@ func (sc *StripeClient) FindorCreateCustomer(ctx context.Context, o *Organizatio
 	default:
 		return nil, ErrFoundMultipleCustomers
 	}
-
 }
 
 // GetCustomerByStripeID gets a customer by ID
 func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID string) (*stripe.Customer, error) {
+	if customerID == "" {
+		return nil, ErrCustomerIDRequired
+	}
+
 	customer, err := sc.Client.Customers.Get(customerID, &stripe.CustomerParams{
 		Params: stripe.Params{
 			Context: ctx,
@@ -93,6 +99,7 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 		},
 	})
 
+	// if the customer is not found, return a specific error, otherwise surface the failed lookup
 	if err != nil {
 		if stripeErr, ok := err.(*stripe.Error); ok {
 			if stripeErr.Code == stripe.ErrorCodeMissing {

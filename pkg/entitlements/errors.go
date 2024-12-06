@@ -11,4 +11,6 @@ var (
 	ErrCustomerNotFound = errors.New("customer not found")
 	// ErrCustomerLookupFailed is returned when a customer lookup fails
 	ErrCustomerLookupFailed = errors.New("failed to lookup customer")
+	// ErrCustomerIDRequired is returned when a customer ID is required
+	ErrCustomerIDRequired = errors.New("customer ID is required")
 )
