@@ -188,7 +188,9 @@ subscription:
     enabled: false
     privateStripeKey: ""
     publicStripeKey: ""
+    stripeBillingPortalSuccessURL: https://console.openlane.com/billing
     stripeWebhookSecret: ""
+    stripeWebhookURL: https://api.openlane.com/v1/stripe/webhook
     trialSubscriptionPriceID: price_1QKLyeBvxky1R7SvaZYGWyQb
 totp:
     codeLength: 6

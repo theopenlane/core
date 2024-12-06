@@ -40,6 +40,8 @@ var (
 	ErrFailedToRegisterListener = errors.New("failed to register listener")
 	// ErrNoControls is returned when a subcontrol has no controls assigned
 	ErrNoControls = errors.New("subcontrol must have at least one control assigned")
+	// ErrUnableToCast is returned when a type assertion fails
+	ErrUnableToCast = errors.New("unable to cast")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

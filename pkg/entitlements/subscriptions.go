@@ -39,7 +39,11 @@ func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscript
 
 // GetSubscriptionByID gets a subscription by ID
 func (sc *StripeClient) GetSubscriptionByID(id string) (*stripe.Subscription, error) {
-	subscription, err := sc.Client.Subscriptions.Get(id, nil)
+	subscription, err := sc.Client.Subscriptions.Get(id, &stripe.SubscriptionParams{
+		Params: stripe.Params{
+			Expand: []*string{stripe.String("customer")},
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -69,18 +73,13 @@ func (sc *StripeClient) CancelSubscription(id string, params *stripe.Subscriptio
 
 var trialdays int64 = 30
 
-type Subs struct {
-	SubsID string
-	Prices []Price
-}
-
 // CreateTrialSubscription creates a trial subscription with the configured price
 func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscription, error) {
 	params := &stripe.SubscriptionParams{
 		Customer: stripe.String(customerID),
 		Items: []*stripe.SubscriptionItemsParams{
-			{ // the other available option beyond using a config parameter / config option is to use the lookup key but given we intend to have all trial customers on the same "tier" to start that seemed excessive
-				Price: &sc.trialSubscriptionPriceID,
+			{
+				Price: &sc.config.TrialSubscriptionPriceID,
 			},
 		},
 		TrialPeriodDays: stripe.Int64(trialdays),
@@ -98,13 +97,38 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 	subs, err := sc.CreateSubscription(params)
 	if err != nil {
 		log.Err(err).Msg("Failed to create trial subscription")
+		return nil, err
 	}
 
-	log.Info().Msgf("Created trial subscription with ID: %s", subs.ID)
+	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
 
 	mappedsubscription := sc.mapStripeSubscription(subs)
 
 	return mappedsubscription, nil
+}
+
+// CreateBillingPortalUpdateSession generates an update session in stripe's billing portal which displays the customers current subscription tier and allows them to upgrade or downgrade
+func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  &custID,
+		ReturnURL: &sc.config.StripeBillingPortalSuccessURL,
+		FlowData: &stripe.BillingPortalSessionFlowDataParams{
+			Type: stripe.String("subscription_update"),
+			SubscriptionUpdate: &stripe.BillingPortalSessionFlowDataSubscriptionUpdateParams{
+				Subscription: &subsID,
+			},
+		},
+	}
+
+	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
+	if err != nil {
+		return Checkout{}, err
+	}
+
+	return Checkout{
+		ID:  billingPortalSession.ID,
+		URL: billingPortalSession.URL,
+	}, nil
 }
 
 // mapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
@@ -152,4 +176,9 @@ func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscr
 	}
 
 	return subscription
+}
+
+type Subs struct {
+	SubsID string
+	Prices []Price
 }
