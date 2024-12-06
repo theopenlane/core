@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
-	"time"
 
 	"entgo.io/ent"
 
@@ -242,7 +241,6 @@ func updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, 
 
 // fetchOrganizationIDbyOrgSettingID fetches the organization ID by the organization setting ID
 func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string, client interface{}) (*entitlements.OrganizationCustomer, error) {
-	time.Sleep(3 * time.Second)
 	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
 	if err != nil {
 		log.Err(err).Msgf("Failed to fetch organization setting ID %s", orgsettingID)
