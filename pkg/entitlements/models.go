@@ -1,8 +1,51 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v81"
+import (
+	"strings"
 
-// NOTE: these are incomplete and are only meant to be used as a reference currently - they will be updated as the project progresses
+	"github.com/stripe/stripe-go/v81"
+	"github.com/theopenlane/utils/rout"
+)
+
+// OrganizationCustomer is a struct which holds both internal organization infos and external stripe infos
+type OrganizationCustomer struct {
+	OrganizationID         string `json:"organization_id"`
+	OrganizationSettingsID string `json:"organization_settings_id"`
+	StripeCustomerID       string `json:"stripe_customer_id"`
+	BillingEmail           string `json:"billing_email"`
+	BillingPhone           string `json:"billing_phone"`
+	OrganizationName       string `json:"organization_name"`
+}
+
+// MapToStripeCustomer maps the OrganizationCustomer to a stripe customer for more easy querying
+func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
+	return &stripe.CustomerParams{
+		Email: &o.BillingEmail,
+		Name:  &o.OrganizationID,
+		Phone: &o.BillingPhone,
+		Metadata: map[string]string{
+			"organization_id":          o.OrganizationID,
+			"organization_settings_id": o.OrganizationSettingsID,
+			"organization_name":        o.OrganizationName,
+		},
+	}
+}
+
+// Validate checks if the OrganizationCustomer contains necessary fields
+func (o *OrganizationCustomer) Validate() error {
+	o.OrganizationID = strings.TrimSpace(o.OrganizationID)
+	o.BillingEmail = strings.TrimSpace(o.BillingEmail)
+
+	switch {
+	case o.OrganizationID == "":
+		return rout.NewMissingRequiredFieldError("organization_id")
+	case o.BillingEmail == "":
+		return rout.NewMissingRequiredFieldError("billing_email")
+	}
+
+	return nil
+}
+
 // Customer holds the customer information
 type Customer struct {
 	ID             string `json:"customer_id" yaml:"customer_id"`
