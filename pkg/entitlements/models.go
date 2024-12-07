@@ -15,6 +15,7 @@ type OrganizationCustomer struct {
 	BillingEmail           string `json:"billing_email"`
 	BillingPhone           string `json:"billing_phone"`
 	OrganizationName       string `json:"organization_name"`
+	Subscription
 }
 
 // MapToStripeCustomer maps the OrganizationCustomer to a stripe customer for more easy querying
@@ -97,7 +98,7 @@ type Subscription struct {
 type Product struct {
 	ID            string                `json:"product_id" yaml:"product_id"`
 	Name          string                `json:"name" yaml:"name"`
-	Description   string                `json:"description" yaml:"description"`
+	Description   string                `json:"description,omitempty" yaml:"description,omitempty"`
 	Features      []Feature             `json:"features" yaml:"features"`
 	Prices        []Price               `json:"prices" yaml:"prices"`
 	StripeParams  *stripe.ProductParams `json:"stripe_params,omitempty" yaml:"stripe_params,omitempty"`
@@ -108,7 +109,7 @@ type Product struct {
 type Price struct {
 	ID           string              `json:"price_id" yaml:"price_id"`
 	Price        float64             `json:"price" yaml:"price"`
-	ProductID    string              `json:"product_id" yaml:"product_id"`
+	ProductID    string              `json:"product_id" yaml:"-"`
 	Interval     string              `json:"interval" yaml:"interval"`
 	StripeParams *stripe.PriceParams `json:"stripe_params,omitempty" yaml:"stripe_params,omitempty"`
 	StripePrice  []stripe.Price      `json:"stripe_price,omitempty" yaml:"stripe_price,omitempty"`
@@ -122,16 +123,14 @@ type Checkout struct {
 
 // Feature are part of a product
 type Feature struct {
-	ID               string `json:"id" yaml:"id"`
-	Name             string `json:"name" yaml:"name"`
-	Lookupkey        string `json:"lookupkey" yaml:"lookupkey"`
-	ProductFeatureID string `json:"product_feature_id" yaml:"product_feature_id"`
+	ID        string `json:"id" yaml:"id"`
+	Name      string `json:"name" yaml:"name"`
+	Lookupkey string `json:"lookupkey" yaml:"lookupkey"`
 }
 
 type ProductFeature struct {
-	ProductFeatureID string `json:"product_feature_id" yaml:"product_feature_id"`
-	FeatureID        string `json:"feature_id" yaml:"feature_id"`
-	ProductID        string `json:"product_id" yaml:"product_id"`
-	Name             string `json:"name" yaml:"name"`
-	Lookupkey        string `json:"lookupkey" yaml:"lookupkey"`
+	FeatureID string `json:"feature_id" yaml:"feature_id"`
+	ProductID string `json:"product_id"`
+	Name      string `json:"name" yaml:"name"`
+	Lookupkey string `json:"lookupkey" yaml:"lookupkey"`
 }

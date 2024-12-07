@@ -71,10 +71,9 @@ func (sc *StripeClient) GetProducts() []Product {
 			}
 
 			features = append(features, Feature{
-				ID:               feature.FeatureID,
-				ProductFeatureID: feature.ProductFeatureID,
-				Name:             feature.Name,
-				Lookupkey:        feature.Lookupkey,
+				ID:        feature.FeatureID,
+				Name:      feature.Name,
+				Lookupkey: feature.Lookupkey,
 			})
 		}
 
@@ -105,10 +104,9 @@ func (sc *StripeClient) GetProductFeatures(productID string) []ProductFeature {
 	for list.Next() {
 		if list.ProductFeature().ID != "" {
 			productfeatures = append(productfeatures, ProductFeature{
-				ProductFeatureID: list.ProductFeature().ID,
-				FeatureID:        list.ProductFeature().EntitlementFeature.ID,
-				Name:             list.ProductFeature().EntitlementFeature.Name,
-				Lookupkey:        list.ProductFeature().EntitlementFeature.LookupKey,
+				FeatureID: list.ProductFeature().EntitlementFeature.ID,
+				Name:      list.ProductFeature().EntitlementFeature.Name,
+				Lookupkey: list.ProductFeature().EntitlementFeature.LookupKey,
 			})
 		}
 	}

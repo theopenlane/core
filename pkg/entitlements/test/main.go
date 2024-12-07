@@ -1,6 +1,8 @@
 package main
 
 import (
+	"sort"
+
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -12,6 +14,8 @@ func main() {
 	client := initStripeClient()
 
 	plans := client.GetProducts()
+
+	sortPlansByFeatureCount(plans)
 
 	// Write the plans to a YAML file
 	err := entitlements.WritePlansToYAML(plans, "pkg/entitlements/test/plans.yaml")
@@ -25,4 +29,11 @@ func main() {
 func initStripeClient() entitlements.StripeClient {
 	client := entitlements.NewStripeClient(entitlements.WithAPIKey(""))
 	return *client
+}
+
+// sortPlansByFeatureCount sorts the plans by the count of features in each plan
+func sortPlansByFeatureCount(plans []entitlements.Product) {
+	sort.Slice(plans, func(i, j int) bool {
+		return len(plans[i].Features) < len(plans[j].Features)
+	})
 }
