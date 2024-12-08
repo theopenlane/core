@@ -11,13 +11,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
-// Subscription holds the schema definition for the Subscription entity
-type Subscription struct {
+// OrgSubscription holds the schema definition for the OrgSubscription entity
+type OrgSubscription struct {
 	ent.Schema
 }
 
-// Fields of the Subscription
-func (Subscription) Fields() []ent.Field {
+// Fields of the OrgSubscription
+func (OrgSubscription) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("stripe_subscription_id").
 			Comment("the stripe subscription id").
@@ -48,29 +48,29 @@ func (Subscription) Fields() []ent.Field {
 	}
 }
 
-// Mixin of the Subscription
-func (Subscription) Mixin() []ent.Mixin {
+// Mixin of the OrgSubscription
+func (OrgSubscription) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		NewOrgOwnMixinWithRef("subscriptions"),
+		NewOrgOwnMixinWithRef("orgsubscriptions"),
 	}
 }
 
-// Edges of the Subscription
-func (Subscription) Edges() []ent.Edge {
+// Edges of the OrgSubscription
+func (OrgSubscription) Edges() []ent.Edge {
 	return []ent.Edge{}
 }
 
-// Indexes of the Subscription
-func (Subscription) Indexes() []ent.Index {
+// Indexes of the OrgSubscription
+func (OrgSubscription) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
-// Annotations of the Subscription
-func (Subscription) Annotations() []schema.Annotation {
+// Annotations of the OrgSubscription
+func (OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
@@ -78,18 +78,18 @@ func (Subscription) Annotations() []schema.Annotation {
 	}
 }
 
-// Hooks of the Subscription
-func (Subscription) Hooks() []ent.Hook {
+// Hooks of the OrgSubscription
+func (OrgSubscription) Hooks() []ent.Hook {
 	return []ent.Hook{}
 }
 
-// Interceptors of the Subscription
-func (Subscription) Interceptors() []ent.Interceptor {
+// Interceptors of the OrgSubscription
+func (OrgSubscription) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{}
 }
 
-// Policy of the Subscription
-//func (Subscription) Policy() ent.Policy {
+// Policy of the OrgSubscription
+//func (OrgSubscription) Policy() ent.Policy {
 //	return policy.NewPolicy(
 //		policy.WithQueryRules(
 //			entfga.CheckReadAccess[*generated.Subscriptio](),
