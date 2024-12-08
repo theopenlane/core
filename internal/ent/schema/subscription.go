@@ -44,8 +44,7 @@ func (Subscription) Fields() []ent.Field {
 			Optional(),
 		field.JSON("features", []string{}).
 			Comment("the features associated with the subscription").
-			Optional().
-			StructTag(`json:"features"`),
+			Optional(),
 	}
 }
 
