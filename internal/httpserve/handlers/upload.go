@@ -1,9 +1,6 @@
 package handlers
 
 import (
-	"net/http"
-
-	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/rs/zerolog/log"
@@ -54,19 +51,4 @@ func (h *Handler) FileUploadHandler(ctx echo.Context) error {
 
 	// return the response
 	return h.SuccessBlob(ctx, out)
-}
-
-// BindUploadBander binds the upload handler to the OpenAPI schema
-func (h *Handler) BindUploadBander() *openapi3.Operation {
-	uploadHandler := openapi3.NewOperation()
-	uploadHandler.Description = "Upload files such as images, documents, using the multipart form data"
-	uploadHandler.OperationID = "Upload"
-
-	h.AddRequestBody("UploadRequest", models.ExampleUploadFileRequest, uploadHandler)
-	h.AddResponse("UploadReply", "success", models.ExampleUploadFilesSuccessResponse.Reply, uploadHandler, http.StatusOK)
-	uploadHandler.AddResponse(http.StatusInternalServerError, internalServerError())
-	uploadHandler.AddResponse(http.StatusBadRequest, badRequest())
-	uploadHandler.AddResponse(http.StatusUnauthorized, unauthorized())
-
-	return uploadHandler
 }

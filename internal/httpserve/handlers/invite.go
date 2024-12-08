@@ -264,7 +264,7 @@ func (h *Handler) BindOrganizationInviteAccept() *openapi3.Operation {
 	inviteAccept.OperationID = "OrganizationInviteAccept"
 	inviteAccept.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{
-			"bearerAuth": []string{},
+			"bearer": []string{},
 		},
 	}
 

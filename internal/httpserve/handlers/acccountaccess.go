@@ -62,7 +62,7 @@ func (h *Handler) BindAccountAccess() *openapi3.Operation {
 	checkAccess.OperationID = "AccountAccess"
 	checkAccess.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{
-			"bearerAuth": []string{},
+			"bearer": []string{},
 		},
 	}
 
