@@ -40,6 +40,7 @@ func (Subscription) Fields() []ent.Field {
 			Optional(),
 		field.Time("expires_at").
 			Comment("the time the subscription is set to expire; only populated if subscription is cancelled").
+			Nillable().
 			Optional(),
 		field.JSON("features", []string{}).
 			Comment("the features associated with the subscription").
