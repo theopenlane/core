@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -522,6 +523,21 @@ func (oc *OrganizationCreate) AddEntitlements(e ...*Entitlement) *OrganizationCr
 		ids[i] = e[i].ID
 	}
 	return oc.AddEntitlementIDs(ids...)
+}
+
+// AddOrgsubscriptionIDs adds the "orgsubscriptions" edge to the OrgSubscription entity by IDs.
+func (oc *OrganizationCreate) AddOrgsubscriptionIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddOrgsubscriptionIDs(ids...)
+	return oc
+}
+
+// AddOrgsubscriptions adds the "orgsubscriptions" edges to the OrgSubscription entity.
+func (oc *OrganizationCreate) AddOrgsubscriptions(o ...*OrgSubscription) *OrganizationCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return oc.AddOrgsubscriptionIDs(ids...)
 }
 
 // AddOrganizationEntitlementIDs adds the "organization_entitlement" edge to the Entitlement entity by IDs.
@@ -1434,6 +1450,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Entitlement
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.OrgsubscriptionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgsubscriptionsTable,
+			Columns: []string{organization.OrgsubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

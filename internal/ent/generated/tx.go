@@ -112,6 +112,10 @@ type Tx struct {
 	OrgMembership *OrgMembershipClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
+	// OrgSubscription is the client for interacting with the OrgSubscription builders.
+	OrgSubscription *OrgSubscriptionClient
+	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
+	OrgSubscriptionHistory *OrgSubscriptionHistoryClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
 	// OrganizationHistory is the client for interacting with the OrganizationHistory builders.
@@ -355,6 +359,8 @@ func (tx *Tx) init() {
 	tx.OhAuthTooToken = NewOhAuthTooTokenClient(tx.config)
 	tx.OrgMembership = NewOrgMembershipClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
+	tx.OrgSubscription = NewOrgSubscriptionClient(tx.config)
+	tx.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
 	tx.OrganizationHistory = NewOrganizationHistoryClient(tx.config)
 	tx.OrganizationSetting = NewOrganizationSettingClient(tx.config)

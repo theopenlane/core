@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -409,6 +410,20 @@ func OrgMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func OrgSubscriptionEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscription edge"))
+
+	return nil
+}
+
+func OrgSubscriptionHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscriptionhistory edge"))
+
+	return nil
+}
+
 func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup organization edge"))
@@ -458,6 +473,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Entitlement.Query().Where((entitlement.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entitlementCount, err := FromContext(ctx).Entitlement.Delete().Where(entitlement.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", entitlementCount).Msg("deleting entitlement")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).OrgSubscription.Query().Where((orgsubscription.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if orgsubscriptionCount, err := FromContext(ctx).OrgSubscription.Delete().Where(orgsubscription.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", orgsubscriptionCount).Msg("deleting orgsubscription")
 			return err
 		}
 	}

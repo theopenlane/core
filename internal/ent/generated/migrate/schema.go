@@ -1845,6 +1845,78 @@ var (
 			},
 		},
 	}
+	// OrgSubscriptionsColumns holds the columns for the "org_subscriptions" table.
+	OrgSubscriptionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
+		{Name: "product_tier", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "features", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// OrgSubscriptionsTable holds the schema information for the "org_subscriptions" table.
+	OrgSubscriptionsTable = &schema.Table{
+		Name:       "org_subscriptions",
+		Columns:    OrgSubscriptionsColumns,
+		PrimaryKey: []*schema.Column{OrgSubscriptionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_subscriptions_organizations_orgsubscriptions",
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// OrgSubscriptionHistoryColumns holds the columns for the "org_subscription_history" table.
+	OrgSubscriptionHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
+		{Name: "product_tier", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "features", Type: field.TypeJSON, Nullable: true},
+	}
+	// OrgSubscriptionHistoryTable holds the schema information for the "org_subscription_history" table.
+	OrgSubscriptionHistoryTable = &schema.Table{
+		Name:       "org_subscription_history",
+		Columns:    OrgSubscriptionHistoryColumns,
+		PrimaryKey: []*schema.Column{OrgSubscriptionHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orgsubscriptionhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{OrgSubscriptionHistoryColumns[1]},
+			},
+		},
+	}
 	// OrganizationsColumns holds the columns for the "organizations" table.
 	OrganizationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -5570,6 +5642,8 @@ var (
 		OhAuthTooTokensTable,
 		OrgMembershipsTable,
 		OrgMembershipHistoryTable,
+		OrgSubscriptionsTable,
+		OrgSubscriptionHistoryTable,
 		OrganizationsTable,
 		OrganizationHistoryTable,
 		OrganizationSettingsTable,
@@ -5806,6 +5880,10 @@ func init() {
 	OrgMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
+	}
+	OrgSubscriptionsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrgSubscriptionHistoryTable.Annotation = &entsql.Annotation{
+		Table: "org_subscription_history",
 	}
 	OrganizationsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{

@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -801,6 +802,43 @@ func adminSearchOhAuthTooTokens(ctx context.Context, query string) ([]*generated
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(connectordata)::text LIKE $12", likeQuery)) // search by ConnectorData
+			},
+		),
+	).All(ctx)
+}
+
+// searchOrgSubscription searches for OrgSubscription based on the query string looking for matches
+func searchOrgSubscriptions(ctx context.Context, query string) ([]*generated.OrgSubscription, error) {
+	return withTransactionalMutation(ctx).OrgSubscription.Query().Where(
+		orgsubscription.Or(
+			orgsubscription.IDContainsFold(query), // search by ID
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+			},
+		),
+	).All(ctx)
+}
+
+// searchOrgSubscription searches for OrgSubscription based on the query string looking for matches
+func adminSearchOrgSubscriptions(ctx context.Context, query string) ([]*generated.OrgSubscription, error) {
+	return withTransactionalMutation(ctx).OrgSubscription.Query().Where(
+		orgsubscription.Or(
+			orgsubscription.IDContainsFold(query), // search by ID
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+			},
+			orgsubscription.DeletedByContainsFold(query),                // search by DeletedBy
+			orgsubscription.OwnerIDContainsFold(query),                  // search by OwnerID
+			orgsubscription.StripeSubscriptionIDContainsFold(query),     // search by StripeSubscriptionID
+			orgsubscription.ProductTierContainsFold(query),              // search by ProductTier
+			orgsubscription.StripeProductTierIDContainsFold(query),      // search by StripeProductTierID
+			orgsubscription.StripeSubscriptionStatusContainsFold(query), // search by StripeSubscriptionStatus
+			orgsubscription.StripeCustomerIDContainsFold(query),         // search by StripeCustomerID
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(features)::text LIKE $10", likeQuery)) // search by Features
 			},
 		),
 	).All(ctx)

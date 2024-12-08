@@ -38,6 +38,7 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		narrativeResults              []*generated.Narrative
 		oauthproviderResults          []*generated.OauthProvider
 		ohauthtootokenResults         []*generated.OhAuthTooToken
+		orgsubscriptionResults        []*generated.OrgSubscription
 		organizationResults           []*generated.Organization
 		organizationsettingResults    []*generated.OrganizationSetting
 		personalaccesstokenResults    []*generated.PersonalAccessToken
@@ -199,6 +200,13 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		func() {
 			var err error
 			ohauthtootokenResults, err = searchOhAuthTooTokens(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			orgsubscriptionResults, err = searchOrgSubscriptions(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -382,6 +390,9 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			},
 			OhAuthTooTokenSearchResult{
 				OhAuthTooTokens: ohauthtootokenResults,
+			},
+			OrgSubscriptionSearchResult{
+				OrgSubscriptions: orgsubscriptionResults,
 			},
 			OrganizationSearchResult{
 				Organizations: organizationResults,
@@ -681,6 +692,18 @@ func (r *queryResolver) OhAuthTooTokenSearch(ctx context.Context, query string) 
 	// return the results
 	return &OhAuthTooTokenSearchResult{
 		OhAuthTooTokens: ohauthtootokenResults,
+	}, nil
+}
+func (r *queryResolver) OrgSubscriptionSearch(ctx context.Context, query string) (*OrgSubscriptionSearchResult, error) {
+	orgsubscriptionResults, err := searchOrgSubscriptions(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &OrgSubscriptionSearchResult{
+		OrgSubscriptions: orgsubscriptionResults,
 	}, nil
 }
 func (r *queryResolver) OrganizationSearch(ctx context.Context, query string) (*OrganizationSearchResult, error) {

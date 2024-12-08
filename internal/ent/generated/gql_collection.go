@@ -63,6 +63,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
@@ -9238,6 +9240,320 @@ func newOrgMembershipHistoryPaginateArgs(rv map[string]any) *orgmembershiphistor
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (os *OrgSubscriptionQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgSubscriptionQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return os, nil
+	}
+	if err := os.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return os, nil
+}
+
+func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(orgsubscription.Columns))
+		selectedFields = []string{orgsubscription.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: os.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			os.withOwner = query
+			if _, ok := fieldSeen[orgsubscription.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldOwnerID)
+				fieldSeen[orgsubscription.FieldOwnerID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[orgsubscription.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldCreatedAt)
+				fieldSeen[orgsubscription.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[orgsubscription.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldUpdatedAt)
+				fieldSeen[orgsubscription.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[orgsubscription.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldCreatedBy)
+				fieldSeen[orgsubscription.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[orgsubscription.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldUpdatedBy)
+				fieldSeen[orgsubscription.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[orgsubscription.FieldTags]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldTags)
+				fieldSeen[orgsubscription.FieldTags] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[orgsubscription.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldDeletedAt)
+				fieldSeen[orgsubscription.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[orgsubscription.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldDeletedBy)
+				fieldSeen[orgsubscription.FieldDeletedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[orgsubscription.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldOwnerID)
+				fieldSeen[orgsubscription.FieldOwnerID] = struct{}{}
+			}
+		case "stripeSubscriptionID":
+			if _, ok := fieldSeen[orgsubscription.FieldStripeSubscriptionID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldStripeSubscriptionID)
+				fieldSeen[orgsubscription.FieldStripeSubscriptionID] = struct{}{}
+			}
+		case "productTier":
+			if _, ok := fieldSeen[orgsubscription.FieldProductTier]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldProductTier)
+				fieldSeen[orgsubscription.FieldProductTier] = struct{}{}
+			}
+		case "stripeProductTierID":
+			if _, ok := fieldSeen[orgsubscription.FieldStripeProductTierID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldStripeProductTierID)
+				fieldSeen[orgsubscription.FieldStripeProductTierID] = struct{}{}
+			}
+		case "stripeSubscriptionStatus":
+			if _, ok := fieldSeen[orgsubscription.FieldStripeSubscriptionStatus]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldStripeSubscriptionStatus)
+				fieldSeen[orgsubscription.FieldStripeSubscriptionStatus] = struct{}{}
+			}
+		case "active":
+			if _, ok := fieldSeen[orgsubscription.FieldActive]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldActive)
+				fieldSeen[orgsubscription.FieldActive] = struct{}{}
+			}
+		case "stripeCustomerID":
+			if _, ok := fieldSeen[orgsubscription.FieldStripeCustomerID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldStripeCustomerID)
+				fieldSeen[orgsubscription.FieldStripeCustomerID] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[orgsubscription.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldExpiresAt)
+				fieldSeen[orgsubscription.FieldExpiresAt] = struct{}{}
+			}
+		case "features":
+			if _, ok := fieldSeen[orgsubscription.FieldFeatures]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldFeatures)
+				fieldSeen[orgsubscription.FieldFeatures] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		os.Select(selectedFields...)
+	}
+	return nil
+}
+
+type orgsubscriptionPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []OrgSubscriptionPaginateOption
+}
+
+func newOrgSubscriptionPaginateArgs(rv map[string]any) *orgsubscriptionPaginateArgs {
+	args := &orgsubscriptionPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*OrgSubscriptionWhereInput); ok {
+		args.opts = append(args.opts, WithOrgSubscriptionFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (osh *OrgSubscriptionHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgSubscriptionHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return osh, nil
+	}
+	if err := osh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return osh, nil
+}
+
+func (osh *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(orgsubscriptionhistory.Columns))
+		selectedFields = []string{orgsubscriptionhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldHistoryTime)
+				fieldSeen[orgsubscriptionhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldRef)
+				fieldSeen[orgsubscriptionhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldOperation)
+				fieldSeen[orgsubscriptionhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldCreatedAt)
+				fieldSeen[orgsubscriptionhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldUpdatedAt)
+				fieldSeen[orgsubscriptionhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldCreatedBy)
+				fieldSeen[orgsubscriptionhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldUpdatedBy)
+				fieldSeen[orgsubscriptionhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldTags)
+				fieldSeen[orgsubscriptionhistory.FieldTags] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldDeletedAt)
+				fieldSeen[orgsubscriptionhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldDeletedBy)
+				fieldSeen[orgsubscriptionhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldOwnerID)
+				fieldSeen[orgsubscriptionhistory.FieldOwnerID] = struct{}{}
+			}
+		case "stripeSubscriptionID":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldStripeSubscriptionID]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldStripeSubscriptionID)
+				fieldSeen[orgsubscriptionhistory.FieldStripeSubscriptionID] = struct{}{}
+			}
+		case "productTier":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldProductTier]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldProductTier)
+				fieldSeen[orgsubscriptionhistory.FieldProductTier] = struct{}{}
+			}
+		case "stripeProductTierID":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldStripeProductTierID]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldStripeProductTierID)
+				fieldSeen[orgsubscriptionhistory.FieldStripeProductTierID] = struct{}{}
+			}
+		case "stripeSubscriptionStatus":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldStripeSubscriptionStatus]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldStripeSubscriptionStatus)
+				fieldSeen[orgsubscriptionhistory.FieldStripeSubscriptionStatus] = struct{}{}
+			}
+		case "active":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldActive]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldActive)
+				fieldSeen[orgsubscriptionhistory.FieldActive] = struct{}{}
+			}
+		case "stripeCustomerID":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldStripeCustomerID]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldStripeCustomerID)
+				fieldSeen[orgsubscriptionhistory.FieldStripeCustomerID] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldExpiresAt)
+				fieldSeen[orgsubscriptionhistory.FieldExpiresAt] = struct{}{}
+			}
+		case "features":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldFeatures]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldFeatures)
+				fieldSeen[orgsubscriptionhistory.FieldFeatures] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		osh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type orgsubscriptionhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []OrgSubscriptionHistoryPaginateOption
+}
+
+func newOrgSubscriptionHistoryPaginateArgs(rv map[string]any) *orgsubscriptionhistoryPaginateArgs {
+	args := &orgsubscriptionhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*OrgSubscriptionHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithOrgSubscriptionHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (o *OrganizationQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -9553,6 +9869,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			o.WithNamedEntitlements(alias, func(wq *EntitlementQuery) {
+				*wq = *query
+			})
+
+		case "orgsubscriptions":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrgSubscriptionClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, orgsubscriptionImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedOrgsubscriptions(alias, func(wq *OrgSubscriptionQuery) {
 				*wq = *query
 			})
 

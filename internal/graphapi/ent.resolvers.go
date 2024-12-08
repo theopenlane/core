@@ -825,6 +825,38 @@ func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgq
 	return res, err
 }
 
+// OrgSubscriptions is the resolver for the orgSubscriptions field.
+func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionWhereInput) (*generated.OrgSubscriptionConnection, error) {
+	res, err := withTransactionalMutation(ctx).OrgSubscription.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrgSubscriptionFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscription"})
+	}
+
+	return res, err
+}
+
+// OrgSubscriptionHistories is the resolver for the orgSubscriptionHistories field.
+func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgSubscriptionHistoryWhereInput) (*generated.OrgSubscriptionHistoryConnection, error) {
+	res, err := withTransactionalMutation(ctx).OrgSubscriptionHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrgSubscriptionHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscriptionhistory"})
+	}
+
+	return res, err
+}
+
 // Organizations is the resolver for the organizations field.
 func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationOrder, where *generated.OrganizationWhereInput) (*generated.OrganizationConnection, error) {
 	res, err := withTransactionalMutation(ctx).Organization.Query().Paginate(

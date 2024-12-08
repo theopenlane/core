@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
@@ -1101,6 +1102,52 @@ func (omhq *OrgMembershipHistoryQuery) AsOf(ctx context.Context, time time.Time)
 	return omhq.
 		Where(orgmembershiphistory.HistoryTimeLTE(time)).
 		Order(orgmembershiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (os *OrgSubscription) History() *OrgSubscriptionHistoryQuery {
+	historyClient := NewOrgSubscriptionHistoryClient(os.config)
+	return historyClient.Query().Where(orgsubscriptionhistory.Ref(os.ID))
+}
+
+func (osh *OrgSubscriptionHistory) Next(ctx context.Context) (*OrgSubscriptionHistory, error) {
+	client := NewOrgSubscriptionHistoryClient(osh.config)
+	return client.Query().
+		Where(
+			orgsubscriptionhistory.Ref(osh.Ref),
+			orgsubscriptionhistory.HistoryTimeGT(osh.HistoryTime),
+		).
+		Order(orgsubscriptionhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (osh *OrgSubscriptionHistory) Prev(ctx context.Context) (*OrgSubscriptionHistory, error) {
+	client := NewOrgSubscriptionHistoryClient(osh.config)
+	return client.Query().
+		Where(
+			orgsubscriptionhistory.Ref(osh.Ref),
+			orgsubscriptionhistory.HistoryTimeLT(osh.HistoryTime),
+		).
+		Order(orgsubscriptionhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (oshq *OrgSubscriptionHistoryQuery) Earliest(ctx context.Context) (*OrgSubscriptionHistory, error) {
+	return oshq.
+		Order(orgsubscriptionhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (oshq *OrgSubscriptionHistoryQuery) Latest(ctx context.Context) (*OrgSubscriptionHistory, error) {
+	return oshq.
+		Order(orgsubscriptionhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (oshq *OrgSubscriptionHistoryQuery) AsOf(ctx context.Context, time time.Time) (*OrgSubscriptionHistory, error) {
+	return oshq.
+		Where(orgsubscriptionhistory.HistoryTimeLTE(time)).
+		Order(orgsubscriptionhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

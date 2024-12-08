@@ -73,6 +73,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -220,6 +222,10 @@ type Client struct {
 	OrgMembership *OrgMembershipClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
+	// OrgSubscription is the client for interacting with the OrgSubscription builders.
+	OrgSubscription *OrgSubscriptionClient
+	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
+	OrgSubscriptionHistory *OrgSubscriptionHistoryClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
 	// OrganizationHistory is the client for interacting with the OrganizationHistory builders.
@@ -352,6 +358,8 @@ func (c *Client) init() {
 	c.OhAuthTooToken = NewOhAuthTooTokenClient(c.config)
 	c.OrgMembership = NewOrgMembershipClient(c.config)
 	c.OrgMembershipHistory = NewOrgMembershipHistoryClient(c.config)
+	c.OrgSubscription = NewOrgSubscriptionClient(c.config)
+	c.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
 	c.OrganizationHistory = NewOrganizationHistoryClient(c.config)
 	c.OrganizationSetting = NewOrganizationSettingClient(c.config)
@@ -594,6 +602,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		OhAuthTooToken:                NewOhAuthTooTokenClient(cfg),
 		OrgMembership:                 NewOrgMembershipClient(cfg),
 		OrgMembershipHistory:          NewOrgMembershipHistoryClient(cfg),
+		OrgSubscription:               NewOrgSubscriptionClient(cfg),
+		OrgSubscriptionHistory:        NewOrgSubscriptionHistoryClient(cfg),
 		Organization:                  NewOrganizationClient(cfg),
 		OrganizationHistory:           NewOrganizationHistoryClient(cfg),
 		OrganizationSetting:           NewOrganizationSettingClient(cfg),
@@ -694,6 +704,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		OhAuthTooToken:                NewOhAuthTooTokenClient(cfg),
 		OrgMembership:                 NewOrgMembershipClient(cfg),
 		OrgMembershipHistory:          NewOrgMembershipHistoryClient(cfg),
+		OrgSubscription:               NewOrgSubscriptionClient(cfg),
+		OrgSubscriptionHistory:        NewOrgSubscriptionHistoryClient(cfg),
 		Organization:                  NewOrganizationClient(cfg),
 		OrganizationHistory:           NewOrganizationHistoryClient(cfg),
 		OrganizationSetting:           NewOrganizationSettingClient(cfg),
@@ -766,14 +778,15 @@ func (c *Client) Use(hooks ...Hook) {
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
 		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.OauthProvider,
 		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
-		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
-		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.OrgMembershipHistory, c.OrgSubscription, c.OrgSubscriptionHistory,
+		c.Organization, c.OrganizationHistory, c.OrganizationSetting,
+		c.OrganizationSettingHistory, c.PasswordResetToken, c.PersonalAccessToken,
+		c.Procedure, c.ProcedureHistory, c.Program, c.ProgramHistory,
+		c.ProgramMembership, c.ProgramMembershipHistory, c.Risk, c.RiskHistory,
+		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
+		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn, c.Webhook,
+		c.WebhookHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -795,14 +808,15 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
 		c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory, c.OauthProvider,
 		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
-		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
-		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.OrgMembershipHistory, c.OrgSubscription, c.OrgSubscriptionHistory,
+		c.Organization, c.OrganizationHistory, c.OrganizationSetting,
+		c.OrganizationSettingHistory, c.PasswordResetToken, c.PersonalAccessToken,
+		c.Procedure, c.ProcedureHistory, c.Program, c.ProgramHistory,
+		c.ProgramMembership, c.ProgramMembershipHistory, c.Risk, c.RiskHistory,
+		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
+		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn, c.Webhook,
+		c.WebhookHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -983,6 +997,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.OrgMembership.mutate(ctx, m)
 	case *OrgMembershipHistoryMutation:
 		return c.OrgMembershipHistory.mutate(ctx, m)
+	case *OrgSubscriptionMutation:
+		return c.OrgSubscription.mutate(ctx, m)
+	case *OrgSubscriptionHistoryMutation:
+		return c.OrgSubscriptionHistory.mutate(ctx, m)
 	case *OrganizationMutation:
 		return c.Organization.mutate(ctx, m)
 	case *OrganizationHistoryMutation:
@@ -11040,6 +11058,293 @@ func (c *OrgMembershipHistoryClient) mutate(ctx context.Context, m *OrgMembershi
 	}
 }
 
+// OrgSubscriptionClient is a client for the OrgSubscription schema.
+type OrgSubscriptionClient struct {
+	config
+}
+
+// NewOrgSubscriptionClient returns a client for the OrgSubscription from the given config.
+func NewOrgSubscriptionClient(c config) *OrgSubscriptionClient {
+	return &OrgSubscriptionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `orgsubscription.Hooks(f(g(h())))`.
+func (c *OrgSubscriptionClient) Use(hooks ...Hook) {
+	c.hooks.OrgSubscription = append(c.hooks.OrgSubscription, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `orgsubscription.Intercept(f(g(h())))`.
+func (c *OrgSubscriptionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OrgSubscription = append(c.inters.OrgSubscription, interceptors...)
+}
+
+// Create returns a builder for creating a OrgSubscription entity.
+func (c *OrgSubscriptionClient) Create() *OrgSubscriptionCreate {
+	mutation := newOrgSubscriptionMutation(c.config, OpCreate)
+	return &OrgSubscriptionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OrgSubscription entities.
+func (c *OrgSubscriptionClient) CreateBulk(builders ...*OrgSubscriptionCreate) *OrgSubscriptionCreateBulk {
+	return &OrgSubscriptionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrgSubscriptionClient) MapCreateBulk(slice any, setFunc func(*OrgSubscriptionCreate, int)) *OrgSubscriptionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrgSubscriptionCreateBulk{err: fmt.Errorf("calling to OrgSubscriptionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrgSubscriptionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OrgSubscriptionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OrgSubscription.
+func (c *OrgSubscriptionClient) Update() *OrgSubscriptionUpdate {
+	mutation := newOrgSubscriptionMutation(c.config, OpUpdate)
+	return &OrgSubscriptionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OrgSubscriptionClient) UpdateOne(os *OrgSubscription) *OrgSubscriptionUpdateOne {
+	mutation := newOrgSubscriptionMutation(c.config, OpUpdateOne, withOrgSubscription(os))
+	return &OrgSubscriptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OrgSubscriptionClient) UpdateOneID(id string) *OrgSubscriptionUpdateOne {
+	mutation := newOrgSubscriptionMutation(c.config, OpUpdateOne, withOrgSubscriptionID(id))
+	return &OrgSubscriptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OrgSubscription.
+func (c *OrgSubscriptionClient) Delete() *OrgSubscriptionDelete {
+	mutation := newOrgSubscriptionMutation(c.config, OpDelete)
+	return &OrgSubscriptionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OrgSubscriptionClient) DeleteOne(os *OrgSubscription) *OrgSubscriptionDeleteOne {
+	return c.DeleteOneID(os.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OrgSubscriptionClient) DeleteOneID(id string) *OrgSubscriptionDeleteOne {
+	builder := c.Delete().Where(orgsubscription.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OrgSubscriptionDeleteOne{builder}
+}
+
+// Query returns a query builder for OrgSubscription.
+func (c *OrgSubscriptionClient) Query() *OrgSubscriptionQuery {
+	return &OrgSubscriptionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOrgSubscription},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OrgSubscription entity by its id.
+func (c *OrgSubscriptionClient) Get(ctx context.Context, id string) (*OrgSubscription, error) {
+	return c.Query().Where(orgsubscription.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OrgSubscriptionClient) GetX(ctx context.Context, id string) *OrgSubscription {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryOwner(os *OrgSubscription) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgsubscription.OwnerTable, orgsubscription.OwnerColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OrgSubscriptionClient) Hooks() []Hook {
+	hooks := c.hooks.OrgSubscription
+	return append(hooks[:len(hooks):len(hooks)], orgsubscription.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OrgSubscriptionClient) Interceptors() []Interceptor {
+	inters := c.inters.OrgSubscription
+	return append(inters[:len(inters):len(inters)], orgsubscription.Interceptors[:]...)
+}
+
+func (c *OrgSubscriptionClient) mutate(ctx context.Context, m *OrgSubscriptionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OrgSubscriptionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OrgSubscriptionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OrgSubscriptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OrgSubscriptionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown OrgSubscription mutation op: %q", m.Op())
+	}
+}
+
+// OrgSubscriptionHistoryClient is a client for the OrgSubscriptionHistory schema.
+type OrgSubscriptionHistoryClient struct {
+	config
+}
+
+// NewOrgSubscriptionHistoryClient returns a client for the OrgSubscriptionHistory from the given config.
+func NewOrgSubscriptionHistoryClient(c config) *OrgSubscriptionHistoryClient {
+	return &OrgSubscriptionHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `orgsubscriptionhistory.Hooks(f(g(h())))`.
+func (c *OrgSubscriptionHistoryClient) Use(hooks ...Hook) {
+	c.hooks.OrgSubscriptionHistory = append(c.hooks.OrgSubscriptionHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `orgsubscriptionhistory.Intercept(f(g(h())))`.
+func (c *OrgSubscriptionHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OrgSubscriptionHistory = append(c.inters.OrgSubscriptionHistory, interceptors...)
+}
+
+// Create returns a builder for creating a OrgSubscriptionHistory entity.
+func (c *OrgSubscriptionHistoryClient) Create() *OrgSubscriptionHistoryCreate {
+	mutation := newOrgSubscriptionHistoryMutation(c.config, OpCreate)
+	return &OrgSubscriptionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OrgSubscriptionHistory entities.
+func (c *OrgSubscriptionHistoryClient) CreateBulk(builders ...*OrgSubscriptionHistoryCreate) *OrgSubscriptionHistoryCreateBulk {
+	return &OrgSubscriptionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrgSubscriptionHistoryClient) MapCreateBulk(slice any, setFunc func(*OrgSubscriptionHistoryCreate, int)) *OrgSubscriptionHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrgSubscriptionHistoryCreateBulk{err: fmt.Errorf("calling to OrgSubscriptionHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrgSubscriptionHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OrgSubscriptionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OrgSubscriptionHistory.
+func (c *OrgSubscriptionHistoryClient) Update() *OrgSubscriptionHistoryUpdate {
+	mutation := newOrgSubscriptionHistoryMutation(c.config, OpUpdate)
+	return &OrgSubscriptionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OrgSubscriptionHistoryClient) UpdateOne(osh *OrgSubscriptionHistory) *OrgSubscriptionHistoryUpdateOne {
+	mutation := newOrgSubscriptionHistoryMutation(c.config, OpUpdateOne, withOrgSubscriptionHistory(osh))
+	return &OrgSubscriptionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OrgSubscriptionHistoryClient) UpdateOneID(id string) *OrgSubscriptionHistoryUpdateOne {
+	mutation := newOrgSubscriptionHistoryMutation(c.config, OpUpdateOne, withOrgSubscriptionHistoryID(id))
+	return &OrgSubscriptionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OrgSubscriptionHistory.
+func (c *OrgSubscriptionHistoryClient) Delete() *OrgSubscriptionHistoryDelete {
+	mutation := newOrgSubscriptionHistoryMutation(c.config, OpDelete)
+	return &OrgSubscriptionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OrgSubscriptionHistoryClient) DeleteOne(osh *OrgSubscriptionHistory) *OrgSubscriptionHistoryDeleteOne {
+	return c.DeleteOneID(osh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OrgSubscriptionHistoryClient) DeleteOneID(id string) *OrgSubscriptionHistoryDeleteOne {
+	builder := c.Delete().Where(orgsubscriptionhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OrgSubscriptionHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for OrgSubscriptionHistory.
+func (c *OrgSubscriptionHistoryClient) Query() *OrgSubscriptionHistoryQuery {
+	return &OrgSubscriptionHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOrgSubscriptionHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OrgSubscriptionHistory entity by its id.
+func (c *OrgSubscriptionHistoryClient) Get(ctx context.Context, id string) (*OrgSubscriptionHistory, error) {
+	return c.Query().Where(orgsubscriptionhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OrgSubscriptionHistoryClient) GetX(ctx context.Context, id string) *OrgSubscriptionHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *OrgSubscriptionHistoryClient) Hooks() []Hook {
+	return c.hooks.OrgSubscriptionHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *OrgSubscriptionHistoryClient) Interceptors() []Interceptor {
+	return c.inters.OrgSubscriptionHistory
+}
+
+func (c *OrgSubscriptionHistoryClient) mutate(ctx context.Context, m *OrgSubscriptionHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OrgSubscriptionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OrgSubscriptionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OrgSubscriptionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OrgSubscriptionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown OrgSubscriptionHistory mutation op: %q", m.Op())
+	}
+}
+
 // OrganizationClient is a client for the Organization schema.
 type OrganizationClient struct {
 	config
@@ -11465,6 +11770,25 @@ func (c *OrganizationClient) QueryEntitlements(o *Organization) *EntitlementQuer
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Entitlement
 		step.Edge.Schema = schemaConfig.Entitlement
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgsubscriptions queries the orgsubscriptions edge of a Organization.
+func (c *OrganizationClient) QueryOrgsubscriptions(o *Organization) *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgsubscriptionsTable, organization.OrgsubscriptionsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -17913,13 +18237,14 @@ type (
 		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
 		InternalPolicy, InternalPolicyHistory, Invite, Narrative, NarrativeHistory,
 		Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
-		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
-		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
-		ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory, Standard,
-		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
-		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn, Webhook, WebhookHistory []ent.Hook
+		OrgMembership, OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory,
+		Organization, OrganizationHistory, OrganizationSetting,
+		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
+		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
+		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
+		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
+		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
+		Webauthn, Webhook, WebhookHistory []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -17932,13 +18257,14 @@ type (
 		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
 		InternalPolicy, InternalPolicyHistory, Invite, Narrative, NarrativeHistory,
 		Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
-		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
-		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
-		ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory, Standard,
-		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
-		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn, Webhook, WebhookHistory []ent.Interceptor
+		OrgMembership, OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory,
+		Organization, OrganizationHistory, OrganizationSetting,
+		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
+		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
+		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
+		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
+		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
+		Webauthn, Webhook, WebhookHistory []ent.Interceptor
 	}
 )
 

@@ -5671,6 +5671,279 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.OrgSubscriptionHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if stripeSubscriptionID, exists := m.StripeSubscriptionID(); exists {
+		create = create.SetStripeSubscriptionID(stripeSubscriptionID)
+	}
+
+	if productTier, exists := m.ProductTier(); exists {
+		create = create.SetProductTier(productTier)
+	}
+
+	if stripeProductTierID, exists := m.StripeProductTierID(); exists {
+		create = create.SetStripeProductTierID(stripeProductTierID)
+	}
+
+	if stripeSubscriptionStatus, exists := m.StripeSubscriptionStatus(); exists {
+		create = create.SetStripeSubscriptionStatus(stripeSubscriptionStatus)
+	}
+
+	if active, exists := m.Active(); exists {
+		create = create.SetActive(active)
+	}
+
+	if stripeCustomerID, exists := m.StripeCustomerID(); exists {
+		create = create.SetStripeCustomerID(stripeCustomerID)
+	}
+
+	if expiresAt, exists := m.ExpiresAt(); exists {
+		create = create.SetNillableExpiresAt(&expiresAt)
+	}
+
+	if features, exists := m.Features(); exists {
+		create = create.SetFeatures(features)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		orgsubscription, err := client.OrgSubscription.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.OrgSubscriptionHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(orgsubscription.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(orgsubscription.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(orgsubscription.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(orgsubscription.UpdatedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(orgsubscription.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(orgsubscription.Tags)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(orgsubscription.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(orgsubscription.DeletedBy)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(orgsubscription.OwnerID)
+		}
+
+		if stripeSubscriptionID, exists := m.StripeSubscriptionID(); exists {
+			create = create.SetStripeSubscriptionID(stripeSubscriptionID)
+		} else {
+			create = create.SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID)
+		}
+
+		if productTier, exists := m.ProductTier(); exists {
+			create = create.SetProductTier(productTier)
+		} else {
+			create = create.SetProductTier(orgsubscription.ProductTier)
+		}
+
+		if stripeProductTierID, exists := m.StripeProductTierID(); exists {
+			create = create.SetStripeProductTierID(stripeProductTierID)
+		} else {
+			create = create.SetStripeProductTierID(orgsubscription.StripeProductTierID)
+		}
+
+		if stripeSubscriptionStatus, exists := m.StripeSubscriptionStatus(); exists {
+			create = create.SetStripeSubscriptionStatus(stripeSubscriptionStatus)
+		} else {
+			create = create.SetStripeSubscriptionStatus(orgsubscription.StripeSubscriptionStatus)
+		}
+
+		if active, exists := m.Active(); exists {
+			create = create.SetActive(active)
+		} else {
+			create = create.SetActive(orgsubscription.Active)
+		}
+
+		if stripeCustomerID, exists := m.StripeCustomerID(); exists {
+			create = create.SetStripeCustomerID(stripeCustomerID)
+		} else {
+			create = create.SetStripeCustomerID(orgsubscription.StripeCustomerID)
+		}
+
+		if expiresAt, exists := m.ExpiresAt(); exists {
+			create = create.SetNillableExpiresAt(&expiresAt)
+		} else {
+			create = create.SetNillableExpiresAt(orgsubscription.ExpiresAt)
+		}
+
+		if features, exists := m.Features(); exists {
+			create = create.SetFeatures(features)
+		} else {
+			create = create.SetFeatures(orgsubscription.Features)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		orgsubscription, err := client.OrgSubscription.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.OrgSubscriptionHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(orgsubscription.CreatedAt).
+			SetUpdatedAt(orgsubscription.UpdatedAt).
+			SetCreatedBy(orgsubscription.CreatedBy).
+			SetUpdatedBy(orgsubscription.UpdatedBy).
+			SetMappingID(orgsubscription.MappingID).
+			SetTags(orgsubscription.Tags).
+			SetDeletedAt(orgsubscription.DeletedAt).
+			SetDeletedBy(orgsubscription.DeletedBy).
+			SetOwnerID(orgsubscription.OwnerID).
+			SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID).
+			SetProductTier(orgsubscription.ProductTier).
+			SetStripeProductTierID(orgsubscription.StripeProductTierID).
+			SetStripeSubscriptionStatus(orgsubscription.StripeSubscriptionStatus).
+			SetActive(orgsubscription.Active).
+			SetStripeCustomerID(orgsubscription.StripeCustomerID).
+			SetNillableExpiresAt(orgsubscription.ExpiresAt).
+			SetFeatures(orgsubscription.Features).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 

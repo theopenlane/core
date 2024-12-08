@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -76,6 +77,7 @@ type OrganizationQuery struct {
 	withSetting                       *OrganizationSettingQuery
 	withDocumentdata                  *DocumentDataQuery
 	withEntitlements                  *EntitlementQuery
+	withOrgsubscriptions              *OrgSubscriptionQuery
 	withOrganizationEntitlement       *EntitlementQuery
 	withPersonalAccessTokens          *PersonalAccessTokenQuery
 	withAPITokens                     *APITokenQuery
@@ -121,6 +123,7 @@ type OrganizationQuery struct {
 	withNamedIntegrations             map[string]*IntegrationQuery
 	withNamedDocumentdata             map[string]*DocumentDataQuery
 	withNamedEntitlements             map[string]*EntitlementQuery
+	withNamedOrgsubscriptions         map[string]*OrgSubscriptionQuery
 	withNamedOrganizationEntitlement  map[string]*EntitlementQuery
 	withNamedPersonalAccessTokens     map[string]*PersonalAccessTokenQuery
 	withNamedAPITokens                map[string]*APITokenQuery
@@ -604,6 +607,31 @@ func (oq *OrganizationQuery) QueryEntitlements() *EntitlementQuery {
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.Entitlement
 		step.Edge.Schema = schemaConfig.Entitlement
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrgsubscriptions chains the current query on the "orgsubscriptions" edge.
+func (oq *OrganizationQuery) QueryOrgsubscriptions() *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgsubscriptionsTable, organization.OrgsubscriptionsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1519,6 +1547,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withSetting:                  oq.withSetting.Clone(),
 		withDocumentdata:             oq.withDocumentdata.Clone(),
 		withEntitlements:             oq.withEntitlements.Clone(),
+		withOrgsubscriptions:         oq.withOrgsubscriptions.Clone(),
 		withOrganizationEntitlement:  oq.withOrganizationEntitlement.Clone(),
 		withPersonalAccessTokens:     oq.withPersonalAccessTokens.Clone(),
 		withAPITokens:                oq.withAPITokens.Clone(),
@@ -1738,6 +1767,17 @@ func (oq *OrganizationQuery) WithEntitlements(opts ...func(*EntitlementQuery)) *
 		opt(query)
 	}
 	oq.withEntitlements = query
+	return oq
+}
+
+// WithOrgsubscriptions tells the query-builder to eager-load the nodes that are connected to
+// the "orgsubscriptions" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithOrgsubscriptions(opts ...func(*OrgSubscriptionQuery)) *OrganizationQuery {
+	query := (&OrgSubscriptionClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withOrgsubscriptions = query
 	return oq
 }
 
@@ -2133,7 +2173,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [45]bool{
+		loadedTypes = [46]bool{
 			oq.withControlCreators != nil,
 			oq.withControlObjectiveCreators != nil,
 			oq.withGroupCreators != nil,
@@ -2151,6 +2191,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withSetting != nil,
 			oq.withDocumentdata != nil,
 			oq.withEntitlements != nil,
+			oq.withOrgsubscriptions != nil,
 			oq.withOrganizationEntitlement != nil,
 			oq.withPersonalAccessTokens != nil,
 			oq.withAPITokens != nil,
@@ -2322,6 +2363,15 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadEntitlements(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Entitlements = []*Entitlement{} },
 			func(n *Organization, e *Entitlement) { n.Edges.Entitlements = append(n.Edges.Entitlements, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withOrgsubscriptions; query != nil {
+		if err := oq.loadOrgsubscriptions(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Orgsubscriptions = []*OrgSubscription{} },
+			func(n *Organization, e *OrgSubscription) {
+				n.Edges.Orgsubscriptions = append(n.Edges.Orgsubscriptions, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -2635,6 +2685,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadEntitlements(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedEntitlements(name) },
 			func(n *Organization, e *Entitlement) { n.appendNamedEntitlements(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedOrgsubscriptions {
+		if err := oq.loadOrgsubscriptions(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedOrgsubscriptions(name) },
+			func(n *Organization, e *OrgSubscription) { n.appendNamedOrgsubscriptions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3622,6 +3679,36 @@ func (oq *OrganizationQuery) loadEntitlements(ctx context.Context, query *Entitl
 	}
 	query.Where(predicate.Entitlement(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.EntitlementsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadOrgsubscriptions(ctx context.Context, query *OrgSubscriptionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgSubscription)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(orgsubscription.FieldOwnerID)
+	}
+	query.Where(predicate.OrgSubscription(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.OrgsubscriptionsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -4985,6 +5072,20 @@ func (oq *OrganizationQuery) WithNamedEntitlements(name string, opts ...func(*En
 		oq.withNamedEntitlements = make(map[string]*EntitlementQuery)
 	}
 	oq.withNamedEntitlements[name] = query
+	return oq
+}
+
+// WithNamedOrgsubscriptions tells the query-builder to eager-load the nodes that are connected to the "orgsubscriptions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedOrgsubscriptions(name string, opts ...func(*OrgSubscriptionQuery)) *OrganizationQuery {
+	query := (&OrgSubscriptionClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedOrgsubscriptions == nil {
+		oq.withNamedOrgsubscriptions = make(map[string]*OrgSubscriptionQuery)
+	}
+	oq.withNamedOrgsubscriptions[name] = query
 	return oq
 }
 

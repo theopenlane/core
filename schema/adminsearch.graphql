@@ -189,6 +189,15 @@ extend type Query{
         query: String!
     ): OhAuthTooTokenSearchResult
     """
+    Search across OrgSubscription objects
+    """
+    adminOrgSubscriptionSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrgSubscriptionSearchResult
+    """
     Search across Organization objects
     """
     adminOrganizationSearch(

@@ -62,6 +62,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -1498,6 +1500,60 @@ func (f TraverseOrgMembershipHistory) Traverse(ctx context.Context, q generated.
 	return fmt.Errorf("unexpected query type %T. expect *generated.OrgMembershipHistoryQuery", q)
 }
 
+// The OrgSubscriptionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrgSubscriptionFunc func(context.Context, *generated.OrgSubscriptionQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrgSubscriptionFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OrgSubscriptionQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OrgSubscriptionQuery", q)
+}
+
+// The TraverseOrgSubscription type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrgSubscription func(context.Context, *generated.OrgSubscriptionQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrgSubscription) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrgSubscription) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgSubscriptionQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OrgSubscriptionQuery", q)
+}
+
+// The OrgSubscriptionHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrgSubscriptionHistoryFunc func(context.Context, *generated.OrgSubscriptionHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrgSubscriptionHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OrgSubscriptionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OrgSubscriptionHistoryQuery", q)
+}
+
+// The TraverseOrgSubscriptionHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrgSubscriptionHistory func(context.Context, *generated.OrgSubscriptionHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrgSubscriptionHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrgSubscriptionHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgSubscriptionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OrgSubscriptionHistoryQuery", q)
+}
+
 // The OrganizationFunc type is an adapter to allow the use of ordinary function as a Querier.
 type OrganizationFunc func(context.Context, *generated.OrganizationQuery) (generated.Value, error)
 
@@ -2438,6 +2494,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.OrgMembershipQuery, predicate.OrgMembership, orgmembership.OrderOption]{typ: generated.TypeOrgMembership, tq: q}, nil
 	case *generated.OrgMembershipHistoryQuery:
 		return &query[*generated.OrgMembershipHistoryQuery, predicate.OrgMembershipHistory, orgmembershiphistory.OrderOption]{typ: generated.TypeOrgMembershipHistory, tq: q}, nil
+	case *generated.OrgSubscriptionQuery:
+		return &query[*generated.OrgSubscriptionQuery, predicate.OrgSubscription, orgsubscription.OrderOption]{typ: generated.TypeOrgSubscription, tq: q}, nil
+	case *generated.OrgSubscriptionHistoryQuery:
+		return &query[*generated.OrgSubscriptionHistoryQuery, predicate.OrgSubscriptionHistory, orgsubscriptionhistory.OrderOption]{typ: generated.TypeOrgSubscriptionHistory, tq: q}, nil
 	case *generated.OrganizationQuery:
 		return &query[*generated.OrganizationQuery, predicate.Organization, organization.OrderOption]{typ: generated.TypeOrganization, tq: q}, nil
 	case *generated.OrganizationHistoryQuery:

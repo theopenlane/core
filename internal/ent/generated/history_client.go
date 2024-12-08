@@ -77,6 +77,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.HistoryHooks[*OrgMembershipMutation]() {
 		c.OrgMembership.Use(hook)
 	}
+	for _, hook := range history.HistoryHooks[*OrgSubscriptionMutation]() {
+		c.OrgSubscription.Use(hook)
+	}
 	for _, hook := range history.HistoryHooks[*OrganizationMutation]() {
 		c.Organization.Use(hook)
 	}

@@ -759,6 +759,36 @@ type OrgMembershipUpdatePayload struct {
 	OrgMembership *generated.OrgMembership `json:"orgMembership"`
 }
 
+// Return response for createBulkOrgSubscription mutation
+type OrgSubscriptionBulkCreatePayload struct {
+	// Created orgSubscriptions
+	OrgSubscriptions []*generated.OrgSubscription `json:"orgSubscriptions,omitempty"`
+}
+
+// Return response for createOrgSubscription mutation
+type OrgSubscriptionCreatePayload struct {
+	// Created orgSubscription
+	OrgSubscription *generated.OrgSubscription `json:"orgSubscription"`
+}
+
+// Return response for deleteOrgSubscription mutation
+type OrgSubscriptionDeletePayload struct {
+	// Deleted orgSubscription ID
+	DeletedID string `json:"deletedID"`
+}
+
+type OrgSubscriptionSearchResult struct {
+	OrgSubscriptions []*generated.OrgSubscription `json:"orgSubscriptions,omitempty"`
+}
+
+func (OrgSubscriptionSearchResult) IsSearchResult() {}
+
+// Return response for updateOrgSubscription mutation
+type OrgSubscriptionUpdatePayload struct {
+	// Updated orgSubscription
+	OrgSubscription *generated.OrgSubscription `json:"orgSubscription"`
+}
+
 // Return response for createBulkOrganization mutation
 type OrganizationBulkCreatePayload struct {
 	// Created organizations
