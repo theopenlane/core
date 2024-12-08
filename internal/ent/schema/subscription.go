@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -73,11 +72,7 @@ func (Subscription) Edges() []ent.Edge {
 // Indexes of the Subscription
 func (Subscription) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("name", "owner_id").
-			Unique().
-			Annotations(
-				entsql.IndexWhere("deleted_at is NULL"),
-			),
+		index.Fields("features", "owner_id"),
 	}
 }
 
