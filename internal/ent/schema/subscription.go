@@ -5,7 +5,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -66,9 +65,7 @@ func (Subscription) Edges() []ent.Edge {
 
 // Indexes of the Subscription
 func (Subscription) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("features", "owner_id"),
-	}
+	return []ent.Index{}
 }
 
 // Annotations of the Subscription
