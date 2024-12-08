@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema/index"
 
 	emixin "github.com/theopenlane/entx/mixin"
-	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
@@ -79,7 +78,6 @@ func (Subscription) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.OrganizationInheritedChecks(),
 	}
 }
 
