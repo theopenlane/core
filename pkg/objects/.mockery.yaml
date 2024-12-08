@@ -5,3 +5,4 @@ disable-version-string: true
 outpkg: mocks
 packages:
   github.com/theopenlane/core/pkg/objects:
+issue-845-fix: True

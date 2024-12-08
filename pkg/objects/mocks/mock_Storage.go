@@ -26,7 +26,7 @@ func (_m *MockStorage) EXPECT() *MockStorage_Expecter {
 	return &MockStorage_Expecter{mock: &_m.Mock}
 }
 
-// Close provides a mock function with given fields:
+// Close provides a mock function with no fields
 func (_m *MockStorage) Close() error {
 	ret := _m.Called()
 
@@ -188,7 +188,7 @@ func (_c *MockStorage_GetPresignedURL_Call) RunAndReturn(run func(context.Contex
 	return _c
 }
 
-// GetScheme provides a mock function with given fields:
+// GetScheme provides a mock function with no fields
 func (_m *MockStorage) GetScheme() *string {
 	ret := _m.Called()
 
@@ -235,7 +235,7 @@ func (_c *MockStorage_GetScheme_Call) RunAndReturn(run func() *string) *MockStor
 	return _c
 }
 
-// ListBuckets provides a mock function with given fields:
+// ListBuckets provides a mock function with no fields
 func (_m *MockStorage) ListBuckets() ([]string, error) {
 	ret := _m.Called()
 
