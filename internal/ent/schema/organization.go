@@ -135,7 +135,7 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
 			),
-		edge.To("subscriptions", OrgSubscription.Type).
+		edge.To("orgsubscriptions", OrgSubscription.Type).
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
 			),
