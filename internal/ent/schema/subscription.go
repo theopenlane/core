@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -58,9 +57,7 @@ func (Subscription) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		NewOrgOwnedMixin(ObjectOwnedMixin{
-			Ref: "subscriptions",
-		}),
+		NewOrgOwnMixinWithRef("subscriptions"),
 	}
 }
 
@@ -82,13 +79,29 @@ func (Subscription) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:   "organization",
-			IncludeHooks: false,
-			IDField:      "OwnerID",
-		},
-		history.Annotations{
-			Exclude: false,
-		},
+		entfga.OrganizationInheritedChecks(),
 	}
 }
+
+// Hooks of the Subscription
+func (Subscription) Hooks() []ent.Hook {
+	return []ent.Hook{}
+}
+
+// Interceptors of the Subscription
+func (Subscription) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{}
+}
+
+// Policy of the Subscription
+//func (Subscription) Policy() ent.Policy {
+//	return policy.NewPolicy(
+//		policy.WithQueryRules(
+//			entfga.CheckReadAccess[*generated.Subscriptio](),
+//		),
+//		policy.WithMutationRules(
+//			entfga.CheckEditAccess[*generated.ContactMutation](),
+//		),
+//	)
+//}
+//
