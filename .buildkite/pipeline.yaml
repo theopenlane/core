@@ -73,8 +73,7 @@ steps:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=8" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-                - "RYUK_CONNECTION_TIMEOUT=10m"
-                - "RYUK_VERBOSE=true"
+                - "TESTCONTAINERS_RYUK_DISABLED=true"
               volumes:
                 - "/var/run/docker.sock:/var/run/docker.sock"
         artifact_paths: ["coverage.out"]
