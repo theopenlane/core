@@ -76,13 +76,11 @@ type Handler struct {
 
 // Handler returns an http handler for a graph resolver
 func (r *Resolver) Handler(withPlayground bool) *Handler {
-	srv := handler.NewDefaultServer(
-		NewExecutableSchema(
-			Config{
-				Resolvers: r,
-			},
-		),
-	)
+	srv := handler.New(NewExecutableSchema(
+		Config{
+			Resolvers: r,
+		},
+	))
 
 	srv.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second, //nolint:mnd
