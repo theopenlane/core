@@ -8,6 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/objects"
@@ -106,10 +107,16 @@ func createAuthConfig(c *ent.Client) *auth.AuthOptions {
 
 // testGraphServer creates a new graphql server for testing the graph api
 func testGraphServer(t *testing.T, c *ent.Client, u *objects.Objects) *handler.Server {
-	srv := handler.NewDefaultServer(
+	srv := handler.New(
 		graphapi.NewExecutableSchema(
 			graphapi.Config{Resolvers: graphapi.NewResolver(c, u)},
 		))
+
+	// add all the transports to the server
+	srv.AddTransport(transport.Options{})
+	srv.AddTransport(transport.GET{})
+	srv.AddTransport(transport.POST{})
+	srv.AddTransport(transport.MultipartForm{})
 
 	// lower the cache size for testing
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
