@@ -134,7 +134,6 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               environment:
-                - CGO_ENABLED=0
                 - GOOS=linux
               command: ["task", "go:build:ci"]
       - label: ":terminal: build cli"

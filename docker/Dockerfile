@@ -4,7 +4,7 @@ WORKDIR /go/src/app
 COPY . .
 
 RUN go mod download
-RUN CGO_ENABLED=1 GOOS=linux go build -o /go/bin/core -a -ldflags '-linkmode external -extldflags "-static"' .
+RUN GOOS=linux go build -o /go/bin/core -a -buildvcs=false -ldflags '-linkmode external -extldflags "-static"' .
 
 FROM gcr.io/distroless/static:nonroot
 

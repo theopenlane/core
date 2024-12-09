@@ -25,6 +25,8 @@ env:
   TEST_FGA_URL: "localhost:8080"
   ENV: config
   GOFLAGS: -buildvcs=false
+  RYUK_CONNECTION_TIMEOUT: "5m"
+  RYUK_VERBOSE: "true"
 
 tasks:
   default:
