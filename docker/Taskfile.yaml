@@ -5,6 +5,10 @@ tasks:
     dir: ..
     desc: builds the core docker image
     cmds:
+      - task: :go:build
+        vars:
+          GOOS: 'GOOS=linux'
+          GOARCH: 'GOARCH=amd64'
       - "docker build -f docker/Dockerfile . -t core:dev"
 
   build:aio:

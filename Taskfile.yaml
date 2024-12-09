@@ -25,6 +25,8 @@ env:
   TEST_FGA_URL: "localhost:8080"
   ENV: config
   GOFLAGS: -buildvcs=false
+  RYUK_CONNECTION_TIMEOUT: "5m"
+  RYUK_VERBOSE: "true"
 
 tasks:
   default:
@@ -84,7 +86,7 @@ tasks:
   go:build:
     desc: Runs go build for the core server
     cmds:
-      - go build -mod=mod -o core
+      - "{{ .GOOS }} {{ .GOARCH }} go build -mod=mod -o core"
 
   go:build:ci:
     desc: Runs go build for the core server
