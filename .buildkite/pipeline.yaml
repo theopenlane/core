@@ -7,6 +7,7 @@ env:
   GCR_REPO: us-west1-docker.pkg.dev/neural-vista-433523-c1/openlane/openlane
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
+  GOFLAGS: -buildvcs=false
 
 steps:
   - group: ":knife: Pre-check"
@@ -36,6 +37,7 @@ steps:
     key: "tests"
     steps:
       - label: ":golangci-lint: lint :lint-roller:"
+        if: build.branch !~ /^renovate\//
         agents:
           queue: "hosted-large"
         cancel_on_build_failing: true
@@ -72,6 +74,7 @@ steps:
                 - "/var/run/docker.sock:/var/run/docker.sock"
         artifact_paths: ["coverage.out"]
       - label: ":auth0: fga model test"
+        if: build.branch !~ /^renovate\//
         agents:
           queue: "hosted-small"
         key: "fga_test"
@@ -81,6 +84,7 @@ steps:
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
     key: "security"
+    if: build.branch !~ /^renovate\//
     steps:
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
@@ -119,6 +123,7 @@ steps:
                 - "SONAR_HOST_URL=$SONAR_HOST"
   - group: ":golang: Builds"
     key: "go-builds"
+    if: build.branch !~ /^renovate\//
     steps:
       - label: ":golang: build"
         key: "gobuild-server"
@@ -148,6 +153,7 @@ steps:
               command: ["task", "go:build-cli:ci"]
   - group: ":database: atlas migrate"
     key: "database"
+    if: build.branch !~ /^renovate\//
     steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
@@ -178,6 +184,7 @@ steps:
               step: migrate
   - group: ":docker: Image Build"
     depends_on: "go-builds"
+    if: build.branch !~ /^renovate\//
     key: "image-build"
     steps:
       - label: ":docker: docker pr build"
