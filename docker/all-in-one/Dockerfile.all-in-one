@@ -5,13 +5,13 @@ COPY . .
 
 RUN go mod download
 
-RUN CGO_ENABLED=1 GOOS=linux go build -o /go/bin/core -a -tags osusergo -ldflags '-linkmode external -extldflags "-static"' .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /go/bin/core -a -buildvcs=false -tags osusergo .
 
 FROM cgr.dev/chainguard/bash:latest
 
 WORKDIR /home/nonroot
 
-# Copy the binary that goreleaser built
+# Copy the binary built above
 COPY --from=builder /go/bin/core /bin/core
 
 # Copy the dbx binary

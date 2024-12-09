@@ -15,6 +15,8 @@ steps:
     steps:
       - label: ":golang: go generate"
         key: "generate"
+        agents:
+          queue: "hosted-large"
         cancel_on_build_failing: true
         plugins:
           - docker#v5.12.0:
@@ -41,6 +43,7 @@ steps:
         agents:
           queue: "hosted-large"
         cancel_on_build_failing: true
+        timeout_in_minutes: 20
         key: "lint"
         plugins:
           - docker#v5.12.0:
@@ -70,6 +73,7 @@ steps:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=8" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+                - "TESTCONTAINERS_RYUK_DISABLED=true"
               volumes:
                 - "/var/run/docker.sock:/var/run/docker.sock"
         artifact_paths: ["coverage.out"]
@@ -197,6 +201,11 @@ steps:
           #!/bin/bash
           ls
         plugins:
+          - artifacts#v1.9.4:
+              download:
+                - from: "bin/${APP_NAME}"
+                  to: "${APP_NAME}"
+              step: "gobuild-server"
           - cluster-secrets#v1.0.0:
               variables:
                 SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
@@ -230,6 +239,11 @@ steps:
           #!/bin/bash
           ls
         plugins:
+          - artifacts#v1.9.4:
+              download:
+                - from: "bin/${APP_NAME}"
+                  to: "${APP_NAME}"
+              step: "gobuild-server"
           - cluster-secrets#v1.0.0:
               variables:
                 SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
