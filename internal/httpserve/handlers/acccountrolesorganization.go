@@ -100,26 +100,7 @@ func (h *Handler) BindAccountRolesOrganization() *openapi3.Operation {
 	orgRoles.OperationID = "AccountRolesOrganization"
 	orgRoles.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{
-			"bearerAuth": []string{},
-		},
-	}
-
-	h.AddResponse("AccountRolesOrganizationReply", "success", models.ExampleAccountRolesOrganizationReply, orgRoles, http.StatusOK)
-	orgRoles.AddResponse(http.StatusInternalServerError, internalServerError())
-	orgRoles.AddResponse(http.StatusBadRequest, badRequest())
-	orgRoles.AddResponse(http.StatusUnauthorized, unauthorized())
-
-	return orgRoles
-}
-
-// BindAccountRolesOrganization returns the OpenAPI3 operation for accepting an account roles organization request
-func (h *Handler) BindAccountRolesOrganizationWithParam() *openapi3.Operation {
-	orgRoles := openapi3.NewOperation()
-	orgRoles.Description = "List roles a subject has in relation to a specific organization id"
-	orgRoles.OperationID = "AccountRolesOrganizationWithID"
-	orgRoles.Security = &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearerAuth": []string{},
+			"bearer": []string{},
 		},
 	}
 
