@@ -5,6 +5,7 @@ tasks:
     dir: ..
     desc: builds the core docker image
     cmds:
+      - task: :go:build
       - "docker build -f docker/Dockerfile . -t core:dev"
 
   build:aio:
