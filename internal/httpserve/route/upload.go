@@ -22,9 +22,7 @@ func registerFileUploadRoute(router *Router) (err error) { // nolint:unused
 		},
 	}
 
-	uploadOperation := router.Handler.BindUploadBander()
-
-	if err := router.Addv1Route(path, method, uploadOperation, route); err != nil {
+	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
 		return err
 	}
 

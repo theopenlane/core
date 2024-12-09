@@ -152,8 +152,8 @@ func (h *Handler) BindVerifyEmailHandler() *openapi3.Operation {
 	verify.OperationID = "VerifyEmail"
 	verify.Security = &openapi3.SecurityRequirements{}
 
-	h.AddRequestBody("VerifyEmailRequest", models.ExampleVerifySuccessRequest, verify)
-	h.AddResponse("VerifyEmailReply", "success", models.ExampleVerifySuccessResponse, verify, http.StatusOK)
+	h.AddRequestBody("VerifyRequest", models.ExampleVerifySuccessRequest, verify)
+	h.AddResponse("VerifyReply", "success", models.ExampleVerifySuccessResponse, verify, http.StatusOK)
 	verify.AddResponse(http.StatusInternalServerError, internalServerError())
 	verify.AddResponse(http.StatusBadRequest, badRequest())
 	verify.AddResponse(http.StatusCreated, created())

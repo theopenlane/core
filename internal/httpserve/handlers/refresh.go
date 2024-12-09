@@ -88,10 +88,7 @@ func (h *Handler) BindRefreshHandler() *openapi3.Operation {
 	refresh.OperationID = "RefreshHandler"
 	refresh.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{
-			"bearerAuth": []string{},
-		},
-		openapi3.SecurityRequirement{
-			"basicAuth": []string{},
+			"bearer": []string{},
 		},
 	}
 

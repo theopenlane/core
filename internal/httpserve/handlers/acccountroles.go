@@ -79,7 +79,7 @@ func (h *Handler) BindAccountRoles() *openapi3.Operation {
 	roles.OperationID = "AccountRoles"
 	roles.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{
-			"bearerAuth": []string{},
+			"bearer": []string{},
 		},
 	}
 
