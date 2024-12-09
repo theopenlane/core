@@ -92,7 +92,7 @@ func (h *Handler) BindResendEmailHandler() *openapi3.Operation {
 	resendEmail.Security = &openapi3.SecurityRequirements{}
 
 	h.AddRequestBody("ResendEmailRequest", models.ExampleResendEmailSuccessRequest, resendEmail)
-	h.AddResponse("ResendEMailReply", "success", models.ExampleResendEmailSuccessResponse, resendEmail, http.StatusOK)
+	h.AddResponse("ResendEmailReply", "success", models.ExampleResendEmailSuccessResponse, resendEmail, http.StatusOK)
 	resendEmail.AddResponse(http.StatusInternalServerError, internalServerError())
 	resendEmail.AddResponse(http.StatusBadRequest, badRequest())
 
