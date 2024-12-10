@@ -109,6 +109,23 @@ mutation CreateProgram($input: CreateProgramInput!) {
   }
 }
 
+mutation CreateProgramWithMembers($input: CreateProgramWithMembersInput!) {
+  createProgramWithMembers(input: $input) {
+    program {
+      name
+      id
+      members {
+        id
+        user {
+          id
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+}
+
 mutation DeleteProgram($deleteProgramId: ID!) {
   deleteProgram(id: $deleteProgramId) {
     deletedID

@@ -6,3 +6,25 @@ extend input ProgramMembershipWhereInput {
   programID: String
   userID: String
 }
+
+input CreateProgramWithMembersInput{
+  program: CreateProgramInput!
+  members: [CreateMemberWithProgramInput!]
+}
+
+input CreateMemberWithProgramInput {
+  role: ProgramMembershipRole
+  userID: ID!
+}
+
+extend type Mutation{
+    """
+    Create a new program with members
+    """
+    createProgramWithMembers(
+        """
+        values of the program
+        """
+        input: CreateProgramWithMembersInput!
+    ): ProgramCreatePayload!
+}
