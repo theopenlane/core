@@ -32,6 +32,7 @@ env:
   ## generate env vars for caching
   GO_GENERATE_FAST_DEBUG: "false" # set to true to debug go-generate-fast
   GO_GENERATE_FAST_CACHE_DIR: "/tmp/.cache"
+  GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
 
 tasks:
   default:
@@ -220,7 +221,6 @@ tasks:
       - sudo npm install jsonschema2mk --global
       - sudo npm install format-graphql
       - go mod download
-      - go install github.com/oNaiPs/go-generate-fast
       - pre-commit install && pre-commit install-hooks
       - pre-commit autoupdate
       - go mod tidy && go get -u ./... &> /dev/null
