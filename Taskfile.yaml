@@ -24,9 +24,14 @@ env:
   TEST_DB_CONTAINER_EXPIRY: "2" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
+  # go build
   GOFLAGS: -buildvcs=false
+  # for test container settings
   RYUK_CONNECTION_TIMEOUT: "5m"
   RYUK_VERBOSE: "true"
+  ## generate env vars for caching
+  GO_GENERATE_FAST_DEBUG: "false" # set to true to debug go-generate-fast
+  GO_GENERATE_FAST_CACHE_DIR: "/tmp/.cache"
 
 tasks:
   default:
@@ -34,10 +39,25 @@ tasks:
     cmds:
       - task --list
 
-  generate:
+  generate:ci:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
     cmds:
       - go generate ./...
+
+  generate:
+    desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
+    cmds:
+      - go-generate-fast ./...
+
+  generate:ent:
+    desc: generate ent models
+    cmds:
+      - go-generate-fast generate_ent.go
+
+  generate:gql:
+    desc: generate gql graphql models and resolvers, along with the client
+    cmds:
+      - go-generate-fast generate_gql.go
 
   ## Go tasks
   go:lint:
@@ -141,7 +161,7 @@ tasks:
   ci:
     desc: a task that runs during CI
     cmds:
-      - task: generate
+      - task: generate:ci
       - task: tidy
       - "git config --global --add safe.directory /workdir"
       - |
@@ -200,6 +220,7 @@ tasks:
       - sudo npm install jsonschema2mk --global
       - sudo npm install format-graphql
       - go mod download
+      - go install github.com/oNaiPs/go-generate-fast
       - pre-commit install && pre-commit install-hooks
       - pre-commit autoupdate
       - go mod tidy && go get -u ./... &> /dev/null

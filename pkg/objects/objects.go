@@ -26,6 +26,8 @@ type Storage interface {
 	io.Closer
 }
 
+//go:generate_input *.go
+//go:generate_output mocks/*.go
 //go:generate mockery --config .mockery.yaml
 
 // Objects is the definition for handling objects and file uploads

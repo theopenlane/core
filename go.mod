@@ -114,6 +114,7 @@ require (
 	github.com/moby/sys/userns v0.1.0 // indirect
 	github.com/moby/term v0.5.0 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
+	github.com/onsi/gomega v1.27.10 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/shirou/gopsutil/v3 v3.23.12 // indirect

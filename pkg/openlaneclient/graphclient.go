@@ -265,6 +265,8 @@ type OpenlaneGraphClient interface {
 	GetProcedureHistories(ctx context.Context, where *ProcedureHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProcedureHistories, error)
 	CreateBulkCSVProgram(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgram, error)
 	CreateBulkProgram(ctx context.Context, input []*CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgram, error)
+	CreateControlWithSubcontrols(ctx context.Context, input CreateControlWithSubcontrolsInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlWithSubcontrols, error)
+	CreateFullProgram(ctx context.Context, input CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateFullProgram, error)
 	CreateProgram(ctx context.Context, input CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgram, error)
 	CreateProgramWithMembers(ctx context.Context, input CreateProgramWithMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgramWithMembers, error)
 	DeleteProgram(ctx context.Context, deleteProgramID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProgram, error)
@@ -36116,6 +36118,257 @@ func (t *CreateBulkProgram_CreateBulkProgram) GetPrograms() []*CreateBulkProgram
 	return t.Programs
 }
 
+type CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control_Subcontrols struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control_Subcontrols) GetID() string {
+	if t == nil {
+		t = &CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control_Subcontrols{}
+	}
+	return t.ID
+}
+func (t *CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control_Subcontrols) GetName() string {
+	if t == nil {
+		t = &CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control_Subcontrols{}
+	}
+	return t.Name
+}
+
+type CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control struct {
+	ID          string                                                                           "json:\"id\" graphql:\"id\""
+	Name        string                                                                           "json:\"name\" graphql:\"name\""
+	Subcontrols []*CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control_Subcontrols "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+}
+
+func (t *CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control) GetID() string {
+	if t == nil {
+		t = &CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control{}
+	}
+	return t.ID
+}
+func (t *CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control) GetName() string {
+	if t == nil {
+		t = &CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control{}
+	}
+	return t.Name
+}
+func (t *CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control) GetSubcontrols() []*CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control_Subcontrols {
+	if t == nil {
+		t = &CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control{}
+	}
+	return t.Subcontrols
+}
+
+type CreateControlWithSubcontrols_CreateControlWithSubcontrols struct {
+	Control CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control "json:\"control\" graphql:\"control\""
+}
+
+func (t *CreateControlWithSubcontrols_CreateControlWithSubcontrols) GetControl() *CreateControlWithSubcontrols_CreateControlWithSubcontrols_Control {
+	if t == nil {
+		t = &CreateControlWithSubcontrols_CreateControlWithSubcontrols{}
+	}
+	return &t.Control
+}
+
+type CreateFullProgram_CreateFullProgram_Program_Members struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program_Members) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Members{}
+	}
+	return t.ID
+}
+
+type CreateFullProgram_CreateFullProgram_Program_Standards struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program_Standards) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Standards{}
+	}
+	return t.ID
+}
+func (t *CreateFullProgram_CreateFullProgram_Program_Standards) GetName() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Standards{}
+	}
+	return t.Name
+}
+
+type CreateFullProgram_CreateFullProgram_Program_Controls struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program_Controls) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Controls{}
+	}
+	return t.ID
+}
+func (t *CreateFullProgram_CreateFullProgram_Program_Controls) GetName() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Controls{}
+	}
+	return t.Name
+}
+
+type CreateFullProgram_CreateFullProgram_Program_Subcontrols struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program_Subcontrols) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Subcontrols{}
+	}
+	return t.ID
+}
+func (t *CreateFullProgram_CreateFullProgram_Program_Subcontrols) GetName() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Subcontrols{}
+	}
+	return t.Name
+}
+
+type CreateFullProgram_CreateFullProgram_Program_Risks struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program_Risks) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Risks{}
+	}
+	return t.ID
+}
+func (t *CreateFullProgram_CreateFullProgram_Program_Risks) GetName() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Risks{}
+	}
+	return t.Name
+}
+
+type CreateFullProgram_CreateFullProgram_Program_Policies struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program_Policies) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Policies{}
+	}
+	return t.ID
+}
+func (t *CreateFullProgram_CreateFullProgram_Program_Policies) GetName() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Policies{}
+	}
+	return t.Name
+}
+
+type CreateFullProgram_CreateFullProgram_Program_Procedures struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program_Procedures) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Procedures{}
+	}
+	return t.ID
+}
+func (t *CreateFullProgram_CreateFullProgram_Program_Procedures) GetName() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Procedures{}
+	}
+	return t.Name
+}
+
+type CreateFullProgram_CreateFullProgram_Program struct {
+	Name        string                                                     "json:\"name\" graphql:\"name\""
+	ID          string                                                     "json:\"id\" graphql:\"id\""
+	Members     []*CreateFullProgram_CreateFullProgram_Program_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Standards   []*CreateFullProgram_CreateFullProgram_Program_Standards   "json:\"standards,omitempty\" graphql:\"standards\""
+	Controls    []*CreateFullProgram_CreateFullProgram_Program_Controls    "json:\"controls,omitempty\" graphql:\"controls\""
+	Subcontrols []*CreateFullProgram_CreateFullProgram_Program_Subcontrols "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Risks       []*CreateFullProgram_CreateFullProgram_Program_Risks       "json:\"risks,omitempty\" graphql:\"risks\""
+	Policies    []*CreateFullProgram_CreateFullProgram_Program_Policies    "json:\"policies,omitempty\" graphql:\"policies\""
+	Procedures  []*CreateFullProgram_CreateFullProgram_Program_Procedures  "json:\"procedures,omitempty\" graphql:\"procedures\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program) GetName() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Name
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.ID
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetMembers() []*CreateFullProgram_CreateFullProgram_Program_Members {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Members
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetStandards() []*CreateFullProgram_CreateFullProgram_Program_Standards {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Standards
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetControls() []*CreateFullProgram_CreateFullProgram_Program_Controls {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Controls
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetSubcontrols() []*CreateFullProgram_CreateFullProgram_Program_Subcontrols {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Subcontrols
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetRisks() []*CreateFullProgram_CreateFullProgram_Program_Risks {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Risks
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetPolicies() []*CreateFullProgram_CreateFullProgram_Program_Policies {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Policies
+}
+func (t *CreateFullProgram_CreateFullProgram_Program) GetProcedures() []*CreateFullProgram_CreateFullProgram_Program_Procedures {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program{}
+	}
+	return t.Procedures
+}
+
+type CreateFullProgram_CreateFullProgram struct {
+	Program CreateFullProgram_CreateFullProgram_Program "json:\"program\" graphql:\"program\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram) GetProgram() *CreateFullProgram_CreateFullProgram_Program {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram{}
+	}
+	return &t.Program
+}
+
 type CreateProgram_CreateProgram_Program_Procedures struct {
 	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -55051,6 +55304,28 @@ func (t *CreateBulkProgram) GetCreateBulkProgram() *CreateBulkProgram_CreateBulk
 	return &t.CreateBulkProgram
 }
 
+type CreateControlWithSubcontrols struct {
+	CreateControlWithSubcontrols CreateControlWithSubcontrols_CreateControlWithSubcontrols "json:\"createControlWithSubcontrols\" graphql:\"createControlWithSubcontrols\""
+}
+
+func (t *CreateControlWithSubcontrols) GetCreateControlWithSubcontrols() *CreateControlWithSubcontrols_CreateControlWithSubcontrols {
+	if t == nil {
+		t = &CreateControlWithSubcontrols{}
+	}
+	return &t.CreateControlWithSubcontrols
+}
+
+type CreateFullProgram struct {
+	CreateFullProgram CreateFullProgram_CreateFullProgram "json:\"createFullProgram\" graphql:\"createFullProgram\""
+}
+
+func (t *CreateFullProgram) GetCreateFullProgram() *CreateFullProgram_CreateFullProgram {
+	if t == nil {
+		t = &CreateFullProgram{}
+	}
+	return &t.CreateFullProgram
+}
+
 type CreateProgram struct {
 	CreateProgram CreateProgram_CreateProgram "json:\"createProgram\" graphql:\"createProgram\""
 }
@@ -67229,6 +67504,91 @@ func (c *Client) CreateBulkProgram(ctx context.Context, input []*CreateProgramIn
 	return &res, nil
 }
 
+const CreateControlWithSubcontrolsDocument = `mutation CreateControlWithSubcontrols ($input: CreateControlWithSubcontrolsInput!) {
+	createControlWithSubcontrols(input: $input) {
+		control {
+			id
+			name
+			subcontrols {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateControlWithSubcontrols(ctx context.Context, input CreateControlWithSubcontrolsInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlWithSubcontrols, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateControlWithSubcontrols
+	if err := c.Client.Post(ctx, "CreateControlWithSubcontrols", CreateControlWithSubcontrolsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateFullProgramDocument = `mutation CreateFullProgram ($input: CreateFullProgramInput!) {
+	createFullProgram(input: $input) {
+		program {
+			name
+			id
+			members {
+				id
+			}
+			standards {
+				id
+				name
+			}
+			controls {
+				id
+				name
+			}
+			subcontrols {
+				id
+				name
+			}
+			risks {
+				id
+				name
+			}
+			policies {
+				id
+				name
+			}
+			procedures {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateFullProgram(ctx context.Context, input CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateFullProgram, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateFullProgram
+	if err := c.Client.Post(ctx, "CreateFullProgram", CreateFullProgramDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInput!) {
 	createProgram(input: $input) {
 		program {
@@ -72339,6 +72699,8 @@ var DocumentOperationNames = map[string]string{
 	GetProcedureHistoriesDocument:                 "GetProcedureHistories",
 	CreateBulkCSVProgramDocument:                  "CreateBulkCSVProgram",
 	CreateBulkProgramDocument:                     "CreateBulkProgram",
+	CreateControlWithSubcontrolsDocument:          "CreateControlWithSubcontrols",
+	CreateFullProgramDocument:                     "CreateFullProgram",
 	CreateProgramDocument:                         "CreateProgram",
 	CreateProgramWithMembersDocument:              "CreateProgramWithMembers",
 	DeleteProgramDocument:                         "DeleteProgram",
