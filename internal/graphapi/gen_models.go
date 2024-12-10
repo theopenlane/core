@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 type SearchResult interface {
@@ -199,6 +200,16 @@ func (ControlSearchResult) IsSearchResult() {}
 type ControlUpdatePayload struct {
 	// Updated control
 	Control *generated.Control `json:"control"`
+}
+
+type CreateMemberWithProgramInput struct {
+	Role   *enums.Role `json:"role,omitempty"`
+	UserID string      `json:"userID"`
+}
+
+type CreateProgramWithMembersInput struct {
+	Program *generated.CreateProgramInput   `json:"program"`
+	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
 }
 
 // Return response for createBulkDocumentData mutation
@@ -931,6 +942,12 @@ func (ProgramSearchResult) IsSearchResult() {}
 type ProgramUpdatePayload struct {
 	// Updated program
 	Program *generated.Program `json:"program"`
+}
+
+type ProgramWithMembersCreatePayload struct {
+	// Created program
+	Program *generated.Program             `json:"program"`
+	Members []*generated.ProgramMembership `json:"members,omitempty"`
 }
 
 // Return response for createBulkRisk mutation
