@@ -13,8 +13,8 @@ input CreateProgramWithMembersInput{
 }
 
 input CreateMemberWithProgramInput {
-  	role: ProgramMembershipRole
-	  userID: ID!
+  role: ProgramMembershipRole
+  userID: ID!
 }
 
 extend type Mutation{
