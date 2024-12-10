@@ -10,7 +10,43 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/utils/rout"
 )
+
+// CreateProgramWithMembers is the resolver for the createProgramWithMembers field.
+func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input CreateProgramWithMembersInput) (*ProgramCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(*input.Program).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+	}
+
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ProgramMembershipCreate, len(input.Members))
+	for i := range input.Members {
+		input := generated.CreateProgramMembershipInput{
+			ProgramID: res.ID,
+			UserID:    input.Members[i].UserID,
+			Role:      input.Members[i].Role,
+		}
+
+		builders[i] = c.ProgramMembership.Create().SetInput(input)
+	}
+
+	_, err = c.ProgramMembership.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ProgramCreatePayload{
+		Program: res,
+	}, nil
+}
 
 // AddProgramMembers is the resolver for the addProgramMembers field.
 func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj *generated.UpdateProgramInput, data []*generated.CreateProgramMembershipInput) error {

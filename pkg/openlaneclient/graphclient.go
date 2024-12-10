@@ -276,6 +276,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVProgram(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgram, error)
 	CreateBulkProgram(ctx context.Context, input []*CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgram, error)
 	CreateProgram(ctx context.Context, input CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgram, error)
+	CreateProgramWithMembers(ctx context.Context, input CreateProgramWithMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgramWithMembers, error)
 	DeleteProgram(ctx context.Context, deleteProgramID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProgram, error)
 	GetAllPrograms(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPrograms, error)
 	GetProgramByID(ctx context.Context, programID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramByID, error)
@@ -37803,6 +37804,85 @@ func (t *CreateProgram_CreateProgram) GetProgram() *CreateProgram_CreateProgram_
 	return &t.Program
 }
 
+type CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User) GetID() string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User{}
+	}
+	return t.ID
+}
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User) GetFirstName() *string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User{}
+	}
+	return t.FirstName
+}
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User) GetLastName() *string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User{}
+	}
+	return t.LastName
+}
+
+type CreateProgramWithMembers_CreateProgramWithMembers_Program_Members struct {
+	ID   string                                                                 "json:\"id\" graphql:\"id\""
+	User CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program_Members) GetID() string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program_Members{}
+	}
+	return t.ID
+}
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program_Members) GetUser() *CreateProgramWithMembers_CreateProgramWithMembers_Program_Members_User {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program_Members{}
+	}
+	return &t.User
+}
+
+type CreateProgramWithMembers_CreateProgramWithMembers_Program struct {
+	Name    string                                                               "json:\"name\" graphql:\"name\""
+	ID      string                                                               "json:\"id\" graphql:\"id\""
+	Members []*CreateProgramWithMembers_CreateProgramWithMembers_Program_Members "json:\"members,omitempty\" graphql:\"members\""
+}
+
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetName() string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
+	}
+	return t.Name
+}
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetID() string {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
+	}
+	return t.ID
+}
+func (t *CreateProgramWithMembers_CreateProgramWithMembers_Program) GetMembers() []*CreateProgramWithMembers_CreateProgramWithMembers_Program_Members {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers_Program{}
+	}
+	return t.Members
+}
+
+type CreateProgramWithMembers_CreateProgramWithMembers struct {
+	Program CreateProgramWithMembers_CreateProgramWithMembers_Program "json:\"program\" graphql:\"program\""
+}
+
+func (t *CreateProgramWithMembers_CreateProgramWithMembers) GetProgram() *CreateProgramWithMembers_CreateProgramWithMembers_Program {
+	if t == nil {
+		t = &CreateProgramWithMembers_CreateProgramWithMembers{}
+	}
+	return &t.Program
+}
+
 type DeleteProgram_DeleteProgram struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -56396,6 +56476,17 @@ func (t *CreateProgram) GetCreateProgram() *CreateProgram_CreateProgram {
 	return &t.CreateProgram
 }
 
+type CreateProgramWithMembers struct {
+	CreateProgramWithMembers CreateProgramWithMembers_CreateProgramWithMembers "json:\"createProgramWithMembers\" graphql:\"createProgramWithMembers\""
+}
+
+func (t *CreateProgramWithMembers) GetCreateProgramWithMembers() *CreateProgramWithMembers_CreateProgramWithMembers {
+	if t == nil {
+		t = &CreateProgramWithMembers{}
+	}
+	return &t.CreateProgramWithMembers
+}
+
 type DeleteProgram struct {
 	DeleteProgram DeleteProgram_DeleteProgram "json:\"deleteProgram\" graphql:\"deleteProgram\""
 }
@@ -69044,6 +69135,41 @@ func (c *Client) CreateProgram(ctx context.Context, input CreateProgramInput, in
 	return &res, nil
 }
 
+const CreateProgramWithMembersDocument = `mutation CreateProgramWithMembers ($input: CreateProgramWithMembersInput!) {
+	createProgramWithMembers(input: $input) {
+		program {
+			name
+			id
+			members {
+				id
+				user {
+					id
+					firstName
+					lastName
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateProgramWithMembers(ctx context.Context, input CreateProgramWithMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgramWithMembers, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateProgramWithMembers
+	if err := c.Client.Post(ctx, "CreateProgramWithMembers", CreateProgramWithMembersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteProgramDocument = `mutation DeleteProgram ($deleteProgramId: ID!) {
 	deleteProgram(id: $deleteProgramId) {
 		deletedID
@@ -74051,6 +74177,7 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkCSVProgramDocument:                  "CreateBulkCSVProgram",
 	CreateBulkProgramDocument:                     "CreateBulkProgram",
 	CreateProgramDocument:                         "CreateProgram",
+	CreateProgramWithMembersDocument:              "CreateProgramWithMembers",
 	DeleteProgramDocument:                         "DeleteProgram",
 	GetAllProgramsDocument:                        "GetAllPrograms",
 	GetProgramByIDDocument:                        "GetProgramByID",
