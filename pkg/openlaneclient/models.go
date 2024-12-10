@@ -17407,12 +17407,6 @@ type ProgramWhereInput struct {
 	HasMembersWith []*ProgramMembershipWhereInput `json:"hasMembersWith,omitempty"`
 }
 
-type ProgramWithMembersCreatePayload struct {
-	// Created program
-	Program *Program             `json:"program"`
-	Members []*ProgramMembership `json:"members,omitempty"`
-}
-
 type Query struct {
 }
 

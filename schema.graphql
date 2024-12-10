@@ -24451,13 +24451,6 @@ input ProgramWhereInput {
 	hasMembers: Boolean
 	hasMembersWith: [ProgramMembershipWhereInput!]
 }
-type ProgramWithMembersCreatePayload {
-	"""
-	Created program
-	"""
-	program: Program!
-	members: [ProgramMembership!]
-}
 type Query {
 	"""
 	Fetches an object given its ID.

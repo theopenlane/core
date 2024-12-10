@@ -944,12 +944,6 @@ type ProgramUpdatePayload struct {
 	Program *generated.Program `json:"program"`
 }
 
-type ProgramWithMembersCreatePayload struct {
-	// Created program
-	Program *generated.Program             `json:"program"`
-	Members []*generated.ProgramMembership `json:"members,omitempty"`
-}
-
 // Return response for createBulkRisk mutation
 type RiskBulkCreatePayload struct {
 	// Created risks
