@@ -15,6 +15,7 @@ type OrganizationCustomer struct {
 	BillingEmail           string `json:"billing_email"`
 	BillingPhone           string `json:"billing_phone"`
 	OrganizationName       string `json:"organization_name"`
+	Features               []string
 	Subscription
 }
 

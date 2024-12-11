@@ -131,25 +131,21 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) 
 	}, nil
 }
 
-func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]Feature, error) {
+func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string, error) {
 	params := &stripe.EntitlementsActiveEntitlementListParams{
 		Customer: stripe.String(customerID),
 		Expand:   []*string{stripe.String("data.feature")},
 	}
 
-	feat := []Feature{}
 	iter := sc.Client.EntitlementsActiveEntitlements.List(params)
 
 	if !iter.Next() {
 		return nil, iter.Err()
 	}
 
+	feat := []string{}
 	for iter.Next() {
-		feat = append(feat, Feature{
-			ID:        iter.EntitlementsActiveEntitlement().Feature.ID,
-			Name:      iter.EntitlementsActiveEntitlement().Feature.Name,
-			Lookupkey: iter.EntitlementsActiveEntitlement().LookupKey,
-		})
+		feat = append(feat, iter.EntitlementsActiveEntitlement().LookupKey)
 	}
 
 	return feat, nil
@@ -164,7 +160,7 @@ func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscr
 	for _, item := range subs.Items.Data {
 		prices = append(prices, Price{
 			ID:        item.Price.ID,
-			Price:     float64(item.Price.UnitAmount) / 100, // assuming the amount is in cents
+			Price:     float64(item.Price.UnitAmount) / 100, // nolint:mnd
 			ProductID: item.Price.Product.ID,
 			Interval:  string(item.Price.Recurring.Interval),
 		})
