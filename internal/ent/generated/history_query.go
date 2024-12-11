@@ -13,13 +13,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeaturehistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
-	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
@@ -29,7 +25,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
-	"github.com/theopenlane/core/internal/ent/generated/oauthproviderhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
@@ -44,7 +39,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
-	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
 )
 
 func (ap *ActionPlan) History() *ActionPlanHistoryQuery {
@@ -277,144 +271,6 @@ func (ddhq *DocumentDataHistoryQuery) AsOf(ctx context.Context, time time.Time) 
 		First(ctx)
 }
 
-func (e *Entitlement) History() *EntitlementHistoryQuery {
-	historyClient := NewEntitlementHistoryClient(e.config)
-	return historyClient.Query().Where(entitlementhistory.Ref(e.ID))
-}
-
-func (eh *EntitlementHistory) Next(ctx context.Context) (*EntitlementHistory, error) {
-	client := NewEntitlementHistoryClient(eh.config)
-	return client.Query().
-		Where(
-			entitlementhistory.Ref(eh.Ref),
-			entitlementhistory.HistoryTimeGT(eh.HistoryTime),
-		).
-		Order(entitlementhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (eh *EntitlementHistory) Prev(ctx context.Context) (*EntitlementHistory, error) {
-	client := NewEntitlementHistoryClient(eh.config)
-	return client.Query().
-		Where(
-			entitlementhistory.Ref(eh.Ref),
-			entitlementhistory.HistoryTimeLT(eh.HistoryTime),
-		).
-		Order(entitlementhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ehq *EntitlementHistoryQuery) Earliest(ctx context.Context) (*EntitlementHistory, error) {
-	return ehq.
-		Order(entitlementhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (ehq *EntitlementHistoryQuery) Latest(ctx context.Context) (*EntitlementHistory, error) {
-	return ehq.
-		Order(entitlementhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ehq *EntitlementHistoryQuery) AsOf(ctx context.Context, time time.Time) (*EntitlementHistory, error) {
-	return ehq.
-		Where(entitlementhistory.HistoryTimeLTE(time)).
-		Order(entitlementhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ep *EntitlementPlan) History() *EntitlementPlanHistoryQuery {
-	historyClient := NewEntitlementPlanHistoryClient(ep.config)
-	return historyClient.Query().Where(entitlementplanhistory.Ref(ep.ID))
-}
-
-func (eph *EntitlementPlanHistory) Next(ctx context.Context) (*EntitlementPlanHistory, error) {
-	client := NewEntitlementPlanHistoryClient(eph.config)
-	return client.Query().
-		Where(
-			entitlementplanhistory.Ref(eph.Ref),
-			entitlementplanhistory.HistoryTimeGT(eph.HistoryTime),
-		).
-		Order(entitlementplanhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (eph *EntitlementPlanHistory) Prev(ctx context.Context) (*EntitlementPlanHistory, error) {
-	client := NewEntitlementPlanHistoryClient(eph.config)
-	return client.Query().
-		Where(
-			entitlementplanhistory.Ref(eph.Ref),
-			entitlementplanhistory.HistoryTimeLT(eph.HistoryTime),
-		).
-		Order(entitlementplanhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ephq *EntitlementPlanHistoryQuery) Earliest(ctx context.Context) (*EntitlementPlanHistory, error) {
-	return ephq.
-		Order(entitlementplanhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (ephq *EntitlementPlanHistoryQuery) Latest(ctx context.Context) (*EntitlementPlanHistory, error) {
-	return ephq.
-		Order(entitlementplanhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ephq *EntitlementPlanHistoryQuery) AsOf(ctx context.Context, time time.Time) (*EntitlementPlanHistory, error) {
-	return ephq.
-		Where(entitlementplanhistory.HistoryTimeLTE(time)).
-		Order(entitlementplanhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (epf *EntitlementPlanFeature) History() *EntitlementPlanFeatureHistoryQuery {
-	historyClient := NewEntitlementPlanFeatureHistoryClient(epf.config)
-	return historyClient.Query().Where(entitlementplanfeaturehistory.Ref(epf.ID))
-}
-
-func (epfh *EntitlementPlanFeatureHistory) Next(ctx context.Context) (*EntitlementPlanFeatureHistory, error) {
-	client := NewEntitlementPlanFeatureHistoryClient(epfh.config)
-	return client.Query().
-		Where(
-			entitlementplanfeaturehistory.Ref(epfh.Ref),
-			entitlementplanfeaturehistory.HistoryTimeGT(epfh.HistoryTime),
-		).
-		Order(entitlementplanfeaturehistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (epfh *EntitlementPlanFeatureHistory) Prev(ctx context.Context) (*EntitlementPlanFeatureHistory, error) {
-	client := NewEntitlementPlanFeatureHistoryClient(epfh.config)
-	return client.Query().
-		Where(
-			entitlementplanfeaturehistory.Ref(epfh.Ref),
-			entitlementplanfeaturehistory.HistoryTimeLT(epfh.HistoryTime),
-		).
-		Order(entitlementplanfeaturehistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (epfhq *EntitlementPlanFeatureHistoryQuery) Earliest(ctx context.Context) (*EntitlementPlanFeatureHistory, error) {
-	return epfhq.
-		Order(entitlementplanfeaturehistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (epfhq *EntitlementPlanFeatureHistoryQuery) Latest(ctx context.Context) (*EntitlementPlanFeatureHistory, error) {
-	return epfhq.
-		Order(entitlementplanfeaturehistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (epfhq *EntitlementPlanFeatureHistoryQuery) AsOf(ctx context.Context, time time.Time) (*EntitlementPlanFeatureHistory, error) {
-	return epfhq.
-		Where(entitlementplanfeaturehistory.HistoryTimeLTE(time)).
-		Order(entitlementplanfeaturehistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
 func (e *Entity) History() *EntityHistoryQuery {
 	historyClient := NewEntityHistoryClient(e.config)
 	return historyClient.Query().Where(entityhistory.Ref(e.ID))
@@ -550,52 +406,6 @@ func (ehq *EventHistoryQuery) AsOf(ctx context.Context, time time.Time) (*EventH
 	return ehq.
 		Where(eventhistory.HistoryTimeLTE(time)).
 		Order(eventhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (f *Feature) History() *FeatureHistoryQuery {
-	historyClient := NewFeatureHistoryClient(f.config)
-	return historyClient.Query().Where(featurehistory.Ref(f.ID))
-}
-
-func (fh *FeatureHistory) Next(ctx context.Context) (*FeatureHistory, error) {
-	client := NewFeatureHistoryClient(fh.config)
-	return client.Query().
-		Where(
-			featurehistory.Ref(fh.Ref),
-			featurehistory.HistoryTimeGT(fh.HistoryTime),
-		).
-		Order(featurehistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (fh *FeatureHistory) Prev(ctx context.Context) (*FeatureHistory, error) {
-	client := NewFeatureHistoryClient(fh.config)
-	return client.Query().
-		Where(
-			featurehistory.Ref(fh.Ref),
-			featurehistory.HistoryTimeLT(fh.HistoryTime),
-		).
-		Order(featurehistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (fhq *FeatureHistoryQuery) Earliest(ctx context.Context) (*FeatureHistory, error) {
-	return fhq.
-		Order(featurehistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (fhq *FeatureHistoryQuery) Latest(ctx context.Context) (*FeatureHistory, error) {
-	return fhq.
-		Order(featurehistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (fhq *FeatureHistoryQuery) AsOf(ctx context.Context, time time.Time) (*FeatureHistory, error) {
-	return fhq.
-		Where(featurehistory.HistoryTimeLTE(time)).
-		Order(featurehistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -1010,52 +820,6 @@ func (nhq *NoteHistoryQuery) AsOf(ctx context.Context, time time.Time) (*NoteHis
 	return nhq.
 		Where(notehistory.HistoryTimeLTE(time)).
 		Order(notehistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (op *OauthProvider) History() *OauthProviderHistoryQuery {
-	historyClient := NewOauthProviderHistoryClient(op.config)
-	return historyClient.Query().Where(oauthproviderhistory.Ref(op.ID))
-}
-
-func (oph *OauthProviderHistory) Next(ctx context.Context) (*OauthProviderHistory, error) {
-	client := NewOauthProviderHistoryClient(oph.config)
-	return client.Query().
-		Where(
-			oauthproviderhistory.Ref(oph.Ref),
-			oauthproviderhistory.HistoryTimeGT(oph.HistoryTime),
-		).
-		Order(oauthproviderhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (oph *OauthProviderHistory) Prev(ctx context.Context) (*OauthProviderHistory, error) {
-	client := NewOauthProviderHistoryClient(oph.config)
-	return client.Query().
-		Where(
-			oauthproviderhistory.Ref(oph.Ref),
-			oauthproviderhistory.HistoryTimeLT(oph.HistoryTime),
-		).
-		Order(oauthproviderhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ophq *OauthProviderHistoryQuery) Earliest(ctx context.Context) (*OauthProviderHistory, error) {
-	return ophq.
-		Order(oauthproviderhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (ophq *OauthProviderHistoryQuery) Latest(ctx context.Context) (*OauthProviderHistory, error) {
-	return ophq.
-		Order(oauthproviderhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ophq *OauthProviderHistoryQuery) AsOf(ctx context.Context, time time.Time) (*OauthProviderHistory, error) {
-	return ophq.
-		Where(oauthproviderhistory.HistoryTimeLTE(time)).
-		Order(oauthproviderhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -1700,51 +1464,5 @@ func (ushq *UserSettingHistoryQuery) AsOf(ctx context.Context, time time.Time) (
 	return ushq.
 		Where(usersettinghistory.HistoryTimeLTE(time)).
 		Order(usersettinghistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (w *Webhook) History() *WebhookHistoryQuery {
-	historyClient := NewWebhookHistoryClient(w.config)
-	return historyClient.Query().Where(webhookhistory.Ref(w.ID))
-}
-
-func (wh *WebhookHistory) Next(ctx context.Context) (*WebhookHistory, error) {
-	client := NewWebhookHistoryClient(wh.config)
-	return client.Query().
-		Where(
-			webhookhistory.Ref(wh.Ref),
-			webhookhistory.HistoryTimeGT(wh.HistoryTime),
-		).
-		Order(webhookhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (wh *WebhookHistory) Prev(ctx context.Context) (*WebhookHistory, error) {
-	client := NewWebhookHistoryClient(wh.config)
-	return client.Query().
-		Where(
-			webhookhistory.Ref(wh.Ref),
-			webhookhistory.HistoryTimeLT(wh.HistoryTime),
-		).
-		Order(webhookhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (whq *WebhookHistoryQuery) Earliest(ctx context.Context) (*WebhookHistory, error) {
-	return whq.
-		Order(webhookhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (whq *WebhookHistoryQuery) Latest(ctx context.Context) (*WebhookHistory, error) {
-	return whq.
-		Order(webhookhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (whq *WebhookHistoryQuery) AsOf(ctx context.Context, time time.Time) (*WebhookHistory, error) {
-	return whq.
-		Where(webhookhistory.HistoryTimeLTE(time)).
-		Order(webhookhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }

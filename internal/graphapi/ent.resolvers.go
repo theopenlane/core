@@ -207,102 +207,6 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 	return res, err
 }
 
-// Entitlements is the resolver for the entitlements field.
-func (r *queryResolver) Entitlements(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementWhereInput) (*generated.EntitlementConnection, error) {
-	res, err := withTransactionalMutation(ctx).Entitlement.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithEntitlementFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlement"})
-	}
-
-	return res, err
-}
-
-// EntitlementHistories is the resolver for the entitlementHistories field.
-func (r *queryResolver) EntitlementHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementHistoryWhereInput) (*generated.EntitlementHistoryConnection, error) {
-	res, err := withTransactionalMutation(ctx).EntitlementHistory.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithEntitlementHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementhistory"})
-	}
-
-	return res, err
-}
-
-// EntitlementPlans is the resolver for the entitlementPlans field.
-func (r *queryResolver) EntitlementPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementPlanWhereInput) (*generated.EntitlementPlanConnection, error) {
-	res, err := withTransactionalMutation(ctx).EntitlementPlan.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithEntitlementPlanFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplan"})
-	}
-
-	return res, err
-}
-
-// EntitlementPlanFeatures is the resolver for the entitlementPlanFeatures field.
-func (r *queryResolver) EntitlementPlanFeatures(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementPlanFeatureWhereInput) (*generated.EntitlementPlanFeatureConnection, error) {
-	res, err := withTransactionalMutation(ctx).EntitlementPlanFeature.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithEntitlementPlanFeatureFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplanfeature"})
-	}
-
-	return res, err
-}
-
-// EntitlementPlanFeatureHistories is the resolver for the entitlementPlanFeatureHistories field.
-func (r *queryResolver) EntitlementPlanFeatureHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementPlanFeatureHistoryWhereInput) (*generated.EntitlementPlanFeatureHistoryConnection, error) {
-	res, err := withTransactionalMutation(ctx).EntitlementPlanFeatureHistory.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithEntitlementPlanFeatureHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplanfeaturehistory"})
-	}
-
-	return res, err
-}
-
-// EntitlementPlanHistories is the resolver for the entitlementPlanHistories field.
-func (r *queryResolver) EntitlementPlanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementPlanHistoryWhereInput) (*generated.EntitlementPlanHistoryConnection, error) {
-	res, err := withTransactionalMutation(ctx).EntitlementPlanHistory.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithEntitlementPlanHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplanhistory"})
-	}
-
-	return res, err
-}
-
 // Entities is the resolver for the entities field.
 func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
 	res, err := withTransactionalMutation(ctx).Entity.Query().Paginate(
@@ -398,38 +302,6 @@ func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor
 		generated.WithEventHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "eventhistory"})
-	}
-
-	return res, err
-}
-
-// Features is the resolver for the features field.
-func (r *queryResolver) Features(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FeatureWhereInput) (*generated.FeatureConnection, error) {
-	res, err := withTransactionalMutation(ctx).Feature.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithFeatureFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "feature"})
-	}
-
-	return res, err
-}
-
-// FeatureHistories is the resolver for the featureHistories field.
-func (r *queryResolver) FeatureHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FeatureHistoryWhereInput) (*generated.FeatureHistoryConnection, error) {
-	res, err := withTransactionalMutation(ctx).FeatureHistory.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithFeatureHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "featurehistory"})
 	}
 
 	return res, err
@@ -740,54 +612,6 @@ func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithNoteHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "notehistory"})
-	}
-
-	return res, err
-}
-
-// OauthProviders is the resolver for the oauthProviders field.
-func (r *queryResolver) OauthProviders(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OauthProviderWhereInput) (*generated.OauthProviderConnection, error) {
-	res, err := withTransactionalMutation(ctx).OauthProvider.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithOauthProviderFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "oauthprovider"})
-	}
-
-	return res, err
-}
-
-// OauthProviderHistories is the resolver for the oauthProviderHistories field.
-func (r *queryResolver) OauthProviderHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OauthProviderHistoryWhereInput) (*generated.OauthProviderHistoryConnection, error) {
-	res, err := withTransactionalMutation(ctx).OauthProviderHistory.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithOauthProviderHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "oauthproviderhistory"})
-	}
-
-	return res, err
-}
-
-// OhAuthTooTokens is the resolver for the ohAuthTooTokens field.
-func (r *queryResolver) OhAuthTooTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OhAuthTooTokenWhereInput) (*generated.OhAuthTooTokenConnection, error) {
-	res, err := withTransactionalMutation(ctx).OhAuthTooToken.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithOhAuthTooTokenFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "ohauthtootoken"})
 	}
 
 	return res, err
@@ -1290,40 +1114,6 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 		generated.WithUserSettingHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "usersettinghistory"})
-	}
-
-	return res, err
-}
-
-// Webhooks is the resolver for the webhooks field.
-func (r *queryResolver) Webhooks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebhookOrder, where *generated.WebhookWhereInput) (*generated.WebhookConnection, error) {
-	res, err := withTransactionalMutation(ctx).Webhook.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithWebhookOrder(orderBy),
-		generated.WithWebhookFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "webhook"})
-	}
-
-	return res, err
-}
-
-// WebhookHistories is the resolver for the webhookHistories field.
-func (r *queryResolver) WebhookHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebhookHistoryOrder, where *generated.WebhookHistoryWhereInput) (*generated.WebhookHistoryConnection, error) {
-	res, err := withTransactionalMutation(ctx).WebhookHistory.Query().Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithWebhookHistoryOrder(orderBy),
-		generated.WithWebhookHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "webhookhistory"})
 	}
 
 	return res, err

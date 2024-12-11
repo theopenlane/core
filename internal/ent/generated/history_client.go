@@ -23,15 +23,6 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.HistoryHooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}
-	for _, hook := range history.HistoryHooks[*EntitlementMutation]() {
-		c.Entitlement.Use(hook)
-	}
-	for _, hook := range history.HistoryHooks[*EntitlementPlanMutation]() {
-		c.EntitlementPlan.Use(hook)
-	}
-	for _, hook := range history.HistoryHooks[*EntitlementPlanFeatureMutation]() {
-		c.EntitlementPlanFeature.Use(hook)
-	}
 	for _, hook := range history.HistoryHooks[*EntityMutation]() {
 		c.Entity.Use(hook)
 	}
@@ -40,9 +31,6 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.HistoryHooks[*EventMutation]() {
 		c.Event.Use(hook)
-	}
-	for _, hook := range history.HistoryHooks[*FeatureMutation]() {
-		c.Feature.Use(hook)
 	}
 	for _, hook := range history.HistoryHooks[*FileMutation]() {
 		c.File.Use(hook)
@@ -70,9 +58,6 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.HistoryHooks[*NoteMutation]() {
 		c.Note.Use(hook)
-	}
-	for _, hook := range history.HistoryHooks[*OauthProviderMutation]() {
-		c.OauthProvider.Use(hook)
 	}
 	for _, hook := range history.HistoryHooks[*OrgMembershipMutation]() {
 		c.OrgMembership.Use(hook)
@@ -115,8 +100,5 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.HistoryHooks[*UserSettingMutation]() {
 		c.UserSetting.Use(hook)
-	}
-	for _, hook := range history.HistoryHooks[*WebhookMutation]() {
-		c.Webhook.Use(hook)
 	}
 }

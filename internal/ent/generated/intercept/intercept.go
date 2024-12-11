@@ -20,20 +20,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/entitlement"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeaturehistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
-	"github.com/theopenlane/core/internal/ent/generated/feature"
-	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -53,9 +45,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
-	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
-	"github.com/theopenlane/core/internal/ent/generated/oauthproviderhistory"
-	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -90,8 +79,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
-	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -474,168 +461,6 @@ func (f TraverseEmailVerificationToken) Traverse(ctx context.Context, q generate
 	return fmt.Errorf("unexpected query type %T. expect *generated.EmailVerificationTokenQuery", q)
 }
 
-// The EntitlementFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EntitlementFunc func(context.Context, *generated.EntitlementQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EntitlementFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.EntitlementQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EntitlementQuery", q)
-}
-
-// The TraverseEntitlement type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEntitlement func(context.Context, *generated.EntitlementQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEntitlement) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEntitlement) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EntitlementQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.EntitlementQuery", q)
-}
-
-// The EntitlementHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EntitlementHistoryFunc func(context.Context, *generated.EntitlementHistoryQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EntitlementHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.EntitlementHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EntitlementHistoryQuery", q)
-}
-
-// The TraverseEntitlementHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEntitlementHistory func(context.Context, *generated.EntitlementHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEntitlementHistory) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEntitlementHistory) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EntitlementHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.EntitlementHistoryQuery", q)
-}
-
-// The EntitlementPlanFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EntitlementPlanFunc func(context.Context, *generated.EntitlementPlanQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EntitlementPlanFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.EntitlementPlanQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EntitlementPlanQuery", q)
-}
-
-// The TraverseEntitlementPlan type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEntitlementPlan func(context.Context, *generated.EntitlementPlanQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEntitlementPlan) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEntitlementPlan) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EntitlementPlanQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.EntitlementPlanQuery", q)
-}
-
-// The EntitlementPlanFeatureFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EntitlementPlanFeatureFunc func(context.Context, *generated.EntitlementPlanFeatureQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EntitlementPlanFeatureFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.EntitlementPlanFeatureQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EntitlementPlanFeatureQuery", q)
-}
-
-// The TraverseEntitlementPlanFeature type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEntitlementPlanFeature func(context.Context, *generated.EntitlementPlanFeatureQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEntitlementPlanFeature) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEntitlementPlanFeature) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EntitlementPlanFeatureQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.EntitlementPlanFeatureQuery", q)
-}
-
-// The EntitlementPlanFeatureHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EntitlementPlanFeatureHistoryFunc func(context.Context, *generated.EntitlementPlanFeatureHistoryQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EntitlementPlanFeatureHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.EntitlementPlanFeatureHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EntitlementPlanFeatureHistoryQuery", q)
-}
-
-// The TraverseEntitlementPlanFeatureHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEntitlementPlanFeatureHistory func(context.Context, *generated.EntitlementPlanFeatureHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEntitlementPlanFeatureHistory) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEntitlementPlanFeatureHistory) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EntitlementPlanFeatureHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.EntitlementPlanFeatureHistoryQuery", q)
-}
-
-// The EntitlementPlanHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EntitlementPlanHistoryFunc func(context.Context, *generated.EntitlementPlanHistoryQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EntitlementPlanHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.EntitlementPlanHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EntitlementPlanHistoryQuery", q)
-}
-
-// The TraverseEntitlementPlanHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEntitlementPlanHistory func(context.Context, *generated.EntitlementPlanHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEntitlementPlanHistory) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEntitlementPlanHistory) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EntitlementPlanHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.EntitlementPlanHistoryQuery", q)
-}
-
 // The EntityFunc type is an adapter to allow the use of ordinary function as a Querier.
 type EntityFunc func(context.Context, *generated.EntityQuery) (generated.Value, error)
 
@@ -796,60 +621,6 @@ func (f TraverseEventHistory) Traverse(ctx context.Context, q generated.Query) e
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.EventHistoryQuery", q)
-}
-
-// The FeatureFunc type is an adapter to allow the use of ordinary function as a Querier.
-type FeatureFunc func(context.Context, *generated.FeatureQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f FeatureFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.FeatureQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.FeatureQuery", q)
-}
-
-// The TraverseFeature type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseFeature func(context.Context, *generated.FeatureQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseFeature) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseFeature) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.FeatureQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.FeatureQuery", q)
-}
-
-// The FeatureHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type FeatureHistoryFunc func(context.Context, *generated.FeatureHistoryQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f FeatureHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.FeatureHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.FeatureHistoryQuery", q)
-}
-
-// The TraverseFeatureHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseFeatureHistory func(context.Context, *generated.FeatureHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseFeatureHistory) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseFeatureHistory) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.FeatureHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.FeatureHistoryQuery", q)
 }
 
 // The FileFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1363,87 +1134,6 @@ func (f TraverseNoteHistory) Traverse(ctx context.Context, q generated.Query) er
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.NoteHistoryQuery", q)
-}
-
-// The OauthProviderFunc type is an adapter to allow the use of ordinary function as a Querier.
-type OauthProviderFunc func(context.Context, *generated.OauthProviderQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f OauthProviderFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.OauthProviderQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OauthProviderQuery", q)
-}
-
-// The TraverseOauthProvider type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseOauthProvider func(context.Context, *generated.OauthProviderQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseOauthProvider) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseOauthProvider) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.OauthProviderQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.OauthProviderQuery", q)
-}
-
-// The OauthProviderHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type OauthProviderHistoryFunc func(context.Context, *generated.OauthProviderHistoryQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f OauthProviderHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.OauthProviderHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OauthProviderHistoryQuery", q)
-}
-
-// The TraverseOauthProviderHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseOauthProviderHistory func(context.Context, *generated.OauthProviderHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseOauthProviderHistory) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseOauthProviderHistory) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.OauthProviderHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.OauthProviderHistoryQuery", q)
-}
-
-// The OhAuthTooTokenFunc type is an adapter to allow the use of ordinary function as a Querier.
-type OhAuthTooTokenFunc func(context.Context, *generated.OhAuthTooTokenQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f OhAuthTooTokenFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.OhAuthTooTokenQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OhAuthTooTokenQuery", q)
-}
-
-// The TraverseOhAuthTooToken type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseOhAuthTooToken func(context.Context, *generated.OhAuthTooTokenQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseOhAuthTooToken) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseOhAuthTooToken) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.OhAuthTooTokenQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.OhAuthTooTokenQuery", q)
 }
 
 // The OrgMembershipFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2337,60 +2027,6 @@ func (f TraverseWebauthn) Traverse(ctx context.Context, q generated.Query) error
 	return fmt.Errorf("unexpected query type %T. expect *generated.WebauthnQuery", q)
 }
 
-// The WebhookFunc type is an adapter to allow the use of ordinary function as a Querier.
-type WebhookFunc func(context.Context, *generated.WebhookQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f WebhookFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.WebhookQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WebhookQuery", q)
-}
-
-// The TraverseWebhook type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseWebhook func(context.Context, *generated.WebhookQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseWebhook) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseWebhook) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.WebhookQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.WebhookQuery", q)
-}
-
-// The WebhookHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type WebhookHistoryFunc func(context.Context, *generated.WebhookHistoryQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f WebhookHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.WebhookHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WebhookHistoryQuery", q)
-}
-
-// The TraverseWebhookHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseWebhookHistory func(context.Context, *generated.WebhookHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseWebhookHistory) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseWebhookHistory) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.WebhookHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.WebhookHistoryQuery", q)
-}
-
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q generated.Query) (Query, error) {
 	switch q := q.(type) {
@@ -2418,18 +2054,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.DocumentDataHistoryQuery, predicate.DocumentDataHistory, documentdatahistory.OrderOption]{typ: generated.TypeDocumentDataHistory, tq: q}, nil
 	case *generated.EmailVerificationTokenQuery:
 		return &query[*generated.EmailVerificationTokenQuery, predicate.EmailVerificationToken, emailverificationtoken.OrderOption]{typ: generated.TypeEmailVerificationToken, tq: q}, nil
-	case *generated.EntitlementQuery:
-		return &query[*generated.EntitlementQuery, predicate.Entitlement, entitlement.OrderOption]{typ: generated.TypeEntitlement, tq: q}, nil
-	case *generated.EntitlementHistoryQuery:
-		return &query[*generated.EntitlementHistoryQuery, predicate.EntitlementHistory, entitlementhistory.OrderOption]{typ: generated.TypeEntitlementHistory, tq: q}, nil
-	case *generated.EntitlementPlanQuery:
-		return &query[*generated.EntitlementPlanQuery, predicate.EntitlementPlan, entitlementplan.OrderOption]{typ: generated.TypeEntitlementPlan, tq: q}, nil
-	case *generated.EntitlementPlanFeatureQuery:
-		return &query[*generated.EntitlementPlanFeatureQuery, predicate.EntitlementPlanFeature, entitlementplanfeature.OrderOption]{typ: generated.TypeEntitlementPlanFeature, tq: q}, nil
-	case *generated.EntitlementPlanFeatureHistoryQuery:
-		return &query[*generated.EntitlementPlanFeatureHistoryQuery, predicate.EntitlementPlanFeatureHistory, entitlementplanfeaturehistory.OrderOption]{typ: generated.TypeEntitlementPlanFeatureHistory, tq: q}, nil
-	case *generated.EntitlementPlanHistoryQuery:
-		return &query[*generated.EntitlementPlanHistoryQuery, predicate.EntitlementPlanHistory, entitlementplanhistory.OrderOption]{typ: generated.TypeEntitlementPlanHistory, tq: q}, nil
 	case *generated.EntityQuery:
 		return &query[*generated.EntityQuery, predicate.Entity, entity.OrderOption]{typ: generated.TypeEntity, tq: q}, nil
 	case *generated.EntityHistoryQuery:
@@ -2442,10 +2066,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.EventQuery, predicate.Event, event.OrderOption]{typ: generated.TypeEvent, tq: q}, nil
 	case *generated.EventHistoryQuery:
 		return &query[*generated.EventHistoryQuery, predicate.EventHistory, eventhistory.OrderOption]{typ: generated.TypeEventHistory, tq: q}, nil
-	case *generated.FeatureQuery:
-		return &query[*generated.FeatureQuery, predicate.Feature, feature.OrderOption]{typ: generated.TypeFeature, tq: q}, nil
-	case *generated.FeatureHistoryQuery:
-		return &query[*generated.FeatureHistoryQuery, predicate.FeatureHistory, featurehistory.OrderOption]{typ: generated.TypeFeatureHistory, tq: q}, nil
 	case *generated.FileQuery:
 		return &query[*generated.FileQuery, predicate.File, file.OrderOption]{typ: generated.TypeFile, tq: q}, nil
 	case *generated.FileHistoryQuery:
@@ -2484,12 +2104,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.NoteQuery, predicate.Note, note.OrderOption]{typ: generated.TypeNote, tq: q}, nil
 	case *generated.NoteHistoryQuery:
 		return &query[*generated.NoteHistoryQuery, predicate.NoteHistory, notehistory.OrderOption]{typ: generated.TypeNoteHistory, tq: q}, nil
-	case *generated.OauthProviderQuery:
-		return &query[*generated.OauthProviderQuery, predicate.OauthProvider, oauthprovider.OrderOption]{typ: generated.TypeOauthProvider, tq: q}, nil
-	case *generated.OauthProviderHistoryQuery:
-		return &query[*generated.OauthProviderHistoryQuery, predicate.OauthProviderHistory, oauthproviderhistory.OrderOption]{typ: generated.TypeOauthProviderHistory, tq: q}, nil
-	case *generated.OhAuthTooTokenQuery:
-		return &query[*generated.OhAuthTooTokenQuery, predicate.OhAuthTooToken, ohauthtootoken.OrderOption]{typ: generated.TypeOhAuthTooToken, tq: q}, nil
 	case *generated.OrgMembershipQuery:
 		return &query[*generated.OrgMembershipQuery, predicate.OrgMembership, orgmembership.OrderOption]{typ: generated.TypeOrgMembership, tq: q}, nil
 	case *generated.OrgMembershipHistoryQuery:
@@ -2556,10 +2170,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.UserSettingHistoryQuery, predicate.UserSettingHistory, usersettinghistory.OrderOption]{typ: generated.TypeUserSettingHistory, tq: q}, nil
 	case *generated.WebauthnQuery:
 		return &query[*generated.WebauthnQuery, predicate.Webauthn, webauthn.OrderOption]{typ: generated.TypeWebauthn, tq: q}, nil
-	case *generated.WebhookQuery:
-		return &query[*generated.WebhookQuery, predicate.Webhook, webhook.OrderOption]{typ: generated.TypeWebhook, tq: q}, nil
-	case *generated.WebhookHistoryQuery:
-		return &query[*generated.WebhookHistoryQuery, predicate.WebhookHistory, webhookhistory.OrderOption]{typ: generated.TypeWebhookHistory, tq: q}, nil
 	default:
 		return nil, fmt.Errorf("unknown query type %T", q)
 	}

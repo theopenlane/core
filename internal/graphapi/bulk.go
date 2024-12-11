@@ -122,63 +122,6 @@ func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*
 	}, nil
 }
 
-// bulkCreateEntitlement uses the CreateBulk function to create multiple Entitlement entities
-func (r *mutationResolver) bulkCreateEntitlement(ctx context.Context, input []*generated.CreateEntitlementInput) (*EntitlementBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.EntitlementCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Entitlement.Create().SetInput(*data)
-	}
-
-	res, err := c.Entitlement.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlement"})
-	}
-
-	// return response
-	return &EntitlementBulkCreatePayload{
-		Entitlements: res,
-	}, nil
-}
-
-// bulkCreateEntitlementPlan uses the CreateBulk function to create multiple EntitlementPlan entities
-func (r *mutationResolver) bulkCreateEntitlementPlan(ctx context.Context, input []*generated.CreateEntitlementPlanInput) (*EntitlementPlanBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.EntitlementPlanCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.EntitlementPlan.Create().SetInput(*data)
-	}
-
-	res, err := c.EntitlementPlan.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlementplan"})
-	}
-
-	// return response
-	return &EntitlementPlanBulkCreatePayload{
-		EntitlementPlans: res,
-	}, nil
-}
-
-// bulkCreateEntitlementPlanFeature uses the CreateBulk function to create multiple EntitlementPlanFeature entities
-func (r *mutationResolver) bulkCreateEntitlementPlanFeature(ctx context.Context, input []*generated.CreateEntitlementPlanFeatureInput) (*EntitlementPlanFeatureBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.EntitlementPlanFeatureCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.EntitlementPlanFeature.Create().SetInput(*data)
-	}
-
-	res, err := c.EntitlementPlanFeature.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlementplanfeature"})
-	}
-
-	// return response
-	return &EntitlementPlanFeatureBulkCreatePayload{
-		EntitlementPlanFeatures: res,
-	}, nil
-}
-
 // bulkCreateEntity uses the CreateBulk function to create multiple Entity entities
 func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*generated.CreateEntityInput) (*EntityBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -233,25 +176,6 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 	// return response
 	return &EventBulkCreatePayload{
 		Events: res,
-	}, nil
-}
-
-// bulkCreateFeature uses the CreateBulk function to create multiple Feature entities
-func (r *mutationResolver) bulkCreateFeature(ctx context.Context, input []*generated.CreateFeatureInput) (*FeatureBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.FeatureCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Feature.Create().SetInput(*data)
-	}
-
-	res, err := c.Feature.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "feature"})
-	}
-
-	// return response
-	return &FeatureBulkCreatePayload{
-		Features: res,
 	}, nil
 }
 
@@ -404,44 +328,6 @@ func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*gen
 	// return response
 	return &NarrativeBulkCreatePayload{
 		Narratives: res,
-	}, nil
-}
-
-// bulkCreateOauthProvider uses the CreateBulk function to create multiple OauthProvider entities
-func (r *mutationResolver) bulkCreateOauthProvider(ctx context.Context, input []*generated.CreateOauthProviderInput) (*OauthProviderBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.OauthProviderCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.OauthProvider.Create().SetInput(*data)
-	}
-
-	res, err := c.OauthProvider.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "oauthprovider"})
-	}
-
-	// return response
-	return &OauthProviderBulkCreatePayload{
-		OauthProviders: res,
-	}, nil
-}
-
-// bulkCreateOhAuthTooToken uses the CreateBulk function to create multiple OhAuthTooToken entities
-func (r *mutationResolver) bulkCreateOhAuthTooToken(ctx context.Context, input []*generated.CreateOhAuthTooTokenInput) (*OhAuthTooTokenBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.OhAuthTooTokenCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.OhAuthTooToken.Create().SetInput(*data)
-	}
-
-	res, err := c.OhAuthTooToken.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "ohauthtootoken"})
-	}
-
-	// return response
-	return &OhAuthTooTokenBulkCreatePayload{
-		OhAuthTooTokens: res,
 	}, nil
 }
 
@@ -727,24 +613,5 @@ func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*g
 	// return response
 	return &UserSettingBulkCreatePayload{
 		UserSettings: res,
-	}, nil
-}
-
-// bulkCreateWebhook uses the CreateBulk function to create multiple Webhook entities
-func (r *mutationResolver) bulkCreateWebhook(ctx context.Context, input []*generated.CreateWebhookInput) (*WebhookBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.WebhookCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Webhook.Create().SetInput(*data)
-	}
-
-	res, err := c.Webhook.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "webhook"})
-	}
-
-	// return response
-	return &WebhookBulkCreatePayload{
-		Webhooks: res,
 	}, nil
 }

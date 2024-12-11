@@ -13,9 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
 )
 
 // IntegrationCreate is the builder for creating a Integration entity.
@@ -211,21 +209,6 @@ func (ic *IntegrationCreate) AddSecrets(h ...*Hush) *IntegrationCreate {
 	return ic.AddSecretIDs(ids...)
 }
 
-// AddOauth2tokenIDs adds the "oauth2tokens" edge to the OhAuthTooToken entity by IDs.
-func (ic *IntegrationCreate) AddOauth2tokenIDs(ids ...string) *IntegrationCreate {
-	ic.mutation.AddOauth2tokenIDs(ids...)
-	return ic
-}
-
-// AddOauth2tokens adds the "oauth2tokens" edges to the OhAuthTooToken entity.
-func (ic *IntegrationCreate) AddOauth2tokens(o ...*OhAuthTooToken) *IntegrationCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return ic.AddOauth2tokenIDs(ids...)
-}
-
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (ic *IntegrationCreate) AddEventIDs(ids ...string) *IntegrationCreate {
 	ic.mutation.AddEventIDs(ids...)
@@ -239,21 +222,6 @@ func (ic *IntegrationCreate) AddEvents(e ...*Event) *IntegrationCreate {
 		ids[i] = e[i].ID
 	}
 	return ic.AddEventIDs(ids...)
-}
-
-// AddWebhookIDs adds the "webhooks" edge to the Webhook entity by IDs.
-func (ic *IntegrationCreate) AddWebhookIDs(ids ...string) *IntegrationCreate {
-	ic.mutation.AddWebhookIDs(ids...)
-	return ic
-}
-
-// AddWebhooks adds the "webhooks" edges to the Webhook entity.
-func (ic *IntegrationCreate) AddWebhooks(w ...*Webhook) *IntegrationCreate {
-	ids := make([]string, len(w))
-	for i := range w {
-		ids[i] = w[i].ID
-	}
-	return ic.AddWebhookIDs(ids...)
 }
 
 // Mutation returns the IntegrationMutation object of the builder.
@@ -461,23 +429,6 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ic.mutation.Oauth2tokensIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   integration.Oauth2tokensTable,
-			Columns: integration.Oauth2tokensPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(ohauthtootoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ic.schemaConfig.IntegrationOauth2tokens
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := ic.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -490,23 +441,6 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = ic.schemaConfig.IntegrationEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ic.mutation.WebhooksIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   integration.WebhooksTable,
-			Columns: integration.WebhooksPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ic.schemaConfig.IntegrationWebhooks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -257,96 +257,6 @@ type DocumentDataUpdatePayload struct {
 	DocumentData *generated.DocumentData `json:"documentData"`
 }
 
-// Return response for createBulkEntitlement mutation
-type EntitlementBulkCreatePayload struct {
-	// Created entitlements
-	Entitlements []*generated.Entitlement `json:"entitlements,omitempty"`
-}
-
-// Return response for createEntitlement mutation
-type EntitlementCreatePayload struct {
-	// Created entitlement
-	Entitlement *generated.Entitlement `json:"entitlement"`
-}
-
-// Return response for deleteEntitlement mutation
-type EntitlementDeletePayload struct {
-	// Deleted entitlement ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createBulkEntitlementPlan mutation
-type EntitlementPlanBulkCreatePayload struct {
-	// Created entitlementPlans
-	EntitlementPlans []*generated.EntitlementPlan `json:"entitlementPlans,omitempty"`
-}
-
-// Return response for createEntitlementPlan mutation
-type EntitlementPlanCreatePayload struct {
-	// Created entitlementPlan
-	EntitlementPlan *generated.EntitlementPlan `json:"entitlementPlan"`
-}
-
-// Return response for deleteEntitlementPlan mutation
-type EntitlementPlanDeletePayload struct {
-	// Deleted entitlementPlan ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createBulkEntitlementPlanFeature mutation
-type EntitlementPlanFeatureBulkCreatePayload struct {
-	// Created entitlementPlanFeatures
-	EntitlementPlanFeatures []*generated.EntitlementPlanFeature `json:"entitlementPlanFeatures,omitempty"`
-}
-
-// Return response for createEntitlementPlanFeature mutation
-type EntitlementPlanFeatureCreatePayload struct {
-	// Created entitlementPlanFeature
-	EntitlementPlanFeature *generated.EntitlementPlanFeature `json:"entitlementPlanFeature"`
-}
-
-// Return response for deleteEntitlementPlanFeature mutation
-type EntitlementPlanFeatureDeletePayload struct {
-	// Deleted entitlementPlanFeature ID
-	DeletedID string `json:"deletedID"`
-}
-
-type EntitlementPlanFeatureSearchResult struct {
-	EntitlementPlanFeatures []*generated.EntitlementPlanFeature `json:"entitlementPlanFeatures,omitempty"`
-}
-
-func (EntitlementPlanFeatureSearchResult) IsSearchResult() {}
-
-// Return response for updateEntitlementPlanFeature mutation
-type EntitlementPlanFeatureUpdatePayload struct {
-	// Updated entitlementPlanFeature
-	EntitlementPlanFeature *generated.EntitlementPlanFeature `json:"entitlementPlanFeature"`
-}
-
-type EntitlementPlanSearchResult struct {
-	EntitlementPlans []*generated.EntitlementPlan `json:"entitlementPlans,omitempty"`
-}
-
-func (EntitlementPlanSearchResult) IsSearchResult() {}
-
-// Return response for updateEntitlementPlan mutation
-type EntitlementPlanUpdatePayload struct {
-	// Updated entitlementPlan
-	EntitlementPlan *generated.EntitlementPlan `json:"entitlementPlan"`
-}
-
-type EntitlementSearchResult struct {
-	Entitlements []*generated.Entitlement `json:"entitlements,omitempty"`
-}
-
-func (EntitlementSearchResult) IsSearchResult() {}
-
-// Return response for updateEntitlement mutation
-type EntitlementUpdatePayload struct {
-	// Updated entitlement
-	Entitlement *generated.Entitlement `json:"entitlement"`
-}
-
 // Return response for createBulkEntity mutation
 type EntityBulkCreatePayload struct {
 	// Created entities
@@ -435,36 +345,6 @@ func (EventSearchResult) IsSearchResult() {}
 type EventUpdatePayload struct {
 	// Updated event
 	Event *generated.Event `json:"event"`
-}
-
-// Return response for createBulkFeature mutation
-type FeatureBulkCreatePayload struct {
-	// Created features
-	Features []*generated.Feature `json:"features,omitempty"`
-}
-
-// Return response for createFeature mutation
-type FeatureCreatePayload struct {
-	// Created feature
-	Feature *generated.Feature `json:"feature"`
-}
-
-// Return response for deleteFeature mutation
-type FeatureDeletePayload struct {
-	// Deleted feature ID
-	DeletedID string `json:"deletedID"`
-}
-
-type FeatureSearchResult struct {
-	Features []*generated.Feature `json:"features,omitempty"`
-}
-
-func (FeatureSearchResult) IsSearchResult() {}
-
-// Return response for updateFeature mutation
-type FeatureUpdatePayload struct {
-	// Updated feature
-	Feature *generated.Feature `json:"feature"`
 }
 
 // Return response for deleteFile mutation
@@ -699,66 +579,6 @@ func (NarrativeSearchResult) IsSearchResult() {}
 type NarrativeUpdatePayload struct {
 	// Updated narrative
 	Narrative *generated.Narrative `json:"narrative"`
-}
-
-// Return response for createBulkOauthProvider mutation
-type OauthProviderBulkCreatePayload struct {
-	// Created oauthProviders
-	OauthProviders []*generated.OauthProvider `json:"oauthProviders,omitempty"`
-}
-
-// Return response for createOauthProvider mutation
-type OauthProviderCreatePayload struct {
-	// Created oauthProvider
-	OauthProvider *generated.OauthProvider `json:"oauthProvider"`
-}
-
-// Return response for deleteOauthProvider mutation
-type OauthProviderDeletePayload struct {
-	// Deleted oauthProvider ID
-	DeletedID string `json:"deletedID"`
-}
-
-type OauthProviderSearchResult struct {
-	OauthProviders []*generated.OauthProvider `json:"oauthProviders,omitempty"`
-}
-
-func (OauthProviderSearchResult) IsSearchResult() {}
-
-// Return response for updateOauthProvider mutation
-type OauthProviderUpdatePayload struct {
-	// Updated oauthProvider
-	OauthProvider *generated.OauthProvider `json:"oauthProvider"`
-}
-
-// Return response for createBulkOhAuthTooToken mutation
-type OhAuthTooTokenBulkCreatePayload struct {
-	// Created ohAuthTooTokens
-	OhAuthTooTokens []*generated.OhAuthTooToken `json:"ohAuthTooTokens,omitempty"`
-}
-
-// Return response for createOhAuthTooToken mutation
-type OhAuthTooTokenCreatePayload struct {
-	// Created ohAuthTooToken
-	OhAuthTooToken *generated.OhAuthTooToken `json:"ohAuthTooToken"`
-}
-
-// Return response for deleteOhAuthTooToken mutation
-type OhAuthTooTokenDeletePayload struct {
-	// Deleted ohAuthTooToken ID
-	DeletedID string `json:"deletedID"`
-}
-
-type OhAuthTooTokenSearchResult struct {
-	OhAuthTooTokens []*generated.OhAuthTooToken `json:"ohAuthTooTokens,omitempty"`
-}
-
-func (OhAuthTooTokenSearchResult) IsSearchResult() {}
-
-// Return response for updateOhAuthTooToken mutation
-type OhAuthTooTokenUpdatePayload struct {
-	// Updated ohAuthTooToken
-	OhAuthTooToken *generated.OhAuthTooToken `json:"ohAuthTooToken"`
 }
 
 // Return response for createBulkOrgMembership mutation
@@ -1244,34 +1064,4 @@ type UserSettingUpdatePayload struct {
 type UserUpdatePayload struct {
 	// Updated user
 	User *generated.User `json:"user"`
-}
-
-// Return response for createBulkWebhook mutation
-type WebhookBulkCreatePayload struct {
-	// Created webhooks
-	Webhooks []*generated.Webhook `json:"webhooks,omitempty"`
-}
-
-// Return response for createWebhook mutation
-type WebhookCreatePayload struct {
-	// Created webhook
-	Webhook *generated.Webhook `json:"webhook"`
-}
-
-// Return response for deleteWebhook mutation
-type WebhookDeletePayload struct {
-	// Deleted webhook ID
-	DeletedID string `json:"deletedID"`
-}
-
-type WebhookSearchResult struct {
-	Webhooks []*generated.Webhook `json:"webhooks,omitempty"`
-}
-
-func (WebhookSearchResult) IsSearchResult() {}
-
-// Return response for updateWebhook mutation
-type WebhookUpdatePayload struct {
-	// Updated webhook
-	Webhook *generated.Webhook `json:"webhook"`
 }

@@ -45,26 +45,14 @@ const (
 	EdgeOrganization = "organization"
 	// EdgeInvite holds the string denoting the invite edge name in mutations.
 	EdgeInvite = "invite"
-	// EdgeFeature holds the string denoting the feature edge name in mutations.
-	EdgeFeature = "feature"
-	// EdgeEntitlementplan holds the string denoting the entitlementplan edge name in mutations.
-	EdgeEntitlementplan = "entitlementplan"
-	// EdgeEntitlementplanfeature holds the string denoting the entitlementplanfeature edge name in mutations.
-	EdgeEntitlementplanfeature = "entitlementplanfeature"
 	// EdgePersonalAccessToken holds the string denoting the personal_access_token edge name in mutations.
 	EdgePersonalAccessToken = "personal_access_token"
-	// EdgeOauth2token holds the string denoting the oauth2token edge name in mutations.
-	EdgeOauth2token = "oauth2token"
 	// EdgeHush holds the string denoting the hush edge name in mutations.
 	EdgeHush = "hush"
 	// EdgeOrgmembership holds the string denoting the orgmembership edge name in mutations.
 	EdgeOrgmembership = "orgmembership"
 	// EdgeGroupmembership holds the string denoting the groupmembership edge name in mutations.
 	EdgeGroupmembership = "groupmembership"
-	// EdgeEntitlement holds the string denoting the entitlement edge name in mutations.
-	EdgeEntitlement = "entitlement"
-	// EdgeWebhook holds the string denoting the webhook edge name in mutations.
-	EdgeWebhook = "webhook"
 	// EdgeSubscriber holds the string denoting the subscriber edge name in mutations.
 	EdgeSubscriber = "subscriber"
 	// EdgeFile holds the string denoting the file edge name in mutations.
@@ -96,31 +84,11 @@ const (
 	// InviteInverseTable is the table name for the Invite entity.
 	// It exists in this package in order to avoid circular dependency with the "invite" package.
 	InviteInverseTable = "invites"
-	// FeatureTable is the table that holds the feature relation/edge. The primary key declared below.
-	FeatureTable = "feature_events"
-	// FeatureInverseTable is the table name for the Feature entity.
-	// It exists in this package in order to avoid circular dependency with the "feature" package.
-	FeatureInverseTable = "features"
-	// EntitlementplanTable is the table that holds the entitlementplan relation/edge. The primary key declared below.
-	EntitlementplanTable = "entitlement_plan_events"
-	// EntitlementplanInverseTable is the table name for the EntitlementPlan entity.
-	// It exists in this package in order to avoid circular dependency with the "entitlementplan" package.
-	EntitlementplanInverseTable = "entitlement_plans"
-	// EntitlementplanfeatureTable is the table that holds the entitlementplanfeature relation/edge. The primary key declared below.
-	EntitlementplanfeatureTable = "entitlement_plan_feature_events"
-	// EntitlementplanfeatureInverseTable is the table name for the EntitlementPlanFeature entity.
-	// It exists in this package in order to avoid circular dependency with the "entitlementplanfeature" package.
-	EntitlementplanfeatureInverseTable = "entitlement_plan_features"
 	// PersonalAccessTokenTable is the table that holds the personal_access_token relation/edge. The primary key declared below.
 	PersonalAccessTokenTable = "personal_access_token_events"
 	// PersonalAccessTokenInverseTable is the table name for the PersonalAccessToken entity.
 	// It exists in this package in order to avoid circular dependency with the "personalaccesstoken" package.
 	PersonalAccessTokenInverseTable = "personal_access_tokens"
-	// Oauth2tokenTable is the table that holds the oauth2token relation/edge. The primary key declared below.
-	Oauth2tokenTable = "oh_auth_too_token_events"
-	// Oauth2tokenInverseTable is the table name for the OhAuthTooToken entity.
-	// It exists in this package in order to avoid circular dependency with the "ohauthtootoken" package.
-	Oauth2tokenInverseTable = "oh_auth_too_tokens"
 	// HushTable is the table that holds the hush relation/edge. The primary key declared below.
 	HushTable = "hush_events"
 	// HushInverseTable is the table name for the Hush entity.
@@ -136,16 +104,6 @@ const (
 	// GroupmembershipInverseTable is the table name for the GroupMembership entity.
 	// It exists in this package in order to avoid circular dependency with the "groupmembership" package.
 	GroupmembershipInverseTable = "group_memberships"
-	// EntitlementTable is the table that holds the entitlement relation/edge. The primary key declared below.
-	EntitlementTable = "entitlement_events"
-	// EntitlementInverseTable is the table name for the Entitlement entity.
-	// It exists in this package in order to avoid circular dependency with the "entitlement" package.
-	EntitlementInverseTable = "entitlements"
-	// WebhookTable is the table that holds the webhook relation/edge. The primary key declared below.
-	WebhookTable = "webhook_events"
-	// WebhookInverseTable is the table name for the Webhook entity.
-	// It exists in this package in order to avoid circular dependency with the "webhook" package.
-	WebhookInverseTable = "webhooks"
 	// SubscriberTable is the table that holds the subscriber relation/edge. The primary key declared below.
 	SubscriberTable = "subscriber_events"
 	// SubscriberInverseTable is the table name for the Subscriber entity.
@@ -189,21 +147,9 @@ var (
 	// InvitePrimaryKey and InviteColumn2 are the table columns denoting the
 	// primary key for the invite relation (M2M).
 	InvitePrimaryKey = []string{"invite_id", "event_id"}
-	// FeaturePrimaryKey and FeatureColumn2 are the table columns denoting the
-	// primary key for the feature relation (M2M).
-	FeaturePrimaryKey = []string{"feature_id", "event_id"}
-	// EntitlementplanPrimaryKey and EntitlementplanColumn2 are the table columns denoting the
-	// primary key for the entitlementplan relation (M2M).
-	EntitlementplanPrimaryKey = []string{"entitlement_plan_id", "event_id"}
-	// EntitlementplanfeaturePrimaryKey and EntitlementplanfeatureColumn2 are the table columns denoting the
-	// primary key for the entitlementplanfeature relation (M2M).
-	EntitlementplanfeaturePrimaryKey = []string{"entitlement_plan_feature_id", "event_id"}
 	// PersonalAccessTokenPrimaryKey and PersonalAccessTokenColumn2 are the table columns denoting the
 	// primary key for the personal_access_token relation (M2M).
 	PersonalAccessTokenPrimaryKey = []string{"personal_access_token_id", "event_id"}
-	// Oauth2tokenPrimaryKey and Oauth2tokenColumn2 are the table columns denoting the
-	// primary key for the oauth2token relation (M2M).
-	Oauth2tokenPrimaryKey = []string{"oh_auth_too_token_id", "event_id"}
 	// HushPrimaryKey and HushColumn2 are the table columns denoting the
 	// primary key for the hush relation (M2M).
 	HushPrimaryKey = []string{"hush_id", "event_id"}
@@ -213,12 +159,6 @@ var (
 	// GroupmembershipPrimaryKey and GroupmembershipColumn2 are the table columns denoting the
 	// primary key for the groupmembership relation (M2M).
 	GroupmembershipPrimaryKey = []string{"group_membership_id", "event_id"}
-	// EntitlementPrimaryKey and EntitlementColumn2 are the table columns denoting the
-	// primary key for the entitlement relation (M2M).
-	EntitlementPrimaryKey = []string{"entitlement_id", "event_id"}
-	// WebhookPrimaryKey and WebhookColumn2 are the table columns denoting the
-	// primary key for the webhook relation (M2M).
-	WebhookPrimaryKey = []string{"webhook_id", "event_id"}
 	// SubscriberPrimaryKey and SubscriberColumn2 are the table columns denoting the
 	// primary key for the subscriber relation (M2M).
 	SubscriberPrimaryKey = []string{"subscriber_id", "event_id"}
@@ -376,48 +316,6 @@ func ByInvite(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByFeatureCount orders the results by feature count.
-func ByFeatureCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFeatureStep(), opts...)
-	}
-}
-
-// ByFeature orders the results by feature terms.
-func ByFeature(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFeatureStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEntitlementplanCount orders the results by entitlementplan count.
-func ByEntitlementplanCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntitlementplanStep(), opts...)
-	}
-}
-
-// ByEntitlementplan orders the results by entitlementplan terms.
-func ByEntitlementplan(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntitlementplanStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEntitlementplanfeatureCount orders the results by entitlementplanfeature count.
-func ByEntitlementplanfeatureCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntitlementplanfeatureStep(), opts...)
-	}
-}
-
-// ByEntitlementplanfeature orders the results by entitlementplanfeature terms.
-func ByEntitlementplanfeature(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntitlementplanfeatureStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByPersonalAccessTokenCount orders the results by personal_access_token count.
 func ByPersonalAccessTokenCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -429,20 +327,6 @@ func ByPersonalAccessTokenCount(opts ...sql.OrderTermOption) OrderOption {
 func ByPersonalAccessToken(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newPersonalAccessTokenStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByOauth2tokenCount orders the results by oauth2token count.
-func ByOauth2tokenCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOauth2tokenStep(), opts...)
-	}
-}
-
-// ByOauth2token orders the results by oauth2token terms.
-func ByOauth2token(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOauth2tokenStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -485,34 +369,6 @@ func ByGroupmembershipCount(opts ...sql.OrderTermOption) OrderOption {
 func ByGroupmembership(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newGroupmembershipStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEntitlementCount orders the results by entitlement count.
-func ByEntitlementCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntitlementStep(), opts...)
-	}
-}
-
-// ByEntitlement orders the results by entitlement terms.
-func ByEntitlement(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntitlementStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByWebhookCount orders the results by webhook count.
-func ByWebhookCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newWebhookStep(), opts...)
-	}
-}
-
-// ByWebhook orders the results by webhook terms.
-func ByWebhook(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newWebhookStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -578,39 +434,11 @@ func newInviteStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, InviteTable, InvitePrimaryKey...),
 	)
 }
-func newFeatureStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FeatureInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, FeatureTable, FeaturePrimaryKey...),
-	)
-}
-func newEntitlementplanStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntitlementplanInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, EntitlementplanTable, EntitlementplanPrimaryKey...),
-	)
-}
-func newEntitlementplanfeatureStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntitlementplanfeatureInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, EntitlementplanfeatureTable, EntitlementplanfeaturePrimaryKey...),
-	)
-}
 func newPersonalAccessTokenStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PersonalAccessTokenInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, PersonalAccessTokenTable, PersonalAccessTokenPrimaryKey...),
-	)
-}
-func newOauth2tokenStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(Oauth2tokenInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, Oauth2tokenTable, Oauth2tokenPrimaryKey...),
 	)
 }
 func newHushStep() *sqlgraph.Step {
@@ -632,20 +460,6 @@ func newGroupmembershipStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(GroupmembershipInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, GroupmembershipTable, GroupmembershipPrimaryKey...),
-	)
-}
-func newEntitlementStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntitlementInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, EntitlementTable, EntitlementPrimaryKey...),
-	)
-}
-func newWebhookStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(WebhookInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, WebhookTable, WebhookPrimaryKey...),
 	)
 }
 func newSubscriberStep() *sqlgraph.Step {

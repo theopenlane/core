@@ -42,24 +42,6 @@ type DocumentDataHistory func(*sql.Selector)
 // EmailVerificationToken is the predicate function for emailverificationtoken builders.
 type EmailVerificationToken func(*sql.Selector)
 
-// Entitlement is the predicate function for entitlement builders.
-type Entitlement func(*sql.Selector)
-
-// EntitlementHistory is the predicate function for entitlementhistory builders.
-type EntitlementHistory func(*sql.Selector)
-
-// EntitlementPlan is the predicate function for entitlementplan builders.
-type EntitlementPlan func(*sql.Selector)
-
-// EntitlementPlanFeature is the predicate function for entitlementplanfeature builders.
-type EntitlementPlanFeature func(*sql.Selector)
-
-// EntitlementPlanFeatureHistory is the predicate function for entitlementplanfeaturehistory builders.
-type EntitlementPlanFeatureHistory func(*sql.Selector)
-
-// EntitlementPlanHistory is the predicate function for entitlementplanhistory builders.
-type EntitlementPlanHistory func(*sql.Selector)
-
 // Entity is the predicate function for entity builders.
 type Entity func(*sql.Selector)
 
@@ -77,12 +59,6 @@ type Event func(*sql.Selector)
 
 // EventHistory is the predicate function for eventhistory builders.
 type EventHistory func(*sql.Selector)
-
-// Feature is the predicate function for feature builders.
-type Feature func(*sql.Selector)
-
-// FeatureHistory is the predicate function for featurehistory builders.
-type FeatureHistory func(*sql.Selector)
 
 // File is the predicate function for file builders.
 type File func(*sql.Selector)
@@ -140,15 +116,6 @@ type Note func(*sql.Selector)
 
 // NoteHistory is the predicate function for notehistory builders.
 type NoteHistory func(*sql.Selector)
-
-// OauthProvider is the predicate function for oauthprovider builders.
-type OauthProvider func(*sql.Selector)
-
-// OauthProviderHistory is the predicate function for oauthproviderhistory builders.
-type OauthProviderHistory func(*sql.Selector)
-
-// OhAuthTooToken is the predicate function for ohauthtootoken builders.
-type OhAuthTooToken func(*sql.Selector)
 
 // OrgMembership is the predicate function for orgmembership builders.
 type OrgMembership func(*sql.Selector)
@@ -248,9 +215,3 @@ type UserSettingHistory func(*sql.Selector)
 
 // Webauthn is the predicate function for webauthn builders.
 type Webauthn func(*sql.Selector)
-
-// Webhook is the predicate function for webhook builders.
-type Webhook func(*sql.Selector)
-
-// WebhookHistory is the predicate function for webhookhistory builders.
-type WebhookHistory func(*sql.Selector)

@@ -15,21 +15,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/entitlement"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/feature"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
-	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
@@ -45,7 +39,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
 )
 
 var (
@@ -280,112 +273,6 @@ func adminSearchDocumentData(ctx context.Context, query string) ([]*generated.Do
 	).All(ctx)
 }
 
-// searchEntitlement searches for Entitlement based on the query string looking for matches
-func searchEntitlements(ctx context.Context, query string) ([]*generated.Entitlement, error) {
-	return withTransactionalMutation(ctx).Entitlement.Query().Where(
-		entitlement.Or(
-			entitlement.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchEntitlement searches for Entitlement based on the query string looking for matches
-func adminSearchEntitlements(ctx context.Context, query string) ([]*generated.Entitlement, error) {
-	return withTransactionalMutation(ctx).Entitlement.Query().Where(
-		entitlement.Or(
-			entitlement.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-			entitlement.DeletedByContainsFold(query),              // search by DeletedBy
-			entitlement.OwnerIDContainsFold(query),                // search by OwnerID
-			entitlement.PlanIDContainsFold(query),                 // search by PlanID
-			entitlement.OrganizationIDContainsFold(query),         // search by OrganizationID
-			entitlement.ExternalCustomerIDContainsFold(query),     // search by ExternalCustomerID
-			entitlement.ExternalSubscriptionIDContainsFold(query), // search by ExternalSubscriptionID
-		),
-	).All(ctx)
-}
-
-// searchEntitlementPlan searches for EntitlementPlan based on the query string looking for matches
-func searchEntitlementPlans(ctx context.Context, query string) ([]*generated.EntitlementPlan, error) {
-	return withTransactionalMutation(ctx).EntitlementPlan.Query().Where(
-		entitlementplan.Or(
-			entitlementplan.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchEntitlementPlan searches for EntitlementPlan based on the query string looking for matches
-func adminSearchEntitlementPlans(ctx context.Context, query string) ([]*generated.EntitlementPlan, error) {
-	return withTransactionalMutation(ctx).EntitlementPlan.Query().Where(
-		entitlementplan.Or(
-			entitlementplan.IDContainsFold(query),        // search by ID
-			entitlementplan.DeletedByContainsFold(query), // search by DeletedBy
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
-			},
-			entitlementplan.OwnerIDContainsFold(query),     // search by OwnerID
-			entitlementplan.DisplayNameContainsFold(query), // search by DisplayName
-			entitlementplan.NameContainsFold(query),        // search by Name
-			entitlementplan.DescriptionContainsFold(query), // search by Description
-			entitlementplan.VersionContainsFold(query),     // search by Version
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(metadata)::text LIKE $9", likeQuery)) // search by Metadata
-			},
-			entitlementplan.StripeProductIDContainsFold(query), // search by StripeProductID
-			entitlementplan.StripePriceIDContainsFold(query),   // search by StripePriceID
-		),
-	).All(ctx)
-}
-
-// searchEntitlementPlanFeature searches for EntitlementPlanFeature based on the query string looking for matches
-func searchEntitlementPlanFeatures(ctx context.Context, query string) ([]*generated.EntitlementPlanFeature, error) {
-	return withTransactionalMutation(ctx).EntitlementPlanFeature.Query().Where(
-		entitlementplanfeature.Or(
-			entitlementplanfeature.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchEntitlementPlanFeature searches for EntitlementPlanFeature based on the query string looking for matches
-func adminSearchEntitlementPlanFeatures(ctx context.Context, query string) ([]*generated.EntitlementPlanFeature, error) {
-	return withTransactionalMutation(ctx).EntitlementPlanFeature.Query().Where(
-		entitlementplanfeature.Or(
-			entitlementplanfeature.IDContainsFold(query),        // search by ID
-			entitlementplanfeature.DeletedByContainsFold(query), // search by DeletedBy
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
-			},
-			entitlementplanfeature.OwnerIDContainsFold(query), // search by OwnerID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(metadata)::text LIKE $5", likeQuery)) // search by Metadata
-			},
-			entitlementplanfeature.PlanIDContainsFold(query),          // search by PlanID
-			entitlementplanfeature.StripeProductIDContainsFold(query), // search by StripeProductID
-			entitlementplanfeature.FeatureIDContainsFold(query),       // search by FeatureID
-			entitlementplanfeature.StripeFeatureIDContainsFold(query), // search by StripeFeatureID
-		),
-	).All(ctx)
-}
-
 // searchEntity searches for Entity based on the query string looking for matches
 func searchEntities(ctx context.Context, query string) ([]*generated.Entity, error) {
 	return withTransactionalMutation(ctx).Entity.Query().Where(
@@ -484,42 +371,6 @@ func adminSearchEvents(ctx context.Context, query string) ([]*generated.Event, e
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(metadata)::text LIKE $6", likeQuery)) // search by Metadata
 			},
-		),
-	).All(ctx)
-}
-
-// searchFeature searches for Feature based on the query string looking for matches
-func searchFeatures(ctx context.Context, query string) ([]*generated.Feature, error) {
-	return withTransactionalMutation(ctx).Feature.Query().Where(
-		feature.Or(
-			feature.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchFeature searches for Feature based on the query string looking for matches
-func adminSearchFeatures(ctx context.Context, query string) ([]*generated.Feature, error) {
-	return withTransactionalMutation(ctx).Feature.Query().Where(
-		feature.Or(
-			feature.DeletedByContainsFold(query), // search by DeletedBy
-			feature.IDContainsFold(query),        // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
-			},
-			feature.OwnerIDContainsFold(query),     // search by OwnerID
-			feature.NameContainsFold(query),        // search by Name
-			feature.DisplayNameContainsFold(query), // search by DisplayName
-			feature.DescriptionContainsFold(query), // search by Description
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(metadata)::text LIKE $8", likeQuery)) // search by Metadata
-			},
-			feature.StripeFeatureIDContainsFold(query), // search by StripeFeatureID
 		),
 	).All(ctx)
 }
@@ -721,87 +572,6 @@ func adminSearchNarratives(ctx context.Context, query string) ([]*generated.Narr
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(details)::text LIKE $8", likeQuery)) // search by Details
-			},
-		),
-	).All(ctx)
-}
-
-// searchOauthProvider searches for OauthProvider based on the query string looking for matches
-func searchOauthProviders(ctx context.Context, query string) ([]*generated.OauthProvider, error) {
-	return withTransactionalMutation(ctx).OauthProvider.Query().Where(
-		oauthprovider.Or(
-			oauthprovider.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchOauthProvider searches for OauthProvider based on the query string looking for matches
-func adminSearchOauthProviders(ctx context.Context, query string) ([]*generated.OauthProvider, error) {
-	return withTransactionalMutation(ctx).OauthProvider.Query().Where(
-		oauthprovider.Or(
-			oauthprovider.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-			oauthprovider.DeletedByContainsFold(query),    // search by DeletedBy
-			oauthprovider.OwnerIDContainsFold(query),      // search by OwnerID
-			oauthprovider.NameContainsFold(query),         // search by Name
-			oauthprovider.ClientIDContainsFold(query),     // search by ClientID
-			oauthprovider.ClientSecretContainsFold(query), // search by ClientSecret
-			oauthprovider.RedirectURLContainsFold(query),  // search by RedirectURL
-			oauthprovider.ScopesContainsFold(query),       // search by Scopes
-			oauthprovider.AuthURLContainsFold(query),      // search by AuthURL
-			oauthprovider.TokenURLContainsFold(query),     // search by TokenURL
-			oauthprovider.InfoURLContainsFold(query),      // search by InfoURL
-		),
-	).All(ctx)
-}
-
-// searchOhAuthTooToken searches for OhAuthTooToken based on the query string looking for matches
-func searchOhAuthTooTokens(ctx context.Context, query string) ([]*generated.OhAuthTooToken, error) {
-	return withTransactionalMutation(ctx).OhAuthTooToken.Query().Where(
-		ohauthtootoken.Or(
-			ohauthtootoken.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchOhAuthTooToken searches for OhAuthTooToken based on the query string looking for matches
-func adminSearchOhAuthTooTokens(ctx context.Context, query string) ([]*generated.OhAuthTooToken, error) {
-	return withTransactionalMutation(ctx).OhAuthTooToken.Query().Where(
-		ohauthtootoken.Or(
-			ohauthtootoken.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-			ohauthtootoken.ClientIDContainsFold(query), // search by ClientID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(scopes)::text LIKE $4", likeQuery)) // search by Scopes
-			},
-			ohauthtootoken.NonceContainsFold(query),          // search by Nonce
-			ohauthtootoken.ClaimsUserIDContainsFold(query),   // search by ClaimsUserID
-			ohauthtootoken.ClaimsUsernameContainsFold(query), // search by ClaimsUsername
-			ohauthtootoken.ClaimsEmailContainsFold(query),    // search by ClaimsEmail
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(claimsgroups)::text LIKE $9", likeQuery)) // search by ClaimsGroups
-			},
-			ohauthtootoken.ClaimsPreferredUsernameContainsFold(query), // search by ClaimsPreferredUsername
-			ohauthtootoken.ConnectorIDContainsFold(query),             // search by ConnectorID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(connectordata)::text LIKE $12", likeQuery)) // search by ConnectorData
 			},
 		),
 	).All(ctx)
@@ -1340,38 +1110,6 @@ func adminSearchUserSettings(ctx context.Context, query string) ([]*generated.Us
 			},
 			usersetting.DeletedByContainsFold(query), // search by DeletedBy
 			usersetting.UserIDContainsFold(query),    // search by UserID
-		),
-	).All(ctx)
-}
-
-// searchWebhook searches for Webhook based on the query string looking for matches
-func searchWebhooks(ctx context.Context, query string) ([]*generated.Webhook, error) {
-	return withTransactionalMutation(ctx).Webhook.Query().Where(
-		webhook.Or(
-			webhook.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-		),
-	).All(ctx)
-}
-
-// searchWebhook searches for Webhook based on the query string looking for matches
-func adminSearchWebhooks(ctx context.Context, query string) ([]*generated.Webhook, error) {
-	return withTransactionalMutation(ctx).Webhook.Query().Where(
-		webhook.Or(
-			webhook.IDContainsFold(query), // search by ID
-			func(s *sql.Selector) {
-				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-			},
-			webhook.DeletedByContainsFold(query),      // search by DeletedBy
-			webhook.OwnerIDContainsFold(query),        // search by OwnerID
-			webhook.NameContainsFold(query),           // search by Name
-			webhook.DestinationURLContainsFold(query), // search by DestinationURL
-			webhook.LastErrorContainsFold(query),      // search by LastError
-			webhook.LastResponseContainsFold(query),   // search by LastResponse
 		),
 	).All(ctx)
 }

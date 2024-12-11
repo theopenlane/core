@@ -43,12 +43,8 @@ const (
 	EdgeOwner = "owner"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
 	EdgeSecrets = "secrets"
-	// EdgeOauth2tokens holds the string denoting the oauth2tokens edge name in mutations.
-	EdgeOauth2tokens = "oauth2tokens"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
-	// EdgeWebhooks holds the string denoting the webhooks edge name in mutations.
-	EdgeWebhooks = "webhooks"
 	// Table holds the table name of the integration in the database.
 	Table = "integrations"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -63,21 +59,11 @@ const (
 	// SecretsInverseTable is the table name for the Hush entity.
 	// It exists in this package in order to avoid circular dependency with the "hush" package.
 	SecretsInverseTable = "hushes"
-	// Oauth2tokensTable is the table that holds the oauth2tokens relation/edge. The primary key declared below.
-	Oauth2tokensTable = "integration_oauth2tokens"
-	// Oauth2tokensInverseTable is the table name for the OhAuthTooToken entity.
-	// It exists in this package in order to avoid circular dependency with the "ohauthtootoken" package.
-	Oauth2tokensInverseTable = "oh_auth_too_tokens"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "integration_events"
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
-	// WebhooksTable is the table that holds the webhooks relation/edge. The primary key declared below.
-	WebhooksTable = "integration_webhooks"
-	// WebhooksInverseTable is the table name for the Webhook entity.
-	// It exists in this package in order to avoid circular dependency with the "webhook" package.
-	WebhooksInverseTable = "webhooks"
 )
 
 // Columns holds all SQL columns for integration fields.
@@ -107,15 +93,9 @@ var (
 	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
 	// primary key for the secrets relation (M2M).
 	SecretsPrimaryKey = []string{"integration_id", "hush_id"}
-	// Oauth2tokensPrimaryKey and Oauth2tokensColumn2 are the table columns denoting the
-	// primary key for the oauth2tokens relation (M2M).
-	Oauth2tokensPrimaryKey = []string{"integration_id", "oh_auth_too_token_id"}
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"integration_id", "event_id"}
-	// WebhooksPrimaryKey and WebhooksColumn2 are the table columns denoting the
-	// primary key for the webhooks relation (M2M).
-	WebhooksPrimaryKey = []string{"integration_id", "webhook_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -244,20 +224,6 @@ func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByOauth2tokensCount orders the results by oauth2tokens count.
-func ByOauth2tokensCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOauth2tokensStep(), opts...)
-	}
-}
-
-// ByOauth2tokens orders the results by oauth2tokens terms.
-func ByOauth2tokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOauth2tokensStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByEventsCount orders the results by events count.
 func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -269,20 +235,6 @@ func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByWebhooksCount orders the results by webhooks count.
-func ByWebhooksCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newWebhooksStep(), opts...)
-	}
-}
-
-// ByWebhooks orders the results by webhooks terms.
-func ByWebhooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newWebhooksStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -299,24 +251,10 @@ func newSecretsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
 	)
 }
-func newOauth2tokensStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(Oauth2tokensInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, Oauth2tokensTable, Oauth2tokensPrimaryKey...),
-	)
-}
 func newEventsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
-	)
-}
-func newWebhooksStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(WebhooksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, WebhooksTable, WebhooksPrimaryKey...),
 	)
 }

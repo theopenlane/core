@@ -464,272 +464,6 @@ var (
 			},
 		},
 	}
-	// EntitlementsColumns holds the columns for the "entitlements" table.
-	EntitlementsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "external_customer_id", Type: field.TypeString, Nullable: true},
-		{Name: "external_subscription_id", Type: field.TypeString, Nullable: true},
-		{Name: "expires", Type: field.TypeBool, Default: false},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "cancelled", Type: field.TypeBool, Default: false},
-		{Name: "cancelled_date", Type: field.TypeTime, Nullable: true},
-		{Name: "bill_starting", Type: field.TypeTime},
-		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "plan_id", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "organization_id", Type: field.TypeString},
-	}
-	// EntitlementsTable holds the schema information for the "entitlements" table.
-	EntitlementsTable = &schema.Table{
-		Name:       "entitlements",
-		Columns:    EntitlementsColumns,
-		PrimaryKey: []*schema.Column{EntitlementsColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "entitlements_entitlement_plans_entitlements",
-				Columns:    []*schema.Column{EntitlementsColumns[17]},
-				RefColumns: []*schema.Column{EntitlementPlansColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "entitlements_organizations_entitlements",
-				Columns:    []*schema.Column{EntitlementsColumns[18]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "entitlements_organizations_organization_entitlement",
-				Columns:    []*schema.Column{EntitlementsColumns[19]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "entitlement_organization_id_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{EntitlementsColumns[19], EntitlementsColumns[18]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL and cancelled = false",
-				},
-			},
-		},
-	}
-	// EntitlementHistoryColumns holds the columns for the "entitlement_history" table.
-	EntitlementHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "plan_id", Type: field.TypeString},
-		{Name: "organization_id", Type: field.TypeString},
-		{Name: "external_customer_id", Type: field.TypeString, Nullable: true},
-		{Name: "external_subscription_id", Type: field.TypeString, Nullable: true},
-		{Name: "expires", Type: field.TypeBool, Default: false},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "cancelled", Type: field.TypeBool, Default: false},
-		{Name: "cancelled_date", Type: field.TypeTime, Nullable: true},
-		{Name: "bill_starting", Type: field.TypeTime},
-		{Name: "active", Type: field.TypeBool, Default: true},
-	}
-	// EntitlementHistoryTable holds the schema information for the "entitlement_history" table.
-	EntitlementHistoryTable = &schema.Table{
-		Name:       "entitlement_history",
-		Columns:    EntitlementHistoryColumns,
-		PrimaryKey: []*schema.Column{EntitlementHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "entitlementhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{EntitlementHistoryColumns[1]},
-			},
-		},
-	}
-	// EntitlementPlansColumns holds the columns for the "entitlement_plans" table.
-	EntitlementPlansColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "display_name", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "version", Type: field.TypeString},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
-		{Name: "stripe_price_id", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// EntitlementPlansTable holds the schema information for the "entitlement_plans" table.
-	EntitlementPlansTable = &schema.Table{
-		Name:       "entitlement_plans",
-		Columns:    EntitlementPlansColumns,
-		PrimaryKey: []*schema.Column{EntitlementPlansColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "entitlement_plans_organizations_entitlementplans",
-				Columns:    []*schema.Column{EntitlementPlansColumns[16]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "entitlementplan_name_version_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{EntitlementPlansColumns[10], EntitlementPlansColumns[12], EntitlementPlansColumns[16]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
-			},
-		},
-	}
-	// EntitlementPlanFeaturesColumns holds the columns for the "entitlement_plan_features" table.
-	EntitlementPlanFeaturesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
-		{Name: "stripe_feature_id", Type: field.TypeString, Nullable: true},
-		{Name: "plan_id", Type: field.TypeString},
-		{Name: "feature_id", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// EntitlementPlanFeaturesTable holds the schema information for the "entitlement_plan_features" table.
-	EntitlementPlanFeaturesTable = &schema.Table{
-		Name:       "entitlement_plan_features",
-		Columns:    EntitlementPlanFeaturesColumns,
-		PrimaryKey: []*schema.Column{EntitlementPlanFeaturesColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "entitlement_plan_features_entitlement_plans_plan",
-				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[12]},
-				RefColumns: []*schema.Column{EntitlementPlansColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "entitlement_plan_features_features_feature",
-				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[13]},
-				RefColumns: []*schema.Column{FeaturesColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "entitlement_plan_features_organizations_entitlementplanfeatures",
-				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[14]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "entitlementplanfeature_feature_id_plan_id",
-				Unique:  true,
-				Columns: []*schema.Column{EntitlementPlanFeaturesColumns[13], EntitlementPlanFeaturesColumns[12]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
-			},
-		},
-	}
-	// EntitlementPlanFeatureHistoryColumns holds the columns for the "entitlement_plan_feature_history" table.
-	EntitlementPlanFeatureHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "plan_id", Type: field.TypeString},
-		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
-		{Name: "feature_id", Type: field.TypeString},
-		{Name: "stripe_feature_id", Type: field.TypeString, Nullable: true},
-	}
-	// EntitlementPlanFeatureHistoryTable holds the schema information for the "entitlement_plan_feature_history" table.
-	EntitlementPlanFeatureHistoryTable = &schema.Table{
-		Name:       "entitlement_plan_feature_history",
-		Columns:    EntitlementPlanFeatureHistoryColumns,
-		PrimaryKey: []*schema.Column{EntitlementPlanFeatureHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "entitlementplanfeaturehistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{EntitlementPlanFeatureHistoryColumns[1]},
-			},
-		},
-	}
-	// EntitlementPlanHistoryColumns holds the columns for the "entitlement_plan_history" table.
-	EntitlementPlanHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "display_name", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "version", Type: field.TypeString},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
-		{Name: "stripe_price_id", Type: field.TypeString, Nullable: true},
-	}
-	// EntitlementPlanHistoryTable holds the schema information for the "entitlement_plan_history" table.
-	EntitlementPlanHistoryTable = &schema.Table{
-		Name:       "entitlement_plan_history",
-		Columns:    EntitlementPlanHistoryColumns,
-		PrimaryKey: []*schema.Column{EntitlementPlanHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "entitlementplanhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{EntitlementPlanHistoryColumns[1]},
-			},
-		},
-	}
 	// EntitiesColumns holds the columns for the "entities" table.
 	EntitiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -936,84 +670,6 @@ var (
 				Name:    "eventhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{EventHistoryColumns[1]},
-			},
-		},
-	}
-	// FeaturesColumns holds the columns for the "features" table.
-	FeaturesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "display_name", Type: field.TypeString, Nullable: true},
-		{Name: "enabled", Type: field.TypeBool, Default: false},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "stripe_feature_id", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// FeaturesTable holds the schema information for the "features" table.
-	FeaturesTable = &schema.Table{
-		Name:       "features",
-		Columns:    FeaturesColumns,
-		PrimaryKey: []*schema.Column{FeaturesColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "features_organizations_features",
-				Columns:    []*schema.Column{FeaturesColumns[15]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "feature_name_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{FeaturesColumns[9], FeaturesColumns[15]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
-			},
-		},
-	}
-	// FeatureHistoryColumns holds the columns for the "feature_history" table.
-	FeatureHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "display_name", Type: field.TypeString, Nullable: true},
-		{Name: "enabled", Type: field.TypeBool, Default: false},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "stripe_feature_id", Type: field.TypeString, Nullable: true},
-	}
-	// FeatureHistoryTable holds the schema information for the "feature_history" table.
-	FeatureHistoryTable = &schema.Table{
-		Name:       "feature_history",
-		Columns:    FeatureHistoryColumns,
-		PrimaryKey: []*schema.Column{FeatureHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "featurehistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{FeatureHistoryColumns[1]},
 			},
 		},
 	}
@@ -1672,104 +1328,6 @@ var (
 				Columns: []*schema.Column{NoteHistoryColumns[1]},
 			},
 		},
-	}
-	// OauthProvidersColumns holds the columns for the "oauth_providers" table.
-	OauthProvidersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "client_id", Type: field.TypeString},
-		{Name: "client_secret", Type: field.TypeString},
-		{Name: "redirect_url", Type: field.TypeString},
-		{Name: "scopes", Type: field.TypeString},
-		{Name: "auth_url", Type: field.TypeString},
-		{Name: "token_url", Type: field.TypeString},
-		{Name: "auth_style", Type: field.TypeUint8},
-		{Name: "info_url", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// OauthProvidersTable holds the schema information for the "oauth_providers" table.
-	OauthProvidersTable = &schema.Table{
-		Name:       "oauth_providers",
-		Columns:    OauthProvidersColumns,
-		PrimaryKey: []*schema.Column{OauthProvidersColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "oauth_providers_organizations_oauthprovider",
-				Columns:    []*schema.Column{OauthProvidersColumns[18]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-	}
-	// OauthProviderHistoryColumns holds the columns for the "oauth_provider_history" table.
-	OauthProviderHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "client_id", Type: field.TypeString},
-		{Name: "client_secret", Type: field.TypeString},
-		{Name: "redirect_url", Type: field.TypeString},
-		{Name: "scopes", Type: field.TypeString},
-		{Name: "auth_url", Type: field.TypeString},
-		{Name: "token_url", Type: field.TypeString},
-		{Name: "auth_style", Type: field.TypeUint8},
-		{Name: "info_url", Type: field.TypeString},
-	}
-	// OauthProviderHistoryTable holds the schema information for the "oauth_provider_history" table.
-	OauthProviderHistoryTable = &schema.Table{
-		Name:       "oauth_provider_history",
-		Columns:    OauthProviderHistoryColumns,
-		PrimaryKey: []*schema.Column{OauthProviderHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "oauthproviderhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{OauthProviderHistoryColumns[1]},
-			},
-		},
-	}
-	// OhAuthTooTokensColumns holds the columns for the "oh_auth_too_tokens" table.
-	OhAuthTooTokensColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "client_id", Type: field.TypeString, Size: 2147483647},
-		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
-		{Name: "nonce", Type: field.TypeString, Size: 2147483647},
-		{Name: "claims_user_id", Type: field.TypeString, Size: 2147483647},
-		{Name: "claims_username", Type: field.TypeString, Size: 2147483647},
-		{Name: "claims_email", Type: field.TypeString, Size: 2147483647},
-		{Name: "claims_email_verified", Type: field.TypeBool},
-		{Name: "claims_groups", Type: field.TypeJSON, Nullable: true},
-		{Name: "claims_preferred_username", Type: field.TypeString, Size: 2147483647},
-		{Name: "connector_id", Type: field.TypeString, Size: 2147483647},
-		{Name: "connector_data", Type: field.TypeJSON, Nullable: true},
-		{Name: "last_used", Type: field.TypeTime},
-	}
-	// OhAuthTooTokensTable holds the schema information for the "oh_auth_too_tokens" table.
-	OhAuthTooTokensTable = &schema.Table{
-		Name:       "oh_auth_too_tokens",
-		Columns:    OhAuthTooTokensColumns,
-		PrimaryKey: []*schema.Column{OhAuthTooTokensColumns[0]},
 	}
 	// OrgMembershipsColumns holds the columns for the "org_memberships" table.
 	OrgMembershipsColumns = []*schema.Column{
@@ -3079,92 +2637,6 @@ var (
 			},
 		},
 	}
-	// WebhooksColumns holds the columns for the "webhooks" table.
-	WebhooksColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString, Unique: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "destination_url", Type: field.TypeString},
-		{Name: "enabled", Type: field.TypeBool, Default: true},
-		{Name: "callback", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "secret", Type: field.TypeBytes, Nullable: true},
-		{Name: "failures", Type: field.TypeInt, Nullable: true, Default: 0},
-		{Name: "last_error", Type: field.TypeString, Nullable: true},
-		{Name: "last_response", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// WebhooksTable holds the schema information for the "webhooks" table.
-	WebhooksTable = &schema.Table{
-		Name:       "webhooks",
-		Columns:    WebhooksColumns,
-		PrimaryKey: []*schema.Column{WebhooksColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "webhooks_organizations_webhooks",
-				Columns:    []*schema.Column{WebhooksColumns[19]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "webhook_name_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{WebhooksColumns[9], WebhooksColumns[19]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
-			},
-		},
-	}
-	// WebhookHistoryColumns holds the columns for the "webhook_history" table.
-	WebhookHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "mapping_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "destination_url", Type: field.TypeString},
-		{Name: "enabled", Type: field.TypeBool, Default: true},
-		{Name: "callback", Type: field.TypeString, Nullable: true},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "secret", Type: field.TypeBytes, Nullable: true},
-		{Name: "failures", Type: field.TypeInt, Nullable: true, Default: 0},
-		{Name: "last_error", Type: field.TypeString, Nullable: true},
-		{Name: "last_response", Type: field.TypeString, Nullable: true},
-	}
-	// WebhookHistoryTable holds the schema information for the "webhook_history" table.
-	WebhookHistoryTable = &schema.Table{
-		Name:       "webhook_history",
-		Columns:    WebhookHistoryColumns,
-		PrimaryKey: []*schema.Column{WebhookHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "webhookhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{WebhookHistoryColumns[1]},
-			},
-		},
-	}
 	// ContactFilesColumns holds the columns for the "contact_files" table.
 	ContactFilesColumns = []*schema.Column{
 		{Name: "contact_id", Type: field.TypeString},
@@ -3565,81 +3037,6 @@ var (
 			},
 		},
 	}
-	// EntitlementEventsColumns holds the columns for the "entitlement_events" table.
-	EntitlementEventsColumns = []*schema.Column{
-		{Name: "entitlement_id", Type: field.TypeString},
-		{Name: "event_id", Type: field.TypeString},
-	}
-	// EntitlementEventsTable holds the schema information for the "entitlement_events" table.
-	EntitlementEventsTable = &schema.Table{
-		Name:       "entitlement_events",
-		Columns:    EntitlementEventsColumns,
-		PrimaryKey: []*schema.Column{EntitlementEventsColumns[0], EntitlementEventsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "entitlement_events_entitlement_id",
-				Columns:    []*schema.Column{EntitlementEventsColumns[0]},
-				RefColumns: []*schema.Column{EntitlementsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "entitlement_events_event_id",
-				Columns:    []*schema.Column{EntitlementEventsColumns[1]},
-				RefColumns: []*schema.Column{EventsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// EntitlementPlanEventsColumns holds the columns for the "entitlement_plan_events" table.
-	EntitlementPlanEventsColumns = []*schema.Column{
-		{Name: "entitlement_plan_id", Type: field.TypeString},
-		{Name: "event_id", Type: field.TypeString},
-	}
-	// EntitlementPlanEventsTable holds the schema information for the "entitlement_plan_events" table.
-	EntitlementPlanEventsTable = &schema.Table{
-		Name:       "entitlement_plan_events",
-		Columns:    EntitlementPlanEventsColumns,
-		PrimaryKey: []*schema.Column{EntitlementPlanEventsColumns[0], EntitlementPlanEventsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "entitlement_plan_events_entitlement_plan_id",
-				Columns:    []*schema.Column{EntitlementPlanEventsColumns[0]},
-				RefColumns: []*schema.Column{EntitlementPlansColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "entitlement_plan_events_event_id",
-				Columns:    []*schema.Column{EntitlementPlanEventsColumns[1]},
-				RefColumns: []*schema.Column{EventsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// EntitlementPlanFeatureEventsColumns holds the columns for the "entitlement_plan_feature_events" table.
-	EntitlementPlanFeatureEventsColumns = []*schema.Column{
-		{Name: "entitlement_plan_feature_id", Type: field.TypeString},
-		{Name: "event_id", Type: field.TypeString},
-	}
-	// EntitlementPlanFeatureEventsTable holds the schema information for the "entitlement_plan_feature_events" table.
-	EntitlementPlanFeatureEventsTable = &schema.Table{
-		Name:       "entitlement_plan_feature_events",
-		Columns:    EntitlementPlanFeatureEventsColumns,
-		PrimaryKey: []*schema.Column{EntitlementPlanFeatureEventsColumns[0], EntitlementPlanFeatureEventsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "entitlement_plan_feature_events_entitlement_plan_feature_id",
-				Columns:    []*schema.Column{EntitlementPlanFeatureEventsColumns[0]},
-				RefColumns: []*schema.Column{EntitlementPlanFeaturesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "entitlement_plan_feature_events_event_id",
-				Columns:    []*schema.Column{EntitlementPlanFeatureEventsColumns[1]},
-				RefColumns: []*schema.Column{EventsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// EntityContactsColumns holds the columns for the "entity_contacts" table.
 	EntityContactsColumns = []*schema.Column{
 		{Name: "entity_id", Type: field.TypeString},
@@ -3711,31 +3108,6 @@ var (
 				Symbol:     "entity_files_file_id",
 				Columns:    []*schema.Column{EntityFilesColumns[1]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// FeatureEventsColumns holds the columns for the "feature_events" table.
-	FeatureEventsColumns = []*schema.Column{
-		{Name: "feature_id", Type: field.TypeString},
-		{Name: "event_id", Type: field.TypeString},
-	}
-	// FeatureEventsTable holds the schema information for the "feature_events" table.
-	FeatureEventsTable = &schema.Table{
-		Name:       "feature_events",
-		Columns:    FeatureEventsColumns,
-		PrimaryKey: []*schema.Column{FeatureEventsColumns[0], FeatureEventsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "feature_events_feature_id",
-				Columns:    []*schema.Column{FeatureEventsColumns[0]},
-				RefColumns: []*schema.Column{FeaturesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "feature_events_event_id",
-				Columns:    []*schema.Column{FeatureEventsColumns[1]},
-				RefColumns: []*schema.Column{EventsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -3915,31 +3287,6 @@ var (
 			},
 		},
 	}
-	// IntegrationOauth2tokensColumns holds the columns for the "integration_oauth2tokens" table.
-	IntegrationOauth2tokensColumns = []*schema.Column{
-		{Name: "integration_id", Type: field.TypeString},
-		{Name: "oh_auth_too_token_id", Type: field.TypeString},
-	}
-	// IntegrationOauth2tokensTable holds the schema information for the "integration_oauth2tokens" table.
-	IntegrationOauth2tokensTable = &schema.Table{
-		Name:       "integration_oauth2tokens",
-		Columns:    IntegrationOauth2tokensColumns,
-		PrimaryKey: []*schema.Column{IntegrationOauth2tokensColumns[0], IntegrationOauth2tokensColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "integration_oauth2tokens_integration_id",
-				Columns:    []*schema.Column{IntegrationOauth2tokensColumns[0]},
-				RefColumns: []*schema.Column{IntegrationsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "integration_oauth2tokens_oh_auth_too_token_id",
-				Columns:    []*schema.Column{IntegrationOauth2tokensColumns[1]},
-				RefColumns: []*schema.Column{OhAuthTooTokensColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// IntegrationEventsColumns holds the columns for the "integration_events" table.
 	IntegrationEventsColumns = []*schema.Column{
 		{Name: "integration_id", Type: field.TypeString},
@@ -3961,31 +3308,6 @@ var (
 				Symbol:     "integration_events_event_id",
 				Columns:    []*schema.Column{IntegrationEventsColumns[1]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// IntegrationWebhooksColumns holds the columns for the "integration_webhooks" table.
-	IntegrationWebhooksColumns = []*schema.Column{
-		{Name: "integration_id", Type: field.TypeString},
-		{Name: "webhook_id", Type: field.TypeString},
-	}
-	// IntegrationWebhooksTable holds the schema information for the "integration_webhooks" table.
-	IntegrationWebhooksTable = &schema.Table{
-		Name:       "integration_webhooks",
-		Columns:    IntegrationWebhooksColumns,
-		PrimaryKey: []*schema.Column{IntegrationWebhooksColumns[0], IntegrationWebhooksColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "integration_webhooks_integration_id",
-				Columns:    []*schema.Column{IntegrationWebhooksColumns[0]},
-				RefColumns: []*schema.Column{IntegrationsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "integration_webhooks_webhook_id",
-				Columns:    []*schema.Column{IntegrationWebhooksColumns[1]},
-				RefColumns: []*schema.Column{WebhooksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -4236,31 +3558,6 @@ var (
 				Symbol:     "narrative_viewers_group_id",
 				Columns:    []*schema.Column{NarrativeViewersColumns[1]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// OhAuthTooTokenEventsColumns holds the columns for the "oh_auth_too_token_events" table.
-	OhAuthTooTokenEventsColumns = []*schema.Column{
-		{Name: "oh_auth_too_token_id", Type: field.TypeString},
-		{Name: "event_id", Type: field.TypeString},
-	}
-	// OhAuthTooTokenEventsTable holds the schema information for the "oh_auth_too_token_events" table.
-	OhAuthTooTokenEventsTable = &schema.Table{
-		Name:       "oh_auth_too_token_events",
-		Columns:    OhAuthTooTokenEventsColumns,
-		PrimaryKey: []*schema.Column{OhAuthTooTokenEventsColumns[0], OhAuthTooTokenEventsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "oh_auth_too_token_events_oh_auth_too_token_id",
-				Columns:    []*schema.Column{OhAuthTooTokenEventsColumns[0]},
-				RefColumns: []*schema.Column{OhAuthTooTokensColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "oh_auth_too_token_events_event_id",
-				Columns:    []*schema.Column{OhAuthTooTokenEventsColumns[1]},
-				RefColumns: []*schema.Column{EventsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -5565,31 +4862,6 @@ var (
 			},
 		},
 	}
-	// WebhookEventsColumns holds the columns for the "webhook_events" table.
-	WebhookEventsColumns = []*schema.Column{
-		{Name: "webhook_id", Type: field.TypeString},
-		{Name: "event_id", Type: field.TypeString},
-	}
-	// WebhookEventsTable holds the schema information for the "webhook_events" table.
-	WebhookEventsTable = &schema.Table{
-		Name:       "webhook_events",
-		Columns:    WebhookEventsColumns,
-		PrimaryKey: []*schema.Column{WebhookEventsColumns[0], WebhookEventsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "webhook_events_webhook_id",
-				Columns:    []*schema.Column{WebhookEventsColumns[0]},
-				RefColumns: []*schema.Column{WebhooksColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "webhook_events_event_id",
-				Columns:    []*schema.Column{WebhookEventsColumns[1]},
-				RefColumns: []*schema.Column{EventsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		APITokensTable,
@@ -5604,20 +4876,12 @@ var (
 		DocumentDataTable,
 		DocumentDataHistoryTable,
 		EmailVerificationTokensTable,
-		EntitlementsTable,
-		EntitlementHistoryTable,
-		EntitlementPlansTable,
-		EntitlementPlanFeaturesTable,
-		EntitlementPlanFeatureHistoryTable,
-		EntitlementPlanHistoryTable,
 		EntitiesTable,
 		EntityHistoryTable,
 		EntityTypesTable,
 		EntityTypeHistoryTable,
 		EventsTable,
 		EventHistoryTable,
-		FeaturesTable,
-		FeatureHistoryTable,
 		FilesTable,
 		FileHistoryTable,
 		GroupsTable,
@@ -5637,9 +4901,6 @@ var (
 		NarrativeHistoryTable,
 		NotesTable,
 		NoteHistoryTable,
-		OauthProvidersTable,
-		OauthProviderHistoryTable,
-		OhAuthTooTokensTable,
 		OrgMembershipsTable,
 		OrgMembershipHistoryTable,
 		OrgSubscriptionsTable,
@@ -5673,8 +4934,6 @@ var (
 		UserSettingsTable,
 		UserSettingHistoryTable,
 		WebauthnsTable,
-		WebhooksTable,
-		WebhookHistoryTable,
 		ContactFilesTable,
 		ControlBlockedGroupsTable,
 		ControlEditorsTable,
@@ -5691,13 +4950,9 @@ var (
 		ControlObjectiveNarrativesTable,
 		ControlObjectiveTasksTable,
 		DocumentDataFilesTable,
-		EntitlementEventsTable,
-		EntitlementPlanEventsTable,
-		EntitlementPlanFeatureEventsTable,
 		EntityContactsTable,
 		EntityDocumentsTable,
 		EntityFilesTable,
-		FeatureEventsTable,
 		FileEventsTable,
 		GroupEventsTable,
 		GroupFilesTable,
@@ -5705,9 +4960,7 @@ var (
 		GroupMembershipEventsTable,
 		HushEventsTable,
 		IntegrationSecretsTable,
-		IntegrationOauth2tokensTable,
 		IntegrationEventsTable,
-		IntegrationWebhooksTable,
 		InternalPolicyBlockedGroupsTable,
 		InternalPolicyEditorsTable,
 		InternalPolicyControlobjectivesTable,
@@ -5718,7 +4971,6 @@ var (
 		NarrativeBlockedGroupsTable,
 		NarrativeEditorsTable,
 		NarrativeViewersTable,
-		OhAuthTooTokenEventsTable,
 		OrgMembershipEventsTable,
 		OrganizationControlCreatorsTable,
 		OrganizationControlObjectiveCreatorsTable,
@@ -5771,7 +5023,6 @@ var (
 		UserActionplansTable,
 		UserSubcontrolsTable,
 		UserSettingFilesTable,
-		WebhookEventsTable,
 	}
 )
 
@@ -5801,22 +5052,6 @@ func init() {
 		Table: "document_data_history",
 	}
 	EmailVerificationTokensTable.ForeignKeys[0].RefTable = UsersTable
-	EntitlementsTable.ForeignKeys[0].RefTable = EntitlementPlansTable
-	EntitlementsTable.ForeignKeys[1].RefTable = OrganizationsTable
-	EntitlementsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	EntitlementHistoryTable.Annotation = &entsql.Annotation{
-		Table: "entitlement_history",
-	}
-	EntitlementPlansTable.ForeignKeys[0].RefTable = OrganizationsTable
-	EntitlementPlanFeaturesTable.ForeignKeys[0].RefTable = EntitlementPlansTable
-	EntitlementPlanFeaturesTable.ForeignKeys[1].RefTable = FeaturesTable
-	EntitlementPlanFeaturesTable.ForeignKeys[2].RefTable = OrganizationsTable
-	EntitlementPlanFeatureHistoryTable.Annotation = &entsql.Annotation{
-		Table: "entitlement_plan_feature_history",
-	}
-	EntitlementPlanHistoryTable.Annotation = &entsql.Annotation{
-		Table: "entitlement_plan_history",
-	}
 	EntitiesTable.ForeignKeys[0].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[1].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[2].RefTable = OrganizationsTable
@@ -5829,10 +5064,6 @@ func init() {
 	}
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
-	}
-	FeaturesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	FeatureHistoryTable.Annotation = &entsql.Annotation{
-		Table: "feature_history",
 	}
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
@@ -5871,10 +5102,6 @@ func init() {
 	NotesTable.ForeignKeys[1].RefTable = OrganizationsTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
-	}
-	OauthProvidersTable.ForeignKeys[0].RefTable = OrganizationsTable
-	OauthProviderHistoryTable.Annotation = &entsql.Annotation{
-		Table: "oauth_provider_history",
 	}
 	OrgMembershipsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgMembershipsTable.ForeignKeys[1].RefTable = UsersTable
@@ -5945,10 +5172,6 @@ func init() {
 		Table: "user_setting_history",
 	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
-	WebhooksTable.ForeignKeys[0].RefTable = OrganizationsTable
-	WebhookHistoryTable.Annotation = &entsql.Annotation{
-		Table: "webhook_history",
-	}
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
 	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ControlBlockedGroupsTable.ForeignKeys[0].RefTable = ControlsTable
@@ -5981,20 +5204,12 @@ func init() {
 	ControlObjectiveTasksTable.ForeignKeys[1].RefTable = TasksTable
 	DocumentDataFilesTable.ForeignKeys[0].RefTable = DocumentDataTable
 	DocumentDataFilesTable.ForeignKeys[1].RefTable = FilesTable
-	EntitlementEventsTable.ForeignKeys[0].RefTable = EntitlementsTable
-	EntitlementEventsTable.ForeignKeys[1].RefTable = EventsTable
-	EntitlementPlanEventsTable.ForeignKeys[0].RefTable = EntitlementPlansTable
-	EntitlementPlanEventsTable.ForeignKeys[1].RefTable = EventsTable
-	EntitlementPlanFeatureEventsTable.ForeignKeys[0].RefTable = EntitlementPlanFeaturesTable
-	EntitlementPlanFeatureEventsTable.ForeignKeys[1].RefTable = EventsTable
 	EntityContactsTable.ForeignKeys[0].RefTable = EntitiesTable
 	EntityContactsTable.ForeignKeys[1].RefTable = ContactsTable
 	EntityDocumentsTable.ForeignKeys[0].RefTable = EntitiesTable
 	EntityDocumentsTable.ForeignKeys[1].RefTable = DocumentDataTable
 	EntityFilesTable.ForeignKeys[0].RefTable = EntitiesTable
 	EntityFilesTable.ForeignKeys[1].RefTable = FilesTable
-	FeatureEventsTable.ForeignKeys[0].RefTable = FeaturesTable
-	FeatureEventsTable.ForeignKeys[1].RefTable = EventsTable
 	FileEventsTable.ForeignKeys[0].RefTable = FilesTable
 	FileEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupEventsTable.ForeignKeys[0].RefTable = GroupsTable
@@ -6009,12 +5224,8 @@ func init() {
 	HushEventsTable.ForeignKeys[1].RefTable = EventsTable
 	IntegrationSecretsTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationSecretsTable.ForeignKeys[1].RefTable = HushesTable
-	IntegrationOauth2tokensTable.ForeignKeys[0].RefTable = IntegrationsTable
-	IntegrationOauth2tokensTable.ForeignKeys[1].RefTable = OhAuthTooTokensTable
 	IntegrationEventsTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationEventsTable.ForeignKeys[1].RefTable = EventsTable
-	IntegrationWebhooksTable.ForeignKeys[0].RefTable = IntegrationsTable
-	IntegrationWebhooksTable.ForeignKeys[1].RefTable = WebhooksTable
 	InternalPolicyBlockedGroupsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	InternalPolicyEditorsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
@@ -6035,8 +5246,6 @@ func init() {
 	NarrativeEditorsTable.ForeignKeys[1].RefTable = GroupsTable
 	NarrativeViewersTable.ForeignKeys[0].RefTable = NarrativesTable
 	NarrativeViewersTable.ForeignKeys[1].RefTable = GroupsTable
-	OhAuthTooTokenEventsTable.ForeignKeys[0].RefTable = OhAuthTooTokensTable
-	OhAuthTooTokenEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrgMembershipEventsTable.ForeignKeys[0].RefTable = OrgMembershipsTable
 	OrgMembershipEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrganizationControlCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
@@ -6141,6 +5350,4 @@ func init() {
 	UserSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
-	WebhookEventsTable.ForeignKeys[0].RefTable = WebhooksTable
-	WebhookEventsTable.ForeignKeys[1].RefTable = EventsTable
 }

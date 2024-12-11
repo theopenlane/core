@@ -920,35 +920,6 @@ func HasSecretsWith(preds ...predicate.Hush) predicate.Integration {
 	})
 }
 
-// HasOauth2tokens applies the HasEdge predicate on the "oauth2tokens" edge.
-func HasOauth2tokens() predicate.Integration {
-	return predicate.Integration(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, Oauth2tokensTable, Oauth2tokensPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OhAuthTooToken
-		step.Edge.Schema = schemaConfig.IntegrationOauth2tokens
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasOauth2tokensWith applies the HasEdge predicate on the "oauth2tokens" edge with a given conditions (other predicates).
-func HasOauth2tokensWith(preds ...predicate.OhAuthTooToken) predicate.Integration {
-	return predicate.Integration(func(s *sql.Selector) {
-		step := newOauth2tokensStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OhAuthTooToken
-		step.Edge.Schema = schemaConfig.IntegrationOauth2tokens
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasEvents applies the HasEdge predicate on the "events" edge.
 func HasEvents() predicate.Integration {
 	return predicate.Integration(func(s *sql.Selector) {
@@ -970,35 +941,6 @@ func HasEventsWith(preds ...predicate.Event) predicate.Integration {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.IntegrationEvents
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasWebhooks applies the HasEdge predicate on the "webhooks" edge.
-func HasWebhooks() predicate.Integration {
-	return predicate.Integration(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, WebhooksTable, WebhooksPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Webhook
-		step.Edge.Schema = schemaConfig.IntegrationWebhooks
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasWebhooksWith applies the HasEdge predicate on the "webhooks" edge with a given conditions (other predicates).
-func HasWebhooksWith(preds ...predicate.Webhook) predicate.Integration {
-	return predicate.Integration(func(s *sql.Selector) {
-		step := newWebhooksStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Webhook
-		step.Edge.Schema = schemaConfig.IntegrationWebhooks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

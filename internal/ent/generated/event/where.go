@@ -802,93 +802,6 @@ func HasInviteWith(preds ...predicate.Invite) predicate.Event {
 	})
 }
 
-// HasFeature applies the HasEdge predicate on the "feature" edge.
-func HasFeature() predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, FeatureTable, FeaturePrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Feature
-		step.Edge.Schema = schemaConfig.FeatureEvents
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasFeatureWith applies the HasEdge predicate on the "feature" edge with a given conditions (other predicates).
-func HasFeatureWith(preds ...predicate.Feature) predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := newFeatureStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Feature
-		step.Edge.Schema = schemaConfig.FeatureEvents
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEntitlementplan applies the HasEdge predicate on the "entitlementplan" edge.
-func HasEntitlementplan() predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, EntitlementplanTable, EntitlementplanPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntitlementPlan
-		step.Edge.Schema = schemaConfig.EntitlementPlanEvents
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEntitlementplanWith applies the HasEdge predicate on the "entitlementplan" edge with a given conditions (other predicates).
-func HasEntitlementplanWith(preds ...predicate.EntitlementPlan) predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := newEntitlementplanStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntitlementPlan
-		step.Edge.Schema = schemaConfig.EntitlementPlanEvents
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEntitlementplanfeature applies the HasEdge predicate on the "entitlementplanfeature" edge.
-func HasEntitlementplanfeature() predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, EntitlementplanfeatureTable, EntitlementplanfeaturePrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntitlementPlanFeature
-		step.Edge.Schema = schemaConfig.EntitlementPlanFeatureEvents
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEntitlementplanfeatureWith applies the HasEdge predicate on the "entitlementplanfeature" edge with a given conditions (other predicates).
-func HasEntitlementplanfeatureWith(preds ...predicate.EntitlementPlanFeature) predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := newEntitlementplanfeatureStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntitlementPlanFeature
-		step.Edge.Schema = schemaConfig.EntitlementPlanFeatureEvents
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasPersonalAccessToken applies the HasEdge predicate on the "personal_access_token" edge.
 func HasPersonalAccessToken() predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
@@ -910,35 +823,6 @@ func HasPersonalAccessTokenWith(preds ...predicate.PersonalAccessToken) predicat
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.PersonalAccessToken
 		step.Edge.Schema = schemaConfig.PersonalAccessTokenEvents
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasOauth2token applies the HasEdge predicate on the "oauth2token" edge.
-func HasOauth2token() predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, Oauth2tokenTable, Oauth2tokenPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OhAuthTooToken
-		step.Edge.Schema = schemaConfig.OhAuthTooTokenEvents
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasOauth2tokenWith applies the HasEdge predicate on the "oauth2token" edge with a given conditions (other predicates).
-func HasOauth2tokenWith(preds ...predicate.OhAuthTooToken) predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := newOauth2tokenStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OhAuthTooToken
-		step.Edge.Schema = schemaConfig.OhAuthTooTokenEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1026,64 +910,6 @@ func HasGroupmembershipWith(preds ...predicate.GroupMembership) predicate.Event 
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.GroupMembership
 		step.Edge.Schema = schemaConfig.GroupMembershipEvents
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEntitlement applies the HasEdge predicate on the "entitlement" edge.
-func HasEntitlement() predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, EntitlementTable, EntitlementPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entitlement
-		step.Edge.Schema = schemaConfig.EntitlementEvents
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEntitlementWith applies the HasEdge predicate on the "entitlement" edge with a given conditions (other predicates).
-func HasEntitlementWith(preds ...predicate.Entitlement) predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := newEntitlementStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entitlement
-		step.Edge.Schema = schemaConfig.EntitlementEvents
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasWebhook applies the HasEdge predicate on the "webhook" edge.
-func HasWebhook() predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, WebhookTable, WebhookPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Webhook
-		step.Edge.Schema = schemaConfig.WebhookEvents
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasWebhookWith applies the HasEdge predicate on the "webhook" edge with a given conditions (other predicates).
-func HasWebhookWith(preds ...predicate.Webhook) predicate.Event {
-	return predicate.Event(func(s *sql.Selector) {
-		step := newWebhookStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Webhook
-		step.Edge.Schema = schemaConfig.WebhookEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

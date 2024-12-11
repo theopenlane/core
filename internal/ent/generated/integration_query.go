@@ -16,10 +16,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -27,22 +25,18 @@ import (
 // IntegrationQuery is the builder for querying Integration entities.
 type IntegrationQuery struct {
 	config
-	ctx                   *QueryContext
-	order                 []integration.OrderOption
-	inters                []Interceptor
-	predicates            []predicate.Integration
-	withOwner             *OrganizationQuery
-	withSecrets           *HushQuery
-	withOauth2tokens      *OhAuthTooTokenQuery
-	withEvents            *EventQuery
-	withWebhooks          *WebhookQuery
-	withFKs               bool
-	loadTotal             []func(context.Context, []*Integration) error
-	modifiers             []func(*sql.Selector)
-	withNamedSecrets      map[string]*HushQuery
-	withNamedOauth2tokens map[string]*OhAuthTooTokenQuery
-	withNamedEvents       map[string]*EventQuery
-	withNamedWebhooks     map[string]*WebhookQuery
+	ctx              *QueryContext
+	order            []integration.OrderOption
+	inters           []Interceptor
+	predicates       []predicate.Integration
+	withOwner        *OrganizationQuery
+	withSecrets      *HushQuery
+	withEvents       *EventQuery
+	withFKs          bool
+	loadTotal        []func(context.Context, []*Integration) error
+	modifiers        []func(*sql.Selector)
+	withNamedSecrets map[string]*HushQuery
+	withNamedEvents  map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -129,31 +123,6 @@ func (iq *IntegrationQuery) QuerySecrets() *HushQuery {
 	return query
 }
 
-// QueryOauth2tokens chains the current query on the "oauth2tokens" edge.
-func (iq *IntegrationQuery) QueryOauth2tokens() *OhAuthTooTokenQuery {
-	query := (&OhAuthTooTokenClient{config: iq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := iq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := iq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(integration.Table, integration.FieldID, selector),
-			sqlgraph.To(ohauthtootoken.Table, ohauthtootoken.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, integration.Oauth2tokensTable, integration.Oauth2tokensPrimaryKey...),
-		)
-		schemaConfig := iq.schemaConfig
-		step.To.Schema = schemaConfig.OhAuthTooToken
-		step.Edge.Schema = schemaConfig.IntegrationOauth2tokens
-		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryEvents chains the current query on the "events" edge.
 func (iq *IntegrationQuery) QueryEvents() *EventQuery {
 	query := (&EventClient{config: iq.config}).Query()
@@ -173,31 +142,6 @@ func (iq *IntegrationQuery) QueryEvents() *EventQuery {
 		schemaConfig := iq.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.IntegrationEvents
-		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryWebhooks chains the current query on the "webhooks" edge.
-func (iq *IntegrationQuery) QueryWebhooks() *WebhookQuery {
-	query := (&WebhookClient{config: iq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := iq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := iq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(integration.Table, integration.FieldID, selector),
-			sqlgraph.To(webhook.Table, webhook.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, integration.WebhooksTable, integration.WebhooksPrimaryKey...),
-		)
-		schemaConfig := iq.schemaConfig
-		step.To.Schema = schemaConfig.Webhook
-		step.Edge.Schema = schemaConfig.IntegrationWebhooks
 		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -391,16 +335,14 @@ func (iq *IntegrationQuery) Clone() *IntegrationQuery {
 		return nil
 	}
 	return &IntegrationQuery{
-		config:           iq.config,
-		ctx:              iq.ctx.Clone(),
-		order:            append([]integration.OrderOption{}, iq.order...),
-		inters:           append([]Interceptor{}, iq.inters...),
-		predicates:       append([]predicate.Integration{}, iq.predicates...),
-		withOwner:        iq.withOwner.Clone(),
-		withSecrets:      iq.withSecrets.Clone(),
-		withOauth2tokens: iq.withOauth2tokens.Clone(),
-		withEvents:       iq.withEvents.Clone(),
-		withWebhooks:     iq.withWebhooks.Clone(),
+		config:      iq.config,
+		ctx:         iq.ctx.Clone(),
+		order:       append([]integration.OrderOption{}, iq.order...),
+		inters:      append([]Interceptor{}, iq.inters...),
+		predicates:  append([]predicate.Integration{}, iq.predicates...),
+		withOwner:   iq.withOwner.Clone(),
+		withSecrets: iq.withSecrets.Clone(),
+		withEvents:  iq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       iq.sql.Clone(),
 		path:      iq.path,
@@ -430,17 +372,6 @@ func (iq *IntegrationQuery) WithSecrets(opts ...func(*HushQuery)) *IntegrationQu
 	return iq
 }
 
-// WithOauth2tokens tells the query-builder to eager-load the nodes that are connected to
-// the "oauth2tokens" edge. The optional arguments are used to configure the query builder of the edge.
-func (iq *IntegrationQuery) WithOauth2tokens(opts ...func(*OhAuthTooTokenQuery)) *IntegrationQuery {
-	query := (&OhAuthTooTokenClient{config: iq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	iq.withOauth2tokens = query
-	return iq
-}
-
 // WithEvents tells the query-builder to eager-load the nodes that are connected to
 // the "events" edge. The optional arguments are used to configure the query builder of the edge.
 func (iq *IntegrationQuery) WithEvents(opts ...func(*EventQuery)) *IntegrationQuery {
@@ -449,17 +380,6 @@ func (iq *IntegrationQuery) WithEvents(opts ...func(*EventQuery)) *IntegrationQu
 		opt(query)
 	}
 	iq.withEvents = query
-	return iq
-}
-
-// WithWebhooks tells the query-builder to eager-load the nodes that are connected to
-// the "webhooks" edge. The optional arguments are used to configure the query builder of the edge.
-func (iq *IntegrationQuery) WithWebhooks(opts ...func(*WebhookQuery)) *IntegrationQuery {
-	query := (&WebhookClient{config: iq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	iq.withWebhooks = query
 	return iq
 }
 
@@ -548,12 +468,10 @@ func (iq *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = iq.withFKs
 		_spec       = iq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [3]bool{
 			iq.withOwner != nil,
 			iq.withSecrets != nil,
-			iq.withOauth2tokens != nil,
 			iq.withEvents != nil,
-			iq.withWebhooks != nil,
 		}
 	)
 	if withFKs {
@@ -595,24 +513,10 @@ func (iq *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
-	if query := iq.withOauth2tokens; query != nil {
-		if err := iq.loadOauth2tokens(ctx, query, nodes,
-			func(n *Integration) { n.Edges.Oauth2tokens = []*OhAuthTooToken{} },
-			func(n *Integration, e *OhAuthTooToken) { n.Edges.Oauth2tokens = append(n.Edges.Oauth2tokens, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := iq.withEvents; query != nil {
 		if err := iq.loadEvents(ctx, query, nodes,
 			func(n *Integration) { n.Edges.Events = []*Event{} },
 			func(n *Integration, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := iq.withWebhooks; query != nil {
-		if err := iq.loadWebhooks(ctx, query, nodes,
-			func(n *Integration) { n.Edges.Webhooks = []*Webhook{} },
-			func(n *Integration, e *Webhook) { n.Edges.Webhooks = append(n.Edges.Webhooks, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -623,24 +527,10 @@ func (iq *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
-	for name, query := range iq.withNamedOauth2tokens {
-		if err := iq.loadOauth2tokens(ctx, query, nodes,
-			func(n *Integration) { n.appendNamedOauth2tokens(name) },
-			func(n *Integration, e *OhAuthTooToken) { n.appendNamedOauth2tokens(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range iq.withNamedEvents {
 		if err := iq.loadEvents(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedEvents(name) },
 			func(n *Integration, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range iq.withNamedWebhooks {
-		if err := iq.loadWebhooks(ctx, query, nodes,
-			func(n *Integration) { n.appendNamedWebhooks(name) },
-			func(n *Integration, e *Webhook) { n.appendNamedWebhooks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -743,68 +633,6 @@ func (iq *IntegrationQuery) loadSecrets(ctx context.Context, query *HushQuery, n
 	}
 	return nil
 }
-func (iq *IntegrationQuery) loadOauth2tokens(ctx context.Context, query *OhAuthTooTokenQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *OhAuthTooToken)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Integration)
-	nids := make(map[string]map[*Integration]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(integration.Oauth2tokensTable)
-		joinT.Schema(iq.schemaConfig.IntegrationOauth2tokens)
-		s.Join(joinT).On(s.C(ohauthtootoken.FieldID), joinT.C(integration.Oauth2tokensPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(integration.Oauth2tokensPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(integration.Oauth2tokensPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Integration]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*OhAuthTooToken](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "oauth2tokens" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (iq *IntegrationQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *Event)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Integration)
@@ -860,68 +688,6 @@ func (iq *IntegrationQuery) loadEvents(ctx context.Context, query *EventQuery, n
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "events" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (iq *IntegrationQuery) loadWebhooks(ctx context.Context, query *WebhookQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *Webhook)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Integration)
-	nids := make(map[string]map[*Integration]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(integration.WebhooksTable)
-		joinT.Schema(iq.schemaConfig.IntegrationWebhooks)
-		s.Join(joinT).On(s.C(webhook.FieldID), joinT.C(integration.WebhooksPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(integration.WebhooksPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(integration.WebhooksPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Integration]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Webhook](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "webhooks" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1045,20 +811,6 @@ func (iq *IntegrationQuery) WithNamedSecrets(name string, opts ...func(*HushQuer
 	return iq
 }
 
-// WithNamedOauth2tokens tells the query-builder to eager-load the nodes that are connected to the "oauth2tokens"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (iq *IntegrationQuery) WithNamedOauth2tokens(name string, opts ...func(*OhAuthTooTokenQuery)) *IntegrationQuery {
-	query := (&OhAuthTooTokenClient{config: iq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if iq.withNamedOauth2tokens == nil {
-		iq.withNamedOauth2tokens = make(map[string]*OhAuthTooTokenQuery)
-	}
-	iq.withNamedOauth2tokens[name] = query
-	return iq
-}
-
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (iq *IntegrationQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *IntegrationQuery {
@@ -1070,20 +822,6 @@ func (iq *IntegrationQuery) WithNamedEvents(name string, opts ...func(*EventQuer
 		iq.withNamedEvents = make(map[string]*EventQuery)
 	}
 	iq.withNamedEvents[name] = query
-	return iq
-}
-
-// WithNamedWebhooks tells the query-builder to eager-load the nodes that are connected to the "webhooks"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (iq *IntegrationQuery) WithNamedWebhooks(name string, opts ...func(*WebhookQuery)) *IntegrationQuery {
-	query := (&WebhookClient{config: iq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if iq.withNamedWebhooks == nil {
-		iq.withNamedWebhooks = make(map[string]*WebhookQuery)
-	}
-	iq.withNamedWebhooks[name] = query
 	return iq
 }
 

@@ -77,38 +77,24 @@ const (
 	EdgeSetting = "setting"
 	// EdgeDocumentdata holds the string denoting the documentdata edge name in mutations.
 	EdgeDocumentdata = "documentdata"
-	// EdgeEntitlements holds the string denoting the entitlements edge name in mutations.
-	EdgeEntitlements = "entitlements"
 	// EdgeOrgsubscriptions holds the string denoting the orgsubscriptions edge name in mutations.
 	EdgeOrgsubscriptions = "orgsubscriptions"
-	// EdgeOrganizationEntitlement holds the string denoting the organization_entitlement edge name in mutations.
-	EdgeOrganizationEntitlement = "organization_entitlement"
 	// EdgePersonalAccessTokens holds the string denoting the personal_access_tokens edge name in mutations.
 	EdgePersonalAccessTokens = "personal_access_tokens"
 	// EdgeAPITokens holds the string denoting the api_tokens edge name in mutations.
 	EdgeAPITokens = "api_tokens"
-	// EdgeOauthprovider holds the string denoting the oauthprovider edge name in mutations.
-	EdgeOauthprovider = "oauthprovider"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// EdgeInvites holds the string denoting the invites edge name in mutations.
 	EdgeInvites = "invites"
 	// EdgeSubscribers holds the string denoting the subscribers edge name in mutations.
 	EdgeSubscribers = "subscribers"
-	// EdgeWebhooks holds the string denoting the webhooks edge name in mutations.
-	EdgeWebhooks = "webhooks"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
 	EdgeSecrets = "secrets"
-	// EdgeFeatures holds the string denoting the features edge name in mutations.
-	EdgeFeatures = "features"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
-	// EdgeEntitlementplans holds the string denoting the entitlementplans edge name in mutations.
-	EdgeEntitlementplans = "entitlementplans"
-	// EdgeEntitlementplanfeatures holds the string denoting the entitlementplanfeatures edge name in mutations.
-	EdgeEntitlementplanfeatures = "entitlementplanfeatures"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
 	// EdgeEntitytypes holds the string denoting the entitytypes edge name in mutations.
@@ -227,13 +213,6 @@ const (
 	DocumentdataInverseTable = "document_data"
 	// DocumentdataColumn is the table column denoting the documentdata relation/edge.
 	DocumentdataColumn = "owner_id"
-	// EntitlementsTable is the table that holds the entitlements relation/edge.
-	EntitlementsTable = "entitlements"
-	// EntitlementsInverseTable is the table name for the Entitlement entity.
-	// It exists in this package in order to avoid circular dependency with the "entitlement" package.
-	EntitlementsInverseTable = "entitlements"
-	// EntitlementsColumn is the table column denoting the entitlements relation/edge.
-	EntitlementsColumn = "owner_id"
 	// OrgsubscriptionsTable is the table that holds the orgsubscriptions relation/edge.
 	OrgsubscriptionsTable = "org_subscriptions"
 	// OrgsubscriptionsInverseTable is the table name for the OrgSubscription entity.
@@ -241,13 +220,6 @@ const (
 	OrgsubscriptionsInverseTable = "org_subscriptions"
 	// OrgsubscriptionsColumn is the table column denoting the orgsubscriptions relation/edge.
 	OrgsubscriptionsColumn = "owner_id"
-	// OrganizationEntitlementTable is the table that holds the organization_entitlement relation/edge.
-	OrganizationEntitlementTable = "entitlements"
-	// OrganizationEntitlementInverseTable is the table name for the Entitlement entity.
-	// It exists in this package in order to avoid circular dependency with the "entitlement" package.
-	OrganizationEntitlementInverseTable = "entitlements"
-	// OrganizationEntitlementColumn is the table column denoting the organization_entitlement relation/edge.
-	OrganizationEntitlementColumn = "organization_id"
 	// PersonalAccessTokensTable is the table that holds the personal_access_tokens relation/edge. The primary key declared below.
 	PersonalAccessTokensTable = "organization_personal_access_tokens"
 	// PersonalAccessTokensInverseTable is the table name for the PersonalAccessToken entity.
@@ -260,13 +232,6 @@ const (
 	APITokensInverseTable = "api_tokens"
 	// APITokensColumn is the table column denoting the api_tokens relation/edge.
 	APITokensColumn = "owner_id"
-	// OauthproviderTable is the table that holds the oauthprovider relation/edge.
-	OauthproviderTable = "oauth_providers"
-	// OauthproviderInverseTable is the table name for the OauthProvider entity.
-	// It exists in this package in order to avoid circular dependency with the "oauthprovider" package.
-	OauthproviderInverseTable = "oauth_providers"
-	// OauthproviderColumn is the table column denoting the oauthprovider relation/edge.
-	OauthproviderColumn = "owner_id"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
 	UsersTable = "org_memberships"
 	// UsersInverseTable is the table name for the User entity.
@@ -286,13 +251,6 @@ const (
 	SubscribersInverseTable = "subscribers"
 	// SubscribersColumn is the table column denoting the subscribers relation/edge.
 	SubscribersColumn = "owner_id"
-	// WebhooksTable is the table that holds the webhooks relation/edge.
-	WebhooksTable = "webhooks"
-	// WebhooksInverseTable is the table name for the Webhook entity.
-	// It exists in this package in order to avoid circular dependency with the "webhook" package.
-	WebhooksInverseTable = "webhooks"
-	// WebhooksColumn is the table column denoting the webhooks relation/edge.
-	WebhooksColumn = "owner_id"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "organization_events"
 	// EventsInverseTable is the table name for the Event entity.
@@ -303,32 +261,11 @@ const (
 	// SecretsInverseTable is the table name for the Hush entity.
 	// It exists in this package in order to avoid circular dependency with the "hush" package.
 	SecretsInverseTable = "hushes"
-	// FeaturesTable is the table that holds the features relation/edge.
-	FeaturesTable = "features"
-	// FeaturesInverseTable is the table name for the Feature entity.
-	// It exists in this package in order to avoid circular dependency with the "feature" package.
-	FeaturesInverseTable = "features"
-	// FeaturesColumn is the table column denoting the features relation/edge.
-	FeaturesColumn = "owner_id"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "organization_files"
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
-	// EntitlementplansTable is the table that holds the entitlementplans relation/edge.
-	EntitlementplansTable = "entitlement_plans"
-	// EntitlementplansInverseTable is the table name for the EntitlementPlan entity.
-	// It exists in this package in order to avoid circular dependency with the "entitlementplan" package.
-	EntitlementplansInverseTable = "entitlement_plans"
-	// EntitlementplansColumn is the table column denoting the entitlementplans relation/edge.
-	EntitlementplansColumn = "owner_id"
-	// EntitlementplanfeaturesTable is the table that holds the entitlementplanfeatures relation/edge.
-	EntitlementplanfeaturesTable = "entitlement_plan_features"
-	// EntitlementplanfeaturesInverseTable is the table name for the EntitlementPlanFeature entity.
-	// It exists in this package in order to avoid circular dependency with the "entitlementplanfeature" package.
-	EntitlementplanfeaturesInverseTable = "entitlement_plan_features"
-	// EntitlementplanfeaturesColumn is the table column denoting the entitlementplanfeatures relation/edge.
-	EntitlementplanfeaturesColumn = "owner_id"
 	// EntitiesTable is the table that holds the entities relation/edge.
 	EntitiesTable = "entities"
 	// EntitiesInverseTable is the table name for the Entity entity.
@@ -828,20 +765,6 @@ func ByDocumentdata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByEntitlementsCount orders the results by entitlements count.
-func ByEntitlementsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntitlementsStep(), opts...)
-	}
-}
-
-// ByEntitlements orders the results by entitlements terms.
-func ByEntitlements(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntitlementsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByOrgsubscriptionsCount orders the results by orgsubscriptions count.
 func ByOrgsubscriptionsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -853,20 +776,6 @@ func ByOrgsubscriptionsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByOrgsubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOrgsubscriptionsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByOrganizationEntitlementCount orders the results by organization_entitlement count.
-func ByOrganizationEntitlementCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrganizationEntitlementStep(), opts...)
-	}
-}
-
-// ByOrganizationEntitlement orders the results by organization_entitlement terms.
-func ByOrganizationEntitlement(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrganizationEntitlementStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -895,20 +804,6 @@ func ByAPITokensCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAPITokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAPITokensStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByOauthproviderCount orders the results by oauthprovider count.
-func ByOauthproviderCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOauthproviderStep(), opts...)
-	}
-}
-
-// ByOauthprovider orders the results by oauthprovider terms.
-func ByOauthprovider(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOauthproviderStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -954,20 +849,6 @@ func BySubscribers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByWebhooksCount orders the results by webhooks count.
-func ByWebhooksCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newWebhooksStep(), opts...)
-	}
-}
-
-// ByWebhooks orders the results by webhooks terms.
-func ByWebhooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newWebhooksStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByEventsCount orders the results by events count.
 func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -996,20 +877,6 @@ func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByFeaturesCount orders the results by features count.
-func ByFeaturesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFeaturesStep(), opts...)
-	}
-}
-
-// ByFeatures orders the results by features terms.
-func ByFeatures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFeaturesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1021,34 +888,6 @@ func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEntitlementplansCount orders the results by entitlementplans count.
-func ByEntitlementplansCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntitlementplansStep(), opts...)
-	}
-}
-
-// ByEntitlementplans orders the results by entitlementplans terms.
-func ByEntitlementplans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntitlementplansStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEntitlementplanfeaturesCount orders the results by entitlementplanfeatures count.
-func ByEntitlementplanfeaturesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntitlementplanfeaturesStep(), opts...)
-	}
-}
-
-// ByEntitlementplanfeatures orders the results by entitlementplanfeatures terms.
-func ByEntitlementplanfeatures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntitlementplanfeaturesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1359,25 +1198,11 @@ func newDocumentdataStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, DocumentdataTable, DocumentdataColumn),
 	)
 }
-func newEntitlementsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntitlementsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EntitlementsTable, EntitlementsColumn),
-	)
-}
 func newOrgsubscriptionsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OrgsubscriptionsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, OrgsubscriptionsTable, OrgsubscriptionsColumn),
-	)
-}
-func newOrganizationEntitlementStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrganizationEntitlementInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, OrganizationEntitlementTable, OrganizationEntitlementColumn),
 	)
 }
 func newPersonalAccessTokensStep() *sqlgraph.Step {
@@ -1392,13 +1217,6 @@ func newAPITokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(APITokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, APITokensTable, APITokensColumn),
-	)
-}
-func newOauthproviderStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OauthproviderInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, OauthproviderTable, OauthproviderColumn),
 	)
 }
 func newUsersStep() *sqlgraph.Step {
@@ -1422,13 +1240,6 @@ func newSubscribersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, SubscribersTable, SubscribersColumn),
 	)
 }
-func newWebhooksStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(WebhooksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, WebhooksTable, WebhooksColumn),
-	)
-}
 func newEventsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1443,32 +1254,11 @@ func newSecretsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
 	)
 }
-func newFeaturesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FeaturesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FeaturesTable, FeaturesColumn),
-	)
-}
 func newFilesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
-	)
-}
-func newEntitlementplansStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntitlementplansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EntitlementplansTable, EntitlementplansColumn),
-	)
-}
-func newEntitlementplanfeaturesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntitlementplanfeaturesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EntitlementplanfeaturesTable, EntitlementplanfeaturesColumn),
 	)
 }
 func newEntitiesStep() *sqlgraph.Step {

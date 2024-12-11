@@ -38,24 +38,6 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
-      ... on EntitlementSearchResult {
-        entitlements {
-          id
-          tags
-        }
-      }
-      ... on EntitlementPlanSearchResult {
-        entitlementPlans {
-          id
-          tags
-        }
-      }
-      ... on EntitlementPlanFeatureSearchResult {
-        entitlementPlanFeatures {
-          id
-          tags
-        }
-      }
       ... on EntitySearchResult {
         entities {
           description
@@ -73,12 +55,6 @@ query GlobalSearch($query: String!) {
       }
       ... on EventSearchResult {
         events {
-          id
-          tags
-        }
-      }
-      ... on FeatureSearchResult {
-        features {
           id
           tags
         }
@@ -117,18 +93,6 @@ query GlobalSearch($query: String!) {
       }
       ... on NarrativeSearchResult {
         narratives {
-          id
-          tags
-        }
-      }
-      ... on OauthProviderSearchResult {
-        oauthProviders {
-          id
-          tags
-        }
-      }
-      ... on OhAuthTooTokenSearchResult {
-        ohAuthTooTokens {
           id
           tags
         }
@@ -224,12 +188,6 @@ query GlobalSearch($query: String!) {
       }
       ... on UserSettingSearchResult {
         userSettings {
-          id
-          tags
-        }
-      }
-      ... on WebhookSearchResult {
-        webhooks {
           id
           tags
         }
