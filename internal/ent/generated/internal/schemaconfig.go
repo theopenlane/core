@@ -35,15 +35,6 @@ type SchemaConfig struct {
 	DocumentDataFiles                    string // DocumentData-files->File table.
 	DocumentDataHistory                  string // DocumentDataHistory table.
 	EmailVerificationToken               string // EmailVerificationToken table.
-	Entitlement                          string // Entitlement table.
-	EntitlementEvents                    string // Entitlement-events->Event table.
-	EntitlementHistory                   string // EntitlementHistory table.
-	EntitlementPlan                      string // EntitlementPlan table.
-	EntitlementPlanEvents                string // EntitlementPlan-events->Event table.
-	EntitlementPlanFeature               string // EntitlementPlanFeature table.
-	EntitlementPlanFeatureEvents         string // EntitlementPlanFeature-events->Event table.
-	EntitlementPlanFeatureHistory        string // EntitlementPlanFeatureHistory table.
-	EntitlementPlanHistory               string // EntitlementPlanHistory table.
 	Entity                               string // Entity table.
 	EntityContacts                       string // Entity-contacts->Contact table.
 	EntityDocuments                      string // Entity-documents->DocumentData table.
@@ -53,9 +44,6 @@ type SchemaConfig struct {
 	EntityTypeHistory                    string // EntityTypeHistory table.
 	Event                                string // Event table.
 	EventHistory                         string // EventHistory table.
-	Feature                              string // Feature table.
-	FeatureEvents                        string // Feature-events->Event table.
-	FeatureHistory                       string // FeatureHistory table.
 	File                                 string // File table.
 	FileEvents                           string // File-events->Event table.
 	FileHistory                          string // FileHistory table.
@@ -74,9 +62,7 @@ type SchemaConfig struct {
 	HushHistory                          string // HushHistory table.
 	Integration                          string // Integration table.
 	IntegrationSecrets                   string // Integration-secrets->Hush table.
-	IntegrationOauth2tokens              string // Integration-oauth2tokens->OhAuthTooToken table.
 	IntegrationEvents                    string // Integration-events->Event table.
-	IntegrationWebhooks                  string // Integration-webhooks->Webhook table.
 	IntegrationHistory                   string // IntegrationHistory table.
 	InternalPolicy                       string // InternalPolicy table.
 	InternalPolicyBlockedGroups          string // InternalPolicy-blocked_groups->Group table.
@@ -95,10 +81,6 @@ type SchemaConfig struct {
 	NarrativeHistory                     string // NarrativeHistory table.
 	Note                                 string // Note table.
 	NoteHistory                          string // NoteHistory table.
-	OauthProvider                        string // OauthProvider table.
-	OauthProviderHistory                 string // OauthProviderHistory table.
-	OhAuthTooToken                       string // OhAuthTooToken table.
-	OhAuthTooTokenEvents                 string // OhAuthTooToken-events->Event table.
 	OrgMembership                        string // OrgMembership table.
 	OrgMembershipEvents                  string // OrgMembership-events->Event table.
 	OrgMembershipHistory                 string // OrgMembershipHistory table.
@@ -184,9 +166,6 @@ type SchemaConfig struct {
 	UserSettingFiles                     string // UserSetting-files->File table.
 	UserSettingHistory                   string // UserSettingHistory table.
 	Webauthn                             string // Webauthn table.
-	Webhook                              string // Webhook table.
-	WebhookEvents                        string // Webhook-events->Event table.
-	WebhookHistory                       string // WebhookHistory table.
 }
 
 type schemaCtxKey struct{}

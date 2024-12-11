@@ -48,10 +48,7 @@ func (Integration) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("secrets", Hush.Type).
 			Comment("the secrets associated with the integration"),
-		edge.To("oauth2tokens", OhAuthTooToken.Type).
-			Comment("the oauth2 tokens associated with the integration"),
 		edge.To("events", Event.Type),
-		edge.To("webhooks", Webhook.Type),
 	}
 }
 

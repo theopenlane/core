@@ -24,20 +24,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/entitlement"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeaturehistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
-	"github.com/theopenlane/core/internal/ent/generated/feature"
-	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -57,9 +49,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
-	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
-	"github.com/theopenlane/core/internal/ent/generated/oauthproviderhistory"
-	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -93,8 +82,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
-	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -155,89 +142,76 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			apitoken.Table:                      apitoken.ValidColumn,
-			actionplan.Table:                    actionplan.ValidColumn,
-			actionplanhistory.Table:             actionplanhistory.ValidColumn,
-			contact.Table:                       contact.ValidColumn,
-			contacthistory.Table:                contacthistory.ValidColumn,
-			control.Table:                       control.ValidColumn,
-			controlhistory.Table:                controlhistory.ValidColumn,
-			controlobjective.Table:              controlobjective.ValidColumn,
-			controlobjectivehistory.Table:       controlobjectivehistory.ValidColumn,
-			documentdata.Table:                  documentdata.ValidColumn,
-			documentdatahistory.Table:           documentdatahistory.ValidColumn,
-			emailverificationtoken.Table:        emailverificationtoken.ValidColumn,
-			entitlement.Table:                   entitlement.ValidColumn,
-			entitlementhistory.Table:            entitlementhistory.ValidColumn,
-			entitlementplan.Table:               entitlementplan.ValidColumn,
-			entitlementplanfeature.Table:        entitlementplanfeature.ValidColumn,
-			entitlementplanfeaturehistory.Table: entitlementplanfeaturehistory.ValidColumn,
-			entitlementplanhistory.Table:        entitlementplanhistory.ValidColumn,
-			entity.Table:                        entity.ValidColumn,
-			entityhistory.Table:                 entityhistory.ValidColumn,
-			entitytype.Table:                    entitytype.ValidColumn,
-			entitytypehistory.Table:             entitytypehistory.ValidColumn,
-			event.Table:                         event.ValidColumn,
-			eventhistory.Table:                  eventhistory.ValidColumn,
-			feature.Table:                       feature.ValidColumn,
-			featurehistory.Table:                featurehistory.ValidColumn,
-			file.Table:                          file.ValidColumn,
-			filehistory.Table:                   filehistory.ValidColumn,
-			group.Table:                         group.ValidColumn,
-			grouphistory.Table:                  grouphistory.ValidColumn,
-			groupmembership.Table:               groupmembership.ValidColumn,
-			groupmembershiphistory.Table:        groupmembershiphistory.ValidColumn,
-			groupsetting.Table:                  groupsetting.ValidColumn,
-			groupsettinghistory.Table:           groupsettinghistory.ValidColumn,
-			hush.Table:                          hush.ValidColumn,
-			hushhistory.Table:                   hushhistory.ValidColumn,
-			integration.Table:                   integration.ValidColumn,
-			integrationhistory.Table:            integrationhistory.ValidColumn,
-			internalpolicy.Table:                internalpolicy.ValidColumn,
-			internalpolicyhistory.Table:         internalpolicyhistory.ValidColumn,
-			invite.Table:                        invite.ValidColumn,
-			narrative.Table:                     narrative.ValidColumn,
-			narrativehistory.Table:              narrativehistory.ValidColumn,
-			note.Table:                          note.ValidColumn,
-			notehistory.Table:                   notehistory.ValidColumn,
-			oauthprovider.Table:                 oauthprovider.ValidColumn,
-			oauthproviderhistory.Table:          oauthproviderhistory.ValidColumn,
-			ohauthtootoken.Table:                ohauthtootoken.ValidColumn,
-			orgmembership.Table:                 orgmembership.ValidColumn,
-			orgmembershiphistory.Table:          orgmembershiphistory.ValidColumn,
-			orgsubscription.Table:               orgsubscription.ValidColumn,
-			orgsubscriptionhistory.Table:        orgsubscriptionhistory.ValidColumn,
-			organization.Table:                  organization.ValidColumn,
-			organizationhistory.Table:           organizationhistory.ValidColumn,
-			organizationsetting.Table:           organizationsetting.ValidColumn,
-			organizationsettinghistory.Table:    organizationsettinghistory.ValidColumn,
-			passwordresettoken.Table:            passwordresettoken.ValidColumn,
-			personalaccesstoken.Table:           personalaccesstoken.ValidColumn,
-			procedure.Table:                     procedure.ValidColumn,
-			procedurehistory.Table:              procedurehistory.ValidColumn,
-			program.Table:                       program.ValidColumn,
-			programhistory.Table:                programhistory.ValidColumn,
-			programmembership.Table:             programmembership.ValidColumn,
-			programmembershiphistory.Table:      programmembershiphistory.ValidColumn,
-			risk.Table:                          risk.ValidColumn,
-			riskhistory.Table:                   riskhistory.ValidColumn,
-			standard.Table:                      standard.ValidColumn,
-			standardhistory.Table:               standardhistory.ValidColumn,
-			subcontrol.Table:                    subcontrol.ValidColumn,
-			subcontrolhistory.Table:             subcontrolhistory.ValidColumn,
-			subscriber.Table:                    subscriber.ValidColumn,
-			tfasetting.Table:                    tfasetting.ValidColumn,
-			task.Table:                          task.ValidColumn,
-			taskhistory.Table:                   taskhistory.ValidColumn,
-			template.Table:                      template.ValidColumn,
-			templatehistory.Table:               templatehistory.ValidColumn,
-			user.Table:                          user.ValidColumn,
-			userhistory.Table:                   userhistory.ValidColumn,
-			usersetting.Table:                   usersetting.ValidColumn,
-			usersettinghistory.Table:            usersettinghistory.ValidColumn,
-			webauthn.Table:                      webauthn.ValidColumn,
-			webhook.Table:                       webhook.ValidColumn,
-			webhookhistory.Table:                webhookhistory.ValidColumn,
+			apitoken.Table:                   apitoken.ValidColumn,
+			actionplan.Table:                 actionplan.ValidColumn,
+			actionplanhistory.Table:          actionplanhistory.ValidColumn,
+			contact.Table:                    contact.ValidColumn,
+			contacthistory.Table:             contacthistory.ValidColumn,
+			control.Table:                    control.ValidColumn,
+			controlhistory.Table:             controlhistory.ValidColumn,
+			controlobjective.Table:           controlobjective.ValidColumn,
+			controlobjectivehistory.Table:    controlobjectivehistory.ValidColumn,
+			documentdata.Table:               documentdata.ValidColumn,
+			documentdatahistory.Table:        documentdatahistory.ValidColumn,
+			emailverificationtoken.Table:     emailverificationtoken.ValidColumn,
+			entity.Table:                     entity.ValidColumn,
+			entityhistory.Table:              entityhistory.ValidColumn,
+			entitytype.Table:                 entitytype.ValidColumn,
+			entitytypehistory.Table:          entitytypehistory.ValidColumn,
+			event.Table:                      event.ValidColumn,
+			eventhistory.Table:               eventhistory.ValidColumn,
+			file.Table:                       file.ValidColumn,
+			filehistory.Table:                filehistory.ValidColumn,
+			group.Table:                      group.ValidColumn,
+			grouphistory.Table:               grouphistory.ValidColumn,
+			groupmembership.Table:            groupmembership.ValidColumn,
+			groupmembershiphistory.Table:     groupmembershiphistory.ValidColumn,
+			groupsetting.Table:               groupsetting.ValidColumn,
+			groupsettinghistory.Table:        groupsettinghistory.ValidColumn,
+			hush.Table:                       hush.ValidColumn,
+			hushhistory.Table:                hushhistory.ValidColumn,
+			integration.Table:                integration.ValidColumn,
+			integrationhistory.Table:         integrationhistory.ValidColumn,
+			internalpolicy.Table:             internalpolicy.ValidColumn,
+			internalpolicyhistory.Table:      internalpolicyhistory.ValidColumn,
+			invite.Table:                     invite.ValidColumn,
+			narrative.Table:                  narrative.ValidColumn,
+			narrativehistory.Table:           narrativehistory.ValidColumn,
+			note.Table:                       note.ValidColumn,
+			notehistory.Table:                notehistory.ValidColumn,
+			orgmembership.Table:              orgmembership.ValidColumn,
+			orgmembershiphistory.Table:       orgmembershiphistory.ValidColumn,
+			orgsubscription.Table:            orgsubscription.ValidColumn,
+			orgsubscriptionhistory.Table:     orgsubscriptionhistory.ValidColumn,
+			organization.Table:               organization.ValidColumn,
+			organizationhistory.Table:        organizationhistory.ValidColumn,
+			organizationsetting.Table:        organizationsetting.ValidColumn,
+			organizationsettinghistory.Table: organizationsettinghistory.ValidColumn,
+			passwordresettoken.Table:         passwordresettoken.ValidColumn,
+			personalaccesstoken.Table:        personalaccesstoken.ValidColumn,
+			procedure.Table:                  procedure.ValidColumn,
+			procedurehistory.Table:           procedurehistory.ValidColumn,
+			program.Table:                    program.ValidColumn,
+			programhistory.Table:             programhistory.ValidColumn,
+			programmembership.Table:          programmembership.ValidColumn,
+			programmembershiphistory.Table:   programmembershiphistory.ValidColumn,
+			risk.Table:                       risk.ValidColumn,
+			riskhistory.Table:                riskhistory.ValidColumn,
+			standard.Table:                   standard.ValidColumn,
+			standardhistory.Table:            standardhistory.ValidColumn,
+			subcontrol.Table:                 subcontrol.ValidColumn,
+			subcontrolhistory.Table:          subcontrolhistory.ValidColumn,
+			subscriber.Table:                 subscriber.ValidColumn,
+			tfasetting.Table:                 tfasetting.ValidColumn,
+			task.Table:                       task.ValidColumn,
+			taskhistory.Table:                taskhistory.ValidColumn,
+			template.Table:                   template.ValidColumn,
+			templatehistory.Table:            templatehistory.ValidColumn,
+			user.Table:                       user.ValidColumn,
+			userhistory.Table:                userhistory.ValidColumn,
+			usersetting.Table:                usersetting.ValidColumn,
+			usersettinghistory.Table:         usersettinghistory.ValidColumn,
+			webauthn.Table:                   webauthn.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

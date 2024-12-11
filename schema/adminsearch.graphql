@@ -54,33 +54,6 @@ extend type Query{
         query: String!
     ): DocumentDataSearchResult
     """
-    Search across Entitlement objects
-    """
-    adminEntitlementSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): EntitlementSearchResult
-    """
-    Search across EntitlementPlan objects
-    """
-    adminEntitlementPlanSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): EntitlementPlanSearchResult
-    """
-    Search across EntitlementPlanFeature objects
-    """
-    adminEntitlementPlanFeatureSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): EntitlementPlanFeatureSearchResult
-    """
     Search across Entity objects
     """
     adminEntitySearch(
@@ -107,15 +80,6 @@ extend type Query{
         """
         query: String!
     ): EventSearchResult
-    """
-    Search across Feature objects
-    """
-    adminFeatureSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): FeatureSearchResult
     """
     Search across File objects
     """
@@ -170,24 +134,6 @@ extend type Query{
         """
         query: String!
     ): NarrativeSearchResult
-    """
-    Search across OauthProvider objects
-    """
-    adminOauthProviderSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): OauthProviderSearchResult
-    """
-    Search across OhAuthTooToken objects
-    """
-    adminOhAuthTooTokenSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): OhAuthTooTokenSearchResult
     """
     Search across OrgSubscription objects
     """
@@ -323,13 +269,4 @@ extend type Query{
         """
         query: String!
     ): UserSettingSearchResult
-    """
-    Search across Webhook objects
-    """
-    adminWebhookSearch(
-        """
-        Search query
-        """
-        query: String!
-    ): WebhookSearchResult
 }

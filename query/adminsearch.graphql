@@ -87,46 +87,6 @@ query AdminSearch($query: String!) {
           data
         }
       }
-      ... on EntitlementSearchResult {
-        entitlements {
-          id
-          tags
-          deletedBy
-          ownerID
-          planID
-          organizationID
-          externalCustomerID
-          externalSubscriptionID
-        }
-      }
-      ... on EntitlementPlanSearchResult {
-        entitlementPlans {
-          id
-          deletedBy
-          tags
-          ownerID
-          displayName
-          name
-          description
-          version
-          metadata
-          stripeProductID
-          stripePriceID
-        }
-      }
-      ... on EntitlementPlanFeatureSearchResult {
-        entitlementPlanFeatures {
-          id
-          deletedBy
-          tags
-          ownerID
-          metadata
-          planID
-          stripeProductID
-          featureID
-          stripeFeatureID
-        }
-      }
       ... on EntitySearchResult {
         entities {
           id
@@ -158,19 +118,6 @@ query AdminSearch($query: String!) {
           correlationID
           eventType
           metadata
-        }
-      }
-      ... on FeatureSearchResult {
-        features {
-          deletedBy
-          id
-          tags
-          ownerID
-          name
-          displayName
-          description
-          metadata
-          stripeFeatureID
         }
       }
       ... on FileSearchResult {
@@ -245,38 +192,6 @@ query AdminSearch($query: String!) {
           description
           satisfies
           details
-        }
-      }
-      ... on OauthProviderSearchResult {
-        oauthProviders {
-          id
-          tags
-          deletedBy
-          ownerID
-          name
-          clientID
-          clientSecret
-          redirectURL
-          scopes
-          authURL
-          tokenURL
-          infoURL
-        }
-      }
-      ... on OhAuthTooTokenSearchResult {
-        ohAuthTooTokens {
-          id
-          tags
-          clientID
-          scopes
-          nonce
-          claimsUserID
-          claimsUsername
-          claimsEmail
-          claimsGroups
-          claimsPreferredUsername
-          connectorID
-          connectorData
         }
       }
       ... on OrgSubscriptionSearchResult {
@@ -471,18 +386,6 @@ query AdminSearch($query: String!) {
           tags
           deletedBy
           userID
-        }
-      }
-      ... on WebhookSearchResult {
-        webhooks {
-          id
-          tags
-          deletedBy
-          ownerID
-          name
-          destinationURL
-          lastError
-          lastResponse
         }
       }
     }

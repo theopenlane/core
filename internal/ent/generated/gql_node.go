@@ -20,20 +20,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlement"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeaturehistory"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
-	"github.com/theopenlane/core/internal/ent/generated/feature"
-	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -53,9 +45,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
-	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
-	"github.com/theopenlane/core/internal/ent/generated/oauthproviderhistory"
-	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -87,8 +76,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
-	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
 )
 
 // Noder wraps the basic Node method.
@@ -151,36 +138,6 @@ var documentdatahistoryImplementors = []string{"DocumentDataHistory", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*DocumentDataHistory) IsNode() {}
 
-var entitlementImplementors = []string{"Entitlement", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*Entitlement) IsNode() {}
-
-var entitlementhistoryImplementors = []string{"EntitlementHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*EntitlementHistory) IsNode() {}
-
-var entitlementplanImplementors = []string{"EntitlementPlan", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*EntitlementPlan) IsNode() {}
-
-var entitlementplanfeatureImplementors = []string{"EntitlementPlanFeature", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*EntitlementPlanFeature) IsNode() {}
-
-var entitlementplanfeaturehistoryImplementors = []string{"EntitlementPlanFeatureHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*EntitlementPlanFeatureHistory) IsNode() {}
-
-var entitlementplanhistoryImplementors = []string{"EntitlementPlanHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*EntitlementPlanHistory) IsNode() {}
-
 var entityImplementors = []string{"Entity", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -210,16 +167,6 @@ var eventhistoryImplementors = []string{"EventHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*EventHistory) IsNode() {}
-
-var featureImplementors = []string{"Feature", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*Feature) IsNode() {}
-
-var featurehistoryImplementors = []string{"FeatureHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*FeatureHistory) IsNode() {}
 
 var fileImplementors = []string{"File", "Node"}
 
@@ -315,21 +262,6 @@ var notehistoryImplementors = []string{"NoteHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*NoteHistory) IsNode() {}
-
-var oauthproviderImplementors = []string{"OauthProvider", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*OauthProvider) IsNode() {}
-
-var oauthproviderhistoryImplementors = []string{"OauthProviderHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*OauthProviderHistory) IsNode() {}
-
-var ohauthtootokenImplementors = []string{"OhAuthTooToken", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*OhAuthTooToken) IsNode() {}
 
 var orgmembershipImplementors = []string{"OrgMembership", "Node"}
 
@@ -485,16 +417,6 @@ var usersettinghistoryImplementors = []string{"UserSettingHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*UserSettingHistory) IsNode() {}
-
-var webhookImplementors = []string{"Webhook", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*Webhook) IsNode() {}
-
-var webhookhistoryImplementors = []string{"WebhookHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*WebhookHistory) IsNode() {}
 
 var errNodeInvalidID = &NotFoundError{"node"}
 
@@ -653,60 +575,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case entitlement.Table:
-		query := c.Entitlement.Query().
-			Where(entitlement.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, entitlementImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case entitlementhistory.Table:
-		query := c.EntitlementHistory.Query().
-			Where(entitlementhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, entitlementhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case entitlementplan.Table:
-		query := c.EntitlementPlan.Query().
-			Where(entitlementplan.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, entitlementplanImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case entitlementplanfeature.Table:
-		query := c.EntitlementPlanFeature.Query().
-			Where(entitlementplanfeature.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, entitlementplanfeatureImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case entitlementplanfeaturehistory.Table:
-		query := c.EntitlementPlanFeatureHistory.Query().
-			Where(entitlementplanfeaturehistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, entitlementplanfeaturehistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case entitlementplanhistory.Table:
-		query := c.EntitlementPlanHistory.Query().
-			Where(entitlementplanhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, entitlementplanhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	case entity.Table:
 		query := c.Entity.Query().
 			Where(entity.ID(id))
@@ -757,24 +625,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(eventhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, eventhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case feature.Table:
-		query := c.Feature.Query().
-			Where(feature.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, featureImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case featurehistory.Table:
-		query := c.FeatureHistory.Query().
-			Where(featurehistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, featurehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -946,33 +796,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(notehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notehistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case oauthprovider.Table:
-		query := c.OauthProvider.Query().
-			Where(oauthprovider.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, oauthproviderImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case oauthproviderhistory.Table:
-		query := c.OauthProviderHistory.Query().
-			Where(oauthproviderhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, oauthproviderhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case ohauthtootoken.Table:
-		query := c.OhAuthTooToken.Query().
-			Where(ohauthtootoken.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, ohauthtootokenImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1256,24 +1079,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case webhook.Table:
-		query := c.Webhook.Query().
-			Where(webhook.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, webhookImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case webhookhistory.Table:
-		query := c.WebhookHistory.Query().
-			Where(webhookhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, webhookhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	default:
 		return nil, fmt.Errorf("cannot resolve noder from table %q: %w", table, errNodeInvalidID)
 	}
@@ -1523,102 +1328,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
-	case entitlement.Table:
-		query := c.Entitlement.Query().
-			Where(entitlement.IDIn(ids...))
-		query, err := query.CollectFields(ctx, entitlementImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case entitlementhistory.Table:
-		query := c.EntitlementHistory.Query().
-			Where(entitlementhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, entitlementhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case entitlementplan.Table:
-		query := c.EntitlementPlan.Query().
-			Where(entitlementplan.IDIn(ids...))
-		query, err := query.CollectFields(ctx, entitlementplanImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case entitlementplanfeature.Table:
-		query := c.EntitlementPlanFeature.Query().
-			Where(entitlementplanfeature.IDIn(ids...))
-		query, err := query.CollectFields(ctx, entitlementplanfeatureImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case entitlementplanfeaturehistory.Table:
-		query := c.EntitlementPlanFeatureHistory.Query().
-			Where(entitlementplanfeaturehistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, entitlementplanfeaturehistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case entitlementplanhistory.Table:
-		query := c.EntitlementPlanHistory.Query().
-			Where(entitlementplanhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, entitlementplanhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case entity.Table:
 		query := c.Entity.Query().
 			Where(entity.IDIn(ids...))
@@ -1703,38 +1412,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.EventHistory.Query().
 			Where(eventhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, eventhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case feature.Table:
-		query := c.Feature.Query().
-			Where(feature.IDIn(ids...))
-		query, err := query.CollectFields(ctx, featureImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case featurehistory.Table:
-		query := c.FeatureHistory.Query().
-			Where(featurehistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, featurehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -2039,54 +1716,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.NoteHistory.Query().
 			Where(notehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, notehistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case oauthprovider.Table:
-		query := c.OauthProvider.Query().
-			Where(oauthprovider.IDIn(ids...))
-		query, err := query.CollectFields(ctx, oauthproviderImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case oauthproviderhistory.Table:
-		query := c.OauthProviderHistory.Query().
-			Where(oauthproviderhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, oauthproviderhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case ohauthtootoken.Table:
-		query := c.OhAuthTooToken.Query().
-			Where(ohauthtootoken.IDIn(ids...))
-		query, err := query.CollectFields(ctx, ohauthtootokenImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -2583,38 +2212,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.UserSettingHistory.Query().
 			Where(usersettinghistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, usersettinghistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case webhook.Table:
-		query := c.Webhook.Query().
-			Where(webhook.IDIn(ids...))
-		query, err := query.CollectFields(ctx, webhookImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case webhookhistory.Table:
-		query := c.WebhookHistory.Query().
-			Where(webhookhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, webhookhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

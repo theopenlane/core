@@ -15,13 +15,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/entitlement"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/feature"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -30,7 +26,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -44,7 +39,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
 )
 
 // OrganizationCreate is the builder for creating a Organization entity.
@@ -510,21 +504,6 @@ func (oc *OrganizationCreate) AddDocumentdata(d ...*DocumentData) *OrganizationC
 	return oc.AddDocumentdatumIDs(ids...)
 }
 
-// AddEntitlementIDs adds the "entitlements" edge to the Entitlement entity by IDs.
-func (oc *OrganizationCreate) AddEntitlementIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEntitlementIDs(ids...)
-	return oc
-}
-
-// AddEntitlements adds the "entitlements" edges to the Entitlement entity.
-func (oc *OrganizationCreate) AddEntitlements(e ...*Entitlement) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return oc.AddEntitlementIDs(ids...)
-}
-
 // AddOrgsubscriptionIDs adds the "orgsubscriptions" edge to the OrgSubscription entity by IDs.
 func (oc *OrganizationCreate) AddOrgsubscriptionIDs(ids ...string) *OrganizationCreate {
 	oc.mutation.AddOrgsubscriptionIDs(ids...)
@@ -538,21 +517,6 @@ func (oc *OrganizationCreate) AddOrgsubscriptions(o ...*OrgSubscription) *Organi
 		ids[i] = o[i].ID
 	}
 	return oc.AddOrgsubscriptionIDs(ids...)
-}
-
-// AddOrganizationEntitlementIDs adds the "organization_entitlement" edge to the Entitlement entity by IDs.
-func (oc *OrganizationCreate) AddOrganizationEntitlementIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddOrganizationEntitlementIDs(ids...)
-	return oc
-}
-
-// AddOrganizationEntitlement adds the "organization_entitlement" edges to the Entitlement entity.
-func (oc *OrganizationCreate) AddOrganizationEntitlement(e ...*Entitlement) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return oc.AddOrganizationEntitlementIDs(ids...)
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
@@ -583,21 +547,6 @@ func (oc *OrganizationCreate) AddAPITokens(a ...*APIToken) *OrganizationCreate {
 		ids[i] = a[i].ID
 	}
 	return oc.AddAPITokenIDs(ids...)
-}
-
-// AddOauthproviderIDs adds the "oauthprovider" edge to the OauthProvider entity by IDs.
-func (oc *OrganizationCreate) AddOauthproviderIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddOauthproviderIDs(ids...)
-	return oc
-}
-
-// AddOauthprovider adds the "oauthprovider" edges to the OauthProvider entity.
-func (oc *OrganizationCreate) AddOauthprovider(o ...*OauthProvider) *OrganizationCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return oc.AddOauthproviderIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
@@ -645,21 +594,6 @@ func (oc *OrganizationCreate) AddSubscribers(s ...*Subscriber) *OrganizationCrea
 	return oc.AddSubscriberIDs(ids...)
 }
 
-// AddWebhookIDs adds the "webhooks" edge to the Webhook entity by IDs.
-func (oc *OrganizationCreate) AddWebhookIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddWebhookIDs(ids...)
-	return oc
-}
-
-// AddWebhooks adds the "webhooks" edges to the Webhook entity.
-func (oc *OrganizationCreate) AddWebhooks(w ...*Webhook) *OrganizationCreate {
-	ids := make([]string, len(w))
-	for i := range w {
-		ids[i] = w[i].ID
-	}
-	return oc.AddWebhookIDs(ids...)
-}
-
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (oc *OrganizationCreate) AddEventIDs(ids ...string) *OrganizationCreate {
 	oc.mutation.AddEventIDs(ids...)
@@ -690,21 +624,6 @@ func (oc *OrganizationCreate) AddSecrets(h ...*Hush) *OrganizationCreate {
 	return oc.AddSecretIDs(ids...)
 }
 
-// AddFeatureIDs adds the "features" edge to the Feature entity by IDs.
-func (oc *OrganizationCreate) AddFeatureIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddFeatureIDs(ids...)
-	return oc
-}
-
-// AddFeatures adds the "features" edges to the Feature entity.
-func (oc *OrganizationCreate) AddFeatures(f ...*Feature) *OrganizationCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
-	}
-	return oc.AddFeatureIDs(ids...)
-}
-
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (oc *OrganizationCreate) AddFileIDs(ids ...string) *OrganizationCreate {
 	oc.mutation.AddFileIDs(ids...)
@@ -718,36 +637,6 @@ func (oc *OrganizationCreate) AddFiles(f ...*File) *OrganizationCreate {
 		ids[i] = f[i].ID
 	}
 	return oc.AddFileIDs(ids...)
-}
-
-// AddEntitlementplanIDs adds the "entitlementplans" edge to the EntitlementPlan entity by IDs.
-func (oc *OrganizationCreate) AddEntitlementplanIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEntitlementplanIDs(ids...)
-	return oc
-}
-
-// AddEntitlementplans adds the "entitlementplans" edges to the EntitlementPlan entity.
-func (oc *OrganizationCreate) AddEntitlementplans(e ...*EntitlementPlan) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return oc.AddEntitlementplanIDs(ids...)
-}
-
-// AddEntitlementplanfeatureIDs adds the "entitlementplanfeatures" edge to the EntitlementPlanFeature entity by IDs.
-func (oc *OrganizationCreate) AddEntitlementplanfeatureIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEntitlementplanfeatureIDs(ids...)
-	return oc
-}
-
-// AddEntitlementplanfeatures adds the "entitlementplanfeatures" edges to the EntitlementPlanFeature entity.
-func (oc *OrganizationCreate) AddEntitlementplanfeatures(e ...*EntitlementPlanFeature) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return oc.AddEntitlementplanfeatureIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
@@ -1438,23 +1327,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.EntitlementsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EntitlementsTable,
-			Columns: []string{organization.EntitlementsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = oc.schemaConfig.Entitlement
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := oc.mutation.OrgsubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1467,23 +1339,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.OrgSubscription
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := oc.mutation.OrganizationEntitlementIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.OrganizationEntitlementTable,
-			Columns: []string{organization.OrganizationEntitlementColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = oc.schemaConfig.Entitlement
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1518,23 +1373,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.APIToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := oc.mutation.OauthproviderIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.OauthproviderTable,
-			Columns: []string{organization.OauthproviderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(oauthprovider.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = oc.schemaConfig.OauthProvider
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1598,23 +1436,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.WebhooksIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.WebhooksTable,
-			Columns: []string{organization.WebhooksColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = oc.schemaConfig.Webhook
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := oc.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1649,23 +1470,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.FeaturesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.FeaturesTable,
-			Columns: []string{organization.FeaturesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(feature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = oc.schemaConfig.Feature
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := oc.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1678,40 +1482,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.OrganizationFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := oc.mutation.EntitlementplansIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EntitlementplansTable,
-			Columns: []string{organization.EntitlementplansColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = oc.schemaConfig.EntitlementPlan
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := oc.mutation.EntitlementplanfeaturesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EntitlementplanfeaturesTable,
-			Columns: []string{organization.EntitlementplanfeaturesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplanfeature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = oc.schemaConfig.EntitlementPlanFeature
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

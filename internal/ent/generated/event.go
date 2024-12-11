@@ -56,53 +56,35 @@ type EventEdges struct {
 	Organization []*Organization `json:"organization,omitempty"`
 	// Invite holds the value of the invite edge.
 	Invite []*Invite `json:"invite,omitempty"`
-	// Feature holds the value of the feature edge.
-	Feature []*Feature `json:"feature,omitempty"`
-	// Entitlementplan holds the value of the entitlementplan edge.
-	Entitlementplan []*EntitlementPlan `json:"entitlementplan,omitempty"`
-	// Entitlementplanfeature holds the value of the entitlementplanfeature edge.
-	Entitlementplanfeature []*EntitlementPlanFeature `json:"entitlementplanfeature,omitempty"`
 	// PersonalAccessToken holds the value of the personal_access_token edge.
 	PersonalAccessToken []*PersonalAccessToken `json:"personal_access_token,omitempty"`
-	// Oauth2token holds the value of the oauth2token edge.
-	Oauth2token []*OhAuthTooToken `json:"oauth2token,omitempty"`
 	// Hush holds the value of the hush edge.
 	Hush []*Hush `json:"hush,omitempty"`
 	// Orgmembership holds the value of the orgmembership edge.
 	Orgmembership []*OrgMembership `json:"orgmembership,omitempty"`
 	// Groupmembership holds the value of the groupmembership edge.
 	Groupmembership []*GroupMembership `json:"groupmembership,omitempty"`
-	// Entitlement holds the value of the entitlement edge.
-	Entitlement []*Entitlement `json:"entitlement,omitempty"`
-	// Webhook holds the value of the webhook edge.
-	Webhook []*Webhook `json:"webhook,omitempty"`
 	// Subscriber holds the value of the subscriber edge.
 	Subscriber []*Subscriber `json:"subscriber,omitempty"`
 	// File holds the value of the file edge.
 	File []*File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [11]map[string]int
 
-	namedUser                   map[string][]*User
-	namedGroup                  map[string][]*Group
-	namedIntegration            map[string][]*Integration
-	namedOrganization           map[string][]*Organization
-	namedInvite                 map[string][]*Invite
-	namedFeature                map[string][]*Feature
-	namedEntitlementplan        map[string][]*EntitlementPlan
-	namedEntitlementplanfeature map[string][]*EntitlementPlanFeature
-	namedPersonalAccessToken    map[string][]*PersonalAccessToken
-	namedOauth2token            map[string][]*OhAuthTooToken
-	namedHush                   map[string][]*Hush
-	namedOrgmembership          map[string][]*OrgMembership
-	namedGroupmembership        map[string][]*GroupMembership
-	namedEntitlement            map[string][]*Entitlement
-	namedWebhook                map[string][]*Webhook
-	namedSubscriber             map[string][]*Subscriber
-	namedFile                   map[string][]*File
+	namedUser                map[string][]*User
+	namedGroup               map[string][]*Group
+	namedIntegration         map[string][]*Integration
+	namedOrganization        map[string][]*Organization
+	namedInvite              map[string][]*Invite
+	namedPersonalAccessToken map[string][]*PersonalAccessToken
+	namedHush                map[string][]*Hush
+	namedOrgmembership       map[string][]*OrgMembership
+	namedGroupmembership     map[string][]*GroupMembership
+	namedSubscriber          map[string][]*Subscriber
+	namedFile                map[string][]*File
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -150,55 +132,19 @@ func (e EventEdges) InviteOrErr() ([]*Invite, error) {
 	return nil, &NotLoadedError{edge: "invite"}
 }
 
-// FeatureOrErr returns the Feature value or an error if the edge
-// was not loaded in eager-loading.
-func (e EventEdges) FeatureOrErr() ([]*Feature, error) {
-	if e.loadedTypes[5] {
-		return e.Feature, nil
-	}
-	return nil, &NotLoadedError{edge: "feature"}
-}
-
-// EntitlementplanOrErr returns the Entitlementplan value or an error if the edge
-// was not loaded in eager-loading.
-func (e EventEdges) EntitlementplanOrErr() ([]*EntitlementPlan, error) {
-	if e.loadedTypes[6] {
-		return e.Entitlementplan, nil
-	}
-	return nil, &NotLoadedError{edge: "entitlementplan"}
-}
-
-// EntitlementplanfeatureOrErr returns the Entitlementplanfeature value or an error if the edge
-// was not loaded in eager-loading.
-func (e EventEdges) EntitlementplanfeatureOrErr() ([]*EntitlementPlanFeature, error) {
-	if e.loadedTypes[7] {
-		return e.Entitlementplanfeature, nil
-	}
-	return nil, &NotLoadedError{edge: "entitlementplanfeature"}
-}
-
 // PersonalAccessTokenOrErr returns the PersonalAccessToken value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) PersonalAccessTokenOrErr() ([]*PersonalAccessToken, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[5] {
 		return e.PersonalAccessToken, nil
 	}
 	return nil, &NotLoadedError{edge: "personal_access_token"}
 }
 
-// Oauth2tokenOrErr returns the Oauth2token value or an error if the edge
-// was not loaded in eager-loading.
-func (e EventEdges) Oauth2tokenOrErr() ([]*OhAuthTooToken, error) {
-	if e.loadedTypes[9] {
-		return e.Oauth2token, nil
-	}
-	return nil, &NotLoadedError{edge: "oauth2token"}
-}
-
 // HushOrErr returns the Hush value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) HushOrErr() ([]*Hush, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[6] {
 		return e.Hush, nil
 	}
 	return nil, &NotLoadedError{edge: "hush"}
@@ -207,7 +153,7 @@ func (e EventEdges) HushOrErr() ([]*Hush, error) {
 // OrgmembershipOrErr returns the Orgmembership value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) OrgmembershipOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[7] {
 		return e.Orgmembership, nil
 	}
 	return nil, &NotLoadedError{edge: "orgmembership"}
@@ -216,34 +162,16 @@ func (e EventEdges) OrgmembershipOrErr() ([]*OrgMembership, error) {
 // GroupmembershipOrErr returns the Groupmembership value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) GroupmembershipOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[8] {
 		return e.Groupmembership, nil
 	}
 	return nil, &NotLoadedError{edge: "groupmembership"}
 }
 
-// EntitlementOrErr returns the Entitlement value or an error if the edge
-// was not loaded in eager-loading.
-func (e EventEdges) EntitlementOrErr() ([]*Entitlement, error) {
-	if e.loadedTypes[13] {
-		return e.Entitlement, nil
-	}
-	return nil, &NotLoadedError{edge: "entitlement"}
-}
-
-// WebhookOrErr returns the Webhook value or an error if the edge
-// was not loaded in eager-loading.
-func (e EventEdges) WebhookOrErr() ([]*Webhook, error) {
-	if e.loadedTypes[14] {
-		return e.Webhook, nil
-	}
-	return nil, &NotLoadedError{edge: "webhook"}
-}
-
 // SubscriberOrErr returns the Subscriber value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) SubscriberOrErr() ([]*Subscriber, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[9] {
 		return e.Subscriber, nil
 	}
 	return nil, &NotLoadedError{edge: "subscriber"}
@@ -252,7 +180,7 @@ func (e EventEdges) SubscriberOrErr() ([]*Subscriber, error) {
 // FileOrErr returns the File value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) FileOrErr() ([]*File, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[10] {
 		return e.File, nil
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -392,29 +320,9 @@ func (e *Event) QueryInvite() *InviteQuery {
 	return NewEventClient(e.config).QueryInvite(e)
 }
 
-// QueryFeature queries the "feature" edge of the Event entity.
-func (e *Event) QueryFeature() *FeatureQuery {
-	return NewEventClient(e.config).QueryFeature(e)
-}
-
-// QueryEntitlementplan queries the "entitlementplan" edge of the Event entity.
-func (e *Event) QueryEntitlementplan() *EntitlementPlanQuery {
-	return NewEventClient(e.config).QueryEntitlementplan(e)
-}
-
-// QueryEntitlementplanfeature queries the "entitlementplanfeature" edge of the Event entity.
-func (e *Event) QueryEntitlementplanfeature() *EntitlementPlanFeatureQuery {
-	return NewEventClient(e.config).QueryEntitlementplanfeature(e)
-}
-
 // QueryPersonalAccessToken queries the "personal_access_token" edge of the Event entity.
 func (e *Event) QueryPersonalAccessToken() *PersonalAccessTokenQuery {
 	return NewEventClient(e.config).QueryPersonalAccessToken(e)
-}
-
-// QueryOauth2token queries the "oauth2token" edge of the Event entity.
-func (e *Event) QueryOauth2token() *OhAuthTooTokenQuery {
-	return NewEventClient(e.config).QueryOauth2token(e)
 }
 
 // QueryHush queries the "hush" edge of the Event entity.
@@ -430,16 +338,6 @@ func (e *Event) QueryOrgmembership() *OrgMembershipQuery {
 // QueryGroupmembership queries the "groupmembership" edge of the Event entity.
 func (e *Event) QueryGroupmembership() *GroupMembershipQuery {
 	return NewEventClient(e.config).QueryGroupmembership(e)
-}
-
-// QueryEntitlement queries the "entitlement" edge of the Event entity.
-func (e *Event) QueryEntitlement() *EntitlementQuery {
-	return NewEventClient(e.config).QueryEntitlement(e)
-}
-
-// QueryWebhook queries the "webhook" edge of the Event entity.
-func (e *Event) QueryWebhook() *WebhookQuery {
-	return NewEventClient(e.config).QueryWebhook(e)
 }
 
 // QuerySubscriber queries the "subscriber" edge of the Event entity.
@@ -628,78 +526,6 @@ func (e *Event) appendNamedInvite(name string, edges ...*Invite) {
 	}
 }
 
-// NamedFeature returns the Feature named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (e *Event) NamedFeature(name string) ([]*Feature, error) {
-	if e.Edges.namedFeature == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := e.Edges.namedFeature[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (e *Event) appendNamedFeature(name string, edges ...*Feature) {
-	if e.Edges.namedFeature == nil {
-		e.Edges.namedFeature = make(map[string][]*Feature)
-	}
-	if len(edges) == 0 {
-		e.Edges.namedFeature[name] = []*Feature{}
-	} else {
-		e.Edges.namedFeature[name] = append(e.Edges.namedFeature[name], edges...)
-	}
-}
-
-// NamedEntitlementplan returns the Entitlementplan named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (e *Event) NamedEntitlementplan(name string) ([]*EntitlementPlan, error) {
-	if e.Edges.namedEntitlementplan == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := e.Edges.namedEntitlementplan[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (e *Event) appendNamedEntitlementplan(name string, edges ...*EntitlementPlan) {
-	if e.Edges.namedEntitlementplan == nil {
-		e.Edges.namedEntitlementplan = make(map[string][]*EntitlementPlan)
-	}
-	if len(edges) == 0 {
-		e.Edges.namedEntitlementplan[name] = []*EntitlementPlan{}
-	} else {
-		e.Edges.namedEntitlementplan[name] = append(e.Edges.namedEntitlementplan[name], edges...)
-	}
-}
-
-// NamedEntitlementplanfeature returns the Entitlementplanfeature named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (e *Event) NamedEntitlementplanfeature(name string) ([]*EntitlementPlanFeature, error) {
-	if e.Edges.namedEntitlementplanfeature == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := e.Edges.namedEntitlementplanfeature[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (e *Event) appendNamedEntitlementplanfeature(name string, edges ...*EntitlementPlanFeature) {
-	if e.Edges.namedEntitlementplanfeature == nil {
-		e.Edges.namedEntitlementplanfeature = make(map[string][]*EntitlementPlanFeature)
-	}
-	if len(edges) == 0 {
-		e.Edges.namedEntitlementplanfeature[name] = []*EntitlementPlanFeature{}
-	} else {
-		e.Edges.namedEntitlementplanfeature[name] = append(e.Edges.namedEntitlementplanfeature[name], edges...)
-	}
-}
-
 // NamedPersonalAccessToken returns the PersonalAccessToken named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (e *Event) NamedPersonalAccessToken(name string) ([]*PersonalAccessToken, error) {
@@ -721,30 +547,6 @@ func (e *Event) appendNamedPersonalAccessToken(name string, edges ...*PersonalAc
 		e.Edges.namedPersonalAccessToken[name] = []*PersonalAccessToken{}
 	} else {
 		e.Edges.namedPersonalAccessToken[name] = append(e.Edges.namedPersonalAccessToken[name], edges...)
-	}
-}
-
-// NamedOauth2token returns the Oauth2token named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (e *Event) NamedOauth2token(name string) ([]*OhAuthTooToken, error) {
-	if e.Edges.namedOauth2token == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := e.Edges.namedOauth2token[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (e *Event) appendNamedOauth2token(name string, edges ...*OhAuthTooToken) {
-	if e.Edges.namedOauth2token == nil {
-		e.Edges.namedOauth2token = make(map[string][]*OhAuthTooToken)
-	}
-	if len(edges) == 0 {
-		e.Edges.namedOauth2token[name] = []*OhAuthTooToken{}
-	} else {
-		e.Edges.namedOauth2token[name] = append(e.Edges.namedOauth2token[name], edges...)
 	}
 }
 
@@ -817,54 +619,6 @@ func (e *Event) appendNamedGroupmembership(name string, edges ...*GroupMembershi
 		e.Edges.namedGroupmembership[name] = []*GroupMembership{}
 	} else {
 		e.Edges.namedGroupmembership[name] = append(e.Edges.namedGroupmembership[name], edges...)
-	}
-}
-
-// NamedEntitlement returns the Entitlement named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (e *Event) NamedEntitlement(name string) ([]*Entitlement, error) {
-	if e.Edges.namedEntitlement == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := e.Edges.namedEntitlement[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (e *Event) appendNamedEntitlement(name string, edges ...*Entitlement) {
-	if e.Edges.namedEntitlement == nil {
-		e.Edges.namedEntitlement = make(map[string][]*Entitlement)
-	}
-	if len(edges) == 0 {
-		e.Edges.namedEntitlement[name] = []*Entitlement{}
-	} else {
-		e.Edges.namedEntitlement[name] = append(e.Edges.namedEntitlement[name], edges...)
-	}
-}
-
-// NamedWebhook returns the Webhook named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (e *Event) NamedWebhook(name string) ([]*Webhook, error) {
-	if e.Edges.namedWebhook == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := e.Edges.namedWebhook[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (e *Event) appendNamedWebhook(name string, edges ...*Webhook) {
-	if e.Edges.namedWebhook == nil {
-		e.Edges.namedWebhook = make(map[string][]*Webhook)
-	}
-	if len(edges) == 0 {
-		e.Edges.namedWebhook[name] = []*Webhook{}
-	} else {
-		e.Edges.namedWebhook[name] = append(e.Edges.namedWebhook[name], edges...)
 	}
 }
 

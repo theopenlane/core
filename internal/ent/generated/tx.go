@@ -36,18 +36,6 @@ type Tx struct {
 	DocumentDataHistory *DocumentDataHistoryClient
 	// EmailVerificationToken is the client for interacting with the EmailVerificationToken builders.
 	EmailVerificationToken *EmailVerificationTokenClient
-	// Entitlement is the client for interacting with the Entitlement builders.
-	Entitlement *EntitlementClient
-	// EntitlementHistory is the client for interacting with the EntitlementHistory builders.
-	EntitlementHistory *EntitlementHistoryClient
-	// EntitlementPlan is the client for interacting with the EntitlementPlan builders.
-	EntitlementPlan *EntitlementPlanClient
-	// EntitlementPlanFeature is the client for interacting with the EntitlementPlanFeature builders.
-	EntitlementPlanFeature *EntitlementPlanFeatureClient
-	// EntitlementPlanFeatureHistory is the client for interacting with the EntitlementPlanFeatureHistory builders.
-	EntitlementPlanFeatureHistory *EntitlementPlanFeatureHistoryClient
-	// EntitlementPlanHistory is the client for interacting with the EntitlementPlanHistory builders.
-	EntitlementPlanHistory *EntitlementPlanHistoryClient
 	// Entity is the client for interacting with the Entity builders.
 	Entity *EntityClient
 	// EntityHistory is the client for interacting with the EntityHistory builders.
@@ -60,10 +48,6 @@ type Tx struct {
 	Event *EventClient
 	// EventHistory is the client for interacting with the EventHistory builders.
 	EventHistory *EventHistoryClient
-	// Feature is the client for interacting with the Feature builders.
-	Feature *FeatureClient
-	// FeatureHistory is the client for interacting with the FeatureHistory builders.
-	FeatureHistory *FeatureHistoryClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
 	// FileHistory is the client for interacting with the FileHistory builders.
@@ -102,12 +86,6 @@ type Tx struct {
 	Note *NoteClient
 	// NoteHistory is the client for interacting with the NoteHistory builders.
 	NoteHistory *NoteHistoryClient
-	// OauthProvider is the client for interacting with the OauthProvider builders.
-	OauthProvider *OauthProviderClient
-	// OauthProviderHistory is the client for interacting with the OauthProviderHistory builders.
-	OauthProviderHistory *OauthProviderHistoryClient
-	// OhAuthTooToken is the client for interacting with the OhAuthTooToken builders.
-	OhAuthTooToken *OhAuthTooTokenClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
 	OrgMembership *OrgMembershipClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
@@ -174,10 +152,6 @@ type Tx struct {
 	UserSettingHistory *UserSettingHistoryClient
 	// Webauthn is the client for interacting with the Webauthn builders.
 	Webauthn *WebauthnClient
-	// Webhook is the client for interacting with the Webhook builders.
-	Webhook *WebhookClient
-	// WebhookHistory is the client for interacting with the WebhookHistory builders.
-	WebhookHistory *WebhookHistoryClient
 
 	// lazily loaded.
 	client     *Client
@@ -321,20 +295,12 @@ func (tx *Tx) init() {
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)
-	tx.Entitlement = NewEntitlementClient(tx.config)
-	tx.EntitlementHistory = NewEntitlementHistoryClient(tx.config)
-	tx.EntitlementPlan = NewEntitlementPlanClient(tx.config)
-	tx.EntitlementPlanFeature = NewEntitlementPlanFeatureClient(tx.config)
-	tx.EntitlementPlanFeatureHistory = NewEntitlementPlanFeatureHistoryClient(tx.config)
-	tx.EntitlementPlanHistory = NewEntitlementPlanHistoryClient(tx.config)
 	tx.Entity = NewEntityClient(tx.config)
 	tx.EntityHistory = NewEntityHistoryClient(tx.config)
 	tx.EntityType = NewEntityTypeClient(tx.config)
 	tx.EntityTypeHistory = NewEntityTypeHistoryClient(tx.config)
 	tx.Event = NewEventClient(tx.config)
 	tx.EventHistory = NewEventHistoryClient(tx.config)
-	tx.Feature = NewFeatureClient(tx.config)
-	tx.FeatureHistory = NewFeatureHistoryClient(tx.config)
 	tx.File = NewFileClient(tx.config)
 	tx.FileHistory = NewFileHistoryClient(tx.config)
 	tx.Group = NewGroupClient(tx.config)
@@ -354,9 +320,6 @@ func (tx *Tx) init() {
 	tx.NarrativeHistory = NewNarrativeHistoryClient(tx.config)
 	tx.Note = NewNoteClient(tx.config)
 	tx.NoteHistory = NewNoteHistoryClient(tx.config)
-	tx.OauthProvider = NewOauthProviderClient(tx.config)
-	tx.OauthProviderHistory = NewOauthProviderHistoryClient(tx.config)
-	tx.OhAuthTooToken = NewOhAuthTooTokenClient(tx.config)
 	tx.OrgMembership = NewOrgMembershipClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
 	tx.OrgSubscription = NewOrgSubscriptionClient(tx.config)
@@ -390,8 +353,6 @@ func (tx *Tx) init() {
 	tx.UserSetting = NewUserSettingClient(tx.config)
 	tx.UserSettingHistory = NewUserSettingHistoryClient(tx.config)
 	tx.Webauthn = NewWebauthnClient(tx.config)
-	tx.Webhook = NewWebhookClient(tx.config)
-	tx.WebhookHistory = NewWebhookHistoryClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

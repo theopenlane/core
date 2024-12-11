@@ -16,44 +16,37 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 	}
 
 	var (
-		errors                        []error
-		apitokenResults               []*generated.APIToken
-		actionplanResults             []*generated.ActionPlan
-		contactResults                []*generated.Contact
-		controlResults                []*generated.Control
-		controlobjectiveResults       []*generated.ControlObjective
-		documentdataResults           []*generated.DocumentData
-		entitlementResults            []*generated.Entitlement
-		entitlementplanResults        []*generated.EntitlementPlan
-		entitlementplanfeatureResults []*generated.EntitlementPlanFeature
-		entityResults                 []*generated.Entity
-		entitytypeResults             []*generated.EntityType
-		eventResults                  []*generated.Event
-		featureResults                []*generated.Feature
-		fileResults                   []*generated.File
-		groupResults                  []*generated.Group
-		groupsettingResults           []*generated.GroupSetting
-		integrationResults            []*generated.Integration
-		internalpolicyResults         []*generated.InternalPolicy
-		narrativeResults              []*generated.Narrative
-		oauthproviderResults          []*generated.OauthProvider
-		ohauthtootokenResults         []*generated.OhAuthTooToken
-		orgsubscriptionResults        []*generated.OrgSubscription
-		organizationResults           []*generated.Organization
-		organizationsettingResults    []*generated.OrganizationSetting
-		personalaccesstokenResults    []*generated.PersonalAccessToken
-		procedureResults              []*generated.Procedure
-		programResults                []*generated.Program
-		riskResults                   []*generated.Risk
-		standardResults               []*generated.Standard
-		subcontrolResults             []*generated.Subcontrol
-		subscriberResults             []*generated.Subscriber
-		tfasettingResults             []*generated.TFASetting
-		taskResults                   []*generated.Task
-		templateResults               []*generated.Template
-		userResults                   []*generated.User
-		usersettingResults            []*generated.UserSetting
-		webhookResults                []*generated.Webhook
+		errors                     []error
+		apitokenResults            []*generated.APIToken
+		actionplanResults          []*generated.ActionPlan
+		contactResults             []*generated.Contact
+		controlResults             []*generated.Control
+		controlobjectiveResults    []*generated.ControlObjective
+		documentdataResults        []*generated.DocumentData
+		entityResults              []*generated.Entity
+		entitytypeResults          []*generated.EntityType
+		eventResults               []*generated.Event
+		fileResults                []*generated.File
+		groupResults               []*generated.Group
+		groupsettingResults        []*generated.GroupSetting
+		integrationResults         []*generated.Integration
+		internalpolicyResults      []*generated.InternalPolicy
+		narrativeResults           []*generated.Narrative
+		orgsubscriptionResults     []*generated.OrgSubscription
+		organizationResults        []*generated.Organization
+		organizationsettingResults []*generated.OrganizationSetting
+		personalaccesstokenResults []*generated.PersonalAccessToken
+		procedureResults           []*generated.Procedure
+		programResults             []*generated.Program
+		riskResults                []*generated.Risk
+		standardResults            []*generated.Standard
+		subcontrolResults          []*generated.Subcontrol
+		subscriberResults          []*generated.Subscriber
+		tfasettingResults          []*generated.TFASetting
+		taskResults                []*generated.Task
+		templateResults            []*generated.Template
+		userResults                []*generated.User
+		usersettingResults         []*generated.UserSetting
 	)
 
 	r.withPool().SubmitMultipleAndWait([]func(){
@@ -101,27 +94,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		},
 		func() {
 			var err error
-			entitlementResults, err = searchEntitlements(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
-			entitlementplanResults, err = searchEntitlementPlans(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
-			entitlementplanfeatureResults, err = searchEntitlementPlanFeatures(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
 			entityResults, err = searchEntities(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
@@ -137,13 +109,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		func() {
 			var err error
 			eventResults, err = searchEvents(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
-			featureResults, err = searchFeatures(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -186,20 +151,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		func() {
 			var err error
 			narrativeResults, err = searchNarratives(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
-			oauthproviderResults, err = searchOauthProviders(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
-			ohauthtootokenResults, err = searchOhAuthTooTokens(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -309,13 +260,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 				errors = append(errors, err)
 			}
 		},
-		func() {
-			var err error
-			webhookResults, err = searchWebhooks(ctx, query)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
 	})
 
 	// Check all errors and return a single error if any of the searches failed
@@ -346,15 +290,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			DocumentDataSearchResult{
 				DocumentData: documentdataResults,
 			},
-			EntitlementSearchResult{
-				Entitlements: entitlementResults,
-			},
-			EntitlementPlanSearchResult{
-				EntitlementPlans: entitlementplanResults,
-			},
-			EntitlementPlanFeatureSearchResult{
-				EntitlementPlanFeatures: entitlementplanfeatureResults,
-			},
 			EntitySearchResult{
 				Entities: entityResults,
 			},
@@ -363,9 +298,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			},
 			EventSearchResult{
 				Events: eventResults,
-			},
-			FeatureSearchResult{
-				Features: featureResults,
 			},
 			FileSearchResult{
 				Files: fileResults,
@@ -384,12 +316,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			},
 			NarrativeSearchResult{
 				Narratives: narrativeResults,
-			},
-			OauthProviderSearchResult{
-				OauthProviders: oauthproviderResults,
-			},
-			OhAuthTooTokenSearchResult{
-				OhAuthTooTokens: ohauthtootokenResults,
 			},
 			OrgSubscriptionSearchResult{
 				OrgSubscriptions: orgsubscriptionResults,
@@ -435,9 +361,6 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			},
 			UserSettingSearchResult{
 				UserSettings: usersettingResults,
-			},
-			WebhookSearchResult{
-				Webhooks: webhookResults,
 			},
 		},
 	}, nil
@@ -514,42 +437,6 @@ func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string) (*
 		DocumentData: documentdataResults,
 	}, nil
 }
-func (r *queryResolver) EntitlementSearch(ctx context.Context, query string) (*EntitlementSearchResult, error) {
-	entitlementResults, err := searchEntitlements(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &EntitlementSearchResult{
-		Entitlements: entitlementResults,
-	}, nil
-}
-func (r *queryResolver) EntitlementPlanSearch(ctx context.Context, query string) (*EntitlementPlanSearchResult, error) {
-	entitlementplanResults, err := searchEntitlementPlans(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &EntitlementPlanSearchResult{
-		EntitlementPlans: entitlementplanResults,
-	}, nil
-}
-func (r *queryResolver) EntitlementPlanFeatureSearch(ctx context.Context, query string) (*EntitlementPlanFeatureSearchResult, error) {
-	entitlementplanfeatureResults, err := searchEntitlementPlanFeatures(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &EntitlementPlanFeatureSearchResult{
-		EntitlementPlanFeatures: entitlementplanfeatureResults,
-	}, nil
-}
 func (r *queryResolver) EntitySearch(ctx context.Context, query string) (*EntitySearchResult, error) {
 	entityResults, err := searchEntities(ctx, query)
 
@@ -584,18 +471,6 @@ func (r *queryResolver) EventSearch(ctx context.Context, query string) (*EventSe
 	// return the results
 	return &EventSearchResult{
 		Events: eventResults,
-	}, nil
-}
-func (r *queryResolver) FeatureSearch(ctx context.Context, query string) (*FeatureSearchResult, error) {
-	featureResults, err := searchFeatures(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &FeatureSearchResult{
-		Features: featureResults,
 	}, nil
 }
 func (r *queryResolver) FileSearch(ctx context.Context, query string) (*FileSearchResult, error) {
@@ -668,30 +543,6 @@ func (r *queryResolver) NarrativeSearch(ctx context.Context, query string) (*Nar
 	// return the results
 	return &NarrativeSearchResult{
 		Narratives: narrativeResults,
-	}, nil
-}
-func (r *queryResolver) OauthProviderSearch(ctx context.Context, query string) (*OauthProviderSearchResult, error) {
-	oauthproviderResults, err := searchOauthProviders(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &OauthProviderSearchResult{
-		OauthProviders: oauthproviderResults,
-	}, nil
-}
-func (r *queryResolver) OhAuthTooTokenSearch(ctx context.Context, query string) (*OhAuthTooTokenSearchResult, error) {
-	ohauthtootokenResults, err := searchOhAuthTooTokens(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &OhAuthTooTokenSearchResult{
-		OhAuthTooTokens: ohauthtootokenResults,
 	}, nil
 }
 func (r *queryResolver) OrgSubscriptionSearch(ctx context.Context, query string) (*OrgSubscriptionSearchResult, error) {
@@ -872,17 +723,5 @@ func (r *queryResolver) UserSettingSearch(ctx context.Context, query string) (*U
 	// return the results
 	return &UserSettingSearchResult{
 		UserSettings: usersettingResults,
-	}, nil
-}
-func (r *queryResolver) WebhookSearch(ctx context.Context, query string) (*WebhookSearchResult, error) {
-	webhookResults, err := searchWebhooks(ctx, query)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return &WebhookSearchResult{
-		Webhooks: webhookResults,
 	}, nil
 }

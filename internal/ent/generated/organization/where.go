@@ -1436,35 +1436,6 @@ func HasDocumentdataWith(preds ...predicate.DocumentData) predicate.Organization
 	})
 }
 
-// HasEntitlements applies the HasEdge predicate on the "entitlements" edge.
-func HasEntitlements() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EntitlementsTable, EntitlementsColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entitlement
-		step.Edge.Schema = schemaConfig.Entitlement
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEntitlementsWith applies the HasEdge predicate on the "entitlements" edge with a given conditions (other predicates).
-func HasEntitlementsWith(preds ...predicate.Entitlement) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newEntitlementsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entitlement
-		step.Edge.Schema = schemaConfig.Entitlement
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasOrgsubscriptions applies the HasEdge predicate on the "orgsubscriptions" edge.
 func HasOrgsubscriptions() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -1486,35 +1457,6 @@ func HasOrgsubscriptionsWith(preds ...predicate.OrgSubscription) predicate.Organ
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgSubscription
 		step.Edge.Schema = schemaConfig.OrgSubscription
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasOrganizationEntitlement applies the HasEdge predicate on the "organization_entitlement" edge.
-func HasOrganizationEntitlement() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, OrganizationEntitlementTable, OrganizationEntitlementColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entitlement
-		step.Edge.Schema = schemaConfig.Entitlement
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasOrganizationEntitlementWith applies the HasEdge predicate on the "organization_entitlement" edge with a given conditions (other predicates).
-func HasOrganizationEntitlementWith(preds ...predicate.Entitlement) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newOrganizationEntitlementStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entitlement
-		step.Edge.Schema = schemaConfig.Entitlement
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1573,35 +1515,6 @@ func HasAPITokensWith(preds ...predicate.APIToken) predicate.Organization {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.APIToken
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasOauthprovider applies the HasEdge predicate on the "oauthprovider" edge.
-func HasOauthprovider() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, OauthproviderTable, OauthproviderColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OauthProvider
-		step.Edge.Schema = schemaConfig.OauthProvider
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasOauthproviderWith applies the HasEdge predicate on the "oauthprovider" edge with a given conditions (other predicates).
-func HasOauthproviderWith(preds ...predicate.OauthProvider) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newOauthproviderStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OauthProvider
-		step.Edge.Schema = schemaConfig.OauthProvider
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1697,35 +1610,6 @@ func HasSubscribersWith(preds ...predicate.Subscriber) predicate.Organization {
 	})
 }
 
-// HasWebhooks applies the HasEdge predicate on the "webhooks" edge.
-func HasWebhooks() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, WebhooksTable, WebhooksColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Webhook
-		step.Edge.Schema = schemaConfig.Webhook
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasWebhooksWith applies the HasEdge predicate on the "webhooks" edge with a given conditions (other predicates).
-func HasWebhooksWith(preds ...predicate.Webhook) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newWebhooksStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Webhook
-		step.Edge.Schema = schemaConfig.Webhook
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasEvents applies the HasEdge predicate on the "events" edge.
 func HasEvents() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -1784,35 +1668,6 @@ func HasSecretsWith(preds ...predicate.Hush) predicate.Organization {
 	})
 }
 
-// HasFeatures applies the HasEdge predicate on the "features" edge.
-func HasFeatures() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, FeaturesTable, FeaturesColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Feature
-		step.Edge.Schema = schemaConfig.Feature
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasFeaturesWith applies the HasEdge predicate on the "features" edge with a given conditions (other predicates).
-func HasFeaturesWith(preds ...predicate.Feature) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newFeaturesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Feature
-		step.Edge.Schema = schemaConfig.Feature
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasFiles applies the HasEdge predicate on the "files" edge.
 func HasFiles() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -1834,64 +1689,6 @@ func HasFilesWith(preds ...predicate.File) predicate.Organization {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.OrganizationFiles
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEntitlementplans applies the HasEdge predicate on the "entitlementplans" edge.
-func HasEntitlementplans() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EntitlementplansTable, EntitlementplansColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntitlementPlan
-		step.Edge.Schema = schemaConfig.EntitlementPlan
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEntitlementplansWith applies the HasEdge predicate on the "entitlementplans" edge with a given conditions (other predicates).
-func HasEntitlementplansWith(preds ...predicate.EntitlementPlan) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newEntitlementplansStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntitlementPlan
-		step.Edge.Schema = schemaConfig.EntitlementPlan
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasEntitlementplanfeatures applies the HasEdge predicate on the "entitlementplanfeatures" edge.
-func HasEntitlementplanfeatures() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EntitlementplanfeaturesTable, EntitlementplanfeaturesColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntitlementPlanFeature
-		step.Edge.Schema = schemaConfig.EntitlementPlanFeature
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEntitlementplanfeaturesWith applies the HasEdge predicate on the "entitlementplanfeatures" edge with a given conditions (other predicates).
-func HasEntitlementplanfeaturesWith(preds ...predicate.EntitlementPlanFeature) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newEntitlementplanfeaturesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntitlementPlanFeature
-		step.Edge.Schema = schemaConfig.EntitlementPlanFeature
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

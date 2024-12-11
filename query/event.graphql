@@ -21,13 +21,7 @@ mutation CreateBulkCSVEvent($input: Upload!) {
       invite {
         id
       }
-      feature {
-        id
-      }
       personalAccessToken {
-        id
-      }
-      oauth2token {
         id
       }
       hush {
@@ -37,12 +31,6 @@ mutation CreateBulkCSVEvent($input: Upload!) {
         id
       }
       groupmembership {
-        id
-      }
-      entitlement {
-        id
-      }
-      webhook {
         id
       }
     }
@@ -72,13 +60,7 @@ mutation CreateBulkEvent($input: [CreateEventInput!]) {
       invite {
         id
       }
-      feature {
-        id
-      }
       personalAccessToken {
-        id
-      }
-      oauth2token {
         id
       }
       hush {
@@ -88,12 +70,6 @@ mutation CreateBulkEvent($input: [CreateEventInput!]) {
         id
       }
       groupmembership {
-        id
-      }
-      entitlement {
-        id
-      }
-      webhook {
         id
       }
     }
@@ -123,13 +99,7 @@ mutation CreateEvent($input: CreateEventInput!) {
       invite {
         id
       }
-      feature {
-        id
-      }
       personalAccessToken {
-        id
-      }
-      oauth2token {
         id
       }
       hush {
@@ -139,12 +109,6 @@ mutation CreateEvent($input: CreateEventInput!) {
         id
       }
       groupmembership {
-        id
-      }
-      entitlement {
-        id
-      }
-      webhook {
         id
       }
     }
@@ -185,13 +149,7 @@ query GetAllEvents {
         invite {
           id
         }
-        feature {
-          id
-        }
         personalAccessToken {
-          id
-        }
-        oauth2token {
           id
         }
         hush {
@@ -201,12 +159,6 @@ query GetAllEvents {
           id
         }
         groupmembership {
-          id
-        }
-        entitlement {
-          id
-        }
-        webhook {
           id
         }
       }
@@ -240,13 +192,7 @@ query GetEventByID($eventId: ID!) {
     invite {
       id
     }
-    feature {
-      id
-    }
     personalAccessToken {
-      id
-    }
-    oauth2token {
       id
     }
     hush {
@@ -256,12 +202,6 @@ query GetEventByID($eventId: ID!) {
       id
     }
     groupmembership {
-      id
-    }
-    entitlement {
-      id
-    }
-    webhook {
       id
     }
   }
@@ -308,13 +248,7 @@ mutation UpdateEvent($updateEventId: ID!, $input: UpdateEventInput!) {
       invite {
         id
       }
-      feature {
-        id
-      }
       personalAccessToken {
-        id
-      }
-      oauth2token {
         id
       }
       hush {
@@ -324,12 +258,6 @@ mutation UpdateEvent($updateEventId: ID!, $input: UpdateEventInput!) {
         id
       }
       groupmembership {
-        id
-      }
-      entitlement {
-        id
-      }
-      webhook {
         id
       }
     }

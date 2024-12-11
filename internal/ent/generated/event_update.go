@@ -12,25 +12,19 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/entitlement"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/feature"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -240,51 +234,6 @@ func (eu *EventUpdate) AddInvite(i ...*Invite) *EventUpdate {
 	return eu.AddInviteIDs(ids...)
 }
 
-// AddFeatureIDs adds the "feature" edge to the Feature entity by IDs.
-func (eu *EventUpdate) AddFeatureIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddFeatureIDs(ids...)
-	return eu
-}
-
-// AddFeature adds the "feature" edges to the Feature entity.
-func (eu *EventUpdate) AddFeature(f ...*Feature) *EventUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
-	}
-	return eu.AddFeatureIDs(ids...)
-}
-
-// AddEntitlementplanIDs adds the "entitlementplan" edge to the EntitlementPlan entity by IDs.
-func (eu *EventUpdate) AddEntitlementplanIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddEntitlementplanIDs(ids...)
-	return eu
-}
-
-// AddEntitlementplan adds the "entitlementplan" edges to the EntitlementPlan entity.
-func (eu *EventUpdate) AddEntitlementplan(e ...*EntitlementPlan) *EventUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return eu.AddEntitlementplanIDs(ids...)
-}
-
-// AddEntitlementplanfeatureIDs adds the "entitlementplanfeature" edge to the EntitlementPlanFeature entity by IDs.
-func (eu *EventUpdate) AddEntitlementplanfeatureIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddEntitlementplanfeatureIDs(ids...)
-	return eu
-}
-
-// AddEntitlementplanfeature adds the "entitlementplanfeature" edges to the EntitlementPlanFeature entity.
-func (eu *EventUpdate) AddEntitlementplanfeature(e ...*EntitlementPlanFeature) *EventUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return eu.AddEntitlementplanfeatureIDs(ids...)
-}
-
 // AddPersonalAccessTokenIDs adds the "personal_access_token" edge to the PersonalAccessToken entity by IDs.
 func (eu *EventUpdate) AddPersonalAccessTokenIDs(ids ...string) *EventUpdate {
 	eu.mutation.AddPersonalAccessTokenIDs(ids...)
@@ -298,21 +247,6 @@ func (eu *EventUpdate) AddPersonalAccessToken(p ...*PersonalAccessToken) *EventU
 		ids[i] = p[i].ID
 	}
 	return eu.AddPersonalAccessTokenIDs(ids...)
-}
-
-// AddOauth2tokenIDs adds the "oauth2token" edge to the OhAuthTooToken entity by IDs.
-func (eu *EventUpdate) AddOauth2tokenIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddOauth2tokenIDs(ids...)
-	return eu
-}
-
-// AddOauth2token adds the "oauth2token" edges to the OhAuthTooToken entity.
-func (eu *EventUpdate) AddOauth2token(o ...*OhAuthTooToken) *EventUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return eu.AddOauth2tokenIDs(ids...)
 }
 
 // AddHushIDs adds the "hush" edge to the Hush entity by IDs.
@@ -358,36 +292,6 @@ func (eu *EventUpdate) AddGroupmembership(g ...*GroupMembership) *EventUpdate {
 		ids[i] = g[i].ID
 	}
 	return eu.AddGroupmembershipIDs(ids...)
-}
-
-// AddEntitlementIDs adds the "entitlement" edge to the Entitlement entity by IDs.
-func (eu *EventUpdate) AddEntitlementIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddEntitlementIDs(ids...)
-	return eu
-}
-
-// AddEntitlement adds the "entitlement" edges to the Entitlement entity.
-func (eu *EventUpdate) AddEntitlement(e ...*Entitlement) *EventUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return eu.AddEntitlementIDs(ids...)
-}
-
-// AddWebhookIDs adds the "webhook" edge to the Webhook entity by IDs.
-func (eu *EventUpdate) AddWebhookIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddWebhookIDs(ids...)
-	return eu
-}
-
-// AddWebhook adds the "webhook" edges to the Webhook entity.
-func (eu *EventUpdate) AddWebhook(w ...*Webhook) *EventUpdate {
-	ids := make([]string, len(w))
-	for i := range w {
-		ids[i] = w[i].ID
-	}
-	return eu.AddWebhookIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscriber" edge to the Subscriber entity by IDs.
@@ -530,69 +434,6 @@ func (eu *EventUpdate) RemoveInvite(i ...*Invite) *EventUpdate {
 	return eu.RemoveInviteIDs(ids...)
 }
 
-// ClearFeature clears all "feature" edges to the Feature entity.
-func (eu *EventUpdate) ClearFeature() *EventUpdate {
-	eu.mutation.ClearFeature()
-	return eu
-}
-
-// RemoveFeatureIDs removes the "feature" edge to Feature entities by IDs.
-func (eu *EventUpdate) RemoveFeatureIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveFeatureIDs(ids...)
-	return eu
-}
-
-// RemoveFeature removes "feature" edges to Feature entities.
-func (eu *EventUpdate) RemoveFeature(f ...*Feature) *EventUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
-	}
-	return eu.RemoveFeatureIDs(ids...)
-}
-
-// ClearEntitlementplan clears all "entitlementplan" edges to the EntitlementPlan entity.
-func (eu *EventUpdate) ClearEntitlementplan() *EventUpdate {
-	eu.mutation.ClearEntitlementplan()
-	return eu
-}
-
-// RemoveEntitlementplanIDs removes the "entitlementplan" edge to EntitlementPlan entities by IDs.
-func (eu *EventUpdate) RemoveEntitlementplanIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveEntitlementplanIDs(ids...)
-	return eu
-}
-
-// RemoveEntitlementplan removes "entitlementplan" edges to EntitlementPlan entities.
-func (eu *EventUpdate) RemoveEntitlementplan(e ...*EntitlementPlan) *EventUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return eu.RemoveEntitlementplanIDs(ids...)
-}
-
-// ClearEntitlementplanfeature clears all "entitlementplanfeature" edges to the EntitlementPlanFeature entity.
-func (eu *EventUpdate) ClearEntitlementplanfeature() *EventUpdate {
-	eu.mutation.ClearEntitlementplanfeature()
-	return eu
-}
-
-// RemoveEntitlementplanfeatureIDs removes the "entitlementplanfeature" edge to EntitlementPlanFeature entities by IDs.
-func (eu *EventUpdate) RemoveEntitlementplanfeatureIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveEntitlementplanfeatureIDs(ids...)
-	return eu
-}
-
-// RemoveEntitlementplanfeature removes "entitlementplanfeature" edges to EntitlementPlanFeature entities.
-func (eu *EventUpdate) RemoveEntitlementplanfeature(e ...*EntitlementPlanFeature) *EventUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return eu.RemoveEntitlementplanfeatureIDs(ids...)
-}
-
 // ClearPersonalAccessToken clears all "personal_access_token" edges to the PersonalAccessToken entity.
 func (eu *EventUpdate) ClearPersonalAccessToken() *EventUpdate {
 	eu.mutation.ClearPersonalAccessToken()
@@ -612,27 +453,6 @@ func (eu *EventUpdate) RemovePersonalAccessToken(p ...*PersonalAccessToken) *Eve
 		ids[i] = p[i].ID
 	}
 	return eu.RemovePersonalAccessTokenIDs(ids...)
-}
-
-// ClearOauth2token clears all "oauth2token" edges to the OhAuthTooToken entity.
-func (eu *EventUpdate) ClearOauth2token() *EventUpdate {
-	eu.mutation.ClearOauth2token()
-	return eu
-}
-
-// RemoveOauth2tokenIDs removes the "oauth2token" edge to OhAuthTooToken entities by IDs.
-func (eu *EventUpdate) RemoveOauth2tokenIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveOauth2tokenIDs(ids...)
-	return eu
-}
-
-// RemoveOauth2token removes "oauth2token" edges to OhAuthTooToken entities.
-func (eu *EventUpdate) RemoveOauth2token(o ...*OhAuthTooToken) *EventUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return eu.RemoveOauth2tokenIDs(ids...)
 }
 
 // ClearHush clears all "hush" edges to the Hush entity.
@@ -696,48 +516,6 @@ func (eu *EventUpdate) RemoveGroupmembership(g ...*GroupMembership) *EventUpdate
 		ids[i] = g[i].ID
 	}
 	return eu.RemoveGroupmembershipIDs(ids...)
-}
-
-// ClearEntitlement clears all "entitlement" edges to the Entitlement entity.
-func (eu *EventUpdate) ClearEntitlement() *EventUpdate {
-	eu.mutation.ClearEntitlement()
-	return eu
-}
-
-// RemoveEntitlementIDs removes the "entitlement" edge to Entitlement entities by IDs.
-func (eu *EventUpdate) RemoveEntitlementIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveEntitlementIDs(ids...)
-	return eu
-}
-
-// RemoveEntitlement removes "entitlement" edges to Entitlement entities.
-func (eu *EventUpdate) RemoveEntitlement(e ...*Entitlement) *EventUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return eu.RemoveEntitlementIDs(ids...)
-}
-
-// ClearWebhook clears all "webhook" edges to the Webhook entity.
-func (eu *EventUpdate) ClearWebhook() *EventUpdate {
-	eu.mutation.ClearWebhook()
-	return eu
-}
-
-// RemoveWebhookIDs removes the "webhook" edge to Webhook entities by IDs.
-func (eu *EventUpdate) RemoveWebhookIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveWebhookIDs(ids...)
-	return eu
-}
-
-// RemoveWebhook removes "webhook" edges to Webhook entities.
-func (eu *EventUpdate) RemoveWebhook(w ...*Webhook) *EventUpdate {
-	ids := make([]string, len(w))
-	for i := range w {
-		ids[i] = w[i].ID
-	}
-	return eu.RemoveWebhookIDs(ids...)
 }
 
 // ClearSubscriber clears all "subscriber" edges to the Subscriber entity.
@@ -1129,150 +907,6 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.FeatureCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.FeatureTable,
-			Columns: event.FeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(feature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.FeatureEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.RemovedFeatureIDs(); len(nodes) > 0 && !eu.mutation.FeatureCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.FeatureTable,
-			Columns: event.FeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(feature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.FeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.FeatureIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.FeatureTable,
-			Columns: event.FeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(feature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.FeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if eu.mutation.EntitlementplanCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanTable,
-			Columns: event.EntitlementplanPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementPlanEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.RemovedEntitlementplanIDs(); len(nodes) > 0 && !eu.mutation.EntitlementplanCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanTable,
-			Columns: event.EntitlementplanPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementPlanEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.EntitlementplanIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanTable,
-			Columns: event.EntitlementplanPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementPlanEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if eu.mutation.EntitlementplanfeatureCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanfeatureTable,
-			Columns: event.EntitlementplanfeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplanfeature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementPlanFeatureEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.RemovedEntitlementplanfeatureIDs(); len(nodes) > 0 && !eu.mutation.EntitlementplanfeatureCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanfeatureTable,
-			Columns: event.EntitlementplanfeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplanfeature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementPlanFeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.EntitlementplanfeatureIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanfeatureTable,
-			Columns: event.EntitlementplanfeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplanfeature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementPlanFeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if eu.mutation.PersonalAccessTokenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1316,54 +950,6 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = eu.schemaConfig.PersonalAccessTokenEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if eu.mutation.Oauth2tokenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.Oauth2tokenTable,
-			Columns: event.Oauth2tokenPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(ohauthtootoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.OhAuthTooTokenEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.RemovedOauth2tokenIDs(); len(nodes) > 0 && !eu.mutation.Oauth2tokenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.Oauth2tokenTable,
-			Columns: event.Oauth2tokenPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(ohauthtootoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.OhAuthTooTokenEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.Oauth2tokenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.Oauth2tokenTable,
-			Columns: event.Oauth2tokenPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(ohauthtootoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.OhAuthTooTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1508,102 +1094,6 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = eu.schemaConfig.GroupMembershipEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if eu.mutation.EntitlementCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementTable,
-			Columns: event.EntitlementPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.RemovedEntitlementIDs(); len(nodes) > 0 && !eu.mutation.EntitlementCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementTable,
-			Columns: event.EntitlementPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.EntitlementIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementTable,
-			Columns: event.EntitlementPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.EntitlementEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if eu.mutation.WebhookCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.WebhookTable,
-			Columns: event.WebhookPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.WebhookEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.RemovedWebhookIDs(); len(nodes) > 0 && !eu.mutation.WebhookCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.WebhookTable,
-			Columns: event.WebhookPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.WebhookEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := eu.mutation.WebhookIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.WebhookTable,
-			Columns: event.WebhookPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = eu.schemaConfig.WebhookEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1920,51 +1410,6 @@ func (euo *EventUpdateOne) AddInvite(i ...*Invite) *EventUpdateOne {
 	return euo.AddInviteIDs(ids...)
 }
 
-// AddFeatureIDs adds the "feature" edge to the Feature entity by IDs.
-func (euo *EventUpdateOne) AddFeatureIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddFeatureIDs(ids...)
-	return euo
-}
-
-// AddFeature adds the "feature" edges to the Feature entity.
-func (euo *EventUpdateOne) AddFeature(f ...*Feature) *EventUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
-	}
-	return euo.AddFeatureIDs(ids...)
-}
-
-// AddEntitlementplanIDs adds the "entitlementplan" edge to the EntitlementPlan entity by IDs.
-func (euo *EventUpdateOne) AddEntitlementplanIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddEntitlementplanIDs(ids...)
-	return euo
-}
-
-// AddEntitlementplan adds the "entitlementplan" edges to the EntitlementPlan entity.
-func (euo *EventUpdateOne) AddEntitlementplan(e ...*EntitlementPlan) *EventUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return euo.AddEntitlementplanIDs(ids...)
-}
-
-// AddEntitlementplanfeatureIDs adds the "entitlementplanfeature" edge to the EntitlementPlanFeature entity by IDs.
-func (euo *EventUpdateOne) AddEntitlementplanfeatureIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddEntitlementplanfeatureIDs(ids...)
-	return euo
-}
-
-// AddEntitlementplanfeature adds the "entitlementplanfeature" edges to the EntitlementPlanFeature entity.
-func (euo *EventUpdateOne) AddEntitlementplanfeature(e ...*EntitlementPlanFeature) *EventUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return euo.AddEntitlementplanfeatureIDs(ids...)
-}
-
 // AddPersonalAccessTokenIDs adds the "personal_access_token" edge to the PersonalAccessToken entity by IDs.
 func (euo *EventUpdateOne) AddPersonalAccessTokenIDs(ids ...string) *EventUpdateOne {
 	euo.mutation.AddPersonalAccessTokenIDs(ids...)
@@ -1978,21 +1423,6 @@ func (euo *EventUpdateOne) AddPersonalAccessToken(p ...*PersonalAccessToken) *Ev
 		ids[i] = p[i].ID
 	}
 	return euo.AddPersonalAccessTokenIDs(ids...)
-}
-
-// AddOauth2tokenIDs adds the "oauth2token" edge to the OhAuthTooToken entity by IDs.
-func (euo *EventUpdateOne) AddOauth2tokenIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddOauth2tokenIDs(ids...)
-	return euo
-}
-
-// AddOauth2token adds the "oauth2token" edges to the OhAuthTooToken entity.
-func (euo *EventUpdateOne) AddOauth2token(o ...*OhAuthTooToken) *EventUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return euo.AddOauth2tokenIDs(ids...)
 }
 
 // AddHushIDs adds the "hush" edge to the Hush entity by IDs.
@@ -2038,36 +1468,6 @@ func (euo *EventUpdateOne) AddGroupmembership(g ...*GroupMembership) *EventUpdat
 		ids[i] = g[i].ID
 	}
 	return euo.AddGroupmembershipIDs(ids...)
-}
-
-// AddEntitlementIDs adds the "entitlement" edge to the Entitlement entity by IDs.
-func (euo *EventUpdateOne) AddEntitlementIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddEntitlementIDs(ids...)
-	return euo
-}
-
-// AddEntitlement adds the "entitlement" edges to the Entitlement entity.
-func (euo *EventUpdateOne) AddEntitlement(e ...*Entitlement) *EventUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return euo.AddEntitlementIDs(ids...)
-}
-
-// AddWebhookIDs adds the "webhook" edge to the Webhook entity by IDs.
-func (euo *EventUpdateOne) AddWebhookIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddWebhookIDs(ids...)
-	return euo
-}
-
-// AddWebhook adds the "webhook" edges to the Webhook entity.
-func (euo *EventUpdateOne) AddWebhook(w ...*Webhook) *EventUpdateOne {
-	ids := make([]string, len(w))
-	for i := range w {
-		ids[i] = w[i].ID
-	}
-	return euo.AddWebhookIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscriber" edge to the Subscriber entity by IDs.
@@ -2210,69 +1610,6 @@ func (euo *EventUpdateOne) RemoveInvite(i ...*Invite) *EventUpdateOne {
 	return euo.RemoveInviteIDs(ids...)
 }
 
-// ClearFeature clears all "feature" edges to the Feature entity.
-func (euo *EventUpdateOne) ClearFeature() *EventUpdateOne {
-	euo.mutation.ClearFeature()
-	return euo
-}
-
-// RemoveFeatureIDs removes the "feature" edge to Feature entities by IDs.
-func (euo *EventUpdateOne) RemoveFeatureIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveFeatureIDs(ids...)
-	return euo
-}
-
-// RemoveFeature removes "feature" edges to Feature entities.
-func (euo *EventUpdateOne) RemoveFeature(f ...*Feature) *EventUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
-	}
-	return euo.RemoveFeatureIDs(ids...)
-}
-
-// ClearEntitlementplan clears all "entitlementplan" edges to the EntitlementPlan entity.
-func (euo *EventUpdateOne) ClearEntitlementplan() *EventUpdateOne {
-	euo.mutation.ClearEntitlementplan()
-	return euo
-}
-
-// RemoveEntitlementplanIDs removes the "entitlementplan" edge to EntitlementPlan entities by IDs.
-func (euo *EventUpdateOne) RemoveEntitlementplanIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveEntitlementplanIDs(ids...)
-	return euo
-}
-
-// RemoveEntitlementplan removes "entitlementplan" edges to EntitlementPlan entities.
-func (euo *EventUpdateOne) RemoveEntitlementplan(e ...*EntitlementPlan) *EventUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return euo.RemoveEntitlementplanIDs(ids...)
-}
-
-// ClearEntitlementplanfeature clears all "entitlementplanfeature" edges to the EntitlementPlanFeature entity.
-func (euo *EventUpdateOne) ClearEntitlementplanfeature() *EventUpdateOne {
-	euo.mutation.ClearEntitlementplanfeature()
-	return euo
-}
-
-// RemoveEntitlementplanfeatureIDs removes the "entitlementplanfeature" edge to EntitlementPlanFeature entities by IDs.
-func (euo *EventUpdateOne) RemoveEntitlementplanfeatureIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveEntitlementplanfeatureIDs(ids...)
-	return euo
-}
-
-// RemoveEntitlementplanfeature removes "entitlementplanfeature" edges to EntitlementPlanFeature entities.
-func (euo *EventUpdateOne) RemoveEntitlementplanfeature(e ...*EntitlementPlanFeature) *EventUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return euo.RemoveEntitlementplanfeatureIDs(ids...)
-}
-
 // ClearPersonalAccessToken clears all "personal_access_token" edges to the PersonalAccessToken entity.
 func (euo *EventUpdateOne) ClearPersonalAccessToken() *EventUpdateOne {
 	euo.mutation.ClearPersonalAccessToken()
@@ -2292,27 +1629,6 @@ func (euo *EventUpdateOne) RemovePersonalAccessToken(p ...*PersonalAccessToken) 
 		ids[i] = p[i].ID
 	}
 	return euo.RemovePersonalAccessTokenIDs(ids...)
-}
-
-// ClearOauth2token clears all "oauth2token" edges to the OhAuthTooToken entity.
-func (euo *EventUpdateOne) ClearOauth2token() *EventUpdateOne {
-	euo.mutation.ClearOauth2token()
-	return euo
-}
-
-// RemoveOauth2tokenIDs removes the "oauth2token" edge to OhAuthTooToken entities by IDs.
-func (euo *EventUpdateOne) RemoveOauth2tokenIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveOauth2tokenIDs(ids...)
-	return euo
-}
-
-// RemoveOauth2token removes "oauth2token" edges to OhAuthTooToken entities.
-func (euo *EventUpdateOne) RemoveOauth2token(o ...*OhAuthTooToken) *EventUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return euo.RemoveOauth2tokenIDs(ids...)
 }
 
 // ClearHush clears all "hush" edges to the Hush entity.
@@ -2376,48 +1692,6 @@ func (euo *EventUpdateOne) RemoveGroupmembership(g ...*GroupMembership) *EventUp
 		ids[i] = g[i].ID
 	}
 	return euo.RemoveGroupmembershipIDs(ids...)
-}
-
-// ClearEntitlement clears all "entitlement" edges to the Entitlement entity.
-func (euo *EventUpdateOne) ClearEntitlement() *EventUpdateOne {
-	euo.mutation.ClearEntitlement()
-	return euo
-}
-
-// RemoveEntitlementIDs removes the "entitlement" edge to Entitlement entities by IDs.
-func (euo *EventUpdateOne) RemoveEntitlementIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveEntitlementIDs(ids...)
-	return euo
-}
-
-// RemoveEntitlement removes "entitlement" edges to Entitlement entities.
-func (euo *EventUpdateOne) RemoveEntitlement(e ...*Entitlement) *EventUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return euo.RemoveEntitlementIDs(ids...)
-}
-
-// ClearWebhook clears all "webhook" edges to the Webhook entity.
-func (euo *EventUpdateOne) ClearWebhook() *EventUpdateOne {
-	euo.mutation.ClearWebhook()
-	return euo
-}
-
-// RemoveWebhookIDs removes the "webhook" edge to Webhook entities by IDs.
-func (euo *EventUpdateOne) RemoveWebhookIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveWebhookIDs(ids...)
-	return euo
-}
-
-// RemoveWebhook removes "webhook" edges to Webhook entities.
-func (euo *EventUpdateOne) RemoveWebhook(w ...*Webhook) *EventUpdateOne {
-	ids := make([]string, len(w))
-	for i := range w {
-		ids[i] = w[i].ID
-	}
-	return euo.RemoveWebhookIDs(ids...)
 }
 
 // ClearSubscriber clears all "subscriber" edges to the Subscriber entity.
@@ -2839,150 +2113,6 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.FeatureCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.FeatureTable,
-			Columns: event.FeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(feature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.FeatureEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.RemovedFeatureIDs(); len(nodes) > 0 && !euo.mutation.FeatureCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.FeatureTable,
-			Columns: event.FeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(feature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.FeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.FeatureIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.FeatureTable,
-			Columns: event.FeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(feature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.FeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if euo.mutation.EntitlementplanCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanTable,
-			Columns: event.EntitlementplanPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementPlanEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.RemovedEntitlementplanIDs(); len(nodes) > 0 && !euo.mutation.EntitlementplanCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanTable,
-			Columns: event.EntitlementplanPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementPlanEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.EntitlementplanIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanTable,
-			Columns: event.EntitlementplanPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementPlanEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if euo.mutation.EntitlementplanfeatureCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanfeatureTable,
-			Columns: event.EntitlementplanfeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplanfeature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementPlanFeatureEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.RemovedEntitlementplanfeatureIDs(); len(nodes) > 0 && !euo.mutation.EntitlementplanfeatureCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanfeatureTable,
-			Columns: event.EntitlementplanfeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplanfeature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementPlanFeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.EntitlementplanfeatureIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanfeatureTable,
-			Columns: event.EntitlementplanfeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplanfeature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementPlanFeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if euo.mutation.PersonalAccessTokenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3026,54 +2156,6 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 			},
 		}
 		edge.Schema = euo.schemaConfig.PersonalAccessTokenEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if euo.mutation.Oauth2tokenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.Oauth2tokenTable,
-			Columns: event.Oauth2tokenPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(ohauthtootoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.OhAuthTooTokenEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.RemovedOauth2tokenIDs(); len(nodes) > 0 && !euo.mutation.Oauth2tokenCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.Oauth2tokenTable,
-			Columns: event.Oauth2tokenPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(ohauthtootoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.OhAuthTooTokenEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.Oauth2tokenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.Oauth2tokenTable,
-			Columns: event.Oauth2tokenPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(ohauthtootoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.OhAuthTooTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3218,102 +2300,6 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 			},
 		}
 		edge.Schema = euo.schemaConfig.GroupMembershipEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if euo.mutation.EntitlementCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementTable,
-			Columns: event.EntitlementPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.RemovedEntitlementIDs(); len(nodes) > 0 && !euo.mutation.EntitlementCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementTable,
-			Columns: event.EntitlementPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.EntitlementIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementTable,
-			Columns: event.EntitlementPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.EntitlementEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if euo.mutation.WebhookCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.WebhookTable,
-			Columns: event.WebhookPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.WebhookEvents
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.RemovedWebhookIDs(); len(nodes) > 0 && !euo.mutation.WebhookCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.WebhookTable,
-			Columns: event.WebhookPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.WebhookEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := euo.mutation.WebhookIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.WebhookTable,
-			Columns: event.WebhookPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = euo.schemaConfig.WebhookEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

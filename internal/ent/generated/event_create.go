@@ -10,24 +10,18 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/entitlement"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
-	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/feature"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/webhook"
 )
 
 // EventCreate is the builder for creating a Event entity.
@@ -242,51 +236,6 @@ func (ec *EventCreate) AddInvite(i ...*Invite) *EventCreate {
 	return ec.AddInviteIDs(ids...)
 }
 
-// AddFeatureIDs adds the "feature" edge to the Feature entity by IDs.
-func (ec *EventCreate) AddFeatureIDs(ids ...string) *EventCreate {
-	ec.mutation.AddFeatureIDs(ids...)
-	return ec
-}
-
-// AddFeature adds the "feature" edges to the Feature entity.
-func (ec *EventCreate) AddFeature(f ...*Feature) *EventCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
-	}
-	return ec.AddFeatureIDs(ids...)
-}
-
-// AddEntitlementplanIDs adds the "entitlementplan" edge to the EntitlementPlan entity by IDs.
-func (ec *EventCreate) AddEntitlementplanIDs(ids ...string) *EventCreate {
-	ec.mutation.AddEntitlementplanIDs(ids...)
-	return ec
-}
-
-// AddEntitlementplan adds the "entitlementplan" edges to the EntitlementPlan entity.
-func (ec *EventCreate) AddEntitlementplan(e ...*EntitlementPlan) *EventCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return ec.AddEntitlementplanIDs(ids...)
-}
-
-// AddEntitlementplanfeatureIDs adds the "entitlementplanfeature" edge to the EntitlementPlanFeature entity by IDs.
-func (ec *EventCreate) AddEntitlementplanfeatureIDs(ids ...string) *EventCreate {
-	ec.mutation.AddEntitlementplanfeatureIDs(ids...)
-	return ec
-}
-
-// AddEntitlementplanfeature adds the "entitlementplanfeature" edges to the EntitlementPlanFeature entity.
-func (ec *EventCreate) AddEntitlementplanfeature(e ...*EntitlementPlanFeature) *EventCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return ec.AddEntitlementplanfeatureIDs(ids...)
-}
-
 // AddPersonalAccessTokenIDs adds the "personal_access_token" edge to the PersonalAccessToken entity by IDs.
 func (ec *EventCreate) AddPersonalAccessTokenIDs(ids ...string) *EventCreate {
 	ec.mutation.AddPersonalAccessTokenIDs(ids...)
@@ -300,21 +249,6 @@ func (ec *EventCreate) AddPersonalAccessToken(p ...*PersonalAccessToken) *EventC
 		ids[i] = p[i].ID
 	}
 	return ec.AddPersonalAccessTokenIDs(ids...)
-}
-
-// AddOauth2tokenIDs adds the "oauth2token" edge to the OhAuthTooToken entity by IDs.
-func (ec *EventCreate) AddOauth2tokenIDs(ids ...string) *EventCreate {
-	ec.mutation.AddOauth2tokenIDs(ids...)
-	return ec
-}
-
-// AddOauth2token adds the "oauth2token" edges to the OhAuthTooToken entity.
-func (ec *EventCreate) AddOauth2token(o ...*OhAuthTooToken) *EventCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return ec.AddOauth2tokenIDs(ids...)
 }
 
 // AddHushIDs adds the "hush" edge to the Hush entity by IDs.
@@ -360,36 +294,6 @@ func (ec *EventCreate) AddGroupmembership(g ...*GroupMembership) *EventCreate {
 		ids[i] = g[i].ID
 	}
 	return ec.AddGroupmembershipIDs(ids...)
-}
-
-// AddEntitlementIDs adds the "entitlement" edge to the Entitlement entity by IDs.
-func (ec *EventCreate) AddEntitlementIDs(ids ...string) *EventCreate {
-	ec.mutation.AddEntitlementIDs(ids...)
-	return ec
-}
-
-// AddEntitlement adds the "entitlement" edges to the Entitlement entity.
-func (ec *EventCreate) AddEntitlement(e ...*Entitlement) *EventCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return ec.AddEntitlementIDs(ids...)
-}
-
-// AddWebhookIDs adds the "webhook" edge to the Webhook entity by IDs.
-func (ec *EventCreate) AddWebhookIDs(ids ...string) *EventCreate {
-	ec.mutation.AddWebhookIDs(ids...)
-	return ec
-}
-
-// AddWebhook adds the "webhook" edges to the Webhook entity.
-func (ec *EventCreate) AddWebhook(w ...*Webhook) *EventCreate {
-	ids := make([]string, len(w))
-	for i := range w {
-		ids[i] = w[i].ID
-	}
-	return ec.AddWebhookIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscriber" edge to the Subscriber entity by IDs.
@@ -663,57 +567,6 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.FeatureIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.FeatureTable,
-			Columns: event.FeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(feature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ec.schemaConfig.FeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ec.mutation.EntitlementplanIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanTable,
-			Columns: event.EntitlementplanPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ec.schemaConfig.EntitlementPlanEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ec.mutation.EntitlementplanfeatureIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementplanfeatureTable,
-			Columns: event.EntitlementplanfeaturePrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlementplanfeature.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ec.schemaConfig.EntitlementPlanFeatureEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := ec.mutation.PersonalAccessTokenIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -726,23 +579,6 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = ec.schemaConfig.PersonalAccessTokenEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ec.mutation.Oauth2tokenIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.Oauth2tokenTable,
-			Columns: event.Oauth2tokenPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(ohauthtootoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ec.schemaConfig.OhAuthTooTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -794,40 +630,6 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = ec.schemaConfig.GroupMembershipEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ec.mutation.EntitlementIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.EntitlementTable,
-			Columns: event.EntitlementPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entitlement.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ec.schemaConfig.EntitlementEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ec.mutation.WebhookIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   event.WebhookTable,
-			Columns: event.WebhookPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(webhook.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ec.schemaConfig.WebhookEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

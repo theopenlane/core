@@ -452,134 +452,6 @@ func (dd *DocumentData) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
-func (e *Entitlement) Owner(ctx context.Context) (*Organization, error) {
-	result, err := e.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = e.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (e *Entitlement) Plan(ctx context.Context) (*EntitlementPlan, error) {
-	result, err := e.Edges.PlanOrErr()
-	if IsNotLoaded(err) {
-		result, err = e.QueryPlan().Only(ctx)
-	}
-	return result, err
-}
-
-func (e *Entitlement) Organization(ctx context.Context) (*Organization, error) {
-	result, err := e.Edges.OrganizationOrErr()
-	if IsNotLoaded(err) {
-		result, err = e.QueryOrganization().Only(ctx)
-	}
-	return result, err
-}
-
-func (e *Entitlement) Events(ctx context.Context) (result []*Event, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = e.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = e.Edges.EventsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = e.QueryEvents().All(ctx)
-	}
-	return result, err
-}
-
-func (ep *EntitlementPlan) Owner(ctx context.Context) (*Organization, error) {
-	result, err := ep.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = ep.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (ep *EntitlementPlan) Entitlements(ctx context.Context) (result []*Entitlement, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = ep.NamedEntitlements(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = ep.Edges.EntitlementsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = ep.QueryEntitlements().All(ctx)
-	}
-	return result, err
-}
-
-func (ep *EntitlementPlan) BaseFeatures(ctx context.Context) (result []*Feature, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = ep.NamedBaseFeatures(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = ep.Edges.BaseFeaturesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = ep.QueryBaseFeatures().All(ctx)
-	}
-	return result, err
-}
-
-func (ep *EntitlementPlan) Events(ctx context.Context) (result []*Event, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = ep.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = ep.Edges.EventsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = ep.QueryEvents().All(ctx)
-	}
-	return result, err
-}
-
-func (ep *EntitlementPlan) Features(ctx context.Context) (result []*EntitlementPlanFeature, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = ep.NamedFeatures(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = ep.Edges.FeaturesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = ep.QueryFeatures().All(ctx)
-	}
-	return result, err
-}
-
-func (epf *EntitlementPlanFeature) Owner(ctx context.Context) (*Organization, error) {
-	result, err := epf.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = epf.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (epf *EntitlementPlanFeature) Plan(ctx context.Context) (*EntitlementPlan, error) {
-	result, err := epf.Edges.PlanOrErr()
-	if IsNotLoaded(err) {
-		result, err = epf.QueryPlan().Only(ctx)
-	}
-	return result, err
-}
-
-func (epf *EntitlementPlanFeature) Feature(ctx context.Context) (*Feature, error) {
-	result, err := epf.Edges.FeatureOrErr()
-	if IsNotLoaded(err) {
-		result, err = epf.QueryFeature().Only(ctx)
-	}
-	return result, err
-}
-
-func (epf *EntitlementPlanFeature) Events(ctx context.Context) (result []*Event, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = epf.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = epf.Edges.EventsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = epf.QueryEvents().All(ctx)
-	}
-	return result, err
-}
-
 func (e *Entity) Owner(ctx context.Context) (*Organization, error) {
 	result, err := e.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -724,42 +596,6 @@ func (e *Event) Invite(ctx context.Context) (result []*Invite, err error) {
 	return result, err
 }
 
-func (e *Event) Feature(ctx context.Context) (result []*Feature, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = e.NamedFeature(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = e.Edges.FeatureOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = e.QueryFeature().All(ctx)
-	}
-	return result, err
-}
-
-func (e *Event) Entitlementplan(ctx context.Context) (result []*EntitlementPlan, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = e.NamedEntitlementplan(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = e.Edges.EntitlementplanOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = e.QueryEntitlementplan().All(ctx)
-	}
-	return result, err
-}
-
-func (e *Event) Entitlementplanfeature(ctx context.Context) (result []*EntitlementPlanFeature, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = e.NamedEntitlementplanfeature(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = e.Edges.EntitlementplanfeatureOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = e.QueryEntitlementplanfeature().All(ctx)
-	}
-	return result, err
-}
-
 func (e *Event) PersonalAccessToken(ctx context.Context) (result []*PersonalAccessToken, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = e.NamedPersonalAccessToken(graphql.GetFieldContext(ctx).Field.Alias)
@@ -768,18 +604,6 @@ func (e *Event) PersonalAccessToken(ctx context.Context) (result []*PersonalAcce
 	}
 	if IsNotLoaded(err) {
 		result, err = e.QueryPersonalAccessToken().All(ctx)
-	}
-	return result, err
-}
-
-func (e *Event) Oauth2token(ctx context.Context) (result []*OhAuthTooToken, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = e.NamedOauth2token(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = e.Edges.Oauth2tokenOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = e.QueryOauth2token().All(ctx)
 	}
 	return result, err
 }
@@ -820,30 +644,6 @@ func (e *Event) Groupmembership(ctx context.Context) (result []*GroupMembership,
 	return result, err
 }
 
-func (e *Event) Entitlement(ctx context.Context) (result []*Entitlement, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = e.NamedEntitlement(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = e.Edges.EntitlementOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = e.QueryEntitlement().All(ctx)
-	}
-	return result, err
-}
-
-func (e *Event) Webhook(ctx context.Context) (result []*Webhook, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = e.NamedWebhook(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = e.Edges.WebhookOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = e.QueryWebhook().All(ctx)
-	}
-	return result, err
-}
-
 func (e *Event) Subscriber(ctx context.Context) (result []*Subscriber, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = e.NamedSubscriber(graphql.GetFieldContext(ctx).Field.Alias)
@@ -864,50 +664,6 @@ func (e *Event) File(ctx context.Context) (result []*File, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = e.QueryFile().All(ctx)
-	}
-	return result, err
-}
-
-func (f *Feature) Owner(ctx context.Context) (*Organization, error) {
-	result, err := f.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = f.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (f *Feature) Plans(ctx context.Context) (result []*EntitlementPlan, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = f.NamedPlans(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = f.Edges.PlansOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = f.QueryPlans().All(ctx)
-	}
-	return result, err
-}
-
-func (f *Feature) Events(ctx context.Context) (result []*Event, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = f.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = f.Edges.EventsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = f.QueryEvents().All(ctx)
-	}
-	return result, err
-}
-
-func (f *Feature) Features(ctx context.Context) (result []*EntitlementPlanFeature, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = f.NamedFeatures(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = f.Edges.FeaturesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = f.QueryFeatures().All(ctx)
 	}
 	return result, err
 }
@@ -1560,18 +1316,6 @@ func (i *Integration) Secrets(ctx context.Context) (result []*Hush, err error) {
 	return result, err
 }
 
-func (i *Integration) Oauth2tokens(ctx context.Context) (result []*OhAuthTooToken, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = i.NamedOauth2tokens(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = i.Edges.Oauth2tokensOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = i.QueryOauth2tokens().All(ctx)
-	}
-	return result, err
-}
-
 func (i *Integration) Events(ctx context.Context) (result []*Event, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = i.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1580,18 +1324,6 @@ func (i *Integration) Events(ctx context.Context) (result []*Event, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = i.QueryEvents().All(ctx)
-	}
-	return result, err
-}
-
-func (i *Integration) Webhooks(ctx context.Context) (result []*Webhook, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = i.NamedWebhooks(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = i.Edges.WebhooksOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = i.QueryWebhooks().All(ctx)
 	}
 	return result, err
 }
@@ -1864,38 +1596,6 @@ func (n *Note) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (op *OauthProvider) Owner(ctx context.Context) (*Organization, error) {
-	result, err := op.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = op.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (oatt *OhAuthTooToken) Integration(ctx context.Context) (result []*Integration, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = oatt.NamedIntegration(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = oatt.Edges.IntegrationOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = oatt.QueryIntegration().All(ctx)
-	}
-	return result, err
-}
-
-func (oatt *OhAuthTooToken) Events(ctx context.Context) (result []*Event, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = oatt.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = oatt.Edges.EventsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = oatt.QueryEvents().All(ctx)
-	}
-	return result, err
-}
-
 func (om *OrgMembership) Organization(ctx context.Context) (*Organization, error) {
 	result, err := om.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {
@@ -2125,18 +1825,6 @@ func (o *Organization) Documentdata(ctx context.Context) (result []*DocumentData
 	return result, err
 }
 
-func (o *Organization) Entitlements(ctx context.Context) (result []*Entitlement, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedEntitlements(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.EntitlementsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryEntitlements().All(ctx)
-	}
-	return result, err
-}
-
 func (o *Organization) Orgsubscriptions(ctx context.Context) (result []*OrgSubscription, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedOrgsubscriptions(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2145,18 +1833,6 @@ func (o *Organization) Orgsubscriptions(ctx context.Context) (result []*OrgSubsc
 	}
 	if IsNotLoaded(err) {
 		result, err = o.QueryOrgsubscriptions().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) OrganizationEntitlement(ctx context.Context) (result []*Entitlement, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedOrganizationEntitlement(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.OrganizationEntitlementOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryOrganizationEntitlement().All(ctx)
 	}
 	return result, err
 }
@@ -2181,18 +1857,6 @@ func (o *Organization) APITokens(ctx context.Context) (result []*APIToken, err e
 	}
 	if IsNotLoaded(err) {
 		result, err = o.QueryAPITokens().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) Oauthprovider(ctx context.Context) (result []*OauthProvider, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedOauthprovider(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.OauthproviderOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryOauthprovider().All(ctx)
 	}
 	return result, err
 }
@@ -2233,18 +1897,6 @@ func (o *Organization) Subscribers(ctx context.Context) (result []*Subscriber, e
 	return result, err
 }
 
-func (o *Organization) Webhooks(ctx context.Context) (result []*Webhook, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedWebhooks(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.WebhooksOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryWebhooks().All(ctx)
-	}
-	return result, err
-}
-
 func (o *Organization) Events(ctx context.Context) (result []*Event, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2269,18 +1921,6 @@ func (o *Organization) Secrets(ctx context.Context) (result []*Hush, err error) 
 	return result, err
 }
 
-func (o *Organization) Features(ctx context.Context) (result []*Feature, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedFeatures(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.FeaturesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryFeatures().All(ctx)
-	}
-	return result, err
-}
-
 func (o *Organization) Files(ctx context.Context) (result []*File, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2289,30 +1929,6 @@ func (o *Organization) Files(ctx context.Context) (result []*File, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = o.QueryFiles().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) Entitlementplans(ctx context.Context) (result []*EntitlementPlan, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedEntitlementplans(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.EntitlementplansOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryEntitlementplans().All(ctx)
-	}
-	return result, err
-}
-
-func (o *Organization) Entitlementplanfeatures(ctx context.Context) (result []*EntitlementPlanFeature, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedEntitlementplanfeatures(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = o.Edges.EntitlementplanfeaturesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = o.QueryEntitlementplanfeatures().All(ctx)
 	}
 	return result, err
 }
@@ -3465,38 +3081,6 @@ func (us *UserSetting) Files(ctx context.Context) (result []*File, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = us.QueryFiles().All(ctx)
-	}
-	return result, err
-}
-
-func (w *Webhook) Owner(ctx context.Context) (*Organization, error) {
-	result, err := w.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = w.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (w *Webhook) Events(ctx context.Context) (result []*Event, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = w.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = w.Edges.EventsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = w.QueryEvents().All(ctx)
-	}
-	return result, err
-}
-
-func (w *Webhook) Integrations(ctx context.Context) (result []*Integration, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = w.NamedIntegrations(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = w.Edges.IntegrationsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = w.QueryIntegrations().All(ctx)
 	}
 	return result, err
 }
