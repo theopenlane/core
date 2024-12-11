@@ -44,7 +44,7 @@ require (
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nyaruka/phonenumbers v1.4.3
-	github.com/oNaiPs/go-generate-fast v0.0.0-00010101000000-000000000000
+	github.com/oNaiPs/go-generate-fast v0.3.0
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/openfga/go-sdk v0.6.3
 	github.com/pkg/errors v0.9.1
