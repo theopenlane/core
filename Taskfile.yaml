@@ -44,21 +44,25 @@ tasks:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
     cmds:
       - go generate ./...
+      - task: tidy
 
   generate:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
     cmds:
       - go-generate-fast ./...
+      - task: tidy
 
   generate:ent:
     desc: generate ent models
     cmds:
       - go-generate-fast generate_ent.go
+      - task: tidy
 
   generate:gql:
     desc: generate gql graphql models and resolvers, along with the client
     cmds:
       - go-generate-fast generate_gql.go
+      - task: tidy
 
   ## Go tasks
   go:lint:
