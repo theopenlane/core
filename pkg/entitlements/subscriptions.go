@@ -131,38 +131,44 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) 
 	}, nil
 }
 
+func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string, error) {
+	params := &stripe.EntitlementsActiveEntitlementListParams{
+		Customer: stripe.String(customerID),
+		Expand:   []*string{stripe.String("data.feature")},
+	}
+
+	iter := sc.Client.EntitlementsActiveEntitlements.List(params)
+
+	if !iter.Next() {
+		return nil, iter.Err()
+	}
+
+	feat := []string{}
+	for iter.Next() {
+		feat = append(feat, iter.EntitlementsActiveEntitlement().LookupKey)
+	}
+
+	return feat, nil
+}
+
 // mapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
 func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscription {
 	subscript := Subscription{}
 
-	var prices []Price
+	prices := []Price{}
 
 	for _, item := range subs.Items.Data {
 		prices = append(prices, Price{
 			ID:        item.Price.ID,
-			Price:     float64(item.Price.UnitAmount),
+			Price:     float64(item.Price.UnitAmount) / 100, // nolint:mnd
 			ProductID: item.Price.Product.ID,
 			Interval:  string(item.Price.Recurring.Interval),
 		})
+
+		subscript.Prices = append(subscript.Prices, prices...)
 	}
 
-	for _, product := range prices {
-		prodFeat := sc.GetProductFeatures(product.ProductID)
-		for _, feature := range prodFeat {
-			featureList := []Feature{
-				{
-					ID:               feature.FeatureID,
-					ProductFeatureID: feature.ProductFeatureID,
-					Name:             feature.Name,
-					Lookupkey:        feature.Lookupkey,
-				},
-			}
-
-			subscript.Features = append(subscript.Features, featureList...)
-		}
-	}
-
-	subscription := &Subscription{
+	return &Subscription{
 		ID:               subs.ID,
 		Prices:           prices,
 		StartDate:        subs.CurrentPeriodStart,
@@ -174,8 +180,6 @@ func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscr
 		DaysUntilDue:     subs.DaysUntilDue,
 		Features:         subscript.Features,
 	}
-
-	return subscription
 }
 
 type Subs struct {

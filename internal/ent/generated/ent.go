@@ -66,6 +66,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -203,6 +205,8 @@ func checkColumn(table, column string) error {
 			ohauthtootoken.Table:                ohauthtootoken.ValidColumn,
 			orgmembership.Table:                 orgmembership.ValidColumn,
 			orgmembershiphistory.Table:          orgmembershiphistory.ValidColumn,
+			orgsubscription.Table:               orgsubscription.ValidColumn,
+			orgsubscriptionhistory.Table:        orgsubscriptionhistory.ValidColumn,
 			organization.Table:                  organization.ValidColumn,
 			organizationhistory.Table:           organizationhistory.ValidColumn,
 			organizationsetting.Table:           organizationsetting.ValidColumn,

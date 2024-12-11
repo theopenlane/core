@@ -74,7 +74,20 @@ func (sc *StripeClient) FindorCreateCustomer(ctx context.Context, o *Organizatio
 			return nil, err
 		}
 
+		subs, err := sc.CreateTrialSubscription(customer.ID)
+		if err != nil {
+			return nil, err
+		}
+
 		o.StripeCustomerID = customer.ID
+		o.Subscription = *subs
+
+		feats, err := sc.retrieveActiveEntitlements(customer.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		o.Features = feats
 
 		return o, nil
 	case 1:

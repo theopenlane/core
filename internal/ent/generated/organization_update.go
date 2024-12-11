@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -479,6 +480,21 @@ func (ou *OrganizationUpdate) AddEntitlements(e ...*Entitlement) *OrganizationUp
 		ids[i] = e[i].ID
 	}
 	return ou.AddEntitlementIDs(ids...)
+}
+
+// AddOrgsubscriptionIDs adds the "orgsubscriptions" edge to the OrgSubscription entity by IDs.
+func (ou *OrganizationUpdate) AddOrgsubscriptionIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddOrgsubscriptionIDs(ids...)
+	return ou
+}
+
+// AddOrgsubscriptions adds the "orgsubscriptions" edges to the OrgSubscription entity.
+func (ou *OrganizationUpdate) AddOrgsubscriptions(o ...*OrgSubscription) *OrganizationUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return ou.AddOrgsubscriptionIDs(ids...)
 }
 
 // AddOrganizationEntitlementIDs adds the "organization_entitlement" edge to the Entitlement entity by IDs.
@@ -1225,6 +1241,27 @@ func (ou *OrganizationUpdate) RemoveEntitlements(e ...*Entitlement) *Organizatio
 		ids[i] = e[i].ID
 	}
 	return ou.RemoveEntitlementIDs(ids...)
+}
+
+// ClearOrgsubscriptions clears all "orgsubscriptions" edges to the OrgSubscription entity.
+func (ou *OrganizationUpdate) ClearOrgsubscriptions() *OrganizationUpdate {
+	ou.mutation.ClearOrgsubscriptions()
+	return ou
+}
+
+// RemoveOrgsubscriptionIDs removes the "orgsubscriptions" edge to OrgSubscription entities by IDs.
+func (ou *OrganizationUpdate) RemoveOrgsubscriptionIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveOrgsubscriptionIDs(ids...)
+	return ou
+}
+
+// RemoveOrgsubscriptions removes "orgsubscriptions" edges to OrgSubscription entities.
+func (ou *OrganizationUpdate) RemoveOrgsubscriptions(o ...*OrgSubscription) *OrganizationUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return ou.RemoveOrgsubscriptionIDs(ids...)
 }
 
 // ClearOrganizationEntitlement clears all "organization_entitlement" edges to the Entitlement entity.
@@ -2706,6 +2743,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = ou.schemaConfig.Entitlement
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.OrgsubscriptionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgsubscriptionsTable,
+			Columns: []string{organization.OrgsubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.OrgSubscription
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedOrgsubscriptionsIDs(); len(nodes) > 0 && !ou.mutation.OrgsubscriptionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgsubscriptionsTable,
+			Columns: []string{organization.OrgsubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.OrgsubscriptionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgsubscriptionsTable,
+			Columns: []string{organization.OrgsubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4516,6 +4601,21 @@ func (ouo *OrganizationUpdateOne) AddEntitlements(e ...*Entitlement) *Organizati
 	return ouo.AddEntitlementIDs(ids...)
 }
 
+// AddOrgsubscriptionIDs adds the "orgsubscriptions" edge to the OrgSubscription entity by IDs.
+func (ouo *OrganizationUpdateOne) AddOrgsubscriptionIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddOrgsubscriptionIDs(ids...)
+	return ouo
+}
+
+// AddOrgsubscriptions adds the "orgsubscriptions" edges to the OrgSubscription entity.
+func (ouo *OrganizationUpdateOne) AddOrgsubscriptions(o ...*OrgSubscription) *OrganizationUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return ouo.AddOrgsubscriptionIDs(ids...)
+}
+
 // AddOrganizationEntitlementIDs adds the "organization_entitlement" edge to the Entitlement entity by IDs.
 func (ouo *OrganizationUpdateOne) AddOrganizationEntitlementIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddOrganizationEntitlementIDs(ids...)
@@ -5260,6 +5360,27 @@ func (ouo *OrganizationUpdateOne) RemoveEntitlements(e ...*Entitlement) *Organiz
 		ids[i] = e[i].ID
 	}
 	return ouo.RemoveEntitlementIDs(ids...)
+}
+
+// ClearOrgsubscriptions clears all "orgsubscriptions" edges to the OrgSubscription entity.
+func (ouo *OrganizationUpdateOne) ClearOrgsubscriptions() *OrganizationUpdateOne {
+	ouo.mutation.ClearOrgsubscriptions()
+	return ouo
+}
+
+// RemoveOrgsubscriptionIDs removes the "orgsubscriptions" edge to OrgSubscription entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveOrgsubscriptionIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveOrgsubscriptionIDs(ids...)
+	return ouo
+}
+
+// RemoveOrgsubscriptions removes "orgsubscriptions" edges to OrgSubscription entities.
+func (ouo *OrganizationUpdateOne) RemoveOrgsubscriptions(o ...*OrgSubscription) *OrganizationUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return ouo.RemoveOrgsubscriptionIDs(ids...)
 }
 
 // ClearOrganizationEntitlement clears all "organization_entitlement" edges to the Entitlement entity.
@@ -6771,6 +6892,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Entitlement
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.OrgsubscriptionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgsubscriptionsTable,
+			Columns: []string{organization.OrgsubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.OrgSubscription
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedOrgsubscriptionsIDs(); len(nodes) > 0 && !ouo.mutation.OrgsubscriptionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgsubscriptionsTable,
+			Columns: []string{organization.OrgsubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.OrgsubscriptionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgsubscriptionsTable,
+			Columns: []string{organization.OrgsubscriptionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

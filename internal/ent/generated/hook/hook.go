@@ -609,6 +609,30 @@ func (f OrgMembershipHistoryFunc) Mutate(ctx context.Context, m generated.Mutati
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.OrgMembershipHistoryMutation", m)
 }
 
+// The OrgSubscriptionFunc type is an adapter to allow the use of ordinary
+// function as OrgSubscription mutator.
+type OrgSubscriptionFunc func(context.Context, *generated.OrgSubscriptionMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OrgSubscriptionFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.OrgSubscriptionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.OrgSubscriptionMutation", m)
+}
+
+// The OrgSubscriptionHistoryFunc type is an adapter to allow the use of ordinary
+// function as OrgSubscriptionHistory mutator.
+type OrgSubscriptionHistoryFunc func(context.Context, *generated.OrgSubscriptionHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OrgSubscriptionHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.OrgSubscriptionHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.OrgSubscriptionHistoryMutation", m)
+}
+
 // The OrganizationFunc type is an adapter to allow the use of ordinary
 // function as Organization mutator.
 type OrganizationFunc func(context.Context, *generated.OrganizationMutation) (generated.Value, error)

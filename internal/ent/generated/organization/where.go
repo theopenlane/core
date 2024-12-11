@@ -1465,6 +1465,35 @@ func HasEntitlementsWith(preds ...predicate.Entitlement) predicate.Organization 
 	})
 }
 
+// HasOrgsubscriptions applies the HasEdge predicate on the "orgsubscriptions" edge.
+func HasOrgsubscriptions() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrgsubscriptionsTable, OrgsubscriptionsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrgsubscriptionsWith applies the HasEdge predicate on the "orgsubscriptions" edge with a given conditions (other predicates).
+func HasOrgsubscriptionsWith(preds ...predicate.OrgSubscription) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newOrgsubscriptionsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasOrganizationEntitlement applies the HasEdge predicate on the "organization_entitlement" edge.
 func HasOrganizationEntitlement() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

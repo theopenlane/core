@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
@@ -1696,6 +1697,84 @@ func (omh *OrgMembershipHistory) Diff(history *OrgMembershipHistory) (*HistoryDi
 	return nil, IdenticalHistoryError
 }
 
+func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(osh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldCreatedAt, osh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(osh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldUpdatedAt, osh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(osh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldCreatedBy, osh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(osh.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldMappingID, osh.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(osh.Tags, new.Tags) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldTags, osh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(osh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedAt, osh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(osh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedBy, osh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(osh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldOwnerID, osh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(osh.StripeSubscriptionID, new.StripeSubscriptionID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionID, osh.StripeSubscriptionID, new.StripeSubscriptionID))
+	}
+	if !reflect.DeepEqual(osh.ProductTier, new.ProductTier) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductTier, osh.ProductTier, new.ProductTier))
+	}
+	if !reflect.DeepEqual(osh.StripeProductTierID, new.StripeProductTierID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeProductTierID, osh.StripeProductTierID, new.StripeProductTierID))
+	}
+	if !reflect.DeepEqual(osh.StripeSubscriptionStatus, new.StripeSubscriptionStatus) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionStatus, osh.StripeSubscriptionStatus, new.StripeSubscriptionStatus))
+	}
+	if !reflect.DeepEqual(osh.Active, new.Active) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldActive, osh.Active, new.Active))
+	}
+	if !reflect.DeepEqual(osh.StripeCustomerID, new.StripeCustomerID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeCustomerID, osh.StripeCustomerID, new.StripeCustomerID))
+	}
+	if !reflect.DeepEqual(osh.ExpiresAt, new.ExpiresAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldExpiresAt, osh.ExpiresAt, new.ExpiresAt))
+	}
+	if !reflect.DeepEqual(osh.Features, new.Features) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatures, osh.Features, new.Features))
+	}
+	return changes
+}
+
+func (osh *OrgSubscriptionHistory) Diff(history *OrgSubscriptionHistory) (*HistoryDiff[OrgSubscriptionHistory], error) {
+	if osh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	oshUnix, historyUnix := osh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	oshOlder := oshUnix < historyUnix || (oshUnix == historyUnix && osh.ID < history.ID)
+	historyOlder := oshUnix > historyUnix || (oshUnix == historyUnix && osh.ID > history.ID)
+
+	if oshOlder {
+		return &HistoryDiff[OrgSubscriptionHistory]{
+			Old:     osh,
+			New:     history,
+			Changes: osh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[OrgSubscriptionHistory]{
+			Old:     history,
+			New:     osh,
+			Changes: history.changes(osh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(oh.CreatedAt, new.CreatedAt) {
@@ -2891,6 +2970,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditOrgSubscriptionHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditOrganizationHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -3179,6 +3264,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("OrgMembershipHistory", "History") {
 		record, err = auditOrgMembershipHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("OrgSubscriptionHistory", "History") {
+		record, err = auditOrgSubscriptionHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -4544,6 +4638,59 @@ func auditOrgMembershipHistory(ctx context.Context, config config) ([][]string, 
 			default:
 				if i == 0 {
 					record.Changes = (&OrgMembershipHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type orgsubscriptionhistoryref struct {
+	Ref string
+}
+
+func auditOrgSubscriptionHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []orgsubscriptionhistoryref
+	client := NewOrgSubscriptionHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(orgsubscriptionhistory.ByRef()).
+		Select(orgsubscriptionhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(orgsubscriptionhistory.Ref(currRef.Ref)).
+			Order(orgsubscriptionhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "OrgSubscriptionHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&OrgSubscriptionHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&OrgSubscriptionHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&OrgSubscriptionHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

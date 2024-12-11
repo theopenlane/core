@@ -67,6 +67,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
@@ -12987,6 +12989,504 @@ func (omh *OrgMembershipHistory) ToEdge(order *OrgMembershipHistoryOrder) *OrgMe
 	return &OrgMembershipHistoryEdge{
 		Node:   omh,
 		Cursor: order.Field.toCursor(omh),
+	}
+}
+
+// OrgSubscriptionEdge is the edge representation of OrgSubscription.
+type OrgSubscriptionEdge struct {
+	Node   *OrgSubscription `json:"node"`
+	Cursor Cursor           `json:"cursor"`
+}
+
+// OrgSubscriptionConnection is the connection containing edges to OrgSubscription.
+type OrgSubscriptionConnection struct {
+	Edges      []*OrgSubscriptionEdge `json:"edges"`
+	PageInfo   PageInfo               `json:"pageInfo"`
+	TotalCount int                    `json:"totalCount"`
+}
+
+func (c *OrgSubscriptionConnection) build(nodes []*OrgSubscription, pager *orgsubscriptionPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *OrgSubscription
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *OrgSubscription {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *OrgSubscription {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*OrgSubscriptionEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &OrgSubscriptionEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// OrgSubscriptionPaginateOption enables pagination customization.
+type OrgSubscriptionPaginateOption func(*orgsubscriptionPager) error
+
+// WithOrgSubscriptionOrder configures pagination ordering.
+func WithOrgSubscriptionOrder(order *OrgSubscriptionOrder) OrgSubscriptionPaginateOption {
+	if order == nil {
+		order = DefaultOrgSubscriptionOrder
+	}
+	o := *order
+	return func(pager *orgsubscriptionPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultOrgSubscriptionOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithOrgSubscriptionFilter configures pagination filter.
+func WithOrgSubscriptionFilter(filter func(*OrgSubscriptionQuery) (*OrgSubscriptionQuery, error)) OrgSubscriptionPaginateOption {
+	return func(pager *orgsubscriptionPager) error {
+		if filter == nil {
+			return errors.New("OrgSubscriptionQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type orgsubscriptionPager struct {
+	reverse bool
+	order   *OrgSubscriptionOrder
+	filter  func(*OrgSubscriptionQuery) (*OrgSubscriptionQuery, error)
+}
+
+func newOrgSubscriptionPager(opts []OrgSubscriptionPaginateOption, reverse bool) (*orgsubscriptionPager, error) {
+	pager := &orgsubscriptionPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultOrgSubscriptionOrder
+	}
+	return pager, nil
+}
+
+func (p *orgsubscriptionPager) applyFilter(query *OrgSubscriptionQuery) (*OrgSubscriptionQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *orgsubscriptionPager) toCursor(os *OrgSubscription) Cursor {
+	return p.order.Field.toCursor(os)
+}
+
+func (p *orgsubscriptionPager) applyCursors(query *OrgSubscriptionQuery, after, before *Cursor) (*OrgSubscriptionQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultOrgSubscriptionOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *orgsubscriptionPager) applyOrder(query *OrgSubscriptionQuery) *OrgSubscriptionQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultOrgSubscriptionOrder.Field {
+		query = query.Order(DefaultOrgSubscriptionOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *orgsubscriptionPager) orderExpr(query *OrgSubscriptionQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultOrgSubscriptionOrder.Field {
+			b.Comma().Ident(DefaultOrgSubscriptionOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to OrgSubscription.
+func (os *OrgSubscriptionQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...OrgSubscriptionPaginateOption,
+) (*OrgSubscriptionConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newOrgSubscriptionPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if os, err = pager.applyFilter(os); err != nil {
+		return nil, err
+	}
+	conn := &OrgSubscriptionConnection{Edges: []*OrgSubscriptionEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := os.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if os, err = pager.applyCursors(os, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		os.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := os.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	os = pager.applyOrder(os)
+	nodes, err := os.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// OrgSubscriptionOrderField defines the ordering field of OrgSubscription.
+type OrgSubscriptionOrderField struct {
+	// Value extracts the ordering value from the given OrgSubscription.
+	Value    func(*OrgSubscription) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) orgsubscription.OrderOption
+	toCursor func(*OrgSubscription) Cursor
+}
+
+// OrgSubscriptionOrder defines the ordering of OrgSubscription.
+type OrgSubscriptionOrder struct {
+	Direction OrderDirection             `json:"direction"`
+	Field     *OrgSubscriptionOrderField `json:"field"`
+}
+
+// DefaultOrgSubscriptionOrder is the default ordering of OrgSubscription.
+var DefaultOrgSubscriptionOrder = &OrgSubscriptionOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &OrgSubscriptionOrderField{
+		Value: func(os *OrgSubscription) (ent.Value, error) {
+			return os.ID, nil
+		},
+		column: orgsubscription.FieldID,
+		toTerm: orgsubscription.ByID,
+		toCursor: func(os *OrgSubscription) Cursor {
+			return Cursor{ID: os.ID}
+		},
+	},
+}
+
+// ToEdge converts OrgSubscription into OrgSubscriptionEdge.
+func (os *OrgSubscription) ToEdge(order *OrgSubscriptionOrder) *OrgSubscriptionEdge {
+	if order == nil {
+		order = DefaultOrgSubscriptionOrder
+	}
+	return &OrgSubscriptionEdge{
+		Node:   os,
+		Cursor: order.Field.toCursor(os),
+	}
+}
+
+// OrgSubscriptionHistoryEdge is the edge representation of OrgSubscriptionHistory.
+type OrgSubscriptionHistoryEdge struct {
+	Node   *OrgSubscriptionHistory `json:"node"`
+	Cursor Cursor                  `json:"cursor"`
+}
+
+// OrgSubscriptionHistoryConnection is the connection containing edges to OrgSubscriptionHistory.
+type OrgSubscriptionHistoryConnection struct {
+	Edges      []*OrgSubscriptionHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                      `json:"pageInfo"`
+	TotalCount int                           `json:"totalCount"`
+}
+
+func (c *OrgSubscriptionHistoryConnection) build(nodes []*OrgSubscriptionHistory, pager *orgsubscriptionhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *OrgSubscriptionHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *OrgSubscriptionHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *OrgSubscriptionHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*OrgSubscriptionHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &OrgSubscriptionHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// OrgSubscriptionHistoryPaginateOption enables pagination customization.
+type OrgSubscriptionHistoryPaginateOption func(*orgsubscriptionhistoryPager) error
+
+// WithOrgSubscriptionHistoryOrder configures pagination ordering.
+func WithOrgSubscriptionHistoryOrder(order *OrgSubscriptionHistoryOrder) OrgSubscriptionHistoryPaginateOption {
+	if order == nil {
+		order = DefaultOrgSubscriptionHistoryOrder
+	}
+	o := *order
+	return func(pager *orgsubscriptionhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultOrgSubscriptionHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithOrgSubscriptionHistoryFilter configures pagination filter.
+func WithOrgSubscriptionHistoryFilter(filter func(*OrgSubscriptionHistoryQuery) (*OrgSubscriptionHistoryQuery, error)) OrgSubscriptionHistoryPaginateOption {
+	return func(pager *orgsubscriptionhistoryPager) error {
+		if filter == nil {
+			return errors.New("OrgSubscriptionHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type orgsubscriptionhistoryPager struct {
+	reverse bool
+	order   *OrgSubscriptionHistoryOrder
+	filter  func(*OrgSubscriptionHistoryQuery) (*OrgSubscriptionHistoryQuery, error)
+}
+
+func newOrgSubscriptionHistoryPager(opts []OrgSubscriptionHistoryPaginateOption, reverse bool) (*orgsubscriptionhistoryPager, error) {
+	pager := &orgsubscriptionhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultOrgSubscriptionHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *orgsubscriptionhistoryPager) applyFilter(query *OrgSubscriptionHistoryQuery) (*OrgSubscriptionHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *orgsubscriptionhistoryPager) toCursor(osh *OrgSubscriptionHistory) Cursor {
+	return p.order.Field.toCursor(osh)
+}
+
+func (p *orgsubscriptionhistoryPager) applyCursors(query *OrgSubscriptionHistoryQuery, after, before *Cursor) (*OrgSubscriptionHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultOrgSubscriptionHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *orgsubscriptionhistoryPager) applyOrder(query *OrgSubscriptionHistoryQuery) *OrgSubscriptionHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultOrgSubscriptionHistoryOrder.Field {
+		query = query.Order(DefaultOrgSubscriptionHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *orgsubscriptionhistoryPager) orderExpr(query *OrgSubscriptionHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultOrgSubscriptionHistoryOrder.Field {
+			b.Comma().Ident(DefaultOrgSubscriptionHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to OrgSubscriptionHistory.
+func (osh *OrgSubscriptionHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...OrgSubscriptionHistoryPaginateOption,
+) (*OrgSubscriptionHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newOrgSubscriptionHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if osh, err = pager.applyFilter(osh); err != nil {
+		return nil, err
+	}
+	conn := &OrgSubscriptionHistoryConnection{Edges: []*OrgSubscriptionHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := osh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if osh, err = pager.applyCursors(osh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		osh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := osh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	osh = pager.applyOrder(osh)
+	nodes, err := osh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// OrgSubscriptionHistoryOrderField defines the ordering field of OrgSubscriptionHistory.
+type OrgSubscriptionHistoryOrderField struct {
+	// Value extracts the ordering value from the given OrgSubscriptionHistory.
+	Value    func(*OrgSubscriptionHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) orgsubscriptionhistory.OrderOption
+	toCursor func(*OrgSubscriptionHistory) Cursor
+}
+
+// OrgSubscriptionHistoryOrder defines the ordering of OrgSubscriptionHistory.
+type OrgSubscriptionHistoryOrder struct {
+	Direction OrderDirection                    `json:"direction"`
+	Field     *OrgSubscriptionHistoryOrderField `json:"field"`
+}
+
+// DefaultOrgSubscriptionHistoryOrder is the default ordering of OrgSubscriptionHistory.
+var DefaultOrgSubscriptionHistoryOrder = &OrgSubscriptionHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &OrgSubscriptionHistoryOrderField{
+		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			return osh.ID, nil
+		},
+		column: orgsubscriptionhistory.FieldID,
+		toTerm: orgsubscriptionhistory.ByID,
+		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			return Cursor{ID: osh.ID}
+		},
+	},
+}
+
+// ToEdge converts OrgSubscriptionHistory into OrgSubscriptionHistoryEdge.
+func (osh *OrgSubscriptionHistory) ToEdge(order *OrgSubscriptionHistoryOrder) *OrgSubscriptionHistoryEdge {
+	if order == nil {
+		order = DefaultOrgSubscriptionHistoryOrder
+	}
+	return &OrgSubscriptionHistoryEdge{
+		Node:   osh,
+		Cursor: order.Field.toCursor(osh),
 	}
 }
 

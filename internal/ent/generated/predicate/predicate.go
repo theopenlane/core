@@ -156,6 +156,12 @@ type OrgMembership func(*sql.Selector)
 // OrgMembershipHistory is the predicate function for orgmembershiphistory builders.
 type OrgMembershipHistory func(*sql.Selector)
 
+// OrgSubscription is the predicate function for orgsubscription builders.
+type OrgSubscription func(*sql.Selector)
+
+// OrgSubscriptionHistory is the predicate function for orgsubscriptionhistory builders.
+type OrgSubscriptionHistory func(*sql.Selector)
+
 // Organization is the predicate function for organization builders.
 type Organization func(*sql.Selector)
 

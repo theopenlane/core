@@ -133,6 +133,12 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
+      ... on OrgSubscriptionSearchResult {
+        orgSubscriptions {
+          id
+          tags
+        }
+      }
       ... on OrganizationSearchResult {
         organizations {
           displayName

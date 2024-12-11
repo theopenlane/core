@@ -203,13 +203,6 @@ func RegisterRoutes(router *Router) error {
 		registerAppleMerchantHandler,
 	}
 
-	// add the checkout handlers if the entitlements are enabled
-	if router.Handler.Entitlements != nil {
-		routeHandlers = append(routeHandlers,
-			registerCheckoutSessionHandler,
-			registerCheckoutSuccessHandler)
-	}
-
 	for _, route := range routeHandlers {
 		if err := route.(func(*Router) error)(router); err != nil {
 			return err

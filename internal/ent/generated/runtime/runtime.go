@@ -60,6 +60,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -2770,6 +2772,89 @@ func init() {
 	orgmembershiphistoryDescID := orgmembershiphistoryFields[7].Descriptor()
 	// orgmembershiphistory.DefaultID holds the default value on creation for the id field.
 	orgmembershiphistory.DefaultID = orgmembershiphistoryDescID.Default.(func() string)
+	orgsubscriptionMixin := schema.OrgSubscription{}.Mixin()
+	orgsubscriptionMixinHooks0 := orgsubscriptionMixin[0].Hooks()
+	orgsubscriptionMixinHooks3 := orgsubscriptionMixin[3].Hooks()
+	orgsubscriptionMixinHooks4 := orgsubscriptionMixin[4].Hooks()
+	orgsubscription.Hooks[0] = orgsubscriptionMixinHooks0[0]
+	orgsubscription.Hooks[1] = orgsubscriptionMixinHooks3[0]
+	orgsubscription.Hooks[2] = orgsubscriptionMixinHooks4[0]
+	orgsubscriptionMixinInters3 := orgsubscriptionMixin[3].Interceptors()
+	orgsubscriptionMixinInters4 := orgsubscriptionMixin[4].Interceptors()
+	orgsubscription.Interceptors[0] = orgsubscriptionMixinInters3[0]
+	orgsubscription.Interceptors[1] = orgsubscriptionMixinInters4[0]
+	orgsubscriptionMixinFields0 := orgsubscriptionMixin[0].Fields()
+	_ = orgsubscriptionMixinFields0
+	orgsubscriptionMixinFields1 := orgsubscriptionMixin[1].Fields()
+	_ = orgsubscriptionMixinFields1
+	orgsubscriptionMixinFields2 := orgsubscriptionMixin[2].Fields()
+	_ = orgsubscriptionMixinFields2
+	orgsubscriptionMixinFields4 := orgsubscriptionMixin[4].Fields()
+	_ = orgsubscriptionMixinFields4
+	orgsubscriptionFields := schema.OrgSubscription{}.Fields()
+	_ = orgsubscriptionFields
+	// orgsubscriptionDescCreatedAt is the schema descriptor for created_at field.
+	orgsubscriptionDescCreatedAt := orgsubscriptionMixinFields0[0].Descriptor()
+	// orgsubscription.DefaultCreatedAt holds the default value on creation for the created_at field.
+	orgsubscription.DefaultCreatedAt = orgsubscriptionDescCreatedAt.Default.(func() time.Time)
+	// orgsubscriptionDescUpdatedAt is the schema descriptor for updated_at field.
+	orgsubscriptionDescUpdatedAt := orgsubscriptionMixinFields0[1].Descriptor()
+	// orgsubscription.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	orgsubscription.DefaultUpdatedAt = orgsubscriptionDescUpdatedAt.Default.(func() time.Time)
+	// orgsubscription.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	orgsubscription.UpdateDefaultUpdatedAt = orgsubscriptionDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// orgsubscriptionDescMappingID is the schema descriptor for mapping_id field.
+	orgsubscriptionDescMappingID := orgsubscriptionMixinFields1[1].Descriptor()
+	// orgsubscription.DefaultMappingID holds the default value on creation for the mapping_id field.
+	orgsubscription.DefaultMappingID = orgsubscriptionDescMappingID.Default.(func() string)
+	// orgsubscriptionDescTags is the schema descriptor for tags field.
+	orgsubscriptionDescTags := orgsubscriptionMixinFields2[0].Descriptor()
+	// orgsubscription.DefaultTags holds the default value on creation for the tags field.
+	orgsubscription.DefaultTags = orgsubscriptionDescTags.Default.([]string)
+	// orgsubscriptionDescOwnerID is the schema descriptor for owner_id field.
+	orgsubscriptionDescOwnerID := orgsubscriptionMixinFields4[0].Descriptor()
+	// orgsubscription.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	orgsubscription.OwnerIDValidator = orgsubscriptionDescOwnerID.Validators[0].(func(string) error)
+	// orgsubscriptionDescActive is the schema descriptor for active field.
+	orgsubscriptionDescActive := orgsubscriptionFields[4].Descriptor()
+	// orgsubscription.DefaultActive holds the default value on creation for the active field.
+	orgsubscription.DefaultActive = orgsubscriptionDescActive.Default.(bool)
+	// orgsubscriptionDescID is the schema descriptor for id field.
+	orgsubscriptionDescID := orgsubscriptionMixinFields1[0].Descriptor()
+	// orgsubscription.DefaultID holds the default value on creation for the id field.
+	orgsubscription.DefaultID = orgsubscriptionDescID.Default.(func() string)
+	orgsubscriptionhistoryFields := schema.OrgSubscriptionHistory{}.Fields()
+	_ = orgsubscriptionhistoryFields
+	// orgsubscriptionhistoryDescHistoryTime is the schema descriptor for history_time field.
+	orgsubscriptionhistoryDescHistoryTime := orgsubscriptionhistoryFields[0].Descriptor()
+	// orgsubscriptionhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	orgsubscriptionhistory.DefaultHistoryTime = orgsubscriptionhistoryDescHistoryTime.Default.(func() time.Time)
+	// orgsubscriptionhistoryDescCreatedAt is the schema descriptor for created_at field.
+	orgsubscriptionhistoryDescCreatedAt := orgsubscriptionhistoryFields[3].Descriptor()
+	// orgsubscriptionhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	orgsubscriptionhistory.DefaultCreatedAt = orgsubscriptionhistoryDescCreatedAt.Default.(func() time.Time)
+	// orgsubscriptionhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	orgsubscriptionhistoryDescUpdatedAt := orgsubscriptionhistoryFields[4].Descriptor()
+	// orgsubscriptionhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	orgsubscriptionhistory.DefaultUpdatedAt = orgsubscriptionhistoryDescUpdatedAt.Default.(func() time.Time)
+	// orgsubscriptionhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	orgsubscriptionhistory.UpdateDefaultUpdatedAt = orgsubscriptionhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// orgsubscriptionhistoryDescMappingID is the schema descriptor for mapping_id field.
+	orgsubscriptionhistoryDescMappingID := orgsubscriptionhistoryFields[8].Descriptor()
+	// orgsubscriptionhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	orgsubscriptionhistory.DefaultMappingID = orgsubscriptionhistoryDescMappingID.Default.(func() string)
+	// orgsubscriptionhistoryDescTags is the schema descriptor for tags field.
+	orgsubscriptionhistoryDescTags := orgsubscriptionhistoryFields[9].Descriptor()
+	// orgsubscriptionhistory.DefaultTags holds the default value on creation for the tags field.
+	orgsubscriptionhistory.DefaultTags = orgsubscriptionhistoryDescTags.Default.([]string)
+	// orgsubscriptionhistoryDescActive is the schema descriptor for active field.
+	orgsubscriptionhistoryDescActive := orgsubscriptionhistoryFields[17].Descriptor()
+	// orgsubscriptionhistory.DefaultActive holds the default value on creation for the active field.
+	orgsubscriptionhistory.DefaultActive = orgsubscriptionhistoryDescActive.Default.(bool)
+	// orgsubscriptionhistoryDescID is the schema descriptor for id field.
+	orgsubscriptionhistoryDescID := orgsubscriptionhistoryFields[7].Descriptor()
+	// orgsubscriptionhistory.DefaultID holds the default value on creation for the id field.
+	orgsubscriptionhistory.DefaultID = orgsubscriptionhistoryDescID.Default.(func() string)
 	organizationMixin := schema.Organization{}.Mixin()
 	organization.Policy = privacy.NewPolicies(schema.Organization{})
 	organization.Hooks[0] = func(next ent.Mutator) ent.Mutator {

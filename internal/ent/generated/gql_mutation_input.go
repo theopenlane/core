@@ -5101,6 +5101,164 @@ func (c *OrgMembershipUpdateOne) SetInput(i UpdateOrgMembershipInput) *OrgMember
 	return c
 }
 
+// CreateOrgSubscriptionInput represents a mutation input for creating orgsubscriptions.
+type CreateOrgSubscriptionInput struct {
+	Tags                     []string
+	StripeSubscriptionID     *string
+	ProductTier              *string
+	StripeProductTierID      *string
+	StripeSubscriptionStatus *string
+	Active                   *bool
+	StripeCustomerID         *string
+	ExpiresAt                *time.Time
+	Features                 []string
+	OwnerID                  *string
+}
+
+// Mutate applies the CreateOrgSubscriptionInput on the OrgSubscriptionMutation builder.
+func (i *CreateOrgSubscriptionInput) Mutate(m *OrgSubscriptionMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.StripeSubscriptionID; v != nil {
+		m.SetStripeSubscriptionID(*v)
+	}
+	if v := i.ProductTier; v != nil {
+		m.SetProductTier(*v)
+	}
+	if v := i.StripeProductTierID; v != nil {
+		m.SetStripeProductTierID(*v)
+	}
+	if v := i.StripeSubscriptionStatus; v != nil {
+		m.SetStripeSubscriptionStatus(*v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
+	if v := i.StripeCustomerID; v != nil {
+		m.SetStripeCustomerID(*v)
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
+	}
+	if v := i.Features; v != nil {
+		m.SetFeatures(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateOrgSubscriptionInput on the OrgSubscriptionCreate builder.
+func (c *OrgSubscriptionCreate) SetInput(i CreateOrgSubscriptionInput) *OrgSubscriptionCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateOrgSubscriptionInput represents a mutation input for updating orgsubscriptions.
+type UpdateOrgSubscriptionInput struct {
+	ClearTags                     bool
+	Tags                          []string
+	AppendTags                    []string
+	ClearStripeSubscriptionID     bool
+	StripeSubscriptionID          *string
+	ClearProductTier              bool
+	ProductTier                   *string
+	ClearStripeProductTierID      bool
+	StripeProductTierID           *string
+	ClearStripeSubscriptionStatus bool
+	StripeSubscriptionStatus      *string
+	Active                        *bool
+	ClearStripeCustomerID         bool
+	StripeCustomerID              *string
+	ClearExpiresAt                bool
+	ExpiresAt                     *time.Time
+	ClearFeatures                 bool
+	Features                      []string
+	AppendFeatures                []string
+	ClearOwner                    bool
+	OwnerID                       *string
+}
+
+// Mutate applies the UpdateOrgSubscriptionInput on the OrgSubscriptionMutation builder.
+func (i *UpdateOrgSubscriptionInput) Mutate(m *OrgSubscriptionMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearStripeSubscriptionID {
+		m.ClearStripeSubscriptionID()
+	}
+	if v := i.StripeSubscriptionID; v != nil {
+		m.SetStripeSubscriptionID(*v)
+	}
+	if i.ClearProductTier {
+		m.ClearProductTier()
+	}
+	if v := i.ProductTier; v != nil {
+		m.SetProductTier(*v)
+	}
+	if i.ClearStripeProductTierID {
+		m.ClearStripeProductTierID()
+	}
+	if v := i.StripeProductTierID; v != nil {
+		m.SetStripeProductTierID(*v)
+	}
+	if i.ClearStripeSubscriptionStatus {
+		m.ClearStripeSubscriptionStatus()
+	}
+	if v := i.StripeSubscriptionStatus; v != nil {
+		m.SetStripeSubscriptionStatus(*v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
+	if i.ClearStripeCustomerID {
+		m.ClearStripeCustomerID()
+	}
+	if v := i.StripeCustomerID; v != nil {
+		m.SetStripeCustomerID(*v)
+	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
+	}
+	if i.ClearFeatures {
+		m.ClearFeatures()
+	}
+	if v := i.Features; v != nil {
+		m.SetFeatures(v)
+	}
+	if i.AppendFeatures != nil {
+		m.AppendFeatures(i.Features)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateOrgSubscriptionInput on the OrgSubscriptionUpdate builder.
+func (c *OrgSubscriptionUpdate) SetInput(i UpdateOrgSubscriptionInput) *OrgSubscriptionUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateOrgSubscriptionInput on the OrgSubscriptionUpdateOne builder.
+func (c *OrgSubscriptionUpdateOne) SetInput(i UpdateOrgSubscriptionInput) *OrgSubscriptionUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateOrganizationInput represents a mutation input for creating organizations.
 type CreateOrganizationInput struct {
 	Tags                       []string
@@ -5126,6 +5284,7 @@ type CreateOrganizationInput struct {
 	SettingID                  *string
 	DocumentdatumIDs           []string
 	EntitlementIDs             []string
+	OrgsubscriptionIDs         []string
 	OrganizationEntitlementIDs []string
 	PersonalAccessTokenIDs     []string
 	APITokenIDs                []string
@@ -5222,6 +5381,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.EntitlementIDs; len(v) > 0 {
 		m.AddEntitlementIDs(v...)
+	}
+	if v := i.OrgsubscriptionIDs; len(v) > 0 {
+		m.AddOrgsubscriptionIDs(v...)
 	}
 	if v := i.OrganizationEntitlementIDs; len(v) > 0 {
 		m.AddOrganizationEntitlementIDs(v...)
@@ -5364,6 +5526,9 @@ type UpdateOrganizationInput struct {
 	ClearEntitlements                bool
 	AddEntitlementIDs                []string
 	RemoveEntitlementIDs             []string
+	ClearOrgsubscriptions            bool
+	AddOrgsubscriptionIDs            []string
+	RemoveOrgsubscriptionIDs         []string
 	ClearOrganizationEntitlement     bool
 	AddOrganizationEntitlementIDs    []string
 	RemoveOrganizationEntitlementIDs []string
@@ -5604,6 +5769,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveEntitlementIDs; len(v) > 0 {
 		m.RemoveEntitlementIDs(v...)
+	}
+	if i.ClearOrgsubscriptions {
+		m.ClearOrgsubscriptions()
+	}
+	if v := i.AddOrgsubscriptionIDs; len(v) > 0 {
+		m.AddOrgsubscriptionIDs(v...)
+	}
+	if v := i.RemoveOrgsubscriptionIDs; len(v) > 0 {
+		m.RemoveOrgsubscriptionIDs(v...)
 	}
 	if i.ClearOrganizationEntitlement {
 		m.ClearOrganizationEntitlement()

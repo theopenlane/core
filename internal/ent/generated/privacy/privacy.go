@@ -1311,6 +1311,54 @@ func (f OrgMembershipHistoryMutationRuleFunc) EvalMutation(ctx context.Context, 
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrgMembershipHistoryMutation", m)
 }
 
+// The OrgSubscriptionQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OrgSubscriptionQueryRuleFunc func(context.Context, *generated.OrgSubscriptionQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OrgSubscriptionQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgSubscriptionQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OrgSubscriptionQuery", q)
+}
+
+// The OrgSubscriptionMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OrgSubscriptionMutationRuleFunc func(context.Context, *generated.OrgSubscriptionMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OrgSubscriptionMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OrgSubscriptionMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrgSubscriptionMutation", m)
+}
+
+// The OrgSubscriptionHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OrgSubscriptionHistoryQueryRuleFunc func(context.Context, *generated.OrgSubscriptionHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OrgSubscriptionHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgSubscriptionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OrgSubscriptionHistoryQuery", q)
+}
+
+// The OrgSubscriptionHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OrgSubscriptionHistoryMutationRuleFunc func(context.Context, *generated.OrgSubscriptionHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OrgSubscriptionHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OrgSubscriptionHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrgSubscriptionHistoryMutation", m)
+}
+
 // The OrganizationQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type OrganizationQueryRuleFunc func(context.Context, *generated.OrganizationQuery) error
@@ -2190,6 +2238,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.OrgMembershipHistoryQuery:
 		return q.Filter(), nil
+	case *generated.OrgSubscriptionQuery:
+		return q.Filter(), nil
+	case *generated.OrgSubscriptionHistoryQuery:
+		return q.Filter(), nil
 	case *generated.OrganizationQuery:
 		return q.Filter(), nil
 	case *generated.OrganizationHistoryQuery:
@@ -2358,6 +2410,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.OrgMembershipMutation:
 		return m.Filter(), nil
 	case *generated.OrgMembershipHistoryMutation:
+		return m.Filter(), nil
+	case *generated.OrgSubscriptionMutation:
+		return m.Filter(), nil
+	case *generated.OrgSubscriptionHistoryMutation:
 		return m.Filter(), nil
 	case *generated.OrganizationMutation:
 		return m.Filter(), nil

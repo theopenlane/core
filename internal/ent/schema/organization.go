@@ -135,7 +135,10 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
 			),
-		// Organization that is assigned the entitlement
+		edge.To("orgsubscriptions", OrgSubscription.Type).
+			Annotations(
+				entx.CascadeAnnotationField("Owner"),
+			),
 		edge.To("organization_entitlement", Entitlement.Type),
 		edge.To("personal_access_tokens", PersonalAccessToken.Type),
 		edge.To("api_tokens", APIToken.Type),

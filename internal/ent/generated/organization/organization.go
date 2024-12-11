@@ -79,6 +79,8 @@ const (
 	EdgeDocumentdata = "documentdata"
 	// EdgeEntitlements holds the string denoting the entitlements edge name in mutations.
 	EdgeEntitlements = "entitlements"
+	// EdgeOrgsubscriptions holds the string denoting the orgsubscriptions edge name in mutations.
+	EdgeOrgsubscriptions = "orgsubscriptions"
 	// EdgeOrganizationEntitlement holds the string denoting the organization_entitlement edge name in mutations.
 	EdgeOrganizationEntitlement = "organization_entitlement"
 	// EdgePersonalAccessTokens holds the string denoting the personal_access_tokens edge name in mutations.
@@ -232,6 +234,13 @@ const (
 	EntitlementsInverseTable = "entitlements"
 	// EntitlementsColumn is the table column denoting the entitlements relation/edge.
 	EntitlementsColumn = "owner_id"
+	// OrgsubscriptionsTable is the table that holds the orgsubscriptions relation/edge.
+	OrgsubscriptionsTable = "org_subscriptions"
+	// OrgsubscriptionsInverseTable is the table name for the OrgSubscription entity.
+	// It exists in this package in order to avoid circular dependency with the "orgsubscription" package.
+	OrgsubscriptionsInverseTable = "org_subscriptions"
+	// OrgsubscriptionsColumn is the table column denoting the orgsubscriptions relation/edge.
+	OrgsubscriptionsColumn = "owner_id"
 	// OrganizationEntitlementTable is the table that holds the organization_entitlement relation/edge.
 	OrganizationEntitlementTable = "entitlements"
 	// OrganizationEntitlementInverseTable is the table name for the Entitlement entity.
@@ -833,6 +842,20 @@ func ByEntitlements(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByOrgsubscriptionsCount orders the results by orgsubscriptions count.
+func ByOrgsubscriptionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrgsubscriptionsStep(), opts...)
+	}
+}
+
+// ByOrgsubscriptions orders the results by orgsubscriptions terms.
+func ByOrgsubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgsubscriptionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByOrganizationEntitlementCount orders the results by organization_entitlement count.
 func ByOrganizationEntitlementCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1341,6 +1364,13 @@ func newEntitlementsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitlementsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EntitlementsTable, EntitlementsColumn),
+	)
+}
+func newOrgsubscriptionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgsubscriptionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrgsubscriptionsTable, OrgsubscriptionsColumn),
 	)
 }
 func newOrganizationEntitlementStep() *sqlgraph.Step {

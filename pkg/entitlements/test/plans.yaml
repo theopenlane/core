@@ -1,63 +1,102 @@
-- product_id: prod_RClqj0AttVzg4k
-  name: Enterprise Tier
-  description: ""
-  features:
-    - id: feat_61RSmG7F7asoJOY4E41Bvxky1R7Sv9Im
-      name: Compliance Module
-      lookupkey: compliance-module
-      product_feature_id: prodft_1QKRHKBvxky1R7SvTtTepHP1
-    - id: feat_61RSmKnFOpuguesvn41Bvxky1R7SvHqK
-      name: Vulnerability Management
-      lookupkey: vulnerability-management
-      product_feature_id: prodft_1QKRGtBvxky1R7Sv80VTF4Vr
-    - id: feat_61RSmMdzv0HRMJO4k41Bvxky1R7Sv3Ki
-      name: Continuous Monitoring
-      lookupkey: continuous-monitoring
-      product_feature_id: prodft_1QKRG8Bvxky1R7SvmQpcbJMo
-  prices:
-    - price_id: price_1QKmuZBvxky1R7SvHAwybmEZ
-      price: 4000
-      product_id: prod_RClqj0AttVzg4k
-      interval: year
-    - price_id: price_1QKMJ6Bvxky1R7SvgbFmumzr
-      price: 400
-      product_id: prod_RClqj0AttVzg4k
-      interval: month
-- product_id: prod_RClW8LT3bzMeyG
-  name: Business Tier
-  description: ""
-  features:
-    - id: feat_61RSmG7F7asoJOY4E41Bvxky1R7Sv9Im
-      name: Compliance Module
-      lookupkey: compliance-module
-      product_feature_id: prodft_1QKRHKBvxky1R7SvfJahMY56
-    - id: feat_61RSmKnFOpuguesvn41Bvxky1R7SvHqK
-      name: Vulnerability Management
-      lookupkey: vulnerability-management
-      product_feature_id: prodft_1QKRGtBvxky1R7SvlyWOa09t
-  prices:
-    - price_id: price_1QKmtZBvxky1R7Sv1wNhoHRP
-      price: 2500
-      product_id: prod_RClW8LT3bzMeyG
-      interval: year
-    - price_id: price_1QKLzjBvxky1R7SvtvVT63Kn
-      price: 250
-      product_id: prod_RClW8LT3bzMeyG
-      interval: month
 - product_id: prod_RClVi0ZeIWJHOR
   name: Starter Tier
-  description: ""
   features:
+    - id: feat_61RSmLtyXmxzlTaC541Bvxky1R7Sv8Qi
+      name: Centralized Audit Documentation
+      lookupkey: centralized-audit-docuemtnation
+    - id: feat_61RSmKVSYRqkKCRLg41Bvxky1R7SvRZg
+      name: Risk Management
+      lookupkey: risk-management
+    - id: feat_61RSmGpuIwzRc6sLb41Bvxky1R7Sv0NE
+      name: Policy and Procedure module
+      lookupkey: policy-and-procedure-module
     - id: feat_61RSmG7F7asoJOY4E41Bvxky1R7Sv9Im
       name: Compliance Module
       lookupkey: compliance-module
-      product_feature_id: prodft_1QKRHKBvxky1R7Svrz8k8Wk4
   prices:
     - price_id: price_1QKO97Bvxky1R7SvcMA1YYG1
       price: 1000
-      product_id: prod_RClVi0ZeIWJHOR
       interval: year
     - price_id: price_1QKLyeBvxky1R7SvaZYGWyQb
       price: 100
-      product_id: prod_RClVi0ZeIWJHOR
+      interval: month
+- product_id: prod_RClW8LT3bzMeyG
+  name: Business Tier
+  features:
+    - id: feat_61RSmLtyXmxzlTaC541Bvxky1R7Sv8Qi
+      name: Centralized Audit Documentation
+      lookupkey: centralized-audit-docuemtnation
+    - id: feat_61RSmKVSYRqkKCRLg41Bvxky1R7SvRZg
+      name: Risk Management
+      lookupkey: risk-management
+    - id: feat_61RSmGwlWtNg1oj2741Bvxky1R7Sv4Fk
+      name: Webhooks
+      lookupkey: webhooks
+    - id: feat_61RSmGVnjXfY2EN6b41Bvxky1R7SvOkC
+      name: Evidence Storage
+      lookupkey: evidence-storage
+    - id: feat_61RSmGKKl7dc5zJP341Bvxky1R7SvI0W
+      name: Questionaire Automation
+      lookupkey: questionaire-automation
+    - id: feat_61RSmGpuIwzRc6sLb41Bvxky1R7Sv0NE
+      name: Policy and Procedure module
+      lookupkey: policy-and-procedure-module
+    - id: feat_61RSmG7F7asoJOY4E41Bvxky1R7Sv9Im
+      name: Compliance Module
+      lookupkey: compliance-module
+    - id: feat_61RSmKnFOpuguesvn41Bvxky1R7SvHqK
+      name: Vulnerability Management
+      lookupkey: vulnerability-management
+  prices:
+    - price_id: price_1QKmtZBvxky1R7Sv1wNhoHRP
+      price: 2500
+      interval: year
+    - price_id: price_1QKLzjBvxky1R7SvtvVT63Kn
+      price: 250
+      interval: month
+- product_id: prod_RClqj0AttVzg4k
+  name: Enterprise Tier
+  features:
+    - id: feat_61RSmMOtfJd9bZgNM41Bvxky1R7SvApU
+      name: Employee Onboarding Automation
+      lookupkey: employee-onboarding-automation
+    - id: feat_61RSmLtyXmxzlTaC541Bvxky1R7Sv8Qi
+      name: Centralized Audit Documentation
+      lookupkey: centralized-audit-docuemtnation
+    - id: feat_61RSmKdT2wmqQdyK141Bvxky1R7SvPvk
+      name: Vendor Management
+      lookupkey: vendor-management
+    - id: feat_61RSmKVSYRqkKCRLg41Bvxky1R7SvRZg
+      name: Risk Management
+      lookupkey: risk-management
+    - id: feat_61RSmH50KcYFM4e7t41Bvxky1R7SvOPg
+      name: SSO
+      lookupkey: sso
+    - id: feat_61RSmGwlWtNg1oj2741Bvxky1R7Sv4Fk
+      name: Webhooks
+      lookupkey: webhooks
+    - id: feat_61RSmGVnjXfY2EN6b41Bvxky1R7SvOkC
+      name: Evidence Storage
+      lookupkey: evidence-storage
+    - id: feat_61RSmGKKl7dc5zJP341Bvxky1R7SvI0W
+      name: Questionaire Automation
+      lookupkey: questionaire-automation
+    - id: feat_61RSmGpuIwzRc6sLb41Bvxky1R7Sv0NE
+      name: Policy and Procedure module
+      lookupkey: policy-and-procedure-module
+    - id: feat_61RSmG7F7asoJOY4E41Bvxky1R7Sv9Im
+      name: Compliance Module
+      lookupkey: compliance-module
+    - id: feat_61RSmKnFOpuguesvn41Bvxky1R7SvHqK
+      name: Vulnerability Management
+      lookupkey: vulnerability-management
+    - id: feat_61RSmMdzv0HRMJO4k41Bvxky1R7Sv3Ki
+      name: Continuous Monitoring
+      lookupkey: continuous-monitoring
+  prices:
+    - price_id: price_1QKmuZBvxky1R7SvHAwybmEZ
+      price: 4000
+      interval: year
+    - price_id: price_1QKMJ6Bvxky1R7SvgbFmumzr
+      price: 400
       interval: month

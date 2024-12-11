@@ -279,6 +279,20 @@ query AdminSearch($query: String!) {
           connectorData
         }
       }
+      ... on OrgSubscriptionSearchResult {
+        orgSubscriptions {
+          id
+          tags
+          deletedBy
+          ownerID
+          stripeSubscriptionID
+          productTier
+          stripeProductTierID
+          stripeSubscriptionStatus
+          stripeCustomerID
+          features
+        }
+      }
       ... on OrganizationSearchResult {
         organizations {
           id

@@ -169,26 +169,28 @@ func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
 
 // RegisterListeners is currently used to globally register what listeners get applied on the entdb client
 func RegisterListeners(e *Eventer) error {
-	for _, event := range []string{OrganizationSettingCreate, OrganizationSettingUpdateOne} {
-		_, err := e.Emitter.On(event, handleOrganizationSettingEvents)
-		if err != nil {
-			log.Error().Err(ErrFailedToRegisterListener)
-			return err
-		}
+	_, err := e.Emitter.On(OrganizationSettingCreate, handleOrganizationSettingsCreate)
+	if err != nil {
+		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
 
-		log.Debug().Msg("Listener registered for " + event)
+	_, err = e.Emitter.On(OrganizationSettingUpdateOne, handleOrganizationSettingsUpdateOne)
+	if err != nil {
+		log.Error().Err(ErrFailedToRegisterListener)
+		return err
 	}
 
 	return nil
 }
 
-// handleCustomerCreate handles the creation of a customer in Stripe when an OrganizationSetting is created or updated
-func handleOrganizationSettingEvents(event soiree.Event) error {
+// handleOrganizationSettingsUpdateOne checks for updates to the organization settings and updates the customer in Stripe accordingly
+func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 	client := event.Client().(*entgen.Client)
 	entMgr := client.EntitlementManager
 
 	if entMgr == nil {
-		log.Info().Msg("EntitlementManager not found on client, skipping customer creation")
+		log.Debug().Msg("EntitlementManager not found on client, skipping customer creation")
 
 		return nil
 	}
@@ -200,6 +202,36 @@ func handleOrganizationSettingEvents(event soiree.Event) error {
 		return err
 	}
 
+	if params, hasUpdate := entitlements.CheckForBillingUpdate(event.Properties(), orgCust); hasUpdate {
+		if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
+			log.Err(err).Msg("Failed to update customer")
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+// handleOrganizationSettingsCreate handles the creation of a customer in Stripe when an OrganizationSetting is created or updated
+func handleOrganizationSettingsCreate(event soiree.Event) error {
+	client := event.Client().(*entgen.Client)
+	entMgr := client.EntitlementManager
+
+	if entMgr == nil {
+		log.Debug().Msg("EntitlementManager not found on client, skipping customer creation")
+
+		return nil
+	}
+
+	orgCust, err := fetchOrganizationIDbyOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
+	if err != nil {
+		log.Err(err).Msg("Failed to fetch organization ID by organization setting ID")
+
+		return err
+	}
+
+	// our resolvers support creating organizations + settings with attributes in the payload, so in the event this is populated we want to do nothing
 	if orgCust.StripeCustomerID == "" {
 		customer, err := entMgr.FindorCreateCustomer(event.Context(), orgCust)
 		if err != nil {
@@ -208,33 +240,32 @@ func handleOrganizationSettingEvents(event soiree.Event) error {
 			return err
 		}
 
-		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgCust.OrganizationSettingsID, customer.StripeCustomerID, client); err != nil {
-			log.Err(err).Msg("Failed to update organization setting with customer ID")
+		if err := createInternalOrgSubscription(event.Context(), customer, client); err != nil {
+			log.Err(err).Msg("Failed to create internal org subscription")
 
 			return err
 		}
 
 		return nil
-	} else {
-		if params, hasUpdate := entitlements.CheckForBillingUpdate(event.Properties(), orgCust); hasUpdate {
-			if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
-				log.Err(err).Msg("Failed to update customer")
-
-				return err
-			}
-		}
 	}
 
 	return nil
 }
 
-// updateOrganizationSettingWithCustomerID updates an OrganizationSetting with a Stripe customer ID
-func updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, customerID string, client interface{}) error {
-	if _, err := client.(*entgen.Client).OrganizationSetting.UpdateOneID(orgsettingID).SetStripeID(customerID).Save(ctx); err != nil {
-		log.Err(err).Msgf("Failed to update OrganizationSetting ID %s with Stripe customer ID %s", orgsettingID, customerID)
-
+// createInternalOrgSubscription creates an internal org subscription
+func createInternalOrgSubscription(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) error {
+	sub, err := client.(*entgen.Client).OrgSubscription.Create().
+		SetStripeSubscriptionID(customer.Subscription.ID).
+		SetOwnerID(customer.OrganizationID).
+		SetStripeCustomerID(customer.StripeCustomerID).
+		SetFeatures(customer.Features).
+		Save(ctx)
+	if err != nil {
+		log.Err(err).Msg("Failed to create internal org subscription")
 		return err
 	}
+
+	log.Info().Msgf("Created internal org subscription with ID %s", sub.ID)
 
 	return nil
 }

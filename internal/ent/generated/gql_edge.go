@@ -1924,6 +1924,14 @@ func (om *OrgMembership) Events(ctx context.Context) (result []*Event, err error
 	return result, err
 }
 
+func (os *OrgSubscription) Owner(ctx context.Context) (*Organization, error) {
+	result, err := os.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (o *Organization) ControlCreators(ctx context.Context) (result []*Group, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedControlCreators(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2125,6 +2133,18 @@ func (o *Organization) Entitlements(ctx context.Context) (result []*Entitlement,
 	}
 	if IsNotLoaded(err) {
 		result, err = o.QueryEntitlements().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) Orgsubscriptions(ctx context.Context) (result []*OrgSubscription, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedOrgsubscriptions(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.OrgsubscriptionsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryOrgsubscriptions().All(ctx)
 	}
 	return result, err
 }

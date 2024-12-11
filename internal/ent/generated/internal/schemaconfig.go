@@ -102,6 +102,8 @@ type SchemaConfig struct {
 	OrgMembership                        string // OrgMembership table.
 	OrgMembershipEvents                  string // OrgMembership-events->Event table.
 	OrgMembershipHistory                 string // OrgMembershipHistory table.
+	OrgSubscription                      string // OrgSubscription table.
+	OrgSubscriptionHistory               string // OrgSubscriptionHistory table.
 	Organization                         string // Organization table.
 	OrganizationControlCreators          string // Organization-control_creators->Group table.
 	OrganizationControlObjectiveCreators string // Organization-control_objective_creators->Group table.
