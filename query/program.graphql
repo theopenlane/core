@@ -70,10 +70,10 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
       controls {
         id
         name
-      }
-      subcontrols {
-        id
-        name
+        subcontrols {
+          id
+          name
+        }
       }
       risks {
         id

@@ -36201,9 +36201,28 @@ func (t *CreateFullProgram_CreateFullProgram_Program_Standards) GetName() string
 	return t.Name
 }
 
-type CreateFullProgram_CreateFullProgram_Program_Controls struct {
+type CreateFullProgram_CreateFullProgram_Program_Controls_Subcontrols struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateFullProgram_CreateFullProgram_Program_Controls_Subcontrols) GetID() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Controls_Subcontrols{}
+	}
+	return t.ID
+}
+func (t *CreateFullProgram_CreateFullProgram_Program_Controls_Subcontrols) GetName() string {
+	if t == nil {
+		t = &CreateFullProgram_CreateFullProgram_Program_Controls_Subcontrols{}
+	}
+	return t.Name
+}
+
+type CreateFullProgram_CreateFullProgram_Program_Controls struct {
+	ID          string                                                              "json:\"id\" graphql:\"id\""
+	Name        string                                                              "json:\"name\" graphql:\"name\""
+	Subcontrols []*CreateFullProgram_CreateFullProgram_Program_Controls_Subcontrols "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 }
 
 func (t *CreateFullProgram_CreateFullProgram_Program_Controls) GetID() string {
@@ -36218,23 +36237,11 @@ func (t *CreateFullProgram_CreateFullProgram_Program_Controls) GetName() string 
 	}
 	return t.Name
 }
-
-type CreateFullProgram_CreateFullProgram_Program_Subcontrols struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateFullProgram_CreateFullProgram_Program_Subcontrols) GetID() string {
+func (t *CreateFullProgram_CreateFullProgram_Program_Controls) GetSubcontrols() []*CreateFullProgram_CreateFullProgram_Program_Controls_Subcontrols {
 	if t == nil {
-		t = &CreateFullProgram_CreateFullProgram_Program_Subcontrols{}
+		t = &CreateFullProgram_CreateFullProgram_Program_Controls{}
 	}
-	return t.ID
-}
-func (t *CreateFullProgram_CreateFullProgram_Program_Subcontrols) GetName() string {
-	if t == nil {
-		t = &CreateFullProgram_CreateFullProgram_Program_Subcontrols{}
-	}
-	return t.Name
+	return t.Subcontrols
 }
 
 type CreateFullProgram_CreateFullProgram_Program_Risks struct {
@@ -36292,15 +36299,14 @@ func (t *CreateFullProgram_CreateFullProgram_Program_Procedures) GetName() strin
 }
 
 type CreateFullProgram_CreateFullProgram_Program struct {
-	Name        string                                                     "json:\"name\" graphql:\"name\""
-	ID          string                                                     "json:\"id\" graphql:\"id\""
-	Members     []*CreateFullProgram_CreateFullProgram_Program_Members     "json:\"members,omitempty\" graphql:\"members\""
-	Standards   []*CreateFullProgram_CreateFullProgram_Program_Standards   "json:\"standards,omitempty\" graphql:\"standards\""
-	Controls    []*CreateFullProgram_CreateFullProgram_Program_Controls    "json:\"controls,omitempty\" graphql:\"controls\""
-	Subcontrols []*CreateFullProgram_CreateFullProgram_Program_Subcontrols "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
-	Risks       []*CreateFullProgram_CreateFullProgram_Program_Risks       "json:\"risks,omitempty\" graphql:\"risks\""
-	Policies    []*CreateFullProgram_CreateFullProgram_Program_Policies    "json:\"policies,omitempty\" graphql:\"policies\""
-	Procedures  []*CreateFullProgram_CreateFullProgram_Program_Procedures  "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Name       string                                                    "json:\"name\" graphql:\"name\""
+	ID         string                                                    "json:\"id\" graphql:\"id\""
+	Members    []*CreateFullProgram_CreateFullProgram_Program_Members    "json:\"members,omitempty\" graphql:\"members\""
+	Standards  []*CreateFullProgram_CreateFullProgram_Program_Standards  "json:\"standards,omitempty\" graphql:\"standards\""
+	Controls   []*CreateFullProgram_CreateFullProgram_Program_Controls   "json:\"controls,omitempty\" graphql:\"controls\""
+	Risks      []*CreateFullProgram_CreateFullProgram_Program_Risks      "json:\"risks,omitempty\" graphql:\"risks\""
+	Policies   []*CreateFullProgram_CreateFullProgram_Program_Policies   "json:\"policies,omitempty\" graphql:\"policies\""
+	Procedures []*CreateFullProgram_CreateFullProgram_Program_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
 }
 
 func (t *CreateFullProgram_CreateFullProgram_Program) GetName() string {
@@ -36332,12 +36338,6 @@ func (t *CreateFullProgram_CreateFullProgram_Program) GetControls() []*CreateFul
 		t = &CreateFullProgram_CreateFullProgram_Program{}
 	}
 	return t.Controls
-}
-func (t *CreateFullProgram_CreateFullProgram_Program) GetSubcontrols() []*CreateFullProgram_CreateFullProgram_Program_Subcontrols {
-	if t == nil {
-		t = &CreateFullProgram_CreateFullProgram_Program{}
-	}
-	return t.Subcontrols
 }
 func (t *CreateFullProgram_CreateFullProgram_Program) GetRisks() []*CreateFullProgram_CreateFullProgram_Program_Risks {
 	if t == nil {
@@ -67550,10 +67550,10 @@ const CreateFullProgramDocument = `mutation CreateFullProgram ($input: CreateFul
 			controls {
 				id
 				name
-			}
-			subcontrols {
-				id
-				name
+				subcontrols {
+					id
+					name
+				}
 			}
 			risks {
 				id

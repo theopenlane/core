@@ -11,7 +11,7 @@ package main
 //go:generate go run ./gen_schema.go
 
 //go:generate echo "------> Generating code - running gqlgenc... <------"
-//go:generate_input query/*.graphql schema/*.graphql internal/graphapi/*.resolvers.go internal/graphapi/gen_models.go internal/graphapi/gen_server.go pkg/openlaneclient/models.go
+//go:generate_input query/*.graphql schema/*.graphql
 //go:generate_output pkg/openlaneclient/graphqlclient.go
 //go:generate go run github.com/Yamashou/gqlgenc generate --configdir schema
 

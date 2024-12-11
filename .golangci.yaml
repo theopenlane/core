@@ -60,7 +60,6 @@ issues:
   exclude-files:
     - internal/graphapi/gen_server.go
     - internal/graphapi/gen_models.go
-    - internal/openlaneclient/graphclient.go
     - pkg/openlaneclient/graphclient.go
     - schema.graphql
 output:

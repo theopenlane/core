@@ -165,8 +165,8 @@ func (suite *GraphTestSuite) TestMutationCreateFull() {
 			require.NotNil(t, resp.CreateFullProgram.Program.Controls)
 			assert.Len(t, resp.CreateFullProgram.Program.Controls, len(tc.request.Controls))
 
-			assert.NotNil(t, resp.CreateFullProgram.Program.Subcontrols)
-			assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Subcontrols))
+			assert.NotNil(t, resp.CreateFullProgram.Program.Controls[0].Subcontrols)
+			assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls[0].Subcontrols))
 
 			require.NotNil(t, resp.CreateFullProgram.Program.Risks)
 			assert.Len(t, resp.CreateFullProgram.Program.Risks, len(tc.request.Risks))
