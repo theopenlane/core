@@ -1,5 +1,3 @@
-FROM golang:1.23.4 AS builder
-
 FROM gcr.io/distroless/static:nonroot
 
 # `nonroot` coming from distroless
