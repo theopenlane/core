@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	defaultTimeFormat = time.TimeOnly
+	defaultTimeFormat = time.Kitchen
 )
 
 var (
@@ -218,7 +218,7 @@ func (w *ConsoleWriter) setDefaultFormatters() {
 					l = bold("N/A")
 				}
 			} else {
-				l = strings.ToUpper(fmt.Sprintf("%s |", i))[0:3]
+				l = strings.ToUpper(fmt.Sprintf("%s", i))[0:3]
 			}
 
 			return l
@@ -226,7 +226,16 @@ func (w *ConsoleWriter) setDefaultFormatters() {
 	w.SetFormatter(
 		zerolog.CallerFieldName,
 		func(i interface{}) string {
-			return faint(filepath.Base(fmt.Sprintf("%s |", i)))
+			var c string
+			if cc, ok := i.(string); ok {
+				c = cc
+			}
+
+			if len(c) > 0 {
+				c = filepath.Base(filepath.Base(fmt.Sprintf("%s", i)))
+			}
+
+			return faint(c)
 		})
 	w.SetFormatter(
 		zerolog.MessageFieldName,

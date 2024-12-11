@@ -110,7 +110,7 @@ func TestConsolelog(t *testing.T) {
 			t.Errorf("Unexpected error when writing output: %s", err)
 		}
 
-		expectedOutput := "12:00AM DBG foo/bar.go > Foobar foo=bar\n"
+		expectedOutput := "12:00AM DBG bar.go Foobar foo=bar\n"
 		actualOutput := out.String()
 		if actualOutput != expectedOutput {
 			t.Errorf("Unexpected output %q, want: %q", actualOutput, expectedOutput)
