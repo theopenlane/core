@@ -42,6 +42,55 @@ mutation CreateBulkProgram($input: [CreateProgramInput!]) {
   }
 }
 
+mutation CreateControlWithSubcontrols($input: CreateControlWithSubcontrolsInput!) {
+  createControlWithSubcontrols(input: $input) {
+    control {
+      id
+      name
+      subcontrols {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation CreateFullProgram($input: CreateFullProgramInput!) {
+  createFullProgram(input: $input) {
+    program {
+      name
+      id
+      members {
+        id
+      }
+      standards {
+        id
+        name
+      }
+      controls {
+        id
+        name
+        subcontrols {
+          id
+          name
+        }
+      }
+      risks {
+        id
+        name
+      }
+      policies {
+        id
+        name
+      }
+      procedures {
+        id
+        name
+      }
+    }
+  }
+}
+
 mutation CreateProgram($input: CreateProgramInput!) {
   createProgram(input: $input) {
     program {

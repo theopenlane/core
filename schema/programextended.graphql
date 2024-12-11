@@ -7,6 +7,21 @@ extend input ProgramMembershipWhereInput {
   userID: String
 }
 
+input CreateControlWithSubcontrolsInput{
+  control: CreateControlInput
+  subcontrols: [CreateSubcontrolInput!]
+}
+
+input CreateFullProgramInput{
+  program: CreateProgramInput!
+  standard: CreateStandardInput!
+  controls: [CreateControlWithSubcontrolsInput!]
+  risks: [CreateRiskInput!]
+  internalPolicies: [CreateInternalPolicyInput!]
+  procedures: [CreateProcedureInput!]
+  members: [CreateMemberWithProgramInput!]
+}
+
 input CreateProgramWithMembersInput{
   program: CreateProgramInput!
   members: [CreateMemberWithProgramInput!]
@@ -27,4 +42,22 @@ extend type Mutation{
         """
         input: CreateProgramWithMembersInput!
     ): ProgramCreatePayload!
+    """
+    Create a new program with options for edges (members, policies, procedures, risks, controls, standard)
+    """
+    createFullProgram(
+        """
+        values of the program
+        """
+        input: CreateFullProgramInput!
+    ): ProgramCreatePayload!
+    """
+    Create a controls with subcontrols
+    """
+    createControlWithSubcontrols(
+        """
+        values of the program
+        """
+        input: CreateControlWithSubcontrolsInput!
+    ): ControlCreatePayload!
 }
