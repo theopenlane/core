@@ -11842,17 +11842,6 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite) GetID() string {
 	return t.ID
 }
 
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature{}
-	}
-	return t.ID
-}
-
 type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -11860,17 +11849,6 @@ type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken struct {
 func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token{}
 	}
 	return t.ID
 }
@@ -11908,28 +11886,6 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership) GetID() s
 	return t.ID
 }
 
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook{}
-	}
-	return t.ID
-}
-
 type CreateBulkCSVEvent_CreateBulkCSVEvent_Events struct {
 	ID                  string                                                              "json:\"id\" graphql:\"id\""
 	EventID             *string                                                             "json:\"eventID,omitempty\" graphql:\"eventID\""
@@ -11941,14 +11897,10 @@ type CreateBulkCSVEvent_CreateBulkCSVEvent_Events struct {
 	Integration         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
 	Organization        []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
 	Invite              []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
 	PersonalAccessToken []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
 	Hush                []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
 	Orgmembership       []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	Groupmembership     []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
 }
 
 func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetID() string {
@@ -12011,23 +11963,11 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetInvite() []*CreateBulk
 	}
 	return t.Invite
 }
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetFeature() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Feature
-}
 func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetPersonalAccessToken() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken {
 	if t == nil {
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.PersonalAccessToken
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOauth2token() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Oauth2token
 }
 func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetHush() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush {
 	if t == nil {
@@ -12046,18 +11986,6 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetGroupmembership() []*C
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Groupmembership
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEntitlement() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Entitlement
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetWebhook() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Webhook
 }
 
 type CreateBulkCSVEvent_CreateBulkCSVEvent struct {
@@ -12126,17 +12054,6 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events_Invite) GetID() string {
 	return t.ID
 }
 
-type CreateBulkEvent_CreateBulkEvent_Events_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Feature) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Feature{}
-	}
-	return t.ID
-}
-
 type CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -12144,17 +12061,6 @@ type CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken struct {
 func (t *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken) GetID() string {
 	if t == nil {
 		t = &CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Oauth2token) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Oauth2token{}
 	}
 	return t.ID
 }
@@ -12192,28 +12098,6 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events_Groupmembership) GetID() string 
 	return t.ID
 }
 
-type CreateBulkEvent_CreateBulkEvent_Events_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Entitlement) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Entitlement{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Webhook) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Webhook{}
-	}
-	return t.ID
-}
-
 type CreateBulkEvent_CreateBulkEvent_Events struct {
 	ID                  string                                                        "json:\"id\" graphql:\"id\""
 	EventID             *string                                                       "json:\"eventID,omitempty\" graphql:\"eventID\""
@@ -12225,14 +12109,10 @@ type CreateBulkEvent_CreateBulkEvent_Events struct {
 	Integration         []*CreateBulkEvent_CreateBulkEvent_Events_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
 	Organization        []*CreateBulkEvent_CreateBulkEvent_Events_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
 	Invite              []*CreateBulkEvent_CreateBulkEvent_Events_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*CreateBulkEvent_CreateBulkEvent_Events_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
 	PersonalAccessToken []*CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*CreateBulkEvent_CreateBulkEvent_Events_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
 	Hush                []*CreateBulkEvent_CreateBulkEvent_Events_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
 	Orgmembership       []*CreateBulkEvent_CreateBulkEvent_Events_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	Groupmembership     []*CreateBulkEvent_CreateBulkEvent_Events_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*CreateBulkEvent_CreateBulkEvent_Events_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*CreateBulkEvent_CreateBulkEvent_Events_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
 }
 
 func (t *CreateBulkEvent_CreateBulkEvent_Events) GetID() string {
@@ -12295,23 +12175,11 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events) GetInvite() []*CreateBulkEvent_
 	}
 	return t.Invite
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetFeature() []*CreateBulkEvent_CreateBulkEvent_Events_Feature {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Feature
-}
 func (t *CreateBulkEvent_CreateBulkEvent_Events) GetPersonalAccessToken() []*CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken {
 	if t == nil {
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
 	return t.PersonalAccessToken
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOauth2token() []*CreateBulkEvent_CreateBulkEvent_Events_Oauth2token {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Oauth2token
 }
 func (t *CreateBulkEvent_CreateBulkEvent_Events) GetHush() []*CreateBulkEvent_CreateBulkEvent_Events_Hush {
 	if t == nil {
@@ -12330,18 +12198,6 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events) GetGroupmembership() []*CreateB
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
 	return t.Groupmembership
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEntitlement() []*CreateBulkEvent_CreateBulkEvent_Events_Entitlement {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Entitlement
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetWebhook() []*CreateBulkEvent_CreateBulkEvent_Events_Webhook {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Webhook
 }
 
 type CreateBulkEvent_CreateBulkEvent struct {
@@ -12410,17 +12266,6 @@ func (t *CreateEvent_CreateEvent_Event_Invite) GetID() string {
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateEvent_CreateEvent_Event_Feature) GetID() string {
-	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Feature{}
-	}
-	return t.ID
-}
-
 type CreateEvent_CreateEvent_Event_PersonalAccessToken struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -12428,17 +12273,6 @@ type CreateEvent_CreateEvent_Event_PersonalAccessToken struct {
 func (t *CreateEvent_CreateEvent_Event_PersonalAccessToken) GetID() string {
 	if t == nil {
 		t = &CreateEvent_CreateEvent_Event_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type CreateEvent_CreateEvent_Event_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateEvent_CreateEvent_Event_Oauth2token) GetID() string {
-	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Oauth2token{}
 	}
 	return t.ID
 }
@@ -12476,28 +12310,6 @@ func (t *CreateEvent_CreateEvent_Event_Groupmembership) GetID() string {
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateEvent_CreateEvent_Event_Entitlement) GetID() string {
-	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Entitlement{}
-	}
-	return t.ID
-}
-
-type CreateEvent_CreateEvent_Event_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateEvent_CreateEvent_Event_Webhook) GetID() string {
-	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Webhook{}
-	}
-	return t.ID
-}
-
 type CreateEvent_CreateEvent_Event struct {
 	ID                  string                                               "json:\"id\" graphql:\"id\""
 	EventID             *string                                              "json:\"eventID,omitempty\" graphql:\"eventID\""
@@ -12509,14 +12321,10 @@ type CreateEvent_CreateEvent_Event struct {
 	Integration         []*CreateEvent_CreateEvent_Event_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
 	Organization        []*CreateEvent_CreateEvent_Event_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
 	Invite              []*CreateEvent_CreateEvent_Event_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*CreateEvent_CreateEvent_Event_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
 	PersonalAccessToken []*CreateEvent_CreateEvent_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*CreateEvent_CreateEvent_Event_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
 	Hush                []*CreateEvent_CreateEvent_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
 	Orgmembership       []*CreateEvent_CreateEvent_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	Groupmembership     []*CreateEvent_CreateEvent_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*CreateEvent_CreateEvent_Event_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*CreateEvent_CreateEvent_Event_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
 }
 
 func (t *CreateEvent_CreateEvent_Event) GetID() string {
@@ -12579,23 +12387,11 @@ func (t *CreateEvent_CreateEvent_Event) GetInvite() []*CreateEvent_CreateEvent_E
 	}
 	return t.Invite
 }
-func (t *CreateEvent_CreateEvent_Event) GetFeature() []*CreateEvent_CreateEvent_Event_Feature {
-	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
-	}
-	return t.Feature
-}
 func (t *CreateEvent_CreateEvent_Event) GetPersonalAccessToken() []*CreateEvent_CreateEvent_Event_PersonalAccessToken {
 	if t == nil {
 		t = &CreateEvent_CreateEvent_Event{}
 	}
 	return t.PersonalAccessToken
-}
-func (t *CreateEvent_CreateEvent_Event) GetOauth2token() []*CreateEvent_CreateEvent_Event_Oauth2token {
-	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
-	}
-	return t.Oauth2token
 }
 func (t *CreateEvent_CreateEvent_Event) GetHush() []*CreateEvent_CreateEvent_Event_Hush {
 	if t == nil {
@@ -12614,18 +12410,6 @@ func (t *CreateEvent_CreateEvent_Event) GetGroupmembership() []*CreateEvent_Crea
 		t = &CreateEvent_CreateEvent_Event{}
 	}
 	return t.Groupmembership
-}
-func (t *CreateEvent_CreateEvent_Event) GetEntitlement() []*CreateEvent_CreateEvent_Event_Entitlement {
-	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
-	}
-	return t.Entitlement
-}
-func (t *CreateEvent_CreateEvent_Event) GetWebhook() []*CreateEvent_CreateEvent_Event_Webhook {
-	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
-	}
-	return t.Webhook
 }
 
 type CreateEvent_CreateEvent struct {
@@ -12705,17 +12489,6 @@ func (t *GetAllEvents_Events_Edges_Node_Invite) GetID() string {
 	return t.ID
 }
 
-type GetAllEvents_Events_Edges_Node_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Feature) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Feature{}
-	}
-	return t.ID
-}
-
 type GetAllEvents_Events_Edges_Node_PersonalAccessToken struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -12723,17 +12496,6 @@ type GetAllEvents_Events_Edges_Node_PersonalAccessToken struct {
 func (t *GetAllEvents_Events_Edges_Node_PersonalAccessToken) GetID() string {
 	if t == nil {
 		t = &GetAllEvents_Events_Edges_Node_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Oauth2token) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Oauth2token{}
 	}
 	return t.ID
 }
@@ -12771,28 +12533,6 @@ func (t *GetAllEvents_Events_Edges_Node_Groupmembership) GetID() string {
 	return t.ID
 }
 
-type GetAllEvents_Events_Edges_Node_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Entitlement) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Entitlement{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Webhook) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Webhook{}
-	}
-	return t.ID
-}
-
 type GetAllEvents_Events_Edges_Node struct {
 	ID                  string                                                "json:\"id\" graphql:\"id\""
 	CreatedAt           *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -12808,14 +12548,10 @@ type GetAllEvents_Events_Edges_Node struct {
 	Integration         []*GetAllEvents_Events_Edges_Node_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
 	Organization        []*GetAllEvents_Events_Edges_Node_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
 	Invite              []*GetAllEvents_Events_Edges_Node_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*GetAllEvents_Events_Edges_Node_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
 	PersonalAccessToken []*GetAllEvents_Events_Edges_Node_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*GetAllEvents_Events_Edges_Node_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
 	Hush                []*GetAllEvents_Events_Edges_Node_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
 	Orgmembership       []*GetAllEvents_Events_Edges_Node_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	Groupmembership     []*GetAllEvents_Events_Edges_Node_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*GetAllEvents_Events_Edges_Node_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*GetAllEvents_Events_Edges_Node_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
 }
 
 func (t *GetAllEvents_Events_Edges_Node) GetID() string {
@@ -12902,23 +12638,11 @@ func (t *GetAllEvents_Events_Edges_Node) GetInvite() []*GetAllEvents_Events_Edge
 	}
 	return t.Invite
 }
-func (t *GetAllEvents_Events_Edges_Node) GetFeature() []*GetAllEvents_Events_Edges_Node_Feature {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return t.Feature
-}
 func (t *GetAllEvents_Events_Edges_Node) GetPersonalAccessToken() []*GetAllEvents_Events_Edges_Node_PersonalAccessToken {
 	if t == nil {
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
 	return t.PersonalAccessToken
-}
-func (t *GetAllEvents_Events_Edges_Node) GetOauth2token() []*GetAllEvents_Events_Edges_Node_Oauth2token {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return t.Oauth2token
 }
 func (t *GetAllEvents_Events_Edges_Node) GetHush() []*GetAllEvents_Events_Edges_Node_Hush {
 	if t == nil {
@@ -12937,18 +12661,6 @@ func (t *GetAllEvents_Events_Edges_Node) GetGroupmembership() []*GetAllEvents_Ev
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
 	return t.Groupmembership
-}
-func (t *GetAllEvents_Events_Edges_Node) GetEntitlement() []*GetAllEvents_Events_Edges_Node_Entitlement {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return t.Entitlement
-}
-func (t *GetAllEvents_Events_Edges_Node) GetWebhook() []*GetAllEvents_Events_Edges_Node_Webhook {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return t.Webhook
 }
 
 type GetAllEvents_Events_Edges struct {
@@ -13028,17 +12740,6 @@ func (t *GetEventByID_Event_Invite) GetID() string {
 	return t.ID
 }
 
-type GetEventByID_Event_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Feature) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Feature{}
-	}
-	return t.ID
-}
-
 type GetEventByID_Event_PersonalAccessToken struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -13046,17 +12747,6 @@ type GetEventByID_Event_PersonalAccessToken struct {
 func (t *GetEventByID_Event_PersonalAccessToken) GetID() string {
 	if t == nil {
 		t = &GetEventByID_Event_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Oauth2token) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Oauth2token{}
 	}
 	return t.ID
 }
@@ -13094,28 +12784,6 @@ func (t *GetEventByID_Event_Groupmembership) GetID() string {
 	return t.ID
 }
 
-type GetEventByID_Event_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Entitlement) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Entitlement{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Webhook) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Webhook{}
-	}
-	return t.ID
-}
-
 type GetEventByID_Event struct {
 	ID                  string                                    "json:\"id\" graphql:\"id\""
 	CreatedAt           *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -13131,14 +12799,10 @@ type GetEventByID_Event struct {
 	Integration         []*GetEventByID_Event_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
 	Organization        []*GetEventByID_Event_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
 	Invite              []*GetEventByID_Event_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*GetEventByID_Event_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
 	PersonalAccessToken []*GetEventByID_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*GetEventByID_Event_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
 	Hush                []*GetEventByID_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
 	Orgmembership       []*GetEventByID_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	Groupmembership     []*GetEventByID_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*GetEventByID_Event_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*GetEventByID_Event_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
 }
 
 func (t *GetEventByID_Event) GetID() string {
@@ -13225,23 +12889,11 @@ func (t *GetEventByID_Event) GetInvite() []*GetEventByID_Event_Invite {
 	}
 	return t.Invite
 }
-func (t *GetEventByID_Event) GetFeature() []*GetEventByID_Event_Feature {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.Feature
-}
 func (t *GetEventByID_Event) GetPersonalAccessToken() []*GetEventByID_Event_PersonalAccessToken {
 	if t == nil {
 		t = &GetEventByID_Event{}
 	}
 	return t.PersonalAccessToken
-}
-func (t *GetEventByID_Event) GetOauth2token() []*GetEventByID_Event_Oauth2token {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.Oauth2token
 }
 func (t *GetEventByID_Event) GetHush() []*GetEventByID_Event_Hush {
 	if t == nil {
@@ -13260,18 +12912,6 @@ func (t *GetEventByID_Event) GetGroupmembership() []*GetEventByID_Event_Groupmem
 		t = &GetEventByID_Event{}
 	}
 	return t.Groupmembership
-}
-func (t *GetEventByID_Event) GetEntitlement() []*GetEventByID_Event_Entitlement {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.Entitlement
-}
-func (t *GetEventByID_Event) GetWebhook() []*GetEventByID_Event_Webhook {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.Webhook
 }
 
 type GetEvents_Events_Edges_Node struct {
@@ -13390,17 +13030,6 @@ func (t *UpdateEvent_UpdateEvent_Event_Invite) GetID() string {
 	return t.ID
 }
 
-type UpdateEvent_UpdateEvent_Event_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateEvent_UpdateEvent_Event_Feature) GetID() string {
-	if t == nil {
-		t = &UpdateEvent_UpdateEvent_Event_Feature{}
-	}
-	return t.ID
-}
-
 type UpdateEvent_UpdateEvent_Event_PersonalAccessToken struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -13408,17 +13037,6 @@ type UpdateEvent_UpdateEvent_Event_PersonalAccessToken struct {
 func (t *UpdateEvent_UpdateEvent_Event_PersonalAccessToken) GetID() string {
 	if t == nil {
 		t = &UpdateEvent_UpdateEvent_Event_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type UpdateEvent_UpdateEvent_Event_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateEvent_UpdateEvent_Event_Oauth2token) GetID() string {
-	if t == nil {
-		t = &UpdateEvent_UpdateEvent_Event_Oauth2token{}
 	}
 	return t.ID
 }
@@ -13456,28 +13074,6 @@ func (t *UpdateEvent_UpdateEvent_Event_Groupmembership) GetID() string {
 	return t.ID
 }
 
-type UpdateEvent_UpdateEvent_Event_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateEvent_UpdateEvent_Event_Entitlement) GetID() string {
-	if t == nil {
-		t = &UpdateEvent_UpdateEvent_Event_Entitlement{}
-	}
-	return t.ID
-}
-
-type UpdateEvent_UpdateEvent_Event_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateEvent_UpdateEvent_Event_Webhook) GetID() string {
-	if t == nil {
-		t = &UpdateEvent_UpdateEvent_Event_Webhook{}
-	}
-	return t.ID
-}
-
 type UpdateEvent_UpdateEvent_Event struct {
 	ID                  string                                               "json:\"id\" graphql:\"id\""
 	CreatedAt           *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -13493,14 +13089,10 @@ type UpdateEvent_UpdateEvent_Event struct {
 	Integration         []*UpdateEvent_UpdateEvent_Event_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
 	Organization        []*UpdateEvent_UpdateEvent_Event_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
 	Invite              []*UpdateEvent_UpdateEvent_Event_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*UpdateEvent_UpdateEvent_Event_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
 	PersonalAccessToken []*UpdateEvent_UpdateEvent_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*UpdateEvent_UpdateEvent_Event_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
 	Hush                []*UpdateEvent_UpdateEvent_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
 	Orgmembership       []*UpdateEvent_UpdateEvent_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
 	Groupmembership     []*UpdateEvent_UpdateEvent_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*UpdateEvent_UpdateEvent_Event_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*UpdateEvent_UpdateEvent_Event_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
 }
 
 func (t *UpdateEvent_UpdateEvent_Event) GetID() string {
@@ -13587,23 +13179,11 @@ func (t *UpdateEvent_UpdateEvent_Event) GetInvite() []*UpdateEvent_UpdateEvent_E
 	}
 	return t.Invite
 }
-func (t *UpdateEvent_UpdateEvent_Event) GetFeature() []*UpdateEvent_UpdateEvent_Event_Feature {
-	if t == nil {
-		t = &UpdateEvent_UpdateEvent_Event{}
-	}
-	return t.Feature
-}
 func (t *UpdateEvent_UpdateEvent_Event) GetPersonalAccessToken() []*UpdateEvent_UpdateEvent_Event_PersonalAccessToken {
 	if t == nil {
 		t = &UpdateEvent_UpdateEvent_Event{}
 	}
 	return t.PersonalAccessToken
-}
-func (t *UpdateEvent_UpdateEvent_Event) GetOauth2token() []*UpdateEvent_UpdateEvent_Event_Oauth2token {
-	if t == nil {
-		t = &UpdateEvent_UpdateEvent_Event{}
-	}
-	return t.Oauth2token
 }
 func (t *UpdateEvent_UpdateEvent_Event) GetHush() []*UpdateEvent_UpdateEvent_Event_Hush {
 	if t == nil {
@@ -13622,18 +13202,6 @@ func (t *UpdateEvent_UpdateEvent_Event) GetGroupmembership() []*UpdateEvent_Upda
 		t = &UpdateEvent_UpdateEvent_Event{}
 	}
 	return t.Groupmembership
-}
-func (t *UpdateEvent_UpdateEvent_Event) GetEntitlement() []*UpdateEvent_UpdateEvent_Event_Entitlement {
-	if t == nil {
-		t = &UpdateEvent_UpdateEvent_Event{}
-	}
-	return t.Entitlement
-}
-func (t *UpdateEvent_UpdateEvent_Event) GetWebhook() []*UpdateEvent_UpdateEvent_Event_Webhook {
-	if t == nil {
-		t = &UpdateEvent_UpdateEvent_Event{}
-	}
-	return t.Webhook
 }
 
 type UpdateEvent_UpdateEvent struct {
@@ -19093,17 +18661,6 @@ func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets)
 	return t.ID
 }
 
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Oauth2tokens struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Oauth2tokens) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Oauth2tokens{}
-	}
-	return t.ID
-}
-
 type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -19115,42 +18672,15 @@ func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events) 
 	return t.ID
 }
 
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks struct {
-	ID             string "json:\"id\" graphql:\"id\""
-	DestinationURL string "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool   "json:\"enabled\" graphql:\"enabled\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks) GetDestinationURL() string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks{}
-	}
-	return t.DestinationURL
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks) GetEnabled() bool {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks{}
-	}
-	return t.Enabled
-}
-
 type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations struct {
-	Description  *string                                                                        "json:\"description,omitempty\" graphql:\"description\""
-	ID           string                                                                         "json:\"id\" graphql:\"id\""
-	Kind         *string                                                                        "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                                                         "json:\"name\" graphql:\"name\""
-	OwnerID      *string                                                                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Owner        *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Owner          "json:\"owner,omitempty\" graphql:\"owner\""
-	Secrets      []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets      "json:\"secrets,omitempty\" graphql:\"secrets\""
-	Oauth2tokens []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Oauth2tokens "json:\"oauth2tokens,omitempty\" graphql:\"oauth2tokens\""
-	Events       []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events       "json:\"events,omitempty\" graphql:\"events\""
-	Webhooks     []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks     "json:\"webhooks,omitempty\" graphql:\"webhooks\""
+	Description *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
+	ID          string                                                                    "json:\"id\" graphql:\"id\""
+	Kind        *string                                                                   "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string                                                                    "json:\"name\" graphql:\"name\""
+	OwnerID     *string                                                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Owner       *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
+	Secrets     []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
+	Events      []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events  "json:\"events,omitempty\" graphql:\"events\""
 }
 
 func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetDescription() *string {
@@ -19195,23 +18725,11 @@ func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetSecr
 	}
 	return t.Secrets
 }
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetOauth2tokens() []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Oauth2tokens {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return t.Oauth2tokens
-}
 func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetEvents() []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events {
 	if t == nil {
 		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
 	}
 	return t.Events
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetWebhooks() []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Webhooks {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return t.Webhooks
 }
 
 type CreateBulkCSVIntegration_CreateBulkCSVIntegration struct {
@@ -19247,17 +18765,6 @@ func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets) GetID
 	return t.ID
 }
 
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Oauth2tokens struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Oauth2tokens) GetID() string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Oauth2tokens{}
-	}
-	return t.ID
-}
-
 type CreateBulkIntegration_CreateBulkIntegration_Integrations_Events struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -19269,42 +18776,15 @@ func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Events) GetID(
 	return t.ID
 }
 
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks struct {
-	ID             string "json:\"id\" graphql:\"id\""
-	DestinationURL string "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool   "json:\"enabled\" graphql:\"enabled\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks) GetID() string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks{}
-	}
-	return t.ID
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks) GetDestinationURL() string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks{}
-	}
-	return t.DestinationURL
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks) GetEnabled() bool {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks{}
-	}
-	return t.Enabled
-}
-
 type CreateBulkIntegration_CreateBulkIntegration_Integrations struct {
-	Description  *string                                                                  "json:\"description,omitempty\" graphql:\"description\""
-	ID           string                                                                   "json:\"id\" graphql:\"id\""
-	Kind         *string                                                                  "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                                                   "json:\"name\" graphql:\"name\""
-	OwnerID      *string                                                                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Owner        *CreateBulkIntegration_CreateBulkIntegration_Integrations_Owner          "json:\"owner,omitempty\" graphql:\"owner\""
-	Secrets      []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets      "json:\"secrets,omitempty\" graphql:\"secrets\""
-	Oauth2tokens []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Oauth2tokens "json:\"oauth2tokens,omitempty\" graphql:\"oauth2tokens\""
-	Events       []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Events       "json:\"events,omitempty\" graphql:\"events\""
-	Webhooks     []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks     "json:\"webhooks,omitempty\" graphql:\"webhooks\""
+	Description *string                                                             "json:\"description,omitempty\" graphql:\"description\""
+	ID          string                                                              "json:\"id\" graphql:\"id\""
+	Kind        *string                                                             "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string                                                              "json:\"name\" graphql:\"name\""
+	OwnerID     *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Owner       *CreateBulkIntegration_CreateBulkIntegration_Integrations_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
+	Secrets     []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
+	Events      []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Events  "json:\"events,omitempty\" graphql:\"events\""
 }
 
 func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetDescription() *string {
@@ -19349,23 +18829,11 @@ func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetSecrets() 
 	}
 	return t.Secrets
 }
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetOauth2tokens() []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Oauth2tokens {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return t.Oauth2tokens
-}
 func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetEvents() []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Events {
 	if t == nil {
 		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
 	}
 	return t.Events
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetWebhooks() []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Webhooks {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return t.Webhooks
 }
 
 type CreateBulkIntegration_CreateBulkIntegration struct {
@@ -19401,17 +18869,6 @@ func (t *CreateIntegration_CreateIntegration_Integration_Secrets) GetID() string
 	return t.ID
 }
 
-type CreateIntegration_CreateIntegration_Integration_Oauth2tokens struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Oauth2tokens) GetID() string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Oauth2tokens{}
-	}
-	return t.ID
-}
-
 type CreateIntegration_CreateIntegration_Integration_Events struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -19423,42 +18880,15 @@ func (t *CreateIntegration_CreateIntegration_Integration_Events) GetID() string 
 	return t.ID
 }
 
-type CreateIntegration_CreateIntegration_Integration_Webhooks struct {
-	ID             string "json:\"id\" graphql:\"id\""
-	DestinationURL string "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool   "json:\"enabled\" graphql:\"enabled\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Webhooks) GetID() string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Webhooks{}
-	}
-	return t.ID
-}
-func (t *CreateIntegration_CreateIntegration_Integration_Webhooks) GetDestinationURL() string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Webhooks{}
-	}
-	return t.DestinationURL
-}
-func (t *CreateIntegration_CreateIntegration_Integration_Webhooks) GetEnabled() bool {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Webhooks{}
-	}
-	return t.Enabled
-}
-
 type CreateIntegration_CreateIntegration_Integration struct {
-	Description  *string                                                         "json:\"description,omitempty\" graphql:\"description\""
-	ID           string                                                          "json:\"id\" graphql:\"id\""
-	Kind         *string                                                         "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                                          "json:\"name\" graphql:\"name\""
-	OwnerID      *string                                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Owner        *CreateIntegration_CreateIntegration_Integration_Owner          "json:\"owner,omitempty\" graphql:\"owner\""
-	Secrets      []*CreateIntegration_CreateIntegration_Integration_Secrets      "json:\"secrets,omitempty\" graphql:\"secrets\""
-	Oauth2tokens []*CreateIntegration_CreateIntegration_Integration_Oauth2tokens "json:\"oauth2tokens,omitempty\" graphql:\"oauth2tokens\""
-	Events       []*CreateIntegration_CreateIntegration_Integration_Events       "json:\"events,omitempty\" graphql:\"events\""
-	Webhooks     []*CreateIntegration_CreateIntegration_Integration_Webhooks     "json:\"webhooks,omitempty\" graphql:\"webhooks\""
+	Description *string                                                    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string                                                     "json:\"id\" graphql:\"id\""
+	Kind        *string                                                    "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string                                                     "json:\"name\" graphql:\"name\""
+	OwnerID     *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Owner       *CreateIntegration_CreateIntegration_Integration_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
+	Secrets     []*CreateIntegration_CreateIntegration_Integration_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
+	Events      []*CreateIntegration_CreateIntegration_Integration_Events  "json:\"events,omitempty\" graphql:\"events\""
 }
 
 func (t *CreateIntegration_CreateIntegration_Integration) GetDescription() *string {
@@ -19503,23 +18933,11 @@ func (t *CreateIntegration_CreateIntegration_Integration) GetSecrets() []*Create
 	}
 	return t.Secrets
 }
-func (t *CreateIntegration_CreateIntegration_Integration) GetOauth2tokens() []*CreateIntegration_CreateIntegration_Integration_Oauth2tokens {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return t.Oauth2tokens
-}
 func (t *CreateIntegration_CreateIntegration_Integration) GetEvents() []*CreateIntegration_CreateIntegration_Integration_Events {
 	if t == nil {
 		t = &CreateIntegration_CreateIntegration_Integration{}
 	}
 	return t.Events
-}
-func (t *CreateIntegration_CreateIntegration_Integration) GetWebhooks() []*CreateIntegration_CreateIntegration_Integration_Webhooks {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return t.Webhooks
 }
 
 type CreateIntegration_CreateIntegration struct {
@@ -19566,17 +18984,6 @@ func (t *GetAllIntegrations_Integrations_Edges_Node_Secrets) GetID() string {
 	return t.ID
 }
 
-type GetAllIntegrations_Integrations_Edges_Node_Oauth2tokens struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Oauth2tokens) GetID() string {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Oauth2tokens{}
-	}
-	return t.ID
-}
-
 type GetAllIntegrations_Integrations_Edges_Node_Events struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -19588,46 +18995,19 @@ func (t *GetAllIntegrations_Integrations_Edges_Node_Events) GetID() string {
 	return t.ID
 }
 
-type GetAllIntegrations_Integrations_Edges_Node_Webhooks struct {
-	ID             string "json:\"id\" graphql:\"id\""
-	DestinationURL string "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool   "json:\"enabled\" graphql:\"enabled\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Webhooks) GetID() string {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Webhooks{}
-	}
-	return t.ID
-}
-func (t *GetAllIntegrations_Integrations_Edges_Node_Webhooks) GetDestinationURL() string {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Webhooks{}
-	}
-	return t.DestinationURL
-}
-func (t *GetAllIntegrations_Integrations_Edges_Node_Webhooks) GetEnabled() bool {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Webhooks{}
-	}
-	return t.Enabled
-}
-
 type GetAllIntegrations_Integrations_Edges_Node struct {
-	Description  *string                                                    "json:\"description,omitempty\" graphql:\"description\""
-	ID           string                                                     "json:\"id\" graphql:\"id\""
-	Kind         *string                                                    "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                                     "json:\"name\" graphql:\"name\""
-	OwnerID      *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Owner        *GetAllIntegrations_Integrations_Edges_Node_Owner          "json:\"owner,omitempty\" graphql:\"owner\""
-	Secrets      []*GetAllIntegrations_Integrations_Edges_Node_Secrets      "json:\"secrets,omitempty\" graphql:\"secrets\""
-	Oauth2tokens []*GetAllIntegrations_Integrations_Edges_Node_Oauth2tokens "json:\"oauth2tokens,omitempty\" graphql:\"oauth2tokens\""
-	Events       []*GetAllIntegrations_Integrations_Edges_Node_Events       "json:\"events,omitempty\" graphql:\"events\""
-	Webhooks     []*GetAllIntegrations_Integrations_Edges_Node_Webhooks     "json:\"webhooks,omitempty\" graphql:\"webhooks\""
-	CreatedAt    *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	UpdatedAt    *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Description *string                                               "json:\"description,omitempty\" graphql:\"description\""
+	ID          string                                                "json:\"id\" graphql:\"id\""
+	Kind        *string                                               "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string                                                "json:\"name\" graphql:\"name\""
+	OwnerID     *string                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Owner       *GetAllIntegrations_Integrations_Edges_Node_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
+	Secrets     []*GetAllIntegrations_Integrations_Edges_Node_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
+	Events      []*GetAllIntegrations_Integrations_Edges_Node_Events  "json:\"events,omitempty\" graphql:\"events\""
+	CreatedAt   *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	UpdatedAt   *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetDescription() *string {
@@ -19672,23 +19052,11 @@ func (t *GetAllIntegrations_Integrations_Edges_Node) GetSecrets() []*GetAllInteg
 	}
 	return t.Secrets
 }
-func (t *GetAllIntegrations_Integrations_Edges_Node) GetOauth2tokens() []*GetAllIntegrations_Integrations_Edges_Node_Oauth2tokens {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node{}
-	}
-	return t.Oauth2tokens
-}
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetEvents() []*GetAllIntegrations_Integrations_Edges_Node_Events {
 	if t == nil {
 		t = &GetAllIntegrations_Integrations_Edges_Node{}
 	}
 	return t.Events
-}
-func (t *GetAllIntegrations_Integrations_Edges_Node) GetWebhooks() []*GetAllIntegrations_Integrations_Edges_Node_Webhooks {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node{}
-	}
-	return t.Webhooks
 }
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -19759,17 +19127,6 @@ func (t *GetIntegrationByID_Integration_Secrets) GetID() string {
 	return t.ID
 }
 
-type GetIntegrationByID_Integration_Oauth2tokens struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetIntegrationByID_Integration_Oauth2tokens) GetID() string {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Oauth2tokens{}
-	}
-	return t.ID
-}
-
 type GetIntegrationByID_Integration_Events struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -19781,46 +19138,19 @@ func (t *GetIntegrationByID_Integration_Events) GetID() string {
 	return t.ID
 }
 
-type GetIntegrationByID_Integration_Webhooks struct {
-	ID             string "json:\"id\" graphql:\"id\""
-	DestinationURL string "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool   "json:\"enabled\" graphql:\"enabled\""
-}
-
-func (t *GetIntegrationByID_Integration_Webhooks) GetID() string {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Webhooks{}
-	}
-	return t.ID
-}
-func (t *GetIntegrationByID_Integration_Webhooks) GetDestinationURL() string {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Webhooks{}
-	}
-	return t.DestinationURL
-}
-func (t *GetIntegrationByID_Integration_Webhooks) GetEnabled() bool {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Webhooks{}
-	}
-	return t.Enabled
-}
-
 type GetIntegrationByID_Integration struct {
-	Description  *string                                        "json:\"description,omitempty\" graphql:\"description\""
-	ID           string                                         "json:\"id\" graphql:\"id\""
-	Kind         *string                                        "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                         "json:\"name\" graphql:\"name\""
-	OwnerID      *string                                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Owner        *GetIntegrationByID_Integration_Owner          "json:\"owner,omitempty\" graphql:\"owner\""
-	Secrets      []*GetIntegrationByID_Integration_Secrets      "json:\"secrets,omitempty\" graphql:\"secrets\""
-	Oauth2tokens []*GetIntegrationByID_Integration_Oauth2tokens "json:\"oauth2tokens,omitempty\" graphql:\"oauth2tokens\""
-	Events       []*GetIntegrationByID_Integration_Events       "json:\"events,omitempty\" graphql:\"events\""
-	Webhooks     []*GetIntegrationByID_Integration_Webhooks     "json:\"webhooks,omitempty\" graphql:\"webhooks\""
-	CreatedAt    *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	UpdatedAt    *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Description *string                                   "json:\"description,omitempty\" graphql:\"description\""
+	ID          string                                    "json:\"id\" graphql:\"id\""
+	Kind        *string                                   "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string                                    "json:\"name\" graphql:\"name\""
+	OwnerID     *string                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Owner       *GetIntegrationByID_Integration_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
+	Secrets     []*GetIntegrationByID_Integration_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
+	Events      []*GetIntegrationByID_Integration_Events  "json:\"events,omitempty\" graphql:\"events\""
+	CreatedAt   *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	UpdatedAt   *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetIntegrationByID_Integration) GetDescription() *string {
@@ -19865,23 +19195,11 @@ func (t *GetIntegrationByID_Integration) GetSecrets() []*GetIntegrationByID_Inte
 	}
 	return t.Secrets
 }
-func (t *GetIntegrationByID_Integration) GetOauth2tokens() []*GetIntegrationByID_Integration_Oauth2tokens {
-	if t == nil {
-		t = &GetIntegrationByID_Integration{}
-	}
-	return t.Oauth2tokens
-}
 func (t *GetIntegrationByID_Integration) GetEvents() []*GetIntegrationByID_Integration_Events {
 	if t == nil {
 		t = &GetIntegrationByID_Integration{}
 	}
 	return t.Events
-}
-func (t *GetIntegrationByID_Integration) GetWebhooks() []*GetIntegrationByID_Integration_Webhooks {
-	if t == nil {
-		t = &GetIntegrationByID_Integration{}
-	}
-	return t.Webhooks
 }
 func (t *GetIntegrationByID_Integration) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -19930,17 +19248,6 @@ func (t *GetIntegrations_Integrations_Edges_Node_Secrets) GetID() string {
 	return t.ID
 }
 
-type GetIntegrations_Integrations_Edges_Node_Oauth2tokens struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetIntegrations_Integrations_Edges_Node_Oauth2tokens) GetID() string {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node_Oauth2tokens{}
-	}
-	return t.ID
-}
-
 type GetIntegrations_Integrations_Edges_Node_Events struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -19952,46 +19259,19 @@ func (t *GetIntegrations_Integrations_Edges_Node_Events) GetID() string {
 	return t.ID
 }
 
-type GetIntegrations_Integrations_Edges_Node_Webhooks struct {
-	ID             string "json:\"id\" graphql:\"id\""
-	DestinationURL string "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool   "json:\"enabled\" graphql:\"enabled\""
-}
-
-func (t *GetIntegrations_Integrations_Edges_Node_Webhooks) GetID() string {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node_Webhooks{}
-	}
-	return t.ID
-}
-func (t *GetIntegrations_Integrations_Edges_Node_Webhooks) GetDestinationURL() string {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node_Webhooks{}
-	}
-	return t.DestinationURL
-}
-func (t *GetIntegrations_Integrations_Edges_Node_Webhooks) GetEnabled() bool {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node_Webhooks{}
-	}
-	return t.Enabled
-}
-
 type GetIntegrations_Integrations_Edges_Node struct {
-	Description  *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	ID           string                                                  "json:\"id\" graphql:\"id\""
-	Kind         *string                                                 "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                                  "json:\"name\" graphql:\"name\""
-	OwnerID      *string                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Owner        *GetIntegrations_Integrations_Edges_Node_Owner          "json:\"owner,omitempty\" graphql:\"owner\""
-	Secrets      []*GetIntegrations_Integrations_Edges_Node_Secrets      "json:\"secrets,omitempty\" graphql:\"secrets\""
-	Oauth2tokens []*GetIntegrations_Integrations_Edges_Node_Oauth2tokens "json:\"oauth2tokens,omitempty\" graphql:\"oauth2tokens\""
-	Events       []*GetIntegrations_Integrations_Edges_Node_Events       "json:\"events,omitempty\" graphql:\"events\""
-	Webhooks     []*GetIntegrations_Integrations_Edges_Node_Webhooks     "json:\"webhooks,omitempty\" graphql:\"webhooks\""
-	CreatedAt    *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	UpdatedAt    *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Description *string                                            "json:\"description,omitempty\" graphql:\"description\""
+	ID          string                                             "json:\"id\" graphql:\"id\""
+	Kind        *string                                            "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string                                             "json:\"name\" graphql:\"name\""
+	OwnerID     *string                                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Owner       *GetIntegrations_Integrations_Edges_Node_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
+	Secrets     []*GetIntegrations_Integrations_Edges_Node_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
+	Events      []*GetIntegrations_Integrations_Edges_Node_Events  "json:\"events,omitempty\" graphql:\"events\""
+	CreatedAt   *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	UpdatedAt   *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetIntegrations_Integrations_Edges_Node) GetDescription() *string {
@@ -20036,23 +19316,11 @@ func (t *GetIntegrations_Integrations_Edges_Node) GetSecrets() []*GetIntegration
 	}
 	return t.Secrets
 }
-func (t *GetIntegrations_Integrations_Edges_Node) GetOauth2tokens() []*GetIntegrations_Integrations_Edges_Node_Oauth2tokens {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node{}
-	}
-	return t.Oauth2tokens
-}
 func (t *GetIntegrations_Integrations_Edges_Node) GetEvents() []*GetIntegrations_Integrations_Edges_Node_Events {
 	if t == nil {
 		t = &GetIntegrations_Integrations_Edges_Node{}
 	}
 	return t.Events
-}
-func (t *GetIntegrations_Integrations_Edges_Node) GetWebhooks() []*GetIntegrations_Integrations_Edges_Node_Webhooks {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node{}
-	}
-	return t.Webhooks
 }
 func (t *GetIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -20123,17 +19391,6 @@ func (t *UpdateIntegration_UpdateIntegration_Integration_Secrets) GetID() string
 	return t.ID
 }
 
-type UpdateIntegration_UpdateIntegration_Integration_Oauth2tokens struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Oauth2tokens) GetID() string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Oauth2tokens{}
-	}
-	return t.ID
-}
-
 type UpdateIntegration_UpdateIntegration_Integration_Events struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -20145,42 +19402,15 @@ func (t *UpdateIntegration_UpdateIntegration_Integration_Events) GetID() string 
 	return t.ID
 }
 
-type UpdateIntegration_UpdateIntegration_Integration_Webhooks struct {
-	ID             string "json:\"id\" graphql:\"id\""
-	DestinationURL string "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool   "json:\"enabled\" graphql:\"enabled\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Webhooks) GetID() string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Webhooks{}
-	}
-	return t.ID
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration_Webhooks) GetDestinationURL() string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Webhooks{}
-	}
-	return t.DestinationURL
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration_Webhooks) GetEnabled() bool {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Webhooks{}
-	}
-	return t.Enabled
-}
-
 type UpdateIntegration_UpdateIntegration_Integration struct {
-	Description  *string                                                         "json:\"description,omitempty\" graphql:\"description\""
-	ID           string                                                          "json:\"id\" graphql:\"id\""
-	Kind         *string                                                         "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string                                                          "json:\"name\" graphql:\"name\""
-	OwnerID      *string                                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Owner        *UpdateIntegration_UpdateIntegration_Integration_Owner          "json:\"owner,omitempty\" graphql:\"owner\""
-	Secrets      []*UpdateIntegration_UpdateIntegration_Integration_Secrets      "json:\"secrets,omitempty\" graphql:\"secrets\""
-	Oauth2tokens []*UpdateIntegration_UpdateIntegration_Integration_Oauth2tokens "json:\"oauth2tokens,omitempty\" graphql:\"oauth2tokens\""
-	Events       []*UpdateIntegration_UpdateIntegration_Integration_Events       "json:\"events,omitempty\" graphql:\"events\""
-	Webhooks     []*UpdateIntegration_UpdateIntegration_Integration_Webhooks     "json:\"webhooks,omitempty\" graphql:\"webhooks\""
+	Description *string                                                    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string                                                     "json:\"id\" graphql:\"id\""
+	Kind        *string                                                    "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string                                                     "json:\"name\" graphql:\"name\""
+	OwnerID     *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Owner       *UpdateIntegration_UpdateIntegration_Integration_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
+	Secrets     []*UpdateIntegration_UpdateIntegration_Integration_Secrets "json:\"secrets,omitempty\" graphql:\"secrets\""
+	Events      []*UpdateIntegration_UpdateIntegration_Integration_Events  "json:\"events,omitempty\" graphql:\"events\""
 }
 
 func (t *UpdateIntegration_UpdateIntegration_Integration) GetDescription() *string {
@@ -20225,23 +19455,11 @@ func (t *UpdateIntegration_UpdateIntegration_Integration) GetSecrets() []*Update
 	}
 	return t.Secrets
 }
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetOauth2tokens() []*UpdateIntegration_UpdateIntegration_Integration_Oauth2tokens {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return t.Oauth2tokens
-}
 func (t *UpdateIntegration_UpdateIntegration_Integration) GetEvents() []*UpdateIntegration_UpdateIntegration_Integration_Events {
 	if t == nil {
 		t = &UpdateIntegration_UpdateIntegration_Integration{}
 	}
 	return t.Events
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetWebhooks() []*UpdateIntegration_UpdateIntegration_Integration_Webhooks {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return t.Webhooks
 }
 
 type UpdateIntegration_UpdateIntegration struct {
@@ -52642,13 +51860,7 @@ const CreateBulkCSVEventDocument = `mutation CreateBulkCSVEvent ($input: Upload!
 			invite {
 				id
 			}
-			feature {
-				id
-			}
 			personalAccessToken {
-				id
-			}
-			oauth2token {
 				id
 			}
 			hush {
@@ -52658,12 +51870,6 @@ const CreateBulkCSVEventDocument = `mutation CreateBulkCSVEvent ($input: Upload!
 				id
 			}
 			groupmembership {
-				id
-			}
-			entitlement {
-				id
-			}
-			webhook {
 				id
 			}
 		}
@@ -52711,13 +51917,7 @@ const CreateBulkEventDocument = `mutation CreateBulkEvent ($input: [CreateEventI
 			invite {
 				id
 			}
-			feature {
-				id
-			}
 			personalAccessToken {
-				id
-			}
-			oauth2token {
 				id
 			}
 			hush {
@@ -52727,12 +51927,6 @@ const CreateBulkEventDocument = `mutation CreateBulkEvent ($input: [CreateEventI
 				id
 			}
 			groupmembership {
-				id
-			}
-			entitlement {
-				id
-			}
-			webhook {
 				id
 			}
 		}
@@ -52780,13 +51974,7 @@ const CreateEventDocument = `mutation CreateEvent ($input: CreateEventInput!) {
 			invite {
 				id
 			}
-			feature {
-				id
-			}
 			personalAccessToken {
-				id
-			}
-			oauth2token {
 				id
 			}
 			hush {
@@ -52796,12 +51984,6 @@ const CreateEventDocument = `mutation CreateEvent ($input: CreateEventInput!) {
 				id
 			}
 			groupmembership {
-				id
-			}
-			entitlement {
-				id
-			}
-			webhook {
 				id
 			}
 		}
@@ -52878,13 +52060,7 @@ const GetAllEventsDocument = `query GetAllEvents {
 				invite {
 					id
 				}
-				feature {
-					id
-				}
 				personalAccessToken {
-					id
-				}
-				oauth2token {
 					id
 				}
 				hush {
@@ -52894,12 +52070,6 @@ const GetAllEventsDocument = `query GetAllEvents {
 					id
 				}
 				groupmembership {
-					id
-				}
-				entitlement {
-					id
-				}
-				webhook {
 					id
 				}
 			}
@@ -52949,13 +52119,7 @@ const GetEventByIDDocument = `query GetEventByID ($eventId: ID!) {
 		invite {
 			id
 		}
-		feature {
-			id
-		}
 		personalAccessToken {
-			id
-		}
-		oauth2token {
 			id
 		}
 		hush {
@@ -52965,12 +52129,6 @@ const GetEventByIDDocument = `query GetEventByID ($eventId: ID!) {
 			id
 		}
 		groupmembership {
-			id
-		}
-		entitlement {
-			id
-		}
-		webhook {
 			id
 		}
 	}
@@ -53053,13 +52211,7 @@ const UpdateEventDocument = `mutation UpdateEvent ($updateEventId: ID!, $input: 
 			invite {
 				id
 			}
-			feature {
-				id
-			}
 			personalAccessToken {
-				id
-			}
-			oauth2token {
 				id
 			}
 			hush {
@@ -53069,12 +52221,6 @@ const UpdateEventDocument = `mutation UpdateEvent ($updateEventId: ID!, $input: 
 				id
 			}
 			groupmembership {
-				id
-			}
-			entitlement {
-				id
-			}
-			webhook {
 				id
 			}
 		}
@@ -54843,16 +53989,8 @@ const CreateBulkCSVIntegrationDocument = `mutation CreateBulkCSVIntegration ($in
 			secrets {
 				id
 			}
-			oauth2tokens {
-				id
-			}
 			events {
 				id
-			}
-			webhooks {
-				id
-				destinationURL
-				enabled
 			}
 		}
 	}
@@ -54890,16 +54028,8 @@ const CreateBulkIntegrationDocument = `mutation CreateBulkIntegration ($input: [
 			secrets {
 				id
 			}
-			oauth2tokens {
-				id
-			}
 			events {
 				id
-			}
-			webhooks {
-				id
-				destinationURL
-				enabled
 			}
 		}
 	}
@@ -54937,16 +54067,8 @@ const CreateIntegrationDocument = `mutation CreateIntegration ($input: CreateInt
 			secrets {
 				id
 			}
-			oauth2tokens {
-				id
-			}
 			events {
 				id
-			}
-			webhooks {
-				id
-				destinationURL
-				enabled
 			}
 		}
 	}
@@ -55009,16 +54131,8 @@ const GetAllIntegrationsDocument = `query GetAllIntegrations {
 				secrets {
 					id
 				}
-				oauth2tokens {
-					id
-				}
 				events {
 					id
-				}
-				webhooks {
-					id
-					destinationURL
-					enabled
 				}
 				createdAt
 				createdBy
@@ -55058,16 +54172,8 @@ const GetIntegrationByIDDocument = `query GetIntegrationByID ($integrationId: ID
 		secrets {
 			id
 		}
-		oauth2tokens {
-			id
-		}
 		events {
 			id
-		}
-		webhooks {
-			id
-			destinationURL
-			enabled
 		}
 		createdAt
 		createdBy
@@ -55109,16 +54215,8 @@ const GetIntegrationsDocument = `query GetIntegrations ($where: IntegrationWhere
 				secrets {
 					id
 				}
-				oauth2tokens {
-					id
-				}
 				events {
 					id
-				}
-				webhooks {
-					id
-					destinationURL
-					enabled
 				}
 				createdAt
 				createdBy
@@ -55161,16 +54259,8 @@ const UpdateIntegrationDocument = `mutation UpdateIntegration ($updateIntegratio
 			secrets {
 				id
 			}
-			oauth2tokens {
-				id
-			}
 			events {
 				id
-			}
-			webhooks {
-				id
-				destinationURL
-				enabled
 			}
 		}
 	}
