@@ -24,7 +24,6 @@ func init() {
 	createCmd.Flags().StringP("name", "n", "", "name of the integration")
 	createCmd.Flags().StringP("description", "d", "", "description of the integration")
 	createCmd.Flags().StringP("kind", "k", "", "the kind of integration")
-	createCmd.Flags().StringP("webhook-id", "w", "", "the webhook id to associate with the integration")
 }
 
 // createValidation validates the required fields for the command
@@ -44,11 +43,6 @@ func createValidation() (input openlaneclient.CreateIntegrationInput, err error)
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
-	}
-
-	webhookID := cmd.Config.String("webhook-id")
-	if webhookID != "" {
-		input.WebhookIDs = append(input.WebhookIDs, webhookID)
 	}
 
 	return input, nil

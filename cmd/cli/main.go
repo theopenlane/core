@@ -9,13 +9,9 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/contact"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/control"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/controlobjective"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/entitlementplan"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/entitlementplanfeatures"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/entitlements"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entity"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitytype"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/events"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/features"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/file"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/group"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/groupmembers"
@@ -44,17 +40,14 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/user"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/usersetting"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/version"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/webhook"
 
 	// history commands
 	_ "github.com/theopenlane/core/cmd/cli/cmd/controlhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/controlobjectivehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/documentdatahistory"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/entitlementhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entityhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitytypehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/eventhistory"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/featurehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/filehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/grouphistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/groupmembershiphistory"
@@ -63,7 +56,6 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/integrationhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/internalpolicyhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/narrativehistory"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/oauthproviderhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/organizationhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/organizationsettinghistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/orgmembershiphistory"
@@ -75,7 +67,6 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/templatehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/userhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/usersettinghistory"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/webhookhistory"
 )
 
 func main() {
