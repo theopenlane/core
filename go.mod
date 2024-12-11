@@ -2,7 +2,7 @@ module github.com/theopenlane/core
 
 go 1.23.3
 
-replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
+replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20231025175343-432967d53b47
 
 require (
 	ariga.io/entcache v0.1.0

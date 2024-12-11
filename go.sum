@@ -418,8 +418,8 @@ github.com/golangci/revgrep v0.5.3 h1:3tL7c1XBMtWHHqVpS5ChmiAAoe4PF/d5+ULzV9sLAz
 github.com/golangci/revgrep v0.5.3/go.mod h1:U4R/s9dlXZsg8uJmaR1GrloUr14D7qDl8gi2iPXJH8k=
 github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed h1:IURFTjxeTfNFP0hTEi1YKjB/ub8zkpaOqFFMApi2EAs=
 github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed/go.mod h1:XLXN8bNw4CGRPaqgl3bv/lhz7bsGPh4/xSaMTbo2vkQ=
-github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43 h1:v92F/xJ1zgy9rriatsOXO+v0afytyI1ZiLe4BFEw5+w=
-github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43/go.mod h1:tIO+Vo3gX8833p92+sE3B7jvMFNnP8rIfewIK5cC6zg=
+github.com/golanglemonade/go-generate-fast v0.0.0-20231025175343-432967d53b47 h1:tyfSi90tLBM/h5fZ89EoCftdkt/CeHCMPiObZac31P0=
+github.com/golanglemonade/go-generate-fast v0.0.0-20231025175343-432967d53b47/go.mod h1:iktiTcPdK+nuL47hn+7UL12uIkgJYyOAh99jdA6ruGw=
 github.com/google/cel-go v0.22.1 h1:AfVXx3chM2qwoSbM7Da8g8hX8OVSkBFwX+rz2+PcK40=
 github.com/google/cel-go v0.22.1/go.mod h1:BuznPXXfQDpXKWQ9sPW3TzlAJN5zzFe+i9tIs0yC4s8=
 github.com/google/go-cmp v0.2.0/go.mod h1:oXzfMopK8JAjlY9xF4vHSVASa0yLyX7SntLO5aqRK0M=
