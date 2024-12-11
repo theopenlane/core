@@ -78,14 +78,6 @@ func (w ConsoleWriter) SetFormatter(id string, f Formatter) {
 	w.formatters[id] = f
 }
 
-// func (w ConsoleWriter) SetFieldsExclude(fields []string) {
-//	w.fieldsExclude = fields
-// }
-//
-// func (w ConsoleWriter) FieldsExclude() []string {
-//	return w.fieldsExclude
-// }
-
 // Write appends the output to Out.
 func (w ConsoleWriter) Write(p []byte) (n int, err error) {
 	var buf bytes.Buffer

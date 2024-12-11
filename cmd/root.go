@@ -57,6 +57,7 @@ func initCmdFlags(cmd *cobra.Command) error {
 }
 
 func setupLogging() {
+	// if you want to try the other console writer, swap this out for pzlog.NewPtermWriter()
 	output := consolelog.NewConsoleWriter()
 	log.Logger = zerolog.New(os.Stderr).
 		With().Timestamp().
@@ -69,8 +70,6 @@ func setupLogging() {
 	if k.Bool("debug") {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 
-		//		buildInfo, _ := debug.ReadBuildInfo()
-
 		log.Logger = log.Logger.With().
 			Caller().Logger()
 	}
@@ -78,12 +77,5 @@ func setupLogging() {
 	// pretty logging for development
 	if k.Bool("pretty") {
 		log.Logger = log.Output(output)
-		//		log.Logger = log.Output(zerolog.ConsoleWriter{
-		//			Out:        os.Stderr,
-		//			TimeFormat: time.RFC3339,
-		//			FormatCaller: func(i interface{}) string {
-		//				return filepath.Base(fmt.Sprintf("%s", i))
-		//			},
-		//		})
 	}
 }
