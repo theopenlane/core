@@ -48,7 +48,7 @@ require (
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/openfga/go-sdk v0.6.3
 	github.com/pkg/errors v0.9.1
-	github.com/pressly/goose/v3 v3.23.0
+	github.com/pressly/goose/v3 v3.23.1
 	github.com/prometheus/client_golang v1.20.5
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.0
