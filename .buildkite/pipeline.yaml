@@ -304,6 +304,11 @@ steps:
         commands: |
           #!/bin/bash
         plugins:
+          - artifacts#v1.9.4:
+              download:
+                - from: "bin/${APP_NAME}"
+                  to: "${APP_NAME}"
+              step: "gobuild-server"
           - cluster-secrets#v1.0.0:
               variables:
                 SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
