@@ -33,6 +33,16 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 
 // CreateBulkInternalPolicy is the resolver for the createBulkInternalPolicy field.
 func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*InternalPolicyBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input[0].OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateInternalPolicy(ctx, input)
 }
 
@@ -43,6 +53,16 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data[0].OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	return r.bulkCreateInternalPolicy(ctx, data)
