@@ -14,3 +14,8 @@ var Migrations embed.FS
 //
 //go:embed migrations-goose-postgres/*.sql
 var GooseMigrationsPG embed.FS
+
+// SeedMigrationsPG contain an embedded filesystem with all the seed files for postgres
+//
+//go:embed seed/*.sql
+var SeedMigrationsPG embed.FS

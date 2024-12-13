@@ -144,7 +144,11 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 func (c *client) runMigrations(ctx context.Context) error {
 	switch c.config.MigrationProvider {
 	case "goose":
-		return c.runGooseMigrations()
+		if err := c.runGooseMigrations(); err != nil {
+			return err
+		}
+
+		return c.seedData()
 	default: // atlas
 		return c.runAtlasMigrations(ctx)
 	}
@@ -188,6 +192,36 @@ func (c *client) runAtlasMigrations(ctx context.Context) error {
 	if err := c.pc.Schema.Create(entcache.Skip(ctx)); err != nil {
 		log.Error().Err(err).Msg("failed creating schema resources")
 
+		return err
+	}
+
+	return nil
+}
+
+// seedData runs the data seed using goose
+func (c *client) seedData() error {
+	driver, err := entx.CheckEntDialect(c.config.DriverName)
+	if err != nil {
+		return err
+	}
+
+	drv, err := sql.Open(c.config.DriverName, c.config.PrimaryDBSource)
+	if err != nil {
+		return err
+	}
+	defer drv.Close()
+
+	seeds := migratedb.SeedMigrationsPG
+
+	goose.SetBaseFS(seeds)
+
+	if err := goose.SetDialect(driver); err != nil {
+		return err
+	}
+
+	migrationsDir := "seed"
+
+	if err := goose.Up(drv, migrationsDir, goose.WithNoVersioning()); err != nil {
 		return err
 	}
 
