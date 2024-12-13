@@ -87,10 +87,10 @@ type OrganizationEdges struct {
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Setting holds the value of the setting edge.
 	Setting *OrganizationSetting `json:"setting,omitempty"`
-	// Documentdata holds the value of the documentdata edge.
-	Documentdata []*DocumentData `json:"documentdata,omitempty"`
-	// Orgsubscriptions holds the value of the orgsubscriptions edge.
-	Orgsubscriptions []*OrgSubscription `json:"orgsubscriptions,omitempty"`
+	// DocumentData holds the value of the document_data edge.
+	DocumentData []*DocumentData `json:"document_data,omitempty"`
+	// OrgSubscriptions holds the value of the org_subscriptions edge.
+	OrgSubscriptions []*OrgSubscription `json:"org_subscriptions,omitempty"`
 	// PersonalAccessTokens holds the value of the personal_access_tokens edge.
 	PersonalAccessTokens []*PersonalAccessToken `json:"personal_access_tokens,omitempty"`
 	// APITokens holds the value of the api_tokens edge.
@@ -109,8 +109,8 @@ type OrganizationEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
-	// Entitytypes holds the value of the entitytypes edge.
-	Entitytypes []*EntityType `json:"entitytypes,omitempty"`
+	// EntityTypes holds the value of the entity_types edge.
+	EntityTypes []*EntityType `json:"entity_types,omitempty"`
 	// Contacts holds the value of the contacts edge.
 	Contacts []*Contact `json:"contacts,omitempty"`
 	// Notes holds the value of the notes edge.
@@ -121,12 +121,12 @@ type OrganizationEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// Procedures holds the value of the procedures edge.
 	Procedures []*Procedure `json:"procedures,omitempty"`
-	// Internalpolicies holds the value of the internalpolicies edge.
-	Internalpolicies []*InternalPolicy `json:"internalpolicies,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
-	// Controlobjectives holds the value of the controlobjectives edge.
-	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
+	// ControlObjectives holds the value of the control_objectives edge.
+	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Controls holds the value of the controls edge.
@@ -154,8 +154,8 @@ type OrganizationEdges struct {
 	namedGroups                   map[string][]*Group
 	namedTemplates                map[string][]*Template
 	namedIntegrations             map[string][]*Integration
-	namedDocumentdata             map[string][]*DocumentData
-	namedOrgsubscriptions         map[string][]*OrgSubscription
+	namedDocumentData             map[string][]*DocumentData
+	namedOrgSubscriptions         map[string][]*OrgSubscription
 	namedPersonalAccessTokens     map[string][]*PersonalAccessToken
 	namedAPITokens                map[string][]*APIToken
 	namedUsers                    map[string][]*User
@@ -165,15 +165,15 @@ type OrganizationEdges struct {
 	namedSecrets                  map[string][]*Hush
 	namedFiles                    map[string][]*File
 	namedEntities                 map[string][]*Entity
-	namedEntitytypes              map[string][]*EntityType
+	namedEntityTypes              map[string][]*EntityType
 	namedContacts                 map[string][]*Contact
 	namedNotes                    map[string][]*Note
 	namedTasks                    map[string][]*Task
 	namedPrograms                 map[string][]*Program
 	namedProcedures               map[string][]*Procedure
-	namedInternalpolicies         map[string][]*InternalPolicy
+	namedInternalPolicies         map[string][]*InternalPolicy
 	namedRisks                    map[string][]*Risk
-	namedControlobjectives        map[string][]*ControlObjective
+	namedControlObjectives        map[string][]*ControlObjective
 	namedNarratives               map[string][]*Narrative
 	namedControls                 map[string][]*Control
 	namedSubcontrols              map[string][]*Subcontrol
@@ -319,22 +319,22 @@ func (e OrganizationEdges) SettingOrErr() (*OrganizationSetting, error) {
 	return nil, &NotLoadedError{edge: "setting"}
 }
 
-// DocumentdataOrErr returns the Documentdata value or an error if the edge
+// DocumentDataOrErr returns the DocumentData value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) DocumentdataOrErr() ([]*DocumentData, error) {
+func (e OrganizationEdges) DocumentDataOrErr() ([]*DocumentData, error) {
 	if e.loadedTypes[15] {
-		return e.Documentdata, nil
+		return e.DocumentData, nil
 	}
-	return nil, &NotLoadedError{edge: "documentdata"}
+	return nil, &NotLoadedError{edge: "document_data"}
 }
 
-// OrgsubscriptionsOrErr returns the Orgsubscriptions value or an error if the edge
+// OrgSubscriptionsOrErr returns the OrgSubscriptions value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) OrgsubscriptionsOrErr() ([]*OrgSubscription, error) {
+func (e OrganizationEdges) OrgSubscriptionsOrErr() ([]*OrgSubscription, error) {
 	if e.loadedTypes[16] {
-		return e.Orgsubscriptions, nil
+		return e.OrgSubscriptions, nil
 	}
-	return nil, &NotLoadedError{edge: "orgsubscriptions"}
+	return nil, &NotLoadedError{edge: "org_subscriptions"}
 }
 
 // PersonalAccessTokensOrErr returns the PersonalAccessTokens value or an error if the edge
@@ -418,13 +418,13 @@ func (e OrganizationEdges) EntitiesOrErr() ([]*Entity, error) {
 	return nil, &NotLoadedError{edge: "entities"}
 }
 
-// EntitytypesOrErr returns the Entitytypes value or an error if the edge
+// EntityTypesOrErr returns the EntityTypes value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) EntitytypesOrErr() ([]*EntityType, error) {
+func (e OrganizationEdges) EntityTypesOrErr() ([]*EntityType, error) {
 	if e.loadedTypes[26] {
-		return e.Entitytypes, nil
+		return e.EntityTypes, nil
 	}
-	return nil, &NotLoadedError{edge: "entitytypes"}
+	return nil, &NotLoadedError{edge: "entity_types"}
 }
 
 // ContactsOrErr returns the Contacts value or an error if the edge
@@ -472,13 +472,13 @@ func (e OrganizationEdges) ProceduresOrErr() ([]*Procedure, error) {
 	return nil, &NotLoadedError{edge: "procedures"}
 }
 
-// InternalpoliciesOrErr returns the Internalpolicies value or an error if the edge
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) InternalpoliciesOrErr() ([]*InternalPolicy, error) {
+func (e OrganizationEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 	if e.loadedTypes[32] {
-		return e.Internalpolicies, nil
+		return e.InternalPolicies, nil
 	}
-	return nil, &NotLoadedError{edge: "internalpolicies"}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
 // RisksOrErr returns the Risks value or an error if the edge
@@ -490,13 +490,13 @@ func (e OrganizationEdges) RisksOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risks"}
 }
 
-// ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
+// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) ControlobjectivesOrErr() ([]*ControlObjective, error) {
+func (e OrganizationEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 	if e.loadedTypes[34] {
-		return e.Controlobjectives, nil
+		return e.ControlObjectives, nil
 	}
-	return nil, &NotLoadedError{edge: "controlobjectives"}
+	return nil, &NotLoadedError{edge: "control_objectives"}
 }
 
 // NarrativesOrErr returns the Narratives value or an error if the edge
@@ -750,14 +750,14 @@ func (o *Organization) QuerySetting() *OrganizationSettingQuery {
 	return NewOrganizationClient(o.config).QuerySetting(o)
 }
 
-// QueryDocumentdata queries the "documentdata" edge of the Organization entity.
-func (o *Organization) QueryDocumentdata() *DocumentDataQuery {
-	return NewOrganizationClient(o.config).QueryDocumentdata(o)
+// QueryDocumentData queries the "document_data" edge of the Organization entity.
+func (o *Organization) QueryDocumentData() *DocumentDataQuery {
+	return NewOrganizationClient(o.config).QueryDocumentData(o)
 }
 
-// QueryOrgsubscriptions queries the "orgsubscriptions" edge of the Organization entity.
-func (o *Organization) QueryOrgsubscriptions() *OrgSubscriptionQuery {
-	return NewOrganizationClient(o.config).QueryOrgsubscriptions(o)
+// QueryOrgSubscriptions queries the "org_subscriptions" edge of the Organization entity.
+func (o *Organization) QueryOrgSubscriptions() *OrgSubscriptionQuery {
+	return NewOrganizationClient(o.config).QueryOrgSubscriptions(o)
 }
 
 // QueryPersonalAccessTokens queries the "personal_access_tokens" edge of the Organization entity.
@@ -805,9 +805,9 @@ func (o *Organization) QueryEntities() *EntityQuery {
 	return NewOrganizationClient(o.config).QueryEntities(o)
 }
 
-// QueryEntitytypes queries the "entitytypes" edge of the Organization entity.
-func (o *Organization) QueryEntitytypes() *EntityTypeQuery {
-	return NewOrganizationClient(o.config).QueryEntitytypes(o)
+// QueryEntityTypes queries the "entity_types" edge of the Organization entity.
+func (o *Organization) QueryEntityTypes() *EntityTypeQuery {
+	return NewOrganizationClient(o.config).QueryEntityTypes(o)
 }
 
 // QueryContacts queries the "contacts" edge of the Organization entity.
@@ -835,9 +835,9 @@ func (o *Organization) QueryProcedures() *ProcedureQuery {
 	return NewOrganizationClient(o.config).QueryProcedures(o)
 }
 
-// QueryInternalpolicies queries the "internalpolicies" edge of the Organization entity.
-func (o *Organization) QueryInternalpolicies() *InternalPolicyQuery {
-	return NewOrganizationClient(o.config).QueryInternalpolicies(o)
+// QueryInternalPolicies queries the "internal_policies" edge of the Organization entity.
+func (o *Organization) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewOrganizationClient(o.config).QueryInternalPolicies(o)
 }
 
 // QueryRisks queries the "risks" edge of the Organization entity.
@@ -845,9 +845,9 @@ func (o *Organization) QueryRisks() *RiskQuery {
 	return NewOrganizationClient(o.config).QueryRisks(o)
 }
 
-// QueryControlobjectives queries the "controlobjectives" edge of the Organization entity.
-func (o *Organization) QueryControlobjectives() *ControlObjectiveQuery {
-	return NewOrganizationClient(o.config).QueryControlobjectives(o)
+// QueryControlObjectives queries the "control_objectives" edge of the Organization entity.
+func (o *Organization) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewOrganizationClient(o.config).QueryControlObjectives(o)
 }
 
 // QueryNarratives queries the "narratives" edge of the Organization entity.
@@ -1255,51 +1255,51 @@ func (o *Organization) appendNamedIntegrations(name string, edges ...*Integratio
 	}
 }
 
-// NamedDocumentdata returns the Documentdata named value or an error if the edge was not
+// NamedDocumentData returns the DocumentData named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedDocumentdata(name string) ([]*DocumentData, error) {
-	if o.Edges.namedDocumentdata == nil {
+func (o *Organization) NamedDocumentData(name string) ([]*DocumentData, error) {
+	if o.Edges.namedDocumentData == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedDocumentdata[name]
+	nodes, ok := o.Edges.namedDocumentData[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedDocumentdata(name string, edges ...*DocumentData) {
-	if o.Edges.namedDocumentdata == nil {
-		o.Edges.namedDocumentdata = make(map[string][]*DocumentData)
+func (o *Organization) appendNamedDocumentData(name string, edges ...*DocumentData) {
+	if o.Edges.namedDocumentData == nil {
+		o.Edges.namedDocumentData = make(map[string][]*DocumentData)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedDocumentdata[name] = []*DocumentData{}
+		o.Edges.namedDocumentData[name] = []*DocumentData{}
 	} else {
-		o.Edges.namedDocumentdata[name] = append(o.Edges.namedDocumentdata[name], edges...)
+		o.Edges.namedDocumentData[name] = append(o.Edges.namedDocumentData[name], edges...)
 	}
 }
 
-// NamedOrgsubscriptions returns the Orgsubscriptions named value or an error if the edge was not
+// NamedOrgSubscriptions returns the OrgSubscriptions named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedOrgsubscriptions(name string) ([]*OrgSubscription, error) {
-	if o.Edges.namedOrgsubscriptions == nil {
+func (o *Organization) NamedOrgSubscriptions(name string) ([]*OrgSubscription, error) {
+	if o.Edges.namedOrgSubscriptions == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedOrgsubscriptions[name]
+	nodes, ok := o.Edges.namedOrgSubscriptions[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedOrgsubscriptions(name string, edges ...*OrgSubscription) {
-	if o.Edges.namedOrgsubscriptions == nil {
-		o.Edges.namedOrgsubscriptions = make(map[string][]*OrgSubscription)
+func (o *Organization) appendNamedOrgSubscriptions(name string, edges ...*OrgSubscription) {
+	if o.Edges.namedOrgSubscriptions == nil {
+		o.Edges.namedOrgSubscriptions = make(map[string][]*OrgSubscription)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedOrgsubscriptions[name] = []*OrgSubscription{}
+		o.Edges.namedOrgSubscriptions[name] = []*OrgSubscription{}
 	} else {
-		o.Edges.namedOrgsubscriptions[name] = append(o.Edges.namedOrgsubscriptions[name], edges...)
+		o.Edges.namedOrgSubscriptions[name] = append(o.Edges.namedOrgSubscriptions[name], edges...)
 	}
 }
 
@@ -1519,27 +1519,27 @@ func (o *Organization) appendNamedEntities(name string, edges ...*Entity) {
 	}
 }
 
-// NamedEntitytypes returns the Entitytypes named value or an error if the edge was not
+// NamedEntityTypes returns the EntityTypes named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedEntitytypes(name string) ([]*EntityType, error) {
-	if o.Edges.namedEntitytypes == nil {
+func (o *Organization) NamedEntityTypes(name string) ([]*EntityType, error) {
+	if o.Edges.namedEntityTypes == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedEntitytypes[name]
+	nodes, ok := o.Edges.namedEntityTypes[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedEntitytypes(name string, edges ...*EntityType) {
-	if o.Edges.namedEntitytypes == nil {
-		o.Edges.namedEntitytypes = make(map[string][]*EntityType)
+func (o *Organization) appendNamedEntityTypes(name string, edges ...*EntityType) {
+	if o.Edges.namedEntityTypes == nil {
+		o.Edges.namedEntityTypes = make(map[string][]*EntityType)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedEntitytypes[name] = []*EntityType{}
+		o.Edges.namedEntityTypes[name] = []*EntityType{}
 	} else {
-		o.Edges.namedEntitytypes[name] = append(o.Edges.namedEntitytypes[name], edges...)
+		o.Edges.namedEntityTypes[name] = append(o.Edges.namedEntityTypes[name], edges...)
 	}
 }
 
@@ -1663,27 +1663,27 @@ func (o *Organization) appendNamedProcedures(name string, edges ...*Procedure) {
 	}
 }
 
-// NamedInternalpolicies returns the Internalpolicies named value or an error if the edge was not
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedInternalpolicies(name string) ([]*InternalPolicy, error) {
-	if o.Edges.namedInternalpolicies == nil {
+func (o *Organization) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if o.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedInternalpolicies[name]
+	nodes, ok := o.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedInternalpolicies(name string, edges ...*InternalPolicy) {
-	if o.Edges.namedInternalpolicies == nil {
-		o.Edges.namedInternalpolicies = make(map[string][]*InternalPolicy)
+func (o *Organization) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if o.Edges.namedInternalPolicies == nil {
+		o.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedInternalpolicies[name] = []*InternalPolicy{}
+		o.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		o.Edges.namedInternalpolicies[name] = append(o.Edges.namedInternalpolicies[name], edges...)
+		o.Edges.namedInternalPolicies[name] = append(o.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
@@ -1711,27 +1711,27 @@ func (o *Organization) appendNamedRisks(name string, edges ...*Risk) {
 	}
 }
 
-// NamedControlobjectives returns the Controlobjectives named value or an error if the edge was not
+// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedControlobjectives(name string) ([]*ControlObjective, error) {
-	if o.Edges.namedControlobjectives == nil {
+func (o *Organization) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if o.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedControlobjectives[name]
+	nodes, ok := o.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedControlobjectives(name string, edges ...*ControlObjective) {
-	if o.Edges.namedControlobjectives == nil {
-		o.Edges.namedControlobjectives = make(map[string][]*ControlObjective)
+func (o *Organization) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if o.Edges.namedControlObjectives == nil {
+		o.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedControlobjectives[name] = []*ControlObjective{}
+		o.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		o.Edges.namedControlobjectives[name] = append(o.Edges.namedControlobjectives[name], edges...)
+		o.Edges.namedControlObjectives[name] = append(o.Edges.namedControlObjectives[name], edges...)
 	}
 }
 

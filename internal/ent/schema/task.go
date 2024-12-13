@@ -74,7 +74,7 @@ func (Task) Edges() []ent.Edge {
 			Ref("tasks"),
 		edge.From("group", Group.Type).
 			Ref("tasks"),
-		edge.From("policy", InternalPolicy.Type).
+		edge.From("internal_policy", InternalPolicy.Type).
 			Ref("tasks"),
 		edge.From("procedure", Procedure.Type).
 			Ref("tasks"),

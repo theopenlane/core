@@ -62,14 +62,14 @@ type Standard struct {
 
 // StandardEdges holds the relations/edges for other nodes in the graph.
 type StandardEdges struct {
-	// Controlobjectives holds the value of the controlobjectives edge.
-	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
+	// ControlObjectives holds the value of the control_objectives edge.
+	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Procedures holds the value of the procedures edge.
 	Procedures []*Procedure `json:"procedures,omitempty"`
-	// Actionplans holds the value of the actionplans edge.
-	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -78,20 +78,20 @@ type StandardEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [5]map[string]int
 
-	namedControlobjectives map[string][]*ControlObjective
+	namedControlObjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
 	namedProcedures        map[string][]*Procedure
-	namedActionplans       map[string][]*ActionPlan
+	namedActionPlans       map[string][]*ActionPlan
 	namedPrograms          map[string][]*Program
 }
 
-// ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
+// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
-func (e StandardEdges) ControlobjectivesOrErr() ([]*ControlObjective, error) {
+func (e StandardEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 	if e.loadedTypes[0] {
-		return e.Controlobjectives, nil
+		return e.ControlObjectives, nil
 	}
-	return nil, &NotLoadedError{edge: "controlobjectives"}
+	return nil, &NotLoadedError{edge: "control_objectives"}
 }
 
 // ControlsOrErr returns the Controls value or an error if the edge
@@ -112,13 +112,13 @@ func (e StandardEdges) ProceduresOrErr() ([]*Procedure, error) {
 	return nil, &NotLoadedError{edge: "procedures"}
 }
 
-// ActionplansOrErr returns the Actionplans value or an error if the edge
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
-func (e StandardEdges) ActionplansOrErr() ([]*ActionPlan, error) {
+func (e StandardEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	if e.loadedTypes[3] {
-		return e.Actionplans, nil
+		return e.ActionPlans, nil
 	}
-	return nil, &NotLoadedError{edge: "actionplans"}
+	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
 // ProgramsOrErr returns the Programs value or an error if the edge
@@ -287,9 +287,9 @@ func (s *Standard) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
-// QueryControlobjectives queries the "controlobjectives" edge of the Standard entity.
-func (s *Standard) QueryControlobjectives() *ControlObjectiveQuery {
-	return NewStandardClient(s.config).QueryControlobjectives(s)
+// QueryControlObjectives queries the "control_objectives" edge of the Standard entity.
+func (s *Standard) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewStandardClient(s.config).QueryControlObjectives(s)
 }
 
 // QueryControls queries the "controls" edge of the Standard entity.
@@ -302,9 +302,9 @@ func (s *Standard) QueryProcedures() *ProcedureQuery {
 	return NewStandardClient(s.config).QueryProcedures(s)
 }
 
-// QueryActionplans queries the "actionplans" edge of the Standard entity.
-func (s *Standard) QueryActionplans() *ActionPlanQuery {
-	return NewStandardClient(s.config).QueryActionplans(s)
+// QueryActionPlans queries the "action_plans" edge of the Standard entity.
+func (s *Standard) QueryActionPlans() *ActionPlanQuery {
+	return NewStandardClient(s.config).QueryActionPlans(s)
 }
 
 // QueryPrograms queries the "programs" edge of the Standard entity.
@@ -392,27 +392,27 @@ func (s *Standard) String() string {
 	return builder.String()
 }
 
-// NamedControlobjectives returns the Controlobjectives named value or an error if the edge was not
+// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Standard) NamedControlobjectives(name string) ([]*ControlObjective, error) {
-	if s.Edges.namedControlobjectives == nil {
+func (s *Standard) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if s.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedControlobjectives[name]
+	nodes, ok := s.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Standard) appendNamedControlobjectives(name string, edges ...*ControlObjective) {
-	if s.Edges.namedControlobjectives == nil {
-		s.Edges.namedControlobjectives = make(map[string][]*ControlObjective)
+func (s *Standard) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if s.Edges.namedControlObjectives == nil {
+		s.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedControlobjectives[name] = []*ControlObjective{}
+		s.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		s.Edges.namedControlobjectives[name] = append(s.Edges.namedControlobjectives[name], edges...)
+		s.Edges.namedControlObjectives[name] = append(s.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
@@ -464,27 +464,27 @@ func (s *Standard) appendNamedProcedures(name string, edges ...*Procedure) {
 	}
 }
 
-// NamedActionplans returns the Actionplans named value or an error if the edge was not
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Standard) NamedActionplans(name string) ([]*ActionPlan, error) {
-	if s.Edges.namedActionplans == nil {
+func (s *Standard) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if s.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedActionplans[name]
+	nodes, ok := s.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Standard) appendNamedActionplans(name string, edges ...*ActionPlan) {
-	if s.Edges.namedActionplans == nil {
-		s.Edges.namedActionplans = make(map[string][]*ActionPlan)
+func (s *Standard) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if s.Edges.namedActionPlans == nil {
+		s.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedActionplans[name] = []*ActionPlan{}
+		s.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		s.Edges.namedActionplans[name] = append(s.Edges.namedActionplans[name], edges...)
+		s.Edges.namedActionPlans[name] = append(s.Edges.namedActionPlans[name], edges...)
 	}
 }
 

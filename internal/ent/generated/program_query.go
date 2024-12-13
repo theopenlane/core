@@ -48,15 +48,15 @@ type ProgramQuery struct {
 	withViewers                *GroupQuery
 	withControls               *ControlQuery
 	withSubcontrols            *SubcontrolQuery
-	withControlobjectives      *ControlObjectiveQuery
-	withPolicies               *InternalPolicyQuery
+	withControlObjectives      *ControlObjectiveQuery
+	withInternalPolicies       *InternalPolicyQuery
 	withProcedures             *ProcedureQuery
 	withRisks                  *RiskQuery
 	withTasks                  *TaskQuery
 	withNotes                  *NoteQuery
 	withFiles                  *FileQuery
 	withNarratives             *NarrativeQuery
-	withActionplans            *ActionPlanQuery
+	withActionPlans            *ActionPlanQuery
 	withStandards              *StandardQuery
 	withUsers                  *UserQuery
 	withMembers                *ProgramMembershipQuery
@@ -67,15 +67,15 @@ type ProgramQuery struct {
 	withNamedViewers           map[string]*GroupQuery
 	withNamedControls          map[string]*ControlQuery
 	withNamedSubcontrols       map[string]*SubcontrolQuery
-	withNamedControlobjectives map[string]*ControlObjectiveQuery
-	withNamedPolicies          map[string]*InternalPolicyQuery
+	withNamedControlObjectives map[string]*ControlObjectiveQuery
+	withNamedInternalPolicies  map[string]*InternalPolicyQuery
 	withNamedProcedures        map[string]*ProcedureQuery
 	withNamedRisks             map[string]*RiskQuery
 	withNamedTasks             map[string]*TaskQuery
 	withNamedNotes             map[string]*NoteQuery
 	withNamedFiles             map[string]*FileQuery
 	withNamedNarratives        map[string]*NarrativeQuery
-	withNamedActionplans       map[string]*ActionPlanQuery
+	withNamedActionPlans       map[string]*ActionPlanQuery
 	withNamedStandards         map[string]*StandardQuery
 	withNamedUsers             map[string]*UserQuery
 	withNamedMembers           map[string]*ProgramMembershipQuery
@@ -265,8 +265,8 @@ func (pq *ProgramQuery) QuerySubcontrols() *SubcontrolQuery {
 	return query
 }
 
-// QueryControlobjectives chains the current query on the "controlobjectives" edge.
-func (pq *ProgramQuery) QueryControlobjectives() *ControlObjectiveQuery {
+// QueryControlObjectives chains the current query on the "control_objectives" edge.
+func (pq *ProgramQuery) QueryControlObjectives() *ControlObjectiveQuery {
 	query := (&ControlObjectiveClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -279,19 +279,19 @@ func (pq *ProgramQuery) QueryControlobjectives() *ControlObjectiveQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, program.ControlobjectivesTable, program.ControlobjectivesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.ControlObjectivesTable, program.ControlObjectivesPrimaryKey...),
 		)
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ProgramControlobjectives
+		step.Edge.Schema = schemaConfig.ProgramControlObjectives
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
-// QueryPolicies chains the current query on the "policies" edge.
-func (pq *ProgramQuery) QueryPolicies() *InternalPolicyQuery {
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (pq *ProgramQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -304,11 +304,11 @@ func (pq *ProgramQuery) QueryPolicies() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, program.PoliciesTable, program.PoliciesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.InternalPoliciesTable, program.InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.ProgramPolicies
+		step.Edge.Schema = schemaConfig.ProgramInternalPolicies
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -465,8 +465,8 @@ func (pq *ProgramQuery) QueryNarratives() *NarrativeQuery {
 	return query
 }
 
-// QueryActionplans chains the current query on the "actionplans" edge.
-func (pq *ProgramQuery) QueryActionplans() *ActionPlanQuery {
+// QueryActionPlans chains the current query on the "action_plans" edge.
+func (pq *ProgramQuery) QueryActionPlans() *ActionPlanQuery {
 	query := (&ActionPlanClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -479,11 +479,11 @@ func (pq *ProgramQuery) QueryActionplans() *ActionPlanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, program.ActionplansTable, program.ActionplansPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.ActionPlansTable, program.ActionPlansPrimaryKey...),
 		)
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ProgramActionplans
+		step.Edge.Schema = schemaConfig.ProgramActionPlans
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -763,15 +763,15 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 		withViewers:           pq.withViewers.Clone(),
 		withControls:          pq.withControls.Clone(),
 		withSubcontrols:       pq.withSubcontrols.Clone(),
-		withControlobjectives: pq.withControlobjectives.Clone(),
-		withPolicies:          pq.withPolicies.Clone(),
+		withControlObjectives: pq.withControlObjectives.Clone(),
+		withInternalPolicies:  pq.withInternalPolicies.Clone(),
 		withProcedures:        pq.withProcedures.Clone(),
 		withRisks:             pq.withRisks.Clone(),
 		withTasks:             pq.withTasks.Clone(),
 		withNotes:             pq.withNotes.Clone(),
 		withFiles:             pq.withFiles.Clone(),
 		withNarratives:        pq.withNarratives.Clone(),
-		withActionplans:       pq.withActionplans.Clone(),
+		withActionPlans:       pq.withActionPlans.Clone(),
 		withStandards:         pq.withStandards.Clone(),
 		withUsers:             pq.withUsers.Clone(),
 		withMembers:           pq.withMembers.Clone(),
@@ -848,25 +848,25 @@ func (pq *ProgramQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *Program
 	return pq
 }
 
-// WithControlobjectives tells the query-builder to eager-load the nodes that are connected to
-// the "controlobjectives" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithControlobjectives(opts ...func(*ControlObjectiveQuery)) *ProgramQuery {
+// WithControlObjectives tells the query-builder to eager-load the nodes that are connected to
+// the "control_objectives" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithControlObjectives(opts ...func(*ControlObjectiveQuery)) *ProgramQuery {
 	query := (&ControlObjectiveClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withControlobjectives = query
+	pq.withControlObjectives = query
 	return pq
 }
 
-// WithPolicies tells the query-builder to eager-load the nodes that are connected to
-// the "policies" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithPolicies(opts ...func(*InternalPolicyQuery)) *ProgramQuery {
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ProgramQuery {
 	query := (&InternalPolicyClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withPolicies = query
+	pq.withInternalPolicies = query
 	return pq
 }
 
@@ -936,14 +936,14 @@ func (pq *ProgramQuery) WithNarratives(opts ...func(*NarrativeQuery)) *ProgramQu
 	return pq
 }
 
-// WithActionplans tells the query-builder to eager-load the nodes that are connected to
-// the "actionplans" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithActionplans(opts ...func(*ActionPlanQuery)) *ProgramQuery {
+// WithActionPlans tells the query-builder to eager-load the nodes that are connected to
+// the "action_plans" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *ProgramQuery {
 	query := (&ActionPlanClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withActionplans = query
+	pq.withActionPlans = query
 	return pq
 }
 
@@ -1071,15 +1071,15 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			pq.withViewers != nil,
 			pq.withControls != nil,
 			pq.withSubcontrols != nil,
-			pq.withControlobjectives != nil,
-			pq.withPolicies != nil,
+			pq.withControlObjectives != nil,
+			pq.withInternalPolicies != nil,
 			pq.withProcedures != nil,
 			pq.withRisks != nil,
 			pq.withTasks != nil,
 			pq.withNotes != nil,
 			pq.withFiles != nil,
 			pq.withNarratives != nil,
-			pq.withActionplans != nil,
+			pq.withActionPlans != nil,
 			pq.withStandards != nil,
 			pq.withUsers != nil,
 			pq.withMembers != nil,
@@ -1149,19 +1149,19 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
-	if query := pq.withControlobjectives; query != nil {
-		if err := pq.loadControlobjectives(ctx, query, nodes,
-			func(n *Program) { n.Edges.Controlobjectives = []*ControlObjective{} },
+	if query := pq.withControlObjectives; query != nil {
+		if err := pq.loadControlObjectives(ctx, query, nodes,
+			func(n *Program) { n.Edges.ControlObjectives = []*ControlObjective{} },
 			func(n *Program, e *ControlObjective) {
-				n.Edges.Controlobjectives = append(n.Edges.Controlobjectives, e)
+				n.Edges.ControlObjectives = append(n.Edges.ControlObjectives, e)
 			}); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withPolicies; query != nil {
-		if err := pq.loadPolicies(ctx, query, nodes,
-			func(n *Program) { n.Edges.Policies = []*InternalPolicy{} },
-			func(n *Program, e *InternalPolicy) { n.Edges.Policies = append(n.Edges.Policies, e) }); err != nil {
+	if query := pq.withInternalPolicies; query != nil {
+		if err := pq.loadInternalPolicies(ctx, query, nodes,
+			func(n *Program) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Program, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1207,10 +1207,10 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
-	if query := pq.withActionplans; query != nil {
-		if err := pq.loadActionplans(ctx, query, nodes,
-			func(n *Program) { n.Edges.Actionplans = []*ActionPlan{} },
-			func(n *Program, e *ActionPlan) { n.Edges.Actionplans = append(n.Edges.Actionplans, e) }); err != nil {
+	if query := pq.withActionPlans; query != nil {
+		if err := pq.loadActionPlans(ctx, query, nodes,
+			func(n *Program) { n.Edges.ActionPlans = []*ActionPlan{} },
+			func(n *Program, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1270,17 +1270,17 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedControlobjectives {
-		if err := pq.loadControlobjectives(ctx, query, nodes,
-			func(n *Program) { n.appendNamedControlobjectives(name) },
-			func(n *Program, e *ControlObjective) { n.appendNamedControlobjectives(name, e) }); err != nil {
+	for name, query := range pq.withNamedControlObjectives {
+		if err := pq.loadControlObjectives(ctx, query, nodes,
+			func(n *Program) { n.appendNamedControlObjectives(name) },
+			func(n *Program, e *ControlObjective) { n.appendNamedControlObjectives(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedPolicies {
-		if err := pq.loadPolicies(ctx, query, nodes,
-			func(n *Program) { n.appendNamedPolicies(name) },
-			func(n *Program, e *InternalPolicy) { n.appendNamedPolicies(name, e) }); err != nil {
+	for name, query := range pq.withNamedInternalPolicies {
+		if err := pq.loadInternalPolicies(ctx, query, nodes,
+			func(n *Program) { n.appendNamedInternalPolicies(name) },
+			func(n *Program, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1326,10 +1326,10 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedActionplans {
-		if err := pq.loadActionplans(ctx, query, nodes,
-			func(n *Program) { n.appendNamedActionplans(name) },
-			func(n *Program, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
+	for name, query := range pq.withNamedActionPlans {
+		if err := pq.loadActionPlans(ctx, query, nodes,
+			func(n *Program) { n.appendNamedActionPlans(name) },
+			func(n *Program, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1701,7 +1701,7 @@ func (pq *ProgramQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQu
 	}
 	return nil
 }
-func (pq *ProgramQuery) loadControlobjectives(ctx context.Context, query *ControlObjectiveQuery, nodes []*Program, init func(*Program), assign func(*Program, *ControlObjective)) error {
+func (pq *ProgramQuery) loadControlObjectives(ctx context.Context, query *ControlObjectiveQuery, nodes []*Program, init func(*Program), assign func(*Program, *ControlObjective)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Program)
 	nids := make(map[string]map[*Program]struct{})
@@ -1713,12 +1713,12 @@ func (pq *ProgramQuery) loadControlobjectives(ctx context.Context, query *Contro
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(program.ControlobjectivesTable)
-		joinT.Schema(pq.schemaConfig.ProgramControlobjectives)
-		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(program.ControlobjectivesPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(program.ControlobjectivesPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(program.ControlObjectivesTable)
+		joinT.Schema(pq.schemaConfig.ProgramControlObjectives)
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(program.ControlObjectivesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(program.ControlObjectivesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(program.ControlobjectivesPrimaryKey[0]))
+		s.Select(joinT.C(program.ControlObjectivesPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1755,7 +1755,7 @@ func (pq *ProgramQuery) loadControlobjectives(ctx context.Context, query *Contro
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "controlobjectives" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "control_objectives" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1763,7 +1763,7 @@ func (pq *ProgramQuery) loadControlobjectives(ctx context.Context, query *Contro
 	}
 	return nil
 }
-func (pq *ProgramQuery) loadPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Program, init func(*Program), assign func(*Program, *InternalPolicy)) error {
+func (pq *ProgramQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Program, init func(*Program), assign func(*Program, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Program)
 	nids := make(map[string]map[*Program]struct{})
@@ -1775,12 +1775,12 @@ func (pq *ProgramQuery) loadPolicies(ctx context.Context, query *InternalPolicyQ
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(program.PoliciesTable)
-		joinT.Schema(pq.schemaConfig.ProgramPolicies)
-		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(program.PoliciesPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(program.PoliciesPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(program.InternalPoliciesTable)
+		joinT.Schema(pq.schemaConfig.ProgramInternalPolicies)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(program.InternalPoliciesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(program.InternalPoliciesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(program.PoliciesPrimaryKey[0]))
+		s.Select(joinT.C(program.InternalPoliciesPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1817,7 +1817,7 @@ func (pq *ProgramQuery) loadPolicies(ctx context.Context, query *InternalPolicyQ
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "policies" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2197,7 +2197,7 @@ func (pq *ProgramQuery) loadNarratives(ctx context.Context, query *NarrativeQuer
 	}
 	return nil
 }
-func (pq *ProgramQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery, nodes []*Program, init func(*Program), assign func(*Program, *ActionPlan)) error {
+func (pq *ProgramQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*Program, init func(*Program), assign func(*Program, *ActionPlan)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Program)
 	nids := make(map[string]map[*Program]struct{})
@@ -2209,12 +2209,12 @@ func (pq *ProgramQuery) loadActionplans(ctx context.Context, query *ActionPlanQu
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(program.ActionplansTable)
-		joinT.Schema(pq.schemaConfig.ProgramActionplans)
-		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(program.ActionplansPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(program.ActionplansPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(program.ActionPlansTable)
+		joinT.Schema(pq.schemaConfig.ProgramActionPlans)
+		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(program.ActionPlansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(program.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(program.ActionplansPrimaryKey[0]))
+		s.Select(joinT.C(program.ActionPlansPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -2251,7 +2251,7 @@ func (pq *ProgramQuery) loadActionplans(ctx context.Context, query *ActionPlanQu
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "actionplans" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "action_plans" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2585,31 +2585,31 @@ func (pq *ProgramQuery) WithNamedSubcontrols(name string, opts ...func(*Subcontr
 	return pq
 }
 
-// WithNamedControlobjectives tells the query-builder to eager-load the nodes that are connected to the "controlobjectives"
+// WithNamedControlObjectives tells the query-builder to eager-load the nodes that are connected to the "control_objectives"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithNamedControlobjectives(name string, opts ...func(*ControlObjectiveQuery)) *ProgramQuery {
+func (pq *ProgramQuery) WithNamedControlObjectives(name string, opts ...func(*ControlObjectiveQuery)) *ProgramQuery {
 	query := (&ControlObjectiveClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedControlobjectives == nil {
-		pq.withNamedControlobjectives = make(map[string]*ControlObjectiveQuery)
+	if pq.withNamedControlObjectives == nil {
+		pq.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery)
 	}
-	pq.withNamedControlobjectives[name] = query
+	pq.withNamedControlObjectives[name] = query
 	return pq
 }
 
-// WithNamedPolicies tells the query-builder to eager-load the nodes that are connected to the "policies"
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithNamedPolicies(name string, opts ...func(*InternalPolicyQuery)) *ProgramQuery {
+func (pq *ProgramQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *ProgramQuery {
 	query := (&InternalPolicyClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedPolicies == nil {
-		pq.withNamedPolicies = make(map[string]*InternalPolicyQuery)
+	if pq.withNamedInternalPolicies == nil {
+		pq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
-	pq.withNamedPolicies[name] = query
+	pq.withNamedInternalPolicies[name] = query
 	return pq
 }
 
@@ -2697,17 +2697,17 @@ func (pq *ProgramQuery) WithNamedNarratives(name string, opts ...func(*Narrative
 	return pq
 }
 
-// WithNamedActionplans tells the query-builder to eager-load the nodes that are connected to the "actionplans"
+// WithNamedActionPlans tells the query-builder to eager-load the nodes that are connected to the "action_plans"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithNamedActionplans(name string, opts ...func(*ActionPlanQuery)) *ProgramQuery {
+func (pq *ProgramQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *ProgramQuery {
 	query := (&ActionPlanClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedActionplans == nil {
-		pq.withNamedActionplans = make(map[string]*ActionPlanQuery)
+	if pq.withNamedActionPlans == nil {
+		pq.withNamedActionPlans = make(map[string]*ActionPlanQuery)
 	}
-	pq.withNamedActionplans[name] = query
+	pq.withNamedActionPlans[name] = query
 	return pq
 }
 

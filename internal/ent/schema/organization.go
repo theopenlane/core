@@ -126,11 +126,11 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(
 				entx.CascadeAnnotationField("Organization"),
 			),
-		edge.To("documentdata", DocumentData.Type).
+		edge.To("document_data", DocumentData.Type).
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
 			),
-		edge.To("orgsubscriptions", OrgSubscription.Type).
+		edge.To("org_subscriptions", OrgSubscription.Type).
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
 			),
@@ -150,7 +150,7 @@ func (Organization) Edges() []ent.Edge {
 		// Organization owns the following entities
 		edge.To("entities", Entity.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
-		edge.To("entitytypes", EntityType.Type).
+		edge.To("entity_types", EntityType.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("contacts", Contact.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
@@ -162,11 +162,11 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("procedures", Procedure.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
-		edge.To("internalpolicies", InternalPolicy.Type).
+		edge.To("internal_policies", InternalPolicy.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("risks", Risk.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
-		edge.To("controlobjectives", ControlObjective.Type).
+		edge.To("control_objectives", ControlObjective.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("narratives", Narrative.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),

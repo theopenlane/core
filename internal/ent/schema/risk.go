@@ -68,7 +68,7 @@ func (Risk) Edges() []ent.Edge {
 			Ref("risks"),
 		edge.From("procedure", Procedure.Type).
 			Ref("risks"),
-		edge.To("actionplans", ActionPlan.Type),
+		edge.To("action_plans", ActionPlan.Type),
 		edge.From("programs", Program.Type).
 			Ref("risks"), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
 	}

@@ -487,19 +487,19 @@ func (uc *UserCreate) AddEvents(e ...*Event) *UserCreate {
 	return uc.AddEventIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (uc *UserCreate) AddActionplanIDs(ids ...string) *UserCreate {
-	uc.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (uc *UserCreate) AddActionPlanIDs(ids ...string) *UserCreate {
+	uc.mutation.AddActionPlanIDs(ids...)
 	return uc
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (uc *UserCreate) AddActionplans(a ...*ActionPlan) *UserCreate {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (uc *UserCreate) AddActionPlans(a ...*ActionPlan) *UserCreate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return uc.AddActionplanIDs(ids...)
+	return uc.AddActionPlanIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
@@ -1062,18 +1062,18 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := uc.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := uc.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.ActionplansTable,
-			Columns: user.ActionplansPrimaryKey,
+			Table:   user.ActionPlansTable,
+			Columns: user.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uc.schemaConfig.UserActionplans
+		edge.Schema = uc.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

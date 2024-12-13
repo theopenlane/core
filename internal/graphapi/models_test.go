@@ -770,7 +770,7 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 
 	if p.WithPolicy {
 		policy := (&InternalPolicyBuilder{client: p.client, Name: gofakeit.AppName()}).MustNew(ctx, t)
-		mutation.AddPolicyIDs(policy.ID)
+		mutation.AddInternalPolicyIDs(policy.ID)
 	}
 
 	if p.EditorIDs != "" {

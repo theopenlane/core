@@ -292,19 +292,19 @@ func (tu *TaskUpdate) AddGroup(g ...*Group) *TaskUpdate {
 	return tu.AddGroupIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (tu *TaskUpdate) AddPolicyIDs(ids ...string) *TaskUpdate {
-	tu.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (tu *TaskUpdate) AddInternalPolicyIDs(ids ...string) *TaskUpdate {
+	tu.mutation.AddInternalPolicyIDs(ids...)
 	return tu
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (tu *TaskUpdate) AddPolicy(i ...*InternalPolicy) *TaskUpdate {
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (tu *TaskUpdate) AddInternalPolicy(i ...*InternalPolicy) *TaskUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return tu.AddPolicyIDs(ids...)
+	return tu.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedure" edge to the Procedure entity by IDs.
@@ -441,25 +441,25 @@ func (tu *TaskUpdate) RemoveGroup(g ...*Group) *TaskUpdate {
 	return tu.RemoveGroupIDs(ids...)
 }
 
-// ClearPolicy clears all "policy" edges to the InternalPolicy entity.
-func (tu *TaskUpdate) ClearPolicy() *TaskUpdate {
-	tu.mutation.ClearPolicy()
+// ClearInternalPolicy clears all "internal_policy" edges to the InternalPolicy entity.
+func (tu *TaskUpdate) ClearInternalPolicy() *TaskUpdate {
+	tu.mutation.ClearInternalPolicy()
 	return tu
 }
 
-// RemovePolicyIDs removes the "policy" edge to InternalPolicy entities by IDs.
-func (tu *TaskUpdate) RemovePolicyIDs(ids ...string) *TaskUpdate {
-	tu.mutation.RemovePolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policy" edge to InternalPolicy entities by IDs.
+func (tu *TaskUpdate) RemoveInternalPolicyIDs(ids ...string) *TaskUpdate {
+	tu.mutation.RemoveInternalPolicyIDs(ids...)
 	return tu
 }
 
-// RemovePolicy removes "policy" edges to InternalPolicy entities.
-func (tu *TaskUpdate) RemovePolicy(i ...*InternalPolicy) *TaskUpdate {
+// RemoveInternalPolicy removes "internal_policy" edges to InternalPolicy entities.
+func (tu *TaskUpdate) RemoveInternalPolicy(i ...*InternalPolicy) *TaskUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return tu.RemovePolicyIDs(ids...)
+	return tu.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedure clears all "procedure" edges to the Procedure entity.
@@ -874,12 +874,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tu.mutation.PolicyCleared() {
+	if tu.mutation.InternalPolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.PolicyTable,
-			Columns: task.PolicyPrimaryKey,
+			Table:   task.InternalPolicyTable,
+			Columns: task.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -888,12 +888,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = tu.schemaConfig.InternalPolicyTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedPolicyIDs(); len(nodes) > 0 && !tu.mutation.PolicyCleared() {
+	if nodes := tu.mutation.RemovedInternalPolicyIDs(); len(nodes) > 0 && !tu.mutation.InternalPolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.PolicyTable,
-			Columns: task.PolicyPrimaryKey,
+			Table:   task.InternalPolicyTable,
+			Columns: task.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -905,12 +905,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.InternalPolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.PolicyTable,
-			Columns: task.PolicyPrimaryKey,
+			Table:   task.InternalPolicyTable,
+			Columns: task.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -1436,19 +1436,19 @@ func (tuo *TaskUpdateOne) AddGroup(g ...*Group) *TaskUpdateOne {
 	return tuo.AddGroupIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (tuo *TaskUpdateOne) AddPolicyIDs(ids ...string) *TaskUpdateOne {
-	tuo.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (tuo *TaskUpdateOne) AddInternalPolicyIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.AddInternalPolicyIDs(ids...)
 	return tuo
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (tuo *TaskUpdateOne) AddPolicy(i ...*InternalPolicy) *TaskUpdateOne {
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (tuo *TaskUpdateOne) AddInternalPolicy(i ...*InternalPolicy) *TaskUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return tuo.AddPolicyIDs(ids...)
+	return tuo.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedure" edge to the Procedure entity by IDs.
@@ -1585,25 +1585,25 @@ func (tuo *TaskUpdateOne) RemoveGroup(g ...*Group) *TaskUpdateOne {
 	return tuo.RemoveGroupIDs(ids...)
 }
 
-// ClearPolicy clears all "policy" edges to the InternalPolicy entity.
-func (tuo *TaskUpdateOne) ClearPolicy() *TaskUpdateOne {
-	tuo.mutation.ClearPolicy()
+// ClearInternalPolicy clears all "internal_policy" edges to the InternalPolicy entity.
+func (tuo *TaskUpdateOne) ClearInternalPolicy() *TaskUpdateOne {
+	tuo.mutation.ClearInternalPolicy()
 	return tuo
 }
 
-// RemovePolicyIDs removes the "policy" edge to InternalPolicy entities by IDs.
-func (tuo *TaskUpdateOne) RemovePolicyIDs(ids ...string) *TaskUpdateOne {
-	tuo.mutation.RemovePolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policy" edge to InternalPolicy entities by IDs.
+func (tuo *TaskUpdateOne) RemoveInternalPolicyIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.RemoveInternalPolicyIDs(ids...)
 	return tuo
 }
 
-// RemovePolicy removes "policy" edges to InternalPolicy entities.
-func (tuo *TaskUpdateOne) RemovePolicy(i ...*InternalPolicy) *TaskUpdateOne {
+// RemoveInternalPolicy removes "internal_policy" edges to InternalPolicy entities.
+func (tuo *TaskUpdateOne) RemoveInternalPolicy(i ...*InternalPolicy) *TaskUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return tuo.RemovePolicyIDs(ids...)
+	return tuo.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedure clears all "procedure" edges to the Procedure entity.
@@ -2048,12 +2048,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuo.mutation.PolicyCleared() {
+	if tuo.mutation.InternalPolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.PolicyTable,
-			Columns: task.PolicyPrimaryKey,
+			Table:   task.InternalPolicyTable,
+			Columns: task.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -2062,12 +2062,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		edge.Schema = tuo.schemaConfig.InternalPolicyTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedPolicyIDs(); len(nodes) > 0 && !tuo.mutation.PolicyCleared() {
+	if nodes := tuo.mutation.RemovedInternalPolicyIDs(); len(nodes) > 0 && !tuo.mutation.InternalPolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.PolicyTable,
-			Columns: task.PolicyPrimaryKey,
+			Table:   task.InternalPolicyTable,
+			Columns: task.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -2079,12 +2079,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.InternalPolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.PolicyTable,
-			Columns: task.PolicyPrimaryKey,
+			Table:   task.InternalPolicyTable,
+			Columns: task.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),

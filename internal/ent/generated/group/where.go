@@ -1360,12 +1360,12 @@ func HasProcedureBlockedGroupsWith(preds ...predicate.Procedure) predicate.Group
 	})
 }
 
-// HasInternalpolicyEditors applies the HasEdge predicate on the "internalpolicy_editors" edge.
-func HasInternalpolicyEditors() predicate.Group {
+// HasInternalPolicyEditors applies the HasEdge predicate on the "internal_policy_editors" edge.
+func HasInternalPolicyEditors() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, InternalpolicyEditorsTable, InternalpolicyEditorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyEditorsTable, InternalPolicyEditorsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -1374,10 +1374,10 @@ func HasInternalpolicyEditors() predicate.Group {
 	})
 }
 
-// HasInternalpolicyEditorsWith applies the HasEdge predicate on the "internalpolicy_editors" edge with a given conditions (other predicates).
-func HasInternalpolicyEditorsWith(preds ...predicate.InternalPolicy) predicate.Group {
+// HasInternalPolicyEditorsWith applies the HasEdge predicate on the "internal_policy_editors" edge with a given conditions (other predicates).
+func HasInternalPolicyEditorsWith(preds ...predicate.InternalPolicy) predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
-		step := newInternalpolicyEditorsStep()
+		step := newInternalPolicyEditorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyEditors
@@ -1389,12 +1389,12 @@ func HasInternalpolicyEditorsWith(preds ...predicate.InternalPolicy) predicate.G
 	})
 }
 
-// HasInternalpolicyBlockedGroups applies the HasEdge predicate on the "internalpolicy_blocked_groups" edge.
-func HasInternalpolicyBlockedGroups() predicate.Group {
+// HasInternalPolicyBlockedGroups applies the HasEdge predicate on the "internal_policy_blocked_groups" edge.
+func HasInternalPolicyBlockedGroups() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, InternalpolicyBlockedGroupsTable, InternalpolicyBlockedGroupsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyBlockedGroupsTable, InternalPolicyBlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -1403,10 +1403,10 @@ func HasInternalpolicyBlockedGroups() predicate.Group {
 	})
 }
 
-// HasInternalpolicyBlockedGroupsWith applies the HasEdge predicate on the "internalpolicy_blocked_groups" edge with a given conditions (other predicates).
-func HasInternalpolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) predicate.Group {
+// HasInternalPolicyBlockedGroupsWith applies the HasEdge predicate on the "internal_policy_blocked_groups" edge with a given conditions (other predicates).
+func HasInternalPolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
-		step := newInternalpolicyBlockedGroupsStep()
+		step := newInternalPolicyBlockedGroupsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
@@ -1592,12 +1592,12 @@ func HasRiskViewersWith(preds ...predicate.Risk) predicate.Group {
 	})
 }
 
-// HasControlobjectiveEditors applies the HasEdge predicate on the "controlobjective_editors" edge.
-func HasControlobjectiveEditors() predicate.Group {
+// HasControlObjectiveEditors applies the HasEdge predicate on the "control_objective_editors" edge.
+func HasControlObjectiveEditors() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveEditorsTable, ControlobjectiveEditorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveEditorsTable, ControlObjectiveEditorsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
@@ -1606,10 +1606,10 @@ func HasControlobjectiveEditors() predicate.Group {
 	})
 }
 
-// HasControlobjectiveEditorsWith applies the HasEdge predicate on the "controlobjective_editors" edge with a given conditions (other predicates).
-func HasControlobjectiveEditorsWith(preds ...predicate.ControlObjective) predicate.Group {
+// HasControlObjectiveEditorsWith applies the HasEdge predicate on the "control_objective_editors" edge with a given conditions (other predicates).
+func HasControlObjectiveEditorsWith(preds ...predicate.ControlObjective) predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
-		step := newControlobjectiveEditorsStep()
+		step := newControlObjectiveEditorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.ControlObjectiveEditors
@@ -1621,12 +1621,12 @@ func HasControlobjectiveEditorsWith(preds ...predicate.ControlObjective) predica
 	})
 }
 
-// HasControlobjectiveBlockedGroups applies the HasEdge predicate on the "controlobjective_blocked_groups" edge.
-func HasControlobjectiveBlockedGroups() predicate.Group {
+// HasControlObjectiveBlockedGroups applies the HasEdge predicate on the "control_objective_blocked_groups" edge.
+func HasControlObjectiveBlockedGroups() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveBlockedGroupsTable, ControlobjectiveBlockedGroupsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveBlockedGroupsTable, ControlObjectiveBlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
@@ -1635,10 +1635,10 @@ func HasControlobjectiveBlockedGroups() predicate.Group {
 	})
 }
 
-// HasControlobjectiveBlockedGroupsWith applies the HasEdge predicate on the "controlobjective_blocked_groups" edge with a given conditions (other predicates).
-func HasControlobjectiveBlockedGroupsWith(preds ...predicate.ControlObjective) predicate.Group {
+// HasControlObjectiveBlockedGroupsWith applies the HasEdge predicate on the "control_objective_blocked_groups" edge with a given conditions (other predicates).
+func HasControlObjectiveBlockedGroupsWith(preds ...predicate.ControlObjective) predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
-		step := newControlobjectiveBlockedGroupsStep()
+		step := newControlObjectiveBlockedGroupsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.ControlObjectiveBlockedGroups
@@ -1650,12 +1650,12 @@ func HasControlobjectiveBlockedGroupsWith(preds ...predicate.ControlObjective) p
 	})
 }
 
-// HasControlobjectiveViewers applies the HasEdge predicate on the "controlobjective_viewers" edge.
-func HasControlobjectiveViewers() predicate.Group {
+// HasControlObjectiveViewers applies the HasEdge predicate on the "control_objective_viewers" edge.
+func HasControlObjectiveViewers() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveViewersTable, ControlobjectiveViewersPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveViewersTable, ControlObjectiveViewersPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
@@ -1664,10 +1664,10 @@ func HasControlobjectiveViewers() predicate.Group {
 	})
 }
 
-// HasControlobjectiveViewersWith applies the HasEdge predicate on the "controlobjective_viewers" edge with a given conditions (other predicates).
-func HasControlobjectiveViewersWith(preds ...predicate.ControlObjective) predicate.Group {
+// HasControlObjectiveViewersWith applies the HasEdge predicate on the "control_objective_viewers" edge with a given conditions (other predicates).
+func HasControlObjectiveViewersWith(preds ...predicate.ControlObjective) predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
-		step := newControlobjectiveViewersStep()
+		step := newControlObjectiveViewersStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.ControlObjectiveViewers

@@ -74,10 +74,10 @@ type ProgramEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
-	// Controlobjectives holds the value of the controlobjectives edge.
-	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
-	// Policies holds the value of the policies edge.
-	Policies []*InternalPolicy `json:"policies,omitempty"`
+	// ControlObjectives holds the value of the control_objectives edge.
+	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// Procedures holds the value of the procedures edge.
 	Procedures []*Procedure `json:"procedures,omitempty"`
 	// Risks holds the value of the risks edge.
@@ -90,8 +90,8 @@ type ProgramEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
-	// Actionplans holds the value of the actionplans edge.
-	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// the framework(s) that the program is based on
 	Standards []*Standard `json:"standards,omitempty"`
 	// Users holds the value of the users edge.
@@ -109,15 +109,15 @@ type ProgramEdges struct {
 	namedViewers           map[string][]*Group
 	namedControls          map[string][]*Control
 	namedSubcontrols       map[string][]*Subcontrol
-	namedControlobjectives map[string][]*ControlObjective
-	namedPolicies          map[string][]*InternalPolicy
+	namedControlObjectives map[string][]*ControlObjective
+	namedInternalPolicies  map[string][]*InternalPolicy
 	namedProcedures        map[string][]*Procedure
 	namedRisks             map[string][]*Risk
 	namedTasks             map[string][]*Task
 	namedNotes             map[string][]*Note
 	namedFiles             map[string][]*File
 	namedNarratives        map[string][]*Narrative
-	namedActionplans       map[string][]*ActionPlan
+	namedActionPlans       map[string][]*ActionPlan
 	namedStandards         map[string][]*Standard
 	namedUsers             map[string][]*User
 	namedMembers           map[string][]*ProgramMembership
@@ -179,22 +179,22 @@ func (e ProgramEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
-// ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
+// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProgramEdges) ControlobjectivesOrErr() ([]*ControlObjective, error) {
+func (e ProgramEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 	if e.loadedTypes[6] {
-		return e.Controlobjectives, nil
+		return e.ControlObjectives, nil
 	}
-	return nil, &NotLoadedError{edge: "controlobjectives"}
+	return nil, &NotLoadedError{edge: "control_objectives"}
 }
 
-// PoliciesOrErr returns the Policies value or an error if the edge
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProgramEdges) PoliciesOrErr() ([]*InternalPolicy, error) {
+func (e ProgramEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 	if e.loadedTypes[7] {
-		return e.Policies, nil
+		return e.InternalPolicies, nil
 	}
-	return nil, &NotLoadedError{edge: "policies"}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
 // ProceduresOrErr returns the Procedures value or an error if the edge
@@ -251,13 +251,13 @@ func (e ProgramEdges) NarrativesOrErr() ([]*Narrative, error) {
 	return nil, &NotLoadedError{edge: "narratives"}
 }
 
-// ActionplansOrErr returns the Actionplans value or an error if the edge
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProgramEdges) ActionplansOrErr() ([]*ActionPlan, error) {
+func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	if e.loadedTypes[14] {
-		return e.Actionplans, nil
+		return e.ActionPlans, nil
 	}
-	return nil, &NotLoadedError{edge: "actionplans"}
+	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
 // StandardsOrErr returns the Standards value or an error if the edge
@@ -468,14 +468,14 @@ func (pr *Program) QuerySubcontrols() *SubcontrolQuery {
 	return NewProgramClient(pr.config).QuerySubcontrols(pr)
 }
 
-// QueryControlobjectives queries the "controlobjectives" edge of the Program entity.
-func (pr *Program) QueryControlobjectives() *ControlObjectiveQuery {
-	return NewProgramClient(pr.config).QueryControlobjectives(pr)
+// QueryControlObjectives queries the "control_objectives" edge of the Program entity.
+func (pr *Program) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewProgramClient(pr.config).QueryControlObjectives(pr)
 }
 
-// QueryPolicies queries the "policies" edge of the Program entity.
-func (pr *Program) QueryPolicies() *InternalPolicyQuery {
-	return NewProgramClient(pr.config).QueryPolicies(pr)
+// QueryInternalPolicies queries the "internal_policies" edge of the Program entity.
+func (pr *Program) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewProgramClient(pr.config).QueryInternalPolicies(pr)
 }
 
 // QueryProcedures queries the "procedures" edge of the Program entity.
@@ -508,9 +508,9 @@ func (pr *Program) QueryNarratives() *NarrativeQuery {
 	return NewProgramClient(pr.config).QueryNarratives(pr)
 }
 
-// QueryActionplans queries the "actionplans" edge of the Program entity.
-func (pr *Program) QueryActionplans() *ActionPlanQuery {
-	return NewProgramClient(pr.config).QueryActionplans(pr)
+// QueryActionPlans queries the "action_plans" edge of the Program entity.
+func (pr *Program) QueryActionPlans() *ActionPlanQuery {
+	return NewProgramClient(pr.config).QueryActionPlans(pr)
 }
 
 // QueryStandards queries the "standards" edge of the Program entity.
@@ -725,51 +725,51 @@ func (pr *Program) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 	}
 }
 
-// NamedControlobjectives returns the Controlobjectives named value or an error if the edge was not
+// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedControlobjectives(name string) ([]*ControlObjective, error) {
-	if pr.Edges.namedControlobjectives == nil {
+func (pr *Program) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if pr.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedControlobjectives[name]
+	nodes, ok := pr.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedControlobjectives(name string, edges ...*ControlObjective) {
-	if pr.Edges.namedControlobjectives == nil {
-		pr.Edges.namedControlobjectives = make(map[string][]*ControlObjective)
+func (pr *Program) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if pr.Edges.namedControlObjectives == nil {
+		pr.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedControlobjectives[name] = []*ControlObjective{}
+		pr.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		pr.Edges.namedControlobjectives[name] = append(pr.Edges.namedControlobjectives[name], edges...)
+		pr.Edges.namedControlObjectives[name] = append(pr.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
-// NamedPolicies returns the Policies named value or an error if the edge was not
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedPolicies(name string) ([]*InternalPolicy, error) {
-	if pr.Edges.namedPolicies == nil {
+func (pr *Program) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if pr.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedPolicies[name]
+	nodes, ok := pr.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedPolicies(name string, edges ...*InternalPolicy) {
-	if pr.Edges.namedPolicies == nil {
-		pr.Edges.namedPolicies = make(map[string][]*InternalPolicy)
+func (pr *Program) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if pr.Edges.namedInternalPolicies == nil {
+		pr.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedPolicies[name] = []*InternalPolicy{}
+		pr.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		pr.Edges.namedPolicies[name] = append(pr.Edges.namedPolicies[name], edges...)
+		pr.Edges.namedInternalPolicies[name] = append(pr.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
@@ -917,27 +917,27 @@ func (pr *Program) appendNamedNarratives(name string, edges ...*Narrative) {
 	}
 }
 
-// NamedActionplans returns the Actionplans named value or an error if the edge was not
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedActionplans(name string) ([]*ActionPlan, error) {
-	if pr.Edges.namedActionplans == nil {
+func (pr *Program) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if pr.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedActionplans[name]
+	nodes, ok := pr.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedActionplans(name string, edges ...*ActionPlan) {
-	if pr.Edges.namedActionplans == nil {
-		pr.Edges.namedActionplans = make(map[string][]*ActionPlan)
+func (pr *Program) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if pr.Edges.namedActionPlans == nil {
+		pr.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedActionplans[name] = []*ActionPlan{}
+		pr.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		pr.Edges.namedActionplans[name] = append(pr.Edges.namedActionplans[name], edges...)
+		pr.Edges.namedActionPlans[name] = append(pr.Edges.namedActionPlans[name], edges...)
 	}
 }
 

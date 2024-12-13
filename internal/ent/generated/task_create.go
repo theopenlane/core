@@ -276,19 +276,19 @@ func (tc *TaskCreate) AddGroup(g ...*Group) *TaskCreate {
 	return tc.AddGroupIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (tc *TaskCreate) AddPolicyIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (tc *TaskCreate) AddInternalPolicyIDs(ids ...string) *TaskCreate {
+	tc.mutation.AddInternalPolicyIDs(ids...)
 	return tc
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (tc *TaskCreate) AddPolicy(i ...*InternalPolicy) *TaskCreate {
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (tc *TaskCreate) AddInternalPolicy(i ...*InternalPolicy) *TaskCreate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return tc.AddPolicyIDs(ids...)
+	return tc.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedure" edge to the Procedure entity by IDs.
@@ -628,12 +628,12 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.InternalPolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.PolicyTable,
-			Columns: task.PolicyPrimaryKey,
+			Table:   task.InternalPolicyTable,
+			Columns: task.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),

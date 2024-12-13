@@ -33,38 +33,38 @@ import (
 // ControlObjectiveQuery is the builder for querying ControlObjective entities.
 type ControlObjectiveQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []controlobjective.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.ControlObjective
-	withOwner              *OrganizationQuery
-	withBlockedGroups      *GroupQuery
-	withEditors            *GroupQuery
-	withViewers            *GroupQuery
-	withPolicy             *InternalPolicyQuery
-	withControls           *ControlQuery
-	withProcedures         *ProcedureQuery
-	withRisks              *RiskQuery
-	withSubcontrols        *SubcontrolQuery
-	withStandard           *StandardQuery
-	withNarratives         *NarrativeQuery
-	withTasks              *TaskQuery
-	withPrograms           *ProgramQuery
-	withFKs                bool
-	loadTotal              []func(context.Context, []*ControlObjective) error
-	modifiers              []func(*sql.Selector)
-	withNamedBlockedGroups map[string]*GroupQuery
-	withNamedEditors       map[string]*GroupQuery
-	withNamedViewers       map[string]*GroupQuery
-	withNamedPolicy        map[string]*InternalPolicyQuery
-	withNamedControls      map[string]*ControlQuery
-	withNamedProcedures    map[string]*ProcedureQuery
-	withNamedRisks         map[string]*RiskQuery
-	withNamedSubcontrols   map[string]*SubcontrolQuery
-	withNamedStandard      map[string]*StandardQuery
-	withNamedNarratives    map[string]*NarrativeQuery
-	withNamedTasks         map[string]*TaskQuery
-	withNamedPrograms      map[string]*ProgramQuery
+	ctx                       *QueryContext
+	order                     []controlobjective.OrderOption
+	inters                    []Interceptor
+	predicates                []predicate.ControlObjective
+	withOwner                 *OrganizationQuery
+	withBlockedGroups         *GroupQuery
+	withEditors               *GroupQuery
+	withViewers               *GroupQuery
+	withInternalPolicies      *InternalPolicyQuery
+	withControls              *ControlQuery
+	withProcedures            *ProcedureQuery
+	withRisks                 *RiskQuery
+	withSubcontrols           *SubcontrolQuery
+	withStandard              *StandardQuery
+	withNarratives            *NarrativeQuery
+	withTasks                 *TaskQuery
+	withPrograms              *ProgramQuery
+	withFKs                   bool
+	loadTotal                 []func(context.Context, []*ControlObjective) error
+	modifiers                 []func(*sql.Selector)
+	withNamedBlockedGroups    map[string]*GroupQuery
+	withNamedEditors          map[string]*GroupQuery
+	withNamedViewers          map[string]*GroupQuery
+	withNamedInternalPolicies map[string]*InternalPolicyQuery
+	withNamedControls         map[string]*ControlQuery
+	withNamedProcedures       map[string]*ProcedureQuery
+	withNamedRisks            map[string]*RiskQuery
+	withNamedSubcontrols      map[string]*SubcontrolQuery
+	withNamedStandard         map[string]*StandardQuery
+	withNamedNarratives       map[string]*NarrativeQuery
+	withNamedTasks            map[string]*TaskQuery
+	withNamedPrograms         map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -201,8 +201,8 @@ func (coq *ControlObjectiveQuery) QueryViewers() *GroupQuery {
 	return query
 }
 
-// QueryPolicy chains the current query on the "policy" edge.
-func (coq *ControlObjectiveQuery) QueryPolicy() *InternalPolicyQuery {
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (coq *ControlObjectiveQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: coq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := coq.prepareQuery(ctx); err != nil {
@@ -215,11 +215,11 @@ func (coq *ControlObjectiveQuery) QueryPolicy() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.PolicyTable, controlobjective.PolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.InternalPoliciesTable, controlobjective.InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := coq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyControlobjectives
+		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
 		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -344,7 +344,7 @@ func (coq *ControlObjectiveQuery) QueryStandard() *StandardQuery {
 		)
 		schemaConfig := coq.schemaConfig
 		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardControlobjectives
+		step.Edge.Schema = schemaConfig.StandardControlObjectives
 		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -419,7 +419,7 @@ func (coq *ControlObjectiveQuery) QueryPrograms() *ProgramQuery {
 		)
 		schemaConfig := coq.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramControlobjectives
+		step.Edge.Schema = schemaConfig.ProgramControlObjectives
 		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -613,24 +613,24 @@ func (coq *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
 		return nil
 	}
 	return &ControlObjectiveQuery{
-		config:            coq.config,
-		ctx:               coq.ctx.Clone(),
-		order:             append([]controlobjective.OrderOption{}, coq.order...),
-		inters:            append([]Interceptor{}, coq.inters...),
-		predicates:        append([]predicate.ControlObjective{}, coq.predicates...),
-		withOwner:         coq.withOwner.Clone(),
-		withBlockedGroups: coq.withBlockedGroups.Clone(),
-		withEditors:       coq.withEditors.Clone(),
-		withViewers:       coq.withViewers.Clone(),
-		withPolicy:        coq.withPolicy.Clone(),
-		withControls:      coq.withControls.Clone(),
-		withProcedures:    coq.withProcedures.Clone(),
-		withRisks:         coq.withRisks.Clone(),
-		withSubcontrols:   coq.withSubcontrols.Clone(),
-		withStandard:      coq.withStandard.Clone(),
-		withNarratives:    coq.withNarratives.Clone(),
-		withTasks:         coq.withTasks.Clone(),
-		withPrograms:      coq.withPrograms.Clone(),
+		config:               coq.config,
+		ctx:                  coq.ctx.Clone(),
+		order:                append([]controlobjective.OrderOption{}, coq.order...),
+		inters:               append([]Interceptor{}, coq.inters...),
+		predicates:           append([]predicate.ControlObjective{}, coq.predicates...),
+		withOwner:            coq.withOwner.Clone(),
+		withBlockedGroups:    coq.withBlockedGroups.Clone(),
+		withEditors:          coq.withEditors.Clone(),
+		withViewers:          coq.withViewers.Clone(),
+		withInternalPolicies: coq.withInternalPolicies.Clone(),
+		withControls:         coq.withControls.Clone(),
+		withProcedures:       coq.withProcedures.Clone(),
+		withRisks:            coq.withRisks.Clone(),
+		withSubcontrols:      coq.withSubcontrols.Clone(),
+		withStandard:         coq.withStandard.Clone(),
+		withNarratives:       coq.withNarratives.Clone(),
+		withTasks:            coq.withTasks.Clone(),
+		withPrograms:         coq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       coq.sql.Clone(),
 		path:      coq.path,
@@ -682,14 +682,14 @@ func (coq *ControlObjectiveQuery) WithViewers(opts ...func(*GroupQuery)) *Contro
 	return coq
 }
 
-// WithPolicy tells the query-builder to eager-load the nodes that are connected to
-// the "policy" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithPolicy(opts ...func(*InternalPolicyQuery)) *ControlObjectiveQuery {
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ControlObjectiveQuery {
 	query := (&InternalPolicyClient{config: coq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withPolicy = query
+	coq.withInternalPolicies = query
 	return coq
 }
 
@@ -871,7 +871,7 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			coq.withBlockedGroups != nil,
 			coq.withEditors != nil,
 			coq.withViewers != nil,
-			coq.withPolicy != nil,
+			coq.withInternalPolicies != nil,
 			coq.withControls != nil,
 			coq.withProcedures != nil,
 			coq.withRisks != nil,
@@ -935,10 +935,12 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			return nil, err
 		}
 	}
-	if query := coq.withPolicy; query != nil {
-		if err := coq.loadPolicy(ctx, query, nodes,
-			func(n *ControlObjective) { n.Edges.Policy = []*InternalPolicy{} },
-			func(n *ControlObjective, e *InternalPolicy) { n.Edges.Policy = append(n.Edges.Policy, e) }); err != nil {
+	if query := coq.withInternalPolicies; query != nil {
+		if err := coq.loadInternalPolicies(ctx, query, nodes,
+			func(n *ControlObjective) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *ControlObjective, e *InternalPolicy) {
+				n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -1019,10 +1021,10 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedPolicy {
-		if err := coq.loadPolicy(ctx, query, nodes,
-			func(n *ControlObjective) { n.appendNamedPolicy(name) },
-			func(n *ControlObjective, e *InternalPolicy) { n.appendNamedPolicy(name, e) }); err != nil {
+	for name, query := range coq.withNamedInternalPolicies {
+		if err := coq.loadInternalPolicies(ctx, query, nodes,
+			func(n *ControlObjective) { n.appendNamedInternalPolicies(name) },
+			func(n *ControlObjective, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1305,7 +1307,7 @@ func (coq *ControlObjectiveQuery) loadViewers(ctx context.Context, query *GroupQ
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadPolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *InternalPolicy)) error {
+func (coq *ControlObjectiveQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1317,12 +1319,12 @@ func (coq *ControlObjectiveQuery) loadPolicy(ctx context.Context, query *Interna
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(controlobjective.PolicyTable)
-		joinT.Schema(coq.schemaConfig.InternalPolicyControlobjectives)
-		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(controlobjective.PolicyPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(controlobjective.PolicyPrimaryKey[1]), edgeIDs...))
+		joinT := sql.Table(controlobjective.InternalPoliciesTable)
+		joinT.Schema(coq.schemaConfig.InternalPolicyControlObjectives)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(controlobjective.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(controlobjective.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(controlobjective.PolicyPrimaryKey[1]))
+		s.Select(joinT.C(controlobjective.InternalPoliciesPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1359,7 +1361,7 @@ func (coq *ControlObjectiveQuery) loadPolicy(ctx context.Context, query *Interna
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "policy" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1504,7 +1506,7 @@ func (coq *ControlObjectiveQuery) loadStandard(ctx context.Context, query *Stand
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.StandardTable)
-		joinT.Schema(coq.schemaConfig.StandardControlobjectives)
+		joinT.Schema(coq.schemaConfig.StandardControlObjectives)
 		s.Join(joinT).On(s.C(standard.FieldID), joinT.C(controlobjective.StandardPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.StandardPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1690,7 +1692,7 @@ func (coq *ControlObjectiveQuery) loadPrograms(ctx context.Context, query *Progr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.ProgramsTable)
-		joinT.Schema(coq.schemaConfig.ProgramControlobjectives)
+		joinT.Schema(coq.schemaConfig.ProgramControlObjectives)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(controlobjective.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1883,17 +1885,17 @@ func (coq *ControlObjectiveQuery) WithNamedViewers(name string, opts ...func(*Gr
 	return coq
 }
 
-// WithNamedPolicy tells the query-builder to eager-load the nodes that are connected to the "policy"
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedPolicy(name string, opts ...func(*InternalPolicyQuery)) *ControlObjectiveQuery {
+func (coq *ControlObjectiveQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *ControlObjectiveQuery {
 	query := (&InternalPolicyClient{config: coq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedPolicy == nil {
-		coq.withNamedPolicy = make(map[string]*InternalPolicyQuery)
+	if coq.withNamedInternalPolicies == nil {
+		coq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
-	coq.withNamedPolicy[name] = query
+	coq.withNamedInternalPolicies[name] = query
 	return coq
 }
 

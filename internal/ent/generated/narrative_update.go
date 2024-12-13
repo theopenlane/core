@@ -259,19 +259,19 @@ func (nu *NarrativeUpdate) AddViewers(g ...*Group) *NarrativeUpdate {
 	return nu.AddViewerIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (nu *NarrativeUpdate) AddPolicyIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (nu *NarrativeUpdate) AddInternalPolicyIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.AddInternalPolicyIDs(ids...)
 	return nu
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (nu *NarrativeUpdate) AddPolicy(i ...*InternalPolicy) *NarrativeUpdate {
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (nu *NarrativeUpdate) AddInternalPolicy(i ...*InternalPolicy) *NarrativeUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return nu.AddPolicyIDs(ids...)
+	return nu.AddInternalPolicyIDs(ids...)
 }
 
 // AddControlIDs adds the "control" edge to the Control entity by IDs.
@@ -304,19 +304,19 @@ func (nu *NarrativeUpdate) AddProcedure(p ...*Procedure) *NarrativeUpdate {
 	return nu.AddProcedureIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjective" edge to the ControlObjective entity by IDs.
-func (nu *NarrativeUpdate) AddControlobjectiveIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objective" edge to the ControlObjective entity by IDs.
+func (nu *NarrativeUpdate) AddControlObjectiveIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.AddControlObjectiveIDs(ids...)
 	return nu
 }
 
-// AddControlobjective adds the "controlobjective" edges to the ControlObjective entity.
-func (nu *NarrativeUpdate) AddControlobjective(c ...*ControlObjective) *NarrativeUpdate {
+// AddControlObjective adds the "control_objective" edges to the ControlObjective entity.
+func (nu *NarrativeUpdate) AddControlObjective(c ...*ControlObjective) *NarrativeUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return nu.AddControlobjectiveIDs(ids...)
+	return nu.AddControlObjectiveIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -408,25 +408,25 @@ func (nu *NarrativeUpdate) RemoveViewers(g ...*Group) *NarrativeUpdate {
 	return nu.RemoveViewerIDs(ids...)
 }
 
-// ClearPolicy clears all "policy" edges to the InternalPolicy entity.
-func (nu *NarrativeUpdate) ClearPolicy() *NarrativeUpdate {
-	nu.mutation.ClearPolicy()
+// ClearInternalPolicy clears all "internal_policy" edges to the InternalPolicy entity.
+func (nu *NarrativeUpdate) ClearInternalPolicy() *NarrativeUpdate {
+	nu.mutation.ClearInternalPolicy()
 	return nu
 }
 
-// RemovePolicyIDs removes the "policy" edge to InternalPolicy entities by IDs.
-func (nu *NarrativeUpdate) RemovePolicyIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemovePolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policy" edge to InternalPolicy entities by IDs.
+func (nu *NarrativeUpdate) RemoveInternalPolicyIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.RemoveInternalPolicyIDs(ids...)
 	return nu
 }
 
-// RemovePolicy removes "policy" edges to InternalPolicy entities.
-func (nu *NarrativeUpdate) RemovePolicy(i ...*InternalPolicy) *NarrativeUpdate {
+// RemoveInternalPolicy removes "internal_policy" edges to InternalPolicy entities.
+func (nu *NarrativeUpdate) RemoveInternalPolicy(i ...*InternalPolicy) *NarrativeUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return nu.RemovePolicyIDs(ids...)
+	return nu.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearControl clears all "control" edges to the Control entity.
@@ -471,25 +471,25 @@ func (nu *NarrativeUpdate) RemoveProcedure(p ...*Procedure) *NarrativeUpdate {
 	return nu.RemoveProcedureIDs(ids...)
 }
 
-// ClearControlobjective clears all "controlobjective" edges to the ControlObjective entity.
-func (nu *NarrativeUpdate) ClearControlobjective() *NarrativeUpdate {
-	nu.mutation.ClearControlobjective()
+// ClearControlObjective clears all "control_objective" edges to the ControlObjective entity.
+func (nu *NarrativeUpdate) ClearControlObjective() *NarrativeUpdate {
+	nu.mutation.ClearControlObjective()
 	return nu
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjective" edge to ControlObjective entities by IDs.
-func (nu *NarrativeUpdate) RemoveControlobjectiveIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemoveControlobjectiveIDs(ids...)
+// RemoveControlObjectiveIDs removes the "control_objective" edge to ControlObjective entities by IDs.
+func (nu *NarrativeUpdate) RemoveControlObjectiveIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.RemoveControlObjectiveIDs(ids...)
 	return nu
 }
 
-// RemoveControlobjective removes "controlobjective" edges to ControlObjective entities.
-func (nu *NarrativeUpdate) RemoveControlobjective(c ...*ControlObjective) *NarrativeUpdate {
+// RemoveControlObjective removes "control_objective" edges to ControlObjective entities.
+func (nu *NarrativeUpdate) RemoveControlObjective(c ...*ControlObjective) *NarrativeUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return nu.RemoveControlobjectiveIDs(ids...)
+	return nu.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -828,12 +828,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.PolicyCleared() {
+	if nu.mutation.InternalPolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.PolicyTable,
-			Columns: narrative.PolicyPrimaryKey,
+			Table:   narrative.InternalPolicyTable,
+			Columns: narrative.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -842,12 +842,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = nu.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedPolicyIDs(); len(nodes) > 0 && !nu.mutation.PolicyCleared() {
+	if nodes := nu.mutation.RemovedInternalPolicyIDs(); len(nodes) > 0 && !nu.mutation.InternalPolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.PolicyTable,
-			Columns: narrative.PolicyPrimaryKey,
+			Table:   narrative.InternalPolicyTable,
+			Columns: narrative.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -859,12 +859,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := nu.mutation.InternalPolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.PolicyTable,
-			Columns: narrative.PolicyPrimaryKey,
+			Table:   narrative.InternalPolicyTable,
+			Columns: narrative.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -972,12 +972,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.ControlobjectiveCleared() {
+	if nu.mutation.ControlObjectiveCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ControlobjectiveTable,
-			Columns: narrative.ControlobjectivePrimaryKey,
+			Table:   narrative.ControlObjectiveTable,
+			Columns: narrative.ControlObjectivePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -986,12 +986,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = nu.schemaConfig.ControlObjectiveNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedControlobjectiveIDs(); len(nodes) > 0 && !nu.mutation.ControlobjectiveCleared() {
+	if nodes := nu.mutation.RemovedControlObjectiveIDs(); len(nodes) > 0 && !nu.mutation.ControlObjectiveCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ControlobjectiveTable,
-			Columns: narrative.ControlobjectivePrimaryKey,
+			Table:   narrative.ControlObjectiveTable,
+			Columns: narrative.ControlObjectivePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -1003,12 +1003,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.ControlobjectiveIDs(); len(nodes) > 0 {
+	if nodes := nu.mutation.ControlObjectiveIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ControlobjectiveTable,
-			Columns: narrative.ControlobjectivePrimaryKey,
+			Table:   narrative.ControlObjectiveTable,
+			Columns: narrative.ControlObjectivePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -1312,19 +1312,19 @@ func (nuo *NarrativeUpdateOne) AddViewers(g ...*Group) *NarrativeUpdateOne {
 	return nuo.AddViewerIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (nuo *NarrativeUpdateOne) AddPolicyIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (nuo *NarrativeUpdateOne) AddInternalPolicyIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.AddInternalPolicyIDs(ids...)
 	return nuo
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (nuo *NarrativeUpdateOne) AddPolicy(i ...*InternalPolicy) *NarrativeUpdateOne {
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (nuo *NarrativeUpdateOne) AddInternalPolicy(i ...*InternalPolicy) *NarrativeUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return nuo.AddPolicyIDs(ids...)
+	return nuo.AddInternalPolicyIDs(ids...)
 }
 
 // AddControlIDs adds the "control" edge to the Control entity by IDs.
@@ -1357,19 +1357,19 @@ func (nuo *NarrativeUpdateOne) AddProcedure(p ...*Procedure) *NarrativeUpdateOne
 	return nuo.AddProcedureIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjective" edge to the ControlObjective entity by IDs.
-func (nuo *NarrativeUpdateOne) AddControlobjectiveIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objective" edge to the ControlObjective entity by IDs.
+func (nuo *NarrativeUpdateOne) AddControlObjectiveIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.AddControlObjectiveIDs(ids...)
 	return nuo
 }
 
-// AddControlobjective adds the "controlobjective" edges to the ControlObjective entity.
-func (nuo *NarrativeUpdateOne) AddControlobjective(c ...*ControlObjective) *NarrativeUpdateOne {
+// AddControlObjective adds the "control_objective" edges to the ControlObjective entity.
+func (nuo *NarrativeUpdateOne) AddControlObjective(c ...*ControlObjective) *NarrativeUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return nuo.AddControlobjectiveIDs(ids...)
+	return nuo.AddControlObjectiveIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -1461,25 +1461,25 @@ func (nuo *NarrativeUpdateOne) RemoveViewers(g ...*Group) *NarrativeUpdateOne {
 	return nuo.RemoveViewerIDs(ids...)
 }
 
-// ClearPolicy clears all "policy" edges to the InternalPolicy entity.
-func (nuo *NarrativeUpdateOne) ClearPolicy() *NarrativeUpdateOne {
-	nuo.mutation.ClearPolicy()
+// ClearInternalPolicy clears all "internal_policy" edges to the InternalPolicy entity.
+func (nuo *NarrativeUpdateOne) ClearInternalPolicy() *NarrativeUpdateOne {
+	nuo.mutation.ClearInternalPolicy()
 	return nuo
 }
 
-// RemovePolicyIDs removes the "policy" edge to InternalPolicy entities by IDs.
-func (nuo *NarrativeUpdateOne) RemovePolicyIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemovePolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policy" edge to InternalPolicy entities by IDs.
+func (nuo *NarrativeUpdateOne) RemoveInternalPolicyIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.RemoveInternalPolicyIDs(ids...)
 	return nuo
 }
 
-// RemovePolicy removes "policy" edges to InternalPolicy entities.
-func (nuo *NarrativeUpdateOne) RemovePolicy(i ...*InternalPolicy) *NarrativeUpdateOne {
+// RemoveInternalPolicy removes "internal_policy" edges to InternalPolicy entities.
+func (nuo *NarrativeUpdateOne) RemoveInternalPolicy(i ...*InternalPolicy) *NarrativeUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return nuo.RemovePolicyIDs(ids...)
+	return nuo.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearControl clears all "control" edges to the Control entity.
@@ -1524,25 +1524,25 @@ func (nuo *NarrativeUpdateOne) RemoveProcedure(p ...*Procedure) *NarrativeUpdate
 	return nuo.RemoveProcedureIDs(ids...)
 }
 
-// ClearControlobjective clears all "controlobjective" edges to the ControlObjective entity.
-func (nuo *NarrativeUpdateOne) ClearControlobjective() *NarrativeUpdateOne {
-	nuo.mutation.ClearControlobjective()
+// ClearControlObjective clears all "control_objective" edges to the ControlObjective entity.
+func (nuo *NarrativeUpdateOne) ClearControlObjective() *NarrativeUpdateOne {
+	nuo.mutation.ClearControlObjective()
 	return nuo
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjective" edge to ControlObjective entities by IDs.
-func (nuo *NarrativeUpdateOne) RemoveControlobjectiveIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemoveControlobjectiveIDs(ids...)
+// RemoveControlObjectiveIDs removes the "control_objective" edge to ControlObjective entities by IDs.
+func (nuo *NarrativeUpdateOne) RemoveControlObjectiveIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.RemoveControlObjectiveIDs(ids...)
 	return nuo
 }
 
-// RemoveControlobjective removes "controlobjective" edges to ControlObjective entities.
-func (nuo *NarrativeUpdateOne) RemoveControlobjective(c ...*ControlObjective) *NarrativeUpdateOne {
+// RemoveControlObjective removes "control_objective" edges to ControlObjective entities.
+func (nuo *NarrativeUpdateOne) RemoveControlObjective(c ...*ControlObjective) *NarrativeUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return nuo.RemoveControlobjectiveIDs(ids...)
+	return nuo.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -1911,12 +1911,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.PolicyCleared() {
+	if nuo.mutation.InternalPolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.PolicyTable,
-			Columns: narrative.PolicyPrimaryKey,
+			Table:   narrative.InternalPolicyTable,
+			Columns: narrative.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -1925,12 +1925,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		edge.Schema = nuo.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedPolicyIDs(); len(nodes) > 0 && !nuo.mutation.PolicyCleared() {
+	if nodes := nuo.mutation.RemovedInternalPolicyIDs(); len(nodes) > 0 && !nuo.mutation.InternalPolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.PolicyTable,
-			Columns: narrative.PolicyPrimaryKey,
+			Table:   narrative.InternalPolicyTable,
+			Columns: narrative.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -1942,12 +1942,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := nuo.mutation.InternalPolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.PolicyTable,
-			Columns: narrative.PolicyPrimaryKey,
+			Table:   narrative.InternalPolicyTable,
+			Columns: narrative.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -2055,12 +2055,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.ControlobjectiveCleared() {
+	if nuo.mutation.ControlObjectiveCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ControlobjectiveTable,
-			Columns: narrative.ControlobjectivePrimaryKey,
+			Table:   narrative.ControlObjectiveTable,
+			Columns: narrative.ControlObjectivePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -2069,12 +2069,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		edge.Schema = nuo.schemaConfig.ControlObjectiveNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedControlobjectiveIDs(); len(nodes) > 0 && !nuo.mutation.ControlobjectiveCleared() {
+	if nodes := nuo.mutation.RemovedControlObjectiveIDs(); len(nodes) > 0 && !nuo.mutation.ControlObjectiveCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ControlobjectiveTable,
-			Columns: narrative.ControlobjectivePrimaryKey,
+			Table:   narrative.ControlObjectiveTable,
+			Columns: narrative.ControlObjectivePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -2086,12 +2086,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.ControlobjectiveIDs(); len(nodes) > 0 {
+	if nodes := nuo.mutation.ControlObjectiveIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ControlobjectiveTable,
-			Columns: narrative.ControlobjectivePrimaryKey,
+			Table:   narrative.ControlObjectiveTable,
+			Columns: narrative.ControlObjectivePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),

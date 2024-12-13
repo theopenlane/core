@@ -531,19 +531,19 @@ func (uu *UserUpdate) AddEvents(e ...*Event) *UserUpdate {
 	return uu.AddEventIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (uu *UserUpdate) AddActionplanIDs(ids ...string) *UserUpdate {
-	uu.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (uu *UserUpdate) AddActionPlanIDs(ids ...string) *UserUpdate {
+	uu.mutation.AddActionPlanIDs(ids...)
 	return uu
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (uu *UserUpdate) AddActionplans(a ...*ActionPlan) *UserUpdate {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (uu *UserUpdate) AddActionPlans(a ...*ActionPlan) *UserUpdate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return uu.AddActionplanIDs(ids...)
+	return uu.AddActionPlanIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
@@ -857,25 +857,25 @@ func (uu *UserUpdate) RemoveEvents(e ...*Event) *UserUpdate {
 	return uu.RemoveEventIDs(ids...)
 }
 
-// ClearActionplans clears all "actionplans" edges to the ActionPlan entity.
-func (uu *UserUpdate) ClearActionplans() *UserUpdate {
-	uu.mutation.ClearActionplans()
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (uu *UserUpdate) ClearActionPlans() *UserUpdate {
+	uu.mutation.ClearActionPlans()
 	return uu
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to ActionPlan entities by IDs.
-func (uu *UserUpdate) RemoveActionplanIDs(ids ...string) *UserUpdate {
-	uu.mutation.RemoveActionplanIDs(ids...)
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (uu *UserUpdate) RemoveActionPlanIDs(ids ...string) *UserUpdate {
+	uu.mutation.RemoveActionPlanIDs(ids...)
 	return uu
 }
 
-// RemoveActionplans removes "actionplans" edges to ActionPlan entities.
-func (uu *UserUpdate) RemoveActionplans(a ...*ActionPlan) *UserUpdate {
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (uu *UserUpdate) RemoveActionPlans(a ...*ActionPlan) *UserUpdate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return uu.RemoveActionplanIDs(ids...)
+	return uu.RemoveActionPlanIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
@@ -1787,49 +1787,49 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uu.mutation.ActionplansCleared() {
+	if uu.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.ActionplansTable,
-			Columns: user.ActionplansPrimaryKey,
+			Table:   user.ActionPlansTable,
+			Columns: user.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uu.schemaConfig.UserActionplans
+		edge.Schema = uu.schemaConfig.UserActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.RemovedActionplansIDs(); len(nodes) > 0 && !uu.mutation.ActionplansCleared() {
+	if nodes := uu.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !uu.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.ActionplansTable,
-			Columns: user.ActionplansPrimaryKey,
+			Table:   user.ActionPlansTable,
+			Columns: user.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uu.schemaConfig.UserActionplans
+		edge.Schema = uu.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.ActionplansTable,
-			Columns: user.ActionplansPrimaryKey,
+			Table:   user.ActionPlansTable,
+			Columns: user.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uu.schemaConfig.UserActionplans
+		edge.Schema = uu.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2697,19 +2697,19 @@ func (uuo *UserUpdateOne) AddEvents(e ...*Event) *UserUpdateOne {
 	return uuo.AddEventIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (uuo *UserUpdateOne) AddActionplanIDs(ids ...string) *UserUpdateOne {
-	uuo.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (uuo *UserUpdateOne) AddActionPlanIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.AddActionPlanIDs(ids...)
 	return uuo
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (uuo *UserUpdateOne) AddActionplans(a ...*ActionPlan) *UserUpdateOne {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (uuo *UserUpdateOne) AddActionPlans(a ...*ActionPlan) *UserUpdateOne {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return uuo.AddActionplanIDs(ids...)
+	return uuo.AddActionPlanIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
@@ -3023,25 +3023,25 @@ func (uuo *UserUpdateOne) RemoveEvents(e ...*Event) *UserUpdateOne {
 	return uuo.RemoveEventIDs(ids...)
 }
 
-// ClearActionplans clears all "actionplans" edges to the ActionPlan entity.
-func (uuo *UserUpdateOne) ClearActionplans() *UserUpdateOne {
-	uuo.mutation.ClearActionplans()
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (uuo *UserUpdateOne) ClearActionPlans() *UserUpdateOne {
+	uuo.mutation.ClearActionPlans()
 	return uuo
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to ActionPlan entities by IDs.
-func (uuo *UserUpdateOne) RemoveActionplanIDs(ids ...string) *UserUpdateOne {
-	uuo.mutation.RemoveActionplanIDs(ids...)
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (uuo *UserUpdateOne) RemoveActionPlanIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.RemoveActionPlanIDs(ids...)
 	return uuo
 }
 
-// RemoveActionplans removes "actionplans" edges to ActionPlan entities.
-func (uuo *UserUpdateOne) RemoveActionplans(a ...*ActionPlan) *UserUpdateOne {
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (uuo *UserUpdateOne) RemoveActionPlans(a ...*ActionPlan) *UserUpdateOne {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return uuo.RemoveActionplanIDs(ids...)
+	return uuo.RemoveActionPlanIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
@@ -3983,49 +3983,49 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uuo.mutation.ActionplansCleared() {
+	if uuo.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.ActionplansTable,
-			Columns: user.ActionplansPrimaryKey,
+			Table:   user.ActionPlansTable,
+			Columns: user.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uuo.schemaConfig.UserActionplans
+		edge.Schema = uuo.schemaConfig.UserActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.RemovedActionplansIDs(); len(nodes) > 0 && !uuo.mutation.ActionplansCleared() {
+	if nodes := uuo.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !uuo.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.ActionplansTable,
-			Columns: user.ActionplansPrimaryKey,
+			Table:   user.ActionPlansTable,
+			Columns: user.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uuo.schemaConfig.UserActionplans
+		edge.Schema = uuo.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.ActionplansTable,
-			Columns: user.ActionplansPrimaryKey,
+			Table:   user.ActionPlansTable,
+			Columns: user.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uuo.schemaConfig.UserActionplans
+		edge.Schema = uuo.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -54,8 +54,8 @@ const (
 	EdgeOrganization = "organization"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
 	EdgeGroup = "group"
-	// EdgePolicy holds the string denoting the policy edge name in mutations.
-	EdgePolicy = "policy"
+	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
+	EdgeInternalPolicy = "internal_policy"
 	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
 	EdgeProcedure = "procedure"
 	// EdgeControl holds the string denoting the control edge name in mutations.
@@ -92,11 +92,11 @@ const (
 	// GroupInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	GroupInverseTable = "groups"
-	// PolicyTable is the table that holds the policy relation/edge. The primary key declared below.
-	PolicyTable = "internal_policy_tasks"
-	// PolicyInverseTable is the table name for the InternalPolicy entity.
+	// InternalPolicyTable is the table that holds the internal_policy relation/edge. The primary key declared below.
+	InternalPolicyTable = "internal_policy_tasks"
+	// InternalPolicyInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	PolicyInverseTable = "internal_policies"
+	InternalPolicyInverseTable = "internal_policies"
 	// ProcedureTable is the table that holds the procedure relation/edge. The primary key declared below.
 	ProcedureTable = "procedure_tasks"
 	// ProcedureInverseTable is the table name for the Procedure entity.
@@ -157,9 +157,9 @@ var (
 	// GroupPrimaryKey and GroupColumn2 are the table columns denoting the
 	// primary key for the group relation (M2M).
 	GroupPrimaryKey = []string{"group_id", "task_id"}
-	// PolicyPrimaryKey and PolicyColumn2 are the table columns denoting the
-	// primary key for the policy relation (M2M).
-	PolicyPrimaryKey = []string{"internal_policy_id", "task_id"}
+	// InternalPolicyPrimaryKey and InternalPolicyColumn2 are the table columns denoting the
+	// primary key for the internal_policy relation (M2M).
+	InternalPolicyPrimaryKey = []string{"internal_policy_id", "task_id"}
 	// ProcedurePrimaryKey and ProcedureColumn2 are the table columns denoting the
 	// primary key for the procedure relation (M2M).
 	ProcedurePrimaryKey = []string{"procedure_id", "task_id"}
@@ -339,17 +339,17 @@ func ByGroup(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByPolicyCount orders the results by policy count.
-func ByPolicyCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInternalPolicyCount orders the results by internal_policy count.
+func ByInternalPolicyCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newPolicyStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyStep(), opts...)
 	}
 }
 
-// ByPolicy orders the results by policy terms.
-func ByPolicy(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInternalPolicy orders the results by internal_policy terms.
+func ByInternalPolicy(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPolicyStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -450,11 +450,11 @@ func newGroupStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, GroupTable, GroupPrimaryKey...),
 	)
 }
-func newPolicyStep() *sqlgraph.Step {
+func newInternalPolicyStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PolicyInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, PolicyTable, PolicyPrimaryKey...),
+		sqlgraph.To(InternalPolicyInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyTable, InternalPolicyPrimaryKey...),
 	)
 }
 func newProcedureStep() *sqlgraph.Step {

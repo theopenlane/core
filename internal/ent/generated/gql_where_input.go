@@ -4831,9 +4831,9 @@ type ControlWhereInput struct {
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 
-	// "controlobjectives" edge predicates.
-	HasControlobjectives     *bool                         `json:"hasControlobjectives,omitempty"`
-	HasControlobjectivesWith []*ControlObjectiveWhereInput `json:"hasControlobjectivesWith,omitempty"`
+	// "control_objectives" edge predicates.
+	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
+	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
 
 	// "standard" edge predicates.
 	HasStandard     *bool                 `json:"hasStandard,omitempty"`
@@ -4847,9 +4847,9 @@ type ControlWhereInput struct {
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
 
-	// "actionplans" edge predicates.
-	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
-	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+	// "action_plans" edge predicates.
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 
 	// "tasks" edge predicates.
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
@@ -5823,23 +5823,23 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		}
 		predicates = append(predicates, control.HasSubcontrolsWith(with...))
 	}
-	if i.HasControlobjectives != nil {
-		p := control.HasControlobjectives()
-		if !*i.HasControlobjectives {
+	if i.HasControlObjectives != nil {
+		p := control.HasControlObjectives()
+		if !*i.HasControlObjectives {
 			p = control.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectivesWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectivesWith))
-		for _, w := range i.HasControlobjectivesWith {
+	if len(i.HasControlObjectivesWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectivesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectivesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, control.HasControlobjectivesWith(with...))
+		predicates = append(predicates, control.HasControlObjectivesWith(with...))
 	}
 	if i.HasStandard != nil {
 		p := control.HasStandard()
@@ -5895,23 +5895,23 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		}
 		predicates = append(predicates, control.HasRisksWith(with...))
 	}
-	if i.HasActionplans != nil {
-		p := control.HasActionplans()
-		if !*i.HasActionplans {
+	if i.HasActionPlans != nil {
+		p := control.HasActionPlans()
+		if !*i.HasActionPlans {
 			p = control.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasActionplansWith) > 0 {
-		with := make([]predicate.ActionPlan, 0, len(i.HasActionplansWith))
-		for _, w := range i.HasActionplansWith {
+	if len(i.HasActionPlansWith) > 0 {
+		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasActionplansWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasActionPlansWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, control.HasActionplansWith(with...))
+		predicates = append(predicates, control.HasActionPlansWith(with...))
 	}
 	if i.HasTasks != nil {
 		p := control.HasTasks()
@@ -7550,9 +7550,9 @@ type ControlObjectiveWhereInput struct {
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 
-	// "policy" edge predicates.
-	HasPolicy     *bool                       `json:"hasPolicy,omitempty"`
-	HasPolicyWith []*InternalPolicyWhereInput `json:"hasPolicyWith,omitempty"`
+	// "internal_policies" edge predicates.
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
@@ -8469,23 +8469,23 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 		}
 		predicates = append(predicates, controlobjective.HasViewersWith(with...))
 	}
-	if i.HasPolicy != nil {
-		p := controlobjective.HasPolicy()
-		if !*i.HasPolicy {
+	if i.HasInternalPolicies != nil {
+		p := controlobjective.HasInternalPolicies()
+		if !*i.HasInternalPolicies {
 			p = controlobjective.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPolicyWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasPolicyWith))
-		for _, w := range i.HasPolicyWith {
+	if len(i.HasInternalPoliciesWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPolicyWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasInternalPoliciesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, controlobjective.HasPolicyWith(with...))
+		predicates = append(predicates, controlobjective.HasInternalPoliciesWith(with...))
 	}
 	if i.HasControls != nil {
 		p := controlobjective.HasControls()
@@ -15942,21 +15942,21 @@ type FileWhereInput struct {
 	HasEntity     *bool               `json:"hasEntity,omitempty"`
 	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
 
-	// "usersetting" edge predicates.
-	HasUsersetting     *bool                    `json:"hasUsersetting,omitempty"`
-	HasUsersettingWith []*UserSettingWhereInput `json:"hasUsersettingWith,omitempty"`
+	// "user_setting" edge predicates.
+	HasUserSetting     *bool                    `json:"hasUserSetting,omitempty"`
+	HasUserSettingWith []*UserSettingWhereInput `json:"hasUserSettingWith,omitempty"`
 
-	// "organizationsetting" edge predicates.
-	HasOrganizationsetting     *bool                            `json:"hasOrganizationsetting,omitempty"`
-	HasOrganizationsettingWith []*OrganizationSettingWhereInput `json:"hasOrganizationsettingWith,omitempty"`
+	// "organization_setting" edge predicates.
+	HasOrganizationSetting     *bool                            `json:"hasOrganizationSetting,omitempty"`
+	HasOrganizationSettingWith []*OrganizationSettingWhereInput `json:"hasOrganizationSettingWith,omitempty"`
 
 	// "template" edge predicates.
 	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
 	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
 
-	// "documentdata" edge predicates.
-	HasDocumentdata     *bool                     `json:"hasDocumentdata,omitempty"`
-	HasDocumentdataWith []*DocumentDataWhereInput `json:"hasDocumentdataWith,omitempty"`
+	// "document_data" edge predicates.
+	HasDocumentData     *bool                     `json:"hasDocumentData,omitempty"`
+	HasDocumentDataWith []*DocumentDataWhereInput `json:"hasDocumentDataWith,omitempty"`
 
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
@@ -16921,41 +16921,41 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasEntityWith(with...))
 	}
-	if i.HasUsersetting != nil {
-		p := file.HasUsersetting()
-		if !*i.HasUsersetting {
+	if i.HasUserSetting != nil {
+		p := file.HasUserSetting()
+		if !*i.HasUserSetting {
 			p = file.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasUsersettingWith) > 0 {
-		with := make([]predicate.UserSetting, 0, len(i.HasUsersettingWith))
-		for _, w := range i.HasUsersettingWith {
+	if len(i.HasUserSettingWith) > 0 {
+		with := make([]predicate.UserSetting, 0, len(i.HasUserSettingWith))
+		for _, w := range i.HasUserSettingWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasUsersettingWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasUserSettingWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, file.HasUsersettingWith(with...))
+		predicates = append(predicates, file.HasUserSettingWith(with...))
 	}
-	if i.HasOrganizationsetting != nil {
-		p := file.HasOrganizationsetting()
-		if !*i.HasOrganizationsetting {
+	if i.HasOrganizationSetting != nil {
+		p := file.HasOrganizationSetting()
+		if !*i.HasOrganizationSetting {
 			p = file.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasOrganizationsettingWith) > 0 {
-		with := make([]predicate.OrganizationSetting, 0, len(i.HasOrganizationsettingWith))
-		for _, w := range i.HasOrganizationsettingWith {
+	if len(i.HasOrganizationSettingWith) > 0 {
+		with := make([]predicate.OrganizationSetting, 0, len(i.HasOrganizationSettingWith))
+		for _, w := range i.HasOrganizationSettingWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOrganizationsettingWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasOrganizationSettingWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, file.HasOrganizationsettingWith(with...))
+		predicates = append(predicates, file.HasOrganizationSettingWith(with...))
 	}
 	if i.HasTemplate != nil {
 		p := file.HasTemplate()
@@ -16975,23 +16975,23 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasTemplateWith(with...))
 	}
-	if i.HasDocumentdata != nil {
-		p := file.HasDocumentdata()
-		if !*i.HasDocumentdata {
+	if i.HasDocumentData != nil {
+		p := file.HasDocumentData()
+		if !*i.HasDocumentData {
 			p = file.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasDocumentdataWith) > 0 {
-		with := make([]predicate.DocumentData, 0, len(i.HasDocumentdataWith))
-		for _, w := range i.HasDocumentdataWith {
+	if len(i.HasDocumentDataWith) > 0 {
+		with := make([]predicate.DocumentData, 0, len(i.HasDocumentDataWith))
+		for _, w := range i.HasDocumentDataWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDocumentdataWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasDocumentDataWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, file.HasDocumentdataWith(with...))
+		predicates = append(predicates, file.HasDocumentDataWith(with...))
 	}
 	if i.HasEvents != nil {
 		p := file.HasEvents()
@@ -18540,13 +18540,13 @@ type GroupWhereInput struct {
 	HasProcedureBlockedGroups     *bool                  `json:"hasProcedureBlockedGroups,omitempty"`
 	HasProcedureBlockedGroupsWith []*ProcedureWhereInput `json:"hasProcedureBlockedGroupsWith,omitempty"`
 
-	// "internalpolicy_editors" edge predicates.
-	HasInternalpolicyEditors     *bool                       `json:"hasInternalpolicyEditors,omitempty"`
-	HasInternalpolicyEditorsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyEditorsWith,omitempty"`
+	// "internal_policy_editors" edge predicates.
+	HasInternalPolicyEditors     *bool                       `json:"hasInternalPolicyEditors,omitempty"`
+	HasInternalPolicyEditorsWith []*InternalPolicyWhereInput `json:"hasInternalPolicyEditorsWith,omitempty"`
 
-	// "internalpolicy_blocked_groups" edge predicates.
-	HasInternalpolicyBlockedGroups     *bool                       `json:"hasInternalpolicyBlockedGroups,omitempty"`
-	HasInternalpolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyBlockedGroupsWith,omitempty"`
+	// "internal_policy_blocked_groups" edge predicates.
+	HasInternalPolicyBlockedGroups     *bool                       `json:"hasInternalPolicyBlockedGroups,omitempty"`
+	HasInternalPolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalPolicyBlockedGroupsWith,omitempty"`
 
 	// "program_editors" edge predicates.
 	HasProgramEditors     *bool                `json:"hasProgramEditors,omitempty"`
@@ -18572,17 +18572,17 @@ type GroupWhereInput struct {
 	HasRiskViewers     *bool             `json:"hasRiskViewers,omitempty"`
 	HasRiskViewersWith []*RiskWhereInput `json:"hasRiskViewersWith,omitempty"`
 
-	// "controlobjective_editors" edge predicates.
-	HasControlobjectiveEditors     *bool                         `json:"hasControlobjectiveEditors,omitempty"`
-	HasControlobjectiveEditorsWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveEditorsWith,omitempty"`
+	// "control_objective_editors" edge predicates.
+	HasControlObjectiveEditors     *bool                         `json:"hasControlObjectiveEditors,omitempty"`
+	HasControlObjectiveEditorsWith []*ControlObjectiveWhereInput `json:"hasControlObjectiveEditorsWith,omitempty"`
 
-	// "controlobjective_blocked_groups" edge predicates.
-	HasControlobjectiveBlockedGroups     *bool                         `json:"hasControlobjectiveBlockedGroups,omitempty"`
-	HasControlobjectiveBlockedGroupsWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveBlockedGroupsWith,omitempty"`
+	// "control_objective_blocked_groups" edge predicates.
+	HasControlObjectiveBlockedGroups     *bool                         `json:"hasControlObjectiveBlockedGroups,omitempty"`
+	HasControlObjectiveBlockedGroupsWith []*ControlObjectiveWhereInput `json:"hasControlObjectiveBlockedGroupsWith,omitempty"`
 
-	// "controlobjective_viewers" edge predicates.
-	HasControlobjectiveViewers     *bool                         `json:"hasControlobjectiveViewers,omitempty"`
-	HasControlobjectiveViewersWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveViewersWith,omitempty"`
+	// "control_objective_viewers" edge predicates.
+	HasControlObjectiveViewers     *bool                         `json:"hasControlObjectiveViewers,omitempty"`
+	HasControlObjectiveViewersWith []*ControlObjectiveWhereInput `json:"hasControlObjectiveViewersWith,omitempty"`
 
 	// "control_editors" edge predicates.
 	HasControlEditors     *bool                `json:"hasControlEditors,omitempty"`
@@ -19303,41 +19303,41 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 		}
 		predicates = append(predicates, group.HasProcedureBlockedGroupsWith(with...))
 	}
-	if i.HasInternalpolicyEditors != nil {
-		p := group.HasInternalpolicyEditors()
-		if !*i.HasInternalpolicyEditors {
+	if i.HasInternalPolicyEditors != nil {
+		p := group.HasInternalPolicyEditors()
+		if !*i.HasInternalPolicyEditors {
 			p = group.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasInternalpolicyEditorsWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalpolicyEditorsWith))
-		for _, w := range i.HasInternalpolicyEditorsWith {
+	if len(i.HasInternalPolicyEditorsWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyEditorsWith))
+		for _, w := range i.HasInternalPolicyEditorsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasInternalpolicyEditorsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasInternalPolicyEditorsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, group.HasInternalpolicyEditorsWith(with...))
+		predicates = append(predicates, group.HasInternalPolicyEditorsWith(with...))
 	}
-	if i.HasInternalpolicyBlockedGroups != nil {
-		p := group.HasInternalpolicyBlockedGroups()
-		if !*i.HasInternalpolicyBlockedGroups {
+	if i.HasInternalPolicyBlockedGroups != nil {
+		p := group.HasInternalPolicyBlockedGroups()
+		if !*i.HasInternalPolicyBlockedGroups {
 			p = group.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasInternalpolicyBlockedGroupsWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalpolicyBlockedGroupsWith))
-		for _, w := range i.HasInternalpolicyBlockedGroupsWith {
+	if len(i.HasInternalPolicyBlockedGroupsWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyBlockedGroupsWith))
+		for _, w := range i.HasInternalPolicyBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasInternalpolicyBlockedGroupsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasInternalPolicyBlockedGroupsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, group.HasInternalpolicyBlockedGroupsWith(with...))
+		predicates = append(predicates, group.HasInternalPolicyBlockedGroupsWith(with...))
 	}
 	if i.HasProgramEditors != nil {
 		p := group.HasProgramEditors()
@@ -19447,59 +19447,59 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 		}
 		predicates = append(predicates, group.HasRiskViewersWith(with...))
 	}
-	if i.HasControlobjectiveEditors != nil {
-		p := group.HasControlobjectiveEditors()
-		if !*i.HasControlobjectiveEditors {
+	if i.HasControlObjectiveEditors != nil {
+		p := group.HasControlObjectiveEditors()
+		if !*i.HasControlObjectiveEditors {
 			p = group.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectiveEditorsWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectiveEditorsWith))
-		for _, w := range i.HasControlobjectiveEditorsWith {
+	if len(i.HasControlObjectiveEditorsWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectiveEditorsWith))
+		for _, w := range i.HasControlObjectiveEditorsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectiveEditorsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectiveEditorsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, group.HasControlobjectiveEditorsWith(with...))
+		predicates = append(predicates, group.HasControlObjectiveEditorsWith(with...))
 	}
-	if i.HasControlobjectiveBlockedGroups != nil {
-		p := group.HasControlobjectiveBlockedGroups()
-		if !*i.HasControlobjectiveBlockedGroups {
+	if i.HasControlObjectiveBlockedGroups != nil {
+		p := group.HasControlObjectiveBlockedGroups()
+		if !*i.HasControlObjectiveBlockedGroups {
 			p = group.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectiveBlockedGroupsWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectiveBlockedGroupsWith))
-		for _, w := range i.HasControlobjectiveBlockedGroupsWith {
+	if len(i.HasControlObjectiveBlockedGroupsWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectiveBlockedGroupsWith))
+		for _, w := range i.HasControlObjectiveBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectiveBlockedGroupsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectiveBlockedGroupsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, group.HasControlobjectiveBlockedGroupsWith(with...))
+		predicates = append(predicates, group.HasControlObjectiveBlockedGroupsWith(with...))
 	}
-	if i.HasControlobjectiveViewers != nil {
-		p := group.HasControlobjectiveViewers()
-		if !*i.HasControlobjectiveViewers {
+	if i.HasControlObjectiveViewers != nil {
+		p := group.HasControlObjectiveViewers()
+		if !*i.HasControlObjectiveViewers {
 			p = group.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectiveViewersWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectiveViewersWith))
-		for _, w := range i.HasControlobjectiveViewersWith {
+	if len(i.HasControlObjectiveViewersWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectiveViewersWith))
+		for _, w := range i.HasControlObjectiveViewersWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectiveViewersWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectiveViewersWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, group.HasControlobjectiveViewersWith(with...))
+		predicates = append(predicates, group.HasControlObjectiveViewersWith(with...))
 	}
 	if i.HasControlEditors != nil {
 		p := group.HasControlEditors()
@@ -26185,9 +26185,9 @@ type InternalPolicyWhereInput struct {
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
-	// "controlobjectives" edge predicates.
-	HasControlobjectives     *bool                         `json:"hasControlobjectives,omitempty"`
-	HasControlobjectivesWith []*ControlObjectiveWhereInput `json:"hasControlobjectivesWith,omitempty"`
+	// "control_objectives" edge predicates.
+	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
+	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
 
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
@@ -26945,23 +26945,23 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 		}
 		predicates = append(predicates, internalpolicy.HasEditorsWith(with...))
 	}
-	if i.HasControlobjectives != nil {
-		p := internalpolicy.HasControlobjectives()
-		if !*i.HasControlobjectives {
+	if i.HasControlObjectives != nil {
+		p := internalpolicy.HasControlObjectives()
+		if !*i.HasControlObjectives {
 			p = internalpolicy.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectivesWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectivesWith))
-		for _, w := range i.HasControlobjectivesWith {
+	if len(i.HasControlObjectivesWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectivesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectivesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, internalpolicy.HasControlobjectivesWith(with...))
+		predicates = append(predicates, internalpolicy.HasControlObjectivesWith(with...))
 	}
 	if i.HasControls != nil {
 		p := internalpolicy.HasControls()
@@ -29073,9 +29073,9 @@ type NarrativeWhereInput struct {
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 
-	// "policy" edge predicates.
-	HasPolicy     *bool                       `json:"hasPolicy,omitempty"`
-	HasPolicyWith []*InternalPolicyWhereInput `json:"hasPolicyWith,omitempty"`
+	// "internal_policy" edge predicates.
+	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
+	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
 
 	// "control" edge predicates.
 	HasControl     *bool                `json:"hasControl,omitempty"`
@@ -29085,9 +29085,9 @@ type NarrativeWhereInput struct {
 	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
 	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
 
-	// "controlobjective" edge predicates.
-	HasControlobjective     *bool                         `json:"hasControlobjective,omitempty"`
-	HasControlobjectiveWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveWith,omitempty"`
+	// "control_objective" edge predicates.
+	HasControlObjective     *bool                         `json:"hasControlObjective,omitempty"`
+	HasControlObjectiveWith []*ControlObjectiveWhereInput `json:"hasControlObjectiveWith,omitempty"`
 
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
@@ -29661,23 +29661,23 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 		}
 		predicates = append(predicates, narrative.HasViewersWith(with...))
 	}
-	if i.HasPolicy != nil {
-		p := narrative.HasPolicy()
-		if !*i.HasPolicy {
+	if i.HasInternalPolicy != nil {
+		p := narrative.HasInternalPolicy()
+		if !*i.HasInternalPolicy {
 			p = narrative.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPolicyWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasPolicyWith))
-		for _, w := range i.HasPolicyWith {
+	if len(i.HasInternalPolicyWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		for _, w := range i.HasInternalPolicyWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPolicyWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasInternalPolicyWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, narrative.HasPolicyWith(with...))
+		predicates = append(predicates, narrative.HasInternalPolicyWith(with...))
 	}
 	if i.HasControl != nil {
 		p := narrative.HasControl()
@@ -29715,23 +29715,23 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 		}
 		predicates = append(predicates, narrative.HasProcedureWith(with...))
 	}
-	if i.HasControlobjective != nil {
-		p := narrative.HasControlobjective()
-		if !*i.HasControlobjective {
+	if i.HasControlObjective != nil {
+		p := narrative.HasControlObjective()
+		if !*i.HasControlObjective {
 			p = narrative.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectiveWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectiveWith))
-		for _, w := range i.HasControlobjectiveWith {
+	if len(i.HasControlObjectiveWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectiveWith))
+		for _, w := range i.HasControlObjectiveWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectiveWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectiveWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, narrative.HasControlobjectiveWith(with...))
+		predicates = append(predicates, narrative.HasControlObjectiveWith(with...))
 	}
 	if i.HasPrograms != nil {
 		p := narrative.HasPrograms()
@@ -35286,13 +35286,13 @@ type OrganizationWhereInput struct {
 	HasSetting     *bool                            `json:"hasSetting,omitempty"`
 	HasSettingWith []*OrganizationSettingWhereInput `json:"hasSettingWith,omitempty"`
 
-	// "documentdata" edge predicates.
-	HasDocumentdata     *bool                     `json:"hasDocumentdata,omitempty"`
-	HasDocumentdataWith []*DocumentDataWhereInput `json:"hasDocumentdataWith,omitempty"`
+	// "document_data" edge predicates.
+	HasDocumentData     *bool                     `json:"hasDocumentData,omitempty"`
+	HasDocumentDataWith []*DocumentDataWhereInput `json:"hasDocumentDataWith,omitempty"`
 
-	// "orgsubscriptions" edge predicates.
-	HasOrgsubscriptions     *bool                        `json:"hasOrgsubscriptions,omitempty"`
-	HasOrgsubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgsubscriptionsWith,omitempty"`
+	// "org_subscriptions" edge predicates.
+	HasOrgSubscriptions     *bool                        `json:"hasOrgSubscriptions,omitempty"`
+	HasOrgSubscriptionsWith []*OrgSubscriptionWhereInput `json:"hasOrgSubscriptionsWith,omitempty"`
 
 	// "personal_access_tokens" edge predicates.
 	HasPersonalAccessTokens     *bool                            `json:"hasPersonalAccessTokens,omitempty"`
@@ -35330,9 +35330,9 @@ type OrganizationWhereInput struct {
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
 
-	// "entitytypes" edge predicates.
-	HasEntitytypes     *bool                   `json:"hasEntitytypes,omitempty"`
-	HasEntitytypesWith []*EntityTypeWhereInput `json:"hasEntitytypesWith,omitempty"`
+	// "entity_types" edge predicates.
+	HasEntityTypes     *bool                   `json:"hasEntityTypes,omitempty"`
+	HasEntityTypesWith []*EntityTypeWhereInput `json:"hasEntityTypesWith,omitempty"`
 
 	// "contacts" edge predicates.
 	HasContacts     *bool                `json:"hasContacts,omitempty"`
@@ -35354,17 +35354,17 @@ type OrganizationWhereInput struct {
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
 	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
 
-	// "internalpolicies" edge predicates.
-	HasInternalpolicies     *bool                       `json:"hasInternalpolicies,omitempty"`
-	HasInternalpoliciesWith []*InternalPolicyWhereInput `json:"hasInternalpoliciesWith,omitempty"`
+	// "internal_policies" edge predicates.
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
 	// "risks" edge predicates.
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
 
-	// "controlobjectives" edge predicates.
-	HasControlobjectives     *bool                         `json:"hasControlobjectives,omitempty"`
-	HasControlobjectivesWith []*ControlObjectiveWhereInput `json:"hasControlobjectivesWith,omitempty"`
+	// "control_objectives" edge predicates.
+	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
+	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
 
 	// "narratives" edge predicates.
 	HasNarratives     *bool                  `json:"hasNarratives,omitempty"`
@@ -36121,41 +36121,41 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasSettingWith(with...))
 	}
-	if i.HasDocumentdata != nil {
-		p := organization.HasDocumentdata()
-		if !*i.HasDocumentdata {
+	if i.HasDocumentData != nil {
+		p := organization.HasDocumentData()
+		if !*i.HasDocumentData {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasDocumentdataWith) > 0 {
-		with := make([]predicate.DocumentData, 0, len(i.HasDocumentdataWith))
-		for _, w := range i.HasDocumentdataWith {
+	if len(i.HasDocumentDataWith) > 0 {
+		with := make([]predicate.DocumentData, 0, len(i.HasDocumentDataWith))
+		for _, w := range i.HasDocumentDataWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasDocumentdataWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasDocumentDataWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasDocumentdataWith(with...))
+		predicates = append(predicates, organization.HasDocumentDataWith(with...))
 	}
-	if i.HasOrgsubscriptions != nil {
-		p := organization.HasOrgsubscriptions()
-		if !*i.HasOrgsubscriptions {
+	if i.HasOrgSubscriptions != nil {
+		p := organization.HasOrgSubscriptions()
+		if !*i.HasOrgSubscriptions {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasOrgsubscriptionsWith) > 0 {
-		with := make([]predicate.OrgSubscription, 0, len(i.HasOrgsubscriptionsWith))
-		for _, w := range i.HasOrgsubscriptionsWith {
+	if len(i.HasOrgSubscriptionsWith) > 0 {
+		with := make([]predicate.OrgSubscription, 0, len(i.HasOrgSubscriptionsWith))
+		for _, w := range i.HasOrgSubscriptionsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOrgsubscriptionsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasOrgSubscriptionsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasOrgsubscriptionsWith(with...))
+		predicates = append(predicates, organization.HasOrgSubscriptionsWith(with...))
 	}
 	if i.HasPersonalAccessTokens != nil {
 		p := organization.HasPersonalAccessTokens()
@@ -36319,23 +36319,23 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasEntitiesWith(with...))
 	}
-	if i.HasEntitytypes != nil {
-		p := organization.HasEntitytypes()
-		if !*i.HasEntitytypes {
+	if i.HasEntityTypes != nil {
+		p := organization.HasEntityTypes()
+		if !*i.HasEntityTypes {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasEntitytypesWith) > 0 {
-		with := make([]predicate.EntityType, 0, len(i.HasEntitytypesWith))
-		for _, w := range i.HasEntitytypesWith {
+	if len(i.HasEntityTypesWith) > 0 {
+		with := make([]predicate.EntityType, 0, len(i.HasEntityTypesWith))
+		for _, w := range i.HasEntityTypesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEntitytypesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasEntityTypesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasEntitytypesWith(with...))
+		predicates = append(predicates, organization.HasEntityTypesWith(with...))
 	}
 	if i.HasContacts != nil {
 		p := organization.HasContacts()
@@ -36427,23 +36427,23 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasProceduresWith(with...))
 	}
-	if i.HasInternalpolicies != nil {
-		p := organization.HasInternalpolicies()
-		if !*i.HasInternalpolicies {
+	if i.HasInternalPolicies != nil {
+		p := organization.HasInternalPolicies()
+		if !*i.HasInternalPolicies {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasInternalpoliciesWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalpoliciesWith))
-		for _, w := range i.HasInternalpoliciesWith {
+	if len(i.HasInternalPoliciesWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasInternalpoliciesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasInternalPoliciesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasInternalpoliciesWith(with...))
+		predicates = append(predicates, organization.HasInternalPoliciesWith(with...))
 	}
 	if i.HasRisks != nil {
 		p := organization.HasRisks()
@@ -36463,23 +36463,23 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasRisksWith(with...))
 	}
-	if i.HasControlobjectives != nil {
-		p := organization.HasControlobjectives()
-		if !*i.HasControlobjectives {
+	if i.HasControlObjectives != nil {
+		p := organization.HasControlObjectives()
+		if !*i.HasControlObjectives {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectivesWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectivesWith))
-		for _, w := range i.HasControlobjectivesWith {
+	if len(i.HasControlObjectivesWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectivesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectivesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasControlobjectivesWith(with...))
+		predicates = append(predicates, organization.HasControlObjectivesWith(with...))
 	}
 	if i.HasNarratives != nil {
 		p := organization.HasNarratives()
@@ -40200,13 +40200,13 @@ type ProcedureWhereInput struct {
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
-	// "control" edge predicates.
-	HasControl     *bool                `json:"hasControl,omitempty"`
-	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+	// "controls" edge predicates.
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 
-	// "internalpolicy" edge predicates.
-	HasInternalpolicy     *bool                       `json:"hasInternalpolicy,omitempty"`
-	HasInternalpolicyWith []*InternalPolicyWhereInput `json:"hasInternalpolicyWith,omitempty"`
+	// "internal_policies" edge predicates.
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
 	// "narratives" edge predicates.
 	HasNarratives     *bool                  `json:"hasNarratives,omitempty"`
@@ -41005,41 +41005,41 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 		}
 		predicates = append(predicates, procedure.HasEditorsWith(with...))
 	}
-	if i.HasControl != nil {
-		p := procedure.HasControl()
-		if !*i.HasControl {
+	if i.HasControls != nil {
+		p := procedure.HasControls()
+		if !*i.HasControls {
 			p = procedure.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlWith) > 0 {
-		with := make([]predicate.Control, 0, len(i.HasControlWith))
-		for _, w := range i.HasControlWith {
+	if len(i.HasControlsWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, procedure.HasControlWith(with...))
+		predicates = append(predicates, procedure.HasControlsWith(with...))
 	}
-	if i.HasInternalpolicy != nil {
-		p := procedure.HasInternalpolicy()
-		if !*i.HasInternalpolicy {
+	if i.HasInternalPolicies != nil {
+		p := procedure.HasInternalPolicies()
+		if !*i.HasInternalPolicies {
 			p = procedure.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasInternalpolicyWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalpolicyWith))
-		for _, w := range i.HasInternalpolicyWith {
+	if len(i.HasInternalPoliciesWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasInternalpolicyWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasInternalPoliciesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, procedure.HasInternalpolicyWith(with...))
+		predicates = append(predicates, procedure.HasInternalPoliciesWith(with...))
 	}
 	if i.HasNarratives != nil {
 		p := procedure.HasNarratives()
@@ -42452,13 +42452,13 @@ type ProgramWhereInput struct {
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 
-	// "controlobjectives" edge predicates.
-	HasControlobjectives     *bool                         `json:"hasControlobjectives,omitempty"`
-	HasControlobjectivesWith []*ControlObjectiveWhereInput `json:"hasControlobjectivesWith,omitempty"`
+	// "control_objectives" edge predicates.
+	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
+	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
 
-	// "policies" edge predicates.
-	HasPolicies     *bool                       `json:"hasPolicies,omitempty"`
-	HasPoliciesWith []*InternalPolicyWhereInput `json:"hasPoliciesWith,omitempty"`
+	// "internal_policies" edge predicates.
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
 	// "procedures" edge predicates.
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
@@ -42484,9 +42484,9 @@ type ProgramWhereInput struct {
 	HasNarratives     *bool                  `json:"hasNarratives,omitempty"`
 	HasNarrativesWith []*NarrativeWhereInput `json:"hasNarrativesWith,omitempty"`
 
-	// "actionplans" edge predicates.
-	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
-	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+	// "action_plans" edge predicates.
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 
 	// "standards" edge predicates.
 	HasStandards     *bool                 `json:"hasStandards,omitempty"`
@@ -43155,41 +43155,41 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 		}
 		predicates = append(predicates, program.HasSubcontrolsWith(with...))
 	}
-	if i.HasControlobjectives != nil {
-		p := program.HasControlobjectives()
-		if !*i.HasControlobjectives {
+	if i.HasControlObjectives != nil {
+		p := program.HasControlObjectives()
+		if !*i.HasControlObjectives {
 			p = program.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectivesWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectivesWith))
-		for _, w := range i.HasControlobjectivesWith {
+	if len(i.HasControlObjectivesWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectivesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectivesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, program.HasControlobjectivesWith(with...))
+		predicates = append(predicates, program.HasControlObjectivesWith(with...))
 	}
-	if i.HasPolicies != nil {
-		p := program.HasPolicies()
-		if !*i.HasPolicies {
+	if i.HasInternalPolicies != nil {
+		p := program.HasInternalPolicies()
+		if !*i.HasInternalPolicies {
 			p = program.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPoliciesWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasPoliciesWith))
-		for _, w := range i.HasPoliciesWith {
+	if len(i.HasInternalPoliciesWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPoliciesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasInternalPoliciesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, program.HasPoliciesWith(with...))
+		predicates = append(predicates, program.HasInternalPoliciesWith(with...))
 	}
 	if i.HasProcedures != nil {
 		p := program.HasProcedures()
@@ -43299,23 +43299,23 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 		}
 		predicates = append(predicates, program.HasNarrativesWith(with...))
 	}
-	if i.HasActionplans != nil {
-		p := program.HasActionplans()
-		if !*i.HasActionplans {
+	if i.HasActionPlans != nil {
+		p := program.HasActionPlans()
+		if !*i.HasActionPlans {
 			p = program.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasActionplansWith) > 0 {
-		with := make([]predicate.ActionPlan, 0, len(i.HasActionplansWith))
-		for _, w := range i.HasActionplansWith {
+	if len(i.HasActionPlansWith) > 0 {
+		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasActionplansWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasActionPlansWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, program.HasActionplansWith(with...))
+		predicates = append(predicates, program.HasActionPlansWith(with...))
 	}
 	if i.HasStandards != nil {
 		p := program.HasStandards()
@@ -45825,9 +45825,9 @@ type RiskWhereInput struct {
 	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
 	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
 
-	// "actionplans" edge predicates.
-	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
-	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+	// "action_plans" edge predicates.
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
@@ -46653,23 +46653,23 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 		}
 		predicates = append(predicates, risk.HasProcedureWith(with...))
 	}
-	if i.HasActionplans != nil {
-		p := risk.HasActionplans()
-		if !*i.HasActionplans {
+	if i.HasActionPlans != nil {
+		p := risk.HasActionPlans()
+		if !*i.HasActionPlans {
 			p = risk.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasActionplansWith) > 0 {
-		with := make([]predicate.ActionPlan, 0, len(i.HasActionplansWith))
-		for _, w := range i.HasActionplansWith {
+	if len(i.HasActionPlansWith) > 0 {
+		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasActionplansWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasActionPlansWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, risk.HasActionplansWith(with...))
+		predicates = append(predicates, risk.HasActionPlansWith(with...))
 	}
 	if i.HasPrograms != nil {
 		p := risk.HasPrograms()
@@ -48046,9 +48046,9 @@ type StandardWhereInput struct {
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
 
-	// "controlobjectives" edge predicates.
-	HasControlobjectives     *bool                         `json:"hasControlobjectives,omitempty"`
-	HasControlobjectivesWith []*ControlObjectiveWhereInput `json:"hasControlobjectivesWith,omitempty"`
+	// "control_objectives" edge predicates.
+	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
+	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
 
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
@@ -48058,9 +48058,9 @@ type StandardWhereInput struct {
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
 	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
 
-	// "actionplans" edge predicates.
-	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
-	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+	// "action_plans" edge predicates.
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
@@ -48793,23 +48793,23 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 		predicates = append(predicates, standard.SatisfiesContainsFold(*i.SatisfiesContainsFold))
 	}
 
-	if i.HasControlobjectives != nil {
-		p := standard.HasControlobjectives()
-		if !*i.HasControlobjectives {
+	if i.HasControlObjectives != nil {
+		p := standard.HasControlObjectives()
+		if !*i.HasControlObjectives {
 			p = standard.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlobjectivesWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectivesWith))
-		for _, w := range i.HasControlobjectivesWith {
+	if len(i.HasControlObjectivesWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlobjectivesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasControlObjectivesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, standard.HasControlobjectivesWith(with...))
+		predicates = append(predicates, standard.HasControlObjectivesWith(with...))
 	}
 	if i.HasControls != nil {
 		p := standard.HasControls()
@@ -48847,23 +48847,23 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 		}
 		predicates = append(predicates, standard.HasProceduresWith(with...))
 	}
-	if i.HasActionplans != nil {
-		p := standard.HasActionplans()
-		if !*i.HasActionplans {
+	if i.HasActionPlans != nil {
+		p := standard.HasActionPlans()
+		if !*i.HasActionPlans {
 			p = standard.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasActionplansWith) > 0 {
-		with := make([]predicate.ActionPlan, 0, len(i.HasActionplansWith))
-		for _, w := range i.HasActionplansWith {
+	if len(i.HasActionPlansWith) > 0 {
+		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasActionplansWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasActionPlansWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, standard.HasActionplansWith(with...))
+		predicates = append(predicates, standard.HasActionPlansWith(with...))
 	}
 	if i.HasPrograms != nil {
 		p := standard.HasPrograms()
@@ -54443,9 +54443,9 @@ type TaskWhereInput struct {
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
 	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
 
-	// "policy" edge predicates.
-	HasPolicy     *bool                       `json:"hasPolicy,omitempty"`
-	HasPolicyWith []*InternalPolicyWhereInput `json:"hasPolicyWith,omitempty"`
+	// "internal_policy" edge predicates.
+	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
+	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
 
 	// "procedure" edge predicates.
 	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
@@ -55023,23 +55023,23 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 		}
 		predicates = append(predicates, task.HasGroupWith(with...))
 	}
-	if i.HasPolicy != nil {
-		p := task.HasPolicy()
-		if !*i.HasPolicy {
+	if i.HasInternalPolicy != nil {
+		p := task.HasInternalPolicy()
+		if !*i.HasInternalPolicy {
 			p = task.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPolicyWith) > 0 {
-		with := make([]predicate.InternalPolicy, 0, len(i.HasPolicyWith))
-		for _, w := range i.HasPolicyWith {
+	if len(i.HasInternalPolicyWith) > 0 {
+		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		for _, w := range i.HasInternalPolicyWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPolicyWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasInternalPolicyWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, task.HasPolicyWith(with...))
+		predicates = append(predicates, task.HasInternalPolicyWith(with...))
 	}
 	if i.HasProcedure != nil {
 		p := task.HasProcedure()
@@ -57702,9 +57702,9 @@ type UserWhereInput struct {
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 
-	// "actionplans" edge predicates.
-	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
-	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+	// "action_plans" edge predicates.
+	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
+	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 
 	// "subcontrols" edge predicates.
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
@@ -58689,23 +58689,23 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 		}
 		predicates = append(predicates, user.HasEventsWith(with...))
 	}
-	if i.HasActionplans != nil {
-		p := user.HasActionplans()
-		if !*i.HasActionplans {
+	if i.HasActionPlans != nil {
+		p := user.HasActionPlans()
+		if !*i.HasActionPlans {
 			p = user.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasActionplansWith) > 0 {
-		with := make([]predicate.ActionPlan, 0, len(i.HasActionplansWith))
-		for _, w := range i.HasActionplansWith {
+	if len(i.HasActionPlansWith) > 0 {
+		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasActionplansWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasActionPlansWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, user.HasActionplansWith(with...))
+		predicates = append(predicates, user.HasActionPlansWith(with...))
 	}
 	if i.HasSubcontrols != nil {
 		p := user.HasSubcontrols()

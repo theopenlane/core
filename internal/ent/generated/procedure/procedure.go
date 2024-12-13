@@ -57,10 +57,10 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
-	// EdgeControl holds the string denoting the control edge name in mutations.
-	EdgeControl = "control"
-	// EdgeInternalpolicy holds the string denoting the internalpolicy edge name in mutations.
-	EdgeInternalpolicy = "internalpolicy"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
 	// EdgeNarratives holds the string denoting the narratives edge name in mutations.
 	EdgeNarratives = "narratives"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
@@ -88,16 +88,16 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
-	// ControlTable is the table that holds the control relation/edge. The primary key declared below.
-	ControlTable = "control_procedures"
-	// ControlInverseTable is the table name for the Control entity.
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "control_procedures"
+	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlInverseTable = "controls"
-	// InternalpolicyTable is the table that holds the internalpolicy relation/edge. The primary key declared below.
-	InternalpolicyTable = "internal_policy_procedures"
-	// InternalpolicyInverseTable is the table name for the InternalPolicy entity.
+	ControlsInverseTable = "controls"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "internal_policy_procedures"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	InternalpolicyInverseTable = "internal_policies"
+	InternalPoliciesInverseTable = "internal_policies"
 	// NarrativesTable is the table that holds the narratives relation/edge. The primary key declared below.
 	NarrativesTable = "procedure_narratives"
 	// NarrativesInverseTable is the table name for the Narrative entity.
@@ -157,12 +157,12 @@ var (
 	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
 	// primary key for the editors relation (M2M).
 	EditorsPrimaryKey = []string{"procedure_id", "group_id"}
-	// ControlPrimaryKey and ControlColumn2 are the table columns denoting the
-	// primary key for the control relation (M2M).
-	ControlPrimaryKey = []string{"control_id", "procedure_id"}
-	// InternalpolicyPrimaryKey and InternalpolicyColumn2 are the table columns denoting the
-	// primary key for the internalpolicy relation (M2M).
-	InternalpolicyPrimaryKey = []string{"internal_policy_id", "procedure_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"control_id", "procedure_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "procedure_id"}
 	// NarrativesPrimaryKey and NarrativesColumn2 are the table columns denoting the
 	// primary key for the narratives relation (M2M).
 	NarrativesPrimaryKey = []string{"procedure_id", "narrative_id"}
@@ -342,31 +342,31 @@ func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByControlCount orders the results by control count.
-func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
 	}
 }
 
-// ByControl orders the results by control terms.
-func ByControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByInternalpolicyCount orders the results by internalpolicy count.
-func ByInternalpolicyCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInternalpolicyStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
 	}
 }
 
-// ByInternalpolicy orders the results by internalpolicy terms.
-func ByInternalpolicy(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInternalpolicyStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -446,18 +446,18 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 	)
 }
-func newControlStep() *sqlgraph.Step {
+func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
-func newInternalpolicyStep() *sqlgraph.Step {
+func newInternalPoliciesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InternalpolicyInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, InternalpolicyTable, InternalpolicyPrimaryKey...),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
 func newNarrativesStep() *sqlgraph.Step {

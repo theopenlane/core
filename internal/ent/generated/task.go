@@ -66,8 +66,8 @@ type TaskEdges struct {
 	Organization []*Organization `json:"organization,omitempty"`
 	// Group holds the value of the group edge.
 	Group []*Group `json:"group,omitempty"`
-	// Policy holds the value of the policy edge.
-	Policy []*InternalPolicy `json:"policy,omitempty"`
+	// InternalPolicy holds the value of the internal_policy edge.
+	InternalPolicy []*InternalPolicy `json:"internal_policy,omitempty"`
 	// Procedure holds the value of the procedure edge.
 	Procedure []*Procedure `json:"procedure,omitempty"`
 	// Control holds the value of the control edge.
@@ -86,7 +86,7 @@ type TaskEdges struct {
 
 	namedOrganization     map[string][]*Organization
 	namedGroup            map[string][]*Group
-	namedPolicy           map[string][]*InternalPolicy
+	namedInternalPolicy   map[string][]*InternalPolicy
 	namedProcedure        map[string][]*Procedure
 	namedControl          map[string][]*Control
 	namedControlObjective map[string][]*ControlObjective
@@ -134,13 +134,13 @@ func (e TaskEdges) GroupOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "group"}
 }
 
-// PolicyOrErr returns the Policy value or an error if the edge
+// InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
 // was not loaded in eager-loading.
-func (e TaskEdges) PolicyOrErr() ([]*InternalPolicy, error) {
+func (e TaskEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
 	if e.loadedTypes[4] {
-		return e.Policy, nil
+		return e.InternalPolicy, nil
 	}
-	return nil, &NotLoadedError{edge: "policy"}
+	return nil, &NotLoadedError{edge: "internal_policy"}
 }
 
 // ProcedureOrErr returns the Procedure value or an error if the edge
@@ -359,9 +359,9 @@ func (t *Task) QueryGroup() *GroupQuery {
 	return NewTaskClient(t.config).QueryGroup(t)
 }
 
-// QueryPolicy queries the "policy" edge of the Task entity.
-func (t *Task) QueryPolicy() *InternalPolicyQuery {
-	return NewTaskClient(t.config).QueryPolicy(t)
+// QueryInternalPolicy queries the "internal_policy" edge of the Task entity.
+func (t *Task) QueryInternalPolicy() *InternalPolicyQuery {
+	return NewTaskClient(t.config).QueryInternalPolicy(t)
 }
 
 // QueryProcedure queries the "procedure" edge of the Task entity.
@@ -505,27 +505,27 @@ func (t *Task) appendNamedGroup(name string, edges ...*Group) {
 	}
 }
 
-// NamedPolicy returns the Policy named value or an error if the edge was not
+// NamedInternalPolicy returns the InternalPolicy named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Task) NamedPolicy(name string) ([]*InternalPolicy, error) {
-	if t.Edges.namedPolicy == nil {
+func (t *Task) NamedInternalPolicy(name string) ([]*InternalPolicy, error) {
+	if t.Edges.namedInternalPolicy == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedPolicy[name]
+	nodes, ok := t.Edges.namedInternalPolicy[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Task) appendNamedPolicy(name string, edges ...*InternalPolicy) {
-	if t.Edges.namedPolicy == nil {
-		t.Edges.namedPolicy = make(map[string][]*InternalPolicy)
+func (t *Task) appendNamedInternalPolicy(name string, edges ...*InternalPolicy) {
+	if t.Edges.namedInternalPolicy == nil {
+		t.Edges.namedInternalPolicy = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedPolicy[name] = []*InternalPolicy{}
+		t.Edges.namedInternalPolicy[name] = []*InternalPolicy{}
 	} else {
-		t.Edges.namedPolicy[name] = append(t.Edges.namedPolicy[name], edges...)
+		t.Edges.namedInternalPolicy[name] = append(t.Edges.namedInternalPolicy[name], edges...)
 	}
 }
 

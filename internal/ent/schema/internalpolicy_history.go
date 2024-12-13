@@ -39,7 +39,7 @@ func (InternalPolicyHistory) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entfga.Annotations{
-			ObjectType:   "internalpolicy",
+			ObjectType:   "internal_policy",
 			IDField:      "Ref",
 			IncludeHooks: false,
 		},

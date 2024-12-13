@@ -3,7 +3,6 @@ package hooks
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -49,7 +48,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 				return err
 			}
 		} else {
-			if err := addTokenEditPermissions(ctx, objID, m.Type()); err != nil {
+			if err := addTokenEditPermissions(ctx, objID, getObjectTypeFromEntMutation(m)); err != nil {
 				return err
 			}
 		}
@@ -61,7 +60,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 			SubjectID:   org,
 			SubjectType: "organization",
 			ObjectID:    objID,
-			ObjectType:  m.Type(),
+			ObjectType:  getObjectTypeFromEntMutation(m),
 		}
 
 		log.Debug().Interface("request", req).
@@ -115,7 +114,7 @@ func programDeleteHook(ctx context.Context, m *generated.ProgramMutation) error 
 		return nil
 	}
 
-	objType := strings.ToLower(m.Type())
+	objType := getObjectTypeFromEntMutation(m)
 	object := fmt.Sprintf("%s:%s", objType, objID)
 
 	log.Debug().Str("object", object).Msg("deleting relationship tuples")

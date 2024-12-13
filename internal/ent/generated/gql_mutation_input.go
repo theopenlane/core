@@ -518,11 +518,11 @@ type CreateControlInput struct {
 	ViewerIDs           []string
 	ProcedureIDs        []string
 	SubcontrolIDs       []string
-	ControlobjectiveIDs []string
+	ControlObjectiveIDs []string
 	StandardIDs         []string
 	NarrativeIDs        []string
 	RiskIDs             []string
-	ActionplanIDs       []string
+	ActionPlanIDs       []string
 	TaskIDs             []string
 	ProgramIDs          []string
 }
@@ -582,8 +582,8 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
-	if v := i.ControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
 	if v := i.StandardIDs; len(v) > 0 {
 		m.AddStandardIDs(v...)
@@ -594,8 +594,8 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
-	if v := i.ActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
@@ -655,9 +655,9 @@ type UpdateControlInput struct {
 	ClearSubcontrols          bool
 	AddSubcontrolIDs          []string
 	RemoveSubcontrolIDs       []string
-	ClearControlobjectives    bool
-	AddControlobjectiveIDs    []string
-	RemoveControlobjectiveIDs []string
+	ClearControlObjectives    bool
+	AddControlObjectiveIDs    []string
+	RemoveControlObjectiveIDs []string
 	ClearStandard             bool
 	AddStandardIDs            []string
 	RemoveStandardIDs         []string
@@ -667,9 +667,9 @@ type UpdateControlInput struct {
 	ClearRisks                bool
 	AddRiskIDs                []string
 	RemoveRiskIDs             []string
-	ClearActionplans          bool
-	AddActionplanIDs          []string
-	RemoveActionplanIDs       []string
+	ClearActionPlans          bool
+	AddActionPlanIDs          []string
+	RemoveActionPlanIDs       []string
 	ClearTasks                bool
 	AddTaskIDs                []string
 	RemoveTaskIDs             []string
@@ -806,14 +806,14 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
 	}
-	if i.ClearControlobjectives {
-		m.ClearControlobjectives()
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
 	}
-	if v := i.AddControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
-		m.RemoveControlobjectiveIDs(v...)
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
 	}
 	if i.ClearStandard {
 		m.ClearStandard()
@@ -842,14 +842,14 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
 	}
-	if i.ClearActionplans {
-		m.ClearActionplans()
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
 	}
-	if v := i.AddActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
-	if v := i.RemoveActionplanIDs; len(v) > 0 {
-		m.RemoveActionplanIDs(v...)
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
 	}
 	if i.ClearTasks {
 		m.ClearTasks()
@@ -901,7 +901,7 @@ type CreateControlObjectiveInput struct {
 	BlockedGroupIDs      []string
 	EditorIDs            []string
 	ViewerIDs            []string
-	PolicyIDs            []string
+	InternalPolicyIDs    []string
 	ControlIDs           []string
 	ProcedureIDs         []string
 	RiskIDs              []string
@@ -958,8 +958,8 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
-	if v := i.PolicyIDs; len(v) > 0 {
-		m.AddPolicyIDs(v...)
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -1029,9 +1029,9 @@ type UpdateControlObjectiveInput struct {
 	ClearViewers              bool
 	AddViewerIDs              []string
 	RemoveViewerIDs           []string
-	ClearPolicy               bool
-	AddPolicyIDs              []string
-	RemovePolicyIDs           []string
+	ClearInternalPolicies     bool
+	AddInternalPolicyIDs      []string
+	RemoveInternalPolicyIDs   []string
 	ClearControls             bool
 	AddControlIDs             []string
 	RemoveControlIDs          []string
@@ -1162,14 +1162,14 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
-	if i.ClearPolicy {
-		m.ClearPolicy()
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
 	}
-	if v := i.AddPolicyIDs; len(v) > 0 {
-		m.AddPolicyIDs(v...)
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.RemovePolicyIDs; len(v) > 0 {
-		m.RemovePolicyIDs(v...)
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -1908,10 +1908,10 @@ type CreateFileInput struct {
 	GroupIDs               []string
 	ContactIDs             []string
 	EntityIDs              []string
-	UsersettingIDs         []string
-	OrganizationsettingIDs []string
+	UserSettingIDs         []string
+	OrganizationSettingIDs []string
 	TemplateIDs            []string
-	DocumentdatumIDs       []string
+	DocumentDatumIDs       []string
 	EventIDs               []string
 	ProgramIDs             []string
 }
@@ -1969,17 +1969,17 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
-	if v := i.UsersettingIDs; len(v) > 0 {
-		m.AddUsersettingIDs(v...)
+	if v := i.UserSettingIDs; len(v) > 0 {
+		m.AddUserSettingIDs(v...)
 	}
-	if v := i.OrganizationsettingIDs; len(v) > 0 {
-		m.AddOrganizationsettingIDs(v...)
+	if v := i.OrganizationSettingIDs; len(v) > 0 {
+		m.AddOrganizationSettingIDs(v...)
 	}
 	if v := i.TemplateIDs; len(v) > 0 {
 		m.AddTemplateIDs(v...)
 	}
-	if v := i.DocumentdatumIDs; len(v) > 0 {
-		m.AddDocumentdatumIDs(v...)
+	if v := i.DocumentDatumIDs; len(v) > 0 {
+		m.AddDocumentDatumIDs(v...)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
@@ -2038,18 +2038,18 @@ type UpdateFileInput struct {
 	ClearEntity                  bool
 	AddEntityIDs                 []string
 	RemoveEntityIDs              []string
-	ClearUsersetting             bool
-	AddUsersettingIDs            []string
-	RemoveUsersettingIDs         []string
-	ClearOrganizationsetting     bool
-	AddOrganizationsettingIDs    []string
-	RemoveOrganizationsettingIDs []string
+	ClearUserSetting             bool
+	AddUserSettingIDs            []string
+	RemoveUserSettingIDs         []string
+	ClearOrganizationSetting     bool
+	AddOrganizationSettingIDs    []string
+	RemoveOrganizationSettingIDs []string
 	ClearTemplate                bool
 	AddTemplateIDs               []string
 	RemoveTemplateIDs            []string
-	ClearDocumentdata            bool
-	AddDocumentdatumIDs          []string
-	RemoveDocumentdatumIDs       []string
+	ClearDocumentData            bool
+	AddDocumentDatumIDs          []string
+	RemoveDocumentDatumIDs       []string
 	ClearEvents                  bool
 	AddEventIDs                  []string
 	RemoveEventIDs               []string
@@ -2183,23 +2183,23 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
 	}
-	if i.ClearUsersetting {
-		m.ClearUsersetting()
+	if i.ClearUserSetting {
+		m.ClearUserSetting()
 	}
-	if v := i.AddUsersettingIDs; len(v) > 0 {
-		m.AddUsersettingIDs(v...)
+	if v := i.AddUserSettingIDs; len(v) > 0 {
+		m.AddUserSettingIDs(v...)
 	}
-	if v := i.RemoveUsersettingIDs; len(v) > 0 {
-		m.RemoveUsersettingIDs(v...)
+	if v := i.RemoveUserSettingIDs; len(v) > 0 {
+		m.RemoveUserSettingIDs(v...)
 	}
-	if i.ClearOrganizationsetting {
-		m.ClearOrganizationsetting()
+	if i.ClearOrganizationSetting {
+		m.ClearOrganizationSetting()
 	}
-	if v := i.AddOrganizationsettingIDs; len(v) > 0 {
-		m.AddOrganizationsettingIDs(v...)
+	if v := i.AddOrganizationSettingIDs; len(v) > 0 {
+		m.AddOrganizationSettingIDs(v...)
 	}
-	if v := i.RemoveOrganizationsettingIDs; len(v) > 0 {
-		m.RemoveOrganizationsettingIDs(v...)
+	if v := i.RemoveOrganizationSettingIDs; len(v) > 0 {
+		m.RemoveOrganizationSettingIDs(v...)
 	}
 	if i.ClearTemplate {
 		m.ClearTemplate()
@@ -2210,14 +2210,14 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveTemplateIDs; len(v) > 0 {
 		m.RemoveTemplateIDs(v...)
 	}
-	if i.ClearDocumentdata {
-		m.ClearDocumentdata()
+	if i.ClearDocumentData {
+		m.ClearDocumentData()
 	}
-	if v := i.AddDocumentdatumIDs; len(v) > 0 {
-		m.AddDocumentdatumIDs(v...)
+	if v := i.AddDocumentDatumIDs; len(v) > 0 {
+		m.AddDocumentDatumIDs(v...)
 	}
-	if v := i.RemoveDocumentdatumIDs; len(v) > 0 {
-		m.RemoveDocumentdatumIDs(v...)
+	if v := i.RemoveDocumentDatumIDs; len(v) > 0 {
+		m.RemoveDocumentDatumIDs(v...)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -2271,17 +2271,17 @@ type CreateGroupInput struct {
 	TemplateCreatorIDs              []string
 	ProcedureEditorIDs              []string
 	ProcedureBlockedGroupIDs        []string
-	InternalpolicyEditorIDs         []string
-	InternalpolicyBlockedGroupIDs   []string
+	InternalPolicyEditorIDs         []string
+	InternalPolicyBlockedGroupIDs   []string
 	ProgramEditorIDs                []string
 	ProgramBlockedGroupIDs          []string
 	ProgramViewerIDs                []string
 	RiskEditorIDs                   []string
 	RiskBlockedGroupIDs             []string
 	RiskViewerIDs                   []string
-	ControlobjectiveEditorIDs       []string
-	ControlobjectiveBlockedGroupIDs []string
-	ControlobjectiveViewerIDs       []string
+	ControlObjectiveEditorIDs       []string
+	ControlObjectiveBlockedGroupIDs []string
+	ControlObjectiveViewerIDs       []string
 	ControlEditorIDs                []string
 	ControlBlockedGroupIDs          []string
 	ControlViewerIDs                []string
@@ -2350,11 +2350,11 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.ProcedureBlockedGroupIDs; len(v) > 0 {
 		m.AddProcedureBlockedGroupIDs(v...)
 	}
-	if v := i.InternalpolicyEditorIDs; len(v) > 0 {
-		m.AddInternalpolicyEditorIDs(v...)
+	if v := i.InternalPolicyEditorIDs; len(v) > 0 {
+		m.AddInternalPolicyEditorIDs(v...)
 	}
-	if v := i.InternalpolicyBlockedGroupIDs; len(v) > 0 {
-		m.AddInternalpolicyBlockedGroupIDs(v...)
+	if v := i.InternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.AddInternalPolicyBlockedGroupIDs(v...)
 	}
 	if v := i.ProgramEditorIDs; len(v) > 0 {
 		m.AddProgramEditorIDs(v...)
@@ -2374,14 +2374,14 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RiskViewerIDs; len(v) > 0 {
 		m.AddRiskViewerIDs(v...)
 	}
-	if v := i.ControlobjectiveEditorIDs; len(v) > 0 {
-		m.AddControlobjectiveEditorIDs(v...)
+	if v := i.ControlObjectiveEditorIDs; len(v) > 0 {
+		m.AddControlObjectiveEditorIDs(v...)
 	}
-	if v := i.ControlobjectiveBlockedGroupIDs; len(v) > 0 {
-		m.AddControlobjectiveBlockedGroupIDs(v...)
+	if v := i.ControlObjectiveBlockedGroupIDs; len(v) > 0 {
+		m.AddControlObjectiveBlockedGroupIDs(v...)
 	}
-	if v := i.ControlobjectiveViewerIDs; len(v) > 0 {
-		m.AddControlobjectiveViewerIDs(v...)
+	if v := i.ControlObjectiveViewerIDs; len(v) > 0 {
+		m.AddControlObjectiveViewerIDs(v...)
 	}
 	if v := i.ControlEditorIDs; len(v) > 0 {
 		m.AddControlEditorIDs(v...)
@@ -2473,12 +2473,12 @@ type UpdateGroupInput struct {
 	ClearProcedureBlockedGroups           bool
 	AddProcedureBlockedGroupIDs           []string
 	RemoveProcedureBlockedGroupIDs        []string
-	ClearInternalpolicyEditors            bool
-	AddInternalpolicyEditorIDs            []string
-	RemoveInternalpolicyEditorIDs         []string
-	ClearInternalpolicyBlockedGroups      bool
-	AddInternalpolicyBlockedGroupIDs      []string
-	RemoveInternalpolicyBlockedGroupIDs   []string
+	ClearInternalPolicyEditors            bool
+	AddInternalPolicyEditorIDs            []string
+	RemoveInternalPolicyEditorIDs         []string
+	ClearInternalPolicyBlockedGroups      bool
+	AddInternalPolicyBlockedGroupIDs      []string
+	RemoveInternalPolicyBlockedGroupIDs   []string
 	ClearProgramEditors                   bool
 	AddProgramEditorIDs                   []string
 	RemoveProgramEditorIDs                []string
@@ -2497,15 +2497,15 @@ type UpdateGroupInput struct {
 	ClearRiskViewers                      bool
 	AddRiskViewerIDs                      []string
 	RemoveRiskViewerIDs                   []string
-	ClearControlobjectiveEditors          bool
-	AddControlobjectiveEditorIDs          []string
-	RemoveControlobjectiveEditorIDs       []string
-	ClearControlobjectiveBlockedGroups    bool
-	AddControlobjectiveBlockedGroupIDs    []string
-	RemoveControlobjectiveBlockedGroupIDs []string
-	ClearControlobjectiveViewers          bool
-	AddControlobjectiveViewerIDs          []string
-	RemoveControlobjectiveViewerIDs       []string
+	ClearControlObjectiveEditors          bool
+	AddControlObjectiveEditorIDs          []string
+	RemoveControlObjectiveEditorIDs       []string
+	ClearControlObjectiveBlockedGroups    bool
+	AddControlObjectiveBlockedGroupIDs    []string
+	RemoveControlObjectiveBlockedGroupIDs []string
+	ClearControlObjectiveViewers          bool
+	AddControlObjectiveViewerIDs          []string
+	RemoveControlObjectiveViewerIDs       []string
 	ClearControlEditors                   bool
 	AddControlEditorIDs                   []string
 	RemoveControlEditorIDs                []string
@@ -2682,23 +2682,23 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RemoveProcedureBlockedGroupIDs; len(v) > 0 {
 		m.RemoveProcedureBlockedGroupIDs(v...)
 	}
-	if i.ClearInternalpolicyEditors {
-		m.ClearInternalpolicyEditors()
+	if i.ClearInternalPolicyEditors {
+		m.ClearInternalPolicyEditors()
 	}
-	if v := i.AddInternalpolicyEditorIDs; len(v) > 0 {
-		m.AddInternalpolicyEditorIDs(v...)
+	if v := i.AddInternalPolicyEditorIDs; len(v) > 0 {
+		m.AddInternalPolicyEditorIDs(v...)
 	}
-	if v := i.RemoveInternalpolicyEditorIDs; len(v) > 0 {
-		m.RemoveInternalpolicyEditorIDs(v...)
+	if v := i.RemoveInternalPolicyEditorIDs; len(v) > 0 {
+		m.RemoveInternalPolicyEditorIDs(v...)
 	}
-	if i.ClearInternalpolicyBlockedGroups {
-		m.ClearInternalpolicyBlockedGroups()
+	if i.ClearInternalPolicyBlockedGroups {
+		m.ClearInternalPolicyBlockedGroups()
 	}
-	if v := i.AddInternalpolicyBlockedGroupIDs; len(v) > 0 {
-		m.AddInternalpolicyBlockedGroupIDs(v...)
+	if v := i.AddInternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.AddInternalPolicyBlockedGroupIDs(v...)
 	}
-	if v := i.RemoveInternalpolicyBlockedGroupIDs; len(v) > 0 {
-		m.RemoveInternalpolicyBlockedGroupIDs(v...)
+	if v := i.RemoveInternalPolicyBlockedGroupIDs; len(v) > 0 {
+		m.RemoveInternalPolicyBlockedGroupIDs(v...)
 	}
 	if i.ClearProgramEditors {
 		m.ClearProgramEditors()
@@ -2754,32 +2754,32 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RemoveRiskViewerIDs; len(v) > 0 {
 		m.RemoveRiskViewerIDs(v...)
 	}
-	if i.ClearControlobjectiveEditors {
-		m.ClearControlobjectiveEditors()
+	if i.ClearControlObjectiveEditors {
+		m.ClearControlObjectiveEditors()
 	}
-	if v := i.AddControlobjectiveEditorIDs; len(v) > 0 {
-		m.AddControlobjectiveEditorIDs(v...)
+	if v := i.AddControlObjectiveEditorIDs; len(v) > 0 {
+		m.AddControlObjectiveEditorIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveEditorIDs; len(v) > 0 {
-		m.RemoveControlobjectiveEditorIDs(v...)
+	if v := i.RemoveControlObjectiveEditorIDs; len(v) > 0 {
+		m.RemoveControlObjectiveEditorIDs(v...)
 	}
-	if i.ClearControlobjectiveBlockedGroups {
-		m.ClearControlobjectiveBlockedGroups()
+	if i.ClearControlObjectiveBlockedGroups {
+		m.ClearControlObjectiveBlockedGroups()
 	}
-	if v := i.AddControlobjectiveBlockedGroupIDs; len(v) > 0 {
-		m.AddControlobjectiveBlockedGroupIDs(v...)
+	if v := i.AddControlObjectiveBlockedGroupIDs; len(v) > 0 {
+		m.AddControlObjectiveBlockedGroupIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveBlockedGroupIDs; len(v) > 0 {
-		m.RemoveControlobjectiveBlockedGroupIDs(v...)
+	if v := i.RemoveControlObjectiveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveControlObjectiveBlockedGroupIDs(v...)
 	}
-	if i.ClearControlobjectiveViewers {
-		m.ClearControlobjectiveViewers()
+	if i.ClearControlObjectiveViewers {
+		m.ClearControlObjectiveViewers()
 	}
-	if v := i.AddControlobjectiveViewerIDs; len(v) > 0 {
-		m.AddControlobjectiveViewerIDs(v...)
+	if v := i.AddControlObjectiveViewerIDs; len(v) > 0 {
+		m.AddControlObjectiveViewerIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveViewerIDs; len(v) > 0 {
-		m.RemoveControlobjectiveViewerIDs(v...)
+	if v := i.RemoveControlObjectiveViewerIDs; len(v) > 0 {
+		m.RemoveControlObjectiveViewerIDs(v...)
 	}
 	if i.ClearControlEditors {
 		m.ClearControlEditors()
@@ -3319,7 +3319,7 @@ type CreateInternalPolicyInput struct {
 	OwnerID             *string
 	BlockedGroupIDs     []string
 	EditorIDs           []string
-	ControlobjectiveIDs []string
+	ControlObjectiveIDs []string
 	ControlIDs          []string
 	ProcedureIDs        []string
 	NarrativeIDs        []string
@@ -3363,8 +3363,8 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
 	}
-	if v := i.ControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -3417,9 +3417,9 @@ type UpdateInternalPolicyInput struct {
 	ClearEditors              bool
 	AddEditorIDs              []string
 	RemoveEditorIDs           []string
-	ClearControlobjectives    bool
-	AddControlobjectiveIDs    []string
-	RemoveControlobjectiveIDs []string
+	ClearControlObjectives    bool
+	AddControlObjectiveIDs    []string
+	RemoveControlObjectiveIDs []string
 	ClearControls             bool
 	AddControlIDs             []string
 	RemoveControlIDs          []string
@@ -3517,14 +3517,14 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
 	}
-	if i.ClearControlobjectives {
-		m.ClearControlobjectives()
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
 	}
-	if v := i.AddControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
-		m.RemoveControlobjectiveIDs(v...)
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -3700,10 +3700,10 @@ type CreateNarrativeInput struct {
 	BlockedGroupIDs     []string
 	EditorIDs           []string
 	ViewerIDs           []string
-	PolicyIDs           []string
+	InternalPolicyIDs   []string
 	ControlIDs          []string
 	ProcedureIDs        []string
-	ControlobjectiveIDs []string
+	ControlObjectiveIDs []string
 	ProgramIDs          []string
 }
 
@@ -3732,8 +3732,8 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
-	if v := i.PolicyIDs; len(v) > 0 {
-		m.AddPolicyIDs(v...)
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -3741,8 +3741,8 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
 	}
-	if v := i.ControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -3777,18 +3777,18 @@ type UpdateNarrativeInput struct {
 	ClearViewers              bool
 	AddViewerIDs              []string
 	RemoveViewerIDs           []string
-	ClearPolicy               bool
-	AddPolicyIDs              []string
-	RemovePolicyIDs           []string
+	ClearInternalPolicy       bool
+	AddInternalPolicyIDs      []string
+	RemoveInternalPolicyIDs   []string
 	ClearControl              bool
 	AddControlIDs             []string
 	RemoveControlIDs          []string
 	ClearProcedure            bool
 	AddProcedureIDs           []string
 	RemoveProcedureIDs        []string
-	ClearControlobjective     bool
-	AddControlobjectiveIDs    []string
-	RemoveControlobjectiveIDs []string
+	ClearControlObjective     bool
+	AddControlObjectiveIDs    []string
+	RemoveControlObjectiveIDs []string
 	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
@@ -3856,14 +3856,14 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
 	}
-	if i.ClearPolicy {
-		m.ClearPolicy()
+	if i.ClearInternalPolicy {
+		m.ClearInternalPolicy()
 	}
-	if v := i.AddPolicyIDs; len(v) > 0 {
-		m.AddPolicyIDs(v...)
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.RemovePolicyIDs; len(v) > 0 {
-		m.RemovePolicyIDs(v...)
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearControl {
 		m.ClearControl()
@@ -3883,14 +3883,14 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.RemoveProcedureIDs; len(v) > 0 {
 		m.RemoveProcedureIDs(v...)
 	}
-	if i.ClearControlobjective {
-		m.ClearControlobjective()
+	if i.ClearControlObjective {
+		m.ClearControlObjective()
 	}
-	if v := i.AddControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
-		m.RemoveControlobjectiveIDs(v...)
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -4270,8 +4270,8 @@ type CreateOrganizationInput struct {
 	TemplateIDs                []string
 	IntegrationIDs             []string
 	SettingID                  *string
-	DocumentdatumIDs           []string
-	OrgsubscriptionIDs         []string
+	DocumentDatumIDs           []string
+	OrgSubscriptionIDs         []string
 	PersonalAccessTokenIDs     []string
 	APITokenIDs                []string
 	UserIDs                    []string
@@ -4281,15 +4281,15 @@ type CreateOrganizationInput struct {
 	SecretIDs                  []string
 	FileIDs                    []string
 	EntityIDs                  []string
-	EntitytypeIDs              []string
+	EntityTypeIDs              []string
 	ContactIDs                 []string
 	NoteIDs                    []string
 	TaskIDs                    []string
 	ProgramIDs                 []string
 	ProcedureIDs               []string
-	InternalpolicyIDs          []string
+	InternalPolicyIDs          []string
 	RiskIDs                    []string
-	ControlobjectiveIDs        []string
+	ControlObjectiveIDs        []string
 	NarrativeIDs               []string
 	ControlIDs                 []string
 	SubcontrolIDs              []string
@@ -4358,11 +4358,11 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
 	}
-	if v := i.DocumentdatumIDs; len(v) > 0 {
-		m.AddDocumentdatumIDs(v...)
+	if v := i.DocumentDatumIDs; len(v) > 0 {
+		m.AddDocumentDatumIDs(v...)
 	}
-	if v := i.OrgsubscriptionIDs; len(v) > 0 {
-		m.AddOrgsubscriptionIDs(v...)
+	if v := i.OrgSubscriptionIDs; len(v) > 0 {
+		m.AddOrgSubscriptionIDs(v...)
 	}
 	if v := i.PersonalAccessTokenIDs; len(v) > 0 {
 		m.AddPersonalAccessTokenIDs(v...)
@@ -4391,8 +4391,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
-	if v := i.EntitytypeIDs; len(v) > 0 {
-		m.AddEntitytypeIDs(v...)
+	if v := i.EntityTypeIDs; len(v) > 0 {
+		m.AddEntityTypeIDs(v...)
 	}
 	if v := i.ContactIDs; len(v) > 0 {
 		m.AddContactIDs(v...)
@@ -4409,14 +4409,14 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
 	}
-	if v := i.InternalpolicyIDs; len(v) > 0 {
-		m.AddInternalpolicyIDs(v...)
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
-	if v := i.ControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
 	if v := i.NarrativeIDs; len(v) > 0 {
 		m.AddNarrativeIDs(v...)
@@ -4484,12 +4484,12 @@ type UpdateOrganizationInput struct {
 	RemoveIntegrationIDs             []string
 	ClearSetting                     bool
 	SettingID                        *string
-	ClearDocumentdata                bool
-	AddDocumentdatumIDs              []string
-	RemoveDocumentdatumIDs           []string
-	ClearOrgsubscriptions            bool
-	AddOrgsubscriptionIDs            []string
-	RemoveOrgsubscriptionIDs         []string
+	ClearDocumentData                bool
+	AddDocumentDatumIDs              []string
+	RemoveDocumentDatumIDs           []string
+	ClearOrgSubscriptions            bool
+	AddOrgSubscriptionIDs            []string
+	RemoveOrgSubscriptionIDs         []string
 	ClearPersonalAccessTokens        bool
 	AddPersonalAccessTokenIDs        []string
 	RemovePersonalAccessTokenIDs     []string
@@ -4517,9 +4517,9 @@ type UpdateOrganizationInput struct {
 	ClearEntities                    bool
 	AddEntityIDs                     []string
 	RemoveEntityIDs                  []string
-	ClearEntitytypes                 bool
-	AddEntitytypeIDs                 []string
-	RemoveEntitytypeIDs              []string
+	ClearEntityTypes                 bool
+	AddEntityTypeIDs                 []string
+	RemoveEntityTypeIDs              []string
 	ClearContacts                    bool
 	AddContactIDs                    []string
 	RemoveContactIDs                 []string
@@ -4535,15 +4535,15 @@ type UpdateOrganizationInput struct {
 	ClearProcedures                  bool
 	AddProcedureIDs                  []string
 	RemoveProcedureIDs               []string
-	ClearInternalpolicies            bool
-	AddInternalpolicyIDs             []string
-	RemoveInternalpolicyIDs          []string
+	ClearInternalPolicies            bool
+	AddInternalPolicyIDs             []string
+	RemoveInternalPolicyIDs          []string
 	ClearRisks                       bool
 	AddRiskIDs                       []string
 	RemoveRiskIDs                    []string
-	ClearControlobjectives           bool
-	AddControlobjectiveIDs           []string
-	RemoveControlobjectiveIDs        []string
+	ClearControlObjectives           bool
+	AddControlObjectiveIDs           []string
+	RemoveControlObjectiveIDs        []string
 	ClearNarratives                  bool
 	AddNarrativeIDs                  []string
 	RemoveNarrativeIDs               []string
@@ -4698,23 +4698,23 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
 	}
-	if i.ClearDocumentdata {
-		m.ClearDocumentdata()
+	if i.ClearDocumentData {
+		m.ClearDocumentData()
 	}
-	if v := i.AddDocumentdatumIDs; len(v) > 0 {
-		m.AddDocumentdatumIDs(v...)
+	if v := i.AddDocumentDatumIDs; len(v) > 0 {
+		m.AddDocumentDatumIDs(v...)
 	}
-	if v := i.RemoveDocumentdatumIDs; len(v) > 0 {
-		m.RemoveDocumentdatumIDs(v...)
+	if v := i.RemoveDocumentDatumIDs; len(v) > 0 {
+		m.RemoveDocumentDatumIDs(v...)
 	}
-	if i.ClearOrgsubscriptions {
-		m.ClearOrgsubscriptions()
+	if i.ClearOrgSubscriptions {
+		m.ClearOrgSubscriptions()
 	}
-	if v := i.AddOrgsubscriptionIDs; len(v) > 0 {
-		m.AddOrgsubscriptionIDs(v...)
+	if v := i.AddOrgSubscriptionIDs; len(v) > 0 {
+		m.AddOrgSubscriptionIDs(v...)
 	}
-	if v := i.RemoveOrgsubscriptionIDs; len(v) > 0 {
-		m.RemoveOrgsubscriptionIDs(v...)
+	if v := i.RemoveOrgSubscriptionIDs; len(v) > 0 {
+		m.RemoveOrgSubscriptionIDs(v...)
 	}
 	if i.ClearPersonalAccessTokens {
 		m.ClearPersonalAccessTokens()
@@ -4797,14 +4797,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
 	}
-	if i.ClearEntitytypes {
-		m.ClearEntitytypes()
+	if i.ClearEntityTypes {
+		m.ClearEntityTypes()
 	}
-	if v := i.AddEntitytypeIDs; len(v) > 0 {
-		m.AddEntitytypeIDs(v...)
+	if v := i.AddEntityTypeIDs; len(v) > 0 {
+		m.AddEntityTypeIDs(v...)
 	}
-	if v := i.RemoveEntitytypeIDs; len(v) > 0 {
-		m.RemoveEntitytypeIDs(v...)
+	if v := i.RemoveEntityTypeIDs; len(v) > 0 {
+		m.RemoveEntityTypeIDs(v...)
 	}
 	if i.ClearContacts {
 		m.ClearContacts()
@@ -4851,14 +4851,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveProcedureIDs; len(v) > 0 {
 		m.RemoveProcedureIDs(v...)
 	}
-	if i.ClearInternalpolicies {
-		m.ClearInternalpolicies()
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
 	}
-	if v := i.AddInternalpolicyIDs; len(v) > 0 {
-		m.AddInternalpolicyIDs(v...)
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.RemoveInternalpolicyIDs; len(v) > 0 {
-		m.RemoveInternalpolicyIDs(v...)
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearRisks {
 		m.ClearRisks()
@@ -4869,14 +4869,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
 	}
-	if i.ClearControlobjectives {
-		m.ClearControlobjectives()
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
 	}
-	if v := i.AddControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
-		m.RemoveControlobjectiveIDs(v...)
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
 	}
 	if i.ClearNarratives {
 		m.ClearNarratives()
@@ -5247,7 +5247,7 @@ type CreateProcedureInput struct {
 	BlockedGroupIDs   []string
 	EditorIDs         []string
 	ControlIDs        []string
-	InternalpolicyIDs []string
+	InternalPolicyIDs []string
 	NarrativeIDs      []string
 	RiskIDs           []string
 	TaskIDs           []string
@@ -5296,8 +5296,8 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
-	if v := i.InternalpolicyIDs; len(v) > 0 {
-		m.AddInternalpolicyIDs(v...)
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 	if v := i.NarrativeIDs; len(v) > 0 {
 		m.AddNarrativeIDs(v...)
@@ -5349,12 +5349,12 @@ type UpdateProcedureInput struct {
 	ClearEditors            bool
 	AddEditorIDs            []string
 	RemoveEditorIDs         []string
-	ClearControl            bool
+	ClearControls           bool
 	AddControlIDs           []string
 	RemoveControlIDs        []string
-	ClearInternalpolicy     bool
-	AddInternalpolicyIDs    []string
-	RemoveInternalpolicyIDs []string
+	ClearInternalPolicies   bool
+	AddInternalPolicyIDs    []string
+	RemoveInternalPolicyIDs []string
 	ClearNarratives         bool
 	AddNarrativeIDs         []string
 	RemoveNarrativeIDs      []string
@@ -5455,8 +5455,8 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
 	}
-	if i.ClearControl {
-		m.ClearControl()
+	if i.ClearControls {
+		m.ClearControls()
 	}
 	if v := i.AddControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -5464,14 +5464,14 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
 	}
-	if i.ClearInternalpolicy {
-		m.ClearInternalpolicy()
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
 	}
-	if v := i.AddInternalpolicyIDs; len(v) > 0 {
-		m.AddInternalpolicyIDs(v...)
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.RemoveInternalpolicyIDs; len(v) > 0 {
-		m.RemoveInternalpolicyIDs(v...)
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearNarratives {
 		m.ClearNarratives()
@@ -5540,15 +5540,15 @@ type CreateProgramInput struct {
 	ViewerIDs            []string
 	ControlIDs           []string
 	SubcontrolIDs        []string
-	ControlobjectiveIDs  []string
-	PolicyIDs            []string
+	ControlObjectiveIDs  []string
+	InternalPolicyIDs    []string
 	ProcedureIDs         []string
 	RiskIDs              []string
 	TaskIDs              []string
 	NoteIDs              []string
 	FileIDs              []string
 	NarrativeIDs         []string
-	ActionplanIDs        []string
+	ActionPlanIDs        []string
 	StandardIDs          []string
 	UserIDs              []string
 }
@@ -5598,11 +5598,11 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
-	if v := i.ControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
-	if v := i.PolicyIDs; len(v) > 0 {
-		m.AddPolicyIDs(v...)
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
@@ -5622,8 +5622,8 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.NarrativeIDs; len(v) > 0 {
 		m.AddNarrativeIDs(v...)
 	}
-	if v := i.ActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
 	if v := i.StandardIDs; len(v) > 0 {
 		m.AddStandardIDs(v...)
@@ -5672,12 +5672,12 @@ type UpdateProgramInput struct {
 	ClearSubcontrols          bool
 	AddSubcontrolIDs          []string
 	RemoveSubcontrolIDs       []string
-	ClearControlobjectives    bool
-	AddControlobjectiveIDs    []string
-	RemoveControlobjectiveIDs []string
-	ClearPolicies             bool
-	AddPolicyIDs              []string
-	RemovePolicyIDs           []string
+	ClearControlObjectives    bool
+	AddControlObjectiveIDs    []string
+	RemoveControlObjectiveIDs []string
+	ClearInternalPolicies     bool
+	AddInternalPolicyIDs      []string
+	RemoveInternalPolicyIDs   []string
 	ClearProcedures           bool
 	AddProcedureIDs           []string
 	RemoveProcedureIDs        []string
@@ -5696,9 +5696,9 @@ type UpdateProgramInput struct {
 	ClearNarratives           bool
 	AddNarrativeIDs           []string
 	RemoveNarrativeIDs        []string
-	ClearActionplans          bool
-	AddActionplanIDs          []string
-	RemoveActionplanIDs       []string
+	ClearActionPlans          bool
+	AddActionPlanIDs          []string
+	RemoveActionPlanIDs       []string
 	ClearStandards            bool
 	AddStandardIDs            []string
 	RemoveStandardIDs         []string
@@ -5802,23 +5802,23 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
 	}
-	if i.ClearControlobjectives {
-		m.ClearControlobjectives()
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
 	}
-	if v := i.AddControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
-		m.RemoveControlobjectiveIDs(v...)
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
 	}
-	if i.ClearPolicies {
-		m.ClearPolicies()
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
 	}
-	if v := i.AddPolicyIDs; len(v) > 0 {
-		m.AddPolicyIDs(v...)
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.RemovePolicyIDs; len(v) > 0 {
-		m.RemovePolicyIDs(v...)
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearProcedures {
 		m.ClearProcedures()
@@ -5874,14 +5874,14 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.RemoveNarrativeIDs; len(v) > 0 {
 		m.RemoveNarrativeIDs(v...)
 	}
-	if i.ClearActionplans {
-		m.ClearActionplans()
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
 	}
-	if v := i.AddActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
-	if v := i.RemoveActionplanIDs; len(v) > 0 {
-		m.RemoveActionplanIDs(v...)
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
 	}
 	if i.ClearStandards {
 		m.ClearStandards()
@@ -5980,7 +5980,7 @@ type CreateRiskInput struct {
 	ViewerIDs       []string
 	ControlIDs      []string
 	ProcedureIDs    []string
-	ActionplanIDs   []string
+	ActionPlanIDs   []string
 	ProgramIDs      []string
 }
 
@@ -6033,8 +6033,8 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
 	}
-	if v := i.ActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -6087,9 +6087,9 @@ type UpdateRiskInput struct {
 	ClearProcedure        bool
 	AddProcedureIDs       []string
 	RemoveProcedureIDs    []string
-	ClearActionplans      bool
-	AddActionplanIDs      []string
-	RemoveActionplanIDs   []string
+	ClearActionPlans      bool
+	AddActionPlanIDs      []string
+	RemoveActionPlanIDs   []string
 	ClearPrograms         bool
 	AddProgramIDs         []string
 	RemoveProgramIDs      []string
@@ -6211,14 +6211,14 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveProcedureIDs; len(v) > 0 {
 		m.RemoveProcedureIDs(v...)
 	}
-	if i.ClearActionplans {
-		m.ClearActionplans()
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
 	}
-	if v := i.AddActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
-	if v := i.RemoveActionplanIDs; len(v) > 0 {
-		m.RemoveActionplanIDs(v...)
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -6256,10 +6256,10 @@ type CreateStandardInput struct {
 	Background          *string
 	Satisfies           *string
 	Details             map[string]interface{}
-	ControlobjectiveIDs []string
+	ControlObjectiveIDs []string
 	ControlIDs          []string
 	ProcedureIDs        []string
-	ActionplanIDs       []string
+	ActionPlanIDs       []string
 	ProgramIDs          []string
 }
 
@@ -6296,8 +6296,8 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
-	if v := i.ControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -6305,8 +6305,8 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
 	}
-	if v := i.ActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -6343,18 +6343,18 @@ type UpdateStandardInput struct {
 	Satisfies                 *string
 	ClearDetails              bool
 	Details                   map[string]interface{}
-	ClearControlobjectives    bool
-	AddControlobjectiveIDs    []string
-	RemoveControlobjectiveIDs []string
+	ClearControlObjectives    bool
+	AddControlObjectiveIDs    []string
+	RemoveControlObjectiveIDs []string
 	ClearControls             bool
 	AddControlIDs             []string
 	RemoveControlIDs          []string
 	ClearProcedures           bool
 	AddProcedureIDs           []string
 	RemoveProcedureIDs        []string
-	ClearActionplans          bool
-	AddActionplanIDs          []string
-	RemoveActionplanIDs       []string
+	ClearActionPlans          bool
+	AddActionPlanIDs          []string
+	RemoveActionPlanIDs       []string
 	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
@@ -6428,14 +6428,14 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
-	if i.ClearControlobjectives {
-		m.ClearControlobjectives()
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
 	}
-	if v := i.AddControlobjectiveIDs; len(v) > 0 {
-		m.AddControlobjectiveIDs(v...)
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
 	}
-	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
-		m.RemoveControlobjectiveIDs(v...)
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -6455,14 +6455,14 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.RemoveProcedureIDs; len(v) > 0 {
 		m.RemoveProcedureIDs(v...)
 	}
-	if i.ClearActionplans {
-		m.ClearActionplans()
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
 	}
-	if v := i.AddActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
-	if v := i.RemoveActionplanIDs; len(v) > 0 {
-		m.RemoveActionplanIDs(v...)
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -6980,7 +6980,7 @@ type CreateTaskInput struct {
 	AssigneeID          *string
 	OrganizationIDs     []string
 	GroupIDs            []string
-	PolicyIDs           []string
+	InternalPolicyIDs   []string
 	ProcedureIDs        []string
 	ControlIDs          []string
 	ControlObjectiveIDs []string
@@ -7019,8 +7019,8 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
 	}
-	if v := i.PolicyIDs; len(v) > 0 {
-		m.AddPolicyIDs(v...)
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
@@ -7069,9 +7069,9 @@ type UpdateTaskInput struct {
 	ClearGroup                bool
 	AddGroupIDs               []string
 	RemoveGroupIDs            []string
-	ClearPolicy               bool
-	AddPolicyIDs              []string
-	RemovePolicyIDs           []string
+	ClearInternalPolicy       bool
+	AddInternalPolicyIDs      []string
+	RemoveInternalPolicyIDs   []string
 	ClearProcedure            bool
 	AddProcedureIDs           []string
 	RemoveProcedureIDs        []string
@@ -7157,14 +7157,14 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RemoveGroupIDs; len(v) > 0 {
 		m.RemoveGroupIDs(v...)
 	}
-	if i.ClearPolicy {
-		m.ClearPolicy()
+	if i.ClearInternalPolicy {
+		m.ClearInternalPolicy()
 	}
-	if v := i.AddPolicyIDs; len(v) > 0 {
-		m.AddPolicyIDs(v...)
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.RemovePolicyIDs; len(v) > 0 {
-		m.RemovePolicyIDs(v...)
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearProcedure {
 		m.ClearProcedure()
@@ -7391,7 +7391,7 @@ type CreateUserInput struct {
 	FileIDs                   []string
 	FileID                    *string
 	EventIDs                  []string
-	ActionplanIDs             []string
+	ActionPlanIDs             []string
 	SubcontrolIDs             []string
 	AssignerTaskIDs           []string
 	AssigneeTaskIDs           []string
@@ -7466,8 +7466,8 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
-	if v := i.ActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.ActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
@@ -7545,9 +7545,9 @@ type UpdateUserInput struct {
 	ClearEvents                     bool
 	AddEventIDs                     []string
 	RemoveEventIDs                  []string
-	ClearActionplans                bool
-	AddActionplanIDs                []string
-	RemoveActionplanIDs             []string
+	ClearActionPlans                bool
+	AddActionPlanIDs                []string
+	RemoveActionPlanIDs             []string
 	ClearSubcontrols                bool
 	AddSubcontrolIDs                []string
 	RemoveSubcontrolIDs             []string
@@ -7726,14 +7726,14 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
 	}
-	if i.ClearActionplans {
-		m.ClearActionplans()
+	if i.ClearActionPlans {
+		m.ClearActionPlans()
 	}
-	if v := i.AddActionplanIDs; len(v) > 0 {
-		m.AddActionplanIDs(v...)
+	if v := i.AddActionPlanIDs; len(v) > 0 {
+		m.AddActionPlanIDs(v...)
 	}
-	if v := i.RemoveActionplanIDs; len(v) > 0 {
-		m.RemoveActionplanIDs(v...)
+	if v := i.RemoveActionPlanIDs; len(v) > 0 {
+		m.RemoveActionPlanIDs(v...)
 	}
 	if i.ClearSubcontrols {
 		m.ClearSubcontrols()

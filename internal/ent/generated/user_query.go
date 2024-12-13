@@ -54,7 +54,7 @@ type UserQuery struct {
 	withFiles                        *FileQuery
 	withFile                         *FileQuery
 	withEvents                       *EventQuery
-	withActionplans                  *ActionPlanQuery
+	withActionPlans                  *ActionPlanQuery
 	withSubcontrols                  *SubcontrolQuery
 	withAssignerTasks                *TaskQuery
 	withAssigneeTasks                *TaskQuery
@@ -73,7 +73,7 @@ type UserQuery struct {
 	withNamedWebauthn                map[string]*WebauthnQuery
 	withNamedFiles                   map[string]*FileQuery
 	withNamedEvents                  map[string]*EventQuery
-	withNamedActionplans             map[string]*ActionPlanQuery
+	withNamedActionPlans             map[string]*ActionPlanQuery
 	withNamedSubcontrols             map[string]*SubcontrolQuery
 	withNamedAssignerTasks           map[string]*TaskQuery
 	withNamedAssigneeTasks           map[string]*TaskQuery
@@ -392,8 +392,8 @@ func (uq *UserQuery) QueryEvents() *EventQuery {
 	return query
 }
 
-// QueryActionplans chains the current query on the "actionplans" edge.
-func (uq *UserQuery) QueryActionplans() *ActionPlanQuery {
+// QueryActionPlans chains the current query on the "action_plans" edge.
+func (uq *UserQuery) QueryActionPlans() *ActionPlanQuery {
 	query := (&ActionPlanClient{config: uq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := uq.prepareQuery(ctx); err != nil {
@@ -406,11 +406,11 @@ func (uq *UserQuery) QueryActionplans() *ActionPlanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, user.ActionplansTable, user.ActionplansPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.ActionPlansTable, user.ActionPlansPrimaryKey...),
 		)
 		schemaConfig := uq.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.UserActionplans
+		step.Edge.Schema = schemaConfig.UserActionPlans
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -795,7 +795,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		withFiles:                   uq.withFiles.Clone(),
 		withFile:                    uq.withFile.Clone(),
 		withEvents:                  uq.withEvents.Clone(),
-		withActionplans:             uq.withActionplans.Clone(),
+		withActionPlans:             uq.withActionPlans.Clone(),
 		withSubcontrols:             uq.withSubcontrols.Clone(),
 		withAssignerTasks:           uq.withAssignerTasks.Clone(),
 		withAssigneeTasks:           uq.withAssigneeTasks.Clone(),
@@ -931,14 +931,14 @@ func (uq *UserQuery) WithEvents(opts ...func(*EventQuery)) *UserQuery {
 	return uq
 }
 
-// WithActionplans tells the query-builder to eager-load the nodes that are connected to
-// the "actionplans" edge. The optional arguments are used to configure the query builder of the edge.
-func (uq *UserQuery) WithActionplans(opts ...func(*ActionPlanQuery)) *UserQuery {
+// WithActionPlans tells the query-builder to eager-load the nodes that are connected to
+// the "action_plans" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *UserQuery {
 	query := (&ActionPlanClient{config: uq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	uq.withActionplans = query
+	uq.withActionPlans = query
 	return uq
 }
 
@@ -1115,7 +1115,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			uq.withFiles != nil,
 			uq.withFile != nil,
 			uq.withEvents != nil,
-			uq.withActionplans != nil,
+			uq.withActionPlans != nil,
 			uq.withSubcontrols != nil,
 			uq.withAssignerTasks != nil,
 			uq.withAssigneeTasks != nil,
@@ -1229,10 +1229,10 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
-	if query := uq.withActionplans; query != nil {
-		if err := uq.loadActionplans(ctx, query, nodes,
-			func(n *User) { n.Edges.Actionplans = []*ActionPlan{} },
-			func(n *User, e *ActionPlan) { n.Edges.Actionplans = append(n.Edges.Actionplans, e) }); err != nil {
+	if query := uq.withActionPlans; query != nil {
+		if err := uq.loadActionPlans(ctx, query, nodes,
+			func(n *User) { n.Edges.ActionPlans = []*ActionPlan{} },
+			func(n *User, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1350,10 +1350,10 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
-	for name, query := range uq.withNamedActionplans {
-		if err := uq.loadActionplans(ctx, query, nodes,
-			func(n *User) { n.appendNamedActionplans(name) },
-			func(n *User, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
+	for name, query := range uq.withNamedActionPlans {
+		if err := uq.loadActionPlans(ctx, query, nodes,
+			func(n *User) { n.appendNamedActionPlans(name) },
+			func(n *User, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1872,7 +1872,7 @@ func (uq *UserQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	return nil
 }
-func (uq *UserQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery, nodes []*User, init func(*User), assign func(*User, *ActionPlan)) error {
+func (uq *UserQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*User, init func(*User), assign func(*User, *ActionPlan)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*User)
 	nids := make(map[string]map[*User]struct{})
@@ -1884,12 +1884,12 @@ func (uq *UserQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(user.ActionplansTable)
-		joinT.Schema(uq.schemaConfig.UserActionplans)
-		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(user.ActionplansPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(user.ActionplansPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(user.ActionPlansTable)
+		joinT.Schema(uq.schemaConfig.UserActionPlans)
+		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(user.ActionPlansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(user.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(user.ActionplansPrimaryKey[0]))
+		s.Select(joinT.C(user.ActionPlansPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1926,7 +1926,7 @@ func (uq *UserQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "actionplans" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "action_plans" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2438,17 +2438,17 @@ func (uq *UserQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *Us
 	return uq
 }
 
-// WithNamedActionplans tells the query-builder to eager-load the nodes that are connected to the "actionplans"
+// WithNamedActionPlans tells the query-builder to eager-load the nodes that are connected to the "action_plans"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (uq *UserQuery) WithNamedActionplans(name string, opts ...func(*ActionPlanQuery)) *UserQuery {
+func (uq *UserQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *UserQuery {
 	query := (&ActionPlanClient{config: uq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if uq.withNamedActionplans == nil {
-		uq.withNamedActionplans = make(map[string]*ActionPlanQuery)
+	if uq.withNamedActionPlans == nil {
+		uq.withNamedActionPlans = make(map[string]*ActionPlanQuery)
 	}
-	uq.withNamedActionplans[name] = query
+	uq.withNamedActionPlans[name] = query
 	return uq
 }
 

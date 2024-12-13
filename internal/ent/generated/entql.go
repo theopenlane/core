@@ -2333,12 +2333,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Subcontrol",
 	)
 	graph.MustAddE(
-		"controlobjectives",
+		"control_objectives",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   control.ControlobjectivesTable,
-			Columns: []string{control.ControlobjectivesColumn},
+			Table:   control.ControlObjectivesTable,
+			Columns: []string{control.ControlObjectivesColumn},
 			Bidi:    false,
 		},
 		"Control",
@@ -2381,12 +2381,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Risk",
 	)
 	graph.MustAddE(
-		"actionplans",
+		"action_plans",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ActionplansTable,
-			Columns: control.ActionplansPrimaryKey,
+			Table:   control.ActionPlansTable,
+			Columns: control.ActionPlansPrimaryKey,
 			Bidi:    false,
 		},
 		"Control",
@@ -2465,12 +2465,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"policy",
+		"internal_policies",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlobjective.PolicyTable,
-			Columns: controlobjective.PolicyPrimaryKey,
+			Table:   controlobjective.InternalPoliciesTable,
+			Columns: controlobjective.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 		},
 		"ControlObjective",
@@ -2921,24 +2921,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Entity",
 	)
 	graph.MustAddE(
-		"usersetting",
+		"user_setting",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.UsersettingTable,
-			Columns: file.UsersettingPrimaryKey,
+			Table:   file.UserSettingTable,
+			Columns: file.UserSettingPrimaryKey,
 			Bidi:    false,
 		},
 		"File",
 		"UserSetting",
 	)
 	graph.MustAddE(
-		"organizationsetting",
+		"organization_setting",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.OrganizationsettingTable,
-			Columns: file.OrganizationsettingPrimaryKey,
+			Table:   file.OrganizationSettingTable,
+			Columns: file.OrganizationSettingPrimaryKey,
 			Bidi:    false,
 		},
 		"File",
@@ -2957,12 +2957,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Template",
 	)
 	graph.MustAddE(
-		"documentdata",
+		"document_data",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentdataTable,
-			Columns: file.DocumentdataPrimaryKey,
+			Table:   file.DocumentDataTable,
+			Columns: file.DocumentDataPrimaryKey,
 			Bidi:    false,
 		},
 		"File",
@@ -3137,24 +3137,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Procedure",
 	)
 	graph.MustAddE(
-		"internalpolicy_editors",
+		"internal_policy_editors",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   group.InternalpolicyEditorsTable,
-			Columns: group.InternalpolicyEditorsPrimaryKey,
+			Table:   group.InternalPolicyEditorsTable,
+			Columns: group.InternalPolicyEditorsPrimaryKey,
 			Bidi:    false,
 		},
 		"Group",
 		"InternalPolicy",
 	)
 	graph.MustAddE(
-		"internalpolicy_blocked_groups",
+		"internal_policy_blocked_groups",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   group.InternalpolicyBlockedGroupsTable,
-			Columns: group.InternalpolicyBlockedGroupsPrimaryKey,
+			Table:   group.InternalPolicyBlockedGroupsTable,
+			Columns: group.InternalPolicyBlockedGroupsPrimaryKey,
 			Bidi:    false,
 		},
 		"Group",
@@ -3233,36 +3233,36 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Risk",
 	)
 	graph.MustAddE(
-		"controlobjective_editors",
+		"control_objective_editors",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   group.ControlobjectiveEditorsTable,
-			Columns: group.ControlobjectiveEditorsPrimaryKey,
+			Table:   group.ControlObjectiveEditorsTable,
+			Columns: group.ControlObjectiveEditorsPrimaryKey,
 			Bidi:    false,
 		},
 		"Group",
 		"ControlObjective",
 	)
 	graph.MustAddE(
-		"controlobjective_blocked_groups",
+		"control_objective_blocked_groups",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   group.ControlobjectiveBlockedGroupsTable,
-			Columns: group.ControlobjectiveBlockedGroupsPrimaryKey,
+			Table:   group.ControlObjectiveBlockedGroupsTable,
+			Columns: group.ControlObjectiveBlockedGroupsPrimaryKey,
 			Bidi:    false,
 		},
 		"Group",
 		"ControlObjective",
 	)
 	graph.MustAddE(
-		"controlobjective_viewers",
+		"control_objective_viewers",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   group.ControlobjectiveViewersTable,
-			Columns: group.ControlobjectiveViewersPrimaryKey,
+			Table:   group.ControlObjectiveViewersTable,
+			Columns: group.ControlObjectiveViewersPrimaryKey,
 			Bidi:    false,
 		},
 		"Group",
@@ -3581,12 +3581,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"controlobjectives",
+		"control_objectives",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   internalpolicy.ControlobjectivesTable,
-			Columns: internalpolicy.ControlobjectivesPrimaryKey,
+			Table:   internalpolicy.ControlObjectivesTable,
+			Columns: internalpolicy.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 		},
 		"InternalPolicy",
@@ -3725,12 +3725,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"policy",
+		"internal_policy",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.PolicyTable,
-			Columns: narrative.PolicyPrimaryKey,
+			Table:   narrative.InternalPolicyTable,
+			Columns: narrative.InternalPolicyPrimaryKey,
 			Bidi:    false,
 		},
 		"Narrative",
@@ -3761,12 +3761,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Procedure",
 	)
 	graph.MustAddE(
-		"controlobjective",
+		"control_objective",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ControlobjectiveTable,
-			Columns: narrative.ControlobjectivePrimaryKey,
+			Table:   narrative.ControlObjectiveTable,
+			Columns: narrative.ControlObjectivePrimaryKey,
 			Bidi:    false,
 		},
 		"Narrative",
@@ -4061,24 +4061,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"OrganizationSetting",
 	)
 	graph.MustAddE(
-		"documentdata",
+		"document_data",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentdataTable,
-			Columns: []string{organization.DocumentdataColumn},
+			Table:   organization.DocumentDataTable,
+			Columns: []string{organization.DocumentDataColumn},
 			Bidi:    false,
 		},
 		"Organization",
 		"DocumentData",
 	)
 	graph.MustAddE(
-		"orgsubscriptions",
+		"org_subscriptions",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.OrgsubscriptionsTable,
-			Columns: []string{organization.OrgsubscriptionsColumn},
+			Table:   organization.OrgSubscriptionsTable,
+			Columns: []string{organization.OrgSubscriptionsColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -4193,12 +4193,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Entity",
 	)
 	graph.MustAddE(
-		"entitytypes",
+		"entity_types",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.EntitytypesTable,
-			Columns: []string{organization.EntitytypesColumn},
+			Table:   organization.EntityTypesTable,
+			Columns: []string{organization.EntityTypesColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -4265,12 +4265,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Procedure",
 	)
 	graph.MustAddE(
-		"internalpolicies",
+		"internal_policies",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.InternalpoliciesTable,
-			Columns: []string{organization.InternalpoliciesColumn},
+			Table:   organization.InternalPoliciesTable,
+			Columns: []string{organization.InternalPoliciesColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -4289,12 +4289,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Risk",
 	)
 	graph.MustAddE(
-		"controlobjectives",
+		"control_objectives",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.ControlobjectivesTable,
-			Columns: []string{organization.ControlobjectivesColumn},
+			Table:   organization.ControlObjectivesTable,
+			Columns: []string{organization.ControlObjectivesColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -4457,24 +4457,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"control",
+		"controls",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.ControlTable,
-			Columns: procedure.ControlPrimaryKey,
+			Table:   procedure.ControlsTable,
+			Columns: procedure.ControlsPrimaryKey,
 			Bidi:    false,
 		},
 		"Procedure",
 		"Control",
 	)
 	graph.MustAddE(
-		"internalpolicy",
+		"internal_policies",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.InternalpolicyTable,
-			Columns: procedure.InternalpolicyPrimaryKey,
+			Table:   procedure.InternalPoliciesTable,
+			Columns: procedure.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 		},
 		"Procedure",
@@ -4601,24 +4601,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Subcontrol",
 	)
 	graph.MustAddE(
-		"controlobjectives",
+		"control_objectives",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ControlobjectivesTable,
-			Columns: program.ControlobjectivesPrimaryKey,
+			Table:   program.ControlObjectivesTable,
+			Columns: program.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 		},
 		"Program",
 		"ControlObjective",
 	)
 	graph.MustAddE(
-		"policies",
+		"internal_policies",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.PoliciesTable,
-			Columns: program.PoliciesPrimaryKey,
+			Table:   program.InternalPoliciesTable,
+			Columns: program.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 		},
 		"Program",
@@ -4697,12 +4697,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Narrative",
 	)
 	graph.MustAddE(
-		"actionplans",
+		"action_plans",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ActionplansTable,
-			Columns: program.ActionplansPrimaryKey,
+			Table:   program.ActionPlansTable,
+			Columns: program.ActionPlansPrimaryKey,
 			Bidi:    false,
 		},
 		"Program",
@@ -4841,12 +4841,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Procedure",
 	)
 	graph.MustAddE(
-		"actionplans",
+		"action_plans",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   risk.ActionplansTable,
-			Columns: risk.ActionplansPrimaryKey,
+			Table:   risk.ActionPlansTable,
+			Columns: risk.ActionPlansPrimaryKey,
 			Bidi:    false,
 		},
 		"Risk",
@@ -4865,12 +4865,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
-		"controlobjectives",
+		"control_objectives",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   standard.ControlobjectivesTable,
-			Columns: standard.ControlobjectivesPrimaryKey,
+			Table:   standard.ControlObjectivesTable,
+			Columns: standard.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 		},
 		"Standard",
@@ -4901,12 +4901,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Procedure",
 	)
 	graph.MustAddE(
-		"actionplans",
+		"action_plans",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   standard.ActionplansTable,
-			Columns: standard.ActionplansPrimaryKey,
+			Table:   standard.ActionPlansTable,
+			Columns: standard.ActionPlansPrimaryKey,
 			Bidi:    false,
 		},
 		"Standard",
@@ -5081,12 +5081,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"policy",
+		"internal_policy",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   task.PolicyTable,
-			Columns: task.PolicyPrimaryKey,
+			Table:   task.InternalPolicyTable,
+			Columns: task.InternalPolicyPrimaryKey,
 			Bidi:    false,
 		},
 		"Task",
@@ -5321,12 +5321,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Event",
 	)
 	graph.MustAddE(
-		"actionplans",
+		"action_plans",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   user.ActionplansTable,
-			Columns: user.ActionplansPrimaryKey,
+			Table:   user.ActionPlansTable,
+			Columns: user.ActionPlansPrimaryKey,
 			Bidi:    false,
 		},
 		"User",
@@ -6443,14 +6443,14 @@ func (f *ControlFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	})))
 }
 
-// WhereHasControlobjectives applies a predicate to check if query has an edge controlobjectives.
-func (f *ControlFilter) WhereHasControlobjectives() {
-	f.Where(entql.HasEdge("controlobjectives"))
+// WhereHasControlObjectives applies a predicate to check if query has an edge control_objectives.
+func (f *ControlFilter) WhereHasControlObjectives() {
+	f.Where(entql.HasEdge("control_objectives"))
 }
 
-// WhereHasControlobjectivesWith applies a predicate to check if query has an edge controlobjectives with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasControlobjectivesWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectivesWith applies a predicate to check if query has an edge control_objectives with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasControlObjectivesWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -6499,14 +6499,14 @@ func (f *ControlFilter) WhereHasRisksWith(preds ...predicate.Risk) {
 	})))
 }
 
-// WhereHasActionplans applies a predicate to check if query has an edge actionplans.
-func (f *ControlFilter) WhereHasActionplans() {
-	f.Where(entql.HasEdge("actionplans"))
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *ControlFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
 }
 
-// WhereHasActionplansWith applies a predicate to check if query has an edge actionplans with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasActionplansWith(preds ...predicate.ActionPlan) {
-	f.Where(entql.HasEdgeWith("actionplans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -6897,14 +6897,14 @@ func (f *ControlObjectiveFilter) WhereHasViewersWith(preds ...predicate.Group) {
 	})))
 }
 
-// WhereHasPolicy applies a predicate to check if query has an edge policy.
-func (f *ControlObjectiveFilter) WhereHasPolicy() {
-	f.Where(entql.HasEdge("policy"))
+// WhereHasInternalPolicies applies a predicate to check if query has an edge internal_policies.
+func (f *ControlObjectiveFilter) WhereHasInternalPolicies() {
+	f.Where(entql.HasEdge("internal_policies"))
 }
 
-// WhereHasPolicyWith applies a predicate to check if query has an edge policy with a given conditions (other predicates).
-func (f *ControlObjectiveFilter) WhereHasPolicyWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("policy", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
+func (f *ControlObjectiveFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -8674,28 +8674,28 @@ func (f *FileFilter) WhereHasEntityWith(preds ...predicate.Entity) {
 	})))
 }
 
-// WhereHasUsersetting applies a predicate to check if query has an edge usersetting.
-func (f *FileFilter) WhereHasUsersetting() {
-	f.Where(entql.HasEdge("usersetting"))
+// WhereHasUserSetting applies a predicate to check if query has an edge user_setting.
+func (f *FileFilter) WhereHasUserSetting() {
+	f.Where(entql.HasEdge("user_setting"))
 }
 
-// WhereHasUsersettingWith applies a predicate to check if query has an edge usersetting with a given conditions (other predicates).
-func (f *FileFilter) WhereHasUsersettingWith(preds ...predicate.UserSetting) {
-	f.Where(entql.HasEdgeWith("usersetting", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasUserSettingWith applies a predicate to check if query has an edge user_setting with a given conditions (other predicates).
+func (f *FileFilter) WhereHasUserSettingWith(preds ...predicate.UserSetting) {
+	f.Where(entql.HasEdgeWith("user_setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasOrganizationsetting applies a predicate to check if query has an edge organizationsetting.
-func (f *FileFilter) WhereHasOrganizationsetting() {
-	f.Where(entql.HasEdge("organizationsetting"))
+// WhereHasOrganizationSetting applies a predicate to check if query has an edge organization_setting.
+func (f *FileFilter) WhereHasOrganizationSetting() {
+	f.Where(entql.HasEdge("organization_setting"))
 }
 
-// WhereHasOrganizationsettingWith applies a predicate to check if query has an edge organizationsetting with a given conditions (other predicates).
-func (f *FileFilter) WhereHasOrganizationsettingWith(preds ...predicate.OrganizationSetting) {
-	f.Where(entql.HasEdgeWith("organizationsetting", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasOrganizationSettingWith applies a predicate to check if query has an edge organization_setting with a given conditions (other predicates).
+func (f *FileFilter) WhereHasOrganizationSettingWith(preds ...predicate.OrganizationSetting) {
+	f.Where(entql.HasEdgeWith("organization_setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -8716,14 +8716,14 @@ func (f *FileFilter) WhereHasTemplateWith(preds ...predicate.Template) {
 	})))
 }
 
-// WhereHasDocumentdata applies a predicate to check if query has an edge documentdata.
-func (f *FileFilter) WhereHasDocumentdata() {
-	f.Where(entql.HasEdge("documentdata"))
+// WhereHasDocumentData applies a predicate to check if query has an edge document_data.
+func (f *FileFilter) WhereHasDocumentData() {
+	f.Where(entql.HasEdge("document_data"))
 }
 
-// WhereHasDocumentdataWith applies a predicate to check if query has an edge documentdata with a given conditions (other predicates).
-func (f *FileFilter) WhereHasDocumentdataWith(preds ...predicate.DocumentData) {
-	f.Where(entql.HasEdgeWith("documentdata", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasDocumentDataWith applies a predicate to check if query has an edge document_data with a given conditions (other predicates).
+func (f *FileFilter) WhereHasDocumentDataWith(preds ...predicate.DocumentData) {
+	f.Where(entql.HasEdgeWith("document_data", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -9201,28 +9201,28 @@ func (f *GroupFilter) WhereHasProcedureBlockedGroupsWith(preds ...predicate.Proc
 	})))
 }
 
-// WhereHasInternalpolicyEditors applies a predicate to check if query has an edge internalpolicy_editors.
-func (f *GroupFilter) WhereHasInternalpolicyEditors() {
-	f.Where(entql.HasEdge("internalpolicy_editors"))
+// WhereHasInternalPolicyEditors applies a predicate to check if query has an edge internal_policy_editors.
+func (f *GroupFilter) WhereHasInternalPolicyEditors() {
+	f.Where(entql.HasEdge("internal_policy_editors"))
 }
 
-// WhereHasInternalpolicyEditorsWith applies a predicate to check if query has an edge internalpolicy_editors with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasInternalpolicyEditorsWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internalpolicy_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasInternalPolicyEditorsWith applies a predicate to check if query has an edge internal_policy_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInternalPolicyEditorsWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasInternalpolicyBlockedGroups applies a predicate to check if query has an edge internalpolicy_blocked_groups.
-func (f *GroupFilter) WhereHasInternalpolicyBlockedGroups() {
-	f.Where(entql.HasEdge("internalpolicy_blocked_groups"))
+// WhereHasInternalPolicyBlockedGroups applies a predicate to check if query has an edge internal_policy_blocked_groups.
+func (f *GroupFilter) WhereHasInternalPolicyBlockedGroups() {
+	f.Where(entql.HasEdge("internal_policy_blocked_groups"))
 }
 
-// WhereHasInternalpolicyBlockedGroupsWith applies a predicate to check if query has an edge internalpolicy_blocked_groups with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasInternalpolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internalpolicy_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasInternalPolicyBlockedGroupsWith applies a predicate to check if query has an edge internal_policy_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInternalPolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -9313,42 +9313,42 @@ func (f *GroupFilter) WhereHasRiskViewersWith(preds ...predicate.Risk) {
 	})))
 }
 
-// WhereHasControlobjectiveEditors applies a predicate to check if query has an edge controlobjective_editors.
-func (f *GroupFilter) WhereHasControlobjectiveEditors() {
-	f.Where(entql.HasEdge("controlobjective_editors"))
+// WhereHasControlObjectiveEditors applies a predicate to check if query has an edge control_objective_editors.
+func (f *GroupFilter) WhereHasControlObjectiveEditors() {
+	f.Where(entql.HasEdge("control_objective_editors"))
 }
 
-// WhereHasControlobjectiveEditorsWith applies a predicate to check if query has an edge controlobjective_editors with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasControlobjectiveEditorsWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjective_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectiveEditorsWith applies a predicate to check if query has an edge control_objective_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasControlObjectiveEditorsWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objective_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasControlobjectiveBlockedGroups applies a predicate to check if query has an edge controlobjective_blocked_groups.
-func (f *GroupFilter) WhereHasControlobjectiveBlockedGroups() {
-	f.Where(entql.HasEdge("controlobjective_blocked_groups"))
+// WhereHasControlObjectiveBlockedGroups applies a predicate to check if query has an edge control_objective_blocked_groups.
+func (f *GroupFilter) WhereHasControlObjectiveBlockedGroups() {
+	f.Where(entql.HasEdge("control_objective_blocked_groups"))
 }
 
-// WhereHasControlobjectiveBlockedGroupsWith applies a predicate to check if query has an edge controlobjective_blocked_groups with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasControlobjectiveBlockedGroupsWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjective_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectiveBlockedGroupsWith applies a predicate to check if query has an edge control_objective_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasControlObjectiveBlockedGroupsWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objective_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasControlobjectiveViewers applies a predicate to check if query has an edge controlobjective_viewers.
-func (f *GroupFilter) WhereHasControlobjectiveViewers() {
-	f.Where(entql.HasEdge("controlobjective_viewers"))
+// WhereHasControlObjectiveViewers applies a predicate to check if query has an edge control_objective_viewers.
+func (f *GroupFilter) WhereHasControlObjectiveViewers() {
+	f.Where(entql.HasEdge("control_objective_viewers"))
 }
 
-// WhereHasControlobjectiveViewersWith applies a predicate to check if query has an edge controlobjective_viewers with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasControlobjectiveViewersWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjective_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectiveViewersWith applies a predicate to check if query has an edge control_objective_viewers with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasControlObjectiveViewersWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objective_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -10819,14 +10819,14 @@ func (f *InternalPolicyFilter) WhereHasEditorsWith(preds ...predicate.Group) {
 	})))
 }
 
-// WhereHasControlobjectives applies a predicate to check if query has an edge controlobjectives.
-func (f *InternalPolicyFilter) WhereHasControlobjectives() {
-	f.Where(entql.HasEdge("controlobjectives"))
+// WhereHasControlObjectives applies a predicate to check if query has an edge control_objectives.
+func (f *InternalPolicyFilter) WhereHasControlObjectives() {
+	f.Where(entql.HasEdge("control_objectives"))
 }
 
-// WhereHasControlobjectivesWith applies a predicate to check if query has an edge controlobjectives with a given conditions (other predicates).
-func (f *InternalPolicyFilter) WhereHasControlobjectivesWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectivesWith applies a predicate to check if query has an edge control_objectives with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasControlObjectivesWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -11352,14 +11352,14 @@ func (f *NarrativeFilter) WhereHasViewersWith(preds ...predicate.Group) {
 	})))
 }
 
-// WhereHasPolicy applies a predicate to check if query has an edge policy.
-func (f *NarrativeFilter) WhereHasPolicy() {
-	f.Where(entql.HasEdge("policy"))
+// WhereHasInternalPolicy applies a predicate to check if query has an edge internal_policy.
+func (f *NarrativeFilter) WhereHasInternalPolicy() {
+	f.Where(entql.HasEdge("internal_policy"))
 }
 
-// WhereHasPolicyWith applies a predicate to check if query has an edge policy with a given conditions (other predicates).
-func (f *NarrativeFilter) WhereHasPolicyWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("policy", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasInternalPolicyWith applies a predicate to check if query has an edge internal_policy with a given conditions (other predicates).
+func (f *NarrativeFilter) WhereHasInternalPolicyWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -11394,14 +11394,14 @@ func (f *NarrativeFilter) WhereHasProcedureWith(preds ...predicate.Procedure) {
 	})))
 }
 
-// WhereHasControlobjective applies a predicate to check if query has an edge controlobjective.
-func (f *NarrativeFilter) WhereHasControlobjective() {
-	f.Where(entql.HasEdge("controlobjective"))
+// WhereHasControlObjective applies a predicate to check if query has an edge control_objective.
+func (f *NarrativeFilter) WhereHasControlObjective() {
+	f.Where(entql.HasEdge("control_objective"))
 }
 
-// WhereHasControlobjectiveWith applies a predicate to check if query has an edge controlobjective with a given conditions (other predicates).
-func (f *NarrativeFilter) WhereHasControlobjectiveWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjective", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectiveWith applies a predicate to check if query has an edge control_objective with a given conditions (other predicates).
+func (f *NarrativeFilter) WhereHasControlObjectiveWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objective", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -12634,28 +12634,28 @@ func (f *OrganizationFilter) WhereHasSettingWith(preds ...predicate.Organization
 	})))
 }
 
-// WhereHasDocumentdata applies a predicate to check if query has an edge documentdata.
-func (f *OrganizationFilter) WhereHasDocumentdata() {
-	f.Where(entql.HasEdge("documentdata"))
+// WhereHasDocumentData applies a predicate to check if query has an edge document_data.
+func (f *OrganizationFilter) WhereHasDocumentData() {
+	f.Where(entql.HasEdge("document_data"))
 }
 
-// WhereHasDocumentdataWith applies a predicate to check if query has an edge documentdata with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasDocumentdataWith(preds ...predicate.DocumentData) {
-	f.Where(entql.HasEdgeWith("documentdata", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasDocumentDataWith applies a predicate to check if query has an edge document_data with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasDocumentDataWith(preds ...predicate.DocumentData) {
+	f.Where(entql.HasEdgeWith("document_data", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasOrgsubscriptions applies a predicate to check if query has an edge orgsubscriptions.
-func (f *OrganizationFilter) WhereHasOrgsubscriptions() {
-	f.Where(entql.HasEdge("orgsubscriptions"))
+// WhereHasOrgSubscriptions applies a predicate to check if query has an edge org_subscriptions.
+func (f *OrganizationFilter) WhereHasOrgSubscriptions() {
+	f.Where(entql.HasEdge("org_subscriptions"))
 }
 
-// WhereHasOrgsubscriptionsWith applies a predicate to check if query has an edge orgsubscriptions with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasOrgsubscriptionsWith(preds ...predicate.OrgSubscription) {
-	f.Where(entql.HasEdgeWith("orgsubscriptions", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasOrgSubscriptionsWith applies a predicate to check if query has an edge org_subscriptions with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasOrgSubscriptionsWith(preds ...predicate.OrgSubscription) {
+	f.Where(entql.HasEdgeWith("org_subscriptions", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -12788,14 +12788,14 @@ func (f *OrganizationFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
 	})))
 }
 
-// WhereHasEntitytypes applies a predicate to check if query has an edge entitytypes.
-func (f *OrganizationFilter) WhereHasEntitytypes() {
-	f.Where(entql.HasEdge("entitytypes"))
+// WhereHasEntityTypes applies a predicate to check if query has an edge entity_types.
+func (f *OrganizationFilter) WhereHasEntityTypes() {
+	f.Where(entql.HasEdge("entity_types"))
 }
 
-// WhereHasEntitytypesWith applies a predicate to check if query has an edge entitytypes with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasEntitytypesWith(preds ...predicate.EntityType) {
-	f.Where(entql.HasEdgeWith("entitytypes", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasEntityTypesWith applies a predicate to check if query has an edge entity_types with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasEntityTypesWith(preds ...predicate.EntityType) {
+	f.Where(entql.HasEdgeWith("entity_types", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -12872,14 +12872,14 @@ func (f *OrganizationFilter) WhereHasProceduresWith(preds ...predicate.Procedure
 	})))
 }
 
-// WhereHasInternalpolicies applies a predicate to check if query has an edge internalpolicies.
-func (f *OrganizationFilter) WhereHasInternalpolicies() {
-	f.Where(entql.HasEdge("internalpolicies"))
+// WhereHasInternalPolicies applies a predicate to check if query has an edge internal_policies.
+func (f *OrganizationFilter) WhereHasInternalPolicies() {
+	f.Where(entql.HasEdge("internal_policies"))
 }
 
-// WhereHasInternalpoliciesWith applies a predicate to check if query has an edge internalpolicies with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasInternalpoliciesWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internalpolicies", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -12900,14 +12900,14 @@ func (f *OrganizationFilter) WhereHasRisksWith(preds ...predicate.Risk) {
 	})))
 }
 
-// WhereHasControlobjectives applies a predicate to check if query has an edge controlobjectives.
-func (f *OrganizationFilter) WhereHasControlobjectives() {
-	f.Where(entql.HasEdge("controlobjectives"))
+// WhereHasControlObjectives applies a predicate to check if query has an edge control_objectives.
+func (f *OrganizationFilter) WhereHasControlObjectives() {
+	f.Where(entql.HasEdge("control_objectives"))
 }
 
-// WhereHasControlobjectivesWith applies a predicate to check if query has an edge controlobjectives with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasControlobjectivesWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectivesWith applies a predicate to check if query has an edge control_objectives with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasControlObjectivesWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -13836,28 +13836,28 @@ func (f *ProcedureFilter) WhereHasEditorsWith(preds ...predicate.Group) {
 	})))
 }
 
-// WhereHasControl applies a predicate to check if query has an edge control.
-func (f *ProcedureFilter) WhereHasControl() {
-	f.Where(entql.HasEdge("control"))
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *ProcedureFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
 }
 
-// WhereHasControlWith applies a predicate to check if query has an edge control with a given conditions (other predicates).
-func (f *ProcedureFilter) WhereHasControlWith(preds ...predicate.Control) {
-	f.Where(entql.HasEdgeWith("control", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasInternalpolicy applies a predicate to check if query has an edge internalpolicy.
-func (f *ProcedureFilter) WhereHasInternalpolicy() {
-	f.Where(entql.HasEdge("internalpolicy"))
+// WhereHasInternalPolicies applies a predicate to check if query has an edge internal_policies.
+func (f *ProcedureFilter) WhereHasInternalPolicies() {
+	f.Where(entql.HasEdge("internal_policies"))
 }
 
-// WhereHasInternalpolicyWith applies a predicate to check if query has an edge internalpolicy with a given conditions (other predicates).
-func (f *ProcedureFilter) WhereHasInternalpolicyWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internalpolicy", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -14274,28 +14274,28 @@ func (f *ProgramFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	})))
 }
 
-// WhereHasControlobjectives applies a predicate to check if query has an edge controlobjectives.
-func (f *ProgramFilter) WhereHasControlobjectives() {
-	f.Where(entql.HasEdge("controlobjectives"))
+// WhereHasControlObjectives applies a predicate to check if query has an edge control_objectives.
+func (f *ProgramFilter) WhereHasControlObjectives() {
+	f.Where(entql.HasEdge("control_objectives"))
 }
 
-// WhereHasControlobjectivesWith applies a predicate to check if query has an edge controlobjectives with a given conditions (other predicates).
-func (f *ProgramFilter) WhereHasControlobjectivesWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectivesWith applies a predicate to check if query has an edge control_objectives with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasControlObjectivesWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasPolicies applies a predicate to check if query has an edge policies.
-func (f *ProgramFilter) WhereHasPolicies() {
-	f.Where(entql.HasEdge("policies"))
+// WhereHasInternalPolicies applies a predicate to check if query has an edge internal_policies.
+func (f *ProgramFilter) WhereHasInternalPolicies() {
+	f.Where(entql.HasEdge("internal_policies"))
 }
 
-// WhereHasPoliciesWith applies a predicate to check if query has an edge policies with a given conditions (other predicates).
-func (f *ProgramFilter) WhereHasPoliciesWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -14386,14 +14386,14 @@ func (f *ProgramFilter) WhereHasNarrativesWith(preds ...predicate.Narrative) {
 	})))
 }
 
-// WhereHasActionplans applies a predicate to check if query has an edge actionplans.
-func (f *ProgramFilter) WhereHasActionplans() {
-	f.Where(entql.HasEdge("actionplans"))
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *ProgramFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
 }
 
-// WhereHasActionplansWith applies a predicate to check if query has an edge actionplans with a given conditions (other predicates).
-func (f *ProgramFilter) WhereHasActionplansWith(preds ...predicate.ActionPlan) {
-	f.Where(entql.HasEdgeWith("actionplans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -15024,14 +15024,14 @@ func (f *RiskFilter) WhereHasProcedureWith(preds ...predicate.Procedure) {
 	})))
 }
 
-// WhereHasActionplans applies a predicate to check if query has an edge actionplans.
-func (f *RiskFilter) WhereHasActionplans() {
-	f.Where(entql.HasEdge("actionplans"))
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *RiskFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
 }
 
-// WhereHasActionplansWith applies a predicate to check if query has an edge actionplans with a given conditions (other predicates).
-func (f *RiskFilter) WhereHasActionplansWith(preds ...predicate.ActionPlan) {
-	f.Where(entql.HasEdgeWith("actionplans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -15332,14 +15332,14 @@ func (f *StandardFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(standard.FieldDetails))
 }
 
-// WhereHasControlobjectives applies a predicate to check if query has an edge controlobjectives.
-func (f *StandardFilter) WhereHasControlobjectives() {
-	f.Where(entql.HasEdge("controlobjectives"))
+// WhereHasControlObjectives applies a predicate to check if query has an edge control_objectives.
+func (f *StandardFilter) WhereHasControlObjectives() {
+	f.Where(entql.HasEdge("control_objectives"))
 }
 
-// WhereHasControlobjectivesWith applies a predicate to check if query has an edge controlobjectives with a given conditions (other predicates).
-func (f *StandardFilter) WhereHasControlobjectivesWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("controlobjectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasControlObjectivesWith applies a predicate to check if query has an edge control_objectives with a given conditions (other predicates).
+func (f *StandardFilter) WhereHasControlObjectivesWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -15374,14 +15374,14 @@ func (f *StandardFilter) WhereHasProceduresWith(preds ...predicate.Procedure) {
 	})))
 }
 
-// WhereHasActionplans applies a predicate to check if query has an edge actionplans.
-func (f *StandardFilter) WhereHasActionplans() {
-	f.Where(entql.HasEdge("actionplans"))
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *StandardFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
 }
 
-// WhereHasActionplansWith applies a predicate to check if query has an edge actionplans with a given conditions (other predicates).
-func (f *StandardFilter) WhereHasActionplansWith(preds ...predicate.ActionPlan) {
-	f.Where(entql.HasEdgeWith("actionplans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *StandardFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16424,14 +16424,14 @@ func (f *TaskFilter) WhereHasGroupWith(preds ...predicate.Group) {
 	})))
 }
 
-// WhereHasPolicy applies a predicate to check if query has an edge policy.
-func (f *TaskFilter) WhereHasPolicy() {
-	f.Where(entql.HasEdge("policy"))
+// WhereHasInternalPolicy applies a predicate to check if query has an edge internal_policy.
+func (f *TaskFilter) WhereHasInternalPolicy() {
+	f.Where(entql.HasEdge("internal_policy"))
 }
 
-// WhereHasPolicyWith applies a predicate to check if query has an edge policy with a given conditions (other predicates).
-func (f *TaskFilter) WhereHasPolicyWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("policy", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasInternalPolicyWith applies a predicate to check if query has an edge internal_policy with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasInternalPolicyWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -17209,14 +17209,14 @@ func (f *UserFilter) WhereHasEventsWith(preds ...predicate.Event) {
 	})))
 }
 
-// WhereHasActionplans applies a predicate to check if query has an edge actionplans.
-func (f *UserFilter) WhereHasActionplans() {
-	f.Where(entql.HasEdge("actionplans"))
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *UserFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
 }
 
-// WhereHasActionplansWith applies a predicate to check if query has an edge actionplans with a given conditions (other predicates).
-func (f *UserFilter) WhereHasActionplansWith(preds ...predicate.ActionPlan) {
-	f.Where(entql.HasEdgeWith("actionplans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *UserFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -102,7 +102,7 @@ func (Group) Mixin() []ent.Mixin {
 					ViewPermissions: false,
 				},
 				{
-					Name:            "internalpolicy",
+					Name:            "internal_policy",
 					Type:            InternalPolicy.Type,
 					ViewPermissions: false,
 				},
@@ -117,7 +117,7 @@ func (Group) Mixin() []ent.Mixin {
 					ViewPermissions: true,
 				},
 				{
-					Name:            "controlobjective",
+					Name:            "control_objective",
 					Type:            ControlObjective.Type,
 					ViewPermissions: true,
 				},

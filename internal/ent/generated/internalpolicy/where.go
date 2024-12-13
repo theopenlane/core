@@ -1279,27 +1279,27 @@ func HasEditorsWith(preds ...predicate.Group) predicate.InternalPolicy {
 	})
 }
 
-// HasControlobjectives applies the HasEdge predicate on the "controlobjectives" edge.
-func HasControlobjectives() predicate.InternalPolicy {
+// HasControlObjectives applies the HasEdge predicate on the "control_objectives" edge.
+func HasControlObjectives() predicate.InternalPolicy {
 	return predicate.InternalPolicy(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ControlobjectivesTable, ControlobjectivesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.InternalPolicyControlobjectives
+		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasControlobjectivesWith applies the HasEdge predicate on the "controlobjectives" edge with a given conditions (other predicates).
-func HasControlobjectivesWith(preds ...predicate.ControlObjective) predicate.InternalPolicy {
+// HasControlObjectivesWith applies the HasEdge predicate on the "control_objectives" edge with a given conditions (other predicates).
+func HasControlObjectivesWith(preds ...predicate.ControlObjective) predicate.InternalPolicy {
 	return predicate.InternalPolicy(func(s *sql.Selector) {
-		step := newControlobjectivesStep()
+		step := newControlObjectivesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.InternalPolicyControlobjectives
+		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1433,7 +1433,7 @@ func HasPrograms() predicate.InternalPolicy {
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramPolicies
+		step.Edge.Schema = schemaConfig.ProgramInternalPolicies
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1444,7 +1444,7 @@ func HasProgramsWith(preds ...predicate.Program) predicate.InternalPolicy {
 		step := newProgramsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramPolicies
+		step.Edge.Schema = schemaConfig.ProgramInternalPolicies
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

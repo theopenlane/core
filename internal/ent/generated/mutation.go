@@ -8115,72 +8115,72 @@ func (m *ContactHistoryMutation) ResetEdge(name string) error {
 // ControlMutation represents an operation that mutates the Control nodes in the graph.
 type ControlMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	mapping_id               *string
-	tags                     *[]string
-	appendtags               []string
-	name                     *string
-	description              *string
-	status                   *string
-	control_type             *string
-	version                  *string
-	control_number           *string
-	family                   *string
-	class                    *string
-	source                   *string
-	satisfies                *string
-	mapped_frameworks        *string
-	details                  *map[string]interface{}
-	clearedFields            map[string]struct{}
-	owner                    *string
-	clearedowner             bool
-	blocked_groups           map[string]struct{}
-	removedblocked_groups    map[string]struct{}
-	clearedblocked_groups    bool
-	editors                  map[string]struct{}
-	removededitors           map[string]struct{}
-	clearededitors           bool
-	viewers                  map[string]struct{}
-	removedviewers           map[string]struct{}
-	clearedviewers           bool
-	procedures               map[string]struct{}
-	removedprocedures        map[string]struct{}
-	clearedprocedures        bool
-	subcontrols              map[string]struct{}
-	removedsubcontrols       map[string]struct{}
-	clearedsubcontrols       bool
-	controlobjectives        map[string]struct{}
-	removedcontrolobjectives map[string]struct{}
-	clearedcontrolobjectives bool
-	standard                 map[string]struct{}
-	removedstandard          map[string]struct{}
-	clearedstandard          bool
-	narratives               map[string]struct{}
-	removednarratives        map[string]struct{}
-	clearednarratives        bool
-	risks                    map[string]struct{}
-	removedrisks             map[string]struct{}
-	clearedrisks             bool
-	actionplans              map[string]struct{}
-	removedactionplans       map[string]struct{}
-	clearedactionplans       bool
-	tasks                    map[string]struct{}
-	removedtasks             map[string]struct{}
-	clearedtasks             bool
-	programs                 map[string]struct{}
-	removedprograms          map[string]struct{}
-	clearedprograms          bool
-	done                     bool
-	oldValue                 func(context.Context) (*Control, error)
-	predicates               []predicate.Control
+	op                        Op
+	typ                       string
+	id                        *string
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	mapping_id                *string
+	tags                      *[]string
+	appendtags                []string
+	name                      *string
+	description               *string
+	status                    *string
+	control_type              *string
+	version                   *string
+	control_number            *string
+	family                    *string
+	class                     *string
+	source                    *string
+	satisfies                 *string
+	mapped_frameworks         *string
+	details                   *map[string]interface{}
+	clearedFields             map[string]struct{}
+	owner                     *string
+	clearedowner              bool
+	blocked_groups            map[string]struct{}
+	removedblocked_groups     map[string]struct{}
+	clearedblocked_groups     bool
+	editors                   map[string]struct{}
+	removededitors            map[string]struct{}
+	clearededitors            bool
+	viewers                   map[string]struct{}
+	removedviewers            map[string]struct{}
+	clearedviewers            bool
+	procedures                map[string]struct{}
+	removedprocedures         map[string]struct{}
+	clearedprocedures         bool
+	subcontrols               map[string]struct{}
+	removedsubcontrols        map[string]struct{}
+	clearedsubcontrols        bool
+	control_objectives        map[string]struct{}
+	removedcontrol_objectives map[string]struct{}
+	clearedcontrol_objectives bool
+	standard                  map[string]struct{}
+	removedstandard           map[string]struct{}
+	clearedstandard           bool
+	narratives                map[string]struct{}
+	removednarratives         map[string]struct{}
+	clearednarratives         bool
+	risks                     map[string]struct{}
+	removedrisks              map[string]struct{}
+	clearedrisks              bool
+	action_plans              map[string]struct{}
+	removedaction_plans       map[string]struct{}
+	clearedaction_plans       bool
+	tasks                     map[string]struct{}
+	removedtasks              map[string]struct{}
+	clearedtasks              bool
+	programs                  map[string]struct{}
+	removedprograms           map[string]struct{}
+	clearedprograms           bool
+	done                      bool
+	oldValue                  func(context.Context) (*Control, error)
+	predicates                []predicate.Control
 }
 
 var _ ent.Mutation = (*ControlMutation)(nil)
@@ -9590,58 +9590,58 @@ func (m *ControlMutation) ResetSubcontrols() {
 	m.removedsubcontrols = nil
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by ids.
-func (m *ControlMutation) AddControlobjectiveIDs(ids ...string) {
-	if m.controlobjectives == nil {
-		m.controlobjectives = make(map[string]struct{})
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by ids.
+func (m *ControlMutation) AddControlObjectiveIDs(ids ...string) {
+	if m.control_objectives == nil {
+		m.control_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjectives[ids[i]] = struct{}{}
+		m.control_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjectives clears the "controlobjectives" edge to the ControlObjective entity.
-func (m *ControlMutation) ClearControlobjectives() {
-	m.clearedcontrolobjectives = true
+// ClearControlObjectives clears the "control_objectives" edge to the ControlObjective entity.
+func (m *ControlMutation) ClearControlObjectives() {
+	m.clearedcontrol_objectives = true
 }
 
-// ControlobjectivesCleared reports if the "controlobjectives" edge to the ControlObjective entity was cleared.
-func (m *ControlMutation) ControlobjectivesCleared() bool {
-	return m.clearedcontrolobjectives
+// ControlObjectivesCleared reports if the "control_objectives" edge to the ControlObjective entity was cleared.
+func (m *ControlMutation) ControlObjectivesCleared() bool {
+	return m.clearedcontrol_objectives
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (m *ControlMutation) RemoveControlobjectiveIDs(ids ...string) {
-	if m.removedcontrolobjectives == nil {
-		m.removedcontrolobjectives = make(map[string]struct{})
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to the ControlObjective entity by IDs.
+func (m *ControlMutation) RemoveControlObjectiveIDs(ids ...string) {
+	if m.removedcontrol_objectives == nil {
+		m.removedcontrol_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.controlobjectives, ids[i])
-		m.removedcontrolobjectives[ids[i]] = struct{}{}
+		delete(m.control_objectives, ids[i])
+		m.removedcontrol_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControlobjectives returns the removed IDs of the "controlobjectives" edge to the ControlObjective entity.
-func (m *ControlMutation) RemovedControlobjectivesIDs() (ids []string) {
-	for id := range m.removedcontrolobjectives {
+// RemovedControlObjectives returns the removed IDs of the "control_objectives" edge to the ControlObjective entity.
+func (m *ControlMutation) RemovedControlObjectivesIDs() (ids []string) {
+	for id := range m.removedcontrol_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlobjectivesIDs returns the "controlobjectives" edge IDs in the mutation.
-func (m *ControlMutation) ControlobjectivesIDs() (ids []string) {
-	for id := range m.controlobjectives {
+// ControlObjectivesIDs returns the "control_objectives" edge IDs in the mutation.
+func (m *ControlMutation) ControlObjectivesIDs() (ids []string) {
+	for id := range m.control_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControlobjectives resets all changes to the "controlobjectives" edge.
-func (m *ControlMutation) ResetControlobjectives() {
-	m.controlobjectives = nil
-	m.clearedcontrolobjectives = false
-	m.removedcontrolobjectives = nil
+// ResetControlObjectives resets all changes to the "control_objectives" edge.
+func (m *ControlMutation) ResetControlObjectives() {
+	m.control_objectives = nil
+	m.clearedcontrol_objectives = false
+	m.removedcontrol_objectives = nil
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by ids.
@@ -9806,58 +9806,58 @@ func (m *ControlMutation) ResetRisks() {
 	m.removedrisks = nil
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by ids.
-func (m *ControlMutation) AddActionplanIDs(ids ...string) {
-	if m.actionplans == nil {
-		m.actionplans = make(map[string]struct{})
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by ids.
+func (m *ControlMutation) AddActionPlanIDs(ids ...string) {
+	if m.action_plans == nil {
+		m.action_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.actionplans[ids[i]] = struct{}{}
+		m.action_plans[ids[i]] = struct{}{}
 	}
 }
 
-// ClearActionplans clears the "actionplans" edge to the ActionPlan entity.
-func (m *ControlMutation) ClearActionplans() {
-	m.clearedactionplans = true
+// ClearActionPlans clears the "action_plans" edge to the ActionPlan entity.
+func (m *ControlMutation) ClearActionPlans() {
+	m.clearedaction_plans = true
 }
 
-// ActionplansCleared reports if the "actionplans" edge to the ActionPlan entity was cleared.
-func (m *ControlMutation) ActionplansCleared() bool {
-	return m.clearedactionplans
+// ActionPlansCleared reports if the "action_plans" edge to the ActionPlan entity was cleared.
+func (m *ControlMutation) ActionPlansCleared() bool {
+	return m.clearedaction_plans
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to the ActionPlan entity by IDs.
-func (m *ControlMutation) RemoveActionplanIDs(ids ...string) {
-	if m.removedactionplans == nil {
-		m.removedactionplans = make(map[string]struct{})
+// RemoveActionPlanIDs removes the "action_plans" edge to the ActionPlan entity by IDs.
+func (m *ControlMutation) RemoveActionPlanIDs(ids ...string) {
+	if m.removedaction_plans == nil {
+		m.removedaction_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.actionplans, ids[i])
-		m.removedactionplans[ids[i]] = struct{}{}
+		delete(m.action_plans, ids[i])
+		m.removedaction_plans[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedActionplans returns the removed IDs of the "actionplans" edge to the ActionPlan entity.
-func (m *ControlMutation) RemovedActionplansIDs() (ids []string) {
-	for id := range m.removedactionplans {
+// RemovedActionPlans returns the removed IDs of the "action_plans" edge to the ActionPlan entity.
+func (m *ControlMutation) RemovedActionPlansIDs() (ids []string) {
+	for id := range m.removedaction_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ActionplansIDs returns the "actionplans" edge IDs in the mutation.
-func (m *ControlMutation) ActionplansIDs() (ids []string) {
-	for id := range m.actionplans {
+// ActionPlansIDs returns the "action_plans" edge IDs in the mutation.
+func (m *ControlMutation) ActionPlansIDs() (ids []string) {
+	for id := range m.action_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetActionplans resets all changes to the "actionplans" edge.
-func (m *ControlMutation) ResetActionplans() {
-	m.actionplans = nil
-	m.clearedactionplans = false
-	m.removedactionplans = nil
+// ResetActionPlans resets all changes to the "action_plans" edge.
+func (m *ControlMutation) ResetActionPlans() {
+	m.action_plans = nil
+	m.clearedaction_plans = false
+	m.removedaction_plans = nil
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by ids.
@@ -10571,8 +10571,8 @@ func (m *ControlMutation) AddedEdges() []string {
 	if m.subcontrols != nil {
 		edges = append(edges, control.EdgeSubcontrols)
 	}
-	if m.controlobjectives != nil {
-		edges = append(edges, control.EdgeControlobjectives)
+	if m.control_objectives != nil {
+		edges = append(edges, control.EdgeControlObjectives)
 	}
 	if m.standard != nil {
 		edges = append(edges, control.EdgeStandard)
@@ -10583,8 +10583,8 @@ func (m *ControlMutation) AddedEdges() []string {
 	if m.risks != nil {
 		edges = append(edges, control.EdgeRisks)
 	}
-	if m.actionplans != nil {
-		edges = append(edges, control.EdgeActionplans)
+	if m.action_plans != nil {
+		edges = append(edges, control.EdgeActionPlans)
 	}
 	if m.tasks != nil {
 		edges = append(edges, control.EdgeTasks)
@@ -10633,9 +10633,9 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case control.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.controlobjectives))
-		for id := range m.controlobjectives {
+	case control.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.control_objectives))
+		for id := range m.control_objectives {
 			ids = append(ids, id)
 		}
 		return ids
@@ -10657,9 +10657,9 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case control.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.actionplans))
-		for id := range m.actionplans {
+	case control.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.action_plans))
+		for id := range m.action_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -10697,8 +10697,8 @@ func (m *ControlMutation) RemovedEdges() []string {
 	if m.removedsubcontrols != nil {
 		edges = append(edges, control.EdgeSubcontrols)
 	}
-	if m.removedcontrolobjectives != nil {
-		edges = append(edges, control.EdgeControlobjectives)
+	if m.removedcontrol_objectives != nil {
+		edges = append(edges, control.EdgeControlObjectives)
 	}
 	if m.removedstandard != nil {
 		edges = append(edges, control.EdgeStandard)
@@ -10709,8 +10709,8 @@ func (m *ControlMutation) RemovedEdges() []string {
 	if m.removedrisks != nil {
 		edges = append(edges, control.EdgeRisks)
 	}
-	if m.removedactionplans != nil {
-		edges = append(edges, control.EdgeActionplans)
+	if m.removedaction_plans != nil {
+		edges = append(edges, control.EdgeActionPlans)
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, control.EdgeTasks)
@@ -10755,9 +10755,9 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case control.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjectives))
-		for id := range m.removedcontrolobjectives {
+	case control.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objectives))
+		for id := range m.removedcontrol_objectives {
 			ids = append(ids, id)
 		}
 		return ids
@@ -10779,9 +10779,9 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case control.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.removedactionplans))
-		for id := range m.removedactionplans {
+	case control.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.removedaction_plans))
+		for id := range m.removedaction_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -10822,8 +10822,8 @@ func (m *ControlMutation) ClearedEdges() []string {
 	if m.clearedsubcontrols {
 		edges = append(edges, control.EdgeSubcontrols)
 	}
-	if m.clearedcontrolobjectives {
-		edges = append(edges, control.EdgeControlobjectives)
+	if m.clearedcontrol_objectives {
+		edges = append(edges, control.EdgeControlObjectives)
 	}
 	if m.clearedstandard {
 		edges = append(edges, control.EdgeStandard)
@@ -10834,8 +10834,8 @@ func (m *ControlMutation) ClearedEdges() []string {
 	if m.clearedrisks {
 		edges = append(edges, control.EdgeRisks)
 	}
-	if m.clearedactionplans {
-		edges = append(edges, control.EdgeActionplans)
+	if m.clearedaction_plans {
+		edges = append(edges, control.EdgeActionPlans)
 	}
 	if m.clearedtasks {
 		edges = append(edges, control.EdgeTasks)
@@ -10862,16 +10862,16 @@ func (m *ControlMutation) EdgeCleared(name string) bool {
 		return m.clearedprocedures
 	case control.EdgeSubcontrols:
 		return m.clearedsubcontrols
-	case control.EdgeControlobjectives:
-		return m.clearedcontrolobjectives
+	case control.EdgeControlObjectives:
+		return m.clearedcontrol_objectives
 	case control.EdgeStandard:
 		return m.clearedstandard
 	case control.EdgeNarratives:
 		return m.clearednarratives
 	case control.EdgeRisks:
 		return m.clearedrisks
-	case control.EdgeActionplans:
-		return m.clearedactionplans
+	case control.EdgeActionPlans:
+		return m.clearedaction_plans
 	case control.EdgeTasks:
 		return m.clearedtasks
 	case control.EdgePrograms:
@@ -10913,8 +10913,8 @@ func (m *ControlMutation) ResetEdge(name string) error {
 	case control.EdgeSubcontrols:
 		m.ResetSubcontrols()
 		return nil
-	case control.EdgeControlobjectives:
-		m.ResetControlobjectives()
+	case control.EdgeControlObjectives:
+		m.ResetControlObjectives()
 		return nil
 	case control.EdgeStandard:
 		m.ResetStandard()
@@ -10925,8 +10925,8 @@ func (m *ControlMutation) ResetEdge(name string) error {
 	case control.EdgeRisks:
 		m.ResetRisks()
 		return nil
-	case control.EdgeActionplans:
-		m.ResetActionplans()
+	case control.EdgeActionPlans:
+		m.ResetActionPlans()
 		return nil
 	case control.EdgeTasks:
 		m.ResetTasks()
@@ -12896,71 +12896,71 @@ func (m *ControlHistoryMutation) ResetEdge(name string) error {
 // ControlObjectiveMutation represents an operation that mutates the ControlObjective nodes in the graph.
 type ControlObjectiveMutation struct {
 	config
-	op                     Op
-	typ                    string
-	id                     *string
-	created_at             *time.Time
-	updated_at             *time.Time
-	created_by             *string
-	updated_by             *string
-	deleted_at             *time.Time
-	deleted_by             *string
-	mapping_id             *string
-	tags                   *[]string
-	appendtags             []string
-	name                   *string
-	description            *string
-	status                 *string
-	control_objective_type *string
-	version                *string
-	control_number         *string
-	family                 *string
-	class                  *string
-	source                 *string
-	mapped_frameworks      *string
-	details                *map[string]interface{}
-	clearedFields          map[string]struct{}
-	owner                  *string
-	clearedowner           bool
-	blocked_groups         map[string]struct{}
-	removedblocked_groups  map[string]struct{}
-	clearedblocked_groups  bool
-	editors                map[string]struct{}
-	removededitors         map[string]struct{}
-	clearededitors         bool
-	viewers                map[string]struct{}
-	removedviewers         map[string]struct{}
-	clearedviewers         bool
-	policy                 map[string]struct{}
-	removedpolicy          map[string]struct{}
-	clearedpolicy          bool
-	controls               map[string]struct{}
-	removedcontrols        map[string]struct{}
-	clearedcontrols        bool
-	procedures             map[string]struct{}
-	removedprocedures      map[string]struct{}
-	clearedprocedures      bool
-	risks                  map[string]struct{}
-	removedrisks           map[string]struct{}
-	clearedrisks           bool
-	subcontrols            map[string]struct{}
-	removedsubcontrols     map[string]struct{}
-	clearedsubcontrols     bool
-	standard               map[string]struct{}
-	removedstandard        map[string]struct{}
-	clearedstandard        bool
-	narratives             map[string]struct{}
-	removednarratives      map[string]struct{}
-	clearednarratives      bool
-	tasks                  map[string]struct{}
-	removedtasks           map[string]struct{}
-	clearedtasks           bool
-	programs               map[string]struct{}
-	removedprograms        map[string]struct{}
-	clearedprograms        bool
-	done                   bool
-	oldValue               func(context.Context) (*ControlObjective, error)
-	predicates             []predicate.ControlObjective
+	op                       Op
+	typ                      string
+	id                       *string
+	created_at               *time.Time
+	updated_at               *time.Time
+	created_by               *string
+	updated_by               *string
+	deleted_at               *time.Time
+	deleted_by               *string
+	mapping_id               *string
+	tags                     *[]string
+	appendtags               []string
+	name                     *string
+	description              *string
+	status                   *string
+	control_objective_type   *string
+	version                  *string
+	control_number           *string
+	family                   *string
+	class                    *string
+	source                   *string
+	mapped_frameworks        *string
+	details                  *map[string]interface{}
+	clearedFields            map[string]struct{}
+	owner                    *string
+	clearedowner             bool
+	blocked_groups           map[string]struct{}
+	removedblocked_groups    map[string]struct{}
+	clearedblocked_groups    bool
+	editors                  map[string]struct{}
+	removededitors           map[string]struct{}
+	clearededitors           bool
+	viewers                  map[string]struct{}
+	removedviewers           map[string]struct{}
+	clearedviewers           bool
+	internal_policies        map[string]struct{}
+	removedinternal_policies map[string]struct{}
+	clearedinternal_policies bool
+	controls                 map[string]struct{}
+	removedcontrols          map[string]struct{}
+	clearedcontrols          bool
+	procedures               map[string]struct{}
+	removedprocedures        map[string]struct{}
+	clearedprocedures        bool
+	risks                    map[string]struct{}
+	removedrisks             map[string]struct{}
+	clearedrisks             bool
+	subcontrols              map[string]struct{}
+	removedsubcontrols       map[string]struct{}
+	clearedsubcontrols       bool
+	standard                 map[string]struct{}
+	removedstandard          map[string]struct{}
+	clearedstandard          bool
+	narratives               map[string]struct{}
+	removednarratives        map[string]struct{}
+	clearednarratives        bool
+	tasks                    map[string]struct{}
+	removedtasks             map[string]struct{}
+	clearedtasks             bool
+	programs                 map[string]struct{}
+	removedprograms          map[string]struct{}
+	clearedprograms          bool
+	done                     bool
+	oldValue                 func(context.Context) (*ControlObjective, error)
+	predicates               []predicate.ControlObjective
 }
 
 var _ ent.Mutation = (*ControlObjectiveMutation)(nil)
@@ -14213,58 +14213,58 @@ func (m *ControlObjectiveMutation) ResetViewers() {
 	m.removedviewers = nil
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by ids.
-func (m *ControlObjectiveMutation) AddPolicyIDs(ids ...string) {
-	if m.policy == nil {
-		m.policy = make(map[string]struct{})
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by ids.
+func (m *ControlObjectiveMutation) AddInternalPolicyIDs(ids ...string) {
+	if m.internal_policies == nil {
+		m.internal_policies = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.policy[ids[i]] = struct{}{}
+		m.internal_policies[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPolicy clears the "policy" edge to the InternalPolicy entity.
-func (m *ControlObjectiveMutation) ClearPolicy() {
-	m.clearedpolicy = true
+// ClearInternalPolicies clears the "internal_policies" edge to the InternalPolicy entity.
+func (m *ControlObjectiveMutation) ClearInternalPolicies() {
+	m.clearedinternal_policies = true
 }
 
-// PolicyCleared reports if the "policy" edge to the InternalPolicy entity was cleared.
-func (m *ControlObjectiveMutation) PolicyCleared() bool {
-	return m.clearedpolicy
+// InternalPoliciesCleared reports if the "internal_policies" edge to the InternalPolicy entity was cleared.
+func (m *ControlObjectiveMutation) InternalPoliciesCleared() bool {
+	return m.clearedinternal_policies
 }
 
-// RemovePolicyIDs removes the "policy" edge to the InternalPolicy entity by IDs.
-func (m *ControlObjectiveMutation) RemovePolicyIDs(ids ...string) {
-	if m.removedpolicy == nil {
-		m.removedpolicy = make(map[string]struct{})
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (m *ControlObjectiveMutation) RemoveInternalPolicyIDs(ids ...string) {
+	if m.removedinternal_policies == nil {
+		m.removedinternal_policies = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.policy, ids[i])
-		m.removedpolicy[ids[i]] = struct{}{}
+		delete(m.internal_policies, ids[i])
+		m.removedinternal_policies[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPolicy returns the removed IDs of the "policy" edge to the InternalPolicy entity.
-func (m *ControlObjectiveMutation) RemovedPolicyIDs() (ids []string) {
-	for id := range m.removedpolicy {
+// RemovedInternalPolicies returns the removed IDs of the "internal_policies" edge to the InternalPolicy entity.
+func (m *ControlObjectiveMutation) RemovedInternalPoliciesIDs() (ids []string) {
+	for id := range m.removedinternal_policies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PolicyIDs returns the "policy" edge IDs in the mutation.
-func (m *ControlObjectiveMutation) PolicyIDs() (ids []string) {
-	for id := range m.policy {
+// InternalPoliciesIDs returns the "internal_policies" edge IDs in the mutation.
+func (m *ControlObjectiveMutation) InternalPoliciesIDs() (ids []string) {
+	for id := range m.internal_policies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPolicy resets all changes to the "policy" edge.
-func (m *ControlObjectiveMutation) ResetPolicy() {
-	m.policy = nil
-	m.clearedpolicy = false
-	m.removedpolicy = nil
+// ResetInternalPolicies resets all changes to the "internal_policies" edge.
+func (m *ControlObjectiveMutation) ResetInternalPolicies() {
+	m.internal_policies = nil
+	m.clearedinternal_policies = false
+	m.removedinternal_policies = nil
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by ids.
@@ -15273,8 +15273,8 @@ func (m *ControlObjectiveMutation) AddedEdges() []string {
 	if m.viewers != nil {
 		edges = append(edges, controlobjective.EdgeViewers)
 	}
-	if m.policy != nil {
-		edges = append(edges, controlobjective.EdgePolicy)
+	if m.internal_policies != nil {
+		edges = append(edges, controlobjective.EdgeInternalPolicies)
 	}
 	if m.controls != nil {
 		edges = append(edges, controlobjective.EdgeControls)
@@ -15329,9 +15329,9 @@ func (m *ControlObjectiveMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case controlobjective.EdgePolicy:
-		ids := make([]ent.Value, 0, len(m.policy))
-		for id := range m.policy {
+	case controlobjective.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.internal_policies))
+		for id := range m.internal_policies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -15399,8 +15399,8 @@ func (m *ControlObjectiveMutation) RemovedEdges() []string {
 	if m.removedviewers != nil {
 		edges = append(edges, controlobjective.EdgeViewers)
 	}
-	if m.removedpolicy != nil {
-		edges = append(edges, controlobjective.EdgePolicy)
+	if m.removedinternal_policies != nil {
+		edges = append(edges, controlobjective.EdgeInternalPolicies)
 	}
 	if m.removedcontrols != nil {
 		edges = append(edges, controlobjective.EdgeControls)
@@ -15451,9 +15451,9 @@ func (m *ControlObjectiveMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case controlobjective.EdgePolicy:
-		ids := make([]ent.Value, 0, len(m.removedpolicy))
-		for id := range m.removedpolicy {
+	case controlobjective.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policies))
+		for id := range m.removedinternal_policies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -15524,8 +15524,8 @@ func (m *ControlObjectiveMutation) ClearedEdges() []string {
 	if m.clearedviewers {
 		edges = append(edges, controlobjective.EdgeViewers)
 	}
-	if m.clearedpolicy {
-		edges = append(edges, controlobjective.EdgePolicy)
+	if m.clearedinternal_policies {
+		edges = append(edges, controlobjective.EdgeInternalPolicies)
 	}
 	if m.clearedcontrols {
 		edges = append(edges, controlobjective.EdgeControls)
@@ -15566,8 +15566,8 @@ func (m *ControlObjectiveMutation) EdgeCleared(name string) bool {
 		return m.clearededitors
 	case controlobjective.EdgeViewers:
 		return m.clearedviewers
-	case controlobjective.EdgePolicy:
-		return m.clearedpolicy
+	case controlobjective.EdgeInternalPolicies:
+		return m.clearedinternal_policies
 	case controlobjective.EdgeControls:
 		return m.clearedcontrols
 	case controlobjective.EdgeProcedures:
@@ -15615,8 +15615,8 @@ func (m *ControlObjectiveMutation) ResetEdge(name string) error {
 	case controlobjective.EdgeViewers:
 		m.ResetViewers()
 		return nil
-	case controlobjective.EdgePolicy:
-		m.ResetPolicy()
+	case controlobjective.EdgeInternalPolicies:
+		m.ResetInternalPolicies()
 		return nil
 	case controlobjective.EdgeControls:
 		m.ResetControls()
@@ -29946,71 +29946,71 @@ func (m *EventHistoryMutation) ResetEdge(name string) error {
 // FileMutation represents an operation that mutates the File nodes in the graph.
 type FileMutation struct {
 	config
-	op                         Op
-	typ                        string
-	id                         *string
-	created_at                 *time.Time
-	updated_at                 *time.Time
-	created_by                 *string
-	updated_by                 *string
-	deleted_at                 *time.Time
-	deleted_by                 *string
-	mapping_id                 *string
-	tags                       *[]string
-	appendtags                 []string
-	provided_file_name         *string
-	provided_file_extension    *string
-	provided_file_size         *int64
-	addprovided_file_size      *int64
-	persisted_file_size        *int64
-	addpersisted_file_size     *int64
-	detected_mime_type         *string
-	md5_hash                   *string
-	detected_content_type      *string
-	store_key                  *string
-	category_type              *string
-	uri                        *string
-	storage_scheme             *string
-	storage_volume             *string
-	storage_path               *string
-	file_contents              *[]byte
-	clearedFields              map[string]struct{}
-	user                       map[string]struct{}
-	removeduser                map[string]struct{}
-	cleareduser                bool
-	organization               map[string]struct{}
-	removedorganization        map[string]struct{}
-	clearedorganization        bool
-	group                      map[string]struct{}
-	removedgroup               map[string]struct{}
-	clearedgroup               bool
-	contact                    map[string]struct{}
-	removedcontact             map[string]struct{}
-	clearedcontact             bool
-	entity                     map[string]struct{}
-	removedentity              map[string]struct{}
-	clearedentity              bool
-	usersetting                map[string]struct{}
-	removedusersetting         map[string]struct{}
-	clearedusersetting         bool
-	organizationsetting        map[string]struct{}
-	removedorganizationsetting map[string]struct{}
-	clearedorganizationsetting bool
-	template                   map[string]struct{}
-	removedtemplate            map[string]struct{}
-	clearedtemplate            bool
-	documentdata               map[string]struct{}
-	removeddocumentdata        map[string]struct{}
-	cleareddocumentdata        bool
-	events                     map[string]struct{}
-	removedevents              map[string]struct{}
-	clearedevents              bool
-	program                    map[string]struct{}
-	removedprogram             map[string]struct{}
-	clearedprogram             bool
-	done                       bool
-	oldValue                   func(context.Context) (*File, error)
-	predicates                 []predicate.File
+	op                          Op
+	typ                         string
+	id                          *string
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	created_by                  *string
+	updated_by                  *string
+	deleted_at                  *time.Time
+	deleted_by                  *string
+	mapping_id                  *string
+	tags                        *[]string
+	appendtags                  []string
+	provided_file_name          *string
+	provided_file_extension     *string
+	provided_file_size          *int64
+	addprovided_file_size       *int64
+	persisted_file_size         *int64
+	addpersisted_file_size      *int64
+	detected_mime_type          *string
+	md5_hash                    *string
+	detected_content_type       *string
+	store_key                   *string
+	category_type               *string
+	uri                         *string
+	storage_scheme              *string
+	storage_volume              *string
+	storage_path                *string
+	file_contents               *[]byte
+	clearedFields               map[string]struct{}
+	user                        map[string]struct{}
+	removeduser                 map[string]struct{}
+	cleareduser                 bool
+	organization                map[string]struct{}
+	removedorganization         map[string]struct{}
+	clearedorganization         bool
+	group                       map[string]struct{}
+	removedgroup                map[string]struct{}
+	clearedgroup                bool
+	contact                     map[string]struct{}
+	removedcontact              map[string]struct{}
+	clearedcontact              bool
+	entity                      map[string]struct{}
+	removedentity               map[string]struct{}
+	clearedentity               bool
+	user_setting                map[string]struct{}
+	removeduser_setting         map[string]struct{}
+	cleareduser_setting         bool
+	organization_setting        map[string]struct{}
+	removedorganization_setting map[string]struct{}
+	clearedorganization_setting bool
+	template                    map[string]struct{}
+	removedtemplate             map[string]struct{}
+	clearedtemplate             bool
+	document_data               map[string]struct{}
+	removeddocument_data        map[string]struct{}
+	cleareddocument_data        bool
+	events                      map[string]struct{}
+	removedevents               map[string]struct{}
+	clearedevents               bool
+	program                     map[string]struct{}
+	removedprogram              map[string]struct{}
+	clearedprogram              bool
+	done                        bool
+	oldValue                    func(context.Context) (*File, error)
+	predicates                  []predicate.File
 }
 
 var _ ent.Mutation = (*FileMutation)(nil)
@@ -31471,112 +31471,112 @@ func (m *FileMutation) ResetEntity() {
 	m.removedentity = nil
 }
 
-// AddUsersettingIDs adds the "usersetting" edge to the UserSetting entity by ids.
-func (m *FileMutation) AddUsersettingIDs(ids ...string) {
-	if m.usersetting == nil {
-		m.usersetting = make(map[string]struct{})
+// AddUserSettingIDs adds the "user_setting" edge to the UserSetting entity by ids.
+func (m *FileMutation) AddUserSettingIDs(ids ...string) {
+	if m.user_setting == nil {
+		m.user_setting = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.usersetting[ids[i]] = struct{}{}
+		m.user_setting[ids[i]] = struct{}{}
 	}
 }
 
-// ClearUsersetting clears the "usersetting" edge to the UserSetting entity.
-func (m *FileMutation) ClearUsersetting() {
-	m.clearedusersetting = true
+// ClearUserSetting clears the "user_setting" edge to the UserSetting entity.
+func (m *FileMutation) ClearUserSetting() {
+	m.cleareduser_setting = true
 }
 
-// UsersettingCleared reports if the "usersetting" edge to the UserSetting entity was cleared.
-func (m *FileMutation) UsersettingCleared() bool {
-	return m.clearedusersetting
+// UserSettingCleared reports if the "user_setting" edge to the UserSetting entity was cleared.
+func (m *FileMutation) UserSettingCleared() bool {
+	return m.cleareduser_setting
 }
 
-// RemoveUsersettingIDs removes the "usersetting" edge to the UserSetting entity by IDs.
-func (m *FileMutation) RemoveUsersettingIDs(ids ...string) {
-	if m.removedusersetting == nil {
-		m.removedusersetting = make(map[string]struct{})
+// RemoveUserSettingIDs removes the "user_setting" edge to the UserSetting entity by IDs.
+func (m *FileMutation) RemoveUserSettingIDs(ids ...string) {
+	if m.removeduser_setting == nil {
+		m.removeduser_setting = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.usersetting, ids[i])
-		m.removedusersetting[ids[i]] = struct{}{}
+		delete(m.user_setting, ids[i])
+		m.removeduser_setting[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedUsersetting returns the removed IDs of the "usersetting" edge to the UserSetting entity.
-func (m *FileMutation) RemovedUsersettingIDs() (ids []string) {
-	for id := range m.removedusersetting {
+// RemovedUserSetting returns the removed IDs of the "user_setting" edge to the UserSetting entity.
+func (m *FileMutation) RemovedUserSettingIDs() (ids []string) {
+	for id := range m.removeduser_setting {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// UsersettingIDs returns the "usersetting" edge IDs in the mutation.
-func (m *FileMutation) UsersettingIDs() (ids []string) {
-	for id := range m.usersetting {
+// UserSettingIDs returns the "user_setting" edge IDs in the mutation.
+func (m *FileMutation) UserSettingIDs() (ids []string) {
+	for id := range m.user_setting {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetUsersetting resets all changes to the "usersetting" edge.
-func (m *FileMutation) ResetUsersetting() {
-	m.usersetting = nil
-	m.clearedusersetting = false
-	m.removedusersetting = nil
+// ResetUserSetting resets all changes to the "user_setting" edge.
+func (m *FileMutation) ResetUserSetting() {
+	m.user_setting = nil
+	m.cleareduser_setting = false
+	m.removeduser_setting = nil
 }
 
-// AddOrganizationsettingIDs adds the "organizationsetting" edge to the OrganizationSetting entity by ids.
-func (m *FileMutation) AddOrganizationsettingIDs(ids ...string) {
-	if m.organizationsetting == nil {
-		m.organizationsetting = make(map[string]struct{})
+// AddOrganizationSettingIDs adds the "organization_setting" edge to the OrganizationSetting entity by ids.
+func (m *FileMutation) AddOrganizationSettingIDs(ids ...string) {
+	if m.organization_setting == nil {
+		m.organization_setting = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.organizationsetting[ids[i]] = struct{}{}
+		m.organization_setting[ids[i]] = struct{}{}
 	}
 }
 
-// ClearOrganizationsetting clears the "organizationsetting" edge to the OrganizationSetting entity.
-func (m *FileMutation) ClearOrganizationsetting() {
-	m.clearedorganizationsetting = true
+// ClearOrganizationSetting clears the "organization_setting" edge to the OrganizationSetting entity.
+func (m *FileMutation) ClearOrganizationSetting() {
+	m.clearedorganization_setting = true
 }
 
-// OrganizationsettingCleared reports if the "organizationsetting" edge to the OrganizationSetting entity was cleared.
-func (m *FileMutation) OrganizationsettingCleared() bool {
-	return m.clearedorganizationsetting
+// OrganizationSettingCleared reports if the "organization_setting" edge to the OrganizationSetting entity was cleared.
+func (m *FileMutation) OrganizationSettingCleared() bool {
+	return m.clearedorganization_setting
 }
 
-// RemoveOrganizationsettingIDs removes the "organizationsetting" edge to the OrganizationSetting entity by IDs.
-func (m *FileMutation) RemoveOrganizationsettingIDs(ids ...string) {
-	if m.removedorganizationsetting == nil {
-		m.removedorganizationsetting = make(map[string]struct{})
+// RemoveOrganizationSettingIDs removes the "organization_setting" edge to the OrganizationSetting entity by IDs.
+func (m *FileMutation) RemoveOrganizationSettingIDs(ids ...string) {
+	if m.removedorganization_setting == nil {
+		m.removedorganization_setting = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.organizationsetting, ids[i])
-		m.removedorganizationsetting[ids[i]] = struct{}{}
+		delete(m.organization_setting, ids[i])
+		m.removedorganization_setting[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedOrganizationsetting returns the removed IDs of the "organizationsetting" edge to the OrganizationSetting entity.
-func (m *FileMutation) RemovedOrganizationsettingIDs() (ids []string) {
-	for id := range m.removedorganizationsetting {
+// RemovedOrganizationSetting returns the removed IDs of the "organization_setting" edge to the OrganizationSetting entity.
+func (m *FileMutation) RemovedOrganizationSettingIDs() (ids []string) {
+	for id := range m.removedorganization_setting {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// OrganizationsettingIDs returns the "organizationsetting" edge IDs in the mutation.
-func (m *FileMutation) OrganizationsettingIDs() (ids []string) {
-	for id := range m.organizationsetting {
+// OrganizationSettingIDs returns the "organization_setting" edge IDs in the mutation.
+func (m *FileMutation) OrganizationSettingIDs() (ids []string) {
+	for id := range m.organization_setting {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetOrganizationsetting resets all changes to the "organizationsetting" edge.
-func (m *FileMutation) ResetOrganizationsetting() {
-	m.organizationsetting = nil
-	m.clearedorganizationsetting = false
-	m.removedorganizationsetting = nil
+// ResetOrganizationSetting resets all changes to the "organization_setting" edge.
+func (m *FileMutation) ResetOrganizationSetting() {
+	m.organization_setting = nil
+	m.clearedorganization_setting = false
+	m.removedorganization_setting = nil
 }
 
 // AddTemplateIDs adds the "template" edge to the Template entity by ids.
@@ -31633,58 +31633,58 @@ func (m *FileMutation) ResetTemplate() {
 	m.removedtemplate = nil
 }
 
-// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by ids.
-func (m *FileMutation) AddDocumentdatumIDs(ids ...string) {
-	if m.documentdata == nil {
-		m.documentdata = make(map[string]struct{})
+// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by ids.
+func (m *FileMutation) AddDocumentDatumIDs(ids ...string) {
+	if m.document_data == nil {
+		m.document_data = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.documentdata[ids[i]] = struct{}{}
+		m.document_data[ids[i]] = struct{}{}
 	}
 }
 
-// ClearDocumentdata clears the "documentdata" edge to the DocumentData entity.
-func (m *FileMutation) ClearDocumentdata() {
-	m.cleareddocumentdata = true
+// ClearDocumentData clears the "document_data" edge to the DocumentData entity.
+func (m *FileMutation) ClearDocumentData() {
+	m.cleareddocument_data = true
 }
 
-// DocumentdataCleared reports if the "documentdata" edge to the DocumentData entity was cleared.
-func (m *FileMutation) DocumentdataCleared() bool {
-	return m.cleareddocumentdata
+// DocumentDataCleared reports if the "document_data" edge to the DocumentData entity was cleared.
+func (m *FileMutation) DocumentDataCleared() bool {
+	return m.cleareddocument_data
 }
 
-// RemoveDocumentdatumIDs removes the "documentdata" edge to the DocumentData entity by IDs.
-func (m *FileMutation) RemoveDocumentdatumIDs(ids ...string) {
-	if m.removeddocumentdata == nil {
-		m.removeddocumentdata = make(map[string]struct{})
+// RemoveDocumentDatumIDs removes the "document_data" edge to the DocumentData entity by IDs.
+func (m *FileMutation) RemoveDocumentDatumIDs(ids ...string) {
+	if m.removeddocument_data == nil {
+		m.removeddocument_data = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.documentdata, ids[i])
-		m.removeddocumentdata[ids[i]] = struct{}{}
+		delete(m.document_data, ids[i])
+		m.removeddocument_data[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedDocumentdata returns the removed IDs of the "documentdata" edge to the DocumentData entity.
-func (m *FileMutation) RemovedDocumentdataIDs() (ids []string) {
-	for id := range m.removeddocumentdata {
+// RemovedDocumentData returns the removed IDs of the "document_data" edge to the DocumentData entity.
+func (m *FileMutation) RemovedDocumentDataIDs() (ids []string) {
+	for id := range m.removeddocument_data {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// DocumentdataIDs returns the "documentdata" edge IDs in the mutation.
-func (m *FileMutation) DocumentdataIDs() (ids []string) {
-	for id := range m.documentdata {
+// DocumentDataIDs returns the "document_data" edge IDs in the mutation.
+func (m *FileMutation) DocumentDataIDs() (ids []string) {
+	for id := range m.document_data {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetDocumentdata resets all changes to the "documentdata" edge.
-func (m *FileMutation) ResetDocumentdata() {
-	m.documentdata = nil
-	m.cleareddocumentdata = false
-	m.removeddocumentdata = nil
+// ResetDocumentData resets all changes to the "document_data" edge.
+func (m *FileMutation) ResetDocumentData() {
+	m.document_data = nil
+	m.cleareddocument_data = false
+	m.removeddocument_data = nil
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by ids.
@@ -32439,17 +32439,17 @@ func (m *FileMutation) AddedEdges() []string {
 	if m.entity != nil {
 		edges = append(edges, file.EdgeEntity)
 	}
-	if m.usersetting != nil {
-		edges = append(edges, file.EdgeUsersetting)
+	if m.user_setting != nil {
+		edges = append(edges, file.EdgeUserSetting)
 	}
-	if m.organizationsetting != nil {
-		edges = append(edges, file.EdgeOrganizationsetting)
+	if m.organization_setting != nil {
+		edges = append(edges, file.EdgeOrganizationSetting)
 	}
 	if m.template != nil {
 		edges = append(edges, file.EdgeTemplate)
 	}
-	if m.documentdata != nil {
-		edges = append(edges, file.EdgeDocumentdata)
+	if m.document_data != nil {
+		edges = append(edges, file.EdgeDocumentData)
 	}
 	if m.events != nil {
 		edges = append(edges, file.EdgeEvents)
@@ -32494,15 +32494,15 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case file.EdgeUsersetting:
-		ids := make([]ent.Value, 0, len(m.usersetting))
-		for id := range m.usersetting {
+	case file.EdgeUserSetting:
+		ids := make([]ent.Value, 0, len(m.user_setting))
+		for id := range m.user_setting {
 			ids = append(ids, id)
 		}
 		return ids
-	case file.EdgeOrganizationsetting:
-		ids := make([]ent.Value, 0, len(m.organizationsetting))
-		for id := range m.organizationsetting {
+	case file.EdgeOrganizationSetting:
+		ids := make([]ent.Value, 0, len(m.organization_setting))
+		for id := range m.organization_setting {
 			ids = append(ids, id)
 		}
 		return ids
@@ -32512,9 +32512,9 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case file.EdgeDocumentdata:
-		ids := make([]ent.Value, 0, len(m.documentdata))
-		for id := range m.documentdata {
+	case file.EdgeDocumentData:
+		ids := make([]ent.Value, 0, len(m.document_data))
+		for id := range m.document_data {
 			ids = append(ids, id)
 		}
 		return ids
@@ -32552,17 +32552,17 @@ func (m *FileMutation) RemovedEdges() []string {
 	if m.removedentity != nil {
 		edges = append(edges, file.EdgeEntity)
 	}
-	if m.removedusersetting != nil {
-		edges = append(edges, file.EdgeUsersetting)
+	if m.removeduser_setting != nil {
+		edges = append(edges, file.EdgeUserSetting)
 	}
-	if m.removedorganizationsetting != nil {
-		edges = append(edges, file.EdgeOrganizationsetting)
+	if m.removedorganization_setting != nil {
+		edges = append(edges, file.EdgeOrganizationSetting)
 	}
 	if m.removedtemplate != nil {
 		edges = append(edges, file.EdgeTemplate)
 	}
-	if m.removeddocumentdata != nil {
-		edges = append(edges, file.EdgeDocumentdata)
+	if m.removeddocument_data != nil {
+		edges = append(edges, file.EdgeDocumentData)
 	}
 	if m.removedevents != nil {
 		edges = append(edges, file.EdgeEvents)
@@ -32607,15 +32607,15 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case file.EdgeUsersetting:
-		ids := make([]ent.Value, 0, len(m.removedusersetting))
-		for id := range m.removedusersetting {
+	case file.EdgeUserSetting:
+		ids := make([]ent.Value, 0, len(m.removeduser_setting))
+		for id := range m.removeduser_setting {
 			ids = append(ids, id)
 		}
 		return ids
-	case file.EdgeOrganizationsetting:
-		ids := make([]ent.Value, 0, len(m.removedorganizationsetting))
-		for id := range m.removedorganizationsetting {
+	case file.EdgeOrganizationSetting:
+		ids := make([]ent.Value, 0, len(m.removedorganization_setting))
+		for id := range m.removedorganization_setting {
 			ids = append(ids, id)
 		}
 		return ids
@@ -32625,9 +32625,9 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case file.EdgeDocumentdata:
-		ids := make([]ent.Value, 0, len(m.removeddocumentdata))
-		for id := range m.removeddocumentdata {
+	case file.EdgeDocumentData:
+		ids := make([]ent.Value, 0, len(m.removeddocument_data))
+		for id := range m.removeddocument_data {
 			ids = append(ids, id)
 		}
 		return ids
@@ -32665,17 +32665,17 @@ func (m *FileMutation) ClearedEdges() []string {
 	if m.clearedentity {
 		edges = append(edges, file.EdgeEntity)
 	}
-	if m.clearedusersetting {
-		edges = append(edges, file.EdgeUsersetting)
+	if m.cleareduser_setting {
+		edges = append(edges, file.EdgeUserSetting)
 	}
-	if m.clearedorganizationsetting {
-		edges = append(edges, file.EdgeOrganizationsetting)
+	if m.clearedorganization_setting {
+		edges = append(edges, file.EdgeOrganizationSetting)
 	}
 	if m.clearedtemplate {
 		edges = append(edges, file.EdgeTemplate)
 	}
-	if m.cleareddocumentdata {
-		edges = append(edges, file.EdgeDocumentdata)
+	if m.cleareddocument_data {
+		edges = append(edges, file.EdgeDocumentData)
 	}
 	if m.clearedevents {
 		edges = append(edges, file.EdgeEvents)
@@ -32700,14 +32700,14 @@ func (m *FileMutation) EdgeCleared(name string) bool {
 		return m.clearedcontact
 	case file.EdgeEntity:
 		return m.clearedentity
-	case file.EdgeUsersetting:
-		return m.clearedusersetting
-	case file.EdgeOrganizationsetting:
-		return m.clearedorganizationsetting
+	case file.EdgeUserSetting:
+		return m.cleareduser_setting
+	case file.EdgeOrganizationSetting:
+		return m.clearedorganization_setting
 	case file.EdgeTemplate:
 		return m.clearedtemplate
-	case file.EdgeDocumentdata:
-		return m.cleareddocumentdata
+	case file.EdgeDocumentData:
+		return m.cleareddocument_data
 	case file.EdgeEvents:
 		return m.clearedevents
 	case file.EdgeProgram:
@@ -32743,17 +32743,17 @@ func (m *FileMutation) ResetEdge(name string) error {
 	case file.EdgeEntity:
 		m.ResetEntity()
 		return nil
-	case file.EdgeUsersetting:
-		m.ResetUsersetting()
+	case file.EdgeUserSetting:
+		m.ResetUserSetting()
 		return nil
-	case file.EdgeOrganizationsetting:
-		m.ResetOrganizationsetting()
+	case file.EdgeOrganizationSetting:
+		m.ResetOrganizationSetting()
 		return nil
 	case file.EdgeTemplate:
 		m.ResetTemplate()
 		return nil
-	case file.EdgeDocumentdata:
-		m.ResetDocumentdata()
+	case file.EdgeDocumentData:
+		m.ResetDocumentData()
 		return nil
 	case file.EdgeEvents:
 		m.ResetEvents()
@@ -34848,133 +34848,133 @@ func (m *FileHistoryMutation) ResetEdge(name string) error {
 // GroupMutation represents an operation that mutates the Group nodes in the graph.
 type GroupMutation struct {
 	config
-	op                                     Op
-	typ                                    string
-	id                                     *string
-	created_at                             *time.Time
-	updated_at                             *time.Time
-	created_by                             *string
-	updated_by                             *string
-	deleted_at                             *time.Time
-	deleted_by                             *string
-	mapping_id                             *string
-	tags                                   *[]string
-	appendtags                             []string
-	name                                   *string
-	description                            *string
-	gravatar_logo_url                      *string
-	logo_url                               *string
-	display_name                           *string
-	clearedFields                          map[string]struct{}
-	owner                                  *string
-	clearedowner                           bool
-	control_creators                       map[string]struct{}
-	removedcontrol_creators                map[string]struct{}
-	clearedcontrol_creators                bool
-	control_objective_creators             map[string]struct{}
-	removedcontrol_objective_creators      map[string]struct{}
-	clearedcontrol_objective_creators      bool
-	group_creators                         map[string]struct{}
-	removedgroup_creators                  map[string]struct{}
-	clearedgroup_creators                  bool
-	internal_policy_creators               map[string]struct{}
-	removedinternal_policy_creators        map[string]struct{}
-	clearedinternal_policy_creators        bool
-	narrative_creators                     map[string]struct{}
-	removednarrative_creators              map[string]struct{}
-	clearednarrative_creators              bool
-	procedure_creators                     map[string]struct{}
-	removedprocedure_creators              map[string]struct{}
-	clearedprocedure_creators              bool
-	program_creators                       map[string]struct{}
-	removedprogram_creators                map[string]struct{}
-	clearedprogram_creators                bool
-	risk_creators                          map[string]struct{}
-	removedrisk_creators                   map[string]struct{}
-	clearedrisk_creators                   bool
-	template_creators                      map[string]struct{}
-	removedtemplate_creators               map[string]struct{}
-	clearedtemplate_creators               bool
-	procedure_editors                      map[string]struct{}
-	removedprocedure_editors               map[string]struct{}
-	clearedprocedure_editors               bool
-	procedure_blocked_groups               map[string]struct{}
-	removedprocedure_blocked_groups        map[string]struct{}
-	clearedprocedure_blocked_groups        bool
-	internalpolicy_editors                 map[string]struct{}
-	removedinternalpolicy_editors          map[string]struct{}
-	clearedinternalpolicy_editors          bool
-	internalpolicy_blocked_groups          map[string]struct{}
-	removedinternalpolicy_blocked_groups   map[string]struct{}
-	clearedinternalpolicy_blocked_groups   bool
-	program_editors                        map[string]struct{}
-	removedprogram_editors                 map[string]struct{}
-	clearedprogram_editors                 bool
-	program_blocked_groups                 map[string]struct{}
-	removedprogram_blocked_groups          map[string]struct{}
-	clearedprogram_blocked_groups          bool
-	program_viewers                        map[string]struct{}
-	removedprogram_viewers                 map[string]struct{}
-	clearedprogram_viewers                 bool
-	risk_editors                           map[string]struct{}
-	removedrisk_editors                    map[string]struct{}
-	clearedrisk_editors                    bool
-	risk_blocked_groups                    map[string]struct{}
-	removedrisk_blocked_groups             map[string]struct{}
-	clearedrisk_blocked_groups             bool
-	risk_viewers                           map[string]struct{}
-	removedrisk_viewers                    map[string]struct{}
-	clearedrisk_viewers                    bool
-	controlobjective_editors               map[string]struct{}
-	removedcontrolobjective_editors        map[string]struct{}
-	clearedcontrolobjective_editors        bool
-	controlobjective_blocked_groups        map[string]struct{}
-	removedcontrolobjective_blocked_groups map[string]struct{}
-	clearedcontrolobjective_blocked_groups bool
-	controlobjective_viewers               map[string]struct{}
-	removedcontrolobjective_viewers        map[string]struct{}
-	clearedcontrolobjective_viewers        bool
-	control_editors                        map[string]struct{}
-	removedcontrol_editors                 map[string]struct{}
-	clearedcontrol_editors                 bool
-	control_blocked_groups                 map[string]struct{}
-	removedcontrol_blocked_groups          map[string]struct{}
-	clearedcontrol_blocked_groups          bool
-	control_viewers                        map[string]struct{}
-	removedcontrol_viewers                 map[string]struct{}
-	clearedcontrol_viewers                 bool
-	narrative_editors                      map[string]struct{}
-	removednarrative_editors               map[string]struct{}
-	clearednarrative_editors               bool
-	narrative_blocked_groups               map[string]struct{}
-	removednarrative_blocked_groups        map[string]struct{}
-	clearednarrative_blocked_groups        bool
-	narrative_viewers                      map[string]struct{}
-	removednarrative_viewers               map[string]struct{}
-	clearednarrative_viewers               bool
-	setting                                *string
-	clearedsetting                         bool
-	users                                  map[string]struct{}
-	removedusers                           map[string]struct{}
-	clearedusers                           bool
-	events                                 map[string]struct{}
-	removedevents                          map[string]struct{}
-	clearedevents                          bool
-	integrations                           map[string]struct{}
-	removedintegrations                    map[string]struct{}
-	clearedintegrations                    bool
-	files                                  map[string]struct{}
-	removedfiles                           map[string]struct{}
-	clearedfiles                           bool
-	tasks                                  map[string]struct{}
-	removedtasks                           map[string]struct{}
-	clearedtasks                           bool
-	members                                map[string]struct{}
-	removedmembers                         map[string]struct{}
-	clearedmembers                         bool
-	done                                   bool
-	oldValue                               func(context.Context) (*Group, error)
-	predicates                             []predicate.Group
+	op                                      Op
+	typ                                     string
+	id                                      *string
+	created_at                              *time.Time
+	updated_at                              *time.Time
+	created_by                              *string
+	updated_by                              *string
+	deleted_at                              *time.Time
+	deleted_by                              *string
+	mapping_id                              *string
+	tags                                    *[]string
+	appendtags                              []string
+	name                                    *string
+	description                             *string
+	gravatar_logo_url                       *string
+	logo_url                                *string
+	display_name                            *string
+	clearedFields                           map[string]struct{}
+	owner                                   *string
+	clearedowner                            bool
+	control_creators                        map[string]struct{}
+	removedcontrol_creators                 map[string]struct{}
+	clearedcontrol_creators                 bool
+	control_objective_creators              map[string]struct{}
+	removedcontrol_objective_creators       map[string]struct{}
+	clearedcontrol_objective_creators       bool
+	group_creators                          map[string]struct{}
+	removedgroup_creators                   map[string]struct{}
+	clearedgroup_creators                   bool
+	internal_policy_creators                map[string]struct{}
+	removedinternal_policy_creators         map[string]struct{}
+	clearedinternal_policy_creators         bool
+	narrative_creators                      map[string]struct{}
+	removednarrative_creators               map[string]struct{}
+	clearednarrative_creators               bool
+	procedure_creators                      map[string]struct{}
+	removedprocedure_creators               map[string]struct{}
+	clearedprocedure_creators               bool
+	program_creators                        map[string]struct{}
+	removedprogram_creators                 map[string]struct{}
+	clearedprogram_creators                 bool
+	risk_creators                           map[string]struct{}
+	removedrisk_creators                    map[string]struct{}
+	clearedrisk_creators                    bool
+	template_creators                       map[string]struct{}
+	removedtemplate_creators                map[string]struct{}
+	clearedtemplate_creators                bool
+	procedure_editors                       map[string]struct{}
+	removedprocedure_editors                map[string]struct{}
+	clearedprocedure_editors                bool
+	procedure_blocked_groups                map[string]struct{}
+	removedprocedure_blocked_groups         map[string]struct{}
+	clearedprocedure_blocked_groups         bool
+	internal_policy_editors                 map[string]struct{}
+	removedinternal_policy_editors          map[string]struct{}
+	clearedinternal_policy_editors          bool
+	internal_policy_blocked_groups          map[string]struct{}
+	removedinternal_policy_blocked_groups   map[string]struct{}
+	clearedinternal_policy_blocked_groups   bool
+	program_editors                         map[string]struct{}
+	removedprogram_editors                  map[string]struct{}
+	clearedprogram_editors                  bool
+	program_blocked_groups                  map[string]struct{}
+	removedprogram_blocked_groups           map[string]struct{}
+	clearedprogram_blocked_groups           bool
+	program_viewers                         map[string]struct{}
+	removedprogram_viewers                  map[string]struct{}
+	clearedprogram_viewers                  bool
+	risk_editors                            map[string]struct{}
+	removedrisk_editors                     map[string]struct{}
+	clearedrisk_editors                     bool
+	risk_blocked_groups                     map[string]struct{}
+	removedrisk_blocked_groups              map[string]struct{}
+	clearedrisk_blocked_groups              bool
+	risk_viewers                            map[string]struct{}
+	removedrisk_viewers                     map[string]struct{}
+	clearedrisk_viewers                     bool
+	control_objective_editors               map[string]struct{}
+	removedcontrol_objective_editors        map[string]struct{}
+	clearedcontrol_objective_editors        bool
+	control_objective_blocked_groups        map[string]struct{}
+	removedcontrol_objective_blocked_groups map[string]struct{}
+	clearedcontrol_objective_blocked_groups bool
+	control_objective_viewers               map[string]struct{}
+	removedcontrol_objective_viewers        map[string]struct{}
+	clearedcontrol_objective_viewers        bool
+	control_editors                         map[string]struct{}
+	removedcontrol_editors                  map[string]struct{}
+	clearedcontrol_editors                  bool
+	control_blocked_groups                  map[string]struct{}
+	removedcontrol_blocked_groups           map[string]struct{}
+	clearedcontrol_blocked_groups           bool
+	control_viewers                         map[string]struct{}
+	removedcontrol_viewers                  map[string]struct{}
+	clearedcontrol_viewers                  bool
+	narrative_editors                       map[string]struct{}
+	removednarrative_editors                map[string]struct{}
+	clearednarrative_editors                bool
+	narrative_blocked_groups                map[string]struct{}
+	removednarrative_blocked_groups         map[string]struct{}
+	clearednarrative_blocked_groups         bool
+	narrative_viewers                       map[string]struct{}
+	removednarrative_viewers                map[string]struct{}
+	clearednarrative_viewers                bool
+	setting                                 *string
+	clearedsetting                          bool
+	users                                   map[string]struct{}
+	removedusers                            map[string]struct{}
+	clearedusers                            bool
+	events                                  map[string]struct{}
+	removedevents                           map[string]struct{}
+	clearedevents                           bool
+	integrations                            map[string]struct{}
+	removedintegrations                     map[string]struct{}
+	clearedintegrations                     bool
+	files                                   map[string]struct{}
+	removedfiles                            map[string]struct{}
+	clearedfiles                            bool
+	tasks                                   map[string]struct{}
+	removedtasks                            map[string]struct{}
+	clearedtasks                            bool
+	members                                 map[string]struct{}
+	removedmembers                          map[string]struct{}
+	clearedmembers                          bool
+	done                                    bool
+	oldValue                                func(context.Context) (*Group, error)
+	predicates                              []predicate.Group
 }
 
 var _ ent.Mutation = (*GroupMutation)(nil)
@@ -36365,112 +36365,112 @@ func (m *GroupMutation) ResetProcedureBlockedGroups() {
 	m.removedprocedure_blocked_groups = nil
 }
 
-// AddInternalpolicyEditorIDs adds the "internalpolicy_editors" edge to the InternalPolicy entity by ids.
-func (m *GroupMutation) AddInternalpolicyEditorIDs(ids ...string) {
-	if m.internalpolicy_editors == nil {
-		m.internalpolicy_editors = make(map[string]struct{})
+// AddInternalPolicyEditorIDs adds the "internal_policy_editors" edge to the InternalPolicy entity by ids.
+func (m *GroupMutation) AddInternalPolicyEditorIDs(ids ...string) {
+	if m.internal_policy_editors == nil {
+		m.internal_policy_editors = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.internalpolicy_editors[ids[i]] = struct{}{}
+		m.internal_policy_editors[ids[i]] = struct{}{}
 	}
 }
 
-// ClearInternalpolicyEditors clears the "internalpolicy_editors" edge to the InternalPolicy entity.
-func (m *GroupMutation) ClearInternalpolicyEditors() {
-	m.clearedinternalpolicy_editors = true
+// ClearInternalPolicyEditors clears the "internal_policy_editors" edge to the InternalPolicy entity.
+func (m *GroupMutation) ClearInternalPolicyEditors() {
+	m.clearedinternal_policy_editors = true
 }
 
-// InternalpolicyEditorsCleared reports if the "internalpolicy_editors" edge to the InternalPolicy entity was cleared.
-func (m *GroupMutation) InternalpolicyEditorsCleared() bool {
-	return m.clearedinternalpolicy_editors
+// InternalPolicyEditorsCleared reports if the "internal_policy_editors" edge to the InternalPolicy entity was cleared.
+func (m *GroupMutation) InternalPolicyEditorsCleared() bool {
+	return m.clearedinternal_policy_editors
 }
 
-// RemoveInternalpolicyEditorIDs removes the "internalpolicy_editors" edge to the InternalPolicy entity by IDs.
-func (m *GroupMutation) RemoveInternalpolicyEditorIDs(ids ...string) {
-	if m.removedinternalpolicy_editors == nil {
-		m.removedinternalpolicy_editors = make(map[string]struct{})
+// RemoveInternalPolicyEditorIDs removes the "internal_policy_editors" edge to the InternalPolicy entity by IDs.
+func (m *GroupMutation) RemoveInternalPolicyEditorIDs(ids ...string) {
+	if m.removedinternal_policy_editors == nil {
+		m.removedinternal_policy_editors = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.internalpolicy_editors, ids[i])
-		m.removedinternalpolicy_editors[ids[i]] = struct{}{}
+		delete(m.internal_policy_editors, ids[i])
+		m.removedinternal_policy_editors[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedInternalpolicyEditors returns the removed IDs of the "internalpolicy_editors" edge to the InternalPolicy entity.
-func (m *GroupMutation) RemovedInternalpolicyEditorsIDs() (ids []string) {
-	for id := range m.removedinternalpolicy_editors {
+// RemovedInternalPolicyEditors returns the removed IDs of the "internal_policy_editors" edge to the InternalPolicy entity.
+func (m *GroupMutation) RemovedInternalPolicyEditorsIDs() (ids []string) {
+	for id := range m.removedinternal_policy_editors {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// InternalpolicyEditorsIDs returns the "internalpolicy_editors" edge IDs in the mutation.
-func (m *GroupMutation) InternalpolicyEditorsIDs() (ids []string) {
-	for id := range m.internalpolicy_editors {
+// InternalPolicyEditorsIDs returns the "internal_policy_editors" edge IDs in the mutation.
+func (m *GroupMutation) InternalPolicyEditorsIDs() (ids []string) {
+	for id := range m.internal_policy_editors {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetInternalpolicyEditors resets all changes to the "internalpolicy_editors" edge.
-func (m *GroupMutation) ResetInternalpolicyEditors() {
-	m.internalpolicy_editors = nil
-	m.clearedinternalpolicy_editors = false
-	m.removedinternalpolicy_editors = nil
+// ResetInternalPolicyEditors resets all changes to the "internal_policy_editors" edge.
+func (m *GroupMutation) ResetInternalPolicyEditors() {
+	m.internal_policy_editors = nil
+	m.clearedinternal_policy_editors = false
+	m.removedinternal_policy_editors = nil
 }
 
-// AddInternalpolicyBlockedGroupIDs adds the "internalpolicy_blocked_groups" edge to the InternalPolicy entity by ids.
-func (m *GroupMutation) AddInternalpolicyBlockedGroupIDs(ids ...string) {
-	if m.internalpolicy_blocked_groups == nil {
-		m.internalpolicy_blocked_groups = make(map[string]struct{})
+// AddInternalPolicyBlockedGroupIDs adds the "internal_policy_blocked_groups" edge to the InternalPolicy entity by ids.
+func (m *GroupMutation) AddInternalPolicyBlockedGroupIDs(ids ...string) {
+	if m.internal_policy_blocked_groups == nil {
+		m.internal_policy_blocked_groups = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.internalpolicy_blocked_groups[ids[i]] = struct{}{}
+		m.internal_policy_blocked_groups[ids[i]] = struct{}{}
 	}
 }
 
-// ClearInternalpolicyBlockedGroups clears the "internalpolicy_blocked_groups" edge to the InternalPolicy entity.
-func (m *GroupMutation) ClearInternalpolicyBlockedGroups() {
-	m.clearedinternalpolicy_blocked_groups = true
+// ClearInternalPolicyBlockedGroups clears the "internal_policy_blocked_groups" edge to the InternalPolicy entity.
+func (m *GroupMutation) ClearInternalPolicyBlockedGroups() {
+	m.clearedinternal_policy_blocked_groups = true
 }
 
-// InternalpolicyBlockedGroupsCleared reports if the "internalpolicy_blocked_groups" edge to the InternalPolicy entity was cleared.
-func (m *GroupMutation) InternalpolicyBlockedGroupsCleared() bool {
-	return m.clearedinternalpolicy_blocked_groups
+// InternalPolicyBlockedGroupsCleared reports if the "internal_policy_blocked_groups" edge to the InternalPolicy entity was cleared.
+func (m *GroupMutation) InternalPolicyBlockedGroupsCleared() bool {
+	return m.clearedinternal_policy_blocked_groups
 }
 
-// RemoveInternalpolicyBlockedGroupIDs removes the "internalpolicy_blocked_groups" edge to the InternalPolicy entity by IDs.
-func (m *GroupMutation) RemoveInternalpolicyBlockedGroupIDs(ids ...string) {
-	if m.removedinternalpolicy_blocked_groups == nil {
-		m.removedinternalpolicy_blocked_groups = make(map[string]struct{})
+// RemoveInternalPolicyBlockedGroupIDs removes the "internal_policy_blocked_groups" edge to the InternalPolicy entity by IDs.
+func (m *GroupMutation) RemoveInternalPolicyBlockedGroupIDs(ids ...string) {
+	if m.removedinternal_policy_blocked_groups == nil {
+		m.removedinternal_policy_blocked_groups = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.internalpolicy_blocked_groups, ids[i])
-		m.removedinternalpolicy_blocked_groups[ids[i]] = struct{}{}
+		delete(m.internal_policy_blocked_groups, ids[i])
+		m.removedinternal_policy_blocked_groups[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedInternalpolicyBlockedGroups returns the removed IDs of the "internalpolicy_blocked_groups" edge to the InternalPolicy entity.
-func (m *GroupMutation) RemovedInternalpolicyBlockedGroupsIDs() (ids []string) {
-	for id := range m.removedinternalpolicy_blocked_groups {
+// RemovedInternalPolicyBlockedGroups returns the removed IDs of the "internal_policy_blocked_groups" edge to the InternalPolicy entity.
+func (m *GroupMutation) RemovedInternalPolicyBlockedGroupsIDs() (ids []string) {
+	for id := range m.removedinternal_policy_blocked_groups {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// InternalpolicyBlockedGroupsIDs returns the "internalpolicy_blocked_groups" edge IDs in the mutation.
-func (m *GroupMutation) InternalpolicyBlockedGroupsIDs() (ids []string) {
-	for id := range m.internalpolicy_blocked_groups {
+// InternalPolicyBlockedGroupsIDs returns the "internal_policy_blocked_groups" edge IDs in the mutation.
+func (m *GroupMutation) InternalPolicyBlockedGroupsIDs() (ids []string) {
+	for id := range m.internal_policy_blocked_groups {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetInternalpolicyBlockedGroups resets all changes to the "internalpolicy_blocked_groups" edge.
-func (m *GroupMutation) ResetInternalpolicyBlockedGroups() {
-	m.internalpolicy_blocked_groups = nil
-	m.clearedinternalpolicy_blocked_groups = false
-	m.removedinternalpolicy_blocked_groups = nil
+// ResetInternalPolicyBlockedGroups resets all changes to the "internal_policy_blocked_groups" edge.
+func (m *GroupMutation) ResetInternalPolicyBlockedGroups() {
+	m.internal_policy_blocked_groups = nil
+	m.clearedinternal_policy_blocked_groups = false
+	m.removedinternal_policy_blocked_groups = nil
 }
 
 // AddProgramEditorIDs adds the "program_editors" edge to the Program entity by ids.
@@ -36797,166 +36797,166 @@ func (m *GroupMutation) ResetRiskViewers() {
 	m.removedrisk_viewers = nil
 }
 
-// AddControlobjectiveEditorIDs adds the "controlobjective_editors" edge to the ControlObjective entity by ids.
-func (m *GroupMutation) AddControlobjectiveEditorIDs(ids ...string) {
-	if m.controlobjective_editors == nil {
-		m.controlobjective_editors = make(map[string]struct{})
+// AddControlObjectiveEditorIDs adds the "control_objective_editors" edge to the ControlObjective entity by ids.
+func (m *GroupMutation) AddControlObjectiveEditorIDs(ids ...string) {
+	if m.control_objective_editors == nil {
+		m.control_objective_editors = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjective_editors[ids[i]] = struct{}{}
+		m.control_objective_editors[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjectiveEditors clears the "controlobjective_editors" edge to the ControlObjective entity.
-func (m *GroupMutation) ClearControlobjectiveEditors() {
-	m.clearedcontrolobjective_editors = true
+// ClearControlObjectiveEditors clears the "control_objective_editors" edge to the ControlObjective entity.
+func (m *GroupMutation) ClearControlObjectiveEditors() {
+	m.clearedcontrol_objective_editors = true
 }
 
-// ControlobjectiveEditorsCleared reports if the "controlobjective_editors" edge to the ControlObjective entity was cleared.
-func (m *GroupMutation) ControlobjectiveEditorsCleared() bool {
-	return m.clearedcontrolobjective_editors
+// ControlObjectiveEditorsCleared reports if the "control_objective_editors" edge to the ControlObjective entity was cleared.
+func (m *GroupMutation) ControlObjectiveEditorsCleared() bool {
+	return m.clearedcontrol_objective_editors
 }
 
-// RemoveControlobjectiveEditorIDs removes the "controlobjective_editors" edge to the ControlObjective entity by IDs.
-func (m *GroupMutation) RemoveControlobjectiveEditorIDs(ids ...string) {
-	if m.removedcontrolobjective_editors == nil {
-		m.removedcontrolobjective_editors = make(map[string]struct{})
+// RemoveControlObjectiveEditorIDs removes the "control_objective_editors" edge to the ControlObjective entity by IDs.
+func (m *GroupMutation) RemoveControlObjectiveEditorIDs(ids ...string) {
+	if m.removedcontrol_objective_editors == nil {
+		m.removedcontrol_objective_editors = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.controlobjective_editors, ids[i])
-		m.removedcontrolobjective_editors[ids[i]] = struct{}{}
+		delete(m.control_objective_editors, ids[i])
+		m.removedcontrol_objective_editors[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControlobjectiveEditors returns the removed IDs of the "controlobjective_editors" edge to the ControlObjective entity.
-func (m *GroupMutation) RemovedControlobjectiveEditorsIDs() (ids []string) {
-	for id := range m.removedcontrolobjective_editors {
+// RemovedControlObjectiveEditors returns the removed IDs of the "control_objective_editors" edge to the ControlObjective entity.
+func (m *GroupMutation) RemovedControlObjectiveEditorsIDs() (ids []string) {
+	for id := range m.removedcontrol_objective_editors {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlobjectiveEditorsIDs returns the "controlobjective_editors" edge IDs in the mutation.
-func (m *GroupMutation) ControlobjectiveEditorsIDs() (ids []string) {
-	for id := range m.controlobjective_editors {
+// ControlObjectiveEditorsIDs returns the "control_objective_editors" edge IDs in the mutation.
+func (m *GroupMutation) ControlObjectiveEditorsIDs() (ids []string) {
+	for id := range m.control_objective_editors {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControlobjectiveEditors resets all changes to the "controlobjective_editors" edge.
-func (m *GroupMutation) ResetControlobjectiveEditors() {
-	m.controlobjective_editors = nil
-	m.clearedcontrolobjective_editors = false
-	m.removedcontrolobjective_editors = nil
+// ResetControlObjectiveEditors resets all changes to the "control_objective_editors" edge.
+func (m *GroupMutation) ResetControlObjectiveEditors() {
+	m.control_objective_editors = nil
+	m.clearedcontrol_objective_editors = false
+	m.removedcontrol_objective_editors = nil
 }
 
-// AddControlobjectiveBlockedGroupIDs adds the "controlobjective_blocked_groups" edge to the ControlObjective entity by ids.
-func (m *GroupMutation) AddControlobjectiveBlockedGroupIDs(ids ...string) {
-	if m.controlobjective_blocked_groups == nil {
-		m.controlobjective_blocked_groups = make(map[string]struct{})
+// AddControlObjectiveBlockedGroupIDs adds the "control_objective_blocked_groups" edge to the ControlObjective entity by ids.
+func (m *GroupMutation) AddControlObjectiveBlockedGroupIDs(ids ...string) {
+	if m.control_objective_blocked_groups == nil {
+		m.control_objective_blocked_groups = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjective_blocked_groups[ids[i]] = struct{}{}
+		m.control_objective_blocked_groups[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjectiveBlockedGroups clears the "controlobjective_blocked_groups" edge to the ControlObjective entity.
-func (m *GroupMutation) ClearControlobjectiveBlockedGroups() {
-	m.clearedcontrolobjective_blocked_groups = true
+// ClearControlObjectiveBlockedGroups clears the "control_objective_blocked_groups" edge to the ControlObjective entity.
+func (m *GroupMutation) ClearControlObjectiveBlockedGroups() {
+	m.clearedcontrol_objective_blocked_groups = true
 }
 
-// ControlobjectiveBlockedGroupsCleared reports if the "controlobjective_blocked_groups" edge to the ControlObjective entity was cleared.
-func (m *GroupMutation) ControlobjectiveBlockedGroupsCleared() bool {
-	return m.clearedcontrolobjective_blocked_groups
+// ControlObjectiveBlockedGroupsCleared reports if the "control_objective_blocked_groups" edge to the ControlObjective entity was cleared.
+func (m *GroupMutation) ControlObjectiveBlockedGroupsCleared() bool {
+	return m.clearedcontrol_objective_blocked_groups
 }
 
-// RemoveControlobjectiveBlockedGroupIDs removes the "controlobjective_blocked_groups" edge to the ControlObjective entity by IDs.
-func (m *GroupMutation) RemoveControlobjectiveBlockedGroupIDs(ids ...string) {
-	if m.removedcontrolobjective_blocked_groups == nil {
-		m.removedcontrolobjective_blocked_groups = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.controlobjective_blocked_groups, ids[i])
-		m.removedcontrolobjective_blocked_groups[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedControlobjectiveBlockedGroups returns the removed IDs of the "controlobjective_blocked_groups" edge to the ControlObjective entity.
-func (m *GroupMutation) RemovedControlobjectiveBlockedGroupsIDs() (ids []string) {
-	for id := range m.removedcontrolobjective_blocked_groups {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ControlobjectiveBlockedGroupsIDs returns the "controlobjective_blocked_groups" edge IDs in the mutation.
-func (m *GroupMutation) ControlobjectiveBlockedGroupsIDs() (ids []string) {
-	for id := range m.controlobjective_blocked_groups {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetControlobjectiveBlockedGroups resets all changes to the "controlobjective_blocked_groups" edge.
-func (m *GroupMutation) ResetControlobjectiveBlockedGroups() {
-	m.controlobjective_blocked_groups = nil
-	m.clearedcontrolobjective_blocked_groups = false
-	m.removedcontrolobjective_blocked_groups = nil
-}
-
-// AddControlobjectiveViewerIDs adds the "controlobjective_viewers" edge to the ControlObjective entity by ids.
-func (m *GroupMutation) AddControlobjectiveViewerIDs(ids ...string) {
-	if m.controlobjective_viewers == nil {
-		m.controlobjective_viewers = make(map[string]struct{})
+// RemoveControlObjectiveBlockedGroupIDs removes the "control_objective_blocked_groups" edge to the ControlObjective entity by IDs.
+func (m *GroupMutation) RemoveControlObjectiveBlockedGroupIDs(ids ...string) {
+	if m.removedcontrol_objective_blocked_groups == nil {
+		m.removedcontrol_objective_blocked_groups = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjective_viewers[ids[i]] = struct{}{}
+		delete(m.control_objective_blocked_groups, ids[i])
+		m.removedcontrol_objective_blocked_groups[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjectiveViewers clears the "controlobjective_viewers" edge to the ControlObjective entity.
-func (m *GroupMutation) ClearControlobjectiveViewers() {
-	m.clearedcontrolobjective_viewers = true
+// RemovedControlObjectiveBlockedGroups returns the removed IDs of the "control_objective_blocked_groups" edge to the ControlObjective entity.
+func (m *GroupMutation) RemovedControlObjectiveBlockedGroupsIDs() (ids []string) {
+	for id := range m.removedcontrol_objective_blocked_groups {
+		ids = append(ids, id)
+	}
+	return
 }
 
-// ControlobjectiveViewersCleared reports if the "controlobjective_viewers" edge to the ControlObjective entity was cleared.
-func (m *GroupMutation) ControlobjectiveViewersCleared() bool {
-	return m.clearedcontrolobjective_viewers
+// ControlObjectiveBlockedGroupsIDs returns the "control_objective_blocked_groups" edge IDs in the mutation.
+func (m *GroupMutation) ControlObjectiveBlockedGroupsIDs() (ids []string) {
+	for id := range m.control_objective_blocked_groups {
+		ids = append(ids, id)
+	}
+	return
 }
 
-// RemoveControlobjectiveViewerIDs removes the "controlobjective_viewers" edge to the ControlObjective entity by IDs.
-func (m *GroupMutation) RemoveControlobjectiveViewerIDs(ids ...string) {
-	if m.removedcontrolobjective_viewers == nil {
-		m.removedcontrolobjective_viewers = make(map[string]struct{})
+// ResetControlObjectiveBlockedGroups resets all changes to the "control_objective_blocked_groups" edge.
+func (m *GroupMutation) ResetControlObjectiveBlockedGroups() {
+	m.control_objective_blocked_groups = nil
+	m.clearedcontrol_objective_blocked_groups = false
+	m.removedcontrol_objective_blocked_groups = nil
+}
+
+// AddControlObjectiveViewerIDs adds the "control_objective_viewers" edge to the ControlObjective entity by ids.
+func (m *GroupMutation) AddControlObjectiveViewerIDs(ids ...string) {
+	if m.control_objective_viewers == nil {
+		m.control_objective_viewers = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.controlobjective_viewers, ids[i])
-		m.removedcontrolobjective_viewers[ids[i]] = struct{}{}
+		m.control_objective_viewers[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControlobjectiveViewers returns the removed IDs of the "controlobjective_viewers" edge to the ControlObjective entity.
-func (m *GroupMutation) RemovedControlobjectiveViewersIDs() (ids []string) {
-	for id := range m.removedcontrolobjective_viewers {
+// ClearControlObjectiveViewers clears the "control_objective_viewers" edge to the ControlObjective entity.
+func (m *GroupMutation) ClearControlObjectiveViewers() {
+	m.clearedcontrol_objective_viewers = true
+}
+
+// ControlObjectiveViewersCleared reports if the "control_objective_viewers" edge to the ControlObjective entity was cleared.
+func (m *GroupMutation) ControlObjectiveViewersCleared() bool {
+	return m.clearedcontrol_objective_viewers
+}
+
+// RemoveControlObjectiveViewerIDs removes the "control_objective_viewers" edge to the ControlObjective entity by IDs.
+func (m *GroupMutation) RemoveControlObjectiveViewerIDs(ids ...string) {
+	if m.removedcontrol_objective_viewers == nil {
+		m.removedcontrol_objective_viewers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.control_objective_viewers, ids[i])
+		m.removedcontrol_objective_viewers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedControlObjectiveViewers returns the removed IDs of the "control_objective_viewers" edge to the ControlObjective entity.
+func (m *GroupMutation) RemovedControlObjectiveViewersIDs() (ids []string) {
+	for id := range m.removedcontrol_objective_viewers {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlobjectiveViewersIDs returns the "controlobjective_viewers" edge IDs in the mutation.
-func (m *GroupMutation) ControlobjectiveViewersIDs() (ids []string) {
-	for id := range m.controlobjective_viewers {
+// ControlObjectiveViewersIDs returns the "control_objective_viewers" edge IDs in the mutation.
+func (m *GroupMutation) ControlObjectiveViewersIDs() (ids []string) {
+	for id := range m.control_objective_viewers {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControlobjectiveViewers resets all changes to the "controlobjective_viewers" edge.
-func (m *GroupMutation) ResetControlobjectiveViewers() {
-	m.controlobjective_viewers = nil
-	m.clearedcontrolobjective_viewers = false
-	m.removedcontrolobjective_viewers = nil
+// ResetControlObjectiveViewers resets all changes to the "control_objective_viewers" edge.
+func (m *GroupMutation) ResetControlObjectiveViewers() {
+	m.control_objective_viewers = nil
+	m.clearedcontrol_objective_viewers = false
+	m.removedcontrol_objective_viewers = nil
 }
 
 // AddControlEditorIDs adds the "control_editors" edge to the Control entity by ids.
@@ -38106,11 +38106,11 @@ func (m *GroupMutation) AddedEdges() []string {
 	if m.procedure_blocked_groups != nil {
 		edges = append(edges, group.EdgeProcedureBlockedGroups)
 	}
-	if m.internalpolicy_editors != nil {
-		edges = append(edges, group.EdgeInternalpolicyEditors)
+	if m.internal_policy_editors != nil {
+		edges = append(edges, group.EdgeInternalPolicyEditors)
 	}
-	if m.internalpolicy_blocked_groups != nil {
-		edges = append(edges, group.EdgeInternalpolicyBlockedGroups)
+	if m.internal_policy_blocked_groups != nil {
+		edges = append(edges, group.EdgeInternalPolicyBlockedGroups)
 	}
 	if m.program_editors != nil {
 		edges = append(edges, group.EdgeProgramEditors)
@@ -38130,14 +38130,14 @@ func (m *GroupMutation) AddedEdges() []string {
 	if m.risk_viewers != nil {
 		edges = append(edges, group.EdgeRiskViewers)
 	}
-	if m.controlobjective_editors != nil {
-		edges = append(edges, group.EdgeControlobjectiveEditors)
+	if m.control_objective_editors != nil {
+		edges = append(edges, group.EdgeControlObjectiveEditors)
 	}
-	if m.controlobjective_blocked_groups != nil {
-		edges = append(edges, group.EdgeControlobjectiveBlockedGroups)
+	if m.control_objective_blocked_groups != nil {
+		edges = append(edges, group.EdgeControlObjectiveBlockedGroups)
 	}
-	if m.controlobjective_viewers != nil {
-		edges = append(edges, group.EdgeControlobjectiveViewers)
+	if m.control_objective_viewers != nil {
+		edges = append(edges, group.EdgeControlObjectiveViewers)
 	}
 	if m.control_editors != nil {
 		edges = append(edges, group.EdgeControlEditors)
@@ -38255,15 +38255,15 @@ func (m *GroupMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeInternalpolicyEditors:
-		ids := make([]ent.Value, 0, len(m.internalpolicy_editors))
-		for id := range m.internalpolicy_editors {
+	case group.EdgeInternalPolicyEditors:
+		ids := make([]ent.Value, 0, len(m.internal_policy_editors))
+		for id := range m.internal_policy_editors {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeInternalpolicyBlockedGroups:
-		ids := make([]ent.Value, 0, len(m.internalpolicy_blocked_groups))
-		for id := range m.internalpolicy_blocked_groups {
+	case group.EdgeInternalPolicyBlockedGroups:
+		ids := make([]ent.Value, 0, len(m.internal_policy_blocked_groups))
+		for id := range m.internal_policy_blocked_groups {
 			ids = append(ids, id)
 		}
 		return ids
@@ -38303,21 +38303,21 @@ func (m *GroupMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeControlobjectiveEditors:
-		ids := make([]ent.Value, 0, len(m.controlobjective_editors))
-		for id := range m.controlobjective_editors {
+	case group.EdgeControlObjectiveEditors:
+		ids := make([]ent.Value, 0, len(m.control_objective_editors))
+		for id := range m.control_objective_editors {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeControlobjectiveBlockedGroups:
-		ids := make([]ent.Value, 0, len(m.controlobjective_blocked_groups))
-		for id := range m.controlobjective_blocked_groups {
+	case group.EdgeControlObjectiveBlockedGroups:
+		ids := make([]ent.Value, 0, len(m.control_objective_blocked_groups))
+		for id := range m.control_objective_blocked_groups {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeControlobjectiveViewers:
-		ids := make([]ent.Value, 0, len(m.controlobjective_viewers))
-		for id := range m.controlobjective_viewers {
+	case group.EdgeControlObjectiveViewers:
+		ids := make([]ent.Value, 0, len(m.control_objective_viewers))
+		for id := range m.control_objective_viewers {
 			ids = append(ids, id)
 		}
 		return ids
@@ -38437,11 +38437,11 @@ func (m *GroupMutation) RemovedEdges() []string {
 	if m.removedprocedure_blocked_groups != nil {
 		edges = append(edges, group.EdgeProcedureBlockedGroups)
 	}
-	if m.removedinternalpolicy_editors != nil {
-		edges = append(edges, group.EdgeInternalpolicyEditors)
+	if m.removedinternal_policy_editors != nil {
+		edges = append(edges, group.EdgeInternalPolicyEditors)
 	}
-	if m.removedinternalpolicy_blocked_groups != nil {
-		edges = append(edges, group.EdgeInternalpolicyBlockedGroups)
+	if m.removedinternal_policy_blocked_groups != nil {
+		edges = append(edges, group.EdgeInternalPolicyBlockedGroups)
 	}
 	if m.removedprogram_editors != nil {
 		edges = append(edges, group.EdgeProgramEditors)
@@ -38461,14 +38461,14 @@ func (m *GroupMutation) RemovedEdges() []string {
 	if m.removedrisk_viewers != nil {
 		edges = append(edges, group.EdgeRiskViewers)
 	}
-	if m.removedcontrolobjective_editors != nil {
-		edges = append(edges, group.EdgeControlobjectiveEditors)
+	if m.removedcontrol_objective_editors != nil {
+		edges = append(edges, group.EdgeControlObjectiveEditors)
 	}
-	if m.removedcontrolobjective_blocked_groups != nil {
-		edges = append(edges, group.EdgeControlobjectiveBlockedGroups)
+	if m.removedcontrol_objective_blocked_groups != nil {
+		edges = append(edges, group.EdgeControlObjectiveBlockedGroups)
 	}
-	if m.removedcontrolobjective_viewers != nil {
-		edges = append(edges, group.EdgeControlobjectiveViewers)
+	if m.removedcontrol_objective_viewers != nil {
+		edges = append(edges, group.EdgeControlObjectiveViewers)
 	}
 	if m.removedcontrol_editors != nil {
 		edges = append(edges, group.EdgeControlEditors)
@@ -38579,15 +38579,15 @@ func (m *GroupMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeInternalpolicyEditors:
-		ids := make([]ent.Value, 0, len(m.removedinternalpolicy_editors))
-		for id := range m.removedinternalpolicy_editors {
+	case group.EdgeInternalPolicyEditors:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policy_editors))
+		for id := range m.removedinternal_policy_editors {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeInternalpolicyBlockedGroups:
-		ids := make([]ent.Value, 0, len(m.removedinternalpolicy_blocked_groups))
-		for id := range m.removedinternalpolicy_blocked_groups {
+	case group.EdgeInternalPolicyBlockedGroups:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policy_blocked_groups))
+		for id := range m.removedinternal_policy_blocked_groups {
 			ids = append(ids, id)
 		}
 		return ids
@@ -38627,21 +38627,21 @@ func (m *GroupMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeControlobjectiveEditors:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjective_editors))
-		for id := range m.removedcontrolobjective_editors {
+	case group.EdgeControlObjectiveEditors:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objective_editors))
+		for id := range m.removedcontrol_objective_editors {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeControlobjectiveBlockedGroups:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjective_blocked_groups))
-		for id := range m.removedcontrolobjective_blocked_groups {
+	case group.EdgeControlObjectiveBlockedGroups:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objective_blocked_groups))
+		for id := range m.removedcontrol_objective_blocked_groups {
 			ids = append(ids, id)
 		}
 		return ids
-	case group.EdgeControlobjectiveViewers:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjective_viewers))
-		for id := range m.removedcontrolobjective_viewers {
+	case group.EdgeControlObjectiveViewers:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objective_viewers))
+		for id := range m.removedcontrol_objective_viewers {
 			ids = append(ids, id)
 		}
 		return ids
@@ -38760,11 +38760,11 @@ func (m *GroupMutation) ClearedEdges() []string {
 	if m.clearedprocedure_blocked_groups {
 		edges = append(edges, group.EdgeProcedureBlockedGroups)
 	}
-	if m.clearedinternalpolicy_editors {
-		edges = append(edges, group.EdgeInternalpolicyEditors)
+	if m.clearedinternal_policy_editors {
+		edges = append(edges, group.EdgeInternalPolicyEditors)
 	}
-	if m.clearedinternalpolicy_blocked_groups {
-		edges = append(edges, group.EdgeInternalpolicyBlockedGroups)
+	if m.clearedinternal_policy_blocked_groups {
+		edges = append(edges, group.EdgeInternalPolicyBlockedGroups)
 	}
 	if m.clearedprogram_editors {
 		edges = append(edges, group.EdgeProgramEditors)
@@ -38784,14 +38784,14 @@ func (m *GroupMutation) ClearedEdges() []string {
 	if m.clearedrisk_viewers {
 		edges = append(edges, group.EdgeRiskViewers)
 	}
-	if m.clearedcontrolobjective_editors {
-		edges = append(edges, group.EdgeControlobjectiveEditors)
+	if m.clearedcontrol_objective_editors {
+		edges = append(edges, group.EdgeControlObjectiveEditors)
 	}
-	if m.clearedcontrolobjective_blocked_groups {
-		edges = append(edges, group.EdgeControlobjectiveBlockedGroups)
+	if m.clearedcontrol_objective_blocked_groups {
+		edges = append(edges, group.EdgeControlObjectiveBlockedGroups)
 	}
-	if m.clearedcontrolobjective_viewers {
-		edges = append(edges, group.EdgeControlobjectiveViewers)
+	if m.clearedcontrol_objective_viewers {
+		edges = append(edges, group.EdgeControlObjectiveViewers)
 	}
 	if m.clearedcontrol_editors {
 		edges = append(edges, group.EdgeControlEditors)
@@ -38863,10 +38863,10 @@ func (m *GroupMutation) EdgeCleared(name string) bool {
 		return m.clearedprocedure_editors
 	case group.EdgeProcedureBlockedGroups:
 		return m.clearedprocedure_blocked_groups
-	case group.EdgeInternalpolicyEditors:
-		return m.clearedinternalpolicy_editors
-	case group.EdgeInternalpolicyBlockedGroups:
-		return m.clearedinternalpolicy_blocked_groups
+	case group.EdgeInternalPolicyEditors:
+		return m.clearedinternal_policy_editors
+	case group.EdgeInternalPolicyBlockedGroups:
+		return m.clearedinternal_policy_blocked_groups
 	case group.EdgeProgramEditors:
 		return m.clearedprogram_editors
 	case group.EdgeProgramBlockedGroups:
@@ -38879,12 +38879,12 @@ func (m *GroupMutation) EdgeCleared(name string) bool {
 		return m.clearedrisk_blocked_groups
 	case group.EdgeRiskViewers:
 		return m.clearedrisk_viewers
-	case group.EdgeControlobjectiveEditors:
-		return m.clearedcontrolobjective_editors
-	case group.EdgeControlobjectiveBlockedGroups:
-		return m.clearedcontrolobjective_blocked_groups
-	case group.EdgeControlobjectiveViewers:
-		return m.clearedcontrolobjective_viewers
+	case group.EdgeControlObjectiveEditors:
+		return m.clearedcontrol_objective_editors
+	case group.EdgeControlObjectiveBlockedGroups:
+		return m.clearedcontrol_objective_blocked_groups
+	case group.EdgeControlObjectiveViewers:
+		return m.clearedcontrol_objective_viewers
 	case group.EdgeControlEditors:
 		return m.clearedcontrol_editors
 	case group.EdgeControlBlockedGroups:
@@ -38969,11 +38969,11 @@ func (m *GroupMutation) ResetEdge(name string) error {
 	case group.EdgeProcedureBlockedGroups:
 		m.ResetProcedureBlockedGroups()
 		return nil
-	case group.EdgeInternalpolicyEditors:
-		m.ResetInternalpolicyEditors()
+	case group.EdgeInternalPolicyEditors:
+		m.ResetInternalPolicyEditors()
 		return nil
-	case group.EdgeInternalpolicyBlockedGroups:
-		m.ResetInternalpolicyBlockedGroups()
+	case group.EdgeInternalPolicyBlockedGroups:
+		m.ResetInternalPolicyBlockedGroups()
 		return nil
 	case group.EdgeProgramEditors:
 		m.ResetProgramEditors()
@@ -38993,14 +38993,14 @@ func (m *GroupMutation) ResetEdge(name string) error {
 	case group.EdgeRiskViewers:
 		m.ResetRiskViewers()
 		return nil
-	case group.EdgeControlobjectiveEditors:
-		m.ResetControlobjectiveEditors()
+	case group.EdgeControlObjectiveEditors:
+		m.ResetControlObjectiveEditors()
 		return nil
-	case group.EdgeControlobjectiveBlockedGroups:
-		m.ResetControlobjectiveBlockedGroups()
+	case group.EdgeControlObjectiveBlockedGroups:
+		m.ResetControlObjectiveBlockedGroups()
 		return nil
-	case group.EdgeControlobjectiveViewers:
-		m.ResetControlobjectiveViewers()
+	case group.EdgeControlObjectiveViewers:
+		m.ResetControlObjectiveViewers()
 		return nil
 	case group.EdgeControlEditors:
 		m.ResetControlEditors()
@@ -50696,56 +50696,56 @@ func (m *IntegrationHistoryMutation) ResetEdge(name string) error {
 // InternalPolicyMutation represents an operation that mutates the InternalPolicy nodes in the graph.
 type InternalPolicyMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	mapping_id               *string
-	tags                     *[]string
-	appendtags               []string
-	name                     *string
-	description              *string
-	status                   *string
-	policy_type              *string
-	version                  *string
-	purpose_and_scope        *string
-	background               *string
-	details                  *map[string]interface{}
-	clearedFields            map[string]struct{}
-	owner                    *string
-	clearedowner             bool
-	blocked_groups           map[string]struct{}
-	removedblocked_groups    map[string]struct{}
-	clearedblocked_groups    bool
-	editors                  map[string]struct{}
-	removededitors           map[string]struct{}
-	clearededitors           bool
-	controlobjectives        map[string]struct{}
-	removedcontrolobjectives map[string]struct{}
-	clearedcontrolobjectives bool
-	controls                 map[string]struct{}
-	removedcontrols          map[string]struct{}
-	clearedcontrols          bool
-	procedures               map[string]struct{}
-	removedprocedures        map[string]struct{}
-	clearedprocedures        bool
-	narratives               map[string]struct{}
-	removednarratives        map[string]struct{}
-	clearednarratives        bool
-	tasks                    map[string]struct{}
-	removedtasks             map[string]struct{}
-	clearedtasks             bool
-	programs                 map[string]struct{}
-	removedprograms          map[string]struct{}
-	clearedprograms          bool
-	done                     bool
-	oldValue                 func(context.Context) (*InternalPolicy, error)
-	predicates               []predicate.InternalPolicy
+	op                        Op
+	typ                       string
+	id                        *string
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	mapping_id                *string
+	tags                      *[]string
+	appendtags                []string
+	name                      *string
+	description               *string
+	status                    *string
+	policy_type               *string
+	version                   *string
+	purpose_and_scope         *string
+	background                *string
+	details                   *map[string]interface{}
+	clearedFields             map[string]struct{}
+	owner                     *string
+	clearedowner              bool
+	blocked_groups            map[string]struct{}
+	removedblocked_groups     map[string]struct{}
+	clearedblocked_groups     bool
+	editors                   map[string]struct{}
+	removededitors            map[string]struct{}
+	clearededitors            bool
+	control_objectives        map[string]struct{}
+	removedcontrol_objectives map[string]struct{}
+	clearedcontrol_objectives bool
+	controls                  map[string]struct{}
+	removedcontrols           map[string]struct{}
+	clearedcontrols           bool
+	procedures                map[string]struct{}
+	removedprocedures         map[string]struct{}
+	clearedprocedures         bool
+	narratives                map[string]struct{}
+	removednarratives         map[string]struct{}
+	clearednarratives         bool
+	tasks                     map[string]struct{}
+	removedtasks              map[string]struct{}
+	clearedtasks              bool
+	programs                  map[string]struct{}
+	removedprograms           map[string]struct{}
+	clearedprograms           bool
+	done                      bool
+	oldValue                  func(context.Context) (*InternalPolicy, error)
+	predicates                []predicate.InternalPolicy
 }
 
 var _ ent.Mutation = (*InternalPolicyMutation)(nil)
@@ -51810,58 +51810,58 @@ func (m *InternalPolicyMutation) ResetEditors() {
 	m.removededitors = nil
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by ids.
-func (m *InternalPolicyMutation) AddControlobjectiveIDs(ids ...string) {
-	if m.controlobjectives == nil {
-		m.controlobjectives = make(map[string]struct{})
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by ids.
+func (m *InternalPolicyMutation) AddControlObjectiveIDs(ids ...string) {
+	if m.control_objectives == nil {
+		m.control_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjectives[ids[i]] = struct{}{}
+		m.control_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjectives clears the "controlobjectives" edge to the ControlObjective entity.
-func (m *InternalPolicyMutation) ClearControlobjectives() {
-	m.clearedcontrolobjectives = true
+// ClearControlObjectives clears the "control_objectives" edge to the ControlObjective entity.
+func (m *InternalPolicyMutation) ClearControlObjectives() {
+	m.clearedcontrol_objectives = true
 }
 
-// ControlobjectivesCleared reports if the "controlobjectives" edge to the ControlObjective entity was cleared.
-func (m *InternalPolicyMutation) ControlobjectivesCleared() bool {
-	return m.clearedcontrolobjectives
+// ControlObjectivesCleared reports if the "control_objectives" edge to the ControlObjective entity was cleared.
+func (m *InternalPolicyMutation) ControlObjectivesCleared() bool {
+	return m.clearedcontrol_objectives
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (m *InternalPolicyMutation) RemoveControlobjectiveIDs(ids ...string) {
-	if m.removedcontrolobjectives == nil {
-		m.removedcontrolobjectives = make(map[string]struct{})
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to the ControlObjective entity by IDs.
+func (m *InternalPolicyMutation) RemoveControlObjectiveIDs(ids ...string) {
+	if m.removedcontrol_objectives == nil {
+		m.removedcontrol_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.controlobjectives, ids[i])
-		m.removedcontrolobjectives[ids[i]] = struct{}{}
+		delete(m.control_objectives, ids[i])
+		m.removedcontrol_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControlobjectives returns the removed IDs of the "controlobjectives" edge to the ControlObjective entity.
-func (m *InternalPolicyMutation) RemovedControlobjectivesIDs() (ids []string) {
-	for id := range m.removedcontrolobjectives {
+// RemovedControlObjectives returns the removed IDs of the "control_objectives" edge to the ControlObjective entity.
+func (m *InternalPolicyMutation) RemovedControlObjectivesIDs() (ids []string) {
+	for id := range m.removedcontrol_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlobjectivesIDs returns the "controlobjectives" edge IDs in the mutation.
-func (m *InternalPolicyMutation) ControlobjectivesIDs() (ids []string) {
-	for id := range m.controlobjectives {
+// ControlObjectivesIDs returns the "control_objectives" edge IDs in the mutation.
+func (m *InternalPolicyMutation) ControlObjectivesIDs() (ids []string) {
+	for id := range m.control_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControlobjectives resets all changes to the "controlobjectives" edge.
-func (m *InternalPolicyMutation) ResetControlobjectives() {
-	m.controlobjectives = nil
-	m.clearedcontrolobjectives = false
-	m.removedcontrolobjectives = nil
+// ResetControlObjectives resets all changes to the "control_objectives" edge.
+func (m *InternalPolicyMutation) ResetControlObjectives() {
+	m.control_objectives = nil
+	m.clearedcontrol_objectives = false
+	m.removedcontrol_objectives = nil
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by ids.
@@ -52642,8 +52642,8 @@ func (m *InternalPolicyMutation) AddedEdges() []string {
 	if m.editors != nil {
 		edges = append(edges, internalpolicy.EdgeEditors)
 	}
-	if m.controlobjectives != nil {
-		edges = append(edges, internalpolicy.EdgeControlobjectives)
+	if m.control_objectives != nil {
+		edges = append(edges, internalpolicy.EdgeControlObjectives)
 	}
 	if m.controls != nil {
 		edges = append(edges, internalpolicy.EdgeControls)
@@ -52683,9 +52683,9 @@ func (m *InternalPolicyMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case internalpolicy.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.controlobjectives))
-		for id := range m.controlobjectives {
+	case internalpolicy.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.control_objectives))
+		for id := range m.control_objectives {
 			ids = append(ids, id)
 		}
 		return ids
@@ -52732,8 +52732,8 @@ func (m *InternalPolicyMutation) RemovedEdges() []string {
 	if m.removededitors != nil {
 		edges = append(edges, internalpolicy.EdgeEditors)
 	}
-	if m.removedcontrolobjectives != nil {
-		edges = append(edges, internalpolicy.EdgeControlobjectives)
+	if m.removedcontrol_objectives != nil {
+		edges = append(edges, internalpolicy.EdgeControlObjectives)
 	}
 	if m.removedcontrols != nil {
 		edges = append(edges, internalpolicy.EdgeControls)
@@ -52769,9 +52769,9 @@ func (m *InternalPolicyMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case internalpolicy.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjectives))
-		for id := range m.removedcontrolobjectives {
+	case internalpolicy.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objectives))
+		for id := range m.removedcontrol_objectives {
 			ids = append(ids, id)
 		}
 		return ids
@@ -52821,8 +52821,8 @@ func (m *InternalPolicyMutation) ClearedEdges() []string {
 	if m.clearededitors {
 		edges = append(edges, internalpolicy.EdgeEditors)
 	}
-	if m.clearedcontrolobjectives {
-		edges = append(edges, internalpolicy.EdgeControlobjectives)
+	if m.clearedcontrol_objectives {
+		edges = append(edges, internalpolicy.EdgeControlObjectives)
 	}
 	if m.clearedcontrols {
 		edges = append(edges, internalpolicy.EdgeControls)
@@ -52852,8 +52852,8 @@ func (m *InternalPolicyMutation) EdgeCleared(name string) bool {
 		return m.clearedblocked_groups
 	case internalpolicy.EdgeEditors:
 		return m.clearededitors
-	case internalpolicy.EdgeControlobjectives:
-		return m.clearedcontrolobjectives
+	case internalpolicy.EdgeControlObjectives:
+		return m.clearedcontrol_objectives
 	case internalpolicy.EdgeControls:
 		return m.clearedcontrols
 	case internalpolicy.EdgeProcedures:
@@ -52892,8 +52892,8 @@ func (m *InternalPolicyMutation) ResetEdge(name string) error {
 	case internalpolicy.EdgeEditors:
 		m.ResetEditors()
 		return nil
-	case internalpolicy.EdgeControlobjectives:
-		m.ResetControlobjectives()
+	case internalpolicy.EdgeControlObjectives:
+		m.ResetControlObjectives()
 		return nil
 	case internalpolicy.EdgeControls:
 		m.ResetControls()
@@ -56090,52 +56090,52 @@ func (m *InviteMutation) ResetEdge(name string) error {
 // NarrativeMutation represents an operation that mutates the Narrative nodes in the graph.
 type NarrativeMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	mapping_id              *string
-	tags                    *[]string
-	appendtags              []string
-	name                    *string
-	description             *string
-	satisfies               *string
-	details                 *map[string]interface{}
-	clearedFields           map[string]struct{}
-	owner                   *string
-	clearedowner            bool
-	blocked_groups          map[string]struct{}
-	removedblocked_groups   map[string]struct{}
-	clearedblocked_groups   bool
-	editors                 map[string]struct{}
-	removededitors          map[string]struct{}
-	clearededitors          bool
-	viewers                 map[string]struct{}
-	removedviewers          map[string]struct{}
-	clearedviewers          bool
-	policy                  map[string]struct{}
-	removedpolicy           map[string]struct{}
-	clearedpolicy           bool
-	control                 map[string]struct{}
-	removedcontrol          map[string]struct{}
-	clearedcontrol          bool
-	procedure               map[string]struct{}
-	removedprocedure        map[string]struct{}
-	clearedprocedure        bool
-	controlobjective        map[string]struct{}
-	removedcontrolobjective map[string]struct{}
-	clearedcontrolobjective bool
-	programs                map[string]struct{}
-	removedprograms         map[string]struct{}
-	clearedprograms         bool
-	done                    bool
-	oldValue                func(context.Context) (*Narrative, error)
-	predicates              []predicate.Narrative
+	op                       Op
+	typ                      string
+	id                       *string
+	created_at               *time.Time
+	updated_at               *time.Time
+	created_by               *string
+	updated_by               *string
+	deleted_at               *time.Time
+	deleted_by               *string
+	mapping_id               *string
+	tags                     *[]string
+	appendtags               []string
+	name                     *string
+	description              *string
+	satisfies                *string
+	details                  *map[string]interface{}
+	clearedFields            map[string]struct{}
+	owner                    *string
+	clearedowner             bool
+	blocked_groups           map[string]struct{}
+	removedblocked_groups    map[string]struct{}
+	clearedblocked_groups    bool
+	editors                  map[string]struct{}
+	removededitors           map[string]struct{}
+	clearededitors           bool
+	viewers                  map[string]struct{}
+	removedviewers           map[string]struct{}
+	clearedviewers           bool
+	internal_policy          map[string]struct{}
+	removedinternal_policy   map[string]struct{}
+	clearedinternal_policy   bool
+	control                  map[string]struct{}
+	removedcontrol           map[string]struct{}
+	clearedcontrol           bool
+	procedure                map[string]struct{}
+	removedprocedure         map[string]struct{}
+	clearedprocedure         bool
+	control_objective        map[string]struct{}
+	removedcontrol_objective map[string]struct{}
+	clearedcontrol_objective bool
+	programs                 map[string]struct{}
+	removedprograms          map[string]struct{}
+	clearedprograms          bool
+	done                     bool
+	oldValue                 func(context.Context) (*Narrative, error)
+	predicates               []predicate.Narrative
 }
 
 var _ ent.Mutation = (*NarrativeMutation)(nil)
@@ -57045,58 +57045,58 @@ func (m *NarrativeMutation) ResetViewers() {
 	m.removedviewers = nil
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by ids.
-func (m *NarrativeMutation) AddPolicyIDs(ids ...string) {
-	if m.policy == nil {
-		m.policy = make(map[string]struct{})
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by ids.
+func (m *NarrativeMutation) AddInternalPolicyIDs(ids ...string) {
+	if m.internal_policy == nil {
+		m.internal_policy = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.policy[ids[i]] = struct{}{}
+		m.internal_policy[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPolicy clears the "policy" edge to the InternalPolicy entity.
-func (m *NarrativeMutation) ClearPolicy() {
-	m.clearedpolicy = true
+// ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
+func (m *NarrativeMutation) ClearInternalPolicy() {
+	m.clearedinternal_policy = true
 }
 
-// PolicyCleared reports if the "policy" edge to the InternalPolicy entity was cleared.
-func (m *NarrativeMutation) PolicyCleared() bool {
-	return m.clearedpolicy
+// InternalPolicyCleared reports if the "internal_policy" edge to the InternalPolicy entity was cleared.
+func (m *NarrativeMutation) InternalPolicyCleared() bool {
+	return m.clearedinternal_policy
 }
 
-// RemovePolicyIDs removes the "policy" edge to the InternalPolicy entity by IDs.
-func (m *NarrativeMutation) RemovePolicyIDs(ids ...string) {
-	if m.removedpolicy == nil {
-		m.removedpolicy = make(map[string]struct{})
+// RemoveInternalPolicyIDs removes the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (m *NarrativeMutation) RemoveInternalPolicyIDs(ids ...string) {
+	if m.removedinternal_policy == nil {
+		m.removedinternal_policy = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.policy, ids[i])
-		m.removedpolicy[ids[i]] = struct{}{}
+		delete(m.internal_policy, ids[i])
+		m.removedinternal_policy[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPolicy returns the removed IDs of the "policy" edge to the InternalPolicy entity.
-func (m *NarrativeMutation) RemovedPolicyIDs() (ids []string) {
-	for id := range m.removedpolicy {
+// RemovedInternalPolicy returns the removed IDs of the "internal_policy" edge to the InternalPolicy entity.
+func (m *NarrativeMutation) RemovedInternalPolicyIDs() (ids []string) {
+	for id := range m.removedinternal_policy {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PolicyIDs returns the "policy" edge IDs in the mutation.
-func (m *NarrativeMutation) PolicyIDs() (ids []string) {
-	for id := range m.policy {
+// InternalPolicyIDs returns the "internal_policy" edge IDs in the mutation.
+func (m *NarrativeMutation) InternalPolicyIDs() (ids []string) {
+	for id := range m.internal_policy {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPolicy resets all changes to the "policy" edge.
-func (m *NarrativeMutation) ResetPolicy() {
-	m.policy = nil
-	m.clearedpolicy = false
-	m.removedpolicy = nil
+// ResetInternalPolicy resets all changes to the "internal_policy" edge.
+func (m *NarrativeMutation) ResetInternalPolicy() {
+	m.internal_policy = nil
+	m.clearedinternal_policy = false
+	m.removedinternal_policy = nil
 }
 
 // AddControlIDs adds the "control" edge to the Control entity by ids.
@@ -57207,58 +57207,58 @@ func (m *NarrativeMutation) ResetProcedure() {
 	m.removedprocedure = nil
 }
 
-// AddControlobjectiveIDs adds the "controlobjective" edge to the ControlObjective entity by ids.
-func (m *NarrativeMutation) AddControlobjectiveIDs(ids ...string) {
-	if m.controlobjective == nil {
-		m.controlobjective = make(map[string]struct{})
+// AddControlObjectiveIDs adds the "control_objective" edge to the ControlObjective entity by ids.
+func (m *NarrativeMutation) AddControlObjectiveIDs(ids ...string) {
+	if m.control_objective == nil {
+		m.control_objective = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjective[ids[i]] = struct{}{}
+		m.control_objective[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjective clears the "controlobjective" edge to the ControlObjective entity.
-func (m *NarrativeMutation) ClearControlobjective() {
-	m.clearedcontrolobjective = true
+// ClearControlObjective clears the "control_objective" edge to the ControlObjective entity.
+func (m *NarrativeMutation) ClearControlObjective() {
+	m.clearedcontrol_objective = true
 }
 
-// ControlobjectiveCleared reports if the "controlobjective" edge to the ControlObjective entity was cleared.
-func (m *NarrativeMutation) ControlobjectiveCleared() bool {
-	return m.clearedcontrolobjective
+// ControlObjectiveCleared reports if the "control_objective" edge to the ControlObjective entity was cleared.
+func (m *NarrativeMutation) ControlObjectiveCleared() bool {
+	return m.clearedcontrol_objective
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjective" edge to the ControlObjective entity by IDs.
-func (m *NarrativeMutation) RemoveControlobjectiveIDs(ids ...string) {
-	if m.removedcontrolobjective == nil {
-		m.removedcontrolobjective = make(map[string]struct{})
+// RemoveControlObjectiveIDs removes the "control_objective" edge to the ControlObjective entity by IDs.
+func (m *NarrativeMutation) RemoveControlObjectiveIDs(ids ...string) {
+	if m.removedcontrol_objective == nil {
+		m.removedcontrol_objective = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.controlobjective, ids[i])
-		m.removedcontrolobjective[ids[i]] = struct{}{}
+		delete(m.control_objective, ids[i])
+		m.removedcontrol_objective[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControlobjective returns the removed IDs of the "controlobjective" edge to the ControlObjective entity.
-func (m *NarrativeMutation) RemovedControlobjectiveIDs() (ids []string) {
-	for id := range m.removedcontrolobjective {
+// RemovedControlObjective returns the removed IDs of the "control_objective" edge to the ControlObjective entity.
+func (m *NarrativeMutation) RemovedControlObjectiveIDs() (ids []string) {
+	for id := range m.removedcontrol_objective {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlobjectiveIDs returns the "controlobjective" edge IDs in the mutation.
-func (m *NarrativeMutation) ControlobjectiveIDs() (ids []string) {
-	for id := range m.controlobjective {
+// ControlObjectiveIDs returns the "control_objective" edge IDs in the mutation.
+func (m *NarrativeMutation) ControlObjectiveIDs() (ids []string) {
+	for id := range m.control_objective {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControlobjective resets all changes to the "controlobjective" edge.
-func (m *NarrativeMutation) ResetControlobjective() {
-	m.controlobjective = nil
-	m.clearedcontrolobjective = false
-	m.removedcontrolobjective = nil
+// ResetControlObjective resets all changes to the "control_objective" edge.
+func (m *NarrativeMutation) ResetControlObjective() {
+	m.control_objective = nil
+	m.clearedcontrol_objective = false
+	m.removedcontrol_objective = nil
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by ids.
@@ -57728,8 +57728,8 @@ func (m *NarrativeMutation) AddedEdges() []string {
 	if m.viewers != nil {
 		edges = append(edges, narrative.EdgeViewers)
 	}
-	if m.policy != nil {
-		edges = append(edges, narrative.EdgePolicy)
+	if m.internal_policy != nil {
+		edges = append(edges, narrative.EdgeInternalPolicy)
 	}
 	if m.control != nil {
 		edges = append(edges, narrative.EdgeControl)
@@ -57737,8 +57737,8 @@ func (m *NarrativeMutation) AddedEdges() []string {
 	if m.procedure != nil {
 		edges = append(edges, narrative.EdgeProcedure)
 	}
-	if m.controlobjective != nil {
-		edges = append(edges, narrative.EdgeControlobjective)
+	if m.control_objective != nil {
+		edges = append(edges, narrative.EdgeControlObjective)
 	}
 	if m.programs != nil {
 		edges = append(edges, narrative.EdgePrograms)
@@ -57772,9 +57772,9 @@ func (m *NarrativeMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case narrative.EdgePolicy:
-		ids := make([]ent.Value, 0, len(m.policy))
-		for id := range m.policy {
+	case narrative.EdgeInternalPolicy:
+		ids := make([]ent.Value, 0, len(m.internal_policy))
+		for id := range m.internal_policy {
 			ids = append(ids, id)
 		}
 		return ids
@@ -57790,9 +57790,9 @@ func (m *NarrativeMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case narrative.EdgeControlobjective:
-		ids := make([]ent.Value, 0, len(m.controlobjective))
-		for id := range m.controlobjective {
+	case narrative.EdgeControlObjective:
+		ids := make([]ent.Value, 0, len(m.control_objective))
+		for id := range m.control_objective {
 			ids = append(ids, id)
 		}
 		return ids
@@ -57818,8 +57818,8 @@ func (m *NarrativeMutation) RemovedEdges() []string {
 	if m.removedviewers != nil {
 		edges = append(edges, narrative.EdgeViewers)
 	}
-	if m.removedpolicy != nil {
-		edges = append(edges, narrative.EdgePolicy)
+	if m.removedinternal_policy != nil {
+		edges = append(edges, narrative.EdgeInternalPolicy)
 	}
 	if m.removedcontrol != nil {
 		edges = append(edges, narrative.EdgeControl)
@@ -57827,8 +57827,8 @@ func (m *NarrativeMutation) RemovedEdges() []string {
 	if m.removedprocedure != nil {
 		edges = append(edges, narrative.EdgeProcedure)
 	}
-	if m.removedcontrolobjective != nil {
-		edges = append(edges, narrative.EdgeControlobjective)
+	if m.removedcontrol_objective != nil {
+		edges = append(edges, narrative.EdgeControlObjective)
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, narrative.EdgePrograms)
@@ -57858,9 +57858,9 @@ func (m *NarrativeMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case narrative.EdgePolicy:
-		ids := make([]ent.Value, 0, len(m.removedpolicy))
-		for id := range m.removedpolicy {
+	case narrative.EdgeInternalPolicy:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policy))
+		for id := range m.removedinternal_policy {
 			ids = append(ids, id)
 		}
 		return ids
@@ -57876,9 +57876,9 @@ func (m *NarrativeMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case narrative.EdgeControlobjective:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjective))
-		for id := range m.removedcontrolobjective {
+	case narrative.EdgeControlObjective:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objective))
+		for id := range m.removedcontrol_objective {
 			ids = append(ids, id)
 		}
 		return ids
@@ -57907,8 +57907,8 @@ func (m *NarrativeMutation) ClearedEdges() []string {
 	if m.clearedviewers {
 		edges = append(edges, narrative.EdgeViewers)
 	}
-	if m.clearedpolicy {
-		edges = append(edges, narrative.EdgePolicy)
+	if m.clearedinternal_policy {
+		edges = append(edges, narrative.EdgeInternalPolicy)
 	}
 	if m.clearedcontrol {
 		edges = append(edges, narrative.EdgeControl)
@@ -57916,8 +57916,8 @@ func (m *NarrativeMutation) ClearedEdges() []string {
 	if m.clearedprocedure {
 		edges = append(edges, narrative.EdgeProcedure)
 	}
-	if m.clearedcontrolobjective {
-		edges = append(edges, narrative.EdgeControlobjective)
+	if m.clearedcontrol_objective {
+		edges = append(edges, narrative.EdgeControlObjective)
 	}
 	if m.clearedprograms {
 		edges = append(edges, narrative.EdgePrograms)
@@ -57937,14 +57937,14 @@ func (m *NarrativeMutation) EdgeCleared(name string) bool {
 		return m.clearededitors
 	case narrative.EdgeViewers:
 		return m.clearedviewers
-	case narrative.EdgePolicy:
-		return m.clearedpolicy
+	case narrative.EdgeInternalPolicy:
+		return m.clearedinternal_policy
 	case narrative.EdgeControl:
 		return m.clearedcontrol
 	case narrative.EdgeProcedure:
 		return m.clearedprocedure
-	case narrative.EdgeControlobjective:
-		return m.clearedcontrolobjective
+	case narrative.EdgeControlObjective:
+		return m.clearedcontrol_objective
 	case narrative.EdgePrograms:
 		return m.clearedprograms
 	}
@@ -57978,8 +57978,8 @@ func (m *NarrativeMutation) ResetEdge(name string) error {
 	case narrative.EdgeViewers:
 		m.ResetViewers()
 		return nil
-	case narrative.EdgePolicy:
-		m.ResetPolicy()
+	case narrative.EdgeInternalPolicy:
+		m.ResetInternalPolicy()
 		return nil
 	case narrative.EdgeControl:
 		m.ResetControl()
@@ -57987,8 +57987,8 @@ func (m *NarrativeMutation) ResetEdge(name string) error {
 	case narrative.EdgeProcedure:
 		m.ResetProcedure()
 		return nil
-	case narrative.EdgeControlobjective:
-		m.ResetControlobjective()
+	case narrative.EdgeControlObjective:
+		m.ResetControlObjective()
 		return nil
 	case narrative.EdgePrograms:
 		m.ResetPrograms()
@@ -67382,12 +67382,12 @@ type OrganizationMutation struct {
 	clearedintegrations               bool
 	setting                           *string
 	clearedsetting                    bool
-	documentdata                      map[string]struct{}
-	removeddocumentdata               map[string]struct{}
-	cleareddocumentdata               bool
-	orgsubscriptions                  map[string]struct{}
-	removedorgsubscriptions           map[string]struct{}
-	clearedorgsubscriptions           bool
+	document_data                     map[string]struct{}
+	removeddocument_data              map[string]struct{}
+	cleareddocument_data              bool
+	org_subscriptions                 map[string]struct{}
+	removedorg_subscriptions          map[string]struct{}
+	clearedorg_subscriptions          bool
 	personal_access_tokens            map[string]struct{}
 	removedpersonal_access_tokens     map[string]struct{}
 	clearedpersonal_access_tokens     bool
@@ -67415,9 +67415,9 @@ type OrganizationMutation struct {
 	entities                          map[string]struct{}
 	removedentities                   map[string]struct{}
 	clearedentities                   bool
-	entitytypes                       map[string]struct{}
-	removedentitytypes                map[string]struct{}
-	clearedentitytypes                bool
+	entity_types                      map[string]struct{}
+	removedentity_types               map[string]struct{}
+	clearedentity_types               bool
 	contacts                          map[string]struct{}
 	removedcontacts                   map[string]struct{}
 	clearedcontacts                   bool
@@ -67433,15 +67433,15 @@ type OrganizationMutation struct {
 	procedures                        map[string]struct{}
 	removedprocedures                 map[string]struct{}
 	clearedprocedures                 bool
-	internalpolicies                  map[string]struct{}
-	removedinternalpolicies           map[string]struct{}
-	clearedinternalpolicies           bool
+	internal_policies                 map[string]struct{}
+	removedinternal_policies          map[string]struct{}
+	clearedinternal_policies          bool
 	risks                             map[string]struct{}
 	removedrisks                      map[string]struct{}
 	clearedrisks                      bool
-	controlobjectives                 map[string]struct{}
-	removedcontrolobjectives          map[string]struct{}
-	clearedcontrolobjectives          bool
+	control_objectives                map[string]struct{}
+	removedcontrol_objectives         map[string]struct{}
+	clearedcontrol_objectives         bool
 	narratives                        map[string]struct{}
 	removednarratives                 map[string]struct{}
 	clearednarratives                 bool
@@ -69043,112 +69043,112 @@ func (m *OrganizationMutation) ResetSetting() {
 	m.clearedsetting = false
 }
 
-// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by ids.
-func (m *OrganizationMutation) AddDocumentdatumIDs(ids ...string) {
-	if m.documentdata == nil {
-		m.documentdata = make(map[string]struct{})
+// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by ids.
+func (m *OrganizationMutation) AddDocumentDatumIDs(ids ...string) {
+	if m.document_data == nil {
+		m.document_data = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.documentdata[ids[i]] = struct{}{}
+		m.document_data[ids[i]] = struct{}{}
 	}
 }
 
-// ClearDocumentdata clears the "documentdata" edge to the DocumentData entity.
-func (m *OrganizationMutation) ClearDocumentdata() {
-	m.cleareddocumentdata = true
+// ClearDocumentData clears the "document_data" edge to the DocumentData entity.
+func (m *OrganizationMutation) ClearDocumentData() {
+	m.cleareddocument_data = true
 }
 
-// DocumentdataCleared reports if the "documentdata" edge to the DocumentData entity was cleared.
-func (m *OrganizationMutation) DocumentdataCleared() bool {
-	return m.cleareddocumentdata
+// DocumentDataCleared reports if the "document_data" edge to the DocumentData entity was cleared.
+func (m *OrganizationMutation) DocumentDataCleared() bool {
+	return m.cleareddocument_data
 }
 
-// RemoveDocumentdatumIDs removes the "documentdata" edge to the DocumentData entity by IDs.
-func (m *OrganizationMutation) RemoveDocumentdatumIDs(ids ...string) {
-	if m.removeddocumentdata == nil {
-		m.removeddocumentdata = make(map[string]struct{})
+// RemoveDocumentDatumIDs removes the "document_data" edge to the DocumentData entity by IDs.
+func (m *OrganizationMutation) RemoveDocumentDatumIDs(ids ...string) {
+	if m.removeddocument_data == nil {
+		m.removeddocument_data = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.documentdata, ids[i])
-		m.removeddocumentdata[ids[i]] = struct{}{}
+		delete(m.document_data, ids[i])
+		m.removeddocument_data[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedDocumentdata returns the removed IDs of the "documentdata" edge to the DocumentData entity.
-func (m *OrganizationMutation) RemovedDocumentdataIDs() (ids []string) {
-	for id := range m.removeddocumentdata {
+// RemovedDocumentData returns the removed IDs of the "document_data" edge to the DocumentData entity.
+func (m *OrganizationMutation) RemovedDocumentDataIDs() (ids []string) {
+	for id := range m.removeddocument_data {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// DocumentdataIDs returns the "documentdata" edge IDs in the mutation.
-func (m *OrganizationMutation) DocumentdataIDs() (ids []string) {
-	for id := range m.documentdata {
+// DocumentDataIDs returns the "document_data" edge IDs in the mutation.
+func (m *OrganizationMutation) DocumentDataIDs() (ids []string) {
+	for id := range m.document_data {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetDocumentdata resets all changes to the "documentdata" edge.
-func (m *OrganizationMutation) ResetDocumentdata() {
-	m.documentdata = nil
-	m.cleareddocumentdata = false
-	m.removeddocumentdata = nil
+// ResetDocumentData resets all changes to the "document_data" edge.
+func (m *OrganizationMutation) ResetDocumentData() {
+	m.document_data = nil
+	m.cleareddocument_data = false
+	m.removeddocument_data = nil
 }
 
-// AddOrgsubscriptionIDs adds the "orgsubscriptions" edge to the OrgSubscription entity by ids.
-func (m *OrganizationMutation) AddOrgsubscriptionIDs(ids ...string) {
-	if m.orgsubscriptions == nil {
-		m.orgsubscriptions = make(map[string]struct{})
+// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by ids.
+func (m *OrganizationMutation) AddOrgSubscriptionIDs(ids ...string) {
+	if m.org_subscriptions == nil {
+		m.org_subscriptions = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.orgsubscriptions[ids[i]] = struct{}{}
+		m.org_subscriptions[ids[i]] = struct{}{}
 	}
 }
 
-// ClearOrgsubscriptions clears the "orgsubscriptions" edge to the OrgSubscription entity.
-func (m *OrganizationMutation) ClearOrgsubscriptions() {
-	m.clearedorgsubscriptions = true
+// ClearOrgSubscriptions clears the "org_subscriptions" edge to the OrgSubscription entity.
+func (m *OrganizationMutation) ClearOrgSubscriptions() {
+	m.clearedorg_subscriptions = true
 }
 
-// OrgsubscriptionsCleared reports if the "orgsubscriptions" edge to the OrgSubscription entity was cleared.
-func (m *OrganizationMutation) OrgsubscriptionsCleared() bool {
-	return m.clearedorgsubscriptions
+// OrgSubscriptionsCleared reports if the "org_subscriptions" edge to the OrgSubscription entity was cleared.
+func (m *OrganizationMutation) OrgSubscriptionsCleared() bool {
+	return m.clearedorg_subscriptions
 }
 
-// RemoveOrgsubscriptionIDs removes the "orgsubscriptions" edge to the OrgSubscription entity by IDs.
-func (m *OrganizationMutation) RemoveOrgsubscriptionIDs(ids ...string) {
-	if m.removedorgsubscriptions == nil {
-		m.removedorgsubscriptions = make(map[string]struct{})
+// RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to the OrgSubscription entity by IDs.
+func (m *OrganizationMutation) RemoveOrgSubscriptionIDs(ids ...string) {
+	if m.removedorg_subscriptions == nil {
+		m.removedorg_subscriptions = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.orgsubscriptions, ids[i])
-		m.removedorgsubscriptions[ids[i]] = struct{}{}
+		delete(m.org_subscriptions, ids[i])
+		m.removedorg_subscriptions[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedOrgsubscriptions returns the removed IDs of the "orgsubscriptions" edge to the OrgSubscription entity.
-func (m *OrganizationMutation) RemovedOrgsubscriptionsIDs() (ids []string) {
-	for id := range m.removedorgsubscriptions {
+// RemovedOrgSubscriptions returns the removed IDs of the "org_subscriptions" edge to the OrgSubscription entity.
+func (m *OrganizationMutation) RemovedOrgSubscriptionsIDs() (ids []string) {
+	for id := range m.removedorg_subscriptions {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// OrgsubscriptionsIDs returns the "orgsubscriptions" edge IDs in the mutation.
-func (m *OrganizationMutation) OrgsubscriptionsIDs() (ids []string) {
-	for id := range m.orgsubscriptions {
+// OrgSubscriptionsIDs returns the "org_subscriptions" edge IDs in the mutation.
+func (m *OrganizationMutation) OrgSubscriptionsIDs() (ids []string) {
+	for id := range m.org_subscriptions {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetOrgsubscriptions resets all changes to the "orgsubscriptions" edge.
-func (m *OrganizationMutation) ResetOrgsubscriptions() {
-	m.orgsubscriptions = nil
-	m.clearedorgsubscriptions = false
-	m.removedorgsubscriptions = nil
+// ResetOrgSubscriptions resets all changes to the "org_subscriptions" edge.
+func (m *OrganizationMutation) ResetOrgSubscriptions() {
+	m.org_subscriptions = nil
+	m.clearedorg_subscriptions = false
+	m.removedorg_subscriptions = nil
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by ids.
@@ -69637,58 +69637,58 @@ func (m *OrganizationMutation) ResetEntities() {
 	m.removedentities = nil
 }
 
-// AddEntitytypeIDs adds the "entitytypes" edge to the EntityType entity by ids.
-func (m *OrganizationMutation) AddEntitytypeIDs(ids ...string) {
-	if m.entitytypes == nil {
-		m.entitytypes = make(map[string]struct{})
+// AddEntityTypeIDs adds the "entity_types" edge to the EntityType entity by ids.
+func (m *OrganizationMutation) AddEntityTypeIDs(ids ...string) {
+	if m.entity_types == nil {
+		m.entity_types = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.entitytypes[ids[i]] = struct{}{}
+		m.entity_types[ids[i]] = struct{}{}
 	}
 }
 
-// ClearEntitytypes clears the "entitytypes" edge to the EntityType entity.
-func (m *OrganizationMutation) ClearEntitytypes() {
-	m.clearedentitytypes = true
+// ClearEntityTypes clears the "entity_types" edge to the EntityType entity.
+func (m *OrganizationMutation) ClearEntityTypes() {
+	m.clearedentity_types = true
 }
 
-// EntitytypesCleared reports if the "entitytypes" edge to the EntityType entity was cleared.
-func (m *OrganizationMutation) EntitytypesCleared() bool {
-	return m.clearedentitytypes
+// EntityTypesCleared reports if the "entity_types" edge to the EntityType entity was cleared.
+func (m *OrganizationMutation) EntityTypesCleared() bool {
+	return m.clearedentity_types
 }
 
-// RemoveEntitytypeIDs removes the "entitytypes" edge to the EntityType entity by IDs.
-func (m *OrganizationMutation) RemoveEntitytypeIDs(ids ...string) {
-	if m.removedentitytypes == nil {
-		m.removedentitytypes = make(map[string]struct{})
+// RemoveEntityTypeIDs removes the "entity_types" edge to the EntityType entity by IDs.
+func (m *OrganizationMutation) RemoveEntityTypeIDs(ids ...string) {
+	if m.removedentity_types == nil {
+		m.removedentity_types = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.entitytypes, ids[i])
-		m.removedentitytypes[ids[i]] = struct{}{}
+		delete(m.entity_types, ids[i])
+		m.removedentity_types[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedEntitytypes returns the removed IDs of the "entitytypes" edge to the EntityType entity.
-func (m *OrganizationMutation) RemovedEntitytypesIDs() (ids []string) {
-	for id := range m.removedentitytypes {
+// RemovedEntityTypes returns the removed IDs of the "entity_types" edge to the EntityType entity.
+func (m *OrganizationMutation) RemovedEntityTypesIDs() (ids []string) {
+	for id := range m.removedentity_types {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// EntitytypesIDs returns the "entitytypes" edge IDs in the mutation.
-func (m *OrganizationMutation) EntitytypesIDs() (ids []string) {
-	for id := range m.entitytypes {
+// EntityTypesIDs returns the "entity_types" edge IDs in the mutation.
+func (m *OrganizationMutation) EntityTypesIDs() (ids []string) {
+	for id := range m.entity_types {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetEntitytypes resets all changes to the "entitytypes" edge.
-func (m *OrganizationMutation) ResetEntitytypes() {
-	m.entitytypes = nil
-	m.clearedentitytypes = false
-	m.removedentitytypes = nil
+// ResetEntityTypes resets all changes to the "entity_types" edge.
+func (m *OrganizationMutation) ResetEntityTypes() {
+	m.entity_types = nil
+	m.clearedentity_types = false
+	m.removedentity_types = nil
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by ids.
@@ -69961,58 +69961,58 @@ func (m *OrganizationMutation) ResetProcedures() {
 	m.removedprocedures = nil
 }
 
-// AddInternalpolicyIDs adds the "internalpolicies" edge to the InternalPolicy entity by ids.
-func (m *OrganizationMutation) AddInternalpolicyIDs(ids ...string) {
-	if m.internalpolicies == nil {
-		m.internalpolicies = make(map[string]struct{})
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by ids.
+func (m *OrganizationMutation) AddInternalPolicyIDs(ids ...string) {
+	if m.internal_policies == nil {
+		m.internal_policies = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.internalpolicies[ids[i]] = struct{}{}
+		m.internal_policies[ids[i]] = struct{}{}
 	}
 }
 
-// ClearInternalpolicies clears the "internalpolicies" edge to the InternalPolicy entity.
-func (m *OrganizationMutation) ClearInternalpolicies() {
-	m.clearedinternalpolicies = true
+// ClearInternalPolicies clears the "internal_policies" edge to the InternalPolicy entity.
+func (m *OrganizationMutation) ClearInternalPolicies() {
+	m.clearedinternal_policies = true
 }
 
-// InternalpoliciesCleared reports if the "internalpolicies" edge to the InternalPolicy entity was cleared.
-func (m *OrganizationMutation) InternalpoliciesCleared() bool {
-	return m.clearedinternalpolicies
+// InternalPoliciesCleared reports if the "internal_policies" edge to the InternalPolicy entity was cleared.
+func (m *OrganizationMutation) InternalPoliciesCleared() bool {
+	return m.clearedinternal_policies
 }
 
-// RemoveInternalpolicyIDs removes the "internalpolicies" edge to the InternalPolicy entity by IDs.
-func (m *OrganizationMutation) RemoveInternalpolicyIDs(ids ...string) {
-	if m.removedinternalpolicies == nil {
-		m.removedinternalpolicies = make(map[string]struct{})
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (m *OrganizationMutation) RemoveInternalPolicyIDs(ids ...string) {
+	if m.removedinternal_policies == nil {
+		m.removedinternal_policies = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.internalpolicies, ids[i])
-		m.removedinternalpolicies[ids[i]] = struct{}{}
+		delete(m.internal_policies, ids[i])
+		m.removedinternal_policies[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedInternalpolicies returns the removed IDs of the "internalpolicies" edge to the InternalPolicy entity.
-func (m *OrganizationMutation) RemovedInternalpoliciesIDs() (ids []string) {
-	for id := range m.removedinternalpolicies {
+// RemovedInternalPolicies returns the removed IDs of the "internal_policies" edge to the InternalPolicy entity.
+func (m *OrganizationMutation) RemovedInternalPoliciesIDs() (ids []string) {
+	for id := range m.removedinternal_policies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// InternalpoliciesIDs returns the "internalpolicies" edge IDs in the mutation.
-func (m *OrganizationMutation) InternalpoliciesIDs() (ids []string) {
-	for id := range m.internalpolicies {
+// InternalPoliciesIDs returns the "internal_policies" edge IDs in the mutation.
+func (m *OrganizationMutation) InternalPoliciesIDs() (ids []string) {
+	for id := range m.internal_policies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetInternalpolicies resets all changes to the "internalpolicies" edge.
-func (m *OrganizationMutation) ResetInternalpolicies() {
-	m.internalpolicies = nil
-	m.clearedinternalpolicies = false
-	m.removedinternalpolicies = nil
+// ResetInternalPolicies resets all changes to the "internal_policies" edge.
+func (m *OrganizationMutation) ResetInternalPolicies() {
+	m.internal_policies = nil
+	m.clearedinternal_policies = false
+	m.removedinternal_policies = nil
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by ids.
@@ -70069,58 +70069,58 @@ func (m *OrganizationMutation) ResetRisks() {
 	m.removedrisks = nil
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by ids.
-func (m *OrganizationMutation) AddControlobjectiveIDs(ids ...string) {
-	if m.controlobjectives == nil {
-		m.controlobjectives = make(map[string]struct{})
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by ids.
+func (m *OrganizationMutation) AddControlObjectiveIDs(ids ...string) {
+	if m.control_objectives == nil {
+		m.control_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjectives[ids[i]] = struct{}{}
+		m.control_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjectives clears the "controlobjectives" edge to the ControlObjective entity.
-func (m *OrganizationMutation) ClearControlobjectives() {
-	m.clearedcontrolobjectives = true
+// ClearControlObjectives clears the "control_objectives" edge to the ControlObjective entity.
+func (m *OrganizationMutation) ClearControlObjectives() {
+	m.clearedcontrol_objectives = true
 }
 
-// ControlobjectivesCleared reports if the "controlobjectives" edge to the ControlObjective entity was cleared.
-func (m *OrganizationMutation) ControlobjectivesCleared() bool {
-	return m.clearedcontrolobjectives
+// ControlObjectivesCleared reports if the "control_objectives" edge to the ControlObjective entity was cleared.
+func (m *OrganizationMutation) ControlObjectivesCleared() bool {
+	return m.clearedcontrol_objectives
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (m *OrganizationMutation) RemoveControlobjectiveIDs(ids ...string) {
-	if m.removedcontrolobjectives == nil {
-		m.removedcontrolobjectives = make(map[string]struct{})
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to the ControlObjective entity by IDs.
+func (m *OrganizationMutation) RemoveControlObjectiveIDs(ids ...string) {
+	if m.removedcontrol_objectives == nil {
+		m.removedcontrol_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.controlobjectives, ids[i])
-		m.removedcontrolobjectives[ids[i]] = struct{}{}
+		delete(m.control_objectives, ids[i])
+		m.removedcontrol_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControlobjectives returns the removed IDs of the "controlobjectives" edge to the ControlObjective entity.
-func (m *OrganizationMutation) RemovedControlobjectivesIDs() (ids []string) {
-	for id := range m.removedcontrolobjectives {
+// RemovedControlObjectives returns the removed IDs of the "control_objectives" edge to the ControlObjective entity.
+func (m *OrganizationMutation) RemovedControlObjectivesIDs() (ids []string) {
+	for id := range m.removedcontrol_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlobjectivesIDs returns the "controlobjectives" edge IDs in the mutation.
-func (m *OrganizationMutation) ControlobjectivesIDs() (ids []string) {
-	for id := range m.controlobjectives {
+// ControlObjectivesIDs returns the "control_objectives" edge IDs in the mutation.
+func (m *OrganizationMutation) ControlObjectivesIDs() (ids []string) {
+	for id := range m.control_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControlobjectives resets all changes to the "controlobjectives" edge.
-func (m *OrganizationMutation) ResetControlobjectives() {
-	m.controlobjectives = nil
-	m.clearedcontrolobjectives = false
-	m.removedcontrolobjectives = nil
+// ResetControlObjectives resets all changes to the "control_objectives" edge.
+func (m *OrganizationMutation) ResetControlObjectives() {
+	m.control_objectives = nil
+	m.clearedcontrol_objectives = false
+	m.removedcontrol_objectives = nil
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by ids.
@@ -70825,11 +70825,11 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.setting != nil {
 		edges = append(edges, organization.EdgeSetting)
 	}
-	if m.documentdata != nil {
-		edges = append(edges, organization.EdgeDocumentdata)
+	if m.document_data != nil {
+		edges = append(edges, organization.EdgeDocumentData)
 	}
-	if m.orgsubscriptions != nil {
-		edges = append(edges, organization.EdgeOrgsubscriptions)
+	if m.org_subscriptions != nil {
+		edges = append(edges, organization.EdgeOrgSubscriptions)
 	}
 	if m.personal_access_tokens != nil {
 		edges = append(edges, organization.EdgePersonalAccessTokens)
@@ -70858,8 +70858,8 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.entities != nil {
 		edges = append(edges, organization.EdgeEntities)
 	}
-	if m.entitytypes != nil {
-		edges = append(edges, organization.EdgeEntitytypes)
+	if m.entity_types != nil {
+		edges = append(edges, organization.EdgeEntityTypes)
 	}
 	if m.contacts != nil {
 		edges = append(edges, organization.EdgeContacts)
@@ -70876,14 +70876,14 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.procedures != nil {
 		edges = append(edges, organization.EdgeProcedures)
 	}
-	if m.internalpolicies != nil {
-		edges = append(edges, organization.EdgeInternalpolicies)
+	if m.internal_policies != nil {
+		edges = append(edges, organization.EdgeInternalPolicies)
 	}
 	if m.risks != nil {
 		edges = append(edges, organization.EdgeRisks)
 	}
-	if m.controlobjectives != nil {
-		edges = append(edges, organization.EdgeControlobjectives)
+	if m.control_objectives != nil {
+		edges = append(edges, organization.EdgeControlObjectives)
 	}
 	if m.narratives != nil {
 		edges = append(edges, organization.EdgeNarratives)
@@ -70990,15 +70990,15 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 		if id := m.setting; id != nil {
 			return []ent.Value{*id}
 		}
-	case organization.EdgeDocumentdata:
-		ids := make([]ent.Value, 0, len(m.documentdata))
-		for id := range m.documentdata {
+	case organization.EdgeDocumentData:
+		ids := make([]ent.Value, 0, len(m.document_data))
+		for id := range m.document_data {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeOrgsubscriptions:
-		ids := make([]ent.Value, 0, len(m.orgsubscriptions))
-		for id := range m.orgsubscriptions {
+	case organization.EdgeOrgSubscriptions:
+		ids := make([]ent.Value, 0, len(m.org_subscriptions))
+		for id := range m.org_subscriptions {
 			ids = append(ids, id)
 		}
 		return ids
@@ -71056,9 +71056,9 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeEntitytypes:
-		ids := make([]ent.Value, 0, len(m.entitytypes))
-		for id := range m.entitytypes {
+	case organization.EdgeEntityTypes:
+		ids := make([]ent.Value, 0, len(m.entity_types))
+		for id := range m.entity_types {
 			ids = append(ids, id)
 		}
 		return ids
@@ -71092,9 +71092,9 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeInternalpolicies:
-		ids := make([]ent.Value, 0, len(m.internalpolicies))
-		for id := range m.internalpolicies {
+	case organization.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.internal_policies))
+		for id := range m.internal_policies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -71104,9 +71104,9 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.controlobjectives))
-		for id := range m.controlobjectives {
+	case organization.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.control_objectives))
+		for id := range m.control_objectives {
 			ids = append(ids, id)
 		}
 		return ids
@@ -71180,11 +71180,11 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedintegrations != nil {
 		edges = append(edges, organization.EdgeIntegrations)
 	}
-	if m.removeddocumentdata != nil {
-		edges = append(edges, organization.EdgeDocumentdata)
+	if m.removeddocument_data != nil {
+		edges = append(edges, organization.EdgeDocumentData)
 	}
-	if m.removedorgsubscriptions != nil {
-		edges = append(edges, organization.EdgeOrgsubscriptions)
+	if m.removedorg_subscriptions != nil {
+		edges = append(edges, organization.EdgeOrgSubscriptions)
 	}
 	if m.removedpersonal_access_tokens != nil {
 		edges = append(edges, organization.EdgePersonalAccessTokens)
@@ -71213,8 +71213,8 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedentities != nil {
 		edges = append(edges, organization.EdgeEntities)
 	}
-	if m.removedentitytypes != nil {
-		edges = append(edges, organization.EdgeEntitytypes)
+	if m.removedentity_types != nil {
+		edges = append(edges, organization.EdgeEntityTypes)
 	}
 	if m.removedcontacts != nil {
 		edges = append(edges, organization.EdgeContacts)
@@ -71231,14 +71231,14 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedprocedures != nil {
 		edges = append(edges, organization.EdgeProcedures)
 	}
-	if m.removedinternalpolicies != nil {
-		edges = append(edges, organization.EdgeInternalpolicies)
+	if m.removedinternal_policies != nil {
+		edges = append(edges, organization.EdgeInternalPolicies)
 	}
 	if m.removedrisks != nil {
 		edges = append(edges, organization.EdgeRisks)
 	}
-	if m.removedcontrolobjectives != nil {
-		edges = append(edges, organization.EdgeControlobjectives)
+	if m.removedcontrol_objectives != nil {
+		edges = append(edges, organization.EdgeControlObjectives)
 	}
 	if m.removednarratives != nil {
 		edges = append(edges, organization.EdgeNarratives)
@@ -71337,15 +71337,15 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeDocumentdata:
-		ids := make([]ent.Value, 0, len(m.removeddocumentdata))
-		for id := range m.removeddocumentdata {
+	case organization.EdgeDocumentData:
+		ids := make([]ent.Value, 0, len(m.removeddocument_data))
+		for id := range m.removeddocument_data {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeOrgsubscriptions:
-		ids := make([]ent.Value, 0, len(m.removedorgsubscriptions))
-		for id := range m.removedorgsubscriptions {
+	case organization.EdgeOrgSubscriptions:
+		ids := make([]ent.Value, 0, len(m.removedorg_subscriptions))
+		for id := range m.removedorg_subscriptions {
 			ids = append(ids, id)
 		}
 		return ids
@@ -71403,9 +71403,9 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeEntitytypes:
-		ids := make([]ent.Value, 0, len(m.removedentitytypes))
-		for id := range m.removedentitytypes {
+	case organization.EdgeEntityTypes:
+		ids := make([]ent.Value, 0, len(m.removedentity_types))
+		for id := range m.removedentity_types {
 			ids = append(ids, id)
 		}
 		return ids
@@ -71439,9 +71439,9 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeInternalpolicies:
-		ids := make([]ent.Value, 0, len(m.removedinternalpolicies))
-		for id := range m.removedinternalpolicies {
+	case organization.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policies))
+		for id := range m.removedinternal_policies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -71451,9 +71451,9 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjectives))
-		for id := range m.removedcontrolobjectives {
+	case organization.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objectives))
+		for id := range m.removedcontrol_objectives {
 			ids = append(ids, id)
 		}
 		return ids
@@ -71533,11 +71533,11 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedsetting {
 		edges = append(edges, organization.EdgeSetting)
 	}
-	if m.cleareddocumentdata {
-		edges = append(edges, organization.EdgeDocumentdata)
+	if m.cleareddocument_data {
+		edges = append(edges, organization.EdgeDocumentData)
 	}
-	if m.clearedorgsubscriptions {
-		edges = append(edges, organization.EdgeOrgsubscriptions)
+	if m.clearedorg_subscriptions {
+		edges = append(edges, organization.EdgeOrgSubscriptions)
 	}
 	if m.clearedpersonal_access_tokens {
 		edges = append(edges, organization.EdgePersonalAccessTokens)
@@ -71566,8 +71566,8 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedentities {
 		edges = append(edges, organization.EdgeEntities)
 	}
-	if m.clearedentitytypes {
-		edges = append(edges, organization.EdgeEntitytypes)
+	if m.clearedentity_types {
+		edges = append(edges, organization.EdgeEntityTypes)
 	}
 	if m.clearedcontacts {
 		edges = append(edges, organization.EdgeContacts)
@@ -71584,14 +71584,14 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedprocedures {
 		edges = append(edges, organization.EdgeProcedures)
 	}
-	if m.clearedinternalpolicies {
-		edges = append(edges, organization.EdgeInternalpolicies)
+	if m.clearedinternal_policies {
+		edges = append(edges, organization.EdgeInternalPolicies)
 	}
 	if m.clearedrisks {
 		edges = append(edges, organization.EdgeRisks)
 	}
-	if m.clearedcontrolobjectives {
-		edges = append(edges, organization.EdgeControlobjectives)
+	if m.clearedcontrol_objectives {
+		edges = append(edges, organization.EdgeControlObjectives)
 	}
 	if m.clearednarratives {
 		edges = append(edges, organization.EdgeNarratives)
@@ -71642,10 +71642,10 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedintegrations
 	case organization.EdgeSetting:
 		return m.clearedsetting
-	case organization.EdgeDocumentdata:
-		return m.cleareddocumentdata
-	case organization.EdgeOrgsubscriptions:
-		return m.clearedorgsubscriptions
+	case organization.EdgeDocumentData:
+		return m.cleareddocument_data
+	case organization.EdgeOrgSubscriptions:
+		return m.clearedorg_subscriptions
 	case organization.EdgePersonalAccessTokens:
 		return m.clearedpersonal_access_tokens
 	case organization.EdgeAPITokens:
@@ -71664,8 +71664,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedfiles
 	case organization.EdgeEntities:
 		return m.clearedentities
-	case organization.EdgeEntitytypes:
-		return m.clearedentitytypes
+	case organization.EdgeEntityTypes:
+		return m.clearedentity_types
 	case organization.EdgeContacts:
 		return m.clearedcontacts
 	case organization.EdgeNotes:
@@ -71676,12 +71676,12 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedprograms
 	case organization.EdgeProcedures:
 		return m.clearedprocedures
-	case organization.EdgeInternalpolicies:
-		return m.clearedinternalpolicies
+	case organization.EdgeInternalPolicies:
+		return m.clearedinternal_policies
 	case organization.EdgeRisks:
 		return m.clearedrisks
-	case organization.EdgeControlobjectives:
-		return m.clearedcontrolobjectives
+	case organization.EdgeControlObjectives:
+		return m.clearedcontrol_objectives
 	case organization.EdgeNarratives:
 		return m.clearednarratives
 	case organization.EdgeControls:
@@ -71757,11 +71757,11 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 	case organization.EdgeSetting:
 		m.ResetSetting()
 		return nil
-	case organization.EdgeDocumentdata:
-		m.ResetDocumentdata()
+	case organization.EdgeDocumentData:
+		m.ResetDocumentData()
 		return nil
-	case organization.EdgeOrgsubscriptions:
-		m.ResetOrgsubscriptions()
+	case organization.EdgeOrgSubscriptions:
+		m.ResetOrgSubscriptions()
 		return nil
 	case organization.EdgePersonalAccessTokens:
 		m.ResetPersonalAccessTokens()
@@ -71790,8 +71790,8 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 	case organization.EdgeEntities:
 		m.ResetEntities()
 		return nil
-	case organization.EdgeEntitytypes:
-		m.ResetEntitytypes()
+	case organization.EdgeEntityTypes:
+		m.ResetEntityTypes()
 		return nil
 	case organization.EdgeContacts:
 		m.ResetContacts()
@@ -71808,14 +71808,14 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 	case organization.EdgeProcedures:
 		m.ResetProcedures()
 		return nil
-	case organization.EdgeInternalpolicies:
-		m.ResetInternalpolicies()
+	case organization.EdgeInternalPolicies:
+		m.ResetInternalPolicies()
 		return nil
 	case organization.EdgeRisks:
 		m.ResetRisks()
 		return nil
-	case organization.EdgeControlobjectives:
-		m.ResetControlobjectives()
+	case organization.EdgeControlObjectives:
+		m.ResetControlObjectives()
 		return nil
 	case organization.EdgeNarratives:
 		m.ResetNarratives()
@@ -79381,57 +79381,57 @@ func (m *PersonalAccessTokenMutation) ResetEdge(name string) error {
 // ProcedureMutation represents an operation that mutates the Procedure nodes in the graph.
 type ProcedureMutation struct {
 	config
-	op                    Op
-	typ                   string
-	id                    *string
-	created_at            *time.Time
-	updated_at            *time.Time
-	created_by            *string
-	updated_by            *string
-	deleted_at            *time.Time
-	deleted_by            *string
-	mapping_id            *string
-	tags                  *[]string
-	appendtags            []string
-	name                  *string
-	description           *string
-	status                *string
-	procedure_type        *string
-	version               *string
-	purpose_and_scope     *string
-	background            *string
-	satisfies             *string
-	details               *map[string]interface{}
-	clearedFields         map[string]struct{}
-	owner                 *string
-	clearedowner          bool
-	blocked_groups        map[string]struct{}
-	removedblocked_groups map[string]struct{}
-	clearedblocked_groups bool
-	editors               map[string]struct{}
-	removededitors        map[string]struct{}
-	clearededitors        bool
-	control               map[string]struct{}
-	removedcontrol        map[string]struct{}
-	clearedcontrol        bool
-	internalpolicy        map[string]struct{}
-	removedinternalpolicy map[string]struct{}
-	clearedinternalpolicy bool
-	narratives            map[string]struct{}
-	removednarratives     map[string]struct{}
-	clearednarratives     bool
-	risks                 map[string]struct{}
-	removedrisks          map[string]struct{}
-	clearedrisks          bool
-	tasks                 map[string]struct{}
-	removedtasks          map[string]struct{}
-	clearedtasks          bool
-	programs              map[string]struct{}
-	removedprograms       map[string]struct{}
-	clearedprograms       bool
-	done                  bool
-	oldValue              func(context.Context) (*Procedure, error)
-	predicates            []predicate.Procedure
+	op                       Op
+	typ                      string
+	id                       *string
+	created_at               *time.Time
+	updated_at               *time.Time
+	created_by               *string
+	updated_by               *string
+	deleted_at               *time.Time
+	deleted_by               *string
+	mapping_id               *string
+	tags                     *[]string
+	appendtags               []string
+	name                     *string
+	description              *string
+	status                   *string
+	procedure_type           *string
+	version                  *string
+	purpose_and_scope        *string
+	background               *string
+	satisfies                *string
+	details                  *map[string]interface{}
+	clearedFields            map[string]struct{}
+	owner                    *string
+	clearedowner             bool
+	blocked_groups           map[string]struct{}
+	removedblocked_groups    map[string]struct{}
+	clearedblocked_groups    bool
+	editors                  map[string]struct{}
+	removededitors           map[string]struct{}
+	clearededitors           bool
+	controls                 map[string]struct{}
+	removedcontrols          map[string]struct{}
+	clearedcontrols          bool
+	internal_policies        map[string]struct{}
+	removedinternal_policies map[string]struct{}
+	clearedinternal_policies bool
+	narratives               map[string]struct{}
+	removednarratives        map[string]struct{}
+	clearednarratives        bool
+	risks                    map[string]struct{}
+	removedrisks             map[string]struct{}
+	clearedrisks             bool
+	tasks                    map[string]struct{}
+	removedtasks             map[string]struct{}
+	clearedtasks             bool
+	programs                 map[string]struct{}
+	removedprograms          map[string]struct{}
+	clearedprograms          bool
+	done                     bool
+	oldValue                 func(context.Context) (*Procedure, error)
+	predicates               []predicate.Procedure
 }
 
 var _ ent.Mutation = (*ProcedureMutation)(nil)
@@ -80545,112 +80545,112 @@ func (m *ProcedureMutation) ResetEditors() {
 	m.removededitors = nil
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by ids.
+// AddControlIDs adds the "controls" edge to the Control entity by ids.
 func (m *ProcedureMutation) AddControlIDs(ids ...string) {
-	if m.control == nil {
-		m.control = make(map[string]struct{})
+	if m.controls == nil {
+		m.controls = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.control[ids[i]] = struct{}{}
+		m.controls[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControl clears the "control" edge to the Control entity.
-func (m *ProcedureMutation) ClearControl() {
-	m.clearedcontrol = true
+// ClearControls clears the "controls" edge to the Control entity.
+func (m *ProcedureMutation) ClearControls() {
+	m.clearedcontrols = true
 }
 
-// ControlCleared reports if the "control" edge to the Control entity was cleared.
-func (m *ProcedureMutation) ControlCleared() bool {
-	return m.clearedcontrol
+// ControlsCleared reports if the "controls" edge to the Control entity was cleared.
+func (m *ProcedureMutation) ControlsCleared() bool {
+	return m.clearedcontrols
 }
 
-// RemoveControlIDs removes the "control" edge to the Control entity by IDs.
+// RemoveControlIDs removes the "controls" edge to the Control entity by IDs.
 func (m *ProcedureMutation) RemoveControlIDs(ids ...string) {
-	if m.removedcontrol == nil {
-		m.removedcontrol = make(map[string]struct{})
+	if m.removedcontrols == nil {
+		m.removedcontrols = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.control, ids[i])
-		m.removedcontrol[ids[i]] = struct{}{}
+		delete(m.controls, ids[i])
+		m.removedcontrols[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControl returns the removed IDs of the "control" edge to the Control entity.
-func (m *ProcedureMutation) RemovedControlIDs() (ids []string) {
-	for id := range m.removedcontrol {
+// RemovedControls returns the removed IDs of the "controls" edge to the Control entity.
+func (m *ProcedureMutation) RemovedControlsIDs() (ids []string) {
+	for id := range m.removedcontrols {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlIDs returns the "control" edge IDs in the mutation.
-func (m *ProcedureMutation) ControlIDs() (ids []string) {
-	for id := range m.control {
+// ControlsIDs returns the "controls" edge IDs in the mutation.
+func (m *ProcedureMutation) ControlsIDs() (ids []string) {
+	for id := range m.controls {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControl resets all changes to the "control" edge.
-func (m *ProcedureMutation) ResetControl() {
-	m.control = nil
-	m.clearedcontrol = false
-	m.removedcontrol = nil
+// ResetControls resets all changes to the "controls" edge.
+func (m *ProcedureMutation) ResetControls() {
+	m.controls = nil
+	m.clearedcontrols = false
+	m.removedcontrols = nil
 }
 
-// AddInternalpolicyIDs adds the "internalpolicy" edge to the InternalPolicy entity by ids.
-func (m *ProcedureMutation) AddInternalpolicyIDs(ids ...string) {
-	if m.internalpolicy == nil {
-		m.internalpolicy = make(map[string]struct{})
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by ids.
+func (m *ProcedureMutation) AddInternalPolicyIDs(ids ...string) {
+	if m.internal_policies == nil {
+		m.internal_policies = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.internalpolicy[ids[i]] = struct{}{}
+		m.internal_policies[ids[i]] = struct{}{}
 	}
 }
 
-// ClearInternalpolicy clears the "internalpolicy" edge to the InternalPolicy entity.
-func (m *ProcedureMutation) ClearInternalpolicy() {
-	m.clearedinternalpolicy = true
+// ClearInternalPolicies clears the "internal_policies" edge to the InternalPolicy entity.
+func (m *ProcedureMutation) ClearInternalPolicies() {
+	m.clearedinternal_policies = true
 }
 
-// InternalpolicyCleared reports if the "internalpolicy" edge to the InternalPolicy entity was cleared.
-func (m *ProcedureMutation) InternalpolicyCleared() bool {
-	return m.clearedinternalpolicy
+// InternalPoliciesCleared reports if the "internal_policies" edge to the InternalPolicy entity was cleared.
+func (m *ProcedureMutation) InternalPoliciesCleared() bool {
+	return m.clearedinternal_policies
 }
 
-// RemoveInternalpolicyIDs removes the "internalpolicy" edge to the InternalPolicy entity by IDs.
-func (m *ProcedureMutation) RemoveInternalpolicyIDs(ids ...string) {
-	if m.removedinternalpolicy == nil {
-		m.removedinternalpolicy = make(map[string]struct{})
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (m *ProcedureMutation) RemoveInternalPolicyIDs(ids ...string) {
+	if m.removedinternal_policies == nil {
+		m.removedinternal_policies = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.internalpolicy, ids[i])
-		m.removedinternalpolicy[ids[i]] = struct{}{}
+		delete(m.internal_policies, ids[i])
+		m.removedinternal_policies[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedInternalpolicy returns the removed IDs of the "internalpolicy" edge to the InternalPolicy entity.
-func (m *ProcedureMutation) RemovedInternalpolicyIDs() (ids []string) {
-	for id := range m.removedinternalpolicy {
+// RemovedInternalPolicies returns the removed IDs of the "internal_policies" edge to the InternalPolicy entity.
+func (m *ProcedureMutation) RemovedInternalPoliciesIDs() (ids []string) {
+	for id := range m.removedinternal_policies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// InternalpolicyIDs returns the "internalpolicy" edge IDs in the mutation.
-func (m *ProcedureMutation) InternalpolicyIDs() (ids []string) {
-	for id := range m.internalpolicy {
+// InternalPoliciesIDs returns the "internal_policies" edge IDs in the mutation.
+func (m *ProcedureMutation) InternalPoliciesIDs() (ids []string) {
+	for id := range m.internal_policies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetInternalpolicy resets all changes to the "internalpolicy" edge.
-func (m *ProcedureMutation) ResetInternalpolicy() {
-	m.internalpolicy = nil
-	m.clearedinternalpolicy = false
-	m.removedinternalpolicy = nil
+// ResetInternalPolicies resets all changes to the "internal_policies" edge.
+func (m *ProcedureMutation) ResetInternalPolicies() {
+	m.internal_policies = nil
+	m.clearedinternal_policies = false
+	m.removedinternal_policies = nil
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by ids.
@@ -81400,11 +81400,11 @@ func (m *ProcedureMutation) AddedEdges() []string {
 	if m.editors != nil {
 		edges = append(edges, procedure.EdgeEditors)
 	}
-	if m.control != nil {
-		edges = append(edges, procedure.EdgeControl)
+	if m.controls != nil {
+		edges = append(edges, procedure.EdgeControls)
 	}
-	if m.internalpolicy != nil {
-		edges = append(edges, procedure.EdgeInternalpolicy)
+	if m.internal_policies != nil {
+		edges = append(edges, procedure.EdgeInternalPolicies)
 	}
 	if m.narratives != nil {
 		edges = append(edges, procedure.EdgeNarratives)
@@ -81441,15 +81441,15 @@ func (m *ProcedureMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case procedure.EdgeControl:
-		ids := make([]ent.Value, 0, len(m.control))
-		for id := range m.control {
+	case procedure.EdgeControls:
+		ids := make([]ent.Value, 0, len(m.controls))
+		for id := range m.controls {
 			ids = append(ids, id)
 		}
 		return ids
-	case procedure.EdgeInternalpolicy:
-		ids := make([]ent.Value, 0, len(m.internalpolicy))
-		for id := range m.internalpolicy {
+	case procedure.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.internal_policies))
+		for id := range m.internal_policies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -81490,11 +81490,11 @@ func (m *ProcedureMutation) RemovedEdges() []string {
 	if m.removededitors != nil {
 		edges = append(edges, procedure.EdgeEditors)
 	}
-	if m.removedcontrol != nil {
-		edges = append(edges, procedure.EdgeControl)
+	if m.removedcontrols != nil {
+		edges = append(edges, procedure.EdgeControls)
 	}
-	if m.removedinternalpolicy != nil {
-		edges = append(edges, procedure.EdgeInternalpolicy)
+	if m.removedinternal_policies != nil {
+		edges = append(edges, procedure.EdgeInternalPolicies)
 	}
 	if m.removednarratives != nil {
 		edges = append(edges, procedure.EdgeNarratives)
@@ -81527,15 +81527,15 @@ func (m *ProcedureMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case procedure.EdgeControl:
-		ids := make([]ent.Value, 0, len(m.removedcontrol))
-		for id := range m.removedcontrol {
+	case procedure.EdgeControls:
+		ids := make([]ent.Value, 0, len(m.removedcontrols))
+		for id := range m.removedcontrols {
 			ids = append(ids, id)
 		}
 		return ids
-	case procedure.EdgeInternalpolicy:
-		ids := make([]ent.Value, 0, len(m.removedinternalpolicy))
-		for id := range m.removedinternalpolicy {
+	case procedure.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policies))
+		for id := range m.removedinternal_policies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -81579,11 +81579,11 @@ func (m *ProcedureMutation) ClearedEdges() []string {
 	if m.clearededitors {
 		edges = append(edges, procedure.EdgeEditors)
 	}
-	if m.clearedcontrol {
-		edges = append(edges, procedure.EdgeControl)
+	if m.clearedcontrols {
+		edges = append(edges, procedure.EdgeControls)
 	}
-	if m.clearedinternalpolicy {
-		edges = append(edges, procedure.EdgeInternalpolicy)
+	if m.clearedinternal_policies {
+		edges = append(edges, procedure.EdgeInternalPolicies)
 	}
 	if m.clearednarratives {
 		edges = append(edges, procedure.EdgeNarratives)
@@ -81610,10 +81610,10 @@ func (m *ProcedureMutation) EdgeCleared(name string) bool {
 		return m.clearedblocked_groups
 	case procedure.EdgeEditors:
 		return m.clearededitors
-	case procedure.EdgeControl:
-		return m.clearedcontrol
-	case procedure.EdgeInternalpolicy:
-		return m.clearedinternalpolicy
+	case procedure.EdgeControls:
+		return m.clearedcontrols
+	case procedure.EdgeInternalPolicies:
+		return m.clearedinternal_policies
 	case procedure.EdgeNarratives:
 		return m.clearednarratives
 	case procedure.EdgeRisks:
@@ -81650,11 +81650,11 @@ func (m *ProcedureMutation) ResetEdge(name string) error {
 	case procedure.EdgeEditors:
 		m.ResetEditors()
 		return nil
-	case procedure.EdgeControl:
-		m.ResetControl()
+	case procedure.EdgeControls:
+		m.ResetControls()
 		return nil
-	case procedure.EdgeInternalpolicy:
-		m.ResetInternalpolicy()
+	case procedure.EdgeInternalPolicies:
+		m.ResetInternalPolicies()
 		return nil
 	case procedure.EdgeNarratives:
 		m.ResetNarratives()
@@ -83430,83 +83430,83 @@ func (m *ProcedureHistoryMutation) ResetEdge(name string) error {
 // ProgramMutation represents an operation that mutates the Program nodes in the graph.
 type ProgramMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	mapping_id               *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	tags                     *[]string
-	appendtags               []string
-	name                     *string
-	description              *string
-	status                   *enums.ProgramStatus
-	start_date               *time.Time
-	end_date                 *time.Time
-	auditor_ready            *bool
-	auditor_write_comments   *bool
-	auditor_read_comments    *bool
-	clearedFields            map[string]struct{}
-	owner                    *string
-	clearedowner             bool
-	blocked_groups           map[string]struct{}
-	removedblocked_groups    map[string]struct{}
-	clearedblocked_groups    bool
-	editors                  map[string]struct{}
-	removededitors           map[string]struct{}
-	clearededitors           bool
-	viewers                  map[string]struct{}
-	removedviewers           map[string]struct{}
-	clearedviewers           bool
-	controls                 map[string]struct{}
-	removedcontrols          map[string]struct{}
-	clearedcontrols          bool
-	subcontrols              map[string]struct{}
-	removedsubcontrols       map[string]struct{}
-	clearedsubcontrols       bool
-	controlobjectives        map[string]struct{}
-	removedcontrolobjectives map[string]struct{}
-	clearedcontrolobjectives bool
-	policies                 map[string]struct{}
-	removedpolicies          map[string]struct{}
-	clearedpolicies          bool
-	procedures               map[string]struct{}
-	removedprocedures        map[string]struct{}
-	clearedprocedures        bool
-	risks                    map[string]struct{}
-	removedrisks             map[string]struct{}
-	clearedrisks             bool
-	tasks                    map[string]struct{}
-	removedtasks             map[string]struct{}
-	clearedtasks             bool
-	notes                    map[string]struct{}
-	removednotes             map[string]struct{}
-	clearednotes             bool
-	files                    map[string]struct{}
-	removedfiles             map[string]struct{}
-	clearedfiles             bool
-	narratives               map[string]struct{}
-	removednarratives        map[string]struct{}
-	clearednarratives        bool
-	actionplans              map[string]struct{}
-	removedactionplans       map[string]struct{}
-	clearedactionplans       bool
-	standards                map[string]struct{}
-	removedstandards         map[string]struct{}
-	clearedstandards         bool
-	users                    map[string]struct{}
-	removedusers             map[string]struct{}
-	clearedusers             bool
-	members                  map[string]struct{}
-	removedmembers           map[string]struct{}
-	clearedmembers           bool
-	done                     bool
-	oldValue                 func(context.Context) (*Program, error)
-	predicates               []predicate.Program
+	op                        Op
+	typ                       string
+	id                        *string
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	mapping_id                *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	name                      *string
+	description               *string
+	status                    *enums.ProgramStatus
+	start_date                *time.Time
+	end_date                  *time.Time
+	auditor_ready             *bool
+	auditor_write_comments    *bool
+	auditor_read_comments     *bool
+	clearedFields             map[string]struct{}
+	owner                     *string
+	clearedowner              bool
+	blocked_groups            map[string]struct{}
+	removedblocked_groups     map[string]struct{}
+	clearedblocked_groups     bool
+	editors                   map[string]struct{}
+	removededitors            map[string]struct{}
+	clearededitors            bool
+	viewers                   map[string]struct{}
+	removedviewers            map[string]struct{}
+	clearedviewers            bool
+	controls                  map[string]struct{}
+	removedcontrols           map[string]struct{}
+	clearedcontrols           bool
+	subcontrols               map[string]struct{}
+	removedsubcontrols        map[string]struct{}
+	clearedsubcontrols        bool
+	control_objectives        map[string]struct{}
+	removedcontrol_objectives map[string]struct{}
+	clearedcontrol_objectives bool
+	internal_policies         map[string]struct{}
+	removedinternal_policies  map[string]struct{}
+	clearedinternal_policies  bool
+	procedures                map[string]struct{}
+	removedprocedures         map[string]struct{}
+	clearedprocedures         bool
+	risks                     map[string]struct{}
+	removedrisks              map[string]struct{}
+	clearedrisks              bool
+	tasks                     map[string]struct{}
+	removedtasks              map[string]struct{}
+	clearedtasks              bool
+	notes                     map[string]struct{}
+	removednotes              map[string]struct{}
+	clearednotes              bool
+	files                     map[string]struct{}
+	removedfiles              map[string]struct{}
+	clearedfiles              bool
+	narratives                map[string]struct{}
+	removednarratives         map[string]struct{}
+	clearednarratives         bool
+	action_plans              map[string]struct{}
+	removedaction_plans       map[string]struct{}
+	clearedaction_plans       bool
+	standards                 map[string]struct{}
+	removedstandards          map[string]struct{}
+	clearedstandards          bool
+	users                     map[string]struct{}
+	removedusers              map[string]struct{}
+	clearedusers              bool
+	members                   map[string]struct{}
+	removedmembers            map[string]struct{}
+	clearedmembers            bool
+	done                      bool
+	oldValue                  func(context.Context) (*Program, error)
+	predicates                []predicate.Program
 }
 
 var _ ent.Mutation = (*ProgramMutation)(nil)
@@ -84681,112 +84681,112 @@ func (m *ProgramMutation) ResetSubcontrols() {
 	m.removedsubcontrols = nil
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by ids.
-func (m *ProgramMutation) AddControlobjectiveIDs(ids ...string) {
-	if m.controlobjectives == nil {
-		m.controlobjectives = make(map[string]struct{})
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by ids.
+func (m *ProgramMutation) AddControlObjectiveIDs(ids ...string) {
+	if m.control_objectives == nil {
+		m.control_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjectives[ids[i]] = struct{}{}
+		m.control_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjectives clears the "controlobjectives" edge to the ControlObjective entity.
-func (m *ProgramMutation) ClearControlobjectives() {
-	m.clearedcontrolobjectives = true
+// ClearControlObjectives clears the "control_objectives" edge to the ControlObjective entity.
+func (m *ProgramMutation) ClearControlObjectives() {
+	m.clearedcontrol_objectives = true
 }
 
-// ControlobjectivesCleared reports if the "controlobjectives" edge to the ControlObjective entity was cleared.
-func (m *ProgramMutation) ControlobjectivesCleared() bool {
-	return m.clearedcontrolobjectives
+// ControlObjectivesCleared reports if the "control_objectives" edge to the ControlObjective entity was cleared.
+func (m *ProgramMutation) ControlObjectivesCleared() bool {
+	return m.clearedcontrol_objectives
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (m *ProgramMutation) RemoveControlobjectiveIDs(ids ...string) {
-	if m.removedcontrolobjectives == nil {
-		m.removedcontrolobjectives = make(map[string]struct{})
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to the ControlObjective entity by IDs.
+func (m *ProgramMutation) RemoveControlObjectiveIDs(ids ...string) {
+	if m.removedcontrol_objectives == nil {
+		m.removedcontrol_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.controlobjectives, ids[i])
-		m.removedcontrolobjectives[ids[i]] = struct{}{}
+		delete(m.control_objectives, ids[i])
+		m.removedcontrol_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControlobjectives returns the removed IDs of the "controlobjectives" edge to the ControlObjective entity.
-func (m *ProgramMutation) RemovedControlobjectivesIDs() (ids []string) {
-	for id := range m.removedcontrolobjectives {
+// RemovedControlObjectives returns the removed IDs of the "control_objectives" edge to the ControlObjective entity.
+func (m *ProgramMutation) RemovedControlObjectivesIDs() (ids []string) {
+	for id := range m.removedcontrol_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlobjectivesIDs returns the "controlobjectives" edge IDs in the mutation.
-func (m *ProgramMutation) ControlobjectivesIDs() (ids []string) {
-	for id := range m.controlobjectives {
+// ControlObjectivesIDs returns the "control_objectives" edge IDs in the mutation.
+func (m *ProgramMutation) ControlObjectivesIDs() (ids []string) {
+	for id := range m.control_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControlobjectives resets all changes to the "controlobjectives" edge.
-func (m *ProgramMutation) ResetControlobjectives() {
-	m.controlobjectives = nil
-	m.clearedcontrolobjectives = false
-	m.removedcontrolobjectives = nil
+// ResetControlObjectives resets all changes to the "control_objectives" edge.
+func (m *ProgramMutation) ResetControlObjectives() {
+	m.control_objectives = nil
+	m.clearedcontrol_objectives = false
+	m.removedcontrol_objectives = nil
 }
 
-// AddPolicyIDs adds the "policies" edge to the InternalPolicy entity by ids.
-func (m *ProgramMutation) AddPolicyIDs(ids ...string) {
-	if m.policies == nil {
-		m.policies = make(map[string]struct{})
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by ids.
+func (m *ProgramMutation) AddInternalPolicyIDs(ids ...string) {
+	if m.internal_policies == nil {
+		m.internal_policies = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.policies[ids[i]] = struct{}{}
+		m.internal_policies[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPolicies clears the "policies" edge to the InternalPolicy entity.
-func (m *ProgramMutation) ClearPolicies() {
-	m.clearedpolicies = true
+// ClearInternalPolicies clears the "internal_policies" edge to the InternalPolicy entity.
+func (m *ProgramMutation) ClearInternalPolicies() {
+	m.clearedinternal_policies = true
 }
 
-// PoliciesCleared reports if the "policies" edge to the InternalPolicy entity was cleared.
-func (m *ProgramMutation) PoliciesCleared() bool {
-	return m.clearedpolicies
+// InternalPoliciesCleared reports if the "internal_policies" edge to the InternalPolicy entity was cleared.
+func (m *ProgramMutation) InternalPoliciesCleared() bool {
+	return m.clearedinternal_policies
 }
 
-// RemovePolicyIDs removes the "policies" edge to the InternalPolicy entity by IDs.
-func (m *ProgramMutation) RemovePolicyIDs(ids ...string) {
-	if m.removedpolicies == nil {
-		m.removedpolicies = make(map[string]struct{})
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (m *ProgramMutation) RemoveInternalPolicyIDs(ids ...string) {
+	if m.removedinternal_policies == nil {
+		m.removedinternal_policies = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.policies, ids[i])
-		m.removedpolicies[ids[i]] = struct{}{}
+		delete(m.internal_policies, ids[i])
+		m.removedinternal_policies[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPolicies returns the removed IDs of the "policies" edge to the InternalPolicy entity.
-func (m *ProgramMutation) RemovedPoliciesIDs() (ids []string) {
-	for id := range m.removedpolicies {
+// RemovedInternalPolicies returns the removed IDs of the "internal_policies" edge to the InternalPolicy entity.
+func (m *ProgramMutation) RemovedInternalPoliciesIDs() (ids []string) {
+	for id := range m.removedinternal_policies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PoliciesIDs returns the "policies" edge IDs in the mutation.
-func (m *ProgramMutation) PoliciesIDs() (ids []string) {
-	for id := range m.policies {
+// InternalPoliciesIDs returns the "internal_policies" edge IDs in the mutation.
+func (m *ProgramMutation) InternalPoliciesIDs() (ids []string) {
+	for id := range m.internal_policies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPolicies resets all changes to the "policies" edge.
-func (m *ProgramMutation) ResetPolicies() {
-	m.policies = nil
-	m.clearedpolicies = false
-	m.removedpolicies = nil
+// ResetInternalPolicies resets all changes to the "internal_policies" edge.
+func (m *ProgramMutation) ResetInternalPolicies() {
+	m.internal_policies = nil
+	m.clearedinternal_policies = false
+	m.removedinternal_policies = nil
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by ids.
@@ -85113,58 +85113,58 @@ func (m *ProgramMutation) ResetNarratives() {
 	m.removednarratives = nil
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by ids.
-func (m *ProgramMutation) AddActionplanIDs(ids ...string) {
-	if m.actionplans == nil {
-		m.actionplans = make(map[string]struct{})
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by ids.
+func (m *ProgramMutation) AddActionPlanIDs(ids ...string) {
+	if m.action_plans == nil {
+		m.action_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.actionplans[ids[i]] = struct{}{}
+		m.action_plans[ids[i]] = struct{}{}
 	}
 }
 
-// ClearActionplans clears the "actionplans" edge to the ActionPlan entity.
-func (m *ProgramMutation) ClearActionplans() {
-	m.clearedactionplans = true
+// ClearActionPlans clears the "action_plans" edge to the ActionPlan entity.
+func (m *ProgramMutation) ClearActionPlans() {
+	m.clearedaction_plans = true
 }
 
-// ActionplansCleared reports if the "actionplans" edge to the ActionPlan entity was cleared.
-func (m *ProgramMutation) ActionplansCleared() bool {
-	return m.clearedactionplans
+// ActionPlansCleared reports if the "action_plans" edge to the ActionPlan entity was cleared.
+func (m *ProgramMutation) ActionPlansCleared() bool {
+	return m.clearedaction_plans
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to the ActionPlan entity by IDs.
-func (m *ProgramMutation) RemoveActionplanIDs(ids ...string) {
-	if m.removedactionplans == nil {
-		m.removedactionplans = make(map[string]struct{})
+// RemoveActionPlanIDs removes the "action_plans" edge to the ActionPlan entity by IDs.
+func (m *ProgramMutation) RemoveActionPlanIDs(ids ...string) {
+	if m.removedaction_plans == nil {
+		m.removedaction_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.actionplans, ids[i])
-		m.removedactionplans[ids[i]] = struct{}{}
+		delete(m.action_plans, ids[i])
+		m.removedaction_plans[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedActionplans returns the removed IDs of the "actionplans" edge to the ActionPlan entity.
-func (m *ProgramMutation) RemovedActionplansIDs() (ids []string) {
-	for id := range m.removedactionplans {
+// RemovedActionPlans returns the removed IDs of the "action_plans" edge to the ActionPlan entity.
+func (m *ProgramMutation) RemovedActionPlansIDs() (ids []string) {
+	for id := range m.removedaction_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ActionplansIDs returns the "actionplans" edge IDs in the mutation.
-func (m *ProgramMutation) ActionplansIDs() (ids []string) {
-	for id := range m.actionplans {
+// ActionPlansIDs returns the "action_plans" edge IDs in the mutation.
+func (m *ProgramMutation) ActionPlansIDs() (ids []string) {
+	for id := range m.action_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetActionplans resets all changes to the "actionplans" edge.
-func (m *ProgramMutation) ResetActionplans() {
-	m.actionplans = nil
-	m.clearedactionplans = false
-	m.removedactionplans = nil
+// ResetActionPlans resets all changes to the "action_plans" edge.
+func (m *ProgramMutation) ResetActionPlans() {
+	m.action_plans = nil
+	m.clearedaction_plans = false
+	m.removedaction_plans = nil
 }
 
 // AddStandardIDs adds the "standards" edge to the Standard entity by ids.
@@ -85822,11 +85822,11 @@ func (m *ProgramMutation) AddedEdges() []string {
 	if m.subcontrols != nil {
 		edges = append(edges, program.EdgeSubcontrols)
 	}
-	if m.controlobjectives != nil {
-		edges = append(edges, program.EdgeControlobjectives)
+	if m.control_objectives != nil {
+		edges = append(edges, program.EdgeControlObjectives)
 	}
-	if m.policies != nil {
-		edges = append(edges, program.EdgePolicies)
+	if m.internal_policies != nil {
+		edges = append(edges, program.EdgeInternalPolicies)
 	}
 	if m.procedures != nil {
 		edges = append(edges, program.EdgeProcedures)
@@ -85846,8 +85846,8 @@ func (m *ProgramMutation) AddedEdges() []string {
 	if m.narratives != nil {
 		edges = append(edges, program.EdgeNarratives)
 	}
-	if m.actionplans != nil {
-		edges = append(edges, program.EdgeActionplans)
+	if m.action_plans != nil {
+		edges = append(edges, program.EdgeActionPlans)
 	}
 	if m.standards != nil {
 		edges = append(edges, program.EdgeStandards)
@@ -85899,15 +85899,15 @@ func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case program.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.controlobjectives))
-		for id := range m.controlobjectives {
+	case program.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.control_objectives))
+		for id := range m.control_objectives {
 			ids = append(ids, id)
 		}
 		return ids
-	case program.EdgePolicies:
-		ids := make([]ent.Value, 0, len(m.policies))
-		for id := range m.policies {
+	case program.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.internal_policies))
+		for id := range m.internal_policies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -85947,9 +85947,9 @@ func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case program.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.actionplans))
-		for id := range m.actionplans {
+	case program.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.action_plans))
+		for id := range m.action_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -85993,11 +85993,11 @@ func (m *ProgramMutation) RemovedEdges() []string {
 	if m.removedsubcontrols != nil {
 		edges = append(edges, program.EdgeSubcontrols)
 	}
-	if m.removedcontrolobjectives != nil {
-		edges = append(edges, program.EdgeControlobjectives)
+	if m.removedcontrol_objectives != nil {
+		edges = append(edges, program.EdgeControlObjectives)
 	}
-	if m.removedpolicies != nil {
-		edges = append(edges, program.EdgePolicies)
+	if m.removedinternal_policies != nil {
+		edges = append(edges, program.EdgeInternalPolicies)
 	}
 	if m.removedprocedures != nil {
 		edges = append(edges, program.EdgeProcedures)
@@ -86017,8 +86017,8 @@ func (m *ProgramMutation) RemovedEdges() []string {
 	if m.removednarratives != nil {
 		edges = append(edges, program.EdgeNarratives)
 	}
-	if m.removedactionplans != nil {
-		edges = append(edges, program.EdgeActionplans)
+	if m.removedaction_plans != nil {
+		edges = append(edges, program.EdgeActionPlans)
 	}
 	if m.removedstandards != nil {
 		edges = append(edges, program.EdgeStandards)
@@ -86066,15 +86066,15 @@ func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case program.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjectives))
-		for id := range m.removedcontrolobjectives {
+	case program.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objectives))
+		for id := range m.removedcontrol_objectives {
 			ids = append(ids, id)
 		}
 		return ids
-	case program.EdgePolicies:
-		ids := make([]ent.Value, 0, len(m.removedpolicies))
-		for id := range m.removedpolicies {
+	case program.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policies))
+		for id := range m.removedinternal_policies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -86114,9 +86114,9 @@ func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case program.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.removedactionplans))
-		for id := range m.removedactionplans {
+	case program.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.removedaction_plans))
+		for id := range m.removedaction_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -86163,11 +86163,11 @@ func (m *ProgramMutation) ClearedEdges() []string {
 	if m.clearedsubcontrols {
 		edges = append(edges, program.EdgeSubcontrols)
 	}
-	if m.clearedcontrolobjectives {
-		edges = append(edges, program.EdgeControlobjectives)
+	if m.clearedcontrol_objectives {
+		edges = append(edges, program.EdgeControlObjectives)
 	}
-	if m.clearedpolicies {
-		edges = append(edges, program.EdgePolicies)
+	if m.clearedinternal_policies {
+		edges = append(edges, program.EdgeInternalPolicies)
 	}
 	if m.clearedprocedures {
 		edges = append(edges, program.EdgeProcedures)
@@ -86187,8 +86187,8 @@ func (m *ProgramMutation) ClearedEdges() []string {
 	if m.clearednarratives {
 		edges = append(edges, program.EdgeNarratives)
 	}
-	if m.clearedactionplans {
-		edges = append(edges, program.EdgeActionplans)
+	if m.clearedaction_plans {
+		edges = append(edges, program.EdgeActionPlans)
 	}
 	if m.clearedstandards {
 		edges = append(edges, program.EdgeStandards)
@@ -86218,10 +86218,10 @@ func (m *ProgramMutation) EdgeCleared(name string) bool {
 		return m.clearedcontrols
 	case program.EdgeSubcontrols:
 		return m.clearedsubcontrols
-	case program.EdgeControlobjectives:
-		return m.clearedcontrolobjectives
-	case program.EdgePolicies:
-		return m.clearedpolicies
+	case program.EdgeControlObjectives:
+		return m.clearedcontrol_objectives
+	case program.EdgeInternalPolicies:
+		return m.clearedinternal_policies
 	case program.EdgeProcedures:
 		return m.clearedprocedures
 	case program.EdgeRisks:
@@ -86234,8 +86234,8 @@ func (m *ProgramMutation) EdgeCleared(name string) bool {
 		return m.clearedfiles
 	case program.EdgeNarratives:
 		return m.clearednarratives
-	case program.EdgeActionplans:
-		return m.clearedactionplans
+	case program.EdgeActionPlans:
+		return m.clearedaction_plans
 	case program.EdgeStandards:
 		return m.clearedstandards
 	case program.EdgeUsers:
@@ -86279,11 +86279,11 @@ func (m *ProgramMutation) ResetEdge(name string) error {
 	case program.EdgeSubcontrols:
 		m.ResetSubcontrols()
 		return nil
-	case program.EdgeControlobjectives:
-		m.ResetControlobjectives()
+	case program.EdgeControlObjectives:
+		m.ResetControlObjectives()
 		return nil
-	case program.EdgePolicies:
-		m.ResetPolicies()
+	case program.EdgeInternalPolicies:
+		m.ResetInternalPolicies()
 		return nil
 	case program.EdgeProcedures:
 		m.ResetProcedures()
@@ -86303,8 +86303,8 @@ func (m *ProgramMutation) ResetEdge(name string) error {
 	case program.EdgeNarratives:
 		m.ResetNarratives()
 		return nil
-	case program.EdgeActionplans:
-		m.ResetActionplans()
+	case program.EdgeActionPlans:
+		m.ResetActionPlans()
 		return nil
 	case program.EdgeStandards:
 		m.ResetStandards()
@@ -90119,9 +90119,9 @@ type RiskMutation struct {
 	procedure             map[string]struct{}
 	removedprocedure      map[string]struct{}
 	clearedprocedure      bool
-	actionplans           map[string]struct{}
-	removedactionplans    map[string]struct{}
-	clearedactionplans    bool
+	action_plans          map[string]struct{}
+	removedaction_plans   map[string]struct{}
+	clearedaction_plans   bool
 	programs              map[string]struct{}
 	removedprograms       map[string]struct{}
 	clearedprograms       bool
@@ -91439,58 +91439,58 @@ func (m *RiskMutation) ResetProcedure() {
 	m.removedprocedure = nil
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by ids.
-func (m *RiskMutation) AddActionplanIDs(ids ...string) {
-	if m.actionplans == nil {
-		m.actionplans = make(map[string]struct{})
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by ids.
+func (m *RiskMutation) AddActionPlanIDs(ids ...string) {
+	if m.action_plans == nil {
+		m.action_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.actionplans[ids[i]] = struct{}{}
+		m.action_plans[ids[i]] = struct{}{}
 	}
 }
 
-// ClearActionplans clears the "actionplans" edge to the ActionPlan entity.
-func (m *RiskMutation) ClearActionplans() {
-	m.clearedactionplans = true
+// ClearActionPlans clears the "action_plans" edge to the ActionPlan entity.
+func (m *RiskMutation) ClearActionPlans() {
+	m.clearedaction_plans = true
 }
 
-// ActionplansCleared reports if the "actionplans" edge to the ActionPlan entity was cleared.
-func (m *RiskMutation) ActionplansCleared() bool {
-	return m.clearedactionplans
+// ActionPlansCleared reports if the "action_plans" edge to the ActionPlan entity was cleared.
+func (m *RiskMutation) ActionPlansCleared() bool {
+	return m.clearedaction_plans
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to the ActionPlan entity by IDs.
-func (m *RiskMutation) RemoveActionplanIDs(ids ...string) {
-	if m.removedactionplans == nil {
-		m.removedactionplans = make(map[string]struct{})
+// RemoveActionPlanIDs removes the "action_plans" edge to the ActionPlan entity by IDs.
+func (m *RiskMutation) RemoveActionPlanIDs(ids ...string) {
+	if m.removedaction_plans == nil {
+		m.removedaction_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.actionplans, ids[i])
-		m.removedactionplans[ids[i]] = struct{}{}
+		delete(m.action_plans, ids[i])
+		m.removedaction_plans[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedActionplans returns the removed IDs of the "actionplans" edge to the ActionPlan entity.
-func (m *RiskMutation) RemovedActionplansIDs() (ids []string) {
-	for id := range m.removedactionplans {
+// RemovedActionPlans returns the removed IDs of the "action_plans" edge to the ActionPlan entity.
+func (m *RiskMutation) RemovedActionPlansIDs() (ids []string) {
+	for id := range m.removedaction_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ActionplansIDs returns the "actionplans" edge IDs in the mutation.
-func (m *RiskMutation) ActionplansIDs() (ids []string) {
-	for id := range m.actionplans {
+// ActionPlansIDs returns the "action_plans" edge IDs in the mutation.
+func (m *RiskMutation) ActionPlansIDs() (ids []string) {
+	for id := range m.action_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetActionplans resets all changes to the "actionplans" edge.
-func (m *RiskMutation) ResetActionplans() {
-	m.actionplans = nil
-	m.clearedactionplans = false
-	m.removedactionplans = nil
+// ResetActionPlans resets all changes to the "action_plans" edge.
+func (m *RiskMutation) ResetActionPlans() {
+	m.action_plans = nil
+	m.clearedaction_plans = false
+	m.removedaction_plans = nil
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by ids.
@@ -92104,8 +92104,8 @@ func (m *RiskMutation) AddedEdges() []string {
 	if m.procedure != nil {
 		edges = append(edges, risk.EdgeProcedure)
 	}
-	if m.actionplans != nil {
-		edges = append(edges, risk.EdgeActionplans)
+	if m.action_plans != nil {
+		edges = append(edges, risk.EdgeActionPlans)
 	}
 	if m.programs != nil {
 		edges = append(edges, risk.EdgePrograms)
@@ -92151,9 +92151,9 @@ func (m *RiskMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case risk.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.actionplans))
-		for id := range m.actionplans {
+	case risk.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.action_plans))
+		for id := range m.action_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -92185,8 +92185,8 @@ func (m *RiskMutation) RemovedEdges() []string {
 	if m.removedprocedure != nil {
 		edges = append(edges, risk.EdgeProcedure)
 	}
-	if m.removedactionplans != nil {
-		edges = append(edges, risk.EdgeActionplans)
+	if m.removedaction_plans != nil {
+		edges = append(edges, risk.EdgeActionPlans)
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, risk.EdgePrograms)
@@ -92228,9 +92228,9 @@ func (m *RiskMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case risk.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.removedactionplans))
-		for id := range m.removedactionplans {
+	case risk.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.removedaction_plans))
+		for id := range m.removedaction_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -92265,8 +92265,8 @@ func (m *RiskMutation) ClearedEdges() []string {
 	if m.clearedprocedure {
 		edges = append(edges, risk.EdgeProcedure)
 	}
-	if m.clearedactionplans {
-		edges = append(edges, risk.EdgeActionplans)
+	if m.clearedaction_plans {
+		edges = append(edges, risk.EdgeActionPlans)
 	}
 	if m.clearedprograms {
 		edges = append(edges, risk.EdgePrograms)
@@ -92290,8 +92290,8 @@ func (m *RiskMutation) EdgeCleared(name string) bool {
 		return m.clearedcontrol
 	case risk.EdgeProcedure:
 		return m.clearedprocedure
-	case risk.EdgeActionplans:
-		return m.clearedactionplans
+	case risk.EdgeActionPlans:
+		return m.clearedaction_plans
 	case risk.EdgePrograms:
 		return m.clearedprograms
 	}
@@ -92331,8 +92331,8 @@ func (m *RiskMutation) ResetEdge(name string) error {
 	case risk.EdgeProcedure:
 		m.ResetProcedure()
 		return nil
-	case risk.EdgeActionplans:
-		m.ResetActionplans()
+	case risk.EdgeActionPlans:
+		m.ResetActionPlans()
 		return nil
 	case risk.EdgePrograms:
 		m.ResetPrograms()
@@ -94153,47 +94153,47 @@ func (m *RiskHistoryMutation) ResetEdge(name string) error {
 // StandardMutation represents an operation that mutates the Standard nodes in the graph.
 type StandardMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	mapping_id               *string
-	tags                     *[]string
-	appendtags               []string
-	name                     *string
-	description              *string
-	family                   *string
-	status                   *string
-	standard_type            *string
-	version                  *string
-	purpose_and_scope        *string
-	background               *string
-	satisfies                *string
-	details                  *map[string]interface{}
-	clearedFields            map[string]struct{}
-	controlobjectives        map[string]struct{}
-	removedcontrolobjectives map[string]struct{}
-	clearedcontrolobjectives bool
-	controls                 map[string]struct{}
-	removedcontrols          map[string]struct{}
-	clearedcontrols          bool
-	procedures               map[string]struct{}
-	removedprocedures        map[string]struct{}
-	clearedprocedures        bool
-	actionplans              map[string]struct{}
-	removedactionplans       map[string]struct{}
-	clearedactionplans       bool
-	programs                 map[string]struct{}
-	removedprograms          map[string]struct{}
-	clearedprograms          bool
-	done                     bool
-	oldValue                 func(context.Context) (*Standard, error)
-	predicates               []predicate.Standard
+	op                        Op
+	typ                       string
+	id                        *string
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	mapping_id                *string
+	tags                      *[]string
+	appendtags                []string
+	name                      *string
+	description               *string
+	family                    *string
+	status                    *string
+	standard_type             *string
+	version                   *string
+	purpose_and_scope         *string
+	background                *string
+	satisfies                 *string
+	details                   *map[string]interface{}
+	clearedFields             map[string]struct{}
+	control_objectives        map[string]struct{}
+	removedcontrol_objectives map[string]struct{}
+	clearedcontrol_objectives bool
+	controls                  map[string]struct{}
+	removedcontrols           map[string]struct{}
+	clearedcontrols           bool
+	procedures                map[string]struct{}
+	removedprocedures         map[string]struct{}
+	clearedprocedures         bool
+	action_plans              map[string]struct{}
+	removedaction_plans       map[string]struct{}
+	clearedaction_plans       bool
+	programs                  map[string]struct{}
+	removedprograms           map[string]struct{}
+	clearedprograms           bool
+	done                      bool
+	oldValue                  func(context.Context) (*Standard, error)
+	predicates                []predicate.Standard
 }
 
 var _ ent.Mutation = (*StandardMutation)(nil)
@@ -95172,58 +95172,58 @@ func (m *StandardMutation) ResetDetails() {
 	delete(m.clearedFields, standard.FieldDetails)
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by ids.
-func (m *StandardMutation) AddControlobjectiveIDs(ids ...string) {
-	if m.controlobjectives == nil {
-		m.controlobjectives = make(map[string]struct{})
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by ids.
+func (m *StandardMutation) AddControlObjectiveIDs(ids ...string) {
+	if m.control_objectives == nil {
+		m.control_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.controlobjectives[ids[i]] = struct{}{}
+		m.control_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// ClearControlobjectives clears the "controlobjectives" edge to the ControlObjective entity.
-func (m *StandardMutation) ClearControlobjectives() {
-	m.clearedcontrolobjectives = true
+// ClearControlObjectives clears the "control_objectives" edge to the ControlObjective entity.
+func (m *StandardMutation) ClearControlObjectives() {
+	m.clearedcontrol_objectives = true
 }
 
-// ControlobjectivesCleared reports if the "controlobjectives" edge to the ControlObjective entity was cleared.
-func (m *StandardMutation) ControlobjectivesCleared() bool {
-	return m.clearedcontrolobjectives
+// ControlObjectivesCleared reports if the "control_objectives" edge to the ControlObjective entity was cleared.
+func (m *StandardMutation) ControlObjectivesCleared() bool {
+	return m.clearedcontrol_objectives
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (m *StandardMutation) RemoveControlobjectiveIDs(ids ...string) {
-	if m.removedcontrolobjectives == nil {
-		m.removedcontrolobjectives = make(map[string]struct{})
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to the ControlObjective entity by IDs.
+func (m *StandardMutation) RemoveControlObjectiveIDs(ids ...string) {
+	if m.removedcontrol_objectives == nil {
+		m.removedcontrol_objectives = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.controlobjectives, ids[i])
-		m.removedcontrolobjectives[ids[i]] = struct{}{}
+		delete(m.control_objectives, ids[i])
+		m.removedcontrol_objectives[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedControlobjectives returns the removed IDs of the "controlobjectives" edge to the ControlObjective entity.
-func (m *StandardMutation) RemovedControlobjectivesIDs() (ids []string) {
-	for id := range m.removedcontrolobjectives {
+// RemovedControlObjectives returns the removed IDs of the "control_objectives" edge to the ControlObjective entity.
+func (m *StandardMutation) RemovedControlObjectivesIDs() (ids []string) {
+	for id := range m.removedcontrol_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ControlobjectivesIDs returns the "controlobjectives" edge IDs in the mutation.
-func (m *StandardMutation) ControlobjectivesIDs() (ids []string) {
-	for id := range m.controlobjectives {
+// ControlObjectivesIDs returns the "control_objectives" edge IDs in the mutation.
+func (m *StandardMutation) ControlObjectivesIDs() (ids []string) {
+	for id := range m.control_objectives {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetControlobjectives resets all changes to the "controlobjectives" edge.
-func (m *StandardMutation) ResetControlobjectives() {
-	m.controlobjectives = nil
-	m.clearedcontrolobjectives = false
-	m.removedcontrolobjectives = nil
+// ResetControlObjectives resets all changes to the "control_objectives" edge.
+func (m *StandardMutation) ResetControlObjectives() {
+	m.control_objectives = nil
+	m.clearedcontrol_objectives = false
+	m.removedcontrol_objectives = nil
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by ids.
@@ -95334,58 +95334,58 @@ func (m *StandardMutation) ResetProcedures() {
 	m.removedprocedures = nil
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by ids.
-func (m *StandardMutation) AddActionplanIDs(ids ...string) {
-	if m.actionplans == nil {
-		m.actionplans = make(map[string]struct{})
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by ids.
+func (m *StandardMutation) AddActionPlanIDs(ids ...string) {
+	if m.action_plans == nil {
+		m.action_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.actionplans[ids[i]] = struct{}{}
+		m.action_plans[ids[i]] = struct{}{}
 	}
 }
 
-// ClearActionplans clears the "actionplans" edge to the ActionPlan entity.
-func (m *StandardMutation) ClearActionplans() {
-	m.clearedactionplans = true
+// ClearActionPlans clears the "action_plans" edge to the ActionPlan entity.
+func (m *StandardMutation) ClearActionPlans() {
+	m.clearedaction_plans = true
 }
 
-// ActionplansCleared reports if the "actionplans" edge to the ActionPlan entity was cleared.
-func (m *StandardMutation) ActionplansCleared() bool {
-	return m.clearedactionplans
+// ActionPlansCleared reports if the "action_plans" edge to the ActionPlan entity was cleared.
+func (m *StandardMutation) ActionPlansCleared() bool {
+	return m.clearedaction_plans
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to the ActionPlan entity by IDs.
-func (m *StandardMutation) RemoveActionplanIDs(ids ...string) {
-	if m.removedactionplans == nil {
-		m.removedactionplans = make(map[string]struct{})
+// RemoveActionPlanIDs removes the "action_plans" edge to the ActionPlan entity by IDs.
+func (m *StandardMutation) RemoveActionPlanIDs(ids ...string) {
+	if m.removedaction_plans == nil {
+		m.removedaction_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.actionplans, ids[i])
-		m.removedactionplans[ids[i]] = struct{}{}
+		delete(m.action_plans, ids[i])
+		m.removedaction_plans[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedActionplans returns the removed IDs of the "actionplans" edge to the ActionPlan entity.
-func (m *StandardMutation) RemovedActionplansIDs() (ids []string) {
-	for id := range m.removedactionplans {
+// RemovedActionPlans returns the removed IDs of the "action_plans" edge to the ActionPlan entity.
+func (m *StandardMutation) RemovedActionPlansIDs() (ids []string) {
+	for id := range m.removedaction_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ActionplansIDs returns the "actionplans" edge IDs in the mutation.
-func (m *StandardMutation) ActionplansIDs() (ids []string) {
-	for id := range m.actionplans {
+// ActionPlansIDs returns the "action_plans" edge IDs in the mutation.
+func (m *StandardMutation) ActionPlansIDs() (ids []string) {
+	for id := range m.action_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetActionplans resets all changes to the "actionplans" edge.
-func (m *StandardMutation) ResetActionplans() {
-	m.actionplans = nil
-	m.clearedactionplans = false
-	m.removedactionplans = nil
+// ResetActionPlans resets all changes to the "action_plans" edge.
+func (m *StandardMutation) ResetActionPlans() {
+	m.action_plans = nil
+	m.clearedaction_plans = false
+	m.removedaction_plans = nil
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by ids.
@@ -95964,8 +95964,8 @@ func (m *StandardMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *StandardMutation) AddedEdges() []string {
 	edges := make([]string, 0, 5)
-	if m.controlobjectives != nil {
-		edges = append(edges, standard.EdgeControlobjectives)
+	if m.control_objectives != nil {
+		edges = append(edges, standard.EdgeControlObjectives)
 	}
 	if m.controls != nil {
 		edges = append(edges, standard.EdgeControls)
@@ -95973,8 +95973,8 @@ func (m *StandardMutation) AddedEdges() []string {
 	if m.procedures != nil {
 		edges = append(edges, standard.EdgeProcedures)
 	}
-	if m.actionplans != nil {
-		edges = append(edges, standard.EdgeActionplans)
+	if m.action_plans != nil {
+		edges = append(edges, standard.EdgeActionPlans)
 	}
 	if m.programs != nil {
 		edges = append(edges, standard.EdgePrograms)
@@ -95986,9 +95986,9 @@ func (m *StandardMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *StandardMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case standard.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.controlobjectives))
-		for id := range m.controlobjectives {
+	case standard.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.control_objectives))
+		for id := range m.control_objectives {
 			ids = append(ids, id)
 		}
 		return ids
@@ -96004,9 +96004,9 @@ func (m *StandardMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case standard.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.actionplans))
-		for id := range m.actionplans {
+	case standard.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.action_plans))
+		for id := range m.action_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -96023,8 +96023,8 @@ func (m *StandardMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *StandardMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 5)
-	if m.removedcontrolobjectives != nil {
-		edges = append(edges, standard.EdgeControlobjectives)
+	if m.removedcontrol_objectives != nil {
+		edges = append(edges, standard.EdgeControlObjectives)
 	}
 	if m.removedcontrols != nil {
 		edges = append(edges, standard.EdgeControls)
@@ -96032,8 +96032,8 @@ func (m *StandardMutation) RemovedEdges() []string {
 	if m.removedprocedures != nil {
 		edges = append(edges, standard.EdgeProcedures)
 	}
-	if m.removedactionplans != nil {
-		edges = append(edges, standard.EdgeActionplans)
+	if m.removedaction_plans != nil {
+		edges = append(edges, standard.EdgeActionPlans)
 	}
 	if m.removedprograms != nil {
 		edges = append(edges, standard.EdgePrograms)
@@ -96045,9 +96045,9 @@ func (m *StandardMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *StandardMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case standard.EdgeControlobjectives:
-		ids := make([]ent.Value, 0, len(m.removedcontrolobjectives))
-		for id := range m.removedcontrolobjectives {
+	case standard.EdgeControlObjectives:
+		ids := make([]ent.Value, 0, len(m.removedcontrol_objectives))
+		for id := range m.removedcontrol_objectives {
 			ids = append(ids, id)
 		}
 		return ids
@@ -96063,9 +96063,9 @@ func (m *StandardMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case standard.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.removedactionplans))
-		for id := range m.removedactionplans {
+	case standard.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.removedaction_plans))
+		for id := range m.removedaction_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -96082,8 +96082,8 @@ func (m *StandardMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *StandardMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 5)
-	if m.clearedcontrolobjectives {
-		edges = append(edges, standard.EdgeControlobjectives)
+	if m.clearedcontrol_objectives {
+		edges = append(edges, standard.EdgeControlObjectives)
 	}
 	if m.clearedcontrols {
 		edges = append(edges, standard.EdgeControls)
@@ -96091,8 +96091,8 @@ func (m *StandardMutation) ClearedEdges() []string {
 	if m.clearedprocedures {
 		edges = append(edges, standard.EdgeProcedures)
 	}
-	if m.clearedactionplans {
-		edges = append(edges, standard.EdgeActionplans)
+	if m.clearedaction_plans {
+		edges = append(edges, standard.EdgeActionPlans)
 	}
 	if m.clearedprograms {
 		edges = append(edges, standard.EdgePrograms)
@@ -96104,14 +96104,14 @@ func (m *StandardMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *StandardMutation) EdgeCleared(name string) bool {
 	switch name {
-	case standard.EdgeControlobjectives:
-		return m.clearedcontrolobjectives
+	case standard.EdgeControlObjectives:
+		return m.clearedcontrol_objectives
 	case standard.EdgeControls:
 		return m.clearedcontrols
 	case standard.EdgeProcedures:
 		return m.clearedprocedures
-	case standard.EdgeActionplans:
-		return m.clearedactionplans
+	case standard.EdgeActionPlans:
+		return m.clearedaction_plans
 	case standard.EdgePrograms:
 		return m.clearedprograms
 	}
@@ -96130,8 +96130,8 @@ func (m *StandardMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *StandardMutation) ResetEdge(name string) error {
 	switch name {
-	case standard.EdgeControlobjectives:
-		m.ResetControlobjectives()
+	case standard.EdgeControlObjectives:
+		m.ResetControlObjectives()
 		return nil
 	case standard.EdgeControls:
 		m.ResetControls()
@@ -96139,8 +96139,8 @@ func (m *StandardMutation) ResetEdge(name string) error {
 	case standard.EdgeProcedures:
 		m.ResetProcedures()
 		return nil
-	case standard.EdgeActionplans:
-		m.ResetActionplans()
+	case standard.EdgeActionPlans:
+		m.ResetActionPlans()
 		return nil
 	case standard.EdgePrograms:
 		m.ResetPrograms()
@@ -105648,9 +105648,9 @@ type TaskMutation struct {
 	group                    map[string]struct{}
 	removedgroup             map[string]struct{}
 	clearedgroup             bool
-	policy                   map[string]struct{}
-	removedpolicy            map[string]struct{}
-	clearedpolicy            bool
+	internal_policy          map[string]struct{}
+	removedinternal_policy   map[string]struct{}
+	clearedinternal_policy   bool
 	procedure                map[string]struct{}
 	removedprocedure         map[string]struct{}
 	clearedprocedure         bool
@@ -106624,58 +106624,58 @@ func (m *TaskMutation) ResetGroup() {
 	m.removedgroup = nil
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by ids.
-func (m *TaskMutation) AddPolicyIDs(ids ...string) {
-	if m.policy == nil {
-		m.policy = make(map[string]struct{})
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by ids.
+func (m *TaskMutation) AddInternalPolicyIDs(ids ...string) {
+	if m.internal_policy == nil {
+		m.internal_policy = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.policy[ids[i]] = struct{}{}
+		m.internal_policy[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPolicy clears the "policy" edge to the InternalPolicy entity.
-func (m *TaskMutation) ClearPolicy() {
-	m.clearedpolicy = true
+// ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
+func (m *TaskMutation) ClearInternalPolicy() {
+	m.clearedinternal_policy = true
 }
 
-// PolicyCleared reports if the "policy" edge to the InternalPolicy entity was cleared.
-func (m *TaskMutation) PolicyCleared() bool {
-	return m.clearedpolicy
+// InternalPolicyCleared reports if the "internal_policy" edge to the InternalPolicy entity was cleared.
+func (m *TaskMutation) InternalPolicyCleared() bool {
+	return m.clearedinternal_policy
 }
 
-// RemovePolicyIDs removes the "policy" edge to the InternalPolicy entity by IDs.
-func (m *TaskMutation) RemovePolicyIDs(ids ...string) {
-	if m.removedpolicy == nil {
-		m.removedpolicy = make(map[string]struct{})
+// RemoveInternalPolicyIDs removes the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (m *TaskMutation) RemoveInternalPolicyIDs(ids ...string) {
+	if m.removedinternal_policy == nil {
+		m.removedinternal_policy = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.policy, ids[i])
-		m.removedpolicy[ids[i]] = struct{}{}
+		delete(m.internal_policy, ids[i])
+		m.removedinternal_policy[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPolicy returns the removed IDs of the "policy" edge to the InternalPolicy entity.
-func (m *TaskMutation) RemovedPolicyIDs() (ids []string) {
-	for id := range m.removedpolicy {
+// RemovedInternalPolicy returns the removed IDs of the "internal_policy" edge to the InternalPolicy entity.
+func (m *TaskMutation) RemovedInternalPolicyIDs() (ids []string) {
+	for id := range m.removedinternal_policy {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PolicyIDs returns the "policy" edge IDs in the mutation.
-func (m *TaskMutation) PolicyIDs() (ids []string) {
-	for id := range m.policy {
+// InternalPolicyIDs returns the "internal_policy" edge IDs in the mutation.
+func (m *TaskMutation) InternalPolicyIDs() (ids []string) {
+	for id := range m.internal_policy {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPolicy resets all changes to the "policy" edge.
-func (m *TaskMutation) ResetPolicy() {
-	m.policy = nil
-	m.clearedpolicy = false
-	m.removedpolicy = nil
+// ResetInternalPolicy resets all changes to the "internal_policy" edge.
+func (m *TaskMutation) ResetInternalPolicy() {
+	m.internal_policy = nil
+	m.clearedinternal_policy = false
+	m.removedinternal_policy = nil
 }
 
 // AddProcedureIDs adds the "procedure" edge to the Procedure entity by ids.
@@ -107384,8 +107384,8 @@ func (m *TaskMutation) AddedEdges() []string {
 	if m.group != nil {
 		edges = append(edges, task.EdgeGroup)
 	}
-	if m.policy != nil {
-		edges = append(edges, task.EdgePolicy)
+	if m.internal_policy != nil {
+		edges = append(edges, task.EdgeInternalPolicy)
 	}
 	if m.procedure != nil {
 		edges = append(edges, task.EdgeProcedure)
@@ -107429,9 +107429,9 @@ func (m *TaskMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case task.EdgePolicy:
-		ids := make([]ent.Value, 0, len(m.policy))
-		for id := range m.policy {
+	case task.EdgeInternalPolicy:
+		ids := make([]ent.Value, 0, len(m.internal_policy))
+		for id := range m.internal_policy {
 			ids = append(ids, id)
 		}
 		return ids
@@ -107478,8 +107478,8 @@ func (m *TaskMutation) RemovedEdges() []string {
 	if m.removedgroup != nil {
 		edges = append(edges, task.EdgeGroup)
 	}
-	if m.removedpolicy != nil {
-		edges = append(edges, task.EdgePolicy)
+	if m.removedinternal_policy != nil {
+		edges = append(edges, task.EdgeInternalPolicy)
 	}
 	if m.removedprocedure != nil {
 		edges = append(edges, task.EdgeProcedure)
@@ -107515,9 +107515,9 @@ func (m *TaskMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case task.EdgePolicy:
-		ids := make([]ent.Value, 0, len(m.removedpolicy))
-		for id := range m.removedpolicy {
+	case task.EdgeInternalPolicy:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policy))
+		for id := range m.removedinternal_policy {
 			ids = append(ids, id)
 		}
 		return ids
@@ -107570,8 +107570,8 @@ func (m *TaskMutation) ClearedEdges() []string {
 	if m.clearedgroup {
 		edges = append(edges, task.EdgeGroup)
 	}
-	if m.clearedpolicy {
-		edges = append(edges, task.EdgePolicy)
+	if m.clearedinternal_policy {
+		edges = append(edges, task.EdgeInternalPolicy)
 	}
 	if m.clearedprocedure {
 		edges = append(edges, task.EdgeProcedure)
@@ -107603,8 +107603,8 @@ func (m *TaskMutation) EdgeCleared(name string) bool {
 		return m.clearedorganization
 	case task.EdgeGroup:
 		return m.clearedgroup
-	case task.EdgePolicy:
-		return m.clearedpolicy
+	case task.EdgeInternalPolicy:
+		return m.clearedinternal_policy
 	case task.EdgeProcedure:
 		return m.clearedprocedure
 	case task.EdgeControl:
@@ -107649,8 +107649,8 @@ func (m *TaskMutation) ResetEdge(name string) error {
 	case task.EdgeGroup:
 		m.ResetGroup()
 		return nil
-	case task.EdgePolicy:
-		m.ResetPolicy()
+	case task.EdgeInternalPolicy:
+		m.ResetInternalPolicy()
 		return nil
 	case task.EdgeProcedure:
 		m.ResetProcedure()
@@ -112065,9 +112065,9 @@ type UserMutation struct {
 	events                           map[string]struct{}
 	removedevents                    map[string]struct{}
 	clearedevents                    bool
-	actionplans                      map[string]struct{}
-	removedactionplans               map[string]struct{}
-	clearedactionplans               bool
+	action_plans                     map[string]struct{}
+	removedaction_plans              map[string]struct{}
+	clearedaction_plans              bool
 	subcontrols                      map[string]struct{}
 	removedsubcontrols               map[string]struct{}
 	clearedsubcontrols               bool
@@ -113756,58 +113756,58 @@ func (m *UserMutation) ResetEvents() {
 	m.removedevents = nil
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by ids.
-func (m *UserMutation) AddActionplanIDs(ids ...string) {
-	if m.actionplans == nil {
-		m.actionplans = make(map[string]struct{})
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by ids.
+func (m *UserMutation) AddActionPlanIDs(ids ...string) {
+	if m.action_plans == nil {
+		m.action_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.actionplans[ids[i]] = struct{}{}
+		m.action_plans[ids[i]] = struct{}{}
 	}
 }
 
-// ClearActionplans clears the "actionplans" edge to the ActionPlan entity.
-func (m *UserMutation) ClearActionplans() {
-	m.clearedactionplans = true
+// ClearActionPlans clears the "action_plans" edge to the ActionPlan entity.
+func (m *UserMutation) ClearActionPlans() {
+	m.clearedaction_plans = true
 }
 
-// ActionplansCleared reports if the "actionplans" edge to the ActionPlan entity was cleared.
-func (m *UserMutation) ActionplansCleared() bool {
-	return m.clearedactionplans
+// ActionPlansCleared reports if the "action_plans" edge to the ActionPlan entity was cleared.
+func (m *UserMutation) ActionPlansCleared() bool {
+	return m.clearedaction_plans
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to the ActionPlan entity by IDs.
-func (m *UserMutation) RemoveActionplanIDs(ids ...string) {
-	if m.removedactionplans == nil {
-		m.removedactionplans = make(map[string]struct{})
+// RemoveActionPlanIDs removes the "action_plans" edge to the ActionPlan entity by IDs.
+func (m *UserMutation) RemoveActionPlanIDs(ids ...string) {
+	if m.removedaction_plans == nil {
+		m.removedaction_plans = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.actionplans, ids[i])
-		m.removedactionplans[ids[i]] = struct{}{}
+		delete(m.action_plans, ids[i])
+		m.removedaction_plans[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedActionplans returns the removed IDs of the "actionplans" edge to the ActionPlan entity.
-func (m *UserMutation) RemovedActionplansIDs() (ids []string) {
-	for id := range m.removedactionplans {
+// RemovedActionPlans returns the removed IDs of the "action_plans" edge to the ActionPlan entity.
+func (m *UserMutation) RemovedActionPlansIDs() (ids []string) {
+	for id := range m.removedaction_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ActionplansIDs returns the "actionplans" edge IDs in the mutation.
-func (m *UserMutation) ActionplansIDs() (ids []string) {
-	for id := range m.actionplans {
+// ActionPlansIDs returns the "action_plans" edge IDs in the mutation.
+func (m *UserMutation) ActionPlansIDs() (ids []string) {
+	for id := range m.action_plans {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetActionplans resets all changes to the "actionplans" edge.
-func (m *UserMutation) ResetActionplans() {
-	m.actionplans = nil
-	m.clearedactionplans = false
-	m.removedactionplans = nil
+// ResetActionPlans resets all changes to the "action_plans" edge.
+func (m *UserMutation) ResetActionPlans() {
+	m.action_plans = nil
+	m.clearedaction_plans = false
+	m.removedaction_plans = nil
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by ids.
@@ -114800,8 +114800,8 @@ func (m *UserMutation) AddedEdges() []string {
 	if m.events != nil {
 		edges = append(edges, user.EdgeEvents)
 	}
-	if m.actionplans != nil {
-		edges = append(edges, user.EdgeActionplans)
+	if m.action_plans != nil {
+		edges = append(edges, user.EdgeActionPlans)
 	}
 	if m.subcontrols != nil {
 		edges = append(edges, user.EdgeSubcontrols)
@@ -114893,9 +114893,9 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case user.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.actionplans))
-		for id := range m.actionplans {
+	case user.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.action_plans))
+		for id := range m.action_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -114975,8 +114975,8 @@ func (m *UserMutation) RemovedEdges() []string {
 	if m.removedevents != nil {
 		edges = append(edges, user.EdgeEvents)
 	}
-	if m.removedactionplans != nil {
-		edges = append(edges, user.EdgeActionplans)
+	if m.removedaction_plans != nil {
+		edges = append(edges, user.EdgeActionPlans)
 	}
 	if m.removedsubcontrols != nil {
 		edges = append(edges, user.EdgeSubcontrols)
@@ -115060,9 +115060,9 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case user.EdgeActionplans:
-		ids := make([]ent.Value, 0, len(m.removedactionplans))
-		for id := range m.removedactionplans {
+	case user.EdgeActionPlans:
+		ids := make([]ent.Value, 0, len(m.removedaction_plans))
+		for id := range m.removedaction_plans {
 			ids = append(ids, id)
 		}
 		return ids
@@ -115148,8 +115148,8 @@ func (m *UserMutation) ClearedEdges() []string {
 	if m.clearedevents {
 		edges = append(edges, user.EdgeEvents)
 	}
-	if m.clearedactionplans {
-		edges = append(edges, user.EdgeActionplans)
+	if m.clearedaction_plans {
+		edges = append(edges, user.EdgeActionPlans)
 	}
 	if m.clearedsubcontrols {
 		edges = append(edges, user.EdgeSubcontrols)
@@ -115201,8 +115201,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 		return m.clearedfile
 	case user.EdgeEvents:
 		return m.clearedevents
-	case user.EdgeActionplans:
-		return m.clearedactionplans
+	case user.EdgeActionPlans:
+		return m.clearedaction_plans
 	case user.EdgeSubcontrols:
 		return m.clearedsubcontrols
 	case user.EdgeAssignerTasks:
@@ -115272,8 +115272,8 @@ func (m *UserMutation) ResetEdge(name string) error {
 	case user.EdgeEvents:
 		m.ResetEvents()
 		return nil
-	case user.EdgeActionplans:
-		m.ResetActionplans()
+	case user.EdgeActionPlans:
+		m.ResetActionPlans()
 		return nil
 	case user.EdgeSubcontrols:
 		m.ResetSubcontrols()

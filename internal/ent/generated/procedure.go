@@ -71,10 +71,10 @@ type ProcedureEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
-	// Control holds the value of the control edge.
-	Control []*Control `json:"control,omitempty"`
-	// Internalpolicy holds the value of the internalpolicy edge.
-	Internalpolicy []*InternalPolicy `json:"internalpolicy,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Risks holds the value of the risks edge.
@@ -89,14 +89,14 @@ type ProcedureEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [9]map[string]int
 
-	namedBlockedGroups  map[string][]*Group
-	namedEditors        map[string][]*Group
-	namedControl        map[string][]*Control
-	namedInternalpolicy map[string][]*InternalPolicy
-	namedNarratives     map[string][]*Narrative
-	namedRisks          map[string][]*Risk
-	namedTasks          map[string][]*Task
-	namedPrograms       map[string][]*Program
+	namedBlockedGroups    map[string][]*Group
+	namedEditors          map[string][]*Group
+	namedControls         map[string][]*Control
+	namedInternalPolicies map[string][]*InternalPolicy
+	namedNarratives       map[string][]*Narrative
+	namedRisks            map[string][]*Risk
+	namedTasks            map[string][]*Task
+	namedPrograms         map[string][]*Program
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -128,22 +128,22 @@ func (e ProcedureEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
-// ControlOrErr returns the Control value or an error if the edge
+// ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProcedureEdges) ControlOrErr() ([]*Control, error) {
+func (e ProcedureEdges) ControlsOrErr() ([]*Control, error) {
 	if e.loadedTypes[3] {
-		return e.Control, nil
+		return e.Controls, nil
 	}
-	return nil, &NotLoadedError{edge: "control"}
+	return nil, &NotLoadedError{edge: "controls"}
 }
 
-// InternalpolicyOrErr returns the Internalpolicy value or an error if the edge
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
-func (e ProcedureEdges) InternalpolicyOrErr() ([]*InternalPolicy, error) {
+func (e ProcedureEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 	if e.loadedTypes[4] {
-		return e.Internalpolicy, nil
+		return e.InternalPolicies, nil
 	}
-	return nil, &NotLoadedError{edge: "internalpolicy"}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
 // NarrativesOrErr returns the Narratives value or an error if the edge
@@ -372,14 +372,14 @@ func (pr *Procedure) QueryEditors() *GroupQuery {
 	return NewProcedureClient(pr.config).QueryEditors(pr)
 }
 
-// QueryControl queries the "control" edge of the Procedure entity.
-func (pr *Procedure) QueryControl() *ControlQuery {
-	return NewProcedureClient(pr.config).QueryControl(pr)
+// QueryControls queries the "controls" edge of the Procedure entity.
+func (pr *Procedure) QueryControls() *ControlQuery {
+	return NewProcedureClient(pr.config).QueryControls(pr)
 }
 
-// QueryInternalpolicy queries the "internalpolicy" edge of the Procedure entity.
-func (pr *Procedure) QueryInternalpolicy() *InternalPolicyQuery {
-	return NewProcedureClient(pr.config).QueryInternalpolicy(pr)
+// QueryInternalPolicies queries the "internal_policies" edge of the Procedure entity.
+func (pr *Procedure) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewProcedureClient(pr.config).QueryInternalPolicies(pr)
 }
 
 // QueryNarratives queries the "narratives" edge of the Procedure entity.
@@ -530,51 +530,51 @@ func (pr *Procedure) appendNamedEditors(name string, edges ...*Group) {
 	}
 }
 
-// NamedControl returns the Control named value or an error if the edge was not
+// NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedControl(name string) ([]*Control, error) {
-	if pr.Edges.namedControl == nil {
+func (pr *Procedure) NamedControls(name string) ([]*Control, error) {
+	if pr.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedControl[name]
+	nodes, ok := pr.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedControl(name string, edges ...*Control) {
-	if pr.Edges.namedControl == nil {
-		pr.Edges.namedControl = make(map[string][]*Control)
+func (pr *Procedure) appendNamedControls(name string, edges ...*Control) {
+	if pr.Edges.namedControls == nil {
+		pr.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedControl[name] = []*Control{}
+		pr.Edges.namedControls[name] = []*Control{}
 	} else {
-		pr.Edges.namedControl[name] = append(pr.Edges.namedControl[name], edges...)
+		pr.Edges.namedControls[name] = append(pr.Edges.namedControls[name], edges...)
 	}
 }
 
-// NamedInternalpolicy returns the Internalpolicy named value or an error if the edge was not
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedInternalpolicy(name string) ([]*InternalPolicy, error) {
-	if pr.Edges.namedInternalpolicy == nil {
+func (pr *Procedure) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if pr.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedInternalpolicy[name]
+	nodes, ok := pr.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedInternalpolicy(name string, edges ...*InternalPolicy) {
-	if pr.Edges.namedInternalpolicy == nil {
-		pr.Edges.namedInternalpolicy = make(map[string][]*InternalPolicy)
+func (pr *Procedure) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if pr.Edges.namedInternalPolicies == nil {
+		pr.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedInternalpolicy[name] = []*InternalPolicy{}
+		pr.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		pr.Edges.namedInternalpolicy[name] = append(pr.Edges.namedInternalpolicy[name], edges...)
+		pr.Edges.namedInternalPolicies[name] = append(pr.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 

@@ -178,7 +178,7 @@ func (User) Edges() []ent.Edge {
 		edge.To("file", File.Type).
 			Field("avatar_local_file_id").Unique(),
 		edge.To("events", Event.Type),
-		edge.To("actionplans", ActionPlan.Type),
+		edge.To("action_plans", ActionPlan.Type),
 		edge.To("subcontrols", Subcontrol.Type),
 		edge.To("assigner_tasks", Task.Type),
 		edge.To("assignee_tasks", Task.Type),

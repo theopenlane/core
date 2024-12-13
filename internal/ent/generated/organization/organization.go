@@ -75,10 +75,10 @@ const (
 	EdgeIntegrations = "integrations"
 	// EdgeSetting holds the string denoting the setting edge name in mutations.
 	EdgeSetting = "setting"
-	// EdgeDocumentdata holds the string denoting the documentdata edge name in mutations.
-	EdgeDocumentdata = "documentdata"
-	// EdgeOrgsubscriptions holds the string denoting the orgsubscriptions edge name in mutations.
-	EdgeOrgsubscriptions = "orgsubscriptions"
+	// EdgeDocumentData holds the string denoting the document_data edge name in mutations.
+	EdgeDocumentData = "document_data"
+	// EdgeOrgSubscriptions holds the string denoting the org_subscriptions edge name in mutations.
+	EdgeOrgSubscriptions = "org_subscriptions"
 	// EdgePersonalAccessTokens holds the string denoting the personal_access_tokens edge name in mutations.
 	EdgePersonalAccessTokens = "personal_access_tokens"
 	// EdgeAPITokens holds the string denoting the api_tokens edge name in mutations.
@@ -97,8 +97,8 @@ const (
 	EdgeFiles = "files"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
-	// EdgeEntitytypes holds the string denoting the entitytypes edge name in mutations.
-	EdgeEntitytypes = "entitytypes"
+	// EdgeEntityTypes holds the string denoting the entity_types edge name in mutations.
+	EdgeEntityTypes = "entity_types"
 	// EdgeContacts holds the string denoting the contacts edge name in mutations.
 	EdgeContacts = "contacts"
 	// EdgeNotes holds the string denoting the notes edge name in mutations.
@@ -109,12 +109,12 @@ const (
 	EdgePrograms = "programs"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
 	EdgeProcedures = "procedures"
-	// EdgeInternalpolicies holds the string denoting the internalpolicies edge name in mutations.
-	EdgeInternalpolicies = "internalpolicies"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
-	// EdgeControlobjectives holds the string denoting the controlobjectives edge name in mutations.
-	EdgeControlobjectives = "controlobjectives"
+	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
+	EdgeControlObjectives = "control_objectives"
 	// EdgeNarratives holds the string denoting the narratives edge name in mutations.
 	EdgeNarratives = "narratives"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
@@ -206,20 +206,20 @@ const (
 	SettingInverseTable = "organization_settings"
 	// SettingColumn is the table column denoting the setting relation/edge.
 	SettingColumn = "organization_id"
-	// DocumentdataTable is the table that holds the documentdata relation/edge.
-	DocumentdataTable = "document_data"
-	// DocumentdataInverseTable is the table name for the DocumentData entity.
+	// DocumentDataTable is the table that holds the document_data relation/edge.
+	DocumentDataTable = "document_data"
+	// DocumentDataInverseTable is the table name for the DocumentData entity.
 	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
-	DocumentdataInverseTable = "document_data"
-	// DocumentdataColumn is the table column denoting the documentdata relation/edge.
-	DocumentdataColumn = "owner_id"
-	// OrgsubscriptionsTable is the table that holds the orgsubscriptions relation/edge.
-	OrgsubscriptionsTable = "org_subscriptions"
-	// OrgsubscriptionsInverseTable is the table name for the OrgSubscription entity.
+	DocumentDataInverseTable = "document_data"
+	// DocumentDataColumn is the table column denoting the document_data relation/edge.
+	DocumentDataColumn = "owner_id"
+	// OrgSubscriptionsTable is the table that holds the org_subscriptions relation/edge.
+	OrgSubscriptionsTable = "org_subscriptions"
+	// OrgSubscriptionsInverseTable is the table name for the OrgSubscription entity.
 	// It exists in this package in order to avoid circular dependency with the "orgsubscription" package.
-	OrgsubscriptionsInverseTable = "org_subscriptions"
-	// OrgsubscriptionsColumn is the table column denoting the orgsubscriptions relation/edge.
-	OrgsubscriptionsColumn = "owner_id"
+	OrgSubscriptionsInverseTable = "org_subscriptions"
+	// OrgSubscriptionsColumn is the table column denoting the org_subscriptions relation/edge.
+	OrgSubscriptionsColumn = "owner_id"
 	// PersonalAccessTokensTable is the table that holds the personal_access_tokens relation/edge. The primary key declared below.
 	PersonalAccessTokensTable = "organization_personal_access_tokens"
 	// PersonalAccessTokensInverseTable is the table name for the PersonalAccessToken entity.
@@ -273,13 +273,13 @@ const (
 	EntitiesInverseTable = "entities"
 	// EntitiesColumn is the table column denoting the entities relation/edge.
 	EntitiesColumn = "owner_id"
-	// EntitytypesTable is the table that holds the entitytypes relation/edge.
-	EntitytypesTable = "entity_types"
-	// EntitytypesInverseTable is the table name for the EntityType entity.
+	// EntityTypesTable is the table that holds the entity_types relation/edge.
+	EntityTypesTable = "entity_types"
+	// EntityTypesInverseTable is the table name for the EntityType entity.
 	// It exists in this package in order to avoid circular dependency with the "entitytype" package.
-	EntitytypesInverseTable = "entity_types"
-	// EntitytypesColumn is the table column denoting the entitytypes relation/edge.
-	EntitytypesColumn = "owner_id"
+	EntityTypesInverseTable = "entity_types"
+	// EntityTypesColumn is the table column denoting the entity_types relation/edge.
+	EntityTypesColumn = "owner_id"
 	// ContactsTable is the table that holds the contacts relation/edge.
 	ContactsTable = "contacts"
 	// ContactsInverseTable is the table name for the Contact entity.
@@ -313,13 +313,13 @@ const (
 	ProceduresInverseTable = "procedures"
 	// ProceduresColumn is the table column denoting the procedures relation/edge.
 	ProceduresColumn = "owner_id"
-	// InternalpoliciesTable is the table that holds the internalpolicies relation/edge.
-	InternalpoliciesTable = "internal_policies"
-	// InternalpoliciesInverseTable is the table name for the InternalPolicy entity.
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge.
+	InternalPoliciesTable = "internal_policies"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	InternalpoliciesInverseTable = "internal_policies"
-	// InternalpoliciesColumn is the table column denoting the internalpolicies relation/edge.
-	InternalpoliciesColumn = "owner_id"
+	InternalPoliciesInverseTable = "internal_policies"
+	// InternalPoliciesColumn is the table column denoting the internal_policies relation/edge.
+	InternalPoliciesColumn = "owner_id"
 	// RisksTable is the table that holds the risks relation/edge.
 	RisksTable = "risks"
 	// RisksInverseTable is the table name for the Risk entity.
@@ -327,13 +327,13 @@ const (
 	RisksInverseTable = "risks"
 	// RisksColumn is the table column denoting the risks relation/edge.
 	RisksColumn = "owner_id"
-	// ControlobjectivesTable is the table that holds the controlobjectives relation/edge.
-	ControlobjectivesTable = "control_objectives"
-	// ControlobjectivesInverseTable is the table name for the ControlObjective entity.
+	// ControlObjectivesTable is the table that holds the control_objectives relation/edge.
+	ControlObjectivesTable = "control_objectives"
+	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
-	ControlobjectivesInverseTable = "control_objectives"
-	// ControlobjectivesColumn is the table column denoting the controlobjectives relation/edge.
-	ControlobjectivesColumn = "owner_id"
+	ControlObjectivesInverseTable = "control_objectives"
+	// ControlObjectivesColumn is the table column denoting the control_objectives relation/edge.
+	ControlObjectivesColumn = "owner_id"
 	// NarrativesTable is the table that holds the narratives relation/edge.
 	NarrativesTable = "narratives"
 	// NarrativesInverseTable is the table name for the Narrative entity.
@@ -751,31 +751,31 @@ func BySettingField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByDocumentdataCount orders the results by documentdata count.
-func ByDocumentdataCount(opts ...sql.OrderTermOption) OrderOption {
+// ByDocumentDataCount orders the results by document_data count.
+func ByDocumentDataCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDocumentdataStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newDocumentDataStep(), opts...)
 	}
 }
 
-// ByDocumentdata orders the results by documentdata terms.
-func ByDocumentdata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByDocumentData orders the results by document_data terms.
+func ByDocumentData(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDocumentdataStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newDocumentDataStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByOrgsubscriptionsCount orders the results by orgsubscriptions count.
-func ByOrgsubscriptionsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByOrgSubscriptionsCount orders the results by org_subscriptions count.
+func ByOrgSubscriptionsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrgsubscriptionsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newOrgSubscriptionsStep(), opts...)
 	}
 }
 
-// ByOrgsubscriptions orders the results by orgsubscriptions terms.
-func ByOrgsubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByOrgSubscriptions orders the results by org_subscriptions terms.
+func ByOrgSubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrgsubscriptionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newOrgSubscriptionsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -905,17 +905,17 @@ func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByEntitytypesCount orders the results by entitytypes count.
-func ByEntitytypesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByEntityTypesCount orders the results by entity_types count.
+func ByEntityTypesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntitytypesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newEntityTypesStep(), opts...)
 	}
 }
 
-// ByEntitytypes orders the results by entitytypes terms.
-func ByEntitytypes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByEntityTypes orders the results by entity_types terms.
+func ByEntityTypes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntitytypesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newEntityTypesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -989,17 +989,17 @@ func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByInternalpoliciesCount orders the results by internalpolicies count.
-func ByInternalpoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInternalpoliciesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
 	}
 }
 
-// ByInternalpolicies orders the results by internalpolicies terms.
-func ByInternalpolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInternalpoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1017,17 +1017,17 @@ func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByControlobjectivesCount orders the results by controlobjectives count.
-func ByControlobjectivesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlObjectivesCount orders the results by control_objectives count.
+func ByControlObjectivesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlobjectivesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectivesStep(), opts...)
 	}
 }
 
-// ByControlobjectives orders the results by controlobjectives terms.
-func ByControlobjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControlObjectives orders the results by control_objectives terms.
+func ByControlObjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlobjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1191,18 +1191,18 @@ func newSettingStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2O, false, SettingTable, SettingColumn),
 	)
 }
-func newDocumentdataStep() *sqlgraph.Step {
+func newDocumentDataStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DocumentdataInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DocumentdataTable, DocumentdataColumn),
+		sqlgraph.To(DocumentDataInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DocumentDataTable, DocumentDataColumn),
 	)
 }
-func newOrgsubscriptionsStep() *sqlgraph.Step {
+func newOrgSubscriptionsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrgsubscriptionsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, OrgsubscriptionsTable, OrgsubscriptionsColumn),
+		sqlgraph.To(OrgSubscriptionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrgSubscriptionsTable, OrgSubscriptionsColumn),
 	)
 }
 func newPersonalAccessTokensStep() *sqlgraph.Step {
@@ -1268,11 +1268,11 @@ func newEntitiesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
 	)
 }
-func newEntitytypesStep() *sqlgraph.Step {
+func newEntityTypesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntitytypesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EntitytypesTable, EntitytypesColumn),
+		sqlgraph.To(EntityTypesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EntityTypesTable, EntityTypesColumn),
 	)
 }
 func newContactsStep() *sqlgraph.Step {
@@ -1310,11 +1310,11 @@ func newProceduresStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
 	)
 }
-func newInternalpoliciesStep() *sqlgraph.Step {
+func newInternalPoliciesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InternalpoliciesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, InternalpoliciesTable, InternalpoliciesColumn),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, InternalPoliciesTable, InternalPoliciesColumn),
 	)
 }
 func newRisksStep() *sqlgraph.Step {
@@ -1324,11 +1324,11 @@ func newRisksStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
 	)
 }
-func newControlobjectivesStep() *sqlgraph.Step {
+func newControlObjectivesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlobjectivesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ControlobjectivesTable, ControlobjectivesColumn),
+		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlObjectivesTable, ControlObjectivesColumn),
 	)
 }
 func newNarrativesStep() *sqlgraph.Step {

@@ -2,12 +2,13 @@ package interceptors
 
 import (
 	"context"
-	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+
+	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -51,7 +52,7 @@ func GetAuthorizedObjectIDs(ctx context.Context, objectType string) ([]string, e
 	req := fgax.ListRequest{
 		SubjectID:   userID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
-		ObjectType:  strings.ToLower(objectType),
+		ObjectType:  strcase.SnakeCase(objectType),
 	}
 
 	resp, err := utils.AuthzClientFromContext(ctx).ListObjectsRequest(ctx, req)

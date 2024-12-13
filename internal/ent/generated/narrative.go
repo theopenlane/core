@@ -61,14 +61,14 @@ type NarrativeEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
-	// Policy holds the value of the policy edge.
-	Policy []*InternalPolicy `json:"policy,omitempty"`
+	// InternalPolicy holds the value of the internal_policy edge.
+	InternalPolicy []*InternalPolicy `json:"internal_policy,omitempty"`
 	// Control holds the value of the control edge.
 	Control []*Control `json:"control,omitempty"`
 	// Procedure holds the value of the procedure edge.
 	Procedure []*Procedure `json:"procedure,omitempty"`
-	// Controlobjective holds the value of the controlobjective edge.
-	Controlobjective []*ControlObjective `json:"controlobjective,omitempty"`
+	// ControlObjective holds the value of the control_objective edge.
+	ControlObjective []*ControlObjective `json:"control_objective,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -80,10 +80,10 @@ type NarrativeEdges struct {
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
 	namedViewers          map[string][]*Group
-	namedPolicy           map[string][]*InternalPolicy
+	namedInternalPolicy   map[string][]*InternalPolicy
 	namedControl          map[string][]*Control
 	namedProcedure        map[string][]*Procedure
-	namedControlobjective map[string][]*ControlObjective
+	namedControlObjective map[string][]*ControlObjective
 	namedPrograms         map[string][]*Program
 }
 
@@ -125,13 +125,13 @@ func (e NarrativeEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
-// PolicyOrErr returns the Policy value or an error if the edge
+// InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
 // was not loaded in eager-loading.
-func (e NarrativeEdges) PolicyOrErr() ([]*InternalPolicy, error) {
+func (e NarrativeEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
 	if e.loadedTypes[4] {
-		return e.Policy, nil
+		return e.InternalPolicy, nil
 	}
-	return nil, &NotLoadedError{edge: "policy"}
+	return nil, &NotLoadedError{edge: "internal_policy"}
 }
 
 // ControlOrErr returns the Control value or an error if the edge
@@ -152,13 +152,13 @@ func (e NarrativeEdges) ProcedureOrErr() ([]*Procedure, error) {
 	return nil, &NotLoadedError{edge: "procedure"}
 }
 
-// ControlobjectiveOrErr returns the Controlobjective value or an error if the edge
+// ControlObjectiveOrErr returns the ControlObjective value or an error if the edge
 // was not loaded in eager-loading.
-func (e NarrativeEdges) ControlobjectiveOrErr() ([]*ControlObjective, error) {
+func (e NarrativeEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
 	if e.loadedTypes[7] {
-		return e.Controlobjective, nil
+		return e.ControlObjective, nil
 	}
-	return nil, &NotLoadedError{edge: "controlobjective"}
+	return nil, &NotLoadedError{edge: "control_objective"}
 }
 
 // ProgramsOrErr returns the Programs value or an error if the edge
@@ -317,9 +317,9 @@ func (n *Narrative) QueryViewers() *GroupQuery {
 	return NewNarrativeClient(n.config).QueryViewers(n)
 }
 
-// QueryPolicy queries the "policy" edge of the Narrative entity.
-func (n *Narrative) QueryPolicy() *InternalPolicyQuery {
-	return NewNarrativeClient(n.config).QueryPolicy(n)
+// QueryInternalPolicy queries the "internal_policy" edge of the Narrative entity.
+func (n *Narrative) QueryInternalPolicy() *InternalPolicyQuery {
+	return NewNarrativeClient(n.config).QueryInternalPolicy(n)
 }
 
 // QueryControl queries the "control" edge of the Narrative entity.
@@ -332,9 +332,9 @@ func (n *Narrative) QueryProcedure() *ProcedureQuery {
 	return NewNarrativeClient(n.config).QueryProcedure(n)
 }
 
-// QueryControlobjective queries the "controlobjective" edge of the Narrative entity.
-func (n *Narrative) QueryControlobjective() *ControlObjectiveQuery {
-	return NewNarrativeClient(n.config).QueryControlobjective(n)
+// QueryControlObjective queries the "control_objective" edge of the Narrative entity.
+func (n *Narrative) QueryControlObjective() *ControlObjectiveQuery {
+	return NewNarrativeClient(n.config).QueryControlObjective(n)
 }
 
 // QueryPrograms queries the "programs" edge of the Narrative entity.
@@ -479,27 +479,27 @@ func (n *Narrative) appendNamedViewers(name string, edges ...*Group) {
 	}
 }
 
-// NamedPolicy returns the Policy named value or an error if the edge was not
+// NamedInternalPolicy returns the InternalPolicy named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedPolicy(name string) ([]*InternalPolicy, error) {
-	if n.Edges.namedPolicy == nil {
+func (n *Narrative) NamedInternalPolicy(name string) ([]*InternalPolicy, error) {
+	if n.Edges.namedInternalPolicy == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedPolicy[name]
+	nodes, ok := n.Edges.namedInternalPolicy[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedPolicy(name string, edges ...*InternalPolicy) {
-	if n.Edges.namedPolicy == nil {
-		n.Edges.namedPolicy = make(map[string][]*InternalPolicy)
+func (n *Narrative) appendNamedInternalPolicy(name string, edges ...*InternalPolicy) {
+	if n.Edges.namedInternalPolicy == nil {
+		n.Edges.namedInternalPolicy = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedPolicy[name] = []*InternalPolicy{}
+		n.Edges.namedInternalPolicy[name] = []*InternalPolicy{}
 	} else {
-		n.Edges.namedPolicy[name] = append(n.Edges.namedPolicy[name], edges...)
+		n.Edges.namedInternalPolicy[name] = append(n.Edges.namedInternalPolicy[name], edges...)
 	}
 }
 
@@ -551,27 +551,27 @@ func (n *Narrative) appendNamedProcedure(name string, edges ...*Procedure) {
 	}
 }
 
-// NamedControlobjective returns the Controlobjective named value or an error if the edge was not
+// NamedControlObjective returns the ControlObjective named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedControlobjective(name string) ([]*ControlObjective, error) {
-	if n.Edges.namedControlobjective == nil {
+func (n *Narrative) NamedControlObjective(name string) ([]*ControlObjective, error) {
+	if n.Edges.namedControlObjective == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedControlobjective[name]
+	nodes, ok := n.Edges.namedControlObjective[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedControlobjective(name string, edges ...*ControlObjective) {
-	if n.Edges.namedControlobjective == nil {
-		n.Edges.namedControlobjective = make(map[string][]*ControlObjective)
+func (n *Narrative) appendNamedControlObjective(name string, edges ...*ControlObjective) {
+	if n.Edges.namedControlObjective == nil {
+		n.Edges.namedControlObjective = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedControlobjective[name] = []*ControlObjective{}
+		n.Edges.namedControlObjective[name] = []*ControlObjective{}
 	} else {
-		n.Edges.namedControlobjective[name] = append(n.Edges.namedControlobjective[name], edges...)
+		n.Edges.namedControlObjective[name] = append(n.Edges.namedControlObjective[name], edges...)
 	}
 }
 

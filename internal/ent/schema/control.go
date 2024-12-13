@@ -67,12 +67,12 @@ func (Control) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("procedures", Procedure.Type),
 		edge.To("subcontrols", Subcontrol.Type),
-		edge.To("controlobjectives", ControlObjective.Type),
+		edge.To("control_objectives", ControlObjective.Type),
 		edge.From("standard", Standard.Type).
 			Ref("controls"),
 		edge.To("narratives", Narrative.Type),
 		edge.To("risks", Risk.Type),
-		edge.To("actionplans", ActionPlan.Type),
+		edge.To("action_plans", ActionPlan.Type),
 		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
 			Ref("controls"),

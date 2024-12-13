@@ -969,12 +969,12 @@ func HasGroupWith(preds ...predicate.Group) predicate.Task {
 	})
 }
 
-// HasPolicy applies the HasEdge predicate on the "policy" edge.
-func HasPolicy() predicate.Task {
+// HasInternalPolicy applies the HasEdge predicate on the "internal_policy" edge.
+func HasInternalPolicy() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, PolicyTable, PolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyTable, InternalPolicyPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -983,10 +983,10 @@ func HasPolicy() predicate.Task {
 	})
 }
 
-// HasPolicyWith applies the HasEdge predicate on the "policy" edge with a given conditions (other predicates).
-func HasPolicyWith(preds ...predicate.InternalPolicy) predicate.Task {
+// HasInternalPolicyWith applies the HasEdge predicate on the "internal_policy" edge with a given conditions (other predicates).
+func HasInternalPolicyWith(preds ...predicate.InternalPolicy) predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
-		step := newPolicyStep()
+		step := newInternalPolicyStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyTasks

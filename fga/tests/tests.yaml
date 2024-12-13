@@ -592,47 +592,47 @@ tests:
         relation: member
         object: group:group-blocked
 
-      # setup internalpolicy
+      # setup internal_policy
       - user: user:ulid-admin
         relation: admin
-        object: internalpolicy:internalpolicy-1
+        object: internal_policy:internal_policy-1
       - user: organization:openlane
         relation: parent
-        object: internalpolicy:internalpolicy-1
+        object: internal_policy:internal_policy-1
 
-      # setup group permissions for internalpolicy
+      # setup group permissions for internal_policy
       - user: group:group-editor#member
         relation: editor
-        object: internalpolicy:internalpolicy-1
+        object: internal_policy:internal_policy-1
       - user: group:group-blocked#member
         relation: blocked
-        object: internalpolicy:internalpolicy-1
+        object: internal_policy:internal_policy-1
 
       # setup view permissions for auditors
       - user: program:program-1#auditor
         relation: viewer
-        object: internalpolicy:internalpolicy-1
+        object: internal_policy:internal_policy-1
     check:
-      - user: user:ulid-admin # admin of the internalpolicy should have all permissions
-        object: internalpolicy:internalpolicy-1
+      - user: user:ulid-admin # admin of the internal_policy should have all permissions
+        object: internal_policy:internal_policy-1
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-group-editor # editor of the internalpolicy should have edit permissions
-        object: internalpolicy:internalpolicy-1
+      - user: user:ulid-group-editor # editor of the internal_policy should have edit permissions
+        object: internal_policy:internal_policy-1
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-group-2 # blocked user of the internalpolicy should have no permissions
-        object: internalpolicy:internalpolicy-1
+      - user: user:ulid-group-2 # blocked user of the internal_policy should have no permissions
+        object: internal_policy:internal_policy-1
         assertions:
           can_view: false
           can_edit: false
           can_delete: false
       - user: user:ulid-auditor # auditor of the program should have view permissions
-        object: internalpolicy:internalpolicy-1
+        object: internal_policy:internal_policy-1
         assertions:
           can_view: true
           can_edit: false

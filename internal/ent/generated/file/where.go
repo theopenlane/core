@@ -1712,12 +1712,12 @@ func HasEntityWith(preds ...predicate.Entity) predicate.File {
 	})
 }
 
-// HasUsersetting applies the HasEdge predicate on the "usersetting" edge.
-func HasUsersetting() predicate.File {
+// HasUserSetting applies the HasEdge predicate on the "user_setting" edge.
+func HasUserSetting() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, UsersettingTable, UsersettingPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, UserSettingTable, UserSettingPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.UserSetting
@@ -1726,10 +1726,10 @@ func HasUsersetting() predicate.File {
 	})
 }
 
-// HasUsersettingWith applies the HasEdge predicate on the "usersetting" edge with a given conditions (other predicates).
-func HasUsersettingWith(preds ...predicate.UserSetting) predicate.File {
+// HasUserSettingWith applies the HasEdge predicate on the "user_setting" edge with a given conditions (other predicates).
+func HasUserSettingWith(preds ...predicate.UserSetting) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
-		step := newUsersettingStep()
+		step := newUserSettingStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.UserSetting
 		step.Edge.Schema = schemaConfig.UserSettingFiles
@@ -1741,12 +1741,12 @@ func HasUsersettingWith(preds ...predicate.UserSetting) predicate.File {
 	})
 }
 
-// HasOrganizationsetting applies the HasEdge predicate on the "organizationsetting" edge.
-func HasOrganizationsetting() predicate.File {
+// HasOrganizationSetting applies the HasEdge predicate on the "organization_setting" edge.
+func HasOrganizationSetting() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, OrganizationsettingTable, OrganizationsettingPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, OrganizationSettingTable, OrganizationSettingPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrganizationSetting
@@ -1755,10 +1755,10 @@ func HasOrganizationsetting() predicate.File {
 	})
 }
 
-// HasOrganizationsettingWith applies the HasEdge predicate on the "organizationsetting" edge with a given conditions (other predicates).
-func HasOrganizationsettingWith(preds ...predicate.OrganizationSetting) predicate.File {
+// HasOrganizationSettingWith applies the HasEdge predicate on the "organization_setting" edge with a given conditions (other predicates).
+func HasOrganizationSettingWith(preds ...predicate.OrganizationSetting) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
-		step := newOrganizationsettingStep()
+		step := newOrganizationSettingStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrganizationSetting
 		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
@@ -1799,12 +1799,12 @@ func HasTemplateWith(preds ...predicate.Template) predicate.File {
 	})
 }
 
-// HasDocumentdata applies the HasEdge predicate on the "documentdata" edge.
-func HasDocumentdata() predicate.File {
+// HasDocumentData applies the HasEdge predicate on the "document_data" edge.
+func HasDocumentData() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, DocumentdataTable, DocumentdataPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, DocumentDataTable, DocumentDataPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DocumentData
@@ -1813,10 +1813,10 @@ func HasDocumentdata() predicate.File {
 	})
 }
 
-// HasDocumentdataWith applies the HasEdge predicate on the "documentdata" edge with a given conditions (other predicates).
-func HasDocumentdataWith(preds ...predicate.DocumentData) predicate.File {
+// HasDocumentDataWith applies the HasEdge predicate on the "document_data" edge with a given conditions (other predicates).
+func HasDocumentDataWith(preds ...predicate.DocumentData) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
-		step := newDocumentdataStep()
+		step := newDocumentDataStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.DocumentDataFiles

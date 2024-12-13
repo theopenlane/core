@@ -978,12 +978,12 @@ func HasViewersWith(preds ...predicate.Group) predicate.Narrative {
 	})
 }
 
-// HasPolicy applies the HasEdge predicate on the "policy" edge.
-func HasPolicy() predicate.Narrative {
+// HasInternalPolicy applies the HasEdge predicate on the "internal_policy" edge.
+func HasInternalPolicy() predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, PolicyTable, PolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyTable, InternalPolicyPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -992,10 +992,10 @@ func HasPolicy() predicate.Narrative {
 	})
 }
 
-// HasPolicyWith applies the HasEdge predicate on the "policy" edge with a given conditions (other predicates).
-func HasPolicyWith(preds ...predicate.InternalPolicy) predicate.Narrative {
+// HasInternalPolicyWith applies the HasEdge predicate on the "internal_policy" edge with a given conditions (other predicates).
+func HasInternalPolicyWith(preds ...predicate.InternalPolicy) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
-		step := newPolicyStep()
+		step := newInternalPolicyStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
@@ -1065,12 +1065,12 @@ func HasProcedureWith(preds ...predicate.Procedure) predicate.Narrative {
 	})
 }
 
-// HasControlobjective applies the HasEdge predicate on the "controlobjective" edge.
-func HasControlobjective() predicate.Narrative {
+// HasControlObjective applies the HasEdge predicate on the "control_objective" edge.
+func HasControlObjective() predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveTable, ControlobjectivePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveTable, ControlObjectivePrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
@@ -1079,10 +1079,10 @@ func HasControlobjective() predicate.Narrative {
 	})
 }
 
-// HasControlobjectiveWith applies the HasEdge predicate on the "controlobjective" edge with a given conditions (other predicates).
-func HasControlobjectiveWith(preds ...predicate.ControlObjective) predicate.Narrative {
+// HasControlObjectiveWith applies the HasEdge predicate on the "control_objective" edge with a given conditions (other predicates).
+func HasControlObjectiveWith(preds ...predicate.ControlObjective) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
-		step := newControlobjectiveStep()
+		step := newControlObjectiveStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.ControlObjectiveNarratives

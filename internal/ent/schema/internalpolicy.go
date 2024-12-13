@@ -55,13 +55,13 @@ func (InternalPolicy) Fields() []ent.Field {
 // Edges of the InternalPolicy
 func (InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("controlobjectives", ControlObjective.Type),
+		edge.To("control_objectives", ControlObjective.Type),
 		edge.To("controls", Control.Type),
 		edge.To("procedures", Procedure.Type),
 		edge.To("narratives", Narrative.Type),
 		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
-			Ref("policies"),
+			Ref("internal_policies"),
 	}
 }
 
@@ -73,7 +73,7 @@ func (InternalPolicy) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		// all policies must be associated to an organization
-		NewOrgOwnMixinWithRef("internalpolicies"),
+		NewOrgOwnMixinWithRef("internal_policies"),
 		// add group edit permissions to the procedure
 		NewGroupPermissionsMixin(false),
 	}

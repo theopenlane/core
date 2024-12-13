@@ -1016,7 +1016,7 @@ func HasStandard() predicate.ActionPlan {
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardActionplans
+		step.Edge.Schema = schemaConfig.StandardActionPlans
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1027,7 +1027,7 @@ func HasStandardWith(preds ...predicate.Standard) predicate.ActionPlan {
 		step := newStandardStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardActionplans
+		step.Edge.Schema = schemaConfig.StandardActionPlans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1045,7 +1045,7 @@ func HasRisk() predicate.ActionPlan {
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.RiskActionplans
+		step.Edge.Schema = schemaConfig.RiskActionPlans
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1056,7 +1056,7 @@ func HasRiskWith(preds ...predicate.Risk) predicate.ActionPlan {
 		step := newRiskStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.RiskActionplans
+		step.Edge.Schema = schemaConfig.RiskActionPlans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1074,7 +1074,7 @@ func HasControl() predicate.ActionPlan {
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlActionplans
+		step.Edge.Schema = schemaConfig.ControlActionPlans
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1085,7 +1085,7 @@ func HasControlWith(preds ...predicate.Control) predicate.ActionPlan {
 		step := newControlStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlActionplans
+		step.Edge.Schema = schemaConfig.ControlActionPlans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1103,7 +1103,7 @@ func HasUser() predicate.ActionPlan {
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserActionplans
+		step.Edge.Schema = schemaConfig.UserActionPlans
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1114,7 +1114,7 @@ func HasUserWith(preds ...predicate.User) predicate.ActionPlan {
 		step := newUserStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserActionplans
+		step.Edge.Schema = schemaConfig.UserActionPlans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1132,7 +1132,7 @@ func HasProgram() predicate.ActionPlan {
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramActionplans
+		step.Edge.Schema = schemaConfig.ProgramActionPlans
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1143,7 +1143,7 @@ func HasProgramWith(preds ...predicate.Program) predicate.ActionPlan {
 		step := newProgramStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramActionplans
+		step.Edge.Schema = schemaConfig.ProgramActionPlans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

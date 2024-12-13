@@ -1407,12 +1407,12 @@ func HasSettingWith(preds ...predicate.OrganizationSetting) predicate.Organizati
 	})
 }
 
-// HasDocumentdata applies the HasEdge predicate on the "documentdata" edge.
-func HasDocumentdata() predicate.Organization {
+// HasDocumentData applies the HasEdge predicate on the "document_data" edge.
+func HasDocumentData() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, DocumentdataTable, DocumentdataColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, DocumentDataTable, DocumentDataColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DocumentData
@@ -1421,10 +1421,10 @@ func HasDocumentdata() predicate.Organization {
 	})
 }
 
-// HasDocumentdataWith applies the HasEdge predicate on the "documentdata" edge with a given conditions (other predicates).
-func HasDocumentdataWith(preds ...predicate.DocumentData) predicate.Organization {
+// HasDocumentDataWith applies the HasEdge predicate on the "document_data" edge with a given conditions (other predicates).
+func HasDocumentDataWith(preds ...predicate.DocumentData) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newDocumentdataStep()
+		step := newDocumentDataStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.DocumentData
@@ -1436,12 +1436,12 @@ func HasDocumentdataWith(preds ...predicate.DocumentData) predicate.Organization
 	})
 }
 
-// HasOrgsubscriptions applies the HasEdge predicate on the "orgsubscriptions" edge.
-func HasOrgsubscriptions() predicate.Organization {
+// HasOrgSubscriptions applies the HasEdge predicate on the "org_subscriptions" edge.
+func HasOrgSubscriptions() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, OrgsubscriptionsTable, OrgsubscriptionsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrgSubscriptionsTable, OrgSubscriptionsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgSubscription
@@ -1450,10 +1450,10 @@ func HasOrgsubscriptions() predicate.Organization {
 	})
 }
 
-// HasOrgsubscriptionsWith applies the HasEdge predicate on the "orgsubscriptions" edge with a given conditions (other predicates).
-func HasOrgsubscriptionsWith(preds ...predicate.OrgSubscription) predicate.Organization {
+// HasOrgSubscriptionsWith applies the HasEdge predicate on the "org_subscriptions" edge with a given conditions (other predicates).
+func HasOrgSubscriptionsWith(preds ...predicate.OrgSubscription) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newOrgsubscriptionsStep()
+		step := newOrgSubscriptionsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgSubscription
 		step.Edge.Schema = schemaConfig.OrgSubscription
@@ -1726,12 +1726,12 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.Organization {
 	})
 }
 
-// HasEntitytypes applies the HasEdge predicate on the "entitytypes" edge.
-func HasEntitytypes() predicate.Organization {
+// HasEntityTypes applies the HasEdge predicate on the "entity_types" edge.
+func HasEntityTypes() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EntitytypesTable, EntitytypesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, EntityTypesTable, EntityTypesColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EntityType
@@ -1740,10 +1740,10 @@ func HasEntitytypes() predicate.Organization {
 	})
 }
 
-// HasEntitytypesWith applies the HasEdge predicate on the "entitytypes" edge with a given conditions (other predicates).
-func HasEntitytypesWith(preds ...predicate.EntityType) predicate.Organization {
+// HasEntityTypesWith applies the HasEdge predicate on the "entity_types" edge with a given conditions (other predicates).
+func HasEntityTypesWith(preds ...predicate.EntityType) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newEntitytypesStep()
+		step := newEntityTypesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EntityType
 		step.Edge.Schema = schemaConfig.EntityType
@@ -1900,12 +1900,12 @@ func HasProceduresWith(preds ...predicate.Procedure) predicate.Organization {
 	})
 }
 
-// HasInternalpolicies applies the HasEdge predicate on the "internalpolicies" edge.
-func HasInternalpolicies() predicate.Organization {
+// HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
+func HasInternalPolicies() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, InternalpoliciesTable, InternalpoliciesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, InternalPoliciesTable, InternalPoliciesColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -1914,10 +1914,10 @@ func HasInternalpolicies() predicate.Organization {
 	})
 }
 
-// HasInternalpoliciesWith applies the HasEdge predicate on the "internalpolicies" edge with a given conditions (other predicates).
-func HasInternalpoliciesWith(preds ...predicate.InternalPolicy) predicate.Organization {
+// HasInternalPoliciesWith applies the HasEdge predicate on the "internal_policies" edge with a given conditions (other predicates).
+func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newInternalpoliciesStep()
+		step := newInternalPoliciesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicy
@@ -1958,12 +1958,12 @@ func HasRisksWith(preds ...predicate.Risk) predicate.Organization {
 	})
 }
 
-// HasControlobjectives applies the HasEdge predicate on the "controlobjectives" edge.
-func HasControlobjectives() predicate.Organization {
+// HasControlObjectives applies the HasEdge predicate on the "control_objectives" edge.
+func HasControlObjectives() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ControlobjectivesTable, ControlobjectivesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, ControlObjectivesTable, ControlObjectivesColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
@@ -1972,10 +1972,10 @@ func HasControlobjectives() predicate.Organization {
 	})
 }
 
-// HasControlobjectivesWith applies the HasEdge predicate on the "controlobjectives" edge with a given conditions (other predicates).
-func HasControlobjectivesWith(preds ...predicate.ControlObjective) predicate.Organization {
+// HasControlObjectivesWith applies the HasEdge predicate on the "control_objectives" edge with a given conditions (other predicates).
+func HasControlObjectivesWith(preds ...predicate.ControlObjective) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newControlobjectivesStep()
+		step := newControlObjectivesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.ControlObjective

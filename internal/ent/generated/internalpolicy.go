@@ -67,8 +67,8 @@ type InternalPolicyEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
-	// Controlobjectives holds the value of the controlobjectives edge.
-	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
+	// ControlObjectives holds the value of the control_objectives edge.
+	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Procedures holds the value of the procedures edge.
@@ -87,7 +87,7 @@ type InternalPolicyEdges struct {
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
-	namedControlobjectives map[string][]*ControlObjective
+	namedControlObjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
 	namedProcedures        map[string][]*Procedure
 	namedNarratives        map[string][]*Narrative
@@ -124,13 +124,13 @@ func (e InternalPolicyEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
-// ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
+// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
-func (e InternalPolicyEdges) ControlobjectivesOrErr() ([]*ControlObjective, error) {
+func (e InternalPolicyEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 	if e.loadedTypes[3] {
-		return e.Controlobjectives, nil
+		return e.ControlObjectives, nil
 	}
-	return nil, &NotLoadedError{edge: "controlobjectives"}
+	return nil, &NotLoadedError{edge: "control_objectives"}
 }
 
 // ControlsOrErr returns the Controls value or an error if the edge
@@ -344,9 +344,9 @@ func (ip *InternalPolicy) QueryEditors() *GroupQuery {
 	return NewInternalPolicyClient(ip.config).QueryEditors(ip)
 }
 
-// QueryControlobjectives queries the "controlobjectives" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryControlobjectives() *ControlObjectiveQuery {
-	return NewInternalPolicyClient(ip.config).QueryControlobjectives(ip)
+// QueryControlObjectives queries the "control_objectives" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewInternalPolicyClient(ip.config).QueryControlObjectives(ip)
 }
 
 // QueryControls queries the "controls" edge of the InternalPolicy entity.
@@ -499,27 +499,27 @@ func (ip *InternalPolicy) appendNamedEditors(name string, edges ...*Group) {
 	}
 }
 
-// NamedControlobjectives returns the Controlobjectives named value or an error if the edge was not
+// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedControlobjectives(name string) ([]*ControlObjective, error) {
-	if ip.Edges.namedControlobjectives == nil {
+func (ip *InternalPolicy) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if ip.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedControlobjectives[name]
+	nodes, ok := ip.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedControlobjectives(name string, edges ...*ControlObjective) {
-	if ip.Edges.namedControlobjectives == nil {
-		ip.Edges.namedControlobjectives = make(map[string][]*ControlObjective)
+func (ip *InternalPolicy) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if ip.Edges.namedControlObjectives == nil {
+		ip.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedControlobjectives[name] = []*ControlObjective{}
+		ip.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		ip.Edges.namedControlobjectives[name] = append(ip.Edges.namedControlobjectives[name], edges...)
+		ip.Edges.namedControlObjectives[name] = append(ip.Edges.namedControlObjectives[name], edges...)
 	}
 }
 

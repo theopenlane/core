@@ -55,7 +55,7 @@ func (OrgSubscription) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		NewOrgOwnMixinWithRef("orgsubscriptions"),
+		NewOrgOwnMixinWithRef("org_subscriptions"),
 	}
 }
 

@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
+	"github.com/stoewer/go-strcase"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
@@ -227,7 +229,7 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			}
 
 			if m.Op() != ent.OpCreate {
-				objectIDs, err := interceptors.GetAuthorizedObjectIDs(ctx, m.Type())
+				objectIDs, err := interceptors.GetAuthorizedObjectIDs(ctx, strcase.SnakeCase(m.Type()))
 				if err != nil {
 					return nil, err
 				}

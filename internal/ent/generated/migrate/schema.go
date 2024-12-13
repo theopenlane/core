@@ -295,7 +295,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
-		{Name: "control_controlobjectives", Type: field.TypeString, Nullable: true},
+		{Name: "control_control_objectives", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
@@ -305,13 +305,13 @@ var (
 		PrimaryKey: []*schema.Column{ControlObjectivesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "control_objectives_controls_controlobjectives",
+				Symbol:     "control_objectives_controls_control_objectives",
 				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "control_objectives_organizations_controlobjectives",
+				Symbol:     "control_objectives_organizations_control_objectives",
 				Columns:    []*schema.Column{ControlObjectivesColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
@@ -380,7 +380,7 @@ var (
 		PrimaryKey: []*schema.Column{DocumentDataColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "document_data_organizations_documentdata",
+				Symbol:     "document_data_organizations_document_data",
 				Columns:    []*schema.Column{DocumentDataColumns[10]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -576,7 +576,7 @@ var (
 		PrimaryKey: []*schema.Column{EntityTypesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "entity_types_organizations_entitytypes",
+				Symbol:     "entity_types_organizations_entity_types",
 				Columns:    []*schema.Column{EntityTypesColumns[10]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -1112,7 +1112,7 @@ var (
 		PrimaryKey: []*schema.Column{InternalPoliciesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "internal_policies_organizations_internalpolicies",
+				Symbol:     "internal_policies_organizations_internal_policies",
 				Columns:    []*schema.Column{InternalPoliciesColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -1431,7 +1431,7 @@ var (
 		PrimaryKey: []*schema.Column{OrgSubscriptionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "org_subscriptions_organizations_orgsubscriptions",
+				Symbol:     "org_subscriptions_organizations_org_subscriptions",
 				Columns:    []*schema.Column{OrgSubscriptionsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -2837,26 +2837,26 @@ var (
 			},
 		},
 	}
-	// ControlActionplansColumns holds the columns for the "control_actionplans" table.
-	ControlActionplansColumns = []*schema.Column{
+	// ControlActionPlansColumns holds the columns for the "control_action_plans" table.
+	ControlActionPlansColumns = []*schema.Column{
 		{Name: "control_id", Type: field.TypeString},
 		{Name: "action_plan_id", Type: field.TypeString},
 	}
-	// ControlActionplansTable holds the schema information for the "control_actionplans" table.
-	ControlActionplansTable = &schema.Table{
-		Name:       "control_actionplans",
-		Columns:    ControlActionplansColumns,
-		PrimaryKey: []*schema.Column{ControlActionplansColumns[0], ControlActionplansColumns[1]},
+	// ControlActionPlansTable holds the schema information for the "control_action_plans" table.
+	ControlActionPlansTable = &schema.Table{
+		Name:       "control_action_plans",
+		Columns:    ControlActionPlansColumns,
+		PrimaryKey: []*schema.Column{ControlActionPlansColumns[0], ControlActionPlansColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "control_actionplans_control_id",
-				Columns:    []*schema.Column{ControlActionplansColumns[0]},
+				Symbol:     "control_action_plans_control_id",
+				Columns:    []*schema.Column{ControlActionPlansColumns[0]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "control_actionplans_action_plan_id",
-				Columns:    []*schema.Column{ControlActionplansColumns[1]},
+				Symbol:     "control_action_plans_action_plan_id",
+				Columns:    []*schema.Column{ControlActionPlansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -3362,26 +3362,26 @@ var (
 			},
 		},
 	}
-	// InternalPolicyControlobjectivesColumns holds the columns for the "internal_policy_controlobjectives" table.
-	InternalPolicyControlobjectivesColumns = []*schema.Column{
+	// InternalPolicyControlObjectivesColumns holds the columns for the "internal_policy_control_objectives" table.
+	InternalPolicyControlObjectivesColumns = []*schema.Column{
 		{Name: "internal_policy_id", Type: field.TypeString},
 		{Name: "control_objective_id", Type: field.TypeString},
 	}
-	// InternalPolicyControlobjectivesTable holds the schema information for the "internal_policy_controlobjectives" table.
-	InternalPolicyControlobjectivesTable = &schema.Table{
-		Name:       "internal_policy_controlobjectives",
-		Columns:    InternalPolicyControlobjectivesColumns,
-		PrimaryKey: []*schema.Column{InternalPolicyControlobjectivesColumns[0], InternalPolicyControlobjectivesColumns[1]},
+	// InternalPolicyControlObjectivesTable holds the schema information for the "internal_policy_control_objectives" table.
+	InternalPolicyControlObjectivesTable = &schema.Table{
+		Name:       "internal_policy_control_objectives",
+		Columns:    InternalPolicyControlObjectivesColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyControlObjectivesColumns[0], InternalPolicyControlObjectivesColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "internal_policy_controlobjectives_internal_policy_id",
-				Columns:    []*schema.Column{InternalPolicyControlobjectivesColumns[0]},
+				Symbol:     "internal_policy_control_objectives_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyControlObjectivesColumns[0]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "internal_policy_controlobjectives_control_objective_id",
-				Columns:    []*schema.Column{InternalPolicyControlobjectivesColumns[1]},
+				Symbol:     "internal_policy_control_objectives_control_objective_id",
+				Columns:    []*schema.Column{InternalPolicyControlObjectivesColumns[1]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -4237,51 +4237,51 @@ var (
 			},
 		},
 	}
-	// ProgramControlobjectivesColumns holds the columns for the "program_controlobjectives" table.
-	ProgramControlobjectivesColumns = []*schema.Column{
+	// ProgramControlObjectivesColumns holds the columns for the "program_control_objectives" table.
+	ProgramControlObjectivesColumns = []*schema.Column{
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "control_objective_id", Type: field.TypeString},
 	}
-	// ProgramControlobjectivesTable holds the schema information for the "program_controlobjectives" table.
-	ProgramControlobjectivesTable = &schema.Table{
-		Name:       "program_controlobjectives",
-		Columns:    ProgramControlobjectivesColumns,
-		PrimaryKey: []*schema.Column{ProgramControlobjectivesColumns[0], ProgramControlobjectivesColumns[1]},
+	// ProgramControlObjectivesTable holds the schema information for the "program_control_objectives" table.
+	ProgramControlObjectivesTable = &schema.Table{
+		Name:       "program_control_objectives",
+		Columns:    ProgramControlObjectivesColumns,
+		PrimaryKey: []*schema.Column{ProgramControlObjectivesColumns[0], ProgramControlObjectivesColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "program_controlobjectives_program_id",
-				Columns:    []*schema.Column{ProgramControlobjectivesColumns[0]},
+				Symbol:     "program_control_objectives_program_id",
+				Columns:    []*schema.Column{ProgramControlObjectivesColumns[0]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "program_controlobjectives_control_objective_id",
-				Columns:    []*schema.Column{ProgramControlobjectivesColumns[1]},
+				Symbol:     "program_control_objectives_control_objective_id",
+				Columns:    []*schema.Column{ProgramControlObjectivesColumns[1]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
 	}
-	// ProgramPoliciesColumns holds the columns for the "program_policies" table.
-	ProgramPoliciesColumns = []*schema.Column{
+	// ProgramInternalPoliciesColumns holds the columns for the "program_internal_policies" table.
+	ProgramInternalPoliciesColumns = []*schema.Column{
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "internal_policy_id", Type: field.TypeString},
 	}
-	// ProgramPoliciesTable holds the schema information for the "program_policies" table.
-	ProgramPoliciesTable = &schema.Table{
-		Name:       "program_policies",
-		Columns:    ProgramPoliciesColumns,
-		PrimaryKey: []*schema.Column{ProgramPoliciesColumns[0], ProgramPoliciesColumns[1]},
+	// ProgramInternalPoliciesTable holds the schema information for the "program_internal_policies" table.
+	ProgramInternalPoliciesTable = &schema.Table{
+		Name:       "program_internal_policies",
+		Columns:    ProgramInternalPoliciesColumns,
+		PrimaryKey: []*schema.Column{ProgramInternalPoliciesColumns[0], ProgramInternalPoliciesColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "program_policies_program_id",
-				Columns:    []*schema.Column{ProgramPoliciesColumns[0]},
+				Symbol:     "program_internal_policies_program_id",
+				Columns:    []*schema.Column{ProgramInternalPoliciesColumns[0]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "program_policies_internal_policy_id",
-				Columns:    []*schema.Column{ProgramPoliciesColumns[1]},
+				Symbol:     "program_internal_policies_internal_policy_id",
+				Columns:    []*schema.Column{ProgramInternalPoliciesColumns[1]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -4437,26 +4437,26 @@ var (
 			},
 		},
 	}
-	// ProgramActionplansColumns holds the columns for the "program_actionplans" table.
-	ProgramActionplansColumns = []*schema.Column{
+	// ProgramActionPlansColumns holds the columns for the "program_action_plans" table.
+	ProgramActionPlansColumns = []*schema.Column{
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "action_plan_id", Type: field.TypeString},
 	}
-	// ProgramActionplansTable holds the schema information for the "program_actionplans" table.
-	ProgramActionplansTable = &schema.Table{
-		Name:       "program_actionplans",
-		Columns:    ProgramActionplansColumns,
-		PrimaryKey: []*schema.Column{ProgramActionplansColumns[0], ProgramActionplansColumns[1]},
+	// ProgramActionPlansTable holds the schema information for the "program_action_plans" table.
+	ProgramActionPlansTable = &schema.Table{
+		Name:       "program_action_plans",
+		Columns:    ProgramActionPlansColumns,
+		PrimaryKey: []*schema.Column{ProgramActionPlansColumns[0], ProgramActionPlansColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "program_actionplans_program_id",
-				Columns:    []*schema.Column{ProgramActionplansColumns[0]},
+				Symbol:     "program_action_plans_program_id",
+				Columns:    []*schema.Column{ProgramActionPlansColumns[0]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "program_actionplans_action_plan_id",
-				Columns:    []*schema.Column{ProgramActionplansColumns[1]},
+				Symbol:     "program_action_plans_action_plan_id",
+				Columns:    []*schema.Column{ProgramActionPlansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -4537,51 +4537,51 @@ var (
 			},
 		},
 	}
-	// RiskActionplansColumns holds the columns for the "risk_actionplans" table.
-	RiskActionplansColumns = []*schema.Column{
+	// RiskActionPlansColumns holds the columns for the "risk_action_plans" table.
+	RiskActionPlansColumns = []*schema.Column{
 		{Name: "risk_id", Type: field.TypeString},
 		{Name: "action_plan_id", Type: field.TypeString},
 	}
-	// RiskActionplansTable holds the schema information for the "risk_actionplans" table.
-	RiskActionplansTable = &schema.Table{
-		Name:       "risk_actionplans",
-		Columns:    RiskActionplansColumns,
-		PrimaryKey: []*schema.Column{RiskActionplansColumns[0], RiskActionplansColumns[1]},
+	// RiskActionPlansTable holds the schema information for the "risk_action_plans" table.
+	RiskActionPlansTable = &schema.Table{
+		Name:       "risk_action_plans",
+		Columns:    RiskActionPlansColumns,
+		PrimaryKey: []*schema.Column{RiskActionPlansColumns[0], RiskActionPlansColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "risk_actionplans_risk_id",
-				Columns:    []*schema.Column{RiskActionplansColumns[0]},
+				Symbol:     "risk_action_plans_risk_id",
+				Columns:    []*schema.Column{RiskActionPlansColumns[0]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "risk_actionplans_action_plan_id",
-				Columns:    []*schema.Column{RiskActionplansColumns[1]},
+				Symbol:     "risk_action_plans_action_plan_id",
+				Columns:    []*schema.Column{RiskActionPlansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
 	}
-	// StandardControlobjectivesColumns holds the columns for the "standard_controlobjectives" table.
-	StandardControlobjectivesColumns = []*schema.Column{
+	// StandardControlObjectivesColumns holds the columns for the "standard_control_objectives" table.
+	StandardControlObjectivesColumns = []*schema.Column{
 		{Name: "standard_id", Type: field.TypeString},
 		{Name: "control_objective_id", Type: field.TypeString},
 	}
-	// StandardControlobjectivesTable holds the schema information for the "standard_controlobjectives" table.
-	StandardControlobjectivesTable = &schema.Table{
-		Name:       "standard_controlobjectives",
-		Columns:    StandardControlobjectivesColumns,
-		PrimaryKey: []*schema.Column{StandardControlobjectivesColumns[0], StandardControlobjectivesColumns[1]},
+	// StandardControlObjectivesTable holds the schema information for the "standard_control_objectives" table.
+	StandardControlObjectivesTable = &schema.Table{
+		Name:       "standard_control_objectives",
+		Columns:    StandardControlObjectivesColumns,
+		PrimaryKey: []*schema.Column{StandardControlObjectivesColumns[0], StandardControlObjectivesColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "standard_controlobjectives_standard_id",
-				Columns:    []*schema.Column{StandardControlobjectivesColumns[0]},
+				Symbol:     "standard_control_objectives_standard_id",
+				Columns:    []*schema.Column{StandardControlObjectivesColumns[0]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "standard_controlobjectives_control_objective_id",
-				Columns:    []*schema.Column{StandardControlobjectivesColumns[1]},
+				Symbol:     "standard_control_objectives_control_objective_id",
+				Columns:    []*schema.Column{StandardControlObjectivesColumns[1]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -4612,26 +4612,26 @@ var (
 			},
 		},
 	}
-	// StandardActionplansColumns holds the columns for the "standard_actionplans" table.
-	StandardActionplansColumns = []*schema.Column{
+	// StandardActionPlansColumns holds the columns for the "standard_action_plans" table.
+	StandardActionPlansColumns = []*schema.Column{
 		{Name: "standard_id", Type: field.TypeString},
 		{Name: "action_plan_id", Type: field.TypeString},
 	}
-	// StandardActionplansTable holds the schema information for the "standard_actionplans" table.
-	StandardActionplansTable = &schema.Table{
-		Name:       "standard_actionplans",
-		Columns:    StandardActionplansColumns,
-		PrimaryKey: []*schema.Column{StandardActionplansColumns[0], StandardActionplansColumns[1]},
+	// StandardActionPlansTable holds the schema information for the "standard_action_plans" table.
+	StandardActionPlansTable = &schema.Table{
+		Name:       "standard_action_plans",
+		Columns:    StandardActionPlansColumns,
+		PrimaryKey: []*schema.Column{StandardActionPlansColumns[0], StandardActionPlansColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "standard_actionplans_standard_id",
-				Columns:    []*schema.Column{StandardActionplansColumns[0]},
+				Symbol:     "standard_action_plans_standard_id",
+				Columns:    []*schema.Column{StandardActionPlansColumns[0]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "standard_actionplans_action_plan_id",
-				Columns:    []*schema.Column{StandardActionplansColumns[1]},
+				Symbol:     "standard_action_plans_action_plan_id",
+				Columns:    []*schema.Column{StandardActionPlansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -4787,26 +4787,26 @@ var (
 			},
 		},
 	}
-	// UserActionplansColumns holds the columns for the "user_actionplans" table.
-	UserActionplansColumns = []*schema.Column{
+	// UserActionPlansColumns holds the columns for the "user_action_plans" table.
+	UserActionPlansColumns = []*schema.Column{
 		{Name: "user_id", Type: field.TypeString},
 		{Name: "action_plan_id", Type: field.TypeString},
 	}
-	// UserActionplansTable holds the schema information for the "user_actionplans" table.
-	UserActionplansTable = &schema.Table{
-		Name:       "user_actionplans",
-		Columns:    UserActionplansColumns,
-		PrimaryKey: []*schema.Column{UserActionplansColumns[0], UserActionplansColumns[1]},
+	// UserActionPlansTable holds the schema information for the "user_action_plans" table.
+	UserActionPlansTable = &schema.Table{
+		Name:       "user_action_plans",
+		Columns:    UserActionPlansColumns,
+		PrimaryKey: []*schema.Column{UserActionPlansColumns[0], UserActionPlansColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "user_actionplans_user_id",
-				Columns:    []*schema.Column{UserActionplansColumns[0]},
+				Symbol:     "user_action_plans_user_id",
+				Columns:    []*schema.Column{UserActionPlansColumns[0]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "user_actionplans_action_plan_id",
-				Columns:    []*schema.Column{UserActionplansColumns[1]},
+				Symbol:     "user_action_plans_action_plan_id",
+				Columns:    []*schema.Column{UserActionPlansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -4942,7 +4942,7 @@ var (
 		ControlSubcontrolsTable,
 		ControlNarrativesTable,
 		ControlRisksTable,
-		ControlActionplansTable,
+		ControlActionPlansTable,
 		ControlTasksTable,
 		ControlObjectiveBlockedGroupsTable,
 		ControlObjectiveEditorsTable,
@@ -4963,7 +4963,7 @@ var (
 		IntegrationEventsTable,
 		InternalPolicyBlockedGroupsTable,
 		InternalPolicyEditorsTable,
-		InternalPolicyControlobjectivesTable,
+		InternalPolicyControlObjectivesTable,
 		InternalPolicyProceduresTable,
 		InternalPolicyNarrativesTable,
 		InternalPolicyTasksTable,
@@ -4998,29 +4998,29 @@ var (
 		ProgramViewersTable,
 		ProgramControlsTable,
 		ProgramSubcontrolsTable,
-		ProgramControlobjectivesTable,
-		ProgramPoliciesTable,
+		ProgramControlObjectivesTable,
+		ProgramInternalPoliciesTable,
 		ProgramProceduresTable,
 		ProgramRisksTable,
 		ProgramTasksTable,
 		ProgramNotesTable,
 		ProgramFilesTable,
 		ProgramNarrativesTable,
-		ProgramActionplansTable,
+		ProgramActionPlansTable,
 		RiskBlockedGroupsTable,
 		RiskEditorsTable,
 		RiskViewersTable,
-		RiskActionplansTable,
-		StandardControlobjectivesTable,
+		RiskActionPlansTable,
+		StandardControlObjectivesTable,
 		StandardControlsTable,
-		StandardActionplansTable,
+		StandardActionPlansTable,
 		StandardProgramsTable,
 		SubcontrolTasksTable,
 		SubscriberEventsTable,
 		TemplateFilesTable,
 		UserFilesTable,
 		UserEventsTable,
-		UserActionplansTable,
+		UserActionPlansTable,
 		UserSubcontrolsTable,
 		UserSettingFilesTable,
 	}
@@ -5188,8 +5188,8 @@ func init() {
 	ControlNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ControlRisksTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlRisksTable.ForeignKeys[1].RefTable = RisksTable
-	ControlActionplansTable.ForeignKeys[0].RefTable = ControlsTable
-	ControlActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	ControlActionPlansTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	ControlTasksTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlTasksTable.ForeignKeys[1].RefTable = TasksTable
 	ControlObjectiveBlockedGroupsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
@@ -5230,8 +5230,8 @@ func init() {
 	InternalPolicyBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	InternalPolicyEditorsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyEditorsTable.ForeignKeys[1].RefTable = GroupsTable
-	InternalPolicyControlobjectivesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
-	InternalPolicyControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
+	InternalPolicyControlObjectivesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	InternalPolicyProceduresTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	InternalPolicyNarrativesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
@@ -5300,10 +5300,10 @@ func init() {
 	ProgramControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	ProgramSubcontrolsTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
-	ProgramControlobjectivesTable.ForeignKeys[0].RefTable = ProgramsTable
-	ProgramControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
-	ProgramPoliciesTable.ForeignKeys[0].RefTable = ProgramsTable
-	ProgramPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
+	ProgramControlObjectivesTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
+	ProgramInternalPoliciesTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramInternalPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
 	ProgramProceduresTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	ProgramRisksTable.ForeignKeys[0].RefTable = ProgramsTable
@@ -5316,22 +5316,22 @@ func init() {
 	ProgramFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ProgramNarrativesTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
-	ProgramActionplansTable.ForeignKeys[0].RefTable = ProgramsTable
-	ProgramActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	ProgramActionPlansTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	RiskBlockedGroupsTable.ForeignKeys[0].RefTable = RisksTable
 	RiskBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	RiskEditorsTable.ForeignKeys[0].RefTable = RisksTable
 	RiskEditorsTable.ForeignKeys[1].RefTable = GroupsTable
 	RiskViewersTable.ForeignKeys[0].RefTable = RisksTable
 	RiskViewersTable.ForeignKeys[1].RefTable = GroupsTable
-	RiskActionplansTable.ForeignKeys[0].RefTable = RisksTable
-	RiskActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
-	StandardControlobjectivesTable.ForeignKeys[0].RefTable = StandardsTable
-	StandardControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
+	RiskActionPlansTable.ForeignKeys[0].RefTable = RisksTable
+	RiskActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	StandardControlObjectivesTable.ForeignKeys[0].RefTable = StandardsTable
+	StandardControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	StandardControlsTable.ForeignKeys[0].RefTable = StandardsTable
 	StandardControlsTable.ForeignKeys[1].RefTable = ControlsTable
-	StandardActionplansTable.ForeignKeys[0].RefTable = StandardsTable
-	StandardActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	StandardActionPlansTable.ForeignKeys[0].RefTable = StandardsTable
+	StandardActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	StandardProgramsTable.ForeignKeys[0].RefTable = StandardsTable
 	StandardProgramsTable.ForeignKeys[1].RefTable = ProgramsTable
 	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable
@@ -5344,8 +5344,8 @@ func init() {
 	UserFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
-	UserActionplansTable.ForeignKeys[0].RefTable = UsersTable
-	UserActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	UserActionPlansTable.ForeignKeys[0].RefTable = UsersTable
+	UserActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	UserSubcontrolsTable.ForeignKeys[0].RefTable = UsersTable
 	UserSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable

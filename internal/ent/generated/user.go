@@ -93,8 +93,8 @@ type UserEdges struct {
 	File *File `json:"file,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
-	// Actionplans holds the value of the actionplans edge.
-	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// AssignerTasks holds the value of the assigner_tasks edge.
@@ -124,7 +124,7 @@ type UserEdges struct {
 	namedWebauthn                map[string][]*Webauthn
 	namedFiles                   map[string][]*File
 	namedEvents                  map[string][]*Event
-	namedActionplans             map[string][]*ActionPlan
+	namedActionPlans             map[string][]*ActionPlan
 	namedSubcontrols             map[string][]*Subcontrol
 	namedAssignerTasks           map[string][]*Task
 	namedAssigneeTasks           map[string][]*Task
@@ -237,13 +237,13 @@ func (e UserEdges) EventsOrErr() ([]*Event, error) {
 	return nil, &NotLoadedError{edge: "events"}
 }
 
-// ActionplansOrErr returns the Actionplans value or an error if the edge
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
-func (e UserEdges) ActionplansOrErr() ([]*ActionPlan, error) {
+func (e UserEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	if e.loadedTypes[11] {
-		return e.Actionplans, nil
+		return e.ActionPlans, nil
 	}
-	return nil, &NotLoadedError{edge: "actionplans"}
+	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
@@ -543,9 +543,9 @@ func (u *User) QueryEvents() *EventQuery {
 	return NewUserClient(u.config).QueryEvents(u)
 }
 
-// QueryActionplans queries the "actionplans" edge of the User entity.
-func (u *User) QueryActionplans() *ActionPlanQuery {
-	return NewUserClient(u.config).QueryActionplans(u)
+// QueryActionPlans queries the "action_plans" edge of the User entity.
+func (u *User) QueryActionPlans() *ActionPlanQuery {
+	return NewUserClient(u.config).QueryActionPlans(u)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the User entity.
@@ -897,27 +897,27 @@ func (u *User) appendNamedEvents(name string, edges ...*Event) {
 	}
 }
 
-// NamedActionplans returns the Actionplans named value or an error if the edge was not
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedActionplans(name string) ([]*ActionPlan, error) {
-	if u.Edges.namedActionplans == nil {
+func (u *User) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if u.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedActionplans[name]
+	nodes, ok := u.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedActionplans(name string, edges ...*ActionPlan) {
-	if u.Edges.namedActionplans == nil {
-		u.Edges.namedActionplans = make(map[string][]*ActionPlan)
+func (u *User) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if u.Edges.namedActionPlans == nil {
+		u.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedActionplans[name] = []*ActionPlan{}
+		u.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		u.Edges.namedActionplans[name] = append(u.Edges.namedActionplans[name], edges...)
+		u.Edges.namedActionPlans[name] = append(u.Edges.namedActionPlans[name], edges...)
 	}
 }
 

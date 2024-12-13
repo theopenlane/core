@@ -61,9 +61,9 @@ type ControlObjective struct {
 	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlObjectiveQuery when eager-loading is set.
-	Edges                     ControlObjectiveEdges `json:"edges"`
-	control_controlobjectives *string
-	selectValues              sql.SelectValues
+	Edges                      ControlObjectiveEdges `json:"edges"`
+	control_control_objectives *string
+	selectValues               sql.SelectValues
 }
 
 // ControlObjectiveEdges holds the relations/edges for other nodes in the graph.
@@ -76,8 +76,8 @@ type ControlObjectiveEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
-	// Policy holds the value of the policy edge.
-	Policy []*InternalPolicy `json:"policy,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Procedures holds the value of the procedures edge.
@@ -100,18 +100,18 @@ type ControlObjectiveEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [13]map[string]int
 
-	namedBlockedGroups map[string][]*Group
-	namedEditors       map[string][]*Group
-	namedViewers       map[string][]*Group
-	namedPolicy        map[string][]*InternalPolicy
-	namedControls      map[string][]*Control
-	namedProcedures    map[string][]*Procedure
-	namedRisks         map[string][]*Risk
-	namedSubcontrols   map[string][]*Subcontrol
-	namedStandard      map[string][]*Standard
-	namedNarratives    map[string][]*Narrative
-	namedTasks         map[string][]*Task
-	namedPrograms      map[string][]*Program
+	namedBlockedGroups    map[string][]*Group
+	namedEditors          map[string][]*Group
+	namedViewers          map[string][]*Group
+	namedInternalPolicies map[string][]*InternalPolicy
+	namedControls         map[string][]*Control
+	namedProcedures       map[string][]*Procedure
+	namedRisks            map[string][]*Risk
+	namedSubcontrols      map[string][]*Subcontrol
+	namedStandard         map[string][]*Standard
+	namedNarratives       map[string][]*Narrative
+	namedTasks            map[string][]*Task
+	namedPrograms         map[string][]*Program
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -152,13 +152,13 @@ func (e ControlObjectiveEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
-// PolicyOrErr returns the Policy value or an error if the edge
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
-func (e ControlObjectiveEdges) PolicyOrErr() ([]*InternalPolicy, error) {
+func (e ControlObjectiveEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 	if e.loadedTypes[4] {
-		return e.Policy, nil
+		return e.InternalPolicies, nil
 	}
-	return nil, &NotLoadedError{edge: "policy"}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
 // ControlsOrErr returns the Controls value or an error if the edge
@@ -244,7 +244,7 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case controlobjective.ForeignKeys[0]: // control_controlobjectives
+		case controlobjective.ForeignKeys[0]: // control_control_objectives
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -393,10 +393,10 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			}
 		case controlobjective.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_controlobjectives", values[i])
+				return fmt.Errorf("unexpected type %T for field control_control_objectives", values[i])
 			} else if value.Valid {
-				co.control_controlobjectives = new(string)
-				*co.control_controlobjectives = value.String
+				co.control_control_objectives = new(string)
+				*co.control_control_objectives = value.String
 			}
 		default:
 			co.selectValues.Set(columns[i], values[i])
@@ -431,9 +431,9 @@ func (co *ControlObjective) QueryViewers() *GroupQuery {
 	return NewControlObjectiveClient(co.config).QueryViewers(co)
 }
 
-// QueryPolicy queries the "policy" edge of the ControlObjective entity.
-func (co *ControlObjective) QueryPolicy() *InternalPolicyQuery {
-	return NewControlObjectiveClient(co.config).QueryPolicy(co)
+// QueryInternalPolicies queries the "internal_policies" edge of the ControlObjective entity.
+func (co *ControlObjective) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewControlObjectiveClient(co.config).QueryInternalPolicies(co)
 }
 
 // QueryControls queries the "controls" edge of the ControlObjective entity.
@@ -634,27 +634,27 @@ func (co *ControlObjective) appendNamedViewers(name string, edges ...*Group) {
 	}
 }
 
-// NamedPolicy returns the Policy named value or an error if the edge was not
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (co *ControlObjective) NamedPolicy(name string) ([]*InternalPolicy, error) {
-	if co.Edges.namedPolicy == nil {
+func (co *ControlObjective) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if co.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := co.Edges.namedPolicy[name]
+	nodes, ok := co.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (co *ControlObjective) appendNamedPolicy(name string, edges ...*InternalPolicy) {
-	if co.Edges.namedPolicy == nil {
-		co.Edges.namedPolicy = make(map[string][]*InternalPolicy)
+func (co *ControlObjective) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if co.Edges.namedInternalPolicies == nil {
+		co.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		co.Edges.namedPolicy[name] = []*InternalPolicy{}
+		co.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		co.Edges.namedPolicy[name] = append(co.Edges.namedPolicy[name], edges...)
+		co.Edges.namedInternalPolicies[name] = append(co.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
