@@ -830,8 +830,8 @@ github.com/redis/go-redis/v9 v9.7.0 h1:HhLSs+B6O021gwzl+locl0zEDnyNkxMtf/Z3NNBMa
 github.com/redis/go-redis/v9 v9.7.0/go.mod h1:f6zhXITC7JUJIlPEiBOTXxJgPLdZcA93GewI7inzyWw=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
-github.com/resend/resend-go/v2 v2.11.0 h1:Ja5eXizUCbvyLgbiP8sFsJW/UN1b7d6IEUqi80IlgiU=
-github.com/resend/resend-go/v2 v2.11.0/go.mod h1:ihnxc7wPpSgans8RV8d8dIF4hYWVsqMK5KxXAr9LIos=
+github.com/resend/resend-go/v2 v2.13.0 h1:O6Z5Z+LiBlDAm6daHHn0POQX4TJfsdGIhQJD8qGutW4=
+github.com/resend/resend-go/v2 v2.13.0/go.mod h1:3YCb8c8+pLiqhtRFXTyFwlLvfjQtluxOr9HEh2BwCkQ=
 github.com/riverqueue/river v0.14.2 h1:I2VJ5HawamDDiL7QIy1XF2/PtwC+Re2y0OBR9Si6v/s=
 github.com/riverqueue/river v0.14.2/go.mod h1:RHcZSKQuaYfylhbkIHcw+xUdBia3LtPJr66qsFCMj3Q=
 github.com/riverqueue/river/riverdriver v0.14.2 h1:7WSg3m8gjMbmwMeavBklkABLqy/+ox+Zg7d96zT0yBc=
@@ -979,8 +979,8 @@ github.com/theopenlane/httpsling v0.2.1 h1:fWK6emqVOv/al4TamApcf/rNHfpWmobWl5nnx
 github.com/theopenlane/httpsling v0.2.1/go.mod h1:17xyZnSgSHHZISpYxqBhbztSNxz9ihZrmjyce3ShfRc=
 github.com/theopenlane/iam v0.5.0 h1:Pumnam4ATT8tz+LM6Un+dwFQwd7j8wlJxInprwaC2DE=
 github.com/theopenlane/iam v0.5.0/go.mod h1:SIhLEl3YrHVcvXxG5r/BVxa36yEUwksQx1AtmWld3os=
-github.com/theopenlane/newman v0.1.1 h1:pxGPRcy8kXQplfv4Sp1N3XUkWmx/scZvp7oj+y2l8wI=
-github.com/theopenlane/newman v0.1.1/go.mod h1:A37pInKEYsdvUmjQzTDv7x5T4KhMxoFW105DA3XvH4Y=
+github.com/theopenlane/newman v0.1.2 h1:BKn1fjT4tU7AxonFjx+4QNAIq0B9ZlT2wM9cWgBA6Hs=
+github.com/theopenlane/newman v0.1.2/go.mod h1:Z6lRBzDVJeGl+Rh8hZ1fIvybBpm0AxuoP1Lj6wY8ylw=
 github.com/theopenlane/riverboat v0.0.7 h1:zT/H6ipMRLVYQEGLGgwUI6B1wXEBS0ARhkfzv+Pekwg=
 github.com/theopenlane/riverboat v0.0.7/go.mod h1:ke4bnkUNiqsQs7arZlIynAbDsy8uqY6yUSRUD1bmrBg=
 github.com/theopenlane/utils v0.4.2 h1:f72oSi3lQj05QRZKiqqSSqy4RY4Wgy1qIRv3RGjftVE=
