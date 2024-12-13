@@ -267,19 +267,19 @@ func (sc *StandardCreate) SetNillableID(s *string) *StandardCreate {
 	return sc
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (sc *StandardCreate) AddControlobjectiveIDs(ids ...string) *StandardCreate {
-	sc.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (sc *StandardCreate) AddControlObjectiveIDs(ids ...string) *StandardCreate {
+	sc.mutation.AddControlObjectiveIDs(ids...)
 	return sc
 }
 
-// AddControlobjectives adds the "controlobjectives" edges to the ControlObjective entity.
-func (sc *StandardCreate) AddControlobjectives(c ...*ControlObjective) *StandardCreate {
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (sc *StandardCreate) AddControlObjectives(c ...*ControlObjective) *StandardCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return sc.AddControlobjectiveIDs(ids...)
+	return sc.AddControlObjectiveIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -312,19 +312,19 @@ func (sc *StandardCreate) AddProcedures(p ...*Procedure) *StandardCreate {
 	return sc.AddProcedureIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (sc *StandardCreate) AddActionplanIDs(ids ...string) *StandardCreate {
-	sc.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (sc *StandardCreate) AddActionPlanIDs(ids ...string) *StandardCreate {
+	sc.mutation.AddActionPlanIDs(ids...)
 	return sc
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (sc *StandardCreate) AddActionplans(a ...*ActionPlan) *StandardCreate {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (sc *StandardCreate) AddActionPlans(a ...*ActionPlan) *StandardCreate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return sc.AddActionplanIDs(ids...)
+	return sc.AddActionPlanIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -535,18 +535,18 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
-	if nodes := sc.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   standard.ControlobjectivesTable,
-			Columns: standard.ControlobjectivesPrimaryKey,
+			Table:   standard.ControlObjectivesTable,
+			Columns: standard.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.StandardControlobjectives
+		edge.Schema = sc.schemaConfig.StandardControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -586,18 +586,18 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   standard.ActionplansTable,
-			Columns: standard.ActionplansPrimaryKey,
+			Table:   standard.ActionPlansTable,
+			Columns: standard.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.StandardActionplans
+		edge.Schema = sc.schemaConfig.StandardActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

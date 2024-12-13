@@ -351,14 +351,14 @@ func (pu *ProcedureUpdate) AddEditors(g ...*Group) *ProcedureUpdate {
 	return pu.AddEditorIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (pu *ProcedureUpdate) AddControlIDs(ids ...string) *ProcedureUpdate {
 	pu.mutation.AddControlIDs(ids...)
 	return pu
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (pu *ProcedureUpdate) AddControl(c ...*Control) *ProcedureUpdate {
+// AddControls adds the "controls" edges to the Control entity.
+func (pu *ProcedureUpdate) AddControls(c ...*Control) *ProcedureUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -366,19 +366,19 @@ func (pu *ProcedureUpdate) AddControl(c ...*Control) *ProcedureUpdate {
 	return pu.AddControlIDs(ids...)
 }
 
-// AddInternalpolicyIDs adds the "internalpolicy" edge to the InternalPolicy entity by IDs.
-func (pu *ProcedureUpdate) AddInternalpolicyIDs(ids ...string) *ProcedureUpdate {
-	pu.mutation.AddInternalpolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (pu *ProcedureUpdate) AddInternalPolicyIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.AddInternalPolicyIDs(ids...)
 	return pu
 }
 
-// AddInternalpolicy adds the "internalpolicy" edges to the InternalPolicy entity.
-func (pu *ProcedureUpdate) AddInternalpolicy(i ...*InternalPolicy) *ProcedureUpdate {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (pu *ProcedureUpdate) AddInternalPolicies(i ...*InternalPolicy) *ProcedureUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return pu.AddInternalpolicyIDs(ids...)
+	return pu.AddInternalPolicyIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
@@ -494,20 +494,20 @@ func (pu *ProcedureUpdate) RemoveEditors(g ...*Group) *ProcedureUpdate {
 	return pu.RemoveEditorIDs(ids...)
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (pu *ProcedureUpdate) ClearControl() *ProcedureUpdate {
-	pu.mutation.ClearControl()
+// ClearControls clears all "controls" edges to the Control entity.
+func (pu *ProcedureUpdate) ClearControls() *ProcedureUpdate {
+	pu.mutation.ClearControls()
 	return pu
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (pu *ProcedureUpdate) RemoveControlIDs(ids ...string) *ProcedureUpdate {
 	pu.mutation.RemoveControlIDs(ids...)
 	return pu
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (pu *ProcedureUpdate) RemoveControl(c ...*Control) *ProcedureUpdate {
+// RemoveControls removes "controls" edges to Control entities.
+func (pu *ProcedureUpdate) RemoveControls(c ...*Control) *ProcedureUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -515,25 +515,25 @@ func (pu *ProcedureUpdate) RemoveControl(c ...*Control) *ProcedureUpdate {
 	return pu.RemoveControlIDs(ids...)
 }
 
-// ClearInternalpolicy clears all "internalpolicy" edges to the InternalPolicy entity.
-func (pu *ProcedureUpdate) ClearInternalpolicy() *ProcedureUpdate {
-	pu.mutation.ClearInternalpolicy()
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (pu *ProcedureUpdate) ClearInternalPolicies() *ProcedureUpdate {
+	pu.mutation.ClearInternalPolicies()
 	return pu
 }
 
-// RemoveInternalpolicyIDs removes the "internalpolicy" edge to InternalPolicy entities by IDs.
-func (pu *ProcedureUpdate) RemoveInternalpolicyIDs(ids ...string) *ProcedureUpdate {
-	pu.mutation.RemoveInternalpolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (pu *ProcedureUpdate) RemoveInternalPolicyIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.RemoveInternalPolicyIDs(ids...)
 	return pu
 }
 
-// RemoveInternalpolicy removes "internalpolicy" edges to InternalPolicy entities.
-func (pu *ProcedureUpdate) RemoveInternalpolicy(i ...*InternalPolicy) *ProcedureUpdate {
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (pu *ProcedureUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *ProcedureUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return pu.RemoveInternalpolicyIDs(ids...)
+	return pu.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
@@ -914,12 +914,12 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ControlCleared() {
+	if pu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.ControlTable,
-			Columns: procedure.ControlPrimaryKey,
+			Table:   procedure.ControlsTable,
+			Columns: procedure.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -928,12 +928,12 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = pu.schemaConfig.ControlProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedControlIDs(); len(nodes) > 0 && !pu.mutation.ControlCleared() {
+	if nodes := pu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !pu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.ControlTable,
-			Columns: procedure.ControlPrimaryKey,
+			Table:   procedure.ControlsTable,
+			Columns: procedure.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -945,12 +945,12 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.ControlTable,
-			Columns: procedure.ControlPrimaryKey,
+			Table:   procedure.ControlsTable,
+			Columns: procedure.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -962,12 +962,12 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.InternalpolicyCleared() {
+	if pu.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.InternalpolicyTable,
-			Columns: procedure.InternalpolicyPrimaryKey,
+			Table:   procedure.InternalPoliciesTable,
+			Columns: procedure.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -976,12 +976,12 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = pu.schemaConfig.InternalPolicyProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedInternalpolicyIDs(); len(nodes) > 0 && !pu.mutation.InternalpolicyCleared() {
+	if nodes := pu.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !pu.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.InternalpolicyTable,
-			Columns: procedure.InternalpolicyPrimaryKey,
+			Table:   procedure.InternalPoliciesTable,
+			Columns: procedure.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -993,12 +993,12 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.InternalpolicyIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.InternalpolicyTable,
-			Columns: procedure.InternalpolicyPrimaryKey,
+			Table:   procedure.InternalPoliciesTable,
+			Columns: procedure.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -1537,14 +1537,14 @@ func (puo *ProcedureUpdateOne) AddEditors(g ...*Group) *ProcedureUpdateOne {
 	return puo.AddEditorIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (puo *ProcedureUpdateOne) AddControlIDs(ids ...string) *ProcedureUpdateOne {
 	puo.mutation.AddControlIDs(ids...)
 	return puo
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (puo *ProcedureUpdateOne) AddControl(c ...*Control) *ProcedureUpdateOne {
+// AddControls adds the "controls" edges to the Control entity.
+func (puo *ProcedureUpdateOne) AddControls(c ...*Control) *ProcedureUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1552,19 +1552,19 @@ func (puo *ProcedureUpdateOne) AddControl(c ...*Control) *ProcedureUpdateOne {
 	return puo.AddControlIDs(ids...)
 }
 
-// AddInternalpolicyIDs adds the "internalpolicy" edge to the InternalPolicy entity by IDs.
-func (puo *ProcedureUpdateOne) AddInternalpolicyIDs(ids ...string) *ProcedureUpdateOne {
-	puo.mutation.AddInternalpolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (puo *ProcedureUpdateOne) AddInternalPolicyIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.AddInternalPolicyIDs(ids...)
 	return puo
 }
 
-// AddInternalpolicy adds the "internalpolicy" edges to the InternalPolicy entity.
-func (puo *ProcedureUpdateOne) AddInternalpolicy(i ...*InternalPolicy) *ProcedureUpdateOne {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (puo *ProcedureUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *ProcedureUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return puo.AddInternalpolicyIDs(ids...)
+	return puo.AddInternalPolicyIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
@@ -1680,20 +1680,20 @@ func (puo *ProcedureUpdateOne) RemoveEditors(g ...*Group) *ProcedureUpdateOne {
 	return puo.RemoveEditorIDs(ids...)
 }
 
-// ClearControl clears all "control" edges to the Control entity.
-func (puo *ProcedureUpdateOne) ClearControl() *ProcedureUpdateOne {
-	puo.mutation.ClearControl()
+// ClearControls clears all "controls" edges to the Control entity.
+func (puo *ProcedureUpdateOne) ClearControls() *ProcedureUpdateOne {
+	puo.mutation.ClearControls()
 	return puo
 }
 
-// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
 func (puo *ProcedureUpdateOne) RemoveControlIDs(ids ...string) *ProcedureUpdateOne {
 	puo.mutation.RemoveControlIDs(ids...)
 	return puo
 }
 
-// RemoveControl removes "control" edges to Control entities.
-func (puo *ProcedureUpdateOne) RemoveControl(c ...*Control) *ProcedureUpdateOne {
+// RemoveControls removes "controls" edges to Control entities.
+func (puo *ProcedureUpdateOne) RemoveControls(c ...*Control) *ProcedureUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -1701,25 +1701,25 @@ func (puo *ProcedureUpdateOne) RemoveControl(c ...*Control) *ProcedureUpdateOne 
 	return puo.RemoveControlIDs(ids...)
 }
 
-// ClearInternalpolicy clears all "internalpolicy" edges to the InternalPolicy entity.
-func (puo *ProcedureUpdateOne) ClearInternalpolicy() *ProcedureUpdateOne {
-	puo.mutation.ClearInternalpolicy()
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (puo *ProcedureUpdateOne) ClearInternalPolicies() *ProcedureUpdateOne {
+	puo.mutation.ClearInternalPolicies()
 	return puo
 }
 
-// RemoveInternalpolicyIDs removes the "internalpolicy" edge to InternalPolicy entities by IDs.
-func (puo *ProcedureUpdateOne) RemoveInternalpolicyIDs(ids ...string) *ProcedureUpdateOne {
-	puo.mutation.RemoveInternalpolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (puo *ProcedureUpdateOne) RemoveInternalPolicyIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.RemoveInternalPolicyIDs(ids...)
 	return puo
 }
 
-// RemoveInternalpolicy removes "internalpolicy" edges to InternalPolicy entities.
-func (puo *ProcedureUpdateOne) RemoveInternalpolicy(i ...*InternalPolicy) *ProcedureUpdateOne {
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (puo *ProcedureUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *ProcedureUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return puo.RemoveInternalpolicyIDs(ids...)
+	return puo.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
@@ -2130,12 +2130,12 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ControlCleared() {
+	if puo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.ControlTable,
-			Columns: procedure.ControlPrimaryKey,
+			Table:   procedure.ControlsTable,
+			Columns: procedure.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -2144,12 +2144,12 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 		edge.Schema = puo.schemaConfig.ControlProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedControlIDs(); len(nodes) > 0 && !puo.mutation.ControlCleared() {
+	if nodes := puo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !puo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.ControlTable,
-			Columns: procedure.ControlPrimaryKey,
+			Table:   procedure.ControlsTable,
+			Columns: procedure.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -2161,12 +2161,12 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.ControlTable,
-			Columns: procedure.ControlPrimaryKey,
+			Table:   procedure.ControlsTable,
+			Columns: procedure.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -2178,12 +2178,12 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.InternalpolicyCleared() {
+	if puo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.InternalpolicyTable,
-			Columns: procedure.InternalpolicyPrimaryKey,
+			Table:   procedure.InternalPoliciesTable,
+			Columns: procedure.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -2192,12 +2192,12 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 		edge.Schema = puo.schemaConfig.InternalPolicyProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedInternalpolicyIDs(); len(nodes) > 0 && !puo.mutation.InternalpolicyCleared() {
+	if nodes := puo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !puo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.InternalpolicyTable,
-			Columns: procedure.InternalpolicyPrimaryKey,
+			Table:   procedure.InternalPoliciesTable,
+			Columns: procedure.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -2209,12 +2209,12 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.InternalpolicyIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.InternalpolicyTable,
-			Columns: procedure.InternalpolicyPrimaryKey,
+			Table:   procedure.InternalPoliciesTable,
+			Columns: procedure.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),

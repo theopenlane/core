@@ -388,34 +388,34 @@ func (fc *FileCreate) AddEntity(e ...*Entity) *FileCreate {
 	return fc.AddEntityIDs(ids...)
 }
 
-// AddUsersettingIDs adds the "usersetting" edge to the UserSetting entity by IDs.
-func (fc *FileCreate) AddUsersettingIDs(ids ...string) *FileCreate {
-	fc.mutation.AddUsersettingIDs(ids...)
+// AddUserSettingIDs adds the "user_setting" edge to the UserSetting entity by IDs.
+func (fc *FileCreate) AddUserSettingIDs(ids ...string) *FileCreate {
+	fc.mutation.AddUserSettingIDs(ids...)
 	return fc
 }
 
-// AddUsersetting adds the "usersetting" edges to the UserSetting entity.
-func (fc *FileCreate) AddUsersetting(u ...*UserSetting) *FileCreate {
+// AddUserSetting adds the "user_setting" edges to the UserSetting entity.
+func (fc *FileCreate) AddUserSetting(u ...*UserSetting) *FileCreate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return fc.AddUsersettingIDs(ids...)
+	return fc.AddUserSettingIDs(ids...)
 }
 
-// AddOrganizationsettingIDs adds the "organizationsetting" edge to the OrganizationSetting entity by IDs.
-func (fc *FileCreate) AddOrganizationsettingIDs(ids ...string) *FileCreate {
-	fc.mutation.AddOrganizationsettingIDs(ids...)
+// AddOrganizationSettingIDs adds the "organization_setting" edge to the OrganizationSetting entity by IDs.
+func (fc *FileCreate) AddOrganizationSettingIDs(ids ...string) *FileCreate {
+	fc.mutation.AddOrganizationSettingIDs(ids...)
 	return fc
 }
 
-// AddOrganizationsetting adds the "organizationsetting" edges to the OrganizationSetting entity.
-func (fc *FileCreate) AddOrganizationsetting(o ...*OrganizationSetting) *FileCreate {
+// AddOrganizationSetting adds the "organization_setting" edges to the OrganizationSetting entity.
+func (fc *FileCreate) AddOrganizationSetting(o ...*OrganizationSetting) *FileCreate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return fc.AddOrganizationsettingIDs(ids...)
+	return fc.AddOrganizationSettingIDs(ids...)
 }
 
 // AddTemplateIDs adds the "template" edge to the Template entity by IDs.
@@ -433,19 +433,19 @@ func (fc *FileCreate) AddTemplate(t ...*Template) *FileCreate {
 	return fc.AddTemplateIDs(ids...)
 }
 
-// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by IDs.
-func (fc *FileCreate) AddDocumentdatumIDs(ids ...string) *FileCreate {
-	fc.mutation.AddDocumentdatumIDs(ids...)
+// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
+func (fc *FileCreate) AddDocumentDatumIDs(ids ...string) *FileCreate {
+	fc.mutation.AddDocumentDatumIDs(ids...)
 	return fc
 }
 
-// AddDocumentdata adds the "documentdata" edges to the DocumentData entity.
-func (fc *FileCreate) AddDocumentdata(d ...*DocumentData) *FileCreate {
+// AddDocumentData adds the "document_data" edges to the DocumentData entity.
+func (fc *FileCreate) AddDocumentData(d ...*DocumentData) *FileCreate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fc.AddDocumentdatumIDs(ids...)
+	return fc.AddDocumentDatumIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -783,12 +783,12 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.UsersettingIDs(); len(nodes) > 0 {
+	if nodes := fc.mutation.UserSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.UsersettingTable,
-			Columns: file.UsersettingPrimaryKey,
+			Table:   file.UserSettingTable,
+			Columns: file.UserSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
@@ -800,12 +800,12 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.OrganizationsettingIDs(); len(nodes) > 0 {
+	if nodes := fc.mutation.OrganizationSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.OrganizationsettingTable,
-			Columns: file.OrganizationsettingPrimaryKey,
+			Table:   file.OrganizationSettingTable,
+			Columns: file.OrganizationSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
@@ -834,12 +834,12 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.DocumentdataIDs(); len(nodes) > 0 {
+	if nodes := fc.mutation.DocumentDataIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentdataTable,
-			Columns: file.DocumentdataPrimaryKey,
+			Table:   file.DocumentDataTable,
+			Columns: file.DocumentDataPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),

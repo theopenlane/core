@@ -58,27 +58,27 @@ const (
 	// Table holds the table name of the actionplan in the database.
 	Table = "action_plans"
 	// StandardTable is the table that holds the standard relation/edge. The primary key declared below.
-	StandardTable = "standard_actionplans"
+	StandardTable = "standard_action_plans"
 	// StandardInverseTable is the table name for the Standard entity.
 	// It exists in this package in order to avoid circular dependency with the "standard" package.
 	StandardInverseTable = "standards"
 	// RiskTable is the table that holds the risk relation/edge. The primary key declared below.
-	RiskTable = "risk_actionplans"
+	RiskTable = "risk_action_plans"
 	// RiskInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RiskInverseTable = "risks"
 	// ControlTable is the table that holds the control relation/edge. The primary key declared below.
-	ControlTable = "control_actionplans"
+	ControlTable = "control_action_plans"
 	// ControlInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlInverseTable = "controls"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
-	UserTable = "user_actionplans"
+	UserTable = "user_action_plans"
 	// UserInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UserInverseTable = "users"
 	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
-	ProgramTable = "program_actionplans"
+	ProgramTable = "program_action_plans"
 	// ProgramInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramInverseTable = "programs"

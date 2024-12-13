@@ -387,19 +387,19 @@ func (cc *ControlCreate) AddSubcontrols(s ...*Subcontrol) *ControlCreate {
 	return cc.AddSubcontrolIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (cc *ControlCreate) AddControlobjectiveIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (cc *ControlCreate) AddControlObjectiveIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddControlObjectiveIDs(ids...)
 	return cc
 }
 
-// AddControlobjectives adds the "controlobjectives" edges to the ControlObjective entity.
-func (cc *ControlCreate) AddControlobjectives(c ...*ControlObjective) *ControlCreate {
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (cc *ControlCreate) AddControlObjectives(c ...*ControlObjective) *ControlCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cc.AddControlobjectiveIDs(ids...)
+	return cc.AddControlObjectiveIDs(ids...)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -447,19 +447,19 @@ func (cc *ControlCreate) AddRisks(r ...*Risk) *ControlCreate {
 	return cc.AddRiskIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (cc *ControlCreate) AddActionplanIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (cc *ControlCreate) AddActionPlanIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddActionPlanIDs(ids...)
 	return cc
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (cc *ControlCreate) AddActionplans(a ...*ActionPlan) *ControlCreate {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (cc *ControlCreate) AddActionPlans(a ...*ActionPlan) *ControlCreate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return cc.AddActionplanIDs(ids...)
+	return cc.AddActionPlanIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
@@ -807,12 +807,12 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   control.ControlobjectivesTable,
-			Columns: []string{control.ControlobjectivesColumn},
+			Table:   control.ControlObjectivesTable,
+			Columns: []string{control.ControlObjectivesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -875,18 +875,18 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ActionplansTable,
-			Columns: control.ActionplansPrimaryKey,
+			Table:   control.ActionPlansTable,
+			Columns: control.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlActionplans
+		edge.Schema = cc.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -403,19 +403,19 @@ func (cou *ControlObjectiveUpdate) AddViewers(g ...*Group) *ControlObjectiveUpda
 	return cou.AddViewerIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (cou *ControlObjectiveUpdate) AddPolicyIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (cou *ControlObjectiveUpdate) AddInternalPolicyIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddInternalPolicyIDs(ids...)
 	return cou
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (cou *ControlObjectiveUpdate) AddPolicy(i ...*InternalPolicy) *ControlObjectiveUpdate {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (cou *ControlObjectiveUpdate) AddInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return cou.AddPolicyIDs(ids...)
+	return cou.AddInternalPolicyIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -612,25 +612,25 @@ func (cou *ControlObjectiveUpdate) RemoveViewers(g ...*Group) *ControlObjectiveU
 	return cou.RemoveViewerIDs(ids...)
 }
 
-// ClearPolicy clears all "policy" edges to the InternalPolicy entity.
-func (cou *ControlObjectiveUpdate) ClearPolicy() *ControlObjectiveUpdate {
-	cou.mutation.ClearPolicy()
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (cou *ControlObjectiveUpdate) ClearInternalPolicies() *ControlObjectiveUpdate {
+	cou.mutation.ClearInternalPolicies()
 	return cou
 }
 
-// RemovePolicyIDs removes the "policy" edge to InternalPolicy entities by IDs.
-func (cou *ControlObjectiveUpdate) RemovePolicyIDs(ids ...string) *ControlObjectiveUpdate {
-	cou.mutation.RemovePolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveInternalPolicyIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveInternalPolicyIDs(ids...)
 	return cou
 }
 
-// RemovePolicy removes "policy" edges to InternalPolicy entities.
-func (cou *ControlObjectiveUpdate) RemovePolicy(i ...*InternalPolicy) *ControlObjectiveUpdate {
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (cou *ControlObjectiveUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return cou.RemovePolicyIDs(ids...)
+	return cou.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -1158,49 +1158,49 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cou.mutation.PolicyCleared() {
+	if cou.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlobjective.PolicyTable,
-			Columns: controlobjective.PolicyPrimaryKey,
+			Table:   controlobjective.InternalPoliciesTable,
+			Columns: controlobjective.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.InternalPolicyControlobjectives
+		edge.Schema = cou.schemaConfig.InternalPolicyControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cou.mutation.RemovedPolicyIDs(); len(nodes) > 0 && !cou.mutation.PolicyCleared() {
+	if nodes := cou.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !cou.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlobjective.PolicyTable,
-			Columns: controlobjective.PolicyPrimaryKey,
+			Table:   controlobjective.InternalPoliciesTable,
+			Columns: controlobjective.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.InternalPolicyControlobjectives
+		edge.Schema = cou.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cou.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := cou.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlobjective.PolicyTable,
-			Columns: controlobjective.PolicyPrimaryKey,
+			Table:   controlobjective.InternalPoliciesTable,
+			Columns: controlobjective.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.InternalPolicyControlobjectives
+		edge.Schema = cou.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1409,7 +1409,7 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.StandardControlobjectives
+		edge.Schema = cou.schemaConfig.StandardControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cou.mutation.RemovedStandardIDs(); len(nodes) > 0 && !cou.mutation.StandardCleared() {
@@ -1423,7 +1423,7 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.StandardControlobjectives
+		edge.Schema = cou.schemaConfig.StandardControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1440,7 +1440,7 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.StandardControlobjectives
+		edge.Schema = cou.schemaConfig.StandardControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1553,7 +1553,7 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.ProgramControlobjectives
+		edge.Schema = cou.schemaConfig.ProgramControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cou.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !cou.mutation.ProgramsCleared() {
@@ -1567,7 +1567,7 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.ProgramControlobjectives
+		edge.Schema = cou.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1584,7 +1584,7 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cou.schemaConfig.ProgramControlobjectives
+		edge.Schema = cou.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1974,19 +1974,19 @@ func (couo *ControlObjectiveUpdateOne) AddViewers(g ...*Group) *ControlObjective
 	return couo.AddViewerIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (couo *ControlObjectiveUpdateOne) AddPolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddInternalPolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddInternalPolicyIDs(ids...)
 	return couo
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (couo *ControlObjectiveUpdateOne) AddPolicy(i ...*InternalPolicy) *ControlObjectiveUpdateOne {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (couo *ControlObjectiveUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return couo.AddPolicyIDs(ids...)
+	return couo.AddInternalPolicyIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -2183,25 +2183,25 @@ func (couo *ControlObjectiveUpdateOne) RemoveViewers(g ...*Group) *ControlObject
 	return couo.RemoveViewerIDs(ids...)
 }
 
-// ClearPolicy clears all "policy" edges to the InternalPolicy entity.
-func (couo *ControlObjectiveUpdateOne) ClearPolicy() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearPolicy()
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (couo *ControlObjectiveUpdateOne) ClearInternalPolicies() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearInternalPolicies()
 	return couo
 }
 
-// RemovePolicyIDs removes the "policy" edge to InternalPolicy entities by IDs.
-func (couo *ControlObjectiveUpdateOne) RemovePolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
-	couo.mutation.RemovePolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveInternalPolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveInternalPolicyIDs(ids...)
 	return couo
 }
 
-// RemovePolicy removes "policy" edges to InternalPolicy entities.
-func (couo *ControlObjectiveUpdateOne) RemovePolicy(i ...*InternalPolicy) *ControlObjectiveUpdateOne {
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (couo *ControlObjectiveUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *ControlObjectiveUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return couo.RemovePolicyIDs(ids...)
+	return couo.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -2759,49 +2759,49 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if couo.mutation.PolicyCleared() {
+	if couo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlobjective.PolicyTable,
-			Columns: controlobjective.PolicyPrimaryKey,
+			Table:   controlobjective.InternalPoliciesTable,
+			Columns: controlobjective.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.InternalPolicyControlobjectives
+		edge.Schema = couo.schemaConfig.InternalPolicyControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := couo.mutation.RemovedPolicyIDs(); len(nodes) > 0 && !couo.mutation.PolicyCleared() {
+	if nodes := couo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !couo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlobjective.PolicyTable,
-			Columns: controlobjective.PolicyPrimaryKey,
+			Table:   controlobjective.InternalPoliciesTable,
+			Columns: controlobjective.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.InternalPolicyControlobjectives
+		edge.Schema = couo.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := couo.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := couo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlobjective.PolicyTable,
-			Columns: controlobjective.PolicyPrimaryKey,
+			Table:   controlobjective.InternalPoliciesTable,
+			Columns: controlobjective.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.InternalPolicyControlobjectives
+		edge.Schema = couo.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3010,7 +3010,7 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.StandardControlobjectives
+		edge.Schema = couo.schemaConfig.StandardControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := couo.mutation.RemovedStandardIDs(); len(nodes) > 0 && !couo.mutation.StandardCleared() {
@@ -3024,7 +3024,7 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.StandardControlobjectives
+		edge.Schema = couo.schemaConfig.StandardControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3041,7 +3041,7 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.StandardControlobjectives
+		edge.Schema = couo.schemaConfig.StandardControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3154,7 +3154,7 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.ProgramControlobjectives
+		edge.Schema = couo.schemaConfig.ProgramControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := couo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !couo.mutation.ProgramsCleared() {
@@ -3168,7 +3168,7 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.ProgramControlobjectives
+		edge.Schema = couo.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3185,7 +3185,7 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = couo.schemaConfig.ProgramControlobjectives
+		edge.Schema = couo.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

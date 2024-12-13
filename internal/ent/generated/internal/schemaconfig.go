@@ -21,7 +21,7 @@ type SchemaConfig struct {
 	ControlSubcontrols                   string // Control-subcontrols->Subcontrol table.
 	ControlNarratives                    string // Control-narratives->Narrative table.
 	ControlRisks                         string // Control-risks->Risk table.
-	ControlActionplans                   string // Control-actionplans->ActionPlan table.
+	ControlActionPlans                   string // Control-action_plans->ActionPlan table.
 	ControlTasks                         string // Control-tasks->Task table.
 	ControlHistory                       string // ControlHistory table.
 	ControlObjective                     string // ControlObjective table.
@@ -67,7 +67,7 @@ type SchemaConfig struct {
 	InternalPolicy                       string // InternalPolicy table.
 	InternalPolicyBlockedGroups          string // InternalPolicy-blocked_groups->Group table.
 	InternalPolicyEditors                string // InternalPolicy-editors->Group table.
-	InternalPolicyControlobjectives      string // InternalPolicy-controlobjectives->ControlObjective table.
+	InternalPolicyControlObjectives      string // InternalPolicy-control_objectives->ControlObjective table.
 	InternalPolicyProcedures             string // InternalPolicy-procedures->Procedure table.
 	InternalPolicyNarratives             string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks                  string // InternalPolicy-tasks->Task table.
@@ -121,15 +121,15 @@ type SchemaConfig struct {
 	ProgramViewers                       string // Program-viewers->Group table.
 	ProgramControls                      string // Program-controls->Control table.
 	ProgramSubcontrols                   string // Program-subcontrols->Subcontrol table.
-	ProgramControlobjectives             string // Program-controlobjectives->ControlObjective table.
-	ProgramPolicies                      string // Program-policies->InternalPolicy table.
+	ProgramControlObjectives             string // Program-control_objectives->ControlObjective table.
+	ProgramInternalPolicies              string // Program-internal_policies->InternalPolicy table.
 	ProgramProcedures                    string // Program-procedures->Procedure table.
 	ProgramRisks                         string // Program-risks->Risk table.
 	ProgramTasks                         string // Program-tasks->Task table.
 	ProgramNotes                         string // Program-notes->Note table.
 	ProgramFiles                         string // Program-files->File table.
 	ProgramNarratives                    string // Program-narratives->Narrative table.
-	ProgramActionplans                   string // Program-actionplans->ActionPlan table.
+	ProgramActionPlans                   string // Program-action_plans->ActionPlan table.
 	ProgramHistory                       string // ProgramHistory table.
 	ProgramMembership                    string // ProgramMembership table.
 	ProgramMembershipHistory             string // ProgramMembershipHistory table.
@@ -137,12 +137,12 @@ type SchemaConfig struct {
 	RiskBlockedGroups                    string // Risk-blocked_groups->Group table.
 	RiskEditors                          string // Risk-editors->Group table.
 	RiskViewers                          string // Risk-viewers->Group table.
-	RiskActionplans                      string // Risk-actionplans->ActionPlan table.
+	RiskActionPlans                      string // Risk-action_plans->ActionPlan table.
 	RiskHistory                          string // RiskHistory table.
 	Standard                             string // Standard table.
-	StandardControlobjectives            string // Standard-controlobjectives->ControlObjective table.
+	StandardControlObjectives            string // Standard-control_objectives->ControlObjective table.
 	StandardControls                     string // Standard-controls->Control table.
-	StandardActionplans                  string // Standard-actionplans->ActionPlan table.
+	StandardActionPlans                  string // Standard-action_plans->ActionPlan table.
 	StandardPrograms                     string // Standard-programs->Program table.
 	StandardHistory                      string // StandardHistory table.
 	Subcontrol                           string // Subcontrol table.
@@ -159,7 +159,7 @@ type SchemaConfig struct {
 	User                                 string // User table.
 	UserFiles                            string // User-files->File table.
 	UserEvents                           string // User-events->Event table.
-	UserActionplans                      string // User-actionplans->ActionPlan table.
+	UserActionPlans                      string // User-action_plans->ActionPlan table.
 	UserSubcontrols                      string // User-subcontrols->Subcontrol table.
 	UserHistory                          string // UserHistory table.
 	UserSetting                          string // UserSetting table.

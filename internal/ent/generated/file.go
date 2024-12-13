@@ -80,14 +80,14 @@ type FileEdges struct {
 	Contact []*Contact `json:"contact,omitempty"`
 	// Entity holds the value of the entity edge.
 	Entity []*Entity `json:"entity,omitempty"`
-	// Usersetting holds the value of the usersetting edge.
-	Usersetting []*UserSetting `json:"usersetting,omitempty"`
-	// Organizationsetting holds the value of the organizationsetting edge.
-	Organizationsetting []*OrganizationSetting `json:"organizationsetting,omitempty"`
+	// UserSetting holds the value of the user_setting edge.
+	UserSetting []*UserSetting `json:"user_setting,omitempty"`
+	// OrganizationSetting holds the value of the organization_setting edge.
+	OrganizationSetting []*OrganizationSetting `json:"organization_setting,omitempty"`
 	// Template holds the value of the template edge.
 	Template []*Template `json:"template,omitempty"`
-	// Documentdata holds the value of the documentdata edge.
-	Documentdata []*DocumentData `json:"documentdata,omitempty"`
+	// DocumentData holds the value of the document_data edge.
+	DocumentData []*DocumentData `json:"document_data,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
 	// Program holds the value of the program edge.
@@ -103,10 +103,10 @@ type FileEdges struct {
 	namedGroup               map[string][]*Group
 	namedContact             map[string][]*Contact
 	namedEntity              map[string][]*Entity
-	namedUsersetting         map[string][]*UserSetting
-	namedOrganizationsetting map[string][]*OrganizationSetting
+	namedUserSetting         map[string][]*UserSetting
+	namedOrganizationSetting map[string][]*OrganizationSetting
 	namedTemplate            map[string][]*Template
-	namedDocumentdata        map[string][]*DocumentData
+	namedDocumentData        map[string][]*DocumentData
 	namedEvents              map[string][]*Event
 	namedProgram             map[string][]*Program
 }
@@ -156,22 +156,22 @@ func (e FileEdges) EntityOrErr() ([]*Entity, error) {
 	return nil, &NotLoadedError{edge: "entity"}
 }
 
-// UsersettingOrErr returns the Usersetting value or an error if the edge
+// UserSettingOrErr returns the UserSetting value or an error if the edge
 // was not loaded in eager-loading.
-func (e FileEdges) UsersettingOrErr() ([]*UserSetting, error) {
+func (e FileEdges) UserSettingOrErr() ([]*UserSetting, error) {
 	if e.loadedTypes[5] {
-		return e.Usersetting, nil
+		return e.UserSetting, nil
 	}
-	return nil, &NotLoadedError{edge: "usersetting"}
+	return nil, &NotLoadedError{edge: "user_setting"}
 }
 
-// OrganizationsettingOrErr returns the Organizationsetting value or an error if the edge
+// OrganizationSettingOrErr returns the OrganizationSetting value or an error if the edge
 // was not loaded in eager-loading.
-func (e FileEdges) OrganizationsettingOrErr() ([]*OrganizationSetting, error) {
+func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
 	if e.loadedTypes[6] {
-		return e.Organizationsetting, nil
+		return e.OrganizationSetting, nil
 	}
-	return nil, &NotLoadedError{edge: "organizationsetting"}
+	return nil, &NotLoadedError{edge: "organization_setting"}
 }
 
 // TemplateOrErr returns the Template value or an error if the edge
@@ -183,13 +183,13 @@ func (e FileEdges) TemplateOrErr() ([]*Template, error) {
 	return nil, &NotLoadedError{edge: "template"}
 }
 
-// DocumentdataOrErr returns the Documentdata value or an error if the edge
+// DocumentDataOrErr returns the DocumentData value or an error if the edge
 // was not loaded in eager-loading.
-func (e FileEdges) DocumentdataOrErr() ([]*DocumentData, error) {
+func (e FileEdges) DocumentDataOrErr() ([]*DocumentData, error) {
 	if e.loadedTypes[8] {
-		return e.Documentdata, nil
+		return e.DocumentData, nil
 	}
-	return nil, &NotLoadedError{edge: "documentdata"}
+	return nil, &NotLoadedError{edge: "document_data"}
 }
 
 // EventsOrErr returns the Events value or an error if the edge
@@ -416,14 +416,14 @@ func (f *File) QueryEntity() *EntityQuery {
 	return NewFileClient(f.config).QueryEntity(f)
 }
 
-// QueryUsersetting queries the "usersetting" edge of the File entity.
-func (f *File) QueryUsersetting() *UserSettingQuery {
-	return NewFileClient(f.config).QueryUsersetting(f)
+// QueryUserSetting queries the "user_setting" edge of the File entity.
+func (f *File) QueryUserSetting() *UserSettingQuery {
+	return NewFileClient(f.config).QueryUserSetting(f)
 }
 
-// QueryOrganizationsetting queries the "organizationsetting" edge of the File entity.
-func (f *File) QueryOrganizationsetting() *OrganizationSettingQuery {
-	return NewFileClient(f.config).QueryOrganizationsetting(f)
+// QueryOrganizationSetting queries the "organization_setting" edge of the File entity.
+func (f *File) QueryOrganizationSetting() *OrganizationSettingQuery {
+	return NewFileClient(f.config).QueryOrganizationSetting(f)
 }
 
 // QueryTemplate queries the "template" edge of the File entity.
@@ -431,9 +431,9 @@ func (f *File) QueryTemplate() *TemplateQuery {
 	return NewFileClient(f.config).QueryTemplate(f)
 }
 
-// QueryDocumentdata queries the "documentdata" edge of the File entity.
-func (f *File) QueryDocumentdata() *DocumentDataQuery {
-	return NewFileClient(f.config).QueryDocumentdata(f)
+// QueryDocumentData queries the "document_data" edge of the File entity.
+func (f *File) QueryDocumentData() *DocumentDataQuery {
+	return NewFileClient(f.config).QueryDocumentData(f)
 }
 
 // QueryEvents queries the "events" edge of the File entity.
@@ -658,51 +658,51 @@ func (f *File) appendNamedEntity(name string, edges ...*Entity) {
 	}
 }
 
-// NamedUsersetting returns the Usersetting named value or an error if the edge was not
+// NamedUserSetting returns the UserSetting named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedUsersetting(name string) ([]*UserSetting, error) {
-	if f.Edges.namedUsersetting == nil {
+func (f *File) NamedUserSetting(name string) ([]*UserSetting, error) {
+	if f.Edges.namedUserSetting == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedUsersetting[name]
+	nodes, ok := f.Edges.namedUserSetting[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedUsersetting(name string, edges ...*UserSetting) {
-	if f.Edges.namedUsersetting == nil {
-		f.Edges.namedUsersetting = make(map[string][]*UserSetting)
+func (f *File) appendNamedUserSetting(name string, edges ...*UserSetting) {
+	if f.Edges.namedUserSetting == nil {
+		f.Edges.namedUserSetting = make(map[string][]*UserSetting)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedUsersetting[name] = []*UserSetting{}
+		f.Edges.namedUserSetting[name] = []*UserSetting{}
 	} else {
-		f.Edges.namedUsersetting[name] = append(f.Edges.namedUsersetting[name], edges...)
+		f.Edges.namedUserSetting[name] = append(f.Edges.namedUserSetting[name], edges...)
 	}
 }
 
-// NamedOrganizationsetting returns the Organizationsetting named value or an error if the edge was not
+// NamedOrganizationSetting returns the OrganizationSetting named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedOrganizationsetting(name string) ([]*OrganizationSetting, error) {
-	if f.Edges.namedOrganizationsetting == nil {
+func (f *File) NamedOrganizationSetting(name string) ([]*OrganizationSetting, error) {
+	if f.Edges.namedOrganizationSetting == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedOrganizationsetting[name]
+	nodes, ok := f.Edges.namedOrganizationSetting[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedOrganizationsetting(name string, edges ...*OrganizationSetting) {
-	if f.Edges.namedOrganizationsetting == nil {
-		f.Edges.namedOrganizationsetting = make(map[string][]*OrganizationSetting)
+func (f *File) appendNamedOrganizationSetting(name string, edges ...*OrganizationSetting) {
+	if f.Edges.namedOrganizationSetting == nil {
+		f.Edges.namedOrganizationSetting = make(map[string][]*OrganizationSetting)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedOrganizationsetting[name] = []*OrganizationSetting{}
+		f.Edges.namedOrganizationSetting[name] = []*OrganizationSetting{}
 	} else {
-		f.Edges.namedOrganizationsetting[name] = append(f.Edges.namedOrganizationsetting[name], edges...)
+		f.Edges.namedOrganizationSetting[name] = append(f.Edges.namedOrganizationSetting[name], edges...)
 	}
 }
 
@@ -730,27 +730,27 @@ func (f *File) appendNamedTemplate(name string, edges ...*Template) {
 	}
 }
 
-// NamedDocumentdata returns the Documentdata named value or an error if the edge was not
+// NamedDocumentData returns the DocumentData named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedDocumentdata(name string) ([]*DocumentData, error) {
-	if f.Edges.namedDocumentdata == nil {
+func (f *File) NamedDocumentData(name string) ([]*DocumentData, error) {
+	if f.Edges.namedDocumentData == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedDocumentdata[name]
+	nodes, ok := f.Edges.namedDocumentData[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedDocumentdata(name string, edges ...*DocumentData) {
-	if f.Edges.namedDocumentdata == nil {
-		f.Edges.namedDocumentdata = make(map[string][]*DocumentData)
+func (f *File) appendNamedDocumentData(name string, edges ...*DocumentData) {
+	if f.Edges.namedDocumentData == nil {
+		f.Edges.namedDocumentData = make(map[string][]*DocumentData)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedDocumentdata[name] = []*DocumentData{}
+		f.Edges.namedDocumentData[name] = []*DocumentData{}
 	} else {
-		f.Edges.namedDocumentdata[name] = append(f.Edges.namedDocumentdata[name], edges...)
+		f.Edges.namedDocumentData[name] = append(f.Edges.namedDocumentData[name], edges...)
 	}
 }
 

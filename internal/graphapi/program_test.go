@@ -72,7 +72,7 @@ func (suite *GraphTestSuite) TestQueryProgram() {
 			assert.Equal(t, program.ID, resp.Program.ID)
 			assert.Equal(t, program.Name, resp.Program.Name)
 			assert.Len(t, resp.Program.Procedures, 1)
-			assert.Len(t, resp.Program.Policies, 1)
+			assert.Len(t, resp.Program.InternalPolicies, 1)
 		})
 	}
 }
@@ -148,7 +148,7 @@ func (suite *GraphTestSuite) TestQueryPrograms() {
 			for _, edge := range resp.Programs.Edges {
 				require.NotNil(t, edge.Node)
 				assert.Len(t, edge.Node.Procedures, 1)
-				assert.Len(t, edge.Node.Policies, 1)
+				assert.Len(t, edge.Node.InternalPolicies, 1)
 			}
 		})
 	}
@@ -200,9 +200,9 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 		{
 			name: "happy path, edges",
 			request: openlaneclient.CreateProgramInput{
-				Name:         "mitb program",
-				ProcedureIDs: []string{procedure.ID},
-				PolicyIDs:    []string{policy.ID},
+				Name:              "mitb program",
+				ProcedureIDs:      []string{procedure.ID},
+				InternalPolicyIDs: []string{policy.ID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -356,9 +356,9 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 				}
 			}
 
-			if len(tc.request.PolicyIDs) > 0 {
-				require.Len(t, resp.CreateProgram.Program.Policies, 1)
-				for _, edge := range resp.CreateProgram.Program.Policies {
+			if len(tc.request.InternalPolicyIDs) > 0 {
+				require.Len(t, resp.CreateProgram.Program.InternalPolicies, 1)
+				for _, edge := range resp.CreateProgram.Program.InternalPolicies {
 					assert.Equal(t, policy.ID, edge.ID)
 				}
 			}
@@ -477,7 +477,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 		{
 			name: "happy path, update edge - policy",
 			request: openlaneclient.UpdateProgramInput{
-				AddPolicyIDs: []string{policy1.ID},
+				AddInternalPolicyIDs: []string{policy1.ID},
 			},
 			client:            suite.client.api,
 			ctx:               testUser1.UserCtx,
@@ -495,7 +495,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 		{
 			name: "update edge - policy - not allowed to access procedure",
 			request: openlaneclient.UpdateProgramInput{
-				AddPolicyIDs: []string{policy2.ID},
+				AddInternalPolicyIDs: []string{policy2.ID},
 			},
 			client:            suite.client.api,
 			ctx:               testUser1.UserCtx,
@@ -580,9 +580,9 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 				}
 			}
 
-			if len(tc.request.AddPolicyIDs) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Policies, 1)
-				for _, edge := range resp.UpdateProgram.Program.Policies {
+			if len(tc.request.AddInternalPolicyIDs) > 0 {
+				require.Len(t, resp.UpdateProgram.Program.InternalPolicies, 1)
+				for _, edge := range resp.UpdateProgram.Program.InternalPolicies {
 					assert.Equal(t, policy1.ID, edge.ID)
 				}
 			}

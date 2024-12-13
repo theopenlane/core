@@ -369,34 +369,34 @@ func (pu *ProgramUpdate) AddSubcontrols(s ...*Subcontrol) *ProgramUpdate {
 	return pu.AddSubcontrolIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (pu *ProgramUpdate) AddControlobjectiveIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (pu *ProgramUpdate) AddControlObjectiveIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddControlObjectiveIDs(ids...)
 	return pu
 }
 
-// AddControlobjectives adds the "controlobjectives" edges to the ControlObjective entity.
-func (pu *ProgramUpdate) AddControlobjectives(c ...*ControlObjective) *ProgramUpdate {
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (pu *ProgramUpdate) AddControlObjectives(c ...*ControlObjective) *ProgramUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return pu.AddControlobjectiveIDs(ids...)
+	return pu.AddControlObjectiveIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policies" edge to the InternalPolicy entity by IDs.
-func (pu *ProgramUpdate) AddPolicyIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (pu *ProgramUpdate) AddInternalPolicyIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddInternalPolicyIDs(ids...)
 	return pu
 }
 
-// AddPolicies adds the "policies" edges to the InternalPolicy entity.
-func (pu *ProgramUpdate) AddPolicies(i ...*InternalPolicy) *ProgramUpdate {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (pu *ProgramUpdate) AddInternalPolicies(i ...*InternalPolicy) *ProgramUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return pu.AddPolicyIDs(ids...)
+	return pu.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
@@ -489,19 +489,19 @@ func (pu *ProgramUpdate) AddNarratives(n ...*Narrative) *ProgramUpdate {
 	return pu.AddNarrativeIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (pu *ProgramUpdate) AddActionplanIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (pu *ProgramUpdate) AddActionPlanIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddActionPlanIDs(ids...)
 	return pu
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (pu *ProgramUpdate) AddActionplans(a ...*ActionPlan) *ProgramUpdate {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (pu *ProgramUpdate) AddActionPlans(a ...*ActionPlan) *ProgramUpdate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return pu.AddActionplanIDs(ids...)
+	return pu.AddActionPlanIDs(ids...)
 }
 
 // AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
@@ -665,46 +665,46 @@ func (pu *ProgramUpdate) RemoveSubcontrols(s ...*Subcontrol) *ProgramUpdate {
 	return pu.RemoveSubcontrolIDs(ids...)
 }
 
-// ClearControlobjectives clears all "controlobjectives" edges to the ControlObjective entity.
-func (pu *ProgramUpdate) ClearControlobjectives() *ProgramUpdate {
-	pu.mutation.ClearControlobjectives()
+// ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
+func (pu *ProgramUpdate) ClearControlObjectives() *ProgramUpdate {
+	pu.mutation.ClearControlObjectives()
 	return pu
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to ControlObjective entities by IDs.
-func (pu *ProgramUpdate) RemoveControlobjectiveIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveControlobjectiveIDs(ids...)
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
+func (pu *ProgramUpdate) RemoveControlObjectiveIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveControlObjectiveIDs(ids...)
 	return pu
 }
 
-// RemoveControlobjectives removes "controlobjectives" edges to ControlObjective entities.
-func (pu *ProgramUpdate) RemoveControlobjectives(c ...*ControlObjective) *ProgramUpdate {
+// RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
+func (pu *ProgramUpdate) RemoveControlObjectives(c ...*ControlObjective) *ProgramUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return pu.RemoveControlobjectiveIDs(ids...)
+	return pu.RemoveControlObjectiveIDs(ids...)
 }
 
-// ClearPolicies clears all "policies" edges to the InternalPolicy entity.
-func (pu *ProgramUpdate) ClearPolicies() *ProgramUpdate {
-	pu.mutation.ClearPolicies()
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (pu *ProgramUpdate) ClearInternalPolicies() *ProgramUpdate {
+	pu.mutation.ClearInternalPolicies()
 	return pu
 }
 
-// RemovePolicyIDs removes the "policies" edge to InternalPolicy entities by IDs.
-func (pu *ProgramUpdate) RemovePolicyIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemovePolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (pu *ProgramUpdate) RemoveInternalPolicyIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveInternalPolicyIDs(ids...)
 	return pu
 }
 
-// RemovePolicies removes "policies" edges to InternalPolicy entities.
-func (pu *ProgramUpdate) RemovePolicies(i ...*InternalPolicy) *ProgramUpdate {
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (pu *ProgramUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *ProgramUpdate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return pu.RemovePolicyIDs(ids...)
+	return pu.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
@@ -833,25 +833,25 @@ func (pu *ProgramUpdate) RemoveNarratives(n ...*Narrative) *ProgramUpdate {
 	return pu.RemoveNarrativeIDs(ids...)
 }
 
-// ClearActionplans clears all "actionplans" edges to the ActionPlan entity.
-func (pu *ProgramUpdate) ClearActionplans() *ProgramUpdate {
-	pu.mutation.ClearActionplans()
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (pu *ProgramUpdate) ClearActionPlans() *ProgramUpdate {
+	pu.mutation.ClearActionPlans()
 	return pu
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to ActionPlan entities by IDs.
-func (pu *ProgramUpdate) RemoveActionplanIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveActionplanIDs(ids...)
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (pu *ProgramUpdate) RemoveActionPlanIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveActionPlanIDs(ids...)
 	return pu
 }
 
-// RemoveActionplans removes "actionplans" edges to ActionPlan entities.
-func (pu *ProgramUpdate) RemoveActionplans(a ...*ActionPlan) *ProgramUpdate {
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (pu *ProgramUpdate) RemoveActionPlans(a ...*ActionPlan) *ProgramUpdate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return pu.RemoveActionplanIDs(ids...)
+	return pu.RemoveActionPlanIDs(ids...)
 }
 
 // ClearStandards clears all "standards" edges to the Standard entity.
@@ -1342,97 +1342,97 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ControlobjectivesCleared() {
+	if pu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ControlobjectivesTable,
-			Columns: program.ControlobjectivesPrimaryKey,
+			Table:   program.ControlObjectivesTable,
+			Columns: program.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControlobjectives
+		edge.Schema = pu.schemaConfig.ProgramControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedControlobjectivesIDs(); len(nodes) > 0 && !pu.mutation.ControlobjectivesCleared() {
+	if nodes := pu.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !pu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ControlobjectivesTable,
-			Columns: program.ControlobjectivesPrimaryKey,
+			Table:   program.ControlObjectivesTable,
+			Columns: program.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControlobjectives
+		edge.Schema = pu.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ControlobjectivesTable,
-			Columns: program.ControlobjectivesPrimaryKey,
+			Table:   program.ControlObjectivesTable,
+			Columns: program.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControlobjectives
+		edge.Schema = pu.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.PoliciesCleared() {
+	if pu.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.PoliciesTable,
-			Columns: program.PoliciesPrimaryKey,
+			Table:   program.InternalPoliciesTable,
+			Columns: program.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramPolicies
+		edge.Schema = pu.schemaConfig.ProgramInternalPolicies
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedPoliciesIDs(); len(nodes) > 0 && !pu.mutation.PoliciesCleared() {
+	if nodes := pu.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !pu.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.PoliciesTable,
-			Columns: program.PoliciesPrimaryKey,
+			Table:   program.InternalPoliciesTable,
+			Columns: program.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramPolicies
+		edge.Schema = pu.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.PoliciesIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.PoliciesTable,
-			Columns: program.PoliciesPrimaryKey,
+			Table:   program.InternalPoliciesTable,
+			Columns: program.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramPolicies
+		edge.Schema = pu.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1726,49 +1726,49 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ActionplansCleared() {
+	if pu.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ActionplansTable,
-			Columns: program.ActionplansPrimaryKey,
+			Table:   program.ActionPlansTable,
+			Columns: program.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramActionplans
+		edge.Schema = pu.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedActionplansIDs(); len(nodes) > 0 && !pu.mutation.ActionplansCleared() {
+	if nodes := pu.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !pu.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ActionplansTable,
-			Columns: program.ActionplansPrimaryKey,
+			Table:   program.ActionPlansTable,
+			Columns: program.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramActionplans
+		edge.Schema = pu.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ActionplansTable,
-			Columns: program.ActionplansPrimaryKey,
+			Table:   program.ActionPlansTable,
+			Columns: program.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramActionplans
+		edge.Schema = pu.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2283,34 +2283,34 @@ func (puo *ProgramUpdateOne) AddSubcontrols(s ...*Subcontrol) *ProgramUpdateOne 
 	return puo.AddSubcontrolIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (puo *ProgramUpdateOne) AddControlobjectiveIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (puo *ProgramUpdateOne) AddControlObjectiveIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddControlObjectiveIDs(ids...)
 	return puo
 }
 
-// AddControlobjectives adds the "controlobjectives" edges to the ControlObjective entity.
-func (puo *ProgramUpdateOne) AddControlobjectives(c ...*ControlObjective) *ProgramUpdateOne {
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (puo *ProgramUpdateOne) AddControlObjectives(c ...*ControlObjective) *ProgramUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return puo.AddControlobjectiveIDs(ids...)
+	return puo.AddControlObjectiveIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policies" edge to the InternalPolicy entity by IDs.
-func (puo *ProgramUpdateOne) AddPolicyIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (puo *ProgramUpdateOne) AddInternalPolicyIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddInternalPolicyIDs(ids...)
 	return puo
 }
 
-// AddPolicies adds the "policies" edges to the InternalPolicy entity.
-func (puo *ProgramUpdateOne) AddPolicies(i ...*InternalPolicy) *ProgramUpdateOne {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (puo *ProgramUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *ProgramUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return puo.AddPolicyIDs(ids...)
+	return puo.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
@@ -2403,19 +2403,19 @@ func (puo *ProgramUpdateOne) AddNarratives(n ...*Narrative) *ProgramUpdateOne {
 	return puo.AddNarrativeIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (puo *ProgramUpdateOne) AddActionplanIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (puo *ProgramUpdateOne) AddActionPlanIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddActionPlanIDs(ids...)
 	return puo
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (puo *ProgramUpdateOne) AddActionplans(a ...*ActionPlan) *ProgramUpdateOne {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (puo *ProgramUpdateOne) AddActionPlans(a ...*ActionPlan) *ProgramUpdateOne {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return puo.AddActionplanIDs(ids...)
+	return puo.AddActionPlanIDs(ids...)
 }
 
 // AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
@@ -2579,46 +2579,46 @@ func (puo *ProgramUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ProgramUpdateO
 	return puo.RemoveSubcontrolIDs(ids...)
 }
 
-// ClearControlobjectives clears all "controlobjectives" edges to the ControlObjective entity.
-func (puo *ProgramUpdateOne) ClearControlobjectives() *ProgramUpdateOne {
-	puo.mutation.ClearControlobjectives()
+// ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
+func (puo *ProgramUpdateOne) ClearControlObjectives() *ProgramUpdateOne {
+	puo.mutation.ClearControlObjectives()
 	return puo
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to ControlObjective entities by IDs.
-func (puo *ProgramUpdateOne) RemoveControlobjectiveIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveControlobjectiveIDs(ids...)
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
+func (puo *ProgramUpdateOne) RemoveControlObjectiveIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveControlObjectiveIDs(ids...)
 	return puo
 }
 
-// RemoveControlobjectives removes "controlobjectives" edges to ControlObjective entities.
-func (puo *ProgramUpdateOne) RemoveControlobjectives(c ...*ControlObjective) *ProgramUpdateOne {
+// RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
+func (puo *ProgramUpdateOne) RemoveControlObjectives(c ...*ControlObjective) *ProgramUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return puo.RemoveControlobjectiveIDs(ids...)
+	return puo.RemoveControlObjectiveIDs(ids...)
 }
 
-// ClearPolicies clears all "policies" edges to the InternalPolicy entity.
-func (puo *ProgramUpdateOne) ClearPolicies() *ProgramUpdateOne {
-	puo.mutation.ClearPolicies()
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (puo *ProgramUpdateOne) ClearInternalPolicies() *ProgramUpdateOne {
+	puo.mutation.ClearInternalPolicies()
 	return puo
 }
 
-// RemovePolicyIDs removes the "policies" edge to InternalPolicy entities by IDs.
-func (puo *ProgramUpdateOne) RemovePolicyIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemovePolicyIDs(ids...)
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (puo *ProgramUpdateOne) RemoveInternalPolicyIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveInternalPolicyIDs(ids...)
 	return puo
 }
 
-// RemovePolicies removes "policies" edges to InternalPolicy entities.
-func (puo *ProgramUpdateOne) RemovePolicies(i ...*InternalPolicy) *ProgramUpdateOne {
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (puo *ProgramUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *ProgramUpdateOne {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return puo.RemovePolicyIDs(ids...)
+	return puo.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
@@ -2747,25 +2747,25 @@ func (puo *ProgramUpdateOne) RemoveNarratives(n ...*Narrative) *ProgramUpdateOne
 	return puo.RemoveNarrativeIDs(ids...)
 }
 
-// ClearActionplans clears all "actionplans" edges to the ActionPlan entity.
-func (puo *ProgramUpdateOne) ClearActionplans() *ProgramUpdateOne {
-	puo.mutation.ClearActionplans()
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (puo *ProgramUpdateOne) ClearActionPlans() *ProgramUpdateOne {
+	puo.mutation.ClearActionPlans()
 	return puo
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to ActionPlan entities by IDs.
-func (puo *ProgramUpdateOne) RemoveActionplanIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveActionplanIDs(ids...)
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (puo *ProgramUpdateOne) RemoveActionPlanIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveActionPlanIDs(ids...)
 	return puo
 }
 
-// RemoveActionplans removes "actionplans" edges to ActionPlan entities.
-func (puo *ProgramUpdateOne) RemoveActionplans(a ...*ActionPlan) *ProgramUpdateOne {
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (puo *ProgramUpdateOne) RemoveActionPlans(a ...*ActionPlan) *ProgramUpdateOne {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return puo.RemoveActionplanIDs(ids...)
+	return puo.RemoveActionPlanIDs(ids...)
 }
 
 // ClearStandards clears all "standards" edges to the Standard entity.
@@ -3286,97 +3286,97 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ControlobjectivesCleared() {
+	if puo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ControlobjectivesTable,
-			Columns: program.ControlobjectivesPrimaryKey,
+			Table:   program.ControlObjectivesTable,
+			Columns: program.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControlobjectives
+		edge.Schema = puo.schemaConfig.ProgramControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedControlobjectivesIDs(); len(nodes) > 0 && !puo.mutation.ControlobjectivesCleared() {
+	if nodes := puo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !puo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ControlobjectivesTable,
-			Columns: program.ControlobjectivesPrimaryKey,
+			Table:   program.ControlObjectivesTable,
+			Columns: program.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControlobjectives
+		edge.Schema = puo.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ControlobjectivesTable,
-			Columns: program.ControlobjectivesPrimaryKey,
+			Table:   program.ControlObjectivesTable,
+			Columns: program.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControlobjectives
+		edge.Schema = puo.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.PoliciesCleared() {
+	if puo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.PoliciesTable,
-			Columns: program.PoliciesPrimaryKey,
+			Table:   program.InternalPoliciesTable,
+			Columns: program.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramPolicies
+		edge.Schema = puo.schemaConfig.ProgramInternalPolicies
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedPoliciesIDs(); len(nodes) > 0 && !puo.mutation.PoliciesCleared() {
+	if nodes := puo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !puo.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.PoliciesTable,
-			Columns: program.PoliciesPrimaryKey,
+			Table:   program.InternalPoliciesTable,
+			Columns: program.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramPolicies
+		edge.Schema = puo.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.PoliciesIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.PoliciesTable,
-			Columns: program.PoliciesPrimaryKey,
+			Table:   program.InternalPoliciesTable,
+			Columns: program.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramPolicies
+		edge.Schema = puo.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3670,49 +3670,49 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ActionplansCleared() {
+	if puo.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ActionplansTable,
-			Columns: program.ActionplansPrimaryKey,
+			Table:   program.ActionPlansTable,
+			Columns: program.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramActionplans
+		edge.Schema = puo.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedActionplansIDs(); len(nodes) > 0 && !puo.mutation.ActionplansCleared() {
+	if nodes := puo.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !puo.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ActionplansTable,
-			Columns: program.ActionplansPrimaryKey,
+			Table:   program.ActionPlansTable,
+			Columns: program.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramActionplans
+		edge.Schema = puo.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.ActionplansTable,
-			Columns: program.ActionplansPrimaryKey,
+			Table:   program.ActionPlansTable,
+			Columns: program.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramActionplans
+		edge.Schema = puo.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

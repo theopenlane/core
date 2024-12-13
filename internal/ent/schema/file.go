@@ -82,13 +82,13 @@ func (File) Edges() []ent.Edge {
 			Ref("files"),
 		edge.From("entity", Entity.Type).
 			Ref("files"),
-		edge.From("usersetting", UserSetting.Type).
+		edge.From("user_setting", UserSetting.Type).
 			Ref("files"),
-		edge.From("organizationsetting", OrganizationSetting.Type).
+		edge.From("organization_setting", OrganizationSetting.Type).
 			Ref("files"),
 		edge.From("template", Template.Type).
 			Ref("files"),
-		edge.From("documentdata", DocumentData.Type).
+		edge.From("document_data", DocumentData.Type).
 			Ref("files"),
 		edge.To("events", Event.Type),
 		edge.From("program", Program.Type).

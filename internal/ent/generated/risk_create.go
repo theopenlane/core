@@ -355,19 +355,19 @@ func (rc *RiskCreate) AddProcedure(p ...*Procedure) *RiskCreate {
 	return rc.AddProcedureIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (rc *RiskCreate) AddActionplanIDs(ids ...string) *RiskCreate {
-	rc.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (rc *RiskCreate) AddActionPlanIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddActionPlanIDs(ids...)
 	return rc
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (rc *RiskCreate) AddActionplans(a ...*ActionPlan) *RiskCreate {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (rc *RiskCreate) AddActionPlans(a ...*ActionPlan) *RiskCreate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return rc.AddActionplanIDs(ids...)
+	return rc.AddActionPlanIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -710,18 +710,18 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := rc.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := rc.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   risk.ActionplansTable,
-			Columns: risk.ActionplansPrimaryKey,
+			Table:   risk.ActionPlansTable,
+			Columns: risk.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = rc.schemaConfig.RiskActionplans
+		edge.Schema = rc.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -30,30 +30,30 @@ import (
 // ProcedureQuery is the builder for querying Procedure entities.
 type ProcedureQuery struct {
 	config
-	ctx                     *QueryContext
-	order                   []procedure.OrderOption
-	inters                  []Interceptor
-	predicates              []predicate.Procedure
-	withOwner               *OrganizationQuery
-	withBlockedGroups       *GroupQuery
-	withEditors             *GroupQuery
-	withControl             *ControlQuery
-	withInternalpolicy      *InternalPolicyQuery
-	withNarratives          *NarrativeQuery
-	withRisks               *RiskQuery
-	withTasks               *TaskQuery
-	withPrograms            *ProgramQuery
-	withFKs                 bool
-	loadTotal               []func(context.Context, []*Procedure) error
-	modifiers               []func(*sql.Selector)
-	withNamedBlockedGroups  map[string]*GroupQuery
-	withNamedEditors        map[string]*GroupQuery
-	withNamedControl        map[string]*ControlQuery
-	withNamedInternalpolicy map[string]*InternalPolicyQuery
-	withNamedNarratives     map[string]*NarrativeQuery
-	withNamedRisks          map[string]*RiskQuery
-	withNamedTasks          map[string]*TaskQuery
-	withNamedPrograms       map[string]*ProgramQuery
+	ctx                       *QueryContext
+	order                     []procedure.OrderOption
+	inters                    []Interceptor
+	predicates                []predicate.Procedure
+	withOwner                 *OrganizationQuery
+	withBlockedGroups         *GroupQuery
+	withEditors               *GroupQuery
+	withControls              *ControlQuery
+	withInternalPolicies      *InternalPolicyQuery
+	withNarratives            *NarrativeQuery
+	withRisks                 *RiskQuery
+	withTasks                 *TaskQuery
+	withPrograms              *ProgramQuery
+	withFKs                   bool
+	loadTotal                 []func(context.Context, []*Procedure) error
+	modifiers                 []func(*sql.Selector)
+	withNamedBlockedGroups    map[string]*GroupQuery
+	withNamedEditors          map[string]*GroupQuery
+	withNamedControls         map[string]*ControlQuery
+	withNamedInternalPolicies map[string]*InternalPolicyQuery
+	withNamedNarratives       map[string]*NarrativeQuery
+	withNamedRisks            map[string]*RiskQuery
+	withNamedTasks            map[string]*TaskQuery
+	withNamedPrograms         map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -165,8 +165,8 @@ func (pq *ProcedureQuery) QueryEditors() *GroupQuery {
 	return query
 }
 
-// QueryControl chains the current query on the "control" edge.
-func (pq *ProcedureQuery) QueryControl() *ControlQuery {
+// QueryControls chains the current query on the "controls" edge.
+func (pq *ProcedureQuery) QueryControls() *ControlQuery {
 	query := (&ControlClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -179,7 +179,7 @@ func (pq *ProcedureQuery) QueryControl() *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ControlTable, procedure.ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ControlsTable, procedure.ControlsPrimaryKey...),
 		)
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -190,8 +190,8 @@ func (pq *ProcedureQuery) QueryControl() *ControlQuery {
 	return query
 }
 
-// QueryInternalpolicy chains the current query on the "internalpolicy" edge.
-func (pq *ProcedureQuery) QueryInternalpolicy() *InternalPolicyQuery {
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (pq *ProcedureQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -204,7 +204,7 @@ func (pq *ProcedureQuery) QueryInternalpolicy() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, procedure.InternalpolicyTable, procedure.InternalpolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, procedure.InternalPoliciesTable, procedure.InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -502,20 +502,20 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 		return nil
 	}
 	return &ProcedureQuery{
-		config:             pq.config,
-		ctx:                pq.ctx.Clone(),
-		order:              append([]procedure.OrderOption{}, pq.order...),
-		inters:             append([]Interceptor{}, pq.inters...),
-		predicates:         append([]predicate.Procedure{}, pq.predicates...),
-		withOwner:          pq.withOwner.Clone(),
-		withBlockedGroups:  pq.withBlockedGroups.Clone(),
-		withEditors:        pq.withEditors.Clone(),
-		withControl:        pq.withControl.Clone(),
-		withInternalpolicy: pq.withInternalpolicy.Clone(),
-		withNarratives:     pq.withNarratives.Clone(),
-		withRisks:          pq.withRisks.Clone(),
-		withTasks:          pq.withTasks.Clone(),
-		withPrograms:       pq.withPrograms.Clone(),
+		config:               pq.config,
+		ctx:                  pq.ctx.Clone(),
+		order:                append([]procedure.OrderOption{}, pq.order...),
+		inters:               append([]Interceptor{}, pq.inters...),
+		predicates:           append([]predicate.Procedure{}, pq.predicates...),
+		withOwner:            pq.withOwner.Clone(),
+		withBlockedGroups:    pq.withBlockedGroups.Clone(),
+		withEditors:          pq.withEditors.Clone(),
+		withControls:         pq.withControls.Clone(),
+		withInternalPolicies: pq.withInternalPolicies.Clone(),
+		withNarratives:       pq.withNarratives.Clone(),
+		withRisks:            pq.withRisks.Clone(),
+		withTasks:            pq.withTasks.Clone(),
+		withPrograms:         pq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       pq.sql.Clone(),
 		path:      pq.path,
@@ -556,25 +556,25 @@ func (pq *ProcedureQuery) WithEditors(opts ...func(*GroupQuery)) *ProcedureQuery
 	return pq
 }
 
-// WithControl tells the query-builder to eager-load the nodes that are connected to
-// the "control" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithControl(opts ...func(*ControlQuery)) *ProcedureQuery {
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithControls(opts ...func(*ControlQuery)) *ProcedureQuery {
 	query := (&ControlClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withControl = query
+	pq.withControls = query
 	return pq
 }
 
-// WithInternalpolicy tells the query-builder to eager-load the nodes that are connected to
-// the "internalpolicy" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithInternalpolicy(opts ...func(*InternalPolicyQuery)) *ProcedureQuery {
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ProcedureQuery {
 	query := (&InternalPolicyClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withInternalpolicy = query
+	pq.withInternalPolicies = query
 	return pq
 }
 
@@ -711,8 +711,8 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			pq.withOwner != nil,
 			pq.withBlockedGroups != nil,
 			pq.withEditors != nil,
-			pq.withControl != nil,
-			pq.withInternalpolicy != nil,
+			pq.withControls != nil,
+			pq.withInternalPolicies != nil,
 			pq.withNarratives != nil,
 			pq.withRisks != nil,
 			pq.withTasks != nil,
@@ -765,17 +765,17 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
-	if query := pq.withControl; query != nil {
-		if err := pq.loadControl(ctx, query, nodes,
-			func(n *Procedure) { n.Edges.Control = []*Control{} },
-			func(n *Procedure, e *Control) { n.Edges.Control = append(n.Edges.Control, e) }); err != nil {
+	if query := pq.withControls; query != nil {
+		if err := pq.loadControls(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.Controls = []*Control{} },
+			func(n *Procedure, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withInternalpolicy; query != nil {
-		if err := pq.loadInternalpolicy(ctx, query, nodes,
-			func(n *Procedure) { n.Edges.Internalpolicy = []*InternalPolicy{} },
-			func(n *Procedure, e *InternalPolicy) { n.Edges.Internalpolicy = append(n.Edges.Internalpolicy, e) }); err != nil {
+	if query := pq.withInternalPolicies; query != nil {
+		if err := pq.loadInternalPolicies(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Procedure, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -821,17 +821,17 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedControl {
-		if err := pq.loadControl(ctx, query, nodes,
-			func(n *Procedure) { n.appendNamedControl(name) },
-			func(n *Procedure, e *Control) { n.appendNamedControl(name, e) }); err != nil {
+	for name, query := range pq.withNamedControls {
+		if err := pq.loadControls(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedControls(name) },
+			func(n *Procedure, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedInternalpolicy {
-		if err := pq.loadInternalpolicy(ctx, query, nodes,
-			func(n *Procedure) { n.appendNamedInternalpolicy(name) },
-			func(n *Procedure, e *InternalPolicy) { n.appendNamedInternalpolicy(name, e) }); err != nil {
+	for name, query := range pq.withNamedInternalPolicies {
+		if err := pq.loadInternalPolicies(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedInternalPolicies(name) },
+			func(n *Procedure, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1024,7 +1024,7 @@ func (pq *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, no
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Control)) error {
+func (pq *ProcedureQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1036,12 +1036,12 @@ func (pq *ProcedureQuery) loadControl(ctx context.Context, query *ControlQuery, 
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(procedure.ControlTable)
+		joinT := sql.Table(procedure.ControlsTable)
 		joinT.Schema(pq.schemaConfig.ControlProcedures)
-		s.Join(joinT).On(s.C(control.FieldID), joinT.C(procedure.ControlPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(procedure.ControlPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(procedure.ControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(procedure.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(procedure.ControlPrimaryKey[1]))
+		s.Select(joinT.C(procedure.ControlsPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1078,7 +1078,7 @@ func (pq *ProcedureQuery) loadControl(ctx context.Context, query *ControlQuery, 
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "control" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1086,7 +1086,7 @@ func (pq *ProcedureQuery) loadControl(ctx context.Context, query *ControlQuery, 
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadInternalpolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *InternalPolicy)) error {
+func (pq *ProcedureQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1098,12 +1098,12 @@ func (pq *ProcedureQuery) loadInternalpolicy(ctx context.Context, query *Interna
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(procedure.InternalpolicyTable)
+		joinT := sql.Table(procedure.InternalPoliciesTable)
 		joinT.Schema(pq.schemaConfig.InternalPolicyProcedures)
-		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(procedure.InternalpolicyPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(procedure.InternalpolicyPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(procedure.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(procedure.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(procedure.InternalpolicyPrimaryKey[1]))
+		s.Select(joinT.C(procedure.InternalPoliciesPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1140,7 +1140,7 @@ func (pq *ProcedureQuery) loadInternalpolicy(ctx context.Context, query *Interna
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "internalpolicy" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1526,31 +1526,31 @@ func (pq *ProcedureQuery) WithNamedEditors(name string, opts ...func(*GroupQuery
 	return pq
 }
 
-// WithNamedControl tells the query-builder to eager-load the nodes that are connected to the "control"
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedControl(name string, opts ...func(*ControlQuery)) *ProcedureQuery {
+func (pq *ProcedureQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ProcedureQuery {
 	query := (&ControlClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedControl == nil {
-		pq.withNamedControl = make(map[string]*ControlQuery)
+	if pq.withNamedControls == nil {
+		pq.withNamedControls = make(map[string]*ControlQuery)
 	}
-	pq.withNamedControl[name] = query
+	pq.withNamedControls[name] = query
 	return pq
 }
 
-// WithNamedInternalpolicy tells the query-builder to eager-load the nodes that are connected to the "internalpolicy"
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedInternalpolicy(name string, opts ...func(*InternalPolicyQuery)) *ProcedureQuery {
+func (pq *ProcedureQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *ProcedureQuery {
 	query := (&InternalPolicyClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedInternalpolicy == nil {
-		pq.withNamedInternalpolicy = make(map[string]*InternalPolicyQuery)
+	if pq.withNamedInternalPolicies == nil {
+		pq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
-	pq.withNamedInternalpolicy[name] = query
+	pq.withNamedInternalPolicies[name] = query
 	return pq
 }
 

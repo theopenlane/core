@@ -76,9 +76,9 @@ func (Program) Edges() []ent.Edge {
 		// programs can have 1:many subcontrols
 		edge.To("subcontrols", Subcontrol.Type),
 		// programs can have 1:many control objectives
-		edge.To("controlobjectives", ControlObjective.Type),
+		edge.To("control_objectives", ControlObjective.Type),
 		// programs can have 1:many associated policies
-		edge.To("policies", InternalPolicy.Type),
+		edge.To("internal_policies", InternalPolicy.Type),
 		// programs can have 1:many associated procedures
 		edge.To("procedures", Procedure.Type),
 		// programs can have 1:many associated risks
@@ -92,7 +92,7 @@ func (Program) Edges() []ent.Edge {
 		// programs can have 1:many associated narratives
 		edge.To("narratives", Narrative.Type),
 		// programs can have 1:many associated action plans
-		edge.To("actionplans", ActionPlan.Type),
+		edge.To("action_plans", ActionPlan.Type),
 		// programs can have 1:many associated standards (frameworks)
 		edge.From("standards", Standard.Type).
 			Ref("programs").

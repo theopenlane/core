@@ -241,19 +241,19 @@ func (nc *NarrativeCreate) AddViewers(g ...*Group) *NarrativeCreate {
 	return nc.AddViewerIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (nc *NarrativeCreate) AddPolicyIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (nc *NarrativeCreate) AddInternalPolicyIDs(ids ...string) *NarrativeCreate {
+	nc.mutation.AddInternalPolicyIDs(ids...)
 	return nc
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (nc *NarrativeCreate) AddPolicy(i ...*InternalPolicy) *NarrativeCreate {
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (nc *NarrativeCreate) AddInternalPolicy(i ...*InternalPolicy) *NarrativeCreate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return nc.AddPolicyIDs(ids...)
+	return nc.AddInternalPolicyIDs(ids...)
 }
 
 // AddControlIDs adds the "control" edge to the Control entity by IDs.
@@ -286,19 +286,19 @@ func (nc *NarrativeCreate) AddProcedure(p ...*Procedure) *NarrativeCreate {
 	return nc.AddProcedureIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjective" edge to the ControlObjective entity by IDs.
-func (nc *NarrativeCreate) AddControlobjectiveIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objective" edge to the ControlObjective entity by IDs.
+func (nc *NarrativeCreate) AddControlObjectiveIDs(ids ...string) *NarrativeCreate {
+	nc.mutation.AddControlObjectiveIDs(ids...)
 	return nc
 }
 
-// AddControlobjective adds the "controlobjective" edges to the ControlObjective entity.
-func (nc *NarrativeCreate) AddControlobjective(c ...*ControlObjective) *NarrativeCreate {
+// AddControlObjective adds the "control_objective" edges to the ControlObjective entity.
+func (nc *NarrativeCreate) AddControlObjective(c ...*ControlObjective) *NarrativeCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return nc.AddControlobjectiveIDs(ids...)
+	return nc.AddControlObjectiveIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -565,12 +565,12 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := nc.mutation.InternalPolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.PolicyTable,
-			Columns: narrative.PolicyPrimaryKey,
+			Table:   narrative.InternalPolicyTable,
+			Columns: narrative.InternalPolicyPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -616,12 +616,12 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.ControlobjectiveIDs(); len(nodes) > 0 {
+	if nodes := nc.mutation.ControlObjectiveIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ControlobjectiveTable,
-			Columns: narrative.ControlobjectivePrimaryKey,
+			Table:   narrative.ControlObjectiveTable,
+			Columns: narrative.ControlObjectivePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),

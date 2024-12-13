@@ -96,7 +96,7 @@ func (apq *ActionPlanQuery) QueryStandard() *StandardQuery {
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.StandardActionplans
+		step.Edge.Schema = schemaConfig.StandardActionPlans
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -121,7 +121,7 @@ func (apq *ActionPlanQuery) QueryRisk() *RiskQuery {
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.RiskActionplans
+		step.Edge.Schema = schemaConfig.RiskActionPlans
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -146,7 +146,7 @@ func (apq *ActionPlanQuery) QueryControl() *ControlQuery {
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlActionplans
+		step.Edge.Schema = schemaConfig.ControlActionPlans
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -171,7 +171,7 @@ func (apq *ActionPlanQuery) QueryUser() *UserQuery {
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserActionplans
+		step.Edge.Schema = schemaConfig.UserActionPlans
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -196,7 +196,7 @@ func (apq *ActionPlanQuery) QueryProgram() *ProgramQuery {
 		)
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramActionplans
+		step.Edge.Schema = schemaConfig.ProgramActionPlans
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -662,7 +662,7 @@ func (apq *ActionPlanQuery) loadStandard(ctx context.Context, query *StandardQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.StandardTable)
-		joinT.Schema(apq.schemaConfig.StandardActionplans)
+		joinT.Schema(apq.schemaConfig.StandardActionPlans)
 		s.Join(joinT).On(s.C(standard.FieldID), joinT.C(actionplan.StandardPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.StandardPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -724,7 +724,7 @@ func (apq *ActionPlanQuery) loadRisk(ctx context.Context, query *RiskQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.RiskTable)
-		joinT.Schema(apq.schemaConfig.RiskActionplans)
+		joinT.Schema(apq.schemaConfig.RiskActionPlans)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(actionplan.RiskPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.RiskPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -786,7 +786,7 @@ func (apq *ActionPlanQuery) loadControl(ctx context.Context, query *ControlQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.ControlTable)
-		joinT.Schema(apq.schemaConfig.ControlActionplans)
+		joinT.Schema(apq.schemaConfig.ControlActionPlans)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(actionplan.ControlPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.ControlPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -848,7 +848,7 @@ func (apq *ActionPlanQuery) loadUser(ctx context.Context, query *UserQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.UserTable)
-		joinT.Schema(apq.schemaConfig.UserActionplans)
+		joinT.Schema(apq.schemaConfig.UserActionPlans)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(actionplan.UserPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.UserPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -910,7 +910,7 @@ func (apq *ActionPlanQuery) loadProgram(ctx context.Context, query *ProgramQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.ProgramTable)
-		joinT.Schema(apq.schemaConfig.ProgramActionplans)
+		joinT.Schema(apq.schemaConfig.ProgramActionPlans)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(actionplan.ProgramPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.ProgramPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()

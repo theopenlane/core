@@ -3,7 +3,6 @@ package hooks
 import (
 	"context"
 	"slices"
-	"strings"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -55,14 +54,14 @@ func HookTaskAssignee() ent.Hook {
 							SubjectID:   assignee,
 							SubjectType: "user",
 							ObjectID:    taskID,
-							ObjectType:  m.Type(),
+							ObjectType:  getObjectTypeFromEntMutation(m),
 							Relation:    "assignee",
 						})
 
 						// get the current assignee and remove them
 						resp, err := utils.AuthzClientFromContext(ctx).ListUserRequest(ctx, fgax.ListRequest{
 							ObjectID:   taskID,
-							ObjectType: strings.ToLower(m.Type()),
+							ObjectType: getObjectTypeFromEntMutation(m),
 							Relation:   "assignee",
 						})
 						if err != nil {
@@ -80,7 +79,7 @@ func HookTaskAssignee() ent.Hook {
 								SubjectID:   user.Object.Id,
 								SubjectType: user.Object.Type,
 								ObjectID:    taskID,
-								ObjectType:  m.Type(),
+								ObjectType:  getObjectTypeFromEntMutation(m),
 								Relation:    "assignee",
 							})
 

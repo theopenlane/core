@@ -9,11 +9,16 @@ import (
 	goUpper "github.com/99designs/gqlgen/codegen/templates"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
+
+func getObjectTypeFromEntMutation(m ent.Mutation) string {
+	return strcase.SnakeCase(m.Type())
+}
 
 // getTuplesToAdd is the generic function to get the tuples that need to be added to the authz service based on the edges that were added
 // it is recommend to use the helper functions that call this instead of calling this directly
@@ -54,8 +59,8 @@ func createParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 		// this will be filled in by getTuplesToAdd based on the parent field
 		tr := fgax.TupleRequest{
 			SubjectType: subjectType,
-			ObjectID:    objectID, // this is the object id being created
-			ObjectType:  m.Type(), // this is the object type being created
+			ObjectID:    objectID,                        // this is the object id being created
+			ObjectType:  getObjectTypeFromEntMutation(m), // this is the object type being created
 			Relation:    fgax.ParentRelation,
 		}
 
@@ -78,8 +83,8 @@ func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID str
 	// this will be filled in by getTuplesToAdd based on the owner id field
 	tr := fgax.TupleRequest{
 		SubjectType: "organization",
-		ObjectID:    objectID, // this is the object id being created
-		ObjectType:  m.Type(), // this is the object type being created
+		ObjectID:    objectID,                        // this is the object id being created
+		ObjectType:  getObjectTypeFromEntMutation(m), // this is the object type being created
 		Relation:    fgax.ParentRelation,
 	}
 
@@ -104,8 +109,8 @@ func createTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string
 		tr := fgax.TupleRequest{
 			SubjectType:     subjectType,
 			SubjectRelation: fgax.MemberRelation,
-			ObjectID:        objectID, // this is the object id being created
-			ObjectType:      m.Type(), // this is the object type being created
+			ObjectID:        objectID,                        // this is the object id being created
+			ObjectType:      getObjectTypeFromEntMutation(m), // this is the object type being created
 			Relation:        relation.String(),
 		}
 
@@ -160,8 +165,8 @@ func removeParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 		// this will be filled in by getTuplesToRemove based on the parent field
 		tr := fgax.TupleRequest{
 			SubjectType: subjectType,
-			ObjectID:    objectID, // this is the object id being created
-			ObjectType:  m.Type(), // this is the object type being created
+			ObjectID:    objectID,                        // this is the object id being created
+			ObjectType:  getObjectTypeFromEntMutation(m), // this is the object type being created
 			Relation:    fgax.ParentRelation,
 		}
 
@@ -186,8 +191,8 @@ func removeTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string
 		tr := fgax.TupleRequest{
 			SubjectType:     subjectType,
 			SubjectRelation: fgax.MemberRelation,
-			ObjectID:        objectID, // this is the object id being created
-			ObjectType:      m.Type(), // this is the object type being created
+			ObjectID:        objectID,                        // this is the object id being created
+			ObjectType:      getObjectTypeFromEntMutation(m), // this is the object type being created
 			Relation:        relation.String(),
 		}
 

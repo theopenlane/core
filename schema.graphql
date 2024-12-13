@@ -1863,11 +1863,11 @@ type Control implements Node {
 	viewers: [Group!]
 	procedures: [Procedure!]
 	subcontrols: [Subcontrol!]
-	controlobjectives: [ControlObjective!]
+	controlObjectives: [ControlObjective!]
 	standard: [Standard!]
 	narratives: [Narrative!]
 	risks: [Risk!]
-	actionplans: [ActionPlan!]
+	actionPlans: [ActionPlan!]
 	tasks: [Task!]
 	programs: [Program!]
 }
@@ -2470,7 +2470,7 @@ type ControlObjective implements Node {
 	provides view access to the risk to members of the group
 	"""
 	viewers: [Group!]
-	policy: [InternalPolicy!]
+	internalPolicies: [InternalPolicy!]
 	controls: [Control!]
 	procedures: [Procedure!]
 	risks: [Risk!]
@@ -3325,10 +3325,10 @@ input ControlObjectiveWhereInput {
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
 	"""
-	policy edge predicates
+	internal_policies edge predicates
 	"""
-	hasPolicy: Boolean
-	hasPolicyWith: [InternalPolicyWhereInput!]
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -3739,10 +3739,10 @@ input ControlWhereInput {
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
-	controlobjectives edge predicates
+	control_objectives edge predicates
 	"""
-	hasControlobjectives: Boolean
-	hasControlobjectivesWith: [ControlObjectiveWhereInput!]
+	hasControlObjectives: Boolean
+	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
 	"""
 	standard edge predicates
 	"""
@@ -3759,10 +3759,10 @@ input ControlWhereInput {
 	hasRisks: Boolean
 	hasRisksWith: [RiskWhereInput!]
 	"""
-	actionplans edge predicates
+	action_plans edge predicates
 	"""
-	hasActionplans: Boolean
-	hasActionplansWith: [ActionPlanWhereInput!]
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
 	tasks edge predicates
 	"""
@@ -3946,11 +3946,11 @@ input CreateControlInput {
 	viewerIDs: [ID!]
 	procedureIDs: [ID!]
 	subcontrolIDs: [ID!]
-	controlobjectiveIDs: [ID!]
+	controlObjectiveIDs: [ID!]
 	standardIDs: [ID!]
 	narrativeIDs: [ID!]
 	riskIDs: [ID!]
-	actionplanIDs: [ID!]
+	actionPlanIDs: [ID!]
 	taskIDs: [ID!]
 	programIDs: [ID!]
 }
@@ -4011,7 +4011,7 @@ input CreateControlObjectiveInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
-	policyIDs: [ID!]
+	internalPolicyIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
 	riskIDs: [ID!]
@@ -4182,10 +4182,10 @@ input CreateFileInput {
 	groupIDs: [ID!]
 	contactIDs: [ID!]
 	entityIDs: [ID!]
-	usersettingIDs: [ID!]
-	organizationsettingIDs: [ID!]
+	userSettingIDs: [ID!]
+	organizationSettingIDs: [ID!]
 	templateIDs: [ID!]
-	documentdatumIDs: [ID!]
+	documentDatumIDs: [ID!]
 	eventIDs: [ID!]
 	programIDs: [ID!]
 }
@@ -4239,17 +4239,17 @@ input CreateGroupInput {
 	templateCreatorIDs: [ID!]
 	procedureEditorIDs: [ID!]
 	procedureBlockedGroupIDs: [ID!]
-	internalpolicyEditorIDs: [ID!]
-	internalpolicyBlockedGroupIDs: [ID!]
+	internalPolicyEditorIDs: [ID!]
+	internalPolicyBlockedGroupIDs: [ID!]
 	programEditorIDs: [ID!]
 	programBlockedGroupIDs: [ID!]
 	programViewerIDs: [ID!]
 	riskEditorIDs: [ID!]
 	riskBlockedGroupIDs: [ID!]
 	riskViewerIDs: [ID!]
-	controlobjectiveEditorIDs: [ID!]
-	controlobjectiveBlockedGroupIDs: [ID!]
-	controlobjectiveViewerIDs: [ID!]
+	controlObjectiveEditorIDs: [ID!]
+	controlObjectiveBlockedGroupIDs: [ID!]
+	controlObjectiveViewerIDs: [ID!]
 	controlEditorIDs: [ID!]
 	controlBlockedGroupIDs: [ID!]
 	controlViewerIDs: [ID!]
@@ -4396,7 +4396,7 @@ input CreateInternalPolicyInput {
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
-	controlobjectiveIDs: [ID!]
+	controlObjectiveIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
 	narrativeIDs: [ID!]
@@ -4465,10 +4465,10 @@ input CreateNarrativeInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
-	policyIDs: [ID!]
+	internalPolicyIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
-	controlobjectiveIDs: [ID!]
+	controlObjectiveIDs: [ID!]
 	programIDs: [ID!]
 }
 """
@@ -4589,8 +4589,8 @@ input CreateOrganizationInput {
 	templateIDs: [ID!]
 	integrationIDs: [ID!]
 	settingID: ID
-	documentdatumIDs: [ID!]
-	orgsubscriptionIDs: [ID!]
+	documentDatumIDs: [ID!]
+	orgSubscriptionIDs: [ID!]
 	personalAccessTokenIDs: [ID!]
 	apiTokenIDs: [ID!]
 	userIDs: [ID!]
@@ -4600,15 +4600,15 @@ input CreateOrganizationInput {
 	secretIDs: [ID!]
 	fileIDs: [ID!]
 	entityIDs: [ID!]
-	entitytypeIDs: [ID!]
+	entityTypeIDs: [ID!]
 	contactIDs: [ID!]
 	noteIDs: [ID!]
 	taskIDs: [ID!]
 	programIDs: [ID!]
 	procedureIDs: [ID!]
-	internalpolicyIDs: [ID!]
+	internalPolicyIDs: [ID!]
 	riskIDs: [ID!]
-	controlobjectiveIDs: [ID!]
+	controlObjectiveIDs: [ID!]
 	narrativeIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
@@ -4734,7 +4734,7 @@ input CreateProcedureInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	controlIDs: [ID!]
-	internalpolicyIDs: [ID!]
+	internalPolicyIDs: [ID!]
 	narrativeIDs: [ID!]
 	riskIDs: [ID!]
 	taskIDs: [ID!]
@@ -4787,15 +4787,15 @@ input CreateProgramInput {
 	viewerIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
-	controlobjectiveIDs: [ID!]
-	policyIDs: [ID!]
+	controlObjectiveIDs: [ID!]
+	internalPolicyIDs: [ID!]
 	procedureIDs: [ID!]
 	riskIDs: [ID!]
 	taskIDs: [ID!]
 	noteIDs: [ID!]
 	fileIDs: [ID!]
 	narrativeIDs: [ID!]
-	actionplanIDs: [ID!]
+	actionPlanIDs: [ID!]
 	standardIDs: [ID!]
 	userIDs: [ID!]
 }
@@ -4867,7 +4867,7 @@ input CreateRiskInput {
 	viewerIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
-	actionplanIDs: [ID!]
+	actionPlanIDs: [ID!]
 	programIDs: [ID!]
 }
 """
@@ -4919,10 +4919,10 @@ input CreateStandardInput {
 	json data with details of the standard
 	"""
 	details: Map
-	controlobjectiveIDs: [ID!]
+	controlObjectiveIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
-	actionplanIDs: [ID!]
+	actionPlanIDs: [ID!]
 	programIDs: [ID!]
 }
 """
@@ -5077,7 +5077,7 @@ input CreateTaskInput {
 	assigneeID: ID
 	organizationIDs: [ID!]
 	groupIDs: [ID!]
-	policyIDs: [ID!]
+	internalPolicyIDs: [ID!]
 	procedureIDs: [ID!]
 	controlIDs: [ID!]
 	controlObjectiveIDs: [ID!]
@@ -5176,7 +5176,7 @@ input CreateUserInput {
 	fileIDs: [ID!]
 	fileID: ID
 	eventIDs: [ID!]
-	actionplanIDs: [ID!]
+	actionPlanIDs: [ID!]
 	subcontrolIDs: [ID!]
 	assignerTaskIDs: [ID!]
 	assigneeTaskIDs: [ID!]
@@ -7576,10 +7576,10 @@ type File implements Node {
 	group: [Group!]
 	contact: [Contact!]
 	entity: [Entity!]
-	usersetting: [UserSetting!]
-	organizationsetting: [OrganizationSetting!]
+	userSetting: [UserSetting!]
+	organizationSetting: [OrganizationSetting!]
 	template: [Template!]
-	documentdata: [DocumentData!]
+	documentData: [DocumentData!]
 	events: [Event!]
 	program: [Program!]
 }
@@ -8455,25 +8455,25 @@ input FileWhereInput {
 	hasEntity: Boolean
 	hasEntityWith: [EntityWhereInput!]
 	"""
-	usersetting edge predicates
+	user_setting edge predicates
 	"""
-	hasUsersetting: Boolean
-	hasUsersettingWith: [UserSettingWhereInput!]
+	hasUserSetting: Boolean
+	hasUserSettingWith: [UserSettingWhereInput!]
 	"""
-	organizationsetting edge predicates
+	organization_setting edge predicates
 	"""
-	hasOrganizationsetting: Boolean
-	hasOrganizationsettingWith: [OrganizationSettingWhereInput!]
+	hasOrganizationSetting: Boolean
+	hasOrganizationSettingWith: [OrganizationSettingWhereInput!]
 	"""
 	template edge predicates
 	"""
 	hasTemplate: Boolean
 	hasTemplateWith: [TemplateWhereInput!]
 	"""
-	documentdata edge predicates
+	document_data edge predicates
 	"""
-	hasDocumentdata: Boolean
-	hasDocumentdataWith: [DocumentDataWhereInput!]
+	hasDocumentData: Boolean
+	hasDocumentDataWith: [DocumentDataWhereInput!]
 	"""
 	events edge predicates
 	"""
@@ -8533,17 +8533,17 @@ type Group implements Node {
 	templateCreators: [Organization!]
 	procedureEditors: [Procedure!]
 	procedureBlockedGroups: [Procedure!]
-	internalpolicyEditors: [InternalPolicy!]
-	internalpolicyBlockedGroups: [InternalPolicy!]
+	internalPolicyEditors: [InternalPolicy!]
+	internalPolicyBlockedGroups: [InternalPolicy!]
 	programEditors: [Program!]
 	programBlockedGroups: [Program!]
 	programViewers: [Program!]
 	riskEditors: [Risk!]
 	riskBlockedGroups: [Risk!]
 	riskViewers: [Risk!]
-	controlobjectiveEditors: [ControlObjective!]
-	controlobjectiveBlockedGroups: [ControlObjective!]
-	controlobjectiveViewers: [ControlObjective!]
+	controlObjectiveEditors: [ControlObjective!]
+	controlObjectiveBlockedGroups: [ControlObjective!]
+	controlObjectiveViewers: [ControlObjective!]
 	controlEditors: [Control!]
 	controlBlockedGroups: [Control!]
 	controlViewers: [Control!]
@@ -10205,15 +10205,15 @@ input GroupWhereInput {
 	hasProcedureBlockedGroups: Boolean
 	hasProcedureBlockedGroupsWith: [ProcedureWhereInput!]
 	"""
-	internalpolicy_editors edge predicates
+	internal_policy_editors edge predicates
 	"""
-	hasInternalpolicyEditors: Boolean
-	hasInternalpolicyEditorsWith: [InternalPolicyWhereInput!]
+	hasInternalPolicyEditors: Boolean
+	hasInternalPolicyEditorsWith: [InternalPolicyWhereInput!]
 	"""
-	internalpolicy_blocked_groups edge predicates
+	internal_policy_blocked_groups edge predicates
 	"""
-	hasInternalpolicyBlockedGroups: Boolean
-	hasInternalpolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
+	hasInternalPolicyBlockedGroups: Boolean
+	hasInternalPolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
 	"""
 	program_editors edge predicates
 	"""
@@ -10245,20 +10245,20 @@ input GroupWhereInput {
 	hasRiskViewers: Boolean
 	hasRiskViewersWith: [RiskWhereInput!]
 	"""
-	controlobjective_editors edge predicates
+	control_objective_editors edge predicates
 	"""
-	hasControlobjectiveEditors: Boolean
-	hasControlobjectiveEditorsWith: [ControlObjectiveWhereInput!]
+	hasControlObjectiveEditors: Boolean
+	hasControlObjectiveEditorsWith: [ControlObjectiveWhereInput!]
 	"""
-	controlobjective_blocked_groups edge predicates
+	control_objective_blocked_groups edge predicates
 	"""
-	hasControlobjectiveBlockedGroups: Boolean
-	hasControlobjectiveBlockedGroupsWith: [ControlObjectiveWhereInput!]
+	hasControlObjectiveBlockedGroups: Boolean
+	hasControlObjectiveBlockedGroupsWith: [ControlObjectiveWhereInput!]
 	"""
-	controlobjective_viewers edge predicates
+	control_objective_viewers edge predicates
 	"""
-	hasControlobjectiveViewers: Boolean
-	hasControlobjectiveViewersWith: [ControlObjectiveWhereInput!]
+	hasControlObjectiveViewers: Boolean
+	hasControlObjectiveViewersWith: [ControlObjectiveWhereInput!]
 	"""
 	control_editors edge predicates
 	"""
@@ -11563,7 +11563,7 @@ type InternalPolicy implements Node {
 	provides edit access to the risk to members of the group
 	"""
 	editors: [Group!]
-	controlobjectives: [ControlObjective!]
+	controlObjectives: [ControlObjective!]
 	controls: [Control!]
 	procedures: [Procedure!]
 	narratives: [Narrative!]
@@ -12294,10 +12294,10 @@ input InternalPolicyWhereInput {
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
 	"""
-	controlobjectives edge predicates
+	control_objectives edge predicates
 	"""
-	hasControlobjectives: Boolean
-	hasControlobjectivesWith: [ControlObjectiveWhereInput!]
+	hasControlObjectives: Boolean
+	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -14394,10 +14394,10 @@ type Narrative implements Node {
 	provides view access to the risk to members of the group
 	"""
 	viewers: [Group!]
-	policy: [InternalPolicy!]
+	internalPolicy: [InternalPolicy!]
 	control: [Control!]
 	procedure: [Procedure!]
-	controlobjective: [ControlObjective!]
+	controlObjective: [ControlObjective!]
 	programs: [Program!]
 }
 """
@@ -14965,10 +14965,10 @@ input NarrativeWhereInput {
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
 	"""
-	policy edge predicates
+	internal_policy edge predicates
 	"""
-	hasPolicy: Boolean
-	hasPolicyWith: [InternalPolicyWhereInput!]
+	hasInternalPolicy: Boolean
+	hasInternalPolicyWith: [InternalPolicyWhereInput!]
 	"""
 	control edge predicates
 	"""
@@ -14980,10 +14980,10 @@ input NarrativeWhereInput {
 	hasProcedure: Boolean
 	hasProcedureWith: [ProcedureWhereInput!]
 	"""
-	controlobjective edge predicates
+	control_objective edge predicates
 	"""
-	hasControlobjective: Boolean
-	hasControlobjectiveWith: [ControlObjectiveWhereInput!]
+	hasControlObjective: Boolean
+	hasControlObjectiveWith: [ControlObjectiveWhereInput!]
 	"""
 	programs edge predicates
 	"""
@@ -16788,8 +16788,8 @@ type Organization implements Node {
 	templates: [Template!]
 	integrations: [Integration!]
 	setting: OrganizationSetting
-	documentdata: [DocumentData!]
-	orgsubscriptions: [OrgSubscription!]
+	documentData: [DocumentData!]
+	orgSubscriptions: [OrgSubscription!]
 	personalAccessTokens: [PersonalAccessToken!]
 	apiTokens: [APIToken!]
 	users: [User!]
@@ -16799,15 +16799,15 @@ type Organization implements Node {
 	secrets: [Hush!]
 	files: [File!]
 	entities: [Entity!]
-	entitytypes: [EntityType!]
+	entityTypes: [EntityType!]
 	contacts: [Contact!]
 	notes: [Note!]
 	tasks: [Task!]
 	programs: [Program!]
 	procedures: [Procedure!]
-	internalpolicies: [InternalPolicy!]
+	internalPolicies: [InternalPolicy!]
 	risks: [Risk!]
-	controlobjectives: [ControlObjective!]
+	controlObjectives: [ControlObjective!]
 	narratives: [Narrative!]
 	controls: [Control!]
 	subcontrols: [Subcontrol!]
@@ -18231,15 +18231,15 @@ input OrganizationWhereInput {
 	hasSetting: Boolean
 	hasSettingWith: [OrganizationSettingWhereInput!]
 	"""
-	documentdata edge predicates
+	document_data edge predicates
 	"""
-	hasDocumentdata: Boolean
-	hasDocumentdataWith: [DocumentDataWhereInput!]
+	hasDocumentData: Boolean
+	hasDocumentDataWith: [DocumentDataWhereInput!]
 	"""
-	orgsubscriptions edge predicates
+	org_subscriptions edge predicates
 	"""
-	hasOrgsubscriptions: Boolean
-	hasOrgsubscriptionsWith: [OrgSubscriptionWhereInput!]
+	hasOrgSubscriptions: Boolean
+	hasOrgSubscriptionsWith: [OrgSubscriptionWhereInput!]
 	"""
 	personal_access_tokens edge predicates
 	"""
@@ -18286,10 +18286,10 @@ input OrganizationWhereInput {
 	hasEntities: Boolean
 	hasEntitiesWith: [EntityWhereInput!]
 	"""
-	entitytypes edge predicates
+	entity_types edge predicates
 	"""
-	hasEntitytypes: Boolean
-	hasEntitytypesWith: [EntityTypeWhereInput!]
+	hasEntityTypes: Boolean
+	hasEntityTypesWith: [EntityTypeWhereInput!]
 	"""
 	contacts edge predicates
 	"""
@@ -18316,20 +18316,20 @@ input OrganizationWhereInput {
 	hasProcedures: Boolean
 	hasProceduresWith: [ProcedureWhereInput!]
 	"""
-	internalpolicies edge predicates
+	internal_policies edge predicates
 	"""
-	hasInternalpolicies: Boolean
-	hasInternalpoliciesWith: [InternalPolicyWhereInput!]
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	risks edge predicates
 	"""
 	hasRisks: Boolean
 	hasRisksWith: [RiskWhereInput!]
 	"""
-	controlobjectives edge predicates
+	control_objectives edge predicates
 	"""
-	hasControlobjectives: Boolean
-	hasControlobjectivesWith: [ControlObjectiveWhereInput!]
+	hasControlObjectives: Boolean
+	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
 	"""
 	narratives edge predicates
 	"""
@@ -18709,8 +18709,8 @@ type Procedure implements Node {
 	provides edit access to the risk to members of the group
 	"""
 	editors: [Group!]
-	control: [Control!]
-	internalpolicy: [InternalPolicy!]
+	controls: [Control!]
+	internalPolicies: [InternalPolicy!]
 	narratives: [Narrative!]
 	risks: [Risk!]
 	tasks: [Task!]
@@ -19480,15 +19480,15 @@ input ProcedureWhereInput {
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
 	"""
-	control edge predicates
+	controls edge predicates
 	"""
-	hasControl: Boolean
-	hasControlWith: [ControlWhereInput!]
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
-	internalpolicy edge predicates
+	internal_policies edge predicates
 	"""
-	hasInternalpolicy: Boolean
-	hasInternalpolicyWith: [InternalPolicyWhereInput!]
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	narratives edge predicates
 	"""
@@ -19573,15 +19573,15 @@ type Program implements Node {
 	viewers: [Group!]
 	controls: [Control!]
 	subcontrols: [Subcontrol!]
-	controlobjectives: [ControlObjective!]
-	policies: [InternalPolicy!]
+	controlObjectives: [ControlObjective!]
+	internalPolicies: [InternalPolicy!]
 	procedures: [Procedure!]
 	risks: [Risk!]
 	tasks: [Task!]
 	notes: [Note!]
 	files: [File!]
 	narratives: [Narrative!]
-	actionplans: [ActionPlan!]
+	actionPlans: [ActionPlan!]
 	"""
 	the framework(s) that the program is based on
 	"""
@@ -20725,15 +20725,15 @@ input ProgramWhereInput {
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
-	controlobjectives edge predicates
+	control_objectives edge predicates
 	"""
-	hasControlobjectives: Boolean
-	hasControlobjectivesWith: [ControlObjectiveWhereInput!]
+	hasControlObjectives: Boolean
+	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
 	"""
-	policies edge predicates
+	internal_policies edge predicates
 	"""
-	hasPolicies: Boolean
-	hasPoliciesWith: [InternalPolicyWhereInput!]
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	procedures edge predicates
 	"""
@@ -20765,10 +20765,10 @@ input ProgramWhereInput {
 	hasNarratives: Boolean
 	hasNarrativesWith: [NarrativeWhereInput!]
 	"""
-	actionplans edge predicates
+	action_plans edge predicates
 	"""
-	hasActionplans: Boolean
-	hasActionplansWith: [ActionPlanWhereInput!]
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
 	standards edge predicates
 	"""
@@ -23597,7 +23597,7 @@ type Risk implements Node {
 	viewers: [Group!]
 	control: [Control!]
 	procedure: [Procedure!]
-	actionplans: [ActionPlan!]
+	actionPlans: [ActionPlan!]
 	programs: [Program!]
 }
 """
@@ -24411,10 +24411,10 @@ input RiskWhereInput {
 	hasProcedure: Boolean
 	hasProcedureWith: [ProcedureWhereInput!]
 	"""
-	actionplans edge predicates
+	action_plans edge predicates
 	"""
-	hasActionplans: Boolean
-	hasActionplansWith: [ActionPlanWhereInput!]
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
 	programs edge predicates
 	"""
@@ -24478,10 +24478,10 @@ type Standard implements Node {
 	json data with details of the standard
 	"""
 	details: Map
-	controlobjectives: [ControlObjective!]
+	controlObjectives: [ControlObjective!]
 	controls: [Control!]
 	procedures: [Procedure!]
-	actionplans: [ActionPlan!]
+	actionPlans: [ActionPlan!]
 	programs: [Program!]
 }
 """
@@ -25233,10 +25233,10 @@ input StandardWhereInput {
 	satisfiesEqualFold: String
 	satisfiesContainsFold: String
 	"""
-	controlobjectives edge predicates
+	control_objectives edge predicates
 	"""
-	hasControlobjectives: Boolean
-	hasControlobjectivesWith: [ControlObjectiveWhereInput!]
+	hasControlObjectives: Boolean
+	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -25248,10 +25248,10 @@ input StandardWhereInput {
 	hasProcedures: Boolean
 	hasProceduresWith: [ProcedureWhereInput!]
 	"""
-	actionplans edge predicates
+	action_plans edge predicates
 	"""
-	hasActionplans: Boolean
-	hasActionplansWith: [ActionPlanWhereInput!]
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
 	programs edge predicates
 	"""
@@ -26951,7 +26951,7 @@ type Task implements Node {
 	assignee: User
 	organization: [Organization!]
 	group: [Group!]
-	policy: [InternalPolicy!]
+	internalPolicy: [InternalPolicy!]
 	procedure: [Procedure!]
 	control: [Control!]
 	controlObjective: [ControlObjective!]
@@ -27545,10 +27545,10 @@ input TaskWhereInput {
 	hasGroup: Boolean
 	hasGroupWith: [GroupWhereInput!]
 	"""
-	policy edge predicates
+	internal_policy edge predicates
 	"""
-	hasPolicy: Boolean
-	hasPolicyWith: [InternalPolicyWhereInput!]
+	hasInternalPolicy: Boolean
+	hasInternalPolicyWith: [InternalPolicyWhereInput!]
 	"""
 	procedure edge predicates
 	"""
@@ -28445,9 +28445,9 @@ input UpdateControlInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
-	addControlobjectiveIDs: [ID!]
-	removeControlobjectiveIDs: [ID!]
-	clearControlobjectives: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjectives: Boolean
 	addStandardIDs: [ID!]
 	removeStandardIDs: [ID!]
 	clearStandard: Boolean
@@ -28457,9 +28457,9 @@ input UpdateControlInput {
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisks: Boolean
-	addActionplanIDs: [ID!]
-	removeActionplanIDs: [ID!]
-	clearActionplans: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
@@ -28542,9 +28542,9 @@ input UpdateControlObjectiveInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
-	addPolicyIDs: [ID!]
-	removePolicyIDs: [ID!]
-	clearPolicy: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -28802,18 +28802,18 @@ input UpdateFileInput {
 	addEntityIDs: [ID!]
 	removeEntityIDs: [ID!]
 	clearEntity: Boolean
-	addUsersettingIDs: [ID!]
-	removeUsersettingIDs: [ID!]
-	clearUsersetting: Boolean
-	addOrganizationsettingIDs: [ID!]
-	removeOrganizationsettingIDs: [ID!]
-	clearOrganizationsetting: Boolean
+	addUserSettingIDs: [ID!]
+	removeUserSettingIDs: [ID!]
+	clearUserSetting: Boolean
+	addOrganizationSettingIDs: [ID!]
+	removeOrganizationSettingIDs: [ID!]
+	clearOrganizationSetting: Boolean
 	addTemplateIDs: [ID!]
 	removeTemplateIDs: [ID!]
 	clearTemplate: Boolean
-	addDocumentdatumIDs: [ID!]
-	removeDocumentdatumIDs: [ID!]
-	clearDocumentdata: Boolean
+	addDocumentDatumIDs: [ID!]
+	removeDocumentDatumIDs: [ID!]
+	clearDocumentData: Boolean
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
@@ -28890,12 +28890,12 @@ input UpdateGroupInput {
 	addProcedureBlockedGroupIDs: [ID!]
 	removeProcedureBlockedGroupIDs: [ID!]
 	clearProcedureBlockedGroups: Boolean
-	addInternalpolicyEditorIDs: [ID!]
-	removeInternalpolicyEditorIDs: [ID!]
-	clearInternalpolicyEditors: Boolean
-	addInternalpolicyBlockedGroupIDs: [ID!]
-	removeInternalpolicyBlockedGroupIDs: [ID!]
-	clearInternalpolicyBlockedGroups: Boolean
+	addInternalPolicyEditorIDs: [ID!]
+	removeInternalPolicyEditorIDs: [ID!]
+	clearInternalPolicyEditors: Boolean
+	addInternalPolicyBlockedGroupIDs: [ID!]
+	removeInternalPolicyBlockedGroupIDs: [ID!]
+	clearInternalPolicyBlockedGroups: Boolean
 	addProgramEditorIDs: [ID!]
 	removeProgramEditorIDs: [ID!]
 	clearProgramEditors: Boolean
@@ -28914,15 +28914,15 @@ input UpdateGroupInput {
 	addRiskViewerIDs: [ID!]
 	removeRiskViewerIDs: [ID!]
 	clearRiskViewers: Boolean
-	addControlobjectiveEditorIDs: [ID!]
-	removeControlobjectiveEditorIDs: [ID!]
-	clearControlobjectiveEditors: Boolean
-	addControlobjectiveBlockedGroupIDs: [ID!]
-	removeControlobjectiveBlockedGroupIDs: [ID!]
-	clearControlobjectiveBlockedGroups: Boolean
-	addControlobjectiveViewerIDs: [ID!]
-	removeControlobjectiveViewerIDs: [ID!]
-	clearControlobjectiveViewers: Boolean
+	addControlObjectiveEditorIDs: [ID!]
+	removeControlObjectiveEditorIDs: [ID!]
+	clearControlObjectiveEditors: Boolean
+	addControlObjectiveBlockedGroupIDs: [ID!]
+	removeControlObjectiveBlockedGroupIDs: [ID!]
+	clearControlObjectiveBlockedGroups: Boolean
+	addControlObjectiveViewerIDs: [ID!]
+	removeControlObjectiveViewerIDs: [ID!]
+	clearControlObjectiveViewers: Boolean
 	addControlEditorIDs: [ID!]
 	removeControlEditorIDs: [ID!]
 	clearControlEditors: Boolean
@@ -29120,9 +29120,9 @@ input UpdateInternalPolicyInput {
 	addEditorIDs: [ID!]
 	removeEditorIDs: [ID!]
 	clearEditors: Boolean
-	addControlobjectiveIDs: [ID!]
-	removeControlobjectiveIDs: [ID!]
-	clearControlobjectives: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjectives: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -29204,18 +29204,18 @@ input UpdateNarrativeInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
-	addPolicyIDs: [ID!]
-	removePolicyIDs: [ID!]
-	clearPolicy: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicy: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControl: Boolean
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
 	clearProcedure: Boolean
-	addControlobjectiveIDs: [ID!]
-	removeControlobjectiveIDs: [ID!]
-	clearControlobjective: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjective: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
@@ -29377,12 +29377,12 @@ input UpdateOrganizationInput {
 	clearIntegrations: Boolean
 	settingID: ID
 	clearSetting: Boolean
-	addDocumentdatumIDs: [ID!]
-	removeDocumentdatumIDs: [ID!]
-	clearDocumentdata: Boolean
-	addOrgsubscriptionIDs: [ID!]
-	removeOrgsubscriptionIDs: [ID!]
-	clearOrgsubscriptions: Boolean
+	addDocumentDatumIDs: [ID!]
+	removeDocumentDatumIDs: [ID!]
+	clearDocumentData: Boolean
+	addOrgSubscriptionIDs: [ID!]
+	removeOrgSubscriptionIDs: [ID!]
+	clearOrgSubscriptions: Boolean
 	addPersonalAccessTokenIDs: [ID!]
 	removePersonalAccessTokenIDs: [ID!]
 	clearPersonalAccessTokens: Boolean
@@ -29410,9 +29410,9 @@ input UpdateOrganizationInput {
 	addEntityIDs: [ID!]
 	removeEntityIDs: [ID!]
 	clearEntities: Boolean
-	addEntitytypeIDs: [ID!]
-	removeEntitytypeIDs: [ID!]
-	clearEntitytypes: Boolean
+	addEntityTypeIDs: [ID!]
+	removeEntityTypeIDs: [ID!]
+	clearEntityTypes: Boolean
 	addContactIDs: [ID!]
 	removeContactIDs: [ID!]
 	clearContacts: Boolean
@@ -29428,15 +29428,15 @@ input UpdateOrganizationInput {
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
 	clearProcedures: Boolean
-	addInternalpolicyIDs: [ID!]
-	removeInternalpolicyIDs: [ID!]
-	clearInternalpolicies: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisks: Boolean
-	addControlobjectiveIDs: [ID!]
-	removeControlobjectiveIDs: [ID!]
-	clearControlobjectives: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjectives: Boolean
 	addNarrativeIDs: [ID!]
 	removeNarrativeIDs: [ID!]
 	clearNarratives: Boolean
@@ -29604,10 +29604,10 @@ input UpdateProcedureInput {
 	clearEditors: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
-	clearControl: Boolean
-	addInternalpolicyIDs: [ID!]
-	removeInternalpolicyIDs: [ID!]
-	clearInternalpolicy: Boolean
+	clearControls: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 	addNarrativeIDs: [ID!]
 	removeNarrativeIDs: [ID!]
 	clearNarratives: Boolean
@@ -29684,12 +29684,12 @@ input UpdateProgramInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
-	addControlobjectiveIDs: [ID!]
-	removeControlobjectiveIDs: [ID!]
-	clearControlobjectives: Boolean
-	addPolicyIDs: [ID!]
-	removePolicyIDs: [ID!]
-	clearPolicies: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjectives: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
 	clearProcedures: Boolean
@@ -29708,9 +29708,9 @@ input UpdateProgramInput {
 	addNarrativeIDs: [ID!]
 	removeNarrativeIDs: [ID!]
 	clearNarratives: Boolean
-	addActionplanIDs: [ID!]
-	removeActionplanIDs: [ID!]
-	clearActionplans: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
 	addStandardIDs: [ID!]
 	removeStandardIDs: [ID!]
 	clearStandards: Boolean
@@ -29802,9 +29802,9 @@ input UpdateRiskInput {
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
 	clearProcedure: Boolean
-	addActionplanIDs: [ID!]
-	removeActionplanIDs: [ID!]
-	clearActionplans: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
@@ -29869,18 +29869,18 @@ input UpdateStandardInput {
 	"""
 	details: Map
 	clearDetails: Boolean
-	addControlobjectiveIDs: [ID!]
-	removeControlobjectiveIDs: [ID!]
-	clearControlobjectives: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjectives: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
 	clearProcedures: Boolean
-	addActionplanIDs: [ID!]
-	removeActionplanIDs: [ID!]
-	clearActionplans: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
@@ -30089,9 +30089,9 @@ input UpdateTaskInput {
 	addGroupIDs: [ID!]
 	removeGroupIDs: [ID!]
 	clearGroup: Boolean
-	addPolicyIDs: [ID!]
-	removePolicyIDs: [ID!]
-	clearPolicy: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicy: Boolean
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
 	clearProcedure: Boolean
@@ -30239,9 +30239,9 @@ input UpdateUserInput {
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
-	addActionplanIDs: [ID!]
-	removeActionplanIDs: [ID!]
-	clearActionplans: Boolean
+	addActionPlanIDs: [ID!]
+	removeActionPlanIDs: [ID!]
+	clearActionPlans: Boolean
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
@@ -30366,7 +30366,7 @@ type User implements Node {
 	files: [File!]
 	file: File
 	events: [Event!]
-	actionplans: [ActionPlan!]
+	actionPlans: [ActionPlan!]
 	subcontrols: [Subcontrol!]
 	assignerTasks: [Task!]
 	assigneeTasks: [Task!]
@@ -31925,10 +31925,10 @@ input UserWhereInput {
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
 	"""
-	actionplans edge predicates
+	action_plans edge predicates
 	"""
-	hasActionplans: Boolean
-	hasActionplansWith: [ActionPlanWhereInput!]
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
 	subcontrols edge predicates
 	"""

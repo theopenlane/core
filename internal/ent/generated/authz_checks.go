@@ -704,7 +704,7 @@ func (q *ControlObjectiveQuery) CheckAccess(ctx context.Context) error {
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanView,
-		ObjectType:  "controlobjective",
+		ObjectType:  "control_objective",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
 		ObjectID:    objectID,
@@ -746,7 +746,7 @@ func (m *ControlObjectiveMutation) CheckAccessForEdit(ctx context.Context) error
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanEdit,
-		ObjectType:  "controlobjective",
+		ObjectType:  "control_objective",
 		ObjectID:    objectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -789,7 +789,7 @@ func (m *ControlObjectiveMutation) CheckAccessForDelete(ctx context.Context) err
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanDelete,
-		ObjectType:  "controlobjective",
+		ObjectType:  "control_objective",
 		ObjectID:    objectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -866,7 +866,7 @@ func (q *ControlObjectiveHistoryQuery) CheckAccess(ctx context.Context) error {
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanView,
-		ObjectType:  "controlobjective",
+		ObjectType:  "control_objective",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
 		ObjectID:    objectID,
@@ -2867,7 +2867,7 @@ func (q *InternalPolicyQuery) CheckAccess(ctx context.Context) error {
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanView,
-		ObjectType:  "internalpolicy",
+		ObjectType:  "internal_policy",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
 		ObjectID:    objectID,
@@ -2909,7 +2909,7 @@ func (m *InternalPolicyMutation) CheckAccessForEdit(ctx context.Context) error {
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanEdit,
-		ObjectType:  "internalpolicy",
+		ObjectType:  "internal_policy",
 		ObjectID:    objectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -2952,7 +2952,7 @@ func (m *InternalPolicyMutation) CheckAccessForDelete(ctx context.Context) error
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanDelete,
-		ObjectType:  "internalpolicy",
+		ObjectType:  "internal_policy",
 		ObjectID:    objectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -3029,7 +3029,7 @@ func (q *InternalPolicyHistoryQuery) CheckAccess(ctx context.Context) error {
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanView,
-		ObjectType:  "internalpolicy",
+		ObjectType:  "internal_policy",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
 		ObjectID:    objectID,

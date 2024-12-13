@@ -305,14 +305,14 @@ func (pc *ProcedureCreate) AddEditors(g ...*Group) *ProcedureCreate {
 	return pc.AddEditorIDs(ids...)
 }
 
-// AddControlIDs adds the "control" edge to the Control entity by IDs.
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (pc *ProcedureCreate) AddControlIDs(ids ...string) *ProcedureCreate {
 	pc.mutation.AddControlIDs(ids...)
 	return pc
 }
 
-// AddControl adds the "control" edges to the Control entity.
-func (pc *ProcedureCreate) AddControl(c ...*Control) *ProcedureCreate {
+// AddControls adds the "controls" edges to the Control entity.
+func (pc *ProcedureCreate) AddControls(c ...*Control) *ProcedureCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -320,19 +320,19 @@ func (pc *ProcedureCreate) AddControl(c ...*Control) *ProcedureCreate {
 	return pc.AddControlIDs(ids...)
 }
 
-// AddInternalpolicyIDs adds the "internalpolicy" edge to the InternalPolicy entity by IDs.
-func (pc *ProcedureCreate) AddInternalpolicyIDs(ids ...string) *ProcedureCreate {
-	pc.mutation.AddInternalpolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (pc *ProcedureCreate) AddInternalPolicyIDs(ids ...string) *ProcedureCreate {
+	pc.mutation.AddInternalPolicyIDs(ids...)
 	return pc
 }
 
-// AddInternalpolicy adds the "internalpolicy" edges to the InternalPolicy entity.
-func (pc *ProcedureCreate) AddInternalpolicy(i ...*InternalPolicy) *ProcedureCreate {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (pc *ProcedureCreate) AddInternalPolicies(i ...*InternalPolicy) *ProcedureCreate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return pc.AddInternalpolicyIDs(ids...)
+	return pc.AddInternalPolicyIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
@@ -641,12 +641,12 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.ControlIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.ControlTable,
-			Columns: procedure.ControlPrimaryKey,
+			Table:   procedure.ControlsTable,
+			Columns: procedure.ControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -658,12 +658,12 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.InternalpolicyIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   procedure.InternalpolicyTable,
-			Columns: procedure.InternalpolicyPrimaryKey,
+			Table:   procedure.InternalPoliciesTable,
+			Columns: procedure.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),

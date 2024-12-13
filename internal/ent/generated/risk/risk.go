@@ -68,8 +68,8 @@ const (
 	EdgeControl = "control"
 	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
 	EdgeProcedure = "procedure"
-	// EdgeActionplans holds the string denoting the actionplans edge name in mutations.
-	EdgeActionplans = "actionplans"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
 	// Table holds the table name of the risk in the database.
@@ -106,11 +106,11 @@ const (
 	// ProcedureInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProcedureInverseTable = "procedures"
-	// ActionplansTable is the table that holds the actionplans relation/edge. The primary key declared below.
-	ActionplansTable = "risk_actionplans"
-	// ActionplansInverseTable is the table name for the ActionPlan entity.
+	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
+	ActionPlansTable = "risk_action_plans"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
-	ActionplansInverseTable = "action_plans"
+	ActionPlansInverseTable = "action_plans"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_risks"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -164,9 +164,9 @@ var (
 	// ProcedurePrimaryKey and ProcedureColumn2 are the table columns denoting the
 	// primary key for the procedure relation (M2M).
 	ProcedurePrimaryKey = []string{"procedure_id", "risk_id"}
-	// ActionplansPrimaryKey and ActionplansColumn2 are the table columns denoting the
-	// primary key for the actionplans relation (M2M).
-	ActionplansPrimaryKey = []string{"risk_id", "action_plan_id"}
+	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
+	// primary key for the action_plans relation (M2M).
+	ActionPlansPrimaryKey = []string{"risk_id", "action_plan_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "risk_id"}
@@ -408,17 +408,17 @@ func ByProcedure(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByActionplansCount orders the results by actionplans count.
-func ByActionplansCount(opts ...sql.OrderTermOption) OrderOption {
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newActionplansStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
 	}
 }
 
-// ByActionplans orders the results by actionplans terms.
-func ByActionplans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newActionplansStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -477,11 +477,11 @@ func newProcedureStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureTable, ProcedurePrimaryKey...),
 	)
 }
-func newActionplansStep() *sqlgraph.Step {
+func newActionPlansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ActionplansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ActionplansTable, ActionplansPrimaryKey...),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

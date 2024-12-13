@@ -476,34 +476,34 @@ func (fu *FileUpdate) AddEntity(e ...*Entity) *FileUpdate {
 	return fu.AddEntityIDs(ids...)
 }
 
-// AddUsersettingIDs adds the "usersetting" edge to the UserSetting entity by IDs.
-func (fu *FileUpdate) AddUsersettingIDs(ids ...string) *FileUpdate {
-	fu.mutation.AddUsersettingIDs(ids...)
+// AddUserSettingIDs adds the "user_setting" edge to the UserSetting entity by IDs.
+func (fu *FileUpdate) AddUserSettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddUserSettingIDs(ids...)
 	return fu
 }
 
-// AddUsersetting adds the "usersetting" edges to the UserSetting entity.
-func (fu *FileUpdate) AddUsersetting(u ...*UserSetting) *FileUpdate {
+// AddUserSetting adds the "user_setting" edges to the UserSetting entity.
+func (fu *FileUpdate) AddUserSetting(u ...*UserSetting) *FileUpdate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return fu.AddUsersettingIDs(ids...)
+	return fu.AddUserSettingIDs(ids...)
 }
 
-// AddOrganizationsettingIDs adds the "organizationsetting" edge to the OrganizationSetting entity by IDs.
-func (fu *FileUpdate) AddOrganizationsettingIDs(ids ...string) *FileUpdate {
-	fu.mutation.AddOrganizationsettingIDs(ids...)
+// AddOrganizationSettingIDs adds the "organization_setting" edge to the OrganizationSetting entity by IDs.
+func (fu *FileUpdate) AddOrganizationSettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddOrganizationSettingIDs(ids...)
 	return fu
 }
 
-// AddOrganizationsetting adds the "organizationsetting" edges to the OrganizationSetting entity.
-func (fu *FileUpdate) AddOrganizationsetting(o ...*OrganizationSetting) *FileUpdate {
+// AddOrganizationSetting adds the "organization_setting" edges to the OrganizationSetting entity.
+func (fu *FileUpdate) AddOrganizationSetting(o ...*OrganizationSetting) *FileUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return fu.AddOrganizationsettingIDs(ids...)
+	return fu.AddOrganizationSettingIDs(ids...)
 }
 
 // AddTemplateIDs adds the "template" edge to the Template entity by IDs.
@@ -521,19 +521,19 @@ func (fu *FileUpdate) AddTemplate(t ...*Template) *FileUpdate {
 	return fu.AddTemplateIDs(ids...)
 }
 
-// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by IDs.
-func (fu *FileUpdate) AddDocumentdatumIDs(ids ...string) *FileUpdate {
-	fu.mutation.AddDocumentdatumIDs(ids...)
+// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
+func (fu *FileUpdate) AddDocumentDatumIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddDocumentDatumIDs(ids...)
 	return fu
 }
 
-// AddDocumentdata adds the "documentdata" edges to the DocumentData entity.
-func (fu *FileUpdate) AddDocumentdata(d ...*DocumentData) *FileUpdate {
+// AddDocumentData adds the "document_data" edges to the DocumentData entity.
+func (fu *FileUpdate) AddDocumentData(d ...*DocumentData) *FileUpdate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fu.AddDocumentdatumIDs(ids...)
+	return fu.AddDocumentDatumIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -676,46 +676,46 @@ func (fu *FileUpdate) RemoveEntity(e ...*Entity) *FileUpdate {
 	return fu.RemoveEntityIDs(ids...)
 }
 
-// ClearUsersetting clears all "usersetting" edges to the UserSetting entity.
-func (fu *FileUpdate) ClearUsersetting() *FileUpdate {
-	fu.mutation.ClearUsersetting()
+// ClearUserSetting clears all "user_setting" edges to the UserSetting entity.
+func (fu *FileUpdate) ClearUserSetting() *FileUpdate {
+	fu.mutation.ClearUserSetting()
 	return fu
 }
 
-// RemoveUsersettingIDs removes the "usersetting" edge to UserSetting entities by IDs.
-func (fu *FileUpdate) RemoveUsersettingIDs(ids ...string) *FileUpdate {
-	fu.mutation.RemoveUsersettingIDs(ids...)
+// RemoveUserSettingIDs removes the "user_setting" edge to UserSetting entities by IDs.
+func (fu *FileUpdate) RemoveUserSettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveUserSettingIDs(ids...)
 	return fu
 }
 
-// RemoveUsersetting removes "usersetting" edges to UserSetting entities.
-func (fu *FileUpdate) RemoveUsersetting(u ...*UserSetting) *FileUpdate {
+// RemoveUserSetting removes "user_setting" edges to UserSetting entities.
+func (fu *FileUpdate) RemoveUserSetting(u ...*UserSetting) *FileUpdate {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return fu.RemoveUsersettingIDs(ids...)
+	return fu.RemoveUserSettingIDs(ids...)
 }
 
-// ClearOrganizationsetting clears all "organizationsetting" edges to the OrganizationSetting entity.
-func (fu *FileUpdate) ClearOrganizationsetting() *FileUpdate {
-	fu.mutation.ClearOrganizationsetting()
+// ClearOrganizationSetting clears all "organization_setting" edges to the OrganizationSetting entity.
+func (fu *FileUpdate) ClearOrganizationSetting() *FileUpdate {
+	fu.mutation.ClearOrganizationSetting()
 	return fu
 }
 
-// RemoveOrganizationsettingIDs removes the "organizationsetting" edge to OrganizationSetting entities by IDs.
-func (fu *FileUpdate) RemoveOrganizationsettingIDs(ids ...string) *FileUpdate {
-	fu.mutation.RemoveOrganizationsettingIDs(ids...)
+// RemoveOrganizationSettingIDs removes the "organization_setting" edge to OrganizationSetting entities by IDs.
+func (fu *FileUpdate) RemoveOrganizationSettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveOrganizationSettingIDs(ids...)
 	return fu
 }
 
-// RemoveOrganizationsetting removes "organizationsetting" edges to OrganizationSetting entities.
-func (fu *FileUpdate) RemoveOrganizationsetting(o ...*OrganizationSetting) *FileUpdate {
+// RemoveOrganizationSetting removes "organization_setting" edges to OrganizationSetting entities.
+func (fu *FileUpdate) RemoveOrganizationSetting(o ...*OrganizationSetting) *FileUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return fu.RemoveOrganizationsettingIDs(ids...)
+	return fu.RemoveOrganizationSettingIDs(ids...)
 }
 
 // ClearTemplate clears all "template" edges to the Template entity.
@@ -739,25 +739,25 @@ func (fu *FileUpdate) RemoveTemplate(t ...*Template) *FileUpdate {
 	return fu.RemoveTemplateIDs(ids...)
 }
 
-// ClearDocumentdata clears all "documentdata" edges to the DocumentData entity.
-func (fu *FileUpdate) ClearDocumentdata() *FileUpdate {
-	fu.mutation.ClearDocumentdata()
+// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
+func (fu *FileUpdate) ClearDocumentData() *FileUpdate {
+	fu.mutation.ClearDocumentData()
 	return fu
 }
 
-// RemoveDocumentdatumIDs removes the "documentdata" edge to DocumentData entities by IDs.
-func (fu *FileUpdate) RemoveDocumentdatumIDs(ids ...string) *FileUpdate {
-	fu.mutation.RemoveDocumentdatumIDs(ids...)
+// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
+func (fu *FileUpdate) RemoveDocumentDatumIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveDocumentDatumIDs(ids...)
 	return fu
 }
 
-// RemoveDocumentdata removes "documentdata" edges to DocumentData entities.
-func (fu *FileUpdate) RemoveDocumentdata(d ...*DocumentData) *FileUpdate {
+// RemoveDocumentData removes "document_data" edges to DocumentData entities.
+func (fu *FileUpdate) RemoveDocumentData(d ...*DocumentData) *FileUpdate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fu.RemoveDocumentdatumIDs(ids...)
+	return fu.RemoveDocumentDatumIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -1239,12 +1239,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fu.mutation.UsersettingCleared() {
+	if fu.mutation.UserSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.UsersettingTable,
-			Columns: file.UsersettingPrimaryKey,
+			Table:   file.UserSettingTable,
+			Columns: file.UserSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
@@ -1253,12 +1253,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = fu.schemaConfig.UserSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.RemovedUsersettingIDs(); len(nodes) > 0 && !fu.mutation.UsersettingCleared() {
+	if nodes := fu.mutation.RemovedUserSettingIDs(); len(nodes) > 0 && !fu.mutation.UserSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.UsersettingTable,
-			Columns: file.UsersettingPrimaryKey,
+			Table:   file.UserSettingTable,
+			Columns: file.UserSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
@@ -1270,12 +1270,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.UsersettingIDs(); len(nodes) > 0 {
+	if nodes := fu.mutation.UserSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.UsersettingTable,
-			Columns: file.UsersettingPrimaryKey,
+			Table:   file.UserSettingTable,
+			Columns: file.UserSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
@@ -1287,12 +1287,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fu.mutation.OrganizationsettingCleared() {
+	if fu.mutation.OrganizationSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.OrganizationsettingTable,
-			Columns: file.OrganizationsettingPrimaryKey,
+			Table:   file.OrganizationSettingTable,
+			Columns: file.OrganizationSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
@@ -1301,12 +1301,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = fu.schemaConfig.OrganizationSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.RemovedOrganizationsettingIDs(); len(nodes) > 0 && !fu.mutation.OrganizationsettingCleared() {
+	if nodes := fu.mutation.RemovedOrganizationSettingIDs(); len(nodes) > 0 && !fu.mutation.OrganizationSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.OrganizationsettingTable,
-			Columns: file.OrganizationsettingPrimaryKey,
+			Table:   file.OrganizationSettingTable,
+			Columns: file.OrganizationSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
@@ -1318,12 +1318,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.OrganizationsettingIDs(); len(nodes) > 0 {
+	if nodes := fu.mutation.OrganizationSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.OrganizationsettingTable,
-			Columns: file.OrganizationsettingPrimaryKey,
+			Table:   file.OrganizationSettingTable,
+			Columns: file.OrganizationSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
@@ -1383,12 +1383,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fu.mutation.DocumentdataCleared() {
+	if fu.mutation.DocumentDataCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentdataTable,
-			Columns: file.DocumentdataPrimaryKey,
+			Table:   file.DocumentDataTable,
+			Columns: file.DocumentDataPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -1397,12 +1397,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = fu.schemaConfig.DocumentDataFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.RemovedDocumentdataIDs(); len(nodes) > 0 && !fu.mutation.DocumentdataCleared() {
+	if nodes := fu.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !fu.mutation.DocumentDataCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentdataTable,
-			Columns: file.DocumentdataPrimaryKey,
+			Table:   file.DocumentDataTable,
+			Columns: file.DocumentDataPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -1414,12 +1414,12 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.DocumentdataIDs(); len(nodes) > 0 {
+	if nodes := fu.mutation.DocumentDataIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentdataTable,
-			Columns: file.DocumentdataPrimaryKey,
+			Table:   file.DocumentDataTable,
+			Columns: file.DocumentDataPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -1984,34 +1984,34 @@ func (fuo *FileUpdateOne) AddEntity(e ...*Entity) *FileUpdateOne {
 	return fuo.AddEntityIDs(ids...)
 }
 
-// AddUsersettingIDs adds the "usersetting" edge to the UserSetting entity by IDs.
-func (fuo *FileUpdateOne) AddUsersettingIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.AddUsersettingIDs(ids...)
+// AddUserSettingIDs adds the "user_setting" edge to the UserSetting entity by IDs.
+func (fuo *FileUpdateOne) AddUserSettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddUserSettingIDs(ids...)
 	return fuo
 }
 
-// AddUsersetting adds the "usersetting" edges to the UserSetting entity.
-func (fuo *FileUpdateOne) AddUsersetting(u ...*UserSetting) *FileUpdateOne {
+// AddUserSetting adds the "user_setting" edges to the UserSetting entity.
+func (fuo *FileUpdateOne) AddUserSetting(u ...*UserSetting) *FileUpdateOne {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return fuo.AddUsersettingIDs(ids...)
+	return fuo.AddUserSettingIDs(ids...)
 }
 
-// AddOrganizationsettingIDs adds the "organizationsetting" edge to the OrganizationSetting entity by IDs.
-func (fuo *FileUpdateOne) AddOrganizationsettingIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.AddOrganizationsettingIDs(ids...)
+// AddOrganizationSettingIDs adds the "organization_setting" edge to the OrganizationSetting entity by IDs.
+func (fuo *FileUpdateOne) AddOrganizationSettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddOrganizationSettingIDs(ids...)
 	return fuo
 }
 
-// AddOrganizationsetting adds the "organizationsetting" edges to the OrganizationSetting entity.
-func (fuo *FileUpdateOne) AddOrganizationsetting(o ...*OrganizationSetting) *FileUpdateOne {
+// AddOrganizationSetting adds the "organization_setting" edges to the OrganizationSetting entity.
+func (fuo *FileUpdateOne) AddOrganizationSetting(o ...*OrganizationSetting) *FileUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return fuo.AddOrganizationsettingIDs(ids...)
+	return fuo.AddOrganizationSettingIDs(ids...)
 }
 
 // AddTemplateIDs adds the "template" edge to the Template entity by IDs.
@@ -2029,19 +2029,19 @@ func (fuo *FileUpdateOne) AddTemplate(t ...*Template) *FileUpdateOne {
 	return fuo.AddTemplateIDs(ids...)
 }
 
-// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by IDs.
-func (fuo *FileUpdateOne) AddDocumentdatumIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.AddDocumentdatumIDs(ids...)
+// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
+func (fuo *FileUpdateOne) AddDocumentDatumIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddDocumentDatumIDs(ids...)
 	return fuo
 }
 
-// AddDocumentdata adds the "documentdata" edges to the DocumentData entity.
-func (fuo *FileUpdateOne) AddDocumentdata(d ...*DocumentData) *FileUpdateOne {
+// AddDocumentData adds the "document_data" edges to the DocumentData entity.
+func (fuo *FileUpdateOne) AddDocumentData(d ...*DocumentData) *FileUpdateOne {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fuo.AddDocumentdatumIDs(ids...)
+	return fuo.AddDocumentDatumIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -2184,46 +2184,46 @@ func (fuo *FileUpdateOne) RemoveEntity(e ...*Entity) *FileUpdateOne {
 	return fuo.RemoveEntityIDs(ids...)
 }
 
-// ClearUsersetting clears all "usersetting" edges to the UserSetting entity.
-func (fuo *FileUpdateOne) ClearUsersetting() *FileUpdateOne {
-	fuo.mutation.ClearUsersetting()
+// ClearUserSetting clears all "user_setting" edges to the UserSetting entity.
+func (fuo *FileUpdateOne) ClearUserSetting() *FileUpdateOne {
+	fuo.mutation.ClearUserSetting()
 	return fuo
 }
 
-// RemoveUsersettingIDs removes the "usersetting" edge to UserSetting entities by IDs.
-func (fuo *FileUpdateOne) RemoveUsersettingIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.RemoveUsersettingIDs(ids...)
+// RemoveUserSettingIDs removes the "user_setting" edge to UserSetting entities by IDs.
+func (fuo *FileUpdateOne) RemoveUserSettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveUserSettingIDs(ids...)
 	return fuo
 }
 
-// RemoveUsersetting removes "usersetting" edges to UserSetting entities.
-func (fuo *FileUpdateOne) RemoveUsersetting(u ...*UserSetting) *FileUpdateOne {
+// RemoveUserSetting removes "user_setting" edges to UserSetting entities.
+func (fuo *FileUpdateOne) RemoveUserSetting(u ...*UserSetting) *FileUpdateOne {
 	ids := make([]string, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
-	return fuo.RemoveUsersettingIDs(ids...)
+	return fuo.RemoveUserSettingIDs(ids...)
 }
 
-// ClearOrganizationsetting clears all "organizationsetting" edges to the OrganizationSetting entity.
-func (fuo *FileUpdateOne) ClearOrganizationsetting() *FileUpdateOne {
-	fuo.mutation.ClearOrganizationsetting()
+// ClearOrganizationSetting clears all "organization_setting" edges to the OrganizationSetting entity.
+func (fuo *FileUpdateOne) ClearOrganizationSetting() *FileUpdateOne {
+	fuo.mutation.ClearOrganizationSetting()
 	return fuo
 }
 
-// RemoveOrganizationsettingIDs removes the "organizationsetting" edge to OrganizationSetting entities by IDs.
-func (fuo *FileUpdateOne) RemoveOrganizationsettingIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.RemoveOrganizationsettingIDs(ids...)
+// RemoveOrganizationSettingIDs removes the "organization_setting" edge to OrganizationSetting entities by IDs.
+func (fuo *FileUpdateOne) RemoveOrganizationSettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveOrganizationSettingIDs(ids...)
 	return fuo
 }
 
-// RemoveOrganizationsetting removes "organizationsetting" edges to OrganizationSetting entities.
-func (fuo *FileUpdateOne) RemoveOrganizationsetting(o ...*OrganizationSetting) *FileUpdateOne {
+// RemoveOrganizationSetting removes "organization_setting" edges to OrganizationSetting entities.
+func (fuo *FileUpdateOne) RemoveOrganizationSetting(o ...*OrganizationSetting) *FileUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return fuo.RemoveOrganizationsettingIDs(ids...)
+	return fuo.RemoveOrganizationSettingIDs(ids...)
 }
 
 // ClearTemplate clears all "template" edges to the Template entity.
@@ -2247,25 +2247,25 @@ func (fuo *FileUpdateOne) RemoveTemplate(t ...*Template) *FileUpdateOne {
 	return fuo.RemoveTemplateIDs(ids...)
 }
 
-// ClearDocumentdata clears all "documentdata" edges to the DocumentData entity.
-func (fuo *FileUpdateOne) ClearDocumentdata() *FileUpdateOne {
-	fuo.mutation.ClearDocumentdata()
+// ClearDocumentData clears all "document_data" edges to the DocumentData entity.
+func (fuo *FileUpdateOne) ClearDocumentData() *FileUpdateOne {
+	fuo.mutation.ClearDocumentData()
 	return fuo
 }
 
-// RemoveDocumentdatumIDs removes the "documentdata" edge to DocumentData entities by IDs.
-func (fuo *FileUpdateOne) RemoveDocumentdatumIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.RemoveDocumentdatumIDs(ids...)
+// RemoveDocumentDatumIDs removes the "document_data" edge to DocumentData entities by IDs.
+func (fuo *FileUpdateOne) RemoveDocumentDatumIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveDocumentDatumIDs(ids...)
 	return fuo
 }
 
-// RemoveDocumentdata removes "documentdata" edges to DocumentData entities.
-func (fuo *FileUpdateOne) RemoveDocumentdata(d ...*DocumentData) *FileUpdateOne {
+// RemoveDocumentData removes "document_data" edges to DocumentData entities.
+func (fuo *FileUpdateOne) RemoveDocumentData(d ...*DocumentData) *FileUpdateOne {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return fuo.RemoveDocumentdatumIDs(ids...)
+	return fuo.RemoveDocumentDatumIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -2777,12 +2777,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fuo.mutation.UsersettingCleared() {
+	if fuo.mutation.UserSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.UsersettingTable,
-			Columns: file.UsersettingPrimaryKey,
+			Table:   file.UserSettingTable,
+			Columns: file.UserSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
@@ -2791,12 +2791,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		edge.Schema = fuo.schemaConfig.UserSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.RemovedUsersettingIDs(); len(nodes) > 0 && !fuo.mutation.UsersettingCleared() {
+	if nodes := fuo.mutation.RemovedUserSettingIDs(); len(nodes) > 0 && !fuo.mutation.UserSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.UsersettingTable,
-			Columns: file.UsersettingPrimaryKey,
+			Table:   file.UserSettingTable,
+			Columns: file.UserSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
@@ -2808,12 +2808,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.UsersettingIDs(); len(nodes) > 0 {
+	if nodes := fuo.mutation.UserSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.UsersettingTable,
-			Columns: file.UsersettingPrimaryKey,
+			Table:   file.UserSettingTable,
+			Columns: file.UserSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
@@ -2825,12 +2825,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fuo.mutation.OrganizationsettingCleared() {
+	if fuo.mutation.OrganizationSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.OrganizationsettingTable,
-			Columns: file.OrganizationsettingPrimaryKey,
+			Table:   file.OrganizationSettingTable,
+			Columns: file.OrganizationSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
@@ -2839,12 +2839,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		edge.Schema = fuo.schemaConfig.OrganizationSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.RemovedOrganizationsettingIDs(); len(nodes) > 0 && !fuo.mutation.OrganizationsettingCleared() {
+	if nodes := fuo.mutation.RemovedOrganizationSettingIDs(); len(nodes) > 0 && !fuo.mutation.OrganizationSettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.OrganizationsettingTable,
-			Columns: file.OrganizationsettingPrimaryKey,
+			Table:   file.OrganizationSettingTable,
+			Columns: file.OrganizationSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
@@ -2856,12 +2856,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.OrganizationsettingIDs(); len(nodes) > 0 {
+	if nodes := fuo.mutation.OrganizationSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.OrganizationsettingTable,
-			Columns: file.OrganizationsettingPrimaryKey,
+			Table:   file.OrganizationSettingTable,
+			Columns: file.OrganizationSettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
@@ -2921,12 +2921,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fuo.mutation.DocumentdataCleared() {
+	if fuo.mutation.DocumentDataCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentdataTable,
-			Columns: file.DocumentdataPrimaryKey,
+			Table:   file.DocumentDataTable,
+			Columns: file.DocumentDataPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -2935,12 +2935,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		edge.Schema = fuo.schemaConfig.DocumentDataFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.RemovedDocumentdataIDs(); len(nodes) > 0 && !fuo.mutation.DocumentdataCleared() {
+	if nodes := fuo.mutation.RemovedDocumentDataIDs(); len(nodes) > 0 && !fuo.mutation.DocumentDataCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentdataTable,
-			Columns: file.DocumentdataPrimaryKey,
+			Table:   file.DocumentDataTable,
+			Columns: file.DocumentDataPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -2952,12 +2952,12 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.DocumentdataIDs(); len(nodes) > 0 {
+	if nodes := fuo.mutation.DocumentDataIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.DocumentdataTable,
-			Columns: file.DocumentdataPrimaryKey,
+			Table:   file.DocumentDataTable,
+			Columns: file.DocumentDataPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),

@@ -1359,12 +1359,12 @@ func HasEditorsWith(preds ...predicate.Group) predicate.Procedure {
 	})
 }
 
-// HasControl applies the HasEdge predicate on the "control" edge.
-func HasControl() predicate.Procedure {
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
@@ -1373,10 +1373,10 @@ func HasControl() predicate.Procedure {
 	})
 }
 
-// HasControlWith applies the HasEdge predicate on the "control" edge with a given conditions (other predicates).
-func HasControlWith(preds ...predicate.Control) predicate.Procedure {
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
-		step := newControlStep()
+		step := newControlsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlProcedures
@@ -1388,12 +1388,12 @@ func HasControlWith(preds ...predicate.Control) predicate.Procedure {
 	})
 }
 
-// HasInternalpolicy applies the HasEdge predicate on the "internalpolicy" edge.
-func HasInternalpolicy() predicate.Procedure {
+// HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
+func HasInternalPolicies() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, InternalpolicyTable, InternalpolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -1402,10 +1402,10 @@ func HasInternalpolicy() predicate.Procedure {
 	})
 }
 
-// HasInternalpolicyWith applies the HasEdge predicate on the "internalpolicy" edge with a given conditions (other predicates).
-func HasInternalpolicyWith(preds ...predicate.InternalPolicy) predicate.Procedure {
+// HasInternalPoliciesWith applies the HasEdge predicate on the "internal_policies" edge with a given conditions (other predicates).
+func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
-		step := newInternalpolicyStep()
+		step := newInternalPoliciesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyProcedures

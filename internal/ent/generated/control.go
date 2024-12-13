@@ -83,16 +83,16 @@ type ControlEdges struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
-	// Controlobjectives holds the value of the controlobjectives edge.
-	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
+	// ControlObjectives holds the value of the control_objectives edge.
+	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// Standard holds the value of the standard edge.
 	Standard []*Standard `json:"standard,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
-	// Actionplans holds the value of the actionplans edge.
-	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Programs holds the value of the programs edge.
@@ -108,11 +108,11 @@ type ControlEdges struct {
 	namedViewers           map[string][]*Group
 	namedProcedures        map[string][]*Procedure
 	namedSubcontrols       map[string][]*Subcontrol
-	namedControlobjectives map[string][]*ControlObjective
+	namedControlObjectives map[string][]*ControlObjective
 	namedStandard          map[string][]*Standard
 	namedNarratives        map[string][]*Narrative
 	namedRisks             map[string][]*Risk
-	namedActionplans       map[string][]*ActionPlan
+	namedActionPlans       map[string][]*ActionPlan
 	namedTasks             map[string][]*Task
 	namedPrograms          map[string][]*Program
 }
@@ -173,13 +173,13 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
-// ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
+// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
-func (e ControlEdges) ControlobjectivesOrErr() ([]*ControlObjective, error) {
+func (e ControlEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 	if e.loadedTypes[6] {
-		return e.Controlobjectives, nil
+		return e.ControlObjectives, nil
 	}
-	return nil, &NotLoadedError{edge: "controlobjectives"}
+	return nil, &NotLoadedError{edge: "control_objectives"}
 }
 
 // StandardOrErr returns the Standard value or an error if the edge
@@ -209,13 +209,13 @@ func (e ControlEdges) RisksOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risks"}
 }
 
-// ActionplansOrErr returns the Actionplans value or an error if the edge
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
-func (e ControlEdges) ActionplansOrErr() ([]*ActionPlan, error) {
+func (e ControlEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	if e.loadedTypes[10] {
-		return e.Actionplans, nil
+		return e.ActionPlans, nil
 	}
-	return nil, &NotLoadedError{edge: "actionplans"}
+	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
 // TasksOrErr returns the Tasks value or an error if the edge
@@ -459,9 +459,9 @@ func (c *Control) QuerySubcontrols() *SubcontrolQuery {
 	return NewControlClient(c.config).QuerySubcontrols(c)
 }
 
-// QueryControlobjectives queries the "controlobjectives" edge of the Control entity.
-func (c *Control) QueryControlobjectives() *ControlObjectiveQuery {
-	return NewControlClient(c.config).QueryControlobjectives(c)
+// QueryControlObjectives queries the "control_objectives" edge of the Control entity.
+func (c *Control) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewControlClient(c.config).QueryControlObjectives(c)
 }
 
 // QueryStandard queries the "standard" edge of the Control entity.
@@ -479,9 +479,9 @@ func (c *Control) QueryRisks() *RiskQuery {
 	return NewControlClient(c.config).QueryRisks(c)
 }
 
-// QueryActionplans queries the "actionplans" edge of the Control entity.
-func (c *Control) QueryActionplans() *ActionPlanQuery {
-	return NewControlClient(c.config).QueryActionplans(c)
+// QueryActionPlans queries the "action_plans" edge of the Control entity.
+func (c *Control) QueryActionPlans() *ActionPlanQuery {
+	return NewControlClient(c.config).QueryActionPlans(c)
 }
 
 // QueryTasks queries the "tasks" edge of the Control entity.
@@ -703,27 +703,27 @@ func (c *Control) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 	}
 }
 
-// NamedControlobjectives returns the Controlobjectives named value or an error if the edge was not
+// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedControlobjectives(name string) ([]*ControlObjective, error) {
-	if c.Edges.namedControlobjectives == nil {
+func (c *Control) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if c.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedControlobjectives[name]
+	nodes, ok := c.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedControlobjectives(name string, edges ...*ControlObjective) {
-	if c.Edges.namedControlobjectives == nil {
-		c.Edges.namedControlobjectives = make(map[string][]*ControlObjective)
+func (c *Control) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if c.Edges.namedControlObjectives == nil {
+		c.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedControlobjectives[name] = []*ControlObjective{}
+		c.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		c.Edges.namedControlobjectives[name] = append(c.Edges.namedControlobjectives[name], edges...)
+		c.Edges.namedControlObjectives[name] = append(c.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
@@ -799,27 +799,27 @@ func (c *Control) appendNamedRisks(name string, edges ...*Risk) {
 	}
 }
 
-// NamedActionplans returns the Actionplans named value or an error if the edge was not
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedActionplans(name string) ([]*ActionPlan, error) {
-	if c.Edges.namedActionplans == nil {
+func (c *Control) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if c.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedActionplans[name]
+	nodes, ok := c.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedActionplans(name string, edges ...*ActionPlan) {
-	if c.Edges.namedActionplans == nil {
-		c.Edges.namedActionplans = make(map[string][]*ActionPlan)
+func (c *Control) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if c.Edges.namedActionPlans == nil {
+		c.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedActionplans[name] = []*ActionPlan{}
+		c.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		c.Edges.namedActionplans[name] = append(c.Edges.namedActionplans[name], edges...)
+		c.Edges.namedActionPlans[name] = append(c.Edges.namedActionPlans[name], edges...)
 	}
 }
 

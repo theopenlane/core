@@ -586,7 +586,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.StandardActionplans
+		edge.Schema = apu.schemaConfig.StandardActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apu.mutation.RemovedStandardIDs(); len(nodes) > 0 && !apu.mutation.StandardCleared() {
@@ -600,7 +600,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.StandardActionplans
+		edge.Schema = apu.schemaConfig.StandardActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -617,7 +617,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.StandardActionplans
+		edge.Schema = apu.schemaConfig.StandardActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -634,7 +634,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.RiskActionplans
+		edge.Schema = apu.schemaConfig.RiskActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apu.mutation.RemovedRiskIDs(); len(nodes) > 0 && !apu.mutation.RiskCleared() {
@@ -648,7 +648,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.RiskActionplans
+		edge.Schema = apu.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -665,7 +665,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.RiskActionplans
+		edge.Schema = apu.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -682,7 +682,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ControlActionplans
+		edge.Schema = apu.schemaConfig.ControlActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apu.mutation.RemovedControlIDs(); len(nodes) > 0 && !apu.mutation.ControlCleared() {
@@ -696,7 +696,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ControlActionplans
+		edge.Schema = apu.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -713,7 +713,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ControlActionplans
+		edge.Schema = apu.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -730,7 +730,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.UserActionplans
+		edge.Schema = apu.schemaConfig.UserActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apu.mutation.RemovedUserIDs(); len(nodes) > 0 && !apu.mutation.UserCleared() {
@@ -744,7 +744,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.UserActionplans
+		edge.Schema = apu.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -761,7 +761,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.UserActionplans
+		edge.Schema = apu.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -778,7 +778,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ProgramActionplans
+		edge.Schema = apu.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !apu.mutation.ProgramCleared() {
@@ -792,7 +792,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ProgramActionplans
+		edge.Schema = apu.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -809,7 +809,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ProgramActionplans
+		edge.Schema = apu.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1418,7 +1418,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.StandardActionplans
+		edge.Schema = apuo.schemaConfig.StandardActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apuo.mutation.RemovedStandardIDs(); len(nodes) > 0 && !apuo.mutation.StandardCleared() {
@@ -1432,7 +1432,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.StandardActionplans
+		edge.Schema = apuo.schemaConfig.StandardActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1449,7 +1449,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.StandardActionplans
+		edge.Schema = apuo.schemaConfig.StandardActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1466,7 +1466,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.RiskActionplans
+		edge.Schema = apuo.schemaConfig.RiskActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apuo.mutation.RemovedRiskIDs(); len(nodes) > 0 && !apuo.mutation.RiskCleared() {
@@ -1480,7 +1480,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.RiskActionplans
+		edge.Schema = apuo.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1497,7 +1497,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.RiskActionplans
+		edge.Schema = apuo.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1514,7 +1514,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ControlActionplans
+		edge.Schema = apuo.schemaConfig.ControlActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apuo.mutation.RemovedControlIDs(); len(nodes) > 0 && !apuo.mutation.ControlCleared() {
@@ -1528,7 +1528,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ControlActionplans
+		edge.Schema = apuo.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1545,7 +1545,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ControlActionplans
+		edge.Schema = apuo.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1562,7 +1562,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.UserActionplans
+		edge.Schema = apuo.schemaConfig.UserActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apuo.mutation.RemovedUserIDs(); len(nodes) > 0 && !apuo.mutation.UserCleared() {
@@ -1576,7 +1576,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.UserActionplans
+		edge.Schema = apuo.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1593,7 +1593,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.UserActionplans
+		edge.Schema = apuo.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1610,7 +1610,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ProgramActionplans
+		edge.Schema = apuo.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := apuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !apuo.mutation.ProgramCleared() {
@@ -1624,7 +1624,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ProgramActionplans
+		edge.Schema = apuo.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1641,7 +1641,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ProgramActionplans
+		edge.Schema = apuo.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

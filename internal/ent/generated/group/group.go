@@ -67,10 +67,10 @@ const (
 	EdgeProcedureEditors = "procedure_editors"
 	// EdgeProcedureBlockedGroups holds the string denoting the procedure_blocked_groups edge name in mutations.
 	EdgeProcedureBlockedGroups = "procedure_blocked_groups"
-	// EdgeInternalpolicyEditors holds the string denoting the internalpolicy_editors edge name in mutations.
-	EdgeInternalpolicyEditors = "internalpolicy_editors"
-	// EdgeInternalpolicyBlockedGroups holds the string denoting the internalpolicy_blocked_groups edge name in mutations.
-	EdgeInternalpolicyBlockedGroups = "internalpolicy_blocked_groups"
+	// EdgeInternalPolicyEditors holds the string denoting the internal_policy_editors edge name in mutations.
+	EdgeInternalPolicyEditors = "internal_policy_editors"
+	// EdgeInternalPolicyBlockedGroups holds the string denoting the internal_policy_blocked_groups edge name in mutations.
+	EdgeInternalPolicyBlockedGroups = "internal_policy_blocked_groups"
 	// EdgeProgramEditors holds the string denoting the program_editors edge name in mutations.
 	EdgeProgramEditors = "program_editors"
 	// EdgeProgramBlockedGroups holds the string denoting the program_blocked_groups edge name in mutations.
@@ -83,12 +83,12 @@ const (
 	EdgeRiskBlockedGroups = "risk_blocked_groups"
 	// EdgeRiskViewers holds the string denoting the risk_viewers edge name in mutations.
 	EdgeRiskViewers = "risk_viewers"
-	// EdgeControlobjectiveEditors holds the string denoting the controlobjective_editors edge name in mutations.
-	EdgeControlobjectiveEditors = "controlobjective_editors"
-	// EdgeControlobjectiveBlockedGroups holds the string denoting the controlobjective_blocked_groups edge name in mutations.
-	EdgeControlobjectiveBlockedGroups = "controlobjective_blocked_groups"
-	// EdgeControlobjectiveViewers holds the string denoting the controlobjective_viewers edge name in mutations.
-	EdgeControlobjectiveViewers = "controlobjective_viewers"
+	// EdgeControlObjectiveEditors holds the string denoting the control_objective_editors edge name in mutations.
+	EdgeControlObjectiveEditors = "control_objective_editors"
+	// EdgeControlObjectiveBlockedGroups holds the string denoting the control_objective_blocked_groups edge name in mutations.
+	EdgeControlObjectiveBlockedGroups = "control_objective_blocked_groups"
+	// EdgeControlObjectiveViewers holds the string denoting the control_objective_viewers edge name in mutations.
+	EdgeControlObjectiveViewers = "control_objective_viewers"
 	// EdgeControlEditors holds the string denoting the control_editors edge name in mutations.
 	EdgeControlEditors = "control_editors"
 	// EdgeControlBlockedGroups holds the string denoting the control_blocked_groups edge name in mutations.
@@ -179,16 +179,16 @@ const (
 	// ProcedureBlockedGroupsInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProcedureBlockedGroupsInverseTable = "procedures"
-	// InternalpolicyEditorsTable is the table that holds the internalpolicy_editors relation/edge. The primary key declared below.
-	InternalpolicyEditorsTable = "internal_policy_editors"
-	// InternalpolicyEditorsInverseTable is the table name for the InternalPolicy entity.
+	// InternalPolicyEditorsTable is the table that holds the internal_policy_editors relation/edge. The primary key declared below.
+	InternalPolicyEditorsTable = "internal_policy_editors"
+	// InternalPolicyEditorsInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	InternalpolicyEditorsInverseTable = "internal_policies"
-	// InternalpolicyBlockedGroupsTable is the table that holds the internalpolicy_blocked_groups relation/edge. The primary key declared below.
-	InternalpolicyBlockedGroupsTable = "internal_policy_blocked_groups"
-	// InternalpolicyBlockedGroupsInverseTable is the table name for the InternalPolicy entity.
+	InternalPolicyEditorsInverseTable = "internal_policies"
+	// InternalPolicyBlockedGroupsTable is the table that holds the internal_policy_blocked_groups relation/edge. The primary key declared below.
+	InternalPolicyBlockedGroupsTable = "internal_policy_blocked_groups"
+	// InternalPolicyBlockedGroupsInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	InternalpolicyBlockedGroupsInverseTable = "internal_policies"
+	InternalPolicyBlockedGroupsInverseTable = "internal_policies"
 	// ProgramEditorsTable is the table that holds the program_editors relation/edge. The primary key declared below.
 	ProgramEditorsTable = "program_editors"
 	// ProgramEditorsInverseTable is the table name for the Program entity.
@@ -219,21 +219,21 @@ const (
 	// RiskViewersInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RiskViewersInverseTable = "risks"
-	// ControlobjectiveEditorsTable is the table that holds the controlobjective_editors relation/edge. The primary key declared below.
-	ControlobjectiveEditorsTable = "control_objective_editors"
-	// ControlobjectiveEditorsInverseTable is the table name for the ControlObjective entity.
+	// ControlObjectiveEditorsTable is the table that holds the control_objective_editors relation/edge. The primary key declared below.
+	ControlObjectiveEditorsTable = "control_objective_editors"
+	// ControlObjectiveEditorsInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
-	ControlobjectiveEditorsInverseTable = "control_objectives"
-	// ControlobjectiveBlockedGroupsTable is the table that holds the controlobjective_blocked_groups relation/edge. The primary key declared below.
-	ControlobjectiveBlockedGroupsTable = "control_objective_blocked_groups"
-	// ControlobjectiveBlockedGroupsInverseTable is the table name for the ControlObjective entity.
+	ControlObjectiveEditorsInverseTable = "control_objectives"
+	// ControlObjectiveBlockedGroupsTable is the table that holds the control_objective_blocked_groups relation/edge. The primary key declared below.
+	ControlObjectiveBlockedGroupsTable = "control_objective_blocked_groups"
+	// ControlObjectiveBlockedGroupsInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
-	ControlobjectiveBlockedGroupsInverseTable = "control_objectives"
-	// ControlobjectiveViewersTable is the table that holds the controlobjective_viewers relation/edge. The primary key declared below.
-	ControlobjectiveViewersTable = "control_objective_viewers"
-	// ControlobjectiveViewersInverseTable is the table name for the ControlObjective entity.
+	ControlObjectiveBlockedGroupsInverseTable = "control_objectives"
+	// ControlObjectiveViewersTable is the table that holds the control_objective_viewers relation/edge. The primary key declared below.
+	ControlObjectiveViewersTable = "control_objective_viewers"
+	// ControlObjectiveViewersInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
-	ControlobjectiveViewersInverseTable = "control_objectives"
+	ControlObjectiveViewersInverseTable = "control_objectives"
 	// ControlEditorsTable is the table that holds the control_editors relation/edge. The primary key declared below.
 	ControlEditorsTable = "control_editors"
 	// ControlEditorsInverseTable is the table name for the Control entity.
@@ -360,12 +360,12 @@ var (
 	// ProcedureBlockedGroupsPrimaryKey and ProcedureBlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the procedure_blocked_groups relation (M2M).
 	ProcedureBlockedGroupsPrimaryKey = []string{"procedure_id", "group_id"}
-	// InternalpolicyEditorsPrimaryKey and InternalpolicyEditorsColumn2 are the table columns denoting the
-	// primary key for the internalpolicy_editors relation (M2M).
-	InternalpolicyEditorsPrimaryKey = []string{"internal_policy_id", "group_id"}
-	// InternalpolicyBlockedGroupsPrimaryKey and InternalpolicyBlockedGroupsColumn2 are the table columns denoting the
-	// primary key for the internalpolicy_blocked_groups relation (M2M).
-	InternalpolicyBlockedGroupsPrimaryKey = []string{"internal_policy_id", "group_id"}
+	// InternalPolicyEditorsPrimaryKey and InternalPolicyEditorsColumn2 are the table columns denoting the
+	// primary key for the internal_policy_editors relation (M2M).
+	InternalPolicyEditorsPrimaryKey = []string{"internal_policy_id", "group_id"}
+	// InternalPolicyBlockedGroupsPrimaryKey and InternalPolicyBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the internal_policy_blocked_groups relation (M2M).
+	InternalPolicyBlockedGroupsPrimaryKey = []string{"internal_policy_id", "group_id"}
 	// ProgramEditorsPrimaryKey and ProgramEditorsColumn2 are the table columns denoting the
 	// primary key for the program_editors relation (M2M).
 	ProgramEditorsPrimaryKey = []string{"program_id", "group_id"}
@@ -384,15 +384,15 @@ var (
 	// RiskViewersPrimaryKey and RiskViewersColumn2 are the table columns denoting the
 	// primary key for the risk_viewers relation (M2M).
 	RiskViewersPrimaryKey = []string{"risk_id", "group_id"}
-	// ControlobjectiveEditorsPrimaryKey and ControlobjectiveEditorsColumn2 are the table columns denoting the
-	// primary key for the controlobjective_editors relation (M2M).
-	ControlobjectiveEditorsPrimaryKey = []string{"control_objective_id", "group_id"}
-	// ControlobjectiveBlockedGroupsPrimaryKey and ControlobjectiveBlockedGroupsColumn2 are the table columns denoting the
-	// primary key for the controlobjective_blocked_groups relation (M2M).
-	ControlobjectiveBlockedGroupsPrimaryKey = []string{"control_objective_id", "group_id"}
-	// ControlobjectiveViewersPrimaryKey and ControlobjectiveViewersColumn2 are the table columns denoting the
-	// primary key for the controlobjective_viewers relation (M2M).
-	ControlobjectiveViewersPrimaryKey = []string{"control_objective_id", "group_id"}
+	// ControlObjectiveEditorsPrimaryKey and ControlObjectiveEditorsColumn2 are the table columns denoting the
+	// primary key for the control_objective_editors relation (M2M).
+	ControlObjectiveEditorsPrimaryKey = []string{"control_objective_id", "group_id"}
+	// ControlObjectiveBlockedGroupsPrimaryKey and ControlObjectiveBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the control_objective_blocked_groups relation (M2M).
+	ControlObjectiveBlockedGroupsPrimaryKey = []string{"control_objective_id", "group_id"}
+	// ControlObjectiveViewersPrimaryKey and ControlObjectiveViewersColumn2 are the table columns denoting the
+	// primary key for the control_objective_viewers relation (M2M).
+	ControlObjectiveViewersPrimaryKey = []string{"control_objective_id", "group_id"}
 	// ControlEditorsPrimaryKey and ControlEditorsColumn2 are the table columns denoting the
 	// primary key for the control_editors relation (M2M).
 	ControlEditorsPrimaryKey = []string{"control_id", "group_id"}
@@ -700,31 +700,31 @@ func ByProcedureBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 	}
 }
 
-// ByInternalpolicyEditorsCount orders the results by internalpolicy_editors count.
-func ByInternalpolicyEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInternalPolicyEditorsCount orders the results by internal_policy_editors count.
+func ByInternalPolicyEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInternalpolicyEditorsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyEditorsStep(), opts...)
 	}
 }
 
-// ByInternalpolicyEditors orders the results by internalpolicy_editors terms.
-func ByInternalpolicyEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInternalPolicyEditors orders the results by internal_policy_editors terms.
+func ByInternalPolicyEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInternalpolicyEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByInternalpolicyBlockedGroupsCount orders the results by internalpolicy_blocked_groups count.
-func ByInternalpolicyBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInternalPolicyBlockedGroupsCount orders the results by internal_policy_blocked_groups count.
+func ByInternalPolicyBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInternalpolicyBlockedGroupsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyBlockedGroupsStep(), opts...)
 	}
 }
 
-// ByInternalpolicyBlockedGroups orders the results by internalpolicy_blocked_groups terms.
-func ByInternalpolicyBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInternalPolicyBlockedGroups orders the results by internal_policy_blocked_groups terms.
+func ByInternalPolicyBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInternalpolicyBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -812,45 +812,45 @@ func ByRiskViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByControlobjectiveEditorsCount orders the results by controlobjective_editors count.
-func ByControlobjectiveEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlObjectiveEditorsCount orders the results by control_objective_editors count.
+func ByControlObjectiveEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlobjectiveEditorsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectiveEditorsStep(), opts...)
 	}
 }
 
-// ByControlobjectiveEditors orders the results by controlobjective_editors terms.
-func ByControlobjectiveEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControlObjectiveEditors orders the results by control_objective_editors terms.
+func ByControlObjectiveEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlobjectiveEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectiveEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByControlobjectiveBlockedGroupsCount orders the results by controlobjective_blocked_groups count.
-func ByControlobjectiveBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlObjectiveBlockedGroupsCount orders the results by control_objective_blocked_groups count.
+func ByControlObjectiveBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlobjectiveBlockedGroupsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectiveBlockedGroupsStep(), opts...)
 	}
 }
 
-// ByControlobjectiveBlockedGroups orders the results by controlobjective_blocked_groups terms.
-func ByControlobjectiveBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControlObjectiveBlockedGroups orders the results by control_objective_blocked_groups terms.
+func ByControlObjectiveBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlobjectiveBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectiveBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByControlobjectiveViewersCount orders the results by controlobjective_viewers count.
-func ByControlobjectiveViewersCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlObjectiveViewersCount orders the results by control_objective_viewers count.
+func ByControlObjectiveViewersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlobjectiveViewersStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectiveViewersStep(), opts...)
 	}
 }
 
-// ByControlobjectiveViewers orders the results by controlobjective_viewers terms.
-func ByControlobjectiveViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControlObjectiveViewers orders the results by control_objective_viewers terms.
+func ByControlObjectiveViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlobjectiveViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectiveViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1112,18 +1112,18 @@ func newProcedureBlockedGroupsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureBlockedGroupsTable, ProcedureBlockedGroupsPrimaryKey...),
 	)
 }
-func newInternalpolicyEditorsStep() *sqlgraph.Step {
+func newInternalPolicyEditorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InternalpolicyEditorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, InternalpolicyEditorsTable, InternalpolicyEditorsPrimaryKey...),
+		sqlgraph.To(InternalPolicyEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyEditorsTable, InternalPolicyEditorsPrimaryKey...),
 	)
 }
-func newInternalpolicyBlockedGroupsStep() *sqlgraph.Step {
+func newInternalPolicyBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InternalpolicyBlockedGroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, InternalpolicyBlockedGroupsTable, InternalpolicyBlockedGroupsPrimaryKey...),
+		sqlgraph.To(InternalPolicyBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyBlockedGroupsTable, InternalPolicyBlockedGroupsPrimaryKey...),
 	)
 }
 func newProgramEditorsStep() *sqlgraph.Step {
@@ -1168,25 +1168,25 @@ func newRiskViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, RiskViewersTable, RiskViewersPrimaryKey...),
 	)
 }
-func newControlobjectiveEditorsStep() *sqlgraph.Step {
+func newControlObjectiveEditorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlobjectiveEditorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveEditorsTable, ControlobjectiveEditorsPrimaryKey...),
+		sqlgraph.To(ControlObjectiveEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveEditorsTable, ControlObjectiveEditorsPrimaryKey...),
 	)
 }
-func newControlobjectiveBlockedGroupsStep() *sqlgraph.Step {
+func newControlObjectiveBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlobjectiveBlockedGroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveBlockedGroupsTable, ControlobjectiveBlockedGroupsPrimaryKey...),
+		sqlgraph.To(ControlObjectiveBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveBlockedGroupsTable, ControlObjectiveBlockedGroupsPrimaryKey...),
 	)
 }
-func newControlobjectiveViewersStep() *sqlgraph.Step {
+func newControlObjectiveViewersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlobjectiveViewersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveViewersTable, ControlobjectiveViewersPrimaryKey...),
+		sqlgraph.To(ControlObjectiveViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlObjectiveViewersTable, ControlObjectiveViewersPrimaryKey...),
 	)
 }
 func newControlEditorsStep() *sqlgraph.Step {

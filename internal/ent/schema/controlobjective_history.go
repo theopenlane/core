@@ -39,7 +39,7 @@ func (ControlObjectiveHistory) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entfga.Annotations{
-			ObjectType:   "controlobjective",
+			ObjectType:   "control_objective",
 			IDField:      "Ref",
 			IncludeHooks: false,
 		},

@@ -51,23 +51,23 @@ const (
 	FieldSatisfies = "satisfies"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
-	// EdgeControlobjectives holds the string denoting the controlobjectives edge name in mutations.
-	EdgeControlobjectives = "controlobjectives"
+	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
+	EdgeControlObjectives = "control_objectives"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
 	EdgeProcedures = "procedures"
-	// EdgeActionplans holds the string denoting the actionplans edge name in mutations.
-	EdgeActionplans = "actionplans"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
 	// Table holds the table name of the standard in the database.
 	Table = "standards"
-	// ControlobjectivesTable is the table that holds the controlobjectives relation/edge. The primary key declared below.
-	ControlobjectivesTable = "standard_controlobjectives"
-	// ControlobjectivesInverseTable is the table name for the ControlObjective entity.
+	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
+	ControlObjectivesTable = "standard_control_objectives"
+	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
-	ControlobjectivesInverseTable = "control_objectives"
+	ControlObjectivesInverseTable = "control_objectives"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "standard_controls"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -80,11 +80,11 @@ const (
 	ProceduresInverseTable = "procedures"
 	// ProceduresColumn is the table column denoting the procedures relation/edge.
 	ProceduresColumn = "standard_procedures"
-	// ActionplansTable is the table that holds the actionplans relation/edge. The primary key declared below.
-	ActionplansTable = "standard_actionplans"
-	// ActionplansInverseTable is the table name for the ActionPlan entity.
+	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
+	ActionPlansTable = "standard_action_plans"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
-	ActionplansInverseTable = "action_plans"
+	ActionPlansInverseTable = "action_plans"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "standard_programs"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -116,15 +116,15 @@ var Columns = []string{
 }
 
 var (
-	// ControlobjectivesPrimaryKey and ControlobjectivesColumn2 are the table columns denoting the
-	// primary key for the controlobjectives relation (M2M).
-	ControlobjectivesPrimaryKey = []string{"standard_id", "control_objective_id"}
+	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
+	// primary key for the control_objectives relation (M2M).
+	ControlObjectivesPrimaryKey = []string{"standard_id", "control_objective_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"standard_id", "control_id"}
-	// ActionplansPrimaryKey and ActionplansColumn2 are the table columns denoting the
-	// primary key for the actionplans relation (M2M).
-	ActionplansPrimaryKey = []string{"standard_id", "action_plan_id"}
+	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
+	// primary key for the action_plans relation (M2M).
+	ActionPlansPrimaryKey = []string{"standard_id", "action_plan_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"standard_id", "program_id"}
@@ -252,17 +252,17 @@ func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
 }
 
-// ByControlobjectivesCount orders the results by controlobjectives count.
-func ByControlobjectivesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlObjectivesCount orders the results by control_objectives count.
+func ByControlObjectivesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlobjectivesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectivesStep(), opts...)
 	}
 }
 
-// ByControlobjectives orders the results by controlobjectives terms.
-func ByControlobjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControlObjectives orders the results by control_objectives terms.
+func ByControlObjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlobjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -294,17 +294,17 @@ func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByActionplansCount orders the results by actionplans count.
-func ByActionplansCount(opts ...sql.OrderTermOption) OrderOption {
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newActionplansStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
 	}
 }
 
-// ByActionplans orders the results by actionplans terms.
-func ByActionplans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newActionplansStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -321,11 +321,11 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newControlobjectivesStep() *sqlgraph.Step {
+func newControlObjectivesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlobjectivesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ControlobjectivesTable, ControlobjectivesPrimaryKey...),
+		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
@@ -342,11 +342,11 @@ func newProceduresStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
 	)
 }
-func newActionplansStep() *sqlgraph.Step {
+func newActionPlansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ActionplansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ActionplansTable, ActionplansPrimaryKey...),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

@@ -1437,27 +1437,27 @@ func HasProcedureWith(preds ...predicate.Procedure) predicate.Risk {
 	})
 }
 
-// HasActionplans applies the HasEdge predicate on the "actionplans" edge.
-func HasActionplans() predicate.Risk {
+// HasActionPlans applies the HasEdge predicate on the "action_plans" edge.
+func HasActionPlans() predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ActionplansTable, ActionplansPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.RiskActionplans
+		step.Edge.Schema = schemaConfig.RiskActionPlans
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasActionplansWith applies the HasEdge predicate on the "actionplans" edge with a given conditions (other predicates).
-func HasActionplansWith(preds ...predicate.ActionPlan) predicate.Risk {
+// HasActionPlansWith applies the HasEdge predicate on the "action_plans" edge with a given conditions (other predicates).
+func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {
-		step := newActionplansStep()
+		step := newActionPlansStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.RiskActionplans
+		step.Edge.Schema = schemaConfig.RiskActionPlans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

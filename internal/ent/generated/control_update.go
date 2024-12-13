@@ -453,19 +453,19 @@ func (cu *ControlUpdate) AddSubcontrols(s ...*Subcontrol) *ControlUpdate {
 	return cu.AddSubcontrolIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (cu *ControlUpdate) AddControlobjectiveIDs(ids ...string) *ControlUpdate {
-	cu.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (cu *ControlUpdate) AddControlObjectiveIDs(ids ...string) *ControlUpdate {
+	cu.mutation.AddControlObjectiveIDs(ids...)
 	return cu
 }
 
-// AddControlobjectives adds the "controlobjectives" edges to the ControlObjective entity.
-func (cu *ControlUpdate) AddControlobjectives(c ...*ControlObjective) *ControlUpdate {
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (cu *ControlUpdate) AddControlObjectives(c ...*ControlObjective) *ControlUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cu.AddControlobjectiveIDs(ids...)
+	return cu.AddControlObjectiveIDs(ids...)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -513,19 +513,19 @@ func (cu *ControlUpdate) AddRisks(r ...*Risk) *ControlUpdate {
 	return cu.AddRiskIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (cu *ControlUpdate) AddActionplanIDs(ids ...string) *ControlUpdate {
-	cu.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (cu *ControlUpdate) AddActionPlanIDs(ids ...string) *ControlUpdate {
+	cu.mutation.AddActionPlanIDs(ids...)
 	return cu
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (cu *ControlUpdate) AddActionplans(a ...*ActionPlan) *ControlUpdate {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (cu *ControlUpdate) AddActionPlans(a ...*ActionPlan) *ControlUpdate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return cu.AddActionplanIDs(ids...)
+	return cu.AddActionPlanIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
@@ -674,25 +674,25 @@ func (cu *ControlUpdate) RemoveSubcontrols(s ...*Subcontrol) *ControlUpdate {
 	return cu.RemoveSubcontrolIDs(ids...)
 }
 
-// ClearControlobjectives clears all "controlobjectives" edges to the ControlObjective entity.
-func (cu *ControlUpdate) ClearControlobjectives() *ControlUpdate {
-	cu.mutation.ClearControlobjectives()
+// ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
+func (cu *ControlUpdate) ClearControlObjectives() *ControlUpdate {
+	cu.mutation.ClearControlObjectives()
 	return cu
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to ControlObjective entities by IDs.
-func (cu *ControlUpdate) RemoveControlobjectiveIDs(ids ...string) *ControlUpdate {
-	cu.mutation.RemoveControlobjectiveIDs(ids...)
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
+func (cu *ControlUpdate) RemoveControlObjectiveIDs(ids ...string) *ControlUpdate {
+	cu.mutation.RemoveControlObjectiveIDs(ids...)
 	return cu
 }
 
-// RemoveControlobjectives removes "controlobjectives" edges to ControlObjective entities.
-func (cu *ControlUpdate) RemoveControlobjectives(c ...*ControlObjective) *ControlUpdate {
+// RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
+func (cu *ControlUpdate) RemoveControlObjectives(c ...*ControlObjective) *ControlUpdate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cu.RemoveControlobjectiveIDs(ids...)
+	return cu.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearStandard clears all "standard" edges to the Standard entity.
@@ -758,25 +758,25 @@ func (cu *ControlUpdate) RemoveRisks(r ...*Risk) *ControlUpdate {
 	return cu.RemoveRiskIDs(ids...)
 }
 
-// ClearActionplans clears all "actionplans" edges to the ActionPlan entity.
-func (cu *ControlUpdate) ClearActionplans() *ControlUpdate {
-	cu.mutation.ClearActionplans()
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (cu *ControlUpdate) ClearActionPlans() *ControlUpdate {
+	cu.mutation.ClearActionPlans()
 	return cu
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to ActionPlan entities by IDs.
-func (cu *ControlUpdate) RemoveActionplanIDs(ids ...string) *ControlUpdate {
-	cu.mutation.RemoveActionplanIDs(ids...)
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (cu *ControlUpdate) RemoveActionPlanIDs(ids ...string) *ControlUpdate {
+	cu.mutation.RemoveActionPlanIDs(ids...)
 	return cu
 }
 
-// RemoveActionplans removes "actionplans" edges to ActionPlan entities.
-func (cu *ControlUpdate) RemoveActionplans(a ...*ActionPlan) *ControlUpdate {
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (cu *ControlUpdate) RemoveActionPlans(a ...*ActionPlan) *ControlUpdate {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return cu.RemoveActionplanIDs(ids...)
+	return cu.RemoveActionPlanIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
@@ -1280,12 +1280,12 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cu.mutation.ControlobjectivesCleared() {
+	if cu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   control.ControlobjectivesTable,
-			Columns: []string{control.ControlobjectivesColumn},
+			Table:   control.ControlObjectivesTable,
+			Columns: []string{control.ControlObjectivesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -1294,12 +1294,12 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = cu.schemaConfig.ControlObjective
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedControlobjectivesIDs(); len(nodes) > 0 && !cu.mutation.ControlobjectivesCleared() {
+	if nodes := cu.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !cu.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   control.ControlobjectivesTable,
-			Columns: []string{control.ControlobjectivesColumn},
+			Table:   control.ControlObjectivesTable,
+			Columns: []string{control.ControlObjectivesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -1311,12 +1311,12 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
+	if nodes := cu.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   control.ControlobjectivesTable,
-			Columns: []string{control.ControlobjectivesColumn},
+			Table:   control.ControlObjectivesTable,
+			Columns: []string{control.ControlObjectivesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -1472,49 +1472,49 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cu.mutation.ActionplansCleared() {
+	if cu.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ActionplansTable,
-			Columns: control.ActionplansPrimaryKey,
+			Table:   control.ActionPlansTable,
+			Columns: control.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ControlActionplans
+		edge.Schema = cu.schemaConfig.ControlActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedActionplansIDs(); len(nodes) > 0 && !cu.mutation.ActionplansCleared() {
+	if nodes := cu.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !cu.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ActionplansTable,
-			Columns: control.ActionplansPrimaryKey,
+			Table:   control.ActionPlansTable,
+			Columns: control.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ControlActionplans
+		edge.Schema = cu.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := cu.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ActionplansTable,
-			Columns: control.ActionplansPrimaryKey,
+			Table:   control.ActionPlansTable,
+			Columns: control.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ControlActionplans
+		edge.Schema = cu.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2050,19 +2050,19 @@ func (cuo *ControlUpdateOne) AddSubcontrols(s ...*Subcontrol) *ControlUpdateOne 
 	return cuo.AddSubcontrolIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (cuo *ControlUpdateOne) AddControlobjectiveIDs(ids ...string) *ControlUpdateOne {
-	cuo.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (cuo *ControlUpdateOne) AddControlObjectiveIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.AddControlObjectiveIDs(ids...)
 	return cuo
 }
 
-// AddControlobjectives adds the "controlobjectives" edges to the ControlObjective entity.
-func (cuo *ControlUpdateOne) AddControlobjectives(c ...*ControlObjective) *ControlUpdateOne {
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (cuo *ControlUpdateOne) AddControlObjectives(c ...*ControlObjective) *ControlUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cuo.AddControlobjectiveIDs(ids...)
+	return cuo.AddControlObjectiveIDs(ids...)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -2110,19 +2110,19 @@ func (cuo *ControlUpdateOne) AddRisks(r ...*Risk) *ControlUpdateOne {
 	return cuo.AddRiskIDs(ids...)
 }
 
-// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
-func (cuo *ControlUpdateOne) AddActionplanIDs(ids ...string) *ControlUpdateOne {
-	cuo.mutation.AddActionplanIDs(ids...)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (cuo *ControlUpdateOne) AddActionPlanIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.AddActionPlanIDs(ids...)
 	return cuo
 }
 
-// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
-func (cuo *ControlUpdateOne) AddActionplans(a ...*ActionPlan) *ControlUpdateOne {
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (cuo *ControlUpdateOne) AddActionPlans(a ...*ActionPlan) *ControlUpdateOne {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return cuo.AddActionplanIDs(ids...)
+	return cuo.AddActionPlanIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
@@ -2271,25 +2271,25 @@ func (cuo *ControlUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ControlUpdateO
 	return cuo.RemoveSubcontrolIDs(ids...)
 }
 
-// ClearControlobjectives clears all "controlobjectives" edges to the ControlObjective entity.
-func (cuo *ControlUpdateOne) ClearControlobjectives() *ControlUpdateOne {
-	cuo.mutation.ClearControlobjectives()
+// ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
+func (cuo *ControlUpdateOne) ClearControlObjectives() *ControlUpdateOne {
+	cuo.mutation.ClearControlObjectives()
 	return cuo
 }
 
-// RemoveControlobjectiveIDs removes the "controlobjectives" edge to ControlObjective entities by IDs.
-func (cuo *ControlUpdateOne) RemoveControlobjectiveIDs(ids ...string) *ControlUpdateOne {
-	cuo.mutation.RemoveControlobjectiveIDs(ids...)
+// RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
+func (cuo *ControlUpdateOne) RemoveControlObjectiveIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.RemoveControlObjectiveIDs(ids...)
 	return cuo
 }
 
-// RemoveControlobjectives removes "controlobjectives" edges to ControlObjective entities.
-func (cuo *ControlUpdateOne) RemoveControlobjectives(c ...*ControlObjective) *ControlUpdateOne {
+// RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
+func (cuo *ControlUpdateOne) RemoveControlObjectives(c ...*ControlObjective) *ControlUpdateOne {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cuo.RemoveControlobjectiveIDs(ids...)
+	return cuo.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearStandard clears all "standard" edges to the Standard entity.
@@ -2355,25 +2355,25 @@ func (cuo *ControlUpdateOne) RemoveRisks(r ...*Risk) *ControlUpdateOne {
 	return cuo.RemoveRiskIDs(ids...)
 }
 
-// ClearActionplans clears all "actionplans" edges to the ActionPlan entity.
-func (cuo *ControlUpdateOne) ClearActionplans() *ControlUpdateOne {
-	cuo.mutation.ClearActionplans()
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (cuo *ControlUpdateOne) ClearActionPlans() *ControlUpdateOne {
+	cuo.mutation.ClearActionPlans()
 	return cuo
 }
 
-// RemoveActionplanIDs removes the "actionplans" edge to ActionPlan entities by IDs.
-func (cuo *ControlUpdateOne) RemoveActionplanIDs(ids ...string) *ControlUpdateOne {
-	cuo.mutation.RemoveActionplanIDs(ids...)
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (cuo *ControlUpdateOne) RemoveActionPlanIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.RemoveActionPlanIDs(ids...)
 	return cuo
 }
 
-// RemoveActionplans removes "actionplans" edges to ActionPlan entities.
-func (cuo *ControlUpdateOne) RemoveActionplans(a ...*ActionPlan) *ControlUpdateOne {
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (cuo *ControlUpdateOne) RemoveActionPlans(a ...*ActionPlan) *ControlUpdateOne {
 	ids := make([]string, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
 	}
-	return cuo.RemoveActionplanIDs(ids...)
+	return cuo.RemoveActionPlanIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
@@ -2907,12 +2907,12 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cuo.mutation.ControlobjectivesCleared() {
+	if cuo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   control.ControlobjectivesTable,
-			Columns: []string{control.ControlobjectivesColumn},
+			Table:   control.ControlObjectivesTable,
+			Columns: []string{control.ControlObjectivesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -2921,12 +2921,12 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 		edge.Schema = cuo.schemaConfig.ControlObjective
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedControlobjectivesIDs(); len(nodes) > 0 && !cuo.mutation.ControlobjectivesCleared() {
+	if nodes := cuo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !cuo.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   control.ControlobjectivesTable,
-			Columns: []string{control.ControlobjectivesColumn},
+			Table:   control.ControlObjectivesTable,
+			Columns: []string{control.ControlObjectivesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -2938,12 +2938,12 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
+	if nodes := cuo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   control.ControlobjectivesTable,
-			Columns: []string{control.ControlobjectivesColumn},
+			Table:   control.ControlObjectivesTable,
+			Columns: []string{control.ControlObjectivesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
@@ -3099,49 +3099,49 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cuo.mutation.ActionplansCleared() {
+	if cuo.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ActionplansTable,
-			Columns: control.ActionplansPrimaryKey,
+			Table:   control.ActionPlansTable,
+			Columns: control.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ControlActionplans
+		edge.Schema = cuo.schemaConfig.ControlActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedActionplansIDs(); len(nodes) > 0 && !cuo.mutation.ActionplansCleared() {
+	if nodes := cuo.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !cuo.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ActionplansTable,
-			Columns: control.ActionplansPrimaryKey,
+			Table:   control.ActionPlansTable,
+			Columns: control.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ControlActionplans
+		edge.Schema = cuo.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.ActionplansIDs(); len(nodes) > 0 {
+	if nodes := cuo.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   control.ActionplansTable,
-			Columns: control.ActionplansPrimaryKey,
+			Table:   control.ActionPlansTable,
+			Columns: control.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ControlActionplans
+		edge.Schema = cuo.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

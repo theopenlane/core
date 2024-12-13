@@ -53,17 +53,17 @@ type GroupQuery struct {
 	withTemplateCreators                   *OrganizationQuery
 	withProcedureEditors                   *ProcedureQuery
 	withProcedureBlockedGroups             *ProcedureQuery
-	withInternalpolicyEditors              *InternalPolicyQuery
-	withInternalpolicyBlockedGroups        *InternalPolicyQuery
+	withInternalPolicyEditors              *InternalPolicyQuery
+	withInternalPolicyBlockedGroups        *InternalPolicyQuery
 	withProgramEditors                     *ProgramQuery
 	withProgramBlockedGroups               *ProgramQuery
 	withProgramViewers                     *ProgramQuery
 	withRiskEditors                        *RiskQuery
 	withRiskBlockedGroups                  *RiskQuery
 	withRiskViewers                        *RiskQuery
-	withControlobjectiveEditors            *ControlObjectiveQuery
-	withControlobjectiveBlockedGroups      *ControlObjectiveQuery
-	withControlobjectiveViewers            *ControlObjectiveQuery
+	withControlObjectiveEditors            *ControlObjectiveQuery
+	withControlObjectiveBlockedGroups      *ControlObjectiveQuery
+	withControlObjectiveViewers            *ControlObjectiveQuery
 	withControlEditors                     *ControlQuery
 	withControlBlockedGroups               *ControlQuery
 	withControlViewers                     *ControlQuery
@@ -90,17 +90,17 @@ type GroupQuery struct {
 	withNamedTemplateCreators              map[string]*OrganizationQuery
 	withNamedProcedureEditors              map[string]*ProcedureQuery
 	withNamedProcedureBlockedGroups        map[string]*ProcedureQuery
-	withNamedInternalpolicyEditors         map[string]*InternalPolicyQuery
-	withNamedInternalpolicyBlockedGroups   map[string]*InternalPolicyQuery
+	withNamedInternalPolicyEditors         map[string]*InternalPolicyQuery
+	withNamedInternalPolicyBlockedGroups   map[string]*InternalPolicyQuery
 	withNamedProgramEditors                map[string]*ProgramQuery
 	withNamedProgramBlockedGroups          map[string]*ProgramQuery
 	withNamedProgramViewers                map[string]*ProgramQuery
 	withNamedRiskEditors                   map[string]*RiskQuery
 	withNamedRiskBlockedGroups             map[string]*RiskQuery
 	withNamedRiskViewers                   map[string]*RiskQuery
-	withNamedControlobjectiveEditors       map[string]*ControlObjectiveQuery
-	withNamedControlobjectiveBlockedGroups map[string]*ControlObjectiveQuery
-	withNamedControlobjectiveViewers       map[string]*ControlObjectiveQuery
+	withNamedControlObjectiveEditors       map[string]*ControlObjectiveQuery
+	withNamedControlObjectiveBlockedGroups map[string]*ControlObjectiveQuery
+	withNamedControlObjectiveViewers       map[string]*ControlObjectiveQuery
 	withNamedControlEditors                map[string]*ControlQuery
 	withNamedControlBlockedGroups          map[string]*ControlQuery
 	withNamedControlViewers                map[string]*ControlQuery
@@ -449,8 +449,8 @@ func (gq *GroupQuery) QueryProcedureBlockedGroups() *ProcedureQuery {
 	return query
 }
 
-// QueryInternalpolicyEditors chains the current query on the "internalpolicy_editors" edge.
-func (gq *GroupQuery) QueryInternalpolicyEditors() *InternalPolicyQuery {
+// QueryInternalPolicyEditors chains the current query on the "internal_policy_editors" edge.
+func (gq *GroupQuery) QueryInternalPolicyEditors() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: gq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gq.prepareQuery(ctx); err != nil {
@@ -463,7 +463,7 @@ func (gq *GroupQuery) QueryInternalpolicyEditors() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalpolicyEditorsTable, group.InternalpolicyEditorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyEditorsTable, group.InternalPolicyEditorsPrimaryKey...),
 		)
 		schemaConfig := gq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -474,8 +474,8 @@ func (gq *GroupQuery) QueryInternalpolicyEditors() *InternalPolicyQuery {
 	return query
 }
 
-// QueryInternalpolicyBlockedGroups chains the current query on the "internalpolicy_blocked_groups" edge.
-func (gq *GroupQuery) QueryInternalpolicyBlockedGroups() *InternalPolicyQuery {
+// QueryInternalPolicyBlockedGroups chains the current query on the "internal_policy_blocked_groups" edge.
+func (gq *GroupQuery) QueryInternalPolicyBlockedGroups() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: gq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gq.prepareQuery(ctx); err != nil {
@@ -488,7 +488,7 @@ func (gq *GroupQuery) QueryInternalpolicyBlockedGroups() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalpolicyBlockedGroupsTable, group.InternalpolicyBlockedGroupsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyBlockedGroupsTable, group.InternalPolicyBlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := gq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -649,8 +649,8 @@ func (gq *GroupQuery) QueryRiskViewers() *RiskQuery {
 	return query
 }
 
-// QueryControlobjectiveEditors chains the current query on the "controlobjective_editors" edge.
-func (gq *GroupQuery) QueryControlobjectiveEditors() *ControlObjectiveQuery {
+// QueryControlObjectiveEditors chains the current query on the "control_objective_editors" edge.
+func (gq *GroupQuery) QueryControlObjectiveEditors() *ControlObjectiveQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gq.prepareQuery(ctx); err != nil {
@@ -663,7 +663,7 @@ func (gq *GroupQuery) QueryControlobjectiveEditors() *ControlObjectiveQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, selector),
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlobjectiveEditorsTable, group.ControlobjectiveEditorsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlObjectiveEditorsTable, group.ControlObjectiveEditorsPrimaryKey...),
 		)
 		schemaConfig := gq.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
@@ -674,8 +674,8 @@ func (gq *GroupQuery) QueryControlobjectiveEditors() *ControlObjectiveQuery {
 	return query
 }
 
-// QueryControlobjectiveBlockedGroups chains the current query on the "controlobjective_blocked_groups" edge.
-func (gq *GroupQuery) QueryControlobjectiveBlockedGroups() *ControlObjectiveQuery {
+// QueryControlObjectiveBlockedGroups chains the current query on the "control_objective_blocked_groups" edge.
+func (gq *GroupQuery) QueryControlObjectiveBlockedGroups() *ControlObjectiveQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gq.prepareQuery(ctx); err != nil {
@@ -688,7 +688,7 @@ func (gq *GroupQuery) QueryControlobjectiveBlockedGroups() *ControlObjectiveQuer
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, selector),
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlobjectiveBlockedGroupsTable, group.ControlobjectiveBlockedGroupsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlObjectiveBlockedGroupsTable, group.ControlObjectiveBlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := gq.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
@@ -699,8 +699,8 @@ func (gq *GroupQuery) QueryControlobjectiveBlockedGroups() *ControlObjectiveQuer
 	return query
 }
 
-// QueryControlobjectiveViewers chains the current query on the "controlobjective_viewers" edge.
-func (gq *GroupQuery) QueryControlobjectiveViewers() *ControlObjectiveQuery {
+// QueryControlObjectiveViewers chains the current query on the "control_objective_viewers" edge.
+func (gq *GroupQuery) QueryControlObjectiveViewers() *ControlObjectiveQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gq.prepareQuery(ctx); err != nil {
@@ -713,7 +713,7 @@ func (gq *GroupQuery) QueryControlobjectiveViewers() *ControlObjectiveQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, selector),
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlobjectiveViewersTable, group.ControlobjectiveViewersPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlObjectiveViewersTable, group.ControlObjectiveViewersPrimaryKey...),
 		)
 		schemaConfig := gq.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
@@ -1253,17 +1253,17 @@ func (gq *GroupQuery) Clone() *GroupQuery {
 		withTemplateCreators:              gq.withTemplateCreators.Clone(),
 		withProcedureEditors:              gq.withProcedureEditors.Clone(),
 		withProcedureBlockedGroups:        gq.withProcedureBlockedGroups.Clone(),
-		withInternalpolicyEditors:         gq.withInternalpolicyEditors.Clone(),
-		withInternalpolicyBlockedGroups:   gq.withInternalpolicyBlockedGroups.Clone(),
+		withInternalPolicyEditors:         gq.withInternalPolicyEditors.Clone(),
+		withInternalPolicyBlockedGroups:   gq.withInternalPolicyBlockedGroups.Clone(),
 		withProgramEditors:                gq.withProgramEditors.Clone(),
 		withProgramBlockedGroups:          gq.withProgramBlockedGroups.Clone(),
 		withProgramViewers:                gq.withProgramViewers.Clone(),
 		withRiskEditors:                   gq.withRiskEditors.Clone(),
 		withRiskBlockedGroups:             gq.withRiskBlockedGroups.Clone(),
 		withRiskViewers:                   gq.withRiskViewers.Clone(),
-		withControlobjectiveEditors:       gq.withControlobjectiveEditors.Clone(),
-		withControlobjectiveBlockedGroups: gq.withControlobjectiveBlockedGroups.Clone(),
-		withControlobjectiveViewers:       gq.withControlobjectiveViewers.Clone(),
+		withControlObjectiveEditors:       gq.withControlObjectiveEditors.Clone(),
+		withControlObjectiveBlockedGroups: gq.withControlObjectiveBlockedGroups.Clone(),
+		withControlObjectiveViewers:       gq.withControlObjectiveViewers.Clone(),
 		withControlEditors:                gq.withControlEditors.Clone(),
 		withControlBlockedGroups:          gq.withControlBlockedGroups.Clone(),
 		withControlViewers:                gq.withControlViewers.Clone(),
@@ -1416,25 +1416,25 @@ func (gq *GroupQuery) WithProcedureBlockedGroups(opts ...func(*ProcedureQuery)) 
 	return gq
 }
 
-// WithInternalpolicyEditors tells the query-builder to eager-load the nodes that are connected to
-// the "internalpolicy_editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithInternalpolicyEditors(opts ...func(*InternalPolicyQuery)) *GroupQuery {
+// WithInternalPolicyEditors tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policy_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithInternalPolicyEditors(opts ...func(*InternalPolicyQuery)) *GroupQuery {
 	query := (&InternalPolicyClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gq.withInternalpolicyEditors = query
+	gq.withInternalPolicyEditors = query
 	return gq
 }
 
-// WithInternalpolicyBlockedGroups tells the query-builder to eager-load the nodes that are connected to
-// the "internalpolicy_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithInternalpolicyBlockedGroups(opts ...func(*InternalPolicyQuery)) *GroupQuery {
+// WithInternalPolicyBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policy_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithInternalPolicyBlockedGroups(opts ...func(*InternalPolicyQuery)) *GroupQuery {
 	query := (&InternalPolicyClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gq.withInternalpolicyBlockedGroups = query
+	gq.withInternalPolicyBlockedGroups = query
 	return gq
 }
 
@@ -1504,36 +1504,36 @@ func (gq *GroupQuery) WithRiskViewers(opts ...func(*RiskQuery)) *GroupQuery {
 	return gq
 }
 
-// WithControlobjectiveEditors tells the query-builder to eager-load the nodes that are connected to
-// the "controlobjective_editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithControlobjectiveEditors(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+// WithControlObjectiveEditors tells the query-builder to eager-load the nodes that are connected to
+// the "control_objective_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithControlObjectiveEditors(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gq.withControlobjectiveEditors = query
+	gq.withControlObjectiveEditors = query
 	return gq
 }
 
-// WithControlobjectiveBlockedGroups tells the query-builder to eager-load the nodes that are connected to
-// the "controlobjective_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithControlobjectiveBlockedGroups(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+// WithControlObjectiveBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "control_objective_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithControlObjectiveBlockedGroups(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gq.withControlobjectiveBlockedGroups = query
+	gq.withControlObjectiveBlockedGroups = query
 	return gq
 }
 
-// WithControlobjectiveViewers tells the query-builder to eager-load the nodes that are connected to
-// the "controlobjective_viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithControlobjectiveViewers(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+// WithControlObjectiveViewers tells the query-builder to eager-load the nodes that are connected to
+// the "control_objective_viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithControlObjectiveViewers(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gq.withControlobjectiveViewers = query
+	gq.withControlObjectiveViewers = query
 	return gq
 }
 
@@ -1777,17 +1777,17 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			gq.withTemplateCreators != nil,
 			gq.withProcedureEditors != nil,
 			gq.withProcedureBlockedGroups != nil,
-			gq.withInternalpolicyEditors != nil,
-			gq.withInternalpolicyBlockedGroups != nil,
+			gq.withInternalPolicyEditors != nil,
+			gq.withInternalPolicyBlockedGroups != nil,
 			gq.withProgramEditors != nil,
 			gq.withProgramBlockedGroups != nil,
 			gq.withProgramViewers != nil,
 			gq.withRiskEditors != nil,
 			gq.withRiskBlockedGroups != nil,
 			gq.withRiskViewers != nil,
-			gq.withControlobjectiveEditors != nil,
-			gq.withControlobjectiveBlockedGroups != nil,
-			gq.withControlobjectiveViewers != nil,
+			gq.withControlObjectiveEditors != nil,
+			gq.withControlObjectiveBlockedGroups != nil,
+			gq.withControlObjectiveViewers != nil,
 			gq.withControlEditors != nil,
 			gq.withControlBlockedGroups != nil,
 			gq.withControlViewers != nil,
@@ -1915,20 +1915,20 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
-	if query := gq.withInternalpolicyEditors; query != nil {
-		if err := gq.loadInternalpolicyEditors(ctx, query, nodes,
-			func(n *Group) { n.Edges.InternalpolicyEditors = []*InternalPolicy{} },
+	if query := gq.withInternalPolicyEditors; query != nil {
+		if err := gq.loadInternalPolicyEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.InternalPolicyEditors = []*InternalPolicy{} },
 			func(n *Group, e *InternalPolicy) {
-				n.Edges.InternalpolicyEditors = append(n.Edges.InternalpolicyEditors, e)
+				n.Edges.InternalPolicyEditors = append(n.Edges.InternalPolicyEditors, e)
 			}); err != nil {
 			return nil, err
 		}
 	}
-	if query := gq.withInternalpolicyBlockedGroups; query != nil {
-		if err := gq.loadInternalpolicyBlockedGroups(ctx, query, nodes,
-			func(n *Group) { n.Edges.InternalpolicyBlockedGroups = []*InternalPolicy{} },
+	if query := gq.withInternalPolicyBlockedGroups; query != nil {
+		if err := gq.loadInternalPolicyBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.InternalPolicyBlockedGroups = []*InternalPolicy{} },
 			func(n *Group, e *InternalPolicy) {
-				n.Edges.InternalpolicyBlockedGroups = append(n.Edges.InternalpolicyBlockedGroups, e)
+				n.Edges.InternalPolicyBlockedGroups = append(n.Edges.InternalPolicyBlockedGroups, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -1975,29 +1975,29 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
-	if query := gq.withControlobjectiveEditors; query != nil {
-		if err := gq.loadControlobjectiveEditors(ctx, query, nodes,
-			func(n *Group) { n.Edges.ControlobjectiveEditors = []*ControlObjective{} },
+	if query := gq.withControlObjectiveEditors; query != nil {
+		if err := gq.loadControlObjectiveEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.ControlObjectiveEditors = []*ControlObjective{} },
 			func(n *Group, e *ControlObjective) {
-				n.Edges.ControlobjectiveEditors = append(n.Edges.ControlobjectiveEditors, e)
+				n.Edges.ControlObjectiveEditors = append(n.Edges.ControlObjectiveEditors, e)
 			}); err != nil {
 			return nil, err
 		}
 	}
-	if query := gq.withControlobjectiveBlockedGroups; query != nil {
-		if err := gq.loadControlobjectiveBlockedGroups(ctx, query, nodes,
-			func(n *Group) { n.Edges.ControlobjectiveBlockedGroups = []*ControlObjective{} },
+	if query := gq.withControlObjectiveBlockedGroups; query != nil {
+		if err := gq.loadControlObjectiveBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.ControlObjectiveBlockedGroups = []*ControlObjective{} },
 			func(n *Group, e *ControlObjective) {
-				n.Edges.ControlobjectiveBlockedGroups = append(n.Edges.ControlobjectiveBlockedGroups, e)
+				n.Edges.ControlObjectiveBlockedGroups = append(n.Edges.ControlObjectiveBlockedGroups, e)
 			}); err != nil {
 			return nil, err
 		}
 	}
-	if query := gq.withControlobjectiveViewers; query != nil {
-		if err := gq.loadControlobjectiveViewers(ctx, query, nodes,
-			func(n *Group) { n.Edges.ControlobjectiveViewers = []*ControlObjective{} },
+	if query := gq.withControlObjectiveViewers; query != nil {
+		if err := gq.loadControlObjectiveViewers(ctx, query, nodes,
+			func(n *Group) { n.Edges.ControlObjectiveViewers = []*ControlObjective{} },
 			func(n *Group, e *ControlObjective) {
-				n.Edges.ControlobjectiveViewers = append(n.Edges.ControlobjectiveViewers, e)
+				n.Edges.ControlObjectiveViewers = append(n.Edges.ControlObjectiveViewers, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -2171,17 +2171,17 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
-	for name, query := range gq.withNamedInternalpolicyEditors {
-		if err := gq.loadInternalpolicyEditors(ctx, query, nodes,
-			func(n *Group) { n.appendNamedInternalpolicyEditors(name) },
-			func(n *Group, e *InternalPolicy) { n.appendNamedInternalpolicyEditors(name, e) }); err != nil {
+	for name, query := range gq.withNamedInternalPolicyEditors {
+		if err := gq.loadInternalPolicyEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedInternalPolicyEditors(name) },
+			func(n *Group, e *InternalPolicy) { n.appendNamedInternalPolicyEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range gq.withNamedInternalpolicyBlockedGroups {
-		if err := gq.loadInternalpolicyBlockedGroups(ctx, query, nodes,
-			func(n *Group) { n.appendNamedInternalpolicyBlockedGroups(name) },
-			func(n *Group, e *InternalPolicy) { n.appendNamedInternalpolicyBlockedGroups(name, e) }); err != nil {
+	for name, query := range gq.withNamedInternalPolicyBlockedGroups {
+		if err := gq.loadInternalPolicyBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedInternalPolicyBlockedGroups(name) },
+			func(n *Group, e *InternalPolicy) { n.appendNamedInternalPolicyBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2227,24 +2227,24 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
-	for name, query := range gq.withNamedControlobjectiveEditors {
-		if err := gq.loadControlobjectiveEditors(ctx, query, nodes,
-			func(n *Group) { n.appendNamedControlobjectiveEditors(name) },
-			func(n *Group, e *ControlObjective) { n.appendNamedControlobjectiveEditors(name, e) }); err != nil {
+	for name, query := range gq.withNamedControlObjectiveEditors {
+		if err := gq.loadControlObjectiveEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedControlObjectiveEditors(name) },
+			func(n *Group, e *ControlObjective) { n.appendNamedControlObjectiveEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range gq.withNamedControlobjectiveBlockedGroups {
-		if err := gq.loadControlobjectiveBlockedGroups(ctx, query, nodes,
-			func(n *Group) { n.appendNamedControlobjectiveBlockedGroups(name) },
-			func(n *Group, e *ControlObjective) { n.appendNamedControlobjectiveBlockedGroups(name, e) }); err != nil {
+	for name, query := range gq.withNamedControlObjectiveBlockedGroups {
+		if err := gq.loadControlObjectiveBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedControlObjectiveBlockedGroups(name) },
+			func(n *Group, e *ControlObjective) { n.appendNamedControlObjectiveBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range gq.withNamedControlobjectiveViewers {
-		if err := gq.loadControlobjectiveViewers(ctx, query, nodes,
-			func(n *Group) { n.appendNamedControlobjectiveViewers(name) },
-			func(n *Group, e *ControlObjective) { n.appendNamedControlobjectiveViewers(name, e) }); err != nil {
+	for name, query := range gq.withNamedControlObjectiveViewers {
+		if err := gq.loadControlObjectiveViewers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedControlObjectiveViewers(name) },
+			func(n *Group, e *ControlObjective) { n.appendNamedControlObjectiveViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3051,7 +3051,7 @@ func (gq *GroupQuery) loadProcedureBlockedGroups(ctx context.Context, query *Pro
 	}
 	return nil
 }
-func (gq *GroupQuery) loadInternalpolicyEditors(ctx context.Context, query *InternalPolicyQuery, nodes []*Group, init func(*Group), assign func(*Group, *InternalPolicy)) error {
+func (gq *GroupQuery) loadInternalPolicyEditors(ctx context.Context, query *InternalPolicyQuery, nodes []*Group, init func(*Group), assign func(*Group, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
 	nids := make(map[string]map[*Group]struct{})
@@ -3063,12 +3063,12 @@ func (gq *GroupQuery) loadInternalpolicyEditors(ctx context.Context, query *Inte
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(group.InternalpolicyEditorsTable)
+		joinT := sql.Table(group.InternalPolicyEditorsTable)
 		joinT.Schema(gq.schemaConfig.InternalPolicyEditors)
-		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(group.InternalpolicyEditorsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(group.InternalpolicyEditorsPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(group.InternalPolicyEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.InternalPolicyEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(group.InternalpolicyEditorsPrimaryKey[1]))
+		s.Select(joinT.C(group.InternalPolicyEditorsPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -3105,7 +3105,7 @@ func (gq *GroupQuery) loadInternalpolicyEditors(ctx context.Context, query *Inte
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "internalpolicy_editors" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "internal_policy_editors" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -3113,7 +3113,7 @@ func (gq *GroupQuery) loadInternalpolicyEditors(ctx context.Context, query *Inte
 	}
 	return nil
 }
-func (gq *GroupQuery) loadInternalpolicyBlockedGroups(ctx context.Context, query *InternalPolicyQuery, nodes []*Group, init func(*Group), assign func(*Group, *InternalPolicy)) error {
+func (gq *GroupQuery) loadInternalPolicyBlockedGroups(ctx context.Context, query *InternalPolicyQuery, nodes []*Group, init func(*Group), assign func(*Group, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
 	nids := make(map[string]map[*Group]struct{})
@@ -3125,12 +3125,12 @@ func (gq *GroupQuery) loadInternalpolicyBlockedGroups(ctx context.Context, query
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(group.InternalpolicyBlockedGroupsTable)
+		joinT := sql.Table(group.InternalPolicyBlockedGroupsTable)
 		joinT.Schema(gq.schemaConfig.InternalPolicyBlockedGroups)
-		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(group.InternalpolicyBlockedGroupsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(group.InternalpolicyBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(group.InternalPolicyBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.InternalPolicyBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(group.InternalpolicyBlockedGroupsPrimaryKey[1]))
+		s.Select(joinT.C(group.InternalPolicyBlockedGroupsPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -3167,7 +3167,7 @@ func (gq *GroupQuery) loadInternalpolicyBlockedGroups(ctx context.Context, query
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "internalpolicy_blocked_groups" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "internal_policy_blocked_groups" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -3547,7 +3547,7 @@ func (gq *GroupQuery) loadRiskViewers(ctx context.Context, query *RiskQuery, nod
 	}
 	return nil
 }
-func (gq *GroupQuery) loadControlobjectiveEditors(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
+func (gq *GroupQuery) loadControlObjectiveEditors(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
 	nids := make(map[string]map[*Group]struct{})
@@ -3559,12 +3559,12 @@ func (gq *GroupQuery) loadControlobjectiveEditors(ctx context.Context, query *Co
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(group.ControlobjectiveEditorsTable)
+		joinT := sql.Table(group.ControlObjectiveEditorsTable)
 		joinT.Schema(gq.schemaConfig.ControlObjectiveEditors)
-		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlobjectiveEditorsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(group.ControlobjectiveEditorsPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlObjectiveEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ControlObjectiveEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(group.ControlobjectiveEditorsPrimaryKey[1]))
+		s.Select(joinT.C(group.ControlObjectiveEditorsPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -3601,7 +3601,7 @@ func (gq *GroupQuery) loadControlobjectiveEditors(ctx context.Context, query *Co
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "controlobjective_editors" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "control_objective_editors" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -3609,7 +3609,7 @@ func (gq *GroupQuery) loadControlobjectiveEditors(ctx context.Context, query *Co
 	}
 	return nil
 }
-func (gq *GroupQuery) loadControlobjectiveBlockedGroups(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
+func (gq *GroupQuery) loadControlObjectiveBlockedGroups(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
 	nids := make(map[string]map[*Group]struct{})
@@ -3621,12 +3621,12 @@ func (gq *GroupQuery) loadControlobjectiveBlockedGroups(ctx context.Context, que
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(group.ControlobjectiveBlockedGroupsTable)
+		joinT := sql.Table(group.ControlObjectiveBlockedGroupsTable)
 		joinT.Schema(gq.schemaConfig.ControlObjectiveBlockedGroups)
-		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlobjectiveBlockedGroupsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(group.ControlobjectiveBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlObjectiveBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ControlObjectiveBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(group.ControlobjectiveBlockedGroupsPrimaryKey[1]))
+		s.Select(joinT.C(group.ControlObjectiveBlockedGroupsPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -3663,7 +3663,7 @@ func (gq *GroupQuery) loadControlobjectiveBlockedGroups(ctx context.Context, que
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "controlobjective_blocked_groups" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "control_objective_blocked_groups" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -3671,7 +3671,7 @@ func (gq *GroupQuery) loadControlobjectiveBlockedGroups(ctx context.Context, que
 	}
 	return nil
 }
-func (gq *GroupQuery) loadControlobjectiveViewers(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
+func (gq *GroupQuery) loadControlObjectiveViewers(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
 	nids := make(map[string]map[*Group]struct{})
@@ -3683,12 +3683,12 @@ func (gq *GroupQuery) loadControlobjectiveViewers(ctx context.Context, query *Co
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(group.ControlobjectiveViewersTable)
+		joinT := sql.Table(group.ControlObjectiveViewersTable)
 		joinT.Schema(gq.schemaConfig.ControlObjectiveViewers)
-		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlobjectiveViewersPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(group.ControlobjectiveViewersPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlObjectiveViewersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ControlObjectiveViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(group.ControlobjectiveViewersPrimaryKey[1]))
+		s.Select(joinT.C(group.ControlObjectiveViewersPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -3725,7 +3725,7 @@ func (gq *GroupQuery) loadControlobjectiveViewers(ctx context.Context, query *Co
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "controlobjective_viewers" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "control_objective_viewers" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -4697,31 +4697,31 @@ func (gq *GroupQuery) WithNamedProcedureBlockedGroups(name string, opts ...func(
 	return gq
 }
 
-// WithNamedInternalpolicyEditors tells the query-builder to eager-load the nodes that are connected to the "internalpolicy_editors"
+// WithNamedInternalPolicyEditors tells the query-builder to eager-load the nodes that are connected to the "internal_policy_editors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithNamedInternalpolicyEditors(name string, opts ...func(*InternalPolicyQuery)) *GroupQuery {
+func (gq *GroupQuery) WithNamedInternalPolicyEditors(name string, opts ...func(*InternalPolicyQuery)) *GroupQuery {
 	query := (&InternalPolicyClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if gq.withNamedInternalpolicyEditors == nil {
-		gq.withNamedInternalpolicyEditors = make(map[string]*InternalPolicyQuery)
+	if gq.withNamedInternalPolicyEditors == nil {
+		gq.withNamedInternalPolicyEditors = make(map[string]*InternalPolicyQuery)
 	}
-	gq.withNamedInternalpolicyEditors[name] = query
+	gq.withNamedInternalPolicyEditors[name] = query
 	return gq
 }
 
-// WithNamedInternalpolicyBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "internalpolicy_blocked_groups"
+// WithNamedInternalPolicyBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "internal_policy_blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithNamedInternalpolicyBlockedGroups(name string, opts ...func(*InternalPolicyQuery)) *GroupQuery {
+func (gq *GroupQuery) WithNamedInternalPolicyBlockedGroups(name string, opts ...func(*InternalPolicyQuery)) *GroupQuery {
 	query := (&InternalPolicyClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if gq.withNamedInternalpolicyBlockedGroups == nil {
-		gq.withNamedInternalpolicyBlockedGroups = make(map[string]*InternalPolicyQuery)
+	if gq.withNamedInternalPolicyBlockedGroups == nil {
+		gq.withNamedInternalPolicyBlockedGroups = make(map[string]*InternalPolicyQuery)
 	}
-	gq.withNamedInternalpolicyBlockedGroups[name] = query
+	gq.withNamedInternalPolicyBlockedGroups[name] = query
 	return gq
 }
 
@@ -4809,45 +4809,45 @@ func (gq *GroupQuery) WithNamedRiskViewers(name string, opts ...func(*RiskQuery)
 	return gq
 }
 
-// WithNamedControlobjectiveEditors tells the query-builder to eager-load the nodes that are connected to the "controlobjective_editors"
+// WithNamedControlObjectiveEditors tells the query-builder to eager-load the nodes that are connected to the "control_objective_editors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithNamedControlobjectiveEditors(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+func (gq *GroupQuery) WithNamedControlObjectiveEditors(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if gq.withNamedControlobjectiveEditors == nil {
-		gq.withNamedControlobjectiveEditors = make(map[string]*ControlObjectiveQuery)
+	if gq.withNamedControlObjectiveEditors == nil {
+		gq.withNamedControlObjectiveEditors = make(map[string]*ControlObjectiveQuery)
 	}
-	gq.withNamedControlobjectiveEditors[name] = query
+	gq.withNamedControlObjectiveEditors[name] = query
 	return gq
 }
 
-// WithNamedControlobjectiveBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "controlobjective_blocked_groups"
+// WithNamedControlObjectiveBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "control_objective_blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithNamedControlobjectiveBlockedGroups(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+func (gq *GroupQuery) WithNamedControlObjectiveBlockedGroups(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if gq.withNamedControlobjectiveBlockedGroups == nil {
-		gq.withNamedControlobjectiveBlockedGroups = make(map[string]*ControlObjectiveQuery)
+	if gq.withNamedControlObjectiveBlockedGroups == nil {
+		gq.withNamedControlObjectiveBlockedGroups = make(map[string]*ControlObjectiveQuery)
 	}
-	gq.withNamedControlobjectiveBlockedGroups[name] = query
+	gq.withNamedControlObjectiveBlockedGroups[name] = query
 	return gq
 }
 
-// WithNamedControlobjectiveViewers tells the query-builder to eager-load the nodes that are connected to the "controlobjective_viewers"
+// WithNamedControlObjectiveViewers tells the query-builder to eager-load the nodes that are connected to the "control_objective_viewers"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithNamedControlobjectiveViewers(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+func (gq *GroupQuery) WithNamedControlObjectiveViewers(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
 	query := (&ControlObjectiveClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if gq.withNamedControlobjectiveViewers == nil {
-		gq.withNamedControlobjectiveViewers = make(map[string]*ControlObjectiveQuery)
+	if gq.withNamedControlObjectiveViewers == nil {
+		gq.withNamedControlObjectiveViewers = make(map[string]*ControlObjectiveQuery)
 	}
-	gq.withNamedControlobjectiveViewers[name] = query
+	gq.withNamedControlObjectiveViewers[name] = query
 	return gq
 }
 

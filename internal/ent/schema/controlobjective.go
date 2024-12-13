@@ -62,18 +62,18 @@ func (ControlObjective) Fields() []ent.Field {
 // Edges of the ControlObjective
 func (ControlObjective) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("policy", InternalPolicy.Type).
-			Ref("controlobjectives"),
+		edge.From("internal_policies", InternalPolicy.Type).
+			Ref("control_objectives"),
 		edge.To("controls", Control.Type),
 		edge.To("procedures", Procedure.Type),
 		edge.To("risks", Risk.Type),
 		edge.To("subcontrols", Subcontrol.Type),
 		edge.From("standard", Standard.Type).
-			Ref("controlobjectives"),
+			Ref("control_objectives"),
 		edge.To("narratives", Narrative.Type),
 		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
-			Ref("controlobjectives"),
+			Ref("control_objectives"),
 	}
 }
 
@@ -90,7 +90,7 @@ func (ControlObjective) Mixin() []ent.Mixin {
 		NewObjectOwnedMixin(ObjectOwnedMixin{
 			FieldNames:            []string{"program_id"},
 			WithOrganizationOwner: true,
-			Ref:                   "controlobjectives",
+			Ref:                   "control_objectives",
 		}),
 		// add groups permissions with viewer, editor, and blocked groups
 		NewGroupPermissionsMixin(true),

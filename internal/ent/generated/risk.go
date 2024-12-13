@@ -79,8 +79,8 @@ type RiskEdges struct {
 	Control []*Control `json:"control,omitempty"`
 	// Procedure holds the value of the procedure edge.
 	Procedure []*Procedure `json:"procedure,omitempty"`
-	// Actionplans holds the value of the actionplans edge.
-	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -94,7 +94,7 @@ type RiskEdges struct {
 	namedViewers       map[string][]*Group
 	namedControl       map[string][]*Control
 	namedProcedure     map[string][]*Procedure
-	namedActionplans   map[string][]*ActionPlan
+	namedActionPlans   map[string][]*ActionPlan
 	namedPrograms      map[string][]*Program
 }
 
@@ -154,13 +154,13 @@ func (e RiskEdges) ProcedureOrErr() ([]*Procedure, error) {
 	return nil, &NotLoadedError{edge: "procedure"}
 }
 
-// ActionplansOrErr returns the Actionplans value or an error if the edge
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
-func (e RiskEdges) ActionplansOrErr() ([]*ActionPlan, error) {
+func (e RiskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	if e.loadedTypes[6] {
-		return e.Actionplans, nil
+		return e.ActionPlans, nil
 	}
-	return nil, &NotLoadedError{edge: "actionplans"}
+	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
 // ProgramsOrErr returns the Programs value or an error if the edge
@@ -374,9 +374,9 @@ func (r *Risk) QueryProcedure() *ProcedureQuery {
 	return NewRiskClient(r.config).QueryProcedure(r)
 }
 
-// QueryActionplans queries the "actionplans" edge of the Risk entity.
-func (r *Risk) QueryActionplans() *ActionPlanQuery {
-	return NewRiskClient(r.config).QueryActionplans(r)
+// QueryActionPlans queries the "action_plans" edge of the Risk entity.
+func (r *Risk) QueryActionPlans() *ActionPlanQuery {
+	return NewRiskClient(r.config).QueryActionPlans(r)
 }
 
 // QueryPrograms queries the "programs" edge of the Risk entity.
@@ -587,27 +587,27 @@ func (r *Risk) appendNamedProcedure(name string, edges ...*Procedure) {
 	}
 }
 
-// NamedActionplans returns the Actionplans named value or an error if the edge was not
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedActionplans(name string) ([]*ActionPlan, error) {
-	if r.Edges.namedActionplans == nil {
+func (r *Risk) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if r.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedActionplans[name]
+	nodes, ok := r.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedActionplans(name string, edges ...*ActionPlan) {
-	if r.Edges.namedActionplans == nil {
-		r.Edges.namedActionplans = make(map[string][]*ActionPlan)
+func (r *Risk) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if r.Edges.namedActionPlans == nil {
+		r.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedActionplans[name] = []*ActionPlan{}
+		r.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		r.Edges.namedActionplans[name] = append(r.Edges.namedActionplans[name], edges...)
+		r.Edges.namedActionPlans[name] = append(r.Edges.namedActionPlans[name], edges...)
 	}
 }
 

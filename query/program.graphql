@@ -79,7 +79,7 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
         id
         name
       }
-      policies {
+      internalPolicies {
         id
         name
       }
@@ -126,7 +126,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
         updatedBy
         version
       }
-      policies {
+      internalPolicies {
         background
         createdAt
         createdBy
@@ -217,7 +217,7 @@ query GetAllPrograms {
           updatedBy
           version
         }
-        policies {
+        internalPolicies {
           background
           createdAt
           createdBy
@@ -284,7 +284,7 @@ query GetProgramByID($programId: ID!) {
       updatedBy
       version
     }
-    policies {
+    internalPolicies {
       background
       createdAt
       createdBy
@@ -351,7 +351,7 @@ query GetPrograms($where: ProgramWhereInput) {
           updatedBy
           version
         }
-        policies {
+        internalPolicies {
           background
           createdAt
           createdBy
@@ -419,7 +419,7 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
         updatedBy
         version
       }
-      policies {
+      internalPolicies {
         background
         createdAt
         createdBy

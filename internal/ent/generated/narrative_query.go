@@ -37,20 +37,20 @@ type NarrativeQuery struct {
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
 	withViewers               *GroupQuery
-	withPolicy                *InternalPolicyQuery
+	withInternalPolicy        *InternalPolicyQuery
 	withControl               *ControlQuery
 	withProcedure             *ProcedureQuery
-	withControlobjective      *ControlObjectiveQuery
+	withControlObjective      *ControlObjectiveQuery
 	withPrograms              *ProgramQuery
 	loadTotal                 []func(context.Context, []*Narrative) error
 	modifiers                 []func(*sql.Selector)
 	withNamedBlockedGroups    map[string]*GroupQuery
 	withNamedEditors          map[string]*GroupQuery
 	withNamedViewers          map[string]*GroupQuery
-	withNamedPolicy           map[string]*InternalPolicyQuery
+	withNamedInternalPolicy   map[string]*InternalPolicyQuery
 	withNamedControl          map[string]*ControlQuery
 	withNamedProcedure        map[string]*ProcedureQuery
-	withNamedControlobjective map[string]*ControlObjectiveQuery
+	withNamedControlObjective map[string]*ControlObjectiveQuery
 	withNamedPrograms         map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -188,8 +188,8 @@ func (nq *NarrativeQuery) QueryViewers() *GroupQuery {
 	return query
 }
 
-// QueryPolicy chains the current query on the "policy" edge.
-func (nq *NarrativeQuery) QueryPolicy() *InternalPolicyQuery {
+// QueryInternalPolicy chains the current query on the "internal_policy" edge.
+func (nq *NarrativeQuery) QueryInternalPolicy() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
@@ -202,7 +202,7 @@ func (nq *NarrativeQuery) QueryPolicy() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, narrative.PolicyTable, narrative.PolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, narrative.InternalPolicyTable, narrative.InternalPolicyPrimaryKey...),
 		)
 		schemaConfig := nq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -263,8 +263,8 @@ func (nq *NarrativeQuery) QueryProcedure() *ProcedureQuery {
 	return query
 }
 
-// QueryControlobjective chains the current query on the "controlobjective" edge.
-func (nq *NarrativeQuery) QueryControlobjective() *ControlObjectiveQuery {
+// QueryControlObjective chains the current query on the "control_objective" edge.
+func (nq *NarrativeQuery) QueryControlObjective() *ControlObjectiveQuery {
 	query := (&ControlObjectiveClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
@@ -277,7 +277,7 @@ func (nq *NarrativeQuery) QueryControlobjective() *ControlObjectiveQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ControlobjectiveTable, narrative.ControlobjectivePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ControlObjectiveTable, narrative.ControlObjectivePrimaryKey...),
 		)
 		schemaConfig := nq.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
@@ -509,10 +509,10 @@ func (nq *NarrativeQuery) Clone() *NarrativeQuery {
 		withBlockedGroups:    nq.withBlockedGroups.Clone(),
 		withEditors:          nq.withEditors.Clone(),
 		withViewers:          nq.withViewers.Clone(),
-		withPolicy:           nq.withPolicy.Clone(),
+		withInternalPolicy:   nq.withInternalPolicy.Clone(),
 		withControl:          nq.withControl.Clone(),
 		withProcedure:        nq.withProcedure.Clone(),
-		withControlobjective: nq.withControlobjective.Clone(),
+		withControlObjective: nq.withControlObjective.Clone(),
 		withPrograms:         nq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       nq.sql.Clone(),
@@ -565,14 +565,14 @@ func (nq *NarrativeQuery) WithViewers(opts ...func(*GroupQuery)) *NarrativeQuery
 	return nq
 }
 
-// WithPolicy tells the query-builder to eager-load the nodes that are connected to
-// the "policy" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithPolicy(opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
+// WithInternalPolicy tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policy" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithInternalPolicy(opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
 	query := (&InternalPolicyClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withPolicy = query
+	nq.withInternalPolicy = query
 	return nq
 }
 
@@ -598,14 +598,14 @@ func (nq *NarrativeQuery) WithProcedure(opts ...func(*ProcedureQuery)) *Narrativ
 	return nq
 }
 
-// WithControlobjective tells the query-builder to eager-load the nodes that are connected to
-// the "controlobjective" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithControlobjective(opts ...func(*ControlObjectiveQuery)) *NarrativeQuery {
+// WithControlObjective tells the query-builder to eager-load the nodes that are connected to
+// the "control_objective" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithControlObjective(opts ...func(*ControlObjectiveQuery)) *NarrativeQuery {
 	query := (&ControlObjectiveClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withControlobjective = query
+	nq.withControlObjective = query
 	return nq
 }
 
@@ -709,10 +709,10 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 			nq.withBlockedGroups != nil,
 			nq.withEditors != nil,
 			nq.withViewers != nil,
-			nq.withPolicy != nil,
+			nq.withInternalPolicy != nil,
 			nq.withControl != nil,
 			nq.withProcedure != nil,
-			nq.withControlobjective != nil,
+			nq.withControlObjective != nil,
 			nq.withPrograms != nil,
 		}
 	)
@@ -766,10 +766,10 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 			return nil, err
 		}
 	}
-	if query := nq.withPolicy; query != nil {
-		if err := nq.loadPolicy(ctx, query, nodes,
-			func(n *Narrative) { n.Edges.Policy = []*InternalPolicy{} },
-			func(n *Narrative, e *InternalPolicy) { n.Edges.Policy = append(n.Edges.Policy, e) }); err != nil {
+	if query := nq.withInternalPolicy; query != nil {
+		if err := nq.loadInternalPolicy(ctx, query, nodes,
+			func(n *Narrative) { n.Edges.InternalPolicy = []*InternalPolicy{} },
+			func(n *Narrative, e *InternalPolicy) { n.Edges.InternalPolicy = append(n.Edges.InternalPolicy, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -787,11 +787,11 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 			return nil, err
 		}
 	}
-	if query := nq.withControlobjective; query != nil {
-		if err := nq.loadControlobjective(ctx, query, nodes,
-			func(n *Narrative) { n.Edges.Controlobjective = []*ControlObjective{} },
+	if query := nq.withControlObjective; query != nil {
+		if err := nq.loadControlObjective(ctx, query, nodes,
+			func(n *Narrative) { n.Edges.ControlObjective = []*ControlObjective{} },
 			func(n *Narrative, e *ControlObjective) {
-				n.Edges.Controlobjective = append(n.Edges.Controlobjective, e)
+				n.Edges.ControlObjective = append(n.Edges.ControlObjective, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -824,10 +824,10 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedPolicy {
-		if err := nq.loadPolicy(ctx, query, nodes,
-			func(n *Narrative) { n.appendNamedPolicy(name) },
-			func(n *Narrative, e *InternalPolicy) { n.appendNamedPolicy(name, e) }); err != nil {
+	for name, query := range nq.withNamedInternalPolicy {
+		if err := nq.loadInternalPolicy(ctx, query, nodes,
+			func(n *Narrative) { n.appendNamedInternalPolicy(name) },
+			func(n *Narrative, e *InternalPolicy) { n.appendNamedInternalPolicy(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -845,10 +845,10 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedControlobjective {
-		if err := nq.loadControlobjective(ctx, query, nodes,
-			func(n *Narrative) { n.appendNamedControlobjective(name) },
-			func(n *Narrative, e *ControlObjective) { n.appendNamedControlobjective(name, e) }); err != nil {
+	for name, query := range nq.withNamedControlObjective {
+		if err := nq.loadControlObjective(ctx, query, nodes,
+			func(n *Narrative) { n.appendNamedControlObjective(name) },
+			func(n *Narrative, e *ControlObjective) { n.appendNamedControlObjective(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1082,7 +1082,7 @@ func (nq *NarrativeQuery) loadViewers(ctx context.Context, query *GroupQuery, no
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadPolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *InternalPolicy)) error {
+func (nq *NarrativeQuery) loadInternalPolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -1094,12 +1094,12 @@ func (nq *NarrativeQuery) loadPolicy(ctx context.Context, query *InternalPolicyQ
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(narrative.PolicyTable)
+		joinT := sql.Table(narrative.InternalPolicyTable)
 		joinT.Schema(nq.schemaConfig.InternalPolicyNarratives)
-		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(narrative.PolicyPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(narrative.PolicyPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(narrative.InternalPolicyPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(narrative.InternalPolicyPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(narrative.PolicyPrimaryKey[1]))
+		s.Select(joinT.C(narrative.InternalPolicyPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1136,7 +1136,7 @@ func (nq *NarrativeQuery) loadPolicy(ctx context.Context, query *InternalPolicyQ
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "policy" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "internal_policy" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1268,7 +1268,7 @@ func (nq *NarrativeQuery) loadProcedure(ctx context.Context, query *ProcedureQue
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadControlobjective(ctx context.Context, query *ControlObjectiveQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *ControlObjective)) error {
+func (nq *NarrativeQuery) loadControlObjective(ctx context.Context, query *ControlObjectiveQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *ControlObjective)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -1280,12 +1280,12 @@ func (nq *NarrativeQuery) loadControlobjective(ctx context.Context, query *Contr
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(narrative.ControlobjectiveTable)
+		joinT := sql.Table(narrative.ControlObjectiveTable)
 		joinT.Schema(nq.schemaConfig.ControlObjectiveNarratives)
-		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(narrative.ControlobjectivePrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(narrative.ControlobjectivePrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(narrative.ControlObjectivePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(narrative.ControlObjectivePrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(narrative.ControlobjectivePrimaryKey[1]))
+		s.Select(joinT.C(narrative.ControlObjectivePrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1322,7 +1322,7 @@ func (nq *NarrativeQuery) loadControlobjective(ctx context.Context, query *Contr
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "controlobjective" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "control_objective" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1536,17 +1536,17 @@ func (nq *NarrativeQuery) WithNamedViewers(name string, opts ...func(*GroupQuery
 	return nq
 }
 
-// WithNamedPolicy tells the query-builder to eager-load the nodes that are connected to the "policy"
+// WithNamedInternalPolicy tells the query-builder to eager-load the nodes that are connected to the "internal_policy"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedPolicy(name string, opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
+func (nq *NarrativeQuery) WithNamedInternalPolicy(name string, opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
 	query := (&InternalPolicyClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedPolicy == nil {
-		nq.withNamedPolicy = make(map[string]*InternalPolicyQuery)
+	if nq.withNamedInternalPolicy == nil {
+		nq.withNamedInternalPolicy = make(map[string]*InternalPolicyQuery)
 	}
-	nq.withNamedPolicy[name] = query
+	nq.withNamedInternalPolicy[name] = query
 	return nq
 }
 
@@ -1578,17 +1578,17 @@ func (nq *NarrativeQuery) WithNamedProcedure(name string, opts ...func(*Procedur
 	return nq
 }
 
-// WithNamedControlobjective tells the query-builder to eager-load the nodes that are connected to the "controlobjective"
+// WithNamedControlObjective tells the query-builder to eager-load the nodes that are connected to the "control_objective"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedControlobjective(name string, opts ...func(*ControlObjectiveQuery)) *NarrativeQuery {
+func (nq *NarrativeQuery) WithNamedControlObjective(name string, opts ...func(*ControlObjectiveQuery)) *NarrativeQuery {
 	query := (&ControlObjectiveClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedControlobjective == nil {
-		nq.withNamedControlobjective = make(map[string]*ControlObjectiveQuery)
+	if nq.withNamedControlObjective == nil {
+		nq.withNamedControlObjective = make(map[string]*ControlObjectiveQuery)
 	}
-	nq.withNamedControlobjective[name] = query
+	nq.withNamedControlObjective[name] = query
 	return nq
 }
 

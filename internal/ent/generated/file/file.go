@@ -69,14 +69,14 @@ const (
 	EdgeContact = "contact"
 	// EdgeEntity holds the string denoting the entity edge name in mutations.
 	EdgeEntity = "entity"
-	// EdgeUsersetting holds the string denoting the usersetting edge name in mutations.
-	EdgeUsersetting = "usersetting"
-	// EdgeOrganizationsetting holds the string denoting the organizationsetting edge name in mutations.
-	EdgeOrganizationsetting = "organizationsetting"
+	// EdgeUserSetting holds the string denoting the user_setting edge name in mutations.
+	EdgeUserSetting = "user_setting"
+	// EdgeOrganizationSetting holds the string denoting the organization_setting edge name in mutations.
+	EdgeOrganizationSetting = "organization_setting"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
-	// EdgeDocumentdata holds the string denoting the documentdata edge name in mutations.
-	EdgeDocumentdata = "documentdata"
+	// EdgeDocumentData holds the string denoting the document_data edge name in mutations.
+	EdgeDocumentData = "document_data"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
 	// EdgeProgram holds the string denoting the program edge name in mutations.
@@ -108,26 +108,26 @@ const (
 	// EntityInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntityInverseTable = "entities"
-	// UsersettingTable is the table that holds the usersetting relation/edge. The primary key declared below.
-	UsersettingTable = "user_setting_files"
-	// UsersettingInverseTable is the table name for the UserSetting entity.
+	// UserSettingTable is the table that holds the user_setting relation/edge. The primary key declared below.
+	UserSettingTable = "user_setting_files"
+	// UserSettingInverseTable is the table name for the UserSetting entity.
 	// It exists in this package in order to avoid circular dependency with the "usersetting" package.
-	UsersettingInverseTable = "user_settings"
-	// OrganizationsettingTable is the table that holds the organizationsetting relation/edge. The primary key declared below.
-	OrganizationsettingTable = "organization_setting_files"
-	// OrganizationsettingInverseTable is the table name for the OrganizationSetting entity.
+	UserSettingInverseTable = "user_settings"
+	// OrganizationSettingTable is the table that holds the organization_setting relation/edge. The primary key declared below.
+	OrganizationSettingTable = "organization_setting_files"
+	// OrganizationSettingInverseTable is the table name for the OrganizationSetting entity.
 	// It exists in this package in order to avoid circular dependency with the "organizationsetting" package.
-	OrganizationsettingInverseTable = "organization_settings"
+	OrganizationSettingInverseTable = "organization_settings"
 	// TemplateTable is the table that holds the template relation/edge. The primary key declared below.
 	TemplateTable = "template_files"
 	// TemplateInverseTable is the table name for the Template entity.
 	// It exists in this package in order to avoid circular dependency with the "template" package.
 	TemplateInverseTable = "templates"
-	// DocumentdataTable is the table that holds the documentdata relation/edge. The primary key declared below.
-	DocumentdataTable = "document_data_files"
-	// DocumentdataInverseTable is the table name for the DocumentData entity.
+	// DocumentDataTable is the table that holds the document_data relation/edge. The primary key declared below.
+	DocumentDataTable = "document_data_files"
+	// DocumentDataInverseTable is the table name for the DocumentData entity.
 	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
-	DocumentdataInverseTable = "document_data"
+	DocumentDataInverseTable = "document_data"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "file_events"
 	// EventsInverseTable is the table name for the Event entity.
@@ -183,18 +183,18 @@ var (
 	// EntityPrimaryKey and EntityColumn2 are the table columns denoting the
 	// primary key for the entity relation (M2M).
 	EntityPrimaryKey = []string{"entity_id", "file_id"}
-	// UsersettingPrimaryKey and UsersettingColumn2 are the table columns denoting the
-	// primary key for the usersetting relation (M2M).
-	UsersettingPrimaryKey = []string{"user_setting_id", "file_id"}
-	// OrganizationsettingPrimaryKey and OrganizationsettingColumn2 are the table columns denoting the
-	// primary key for the organizationsetting relation (M2M).
-	OrganizationsettingPrimaryKey = []string{"organization_setting_id", "file_id"}
+	// UserSettingPrimaryKey and UserSettingColumn2 are the table columns denoting the
+	// primary key for the user_setting relation (M2M).
+	UserSettingPrimaryKey = []string{"user_setting_id", "file_id"}
+	// OrganizationSettingPrimaryKey and OrganizationSettingColumn2 are the table columns denoting the
+	// primary key for the organization_setting relation (M2M).
+	OrganizationSettingPrimaryKey = []string{"organization_setting_id", "file_id"}
 	// TemplatePrimaryKey and TemplateColumn2 are the table columns denoting the
 	// primary key for the template relation (M2M).
 	TemplatePrimaryKey = []string{"template_id", "file_id"}
-	// DocumentdataPrimaryKey and DocumentdataColumn2 are the table columns denoting the
-	// primary key for the documentdata relation (M2M).
-	DocumentdataPrimaryKey = []string{"document_data_id", "file_id"}
+	// DocumentDataPrimaryKey and DocumentDataColumn2 are the table columns denoting the
+	// primary key for the document_data relation (M2M).
+	DocumentDataPrimaryKey = []string{"document_data_id", "file_id"}
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"file_id", "event_id"}
@@ -418,31 +418,31 @@ func ByEntity(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByUsersettingCount orders the results by usersetting count.
-func ByUsersettingCount(opts ...sql.OrderTermOption) OrderOption {
+// ByUserSettingCount orders the results by user_setting count.
+func ByUserSettingCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUsersettingStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newUserSettingStep(), opts...)
 	}
 }
 
-// ByUsersetting orders the results by usersetting terms.
-func ByUsersetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByUserSetting orders the results by user_setting terms.
+func ByUserSetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUsersettingStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newUserSettingStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByOrganizationsettingCount orders the results by organizationsetting count.
-func ByOrganizationsettingCount(opts ...sql.OrderTermOption) OrderOption {
+// ByOrganizationSettingCount orders the results by organization_setting count.
+func ByOrganizationSettingCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrganizationsettingStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newOrganizationSettingStep(), opts...)
 	}
 }
 
-// ByOrganizationsetting orders the results by organizationsetting terms.
-func ByOrganizationsetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByOrganizationSetting orders the results by organization_setting terms.
+func ByOrganizationSetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrganizationsettingStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newOrganizationSettingStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -460,17 +460,17 @@ func ByTemplate(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByDocumentdataCount orders the results by documentdata count.
-func ByDocumentdataCount(opts ...sql.OrderTermOption) OrderOption {
+// ByDocumentDataCount orders the results by document_data count.
+func ByDocumentDataCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDocumentdataStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newDocumentDataStep(), opts...)
 	}
 }
 
-// ByDocumentdata orders the results by documentdata terms.
-func ByDocumentdata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByDocumentData orders the results by document_data terms.
+func ByDocumentData(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDocumentdataStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newDocumentDataStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -536,18 +536,18 @@ func newEntityStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, EntityTable, EntityPrimaryKey...),
 	)
 }
-func newUsersettingStep() *sqlgraph.Step {
+func newUserSettingStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UsersettingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, UsersettingTable, UsersettingPrimaryKey...),
+		sqlgraph.To(UserSettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, UserSettingTable, UserSettingPrimaryKey...),
 	)
 }
-func newOrganizationsettingStep() *sqlgraph.Step {
+func newOrganizationSettingStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrganizationsettingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationsettingTable, OrganizationsettingPrimaryKey...),
+		sqlgraph.To(OrganizationSettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationSettingTable, OrganizationSettingPrimaryKey...),
 	)
 }
 func newTemplateStep() *sqlgraph.Step {
@@ -557,11 +557,11 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, TemplateTable, TemplatePrimaryKey...),
 	)
 }
-func newDocumentdataStep() *sqlgraph.Step {
+func newDocumentDataStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DocumentdataInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, DocumentdataTable, DocumentdataPrimaryKey...),
+		sqlgraph.To(DocumentDataInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, DocumentDataTable, DocumentDataPrimaryKey...),
 	)
 }
 func newEventsStep() *sqlgraph.Step {

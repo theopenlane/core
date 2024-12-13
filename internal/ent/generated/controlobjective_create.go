@@ -343,19 +343,19 @@ func (coc *ControlObjectiveCreate) AddViewers(g ...*Group) *ControlObjectiveCrea
 	return coc.AddViewerIDs(ids...)
 }
 
-// AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
-func (coc *ControlObjectiveCreate) AddPolicyIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddPolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (coc *ControlObjectiveCreate) AddInternalPolicyIDs(ids ...string) *ControlObjectiveCreate {
+	coc.mutation.AddInternalPolicyIDs(ids...)
 	return coc
 }
 
-// AddPolicy adds the "policy" edges to the InternalPolicy entity.
-func (coc *ControlObjectiveCreate) AddPolicy(i ...*InternalPolicy) *ControlObjectiveCreate {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (coc *ControlObjectiveCreate) AddInternalPolicies(i ...*InternalPolicy) *ControlObjectiveCreate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return coc.AddPolicyIDs(ids...)
+	return coc.AddInternalPolicyIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -755,18 +755,18 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.PolicyIDs(); len(nodes) > 0 {
+	if nodes := coc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   controlobjective.PolicyTable,
-			Columns: controlobjective.PolicyPrimaryKey,
+			Table:   controlobjective.InternalPoliciesTable,
+			Columns: controlobjective.InternalPoliciesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.InternalPolicyControlobjectives
+		edge.Schema = coc.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -851,7 +851,7 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.StandardControlobjectives
+		edge.Schema = coc.schemaConfig.StandardControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -902,7 +902,7 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.ProgramControlobjectives
+		edge.Schema = coc.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

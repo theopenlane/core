@@ -489,34 +489,34 @@ func (oc *OrganizationCreate) SetSetting(o *OrganizationSetting) *OrganizationCr
 	return oc.SetSettingID(o.ID)
 }
 
-// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by IDs.
-func (oc *OrganizationCreate) AddDocumentdatumIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddDocumentdatumIDs(ids...)
+// AddDocumentDatumIDs adds the "document_data" edge to the DocumentData entity by IDs.
+func (oc *OrganizationCreate) AddDocumentDatumIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddDocumentDatumIDs(ids...)
 	return oc
 }
 
-// AddDocumentdata adds the "documentdata" edges to the DocumentData entity.
-func (oc *OrganizationCreate) AddDocumentdata(d ...*DocumentData) *OrganizationCreate {
+// AddDocumentData adds the "document_data" edges to the DocumentData entity.
+func (oc *OrganizationCreate) AddDocumentData(d ...*DocumentData) *OrganizationCreate {
 	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
-	return oc.AddDocumentdatumIDs(ids...)
+	return oc.AddDocumentDatumIDs(ids...)
 }
 
-// AddOrgsubscriptionIDs adds the "orgsubscriptions" edge to the OrgSubscription entity by IDs.
-func (oc *OrganizationCreate) AddOrgsubscriptionIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddOrgsubscriptionIDs(ids...)
+// AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
+func (oc *OrganizationCreate) AddOrgSubscriptionIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddOrgSubscriptionIDs(ids...)
 	return oc
 }
 
-// AddOrgsubscriptions adds the "orgsubscriptions" edges to the OrgSubscription entity.
-func (oc *OrganizationCreate) AddOrgsubscriptions(o ...*OrgSubscription) *OrganizationCreate {
+// AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
+func (oc *OrganizationCreate) AddOrgSubscriptions(o ...*OrgSubscription) *OrganizationCreate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return oc.AddOrgsubscriptionIDs(ids...)
+	return oc.AddOrgSubscriptionIDs(ids...)
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
@@ -654,19 +654,19 @@ func (oc *OrganizationCreate) AddEntities(e ...*Entity) *OrganizationCreate {
 	return oc.AddEntityIDs(ids...)
 }
 
-// AddEntitytypeIDs adds the "entitytypes" edge to the EntityType entity by IDs.
-func (oc *OrganizationCreate) AddEntitytypeIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEntitytypeIDs(ids...)
+// AddEntityTypeIDs adds the "entity_types" edge to the EntityType entity by IDs.
+func (oc *OrganizationCreate) AddEntityTypeIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddEntityTypeIDs(ids...)
 	return oc
 }
 
-// AddEntitytypes adds the "entitytypes" edges to the EntityType entity.
-func (oc *OrganizationCreate) AddEntitytypes(e ...*EntityType) *OrganizationCreate {
+// AddEntityTypes adds the "entity_types" edges to the EntityType entity.
+func (oc *OrganizationCreate) AddEntityTypes(e ...*EntityType) *OrganizationCreate {
 	ids := make([]string, len(e))
 	for i := range e {
 		ids[i] = e[i].ID
 	}
-	return oc.AddEntitytypeIDs(ids...)
+	return oc.AddEntityTypeIDs(ids...)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
@@ -744,19 +744,19 @@ func (oc *OrganizationCreate) AddProcedures(p ...*Procedure) *OrganizationCreate
 	return oc.AddProcedureIDs(ids...)
 }
 
-// AddInternalpolicyIDs adds the "internalpolicies" edge to the InternalPolicy entity by IDs.
-func (oc *OrganizationCreate) AddInternalpolicyIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddInternalpolicyIDs(ids...)
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (oc *OrganizationCreate) AddInternalPolicyIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddInternalPolicyIDs(ids...)
 	return oc
 }
 
-// AddInternalpolicies adds the "internalpolicies" edges to the InternalPolicy entity.
-func (oc *OrganizationCreate) AddInternalpolicies(i ...*InternalPolicy) *OrganizationCreate {
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (oc *OrganizationCreate) AddInternalPolicies(i ...*InternalPolicy) *OrganizationCreate {
 	ids := make([]string, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
-	return oc.AddInternalpolicyIDs(ids...)
+	return oc.AddInternalPolicyIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
@@ -774,19 +774,19 @@ func (oc *OrganizationCreate) AddRisks(r ...*Risk) *OrganizationCreate {
 	return oc.AddRiskIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (oc *OrganizationCreate) AddControlobjectiveIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (oc *OrganizationCreate) AddControlObjectiveIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddControlObjectiveIDs(ids...)
 	return oc
 }
 
-// AddControlobjectives adds the "controlobjectives" edges to the ControlObjective entity.
-func (oc *OrganizationCreate) AddControlobjectives(c ...*ControlObjective) *OrganizationCreate {
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (oc *OrganizationCreate) AddControlObjectives(c ...*ControlObjective) *OrganizationCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return oc.AddControlobjectiveIDs(ids...)
+	return oc.AddControlObjectiveIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
@@ -1310,12 +1310,12 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.DocumentdataIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.DocumentDataIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.DocumentdataTable,
-			Columns: []string{organization.DocumentdataColumn},
+			Table:   organization.DocumentDataTable,
+			Columns: []string{organization.DocumentDataColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
@@ -1327,12 +1327,12 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.OrgsubscriptionsIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.OrgsubscriptionsTable,
-			Columns: []string{organization.OrgsubscriptionsColumn},
+			Table:   organization.OrgSubscriptionsTable,
+			Columns: []string{organization.OrgSubscriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
@@ -1504,12 +1504,12 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.EntitytypesIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.EntityTypesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.EntitytypesTable,
-			Columns: []string{organization.EntitytypesColumn},
+			Table:   organization.EntityTypesTable,
+			Columns: []string{organization.EntityTypesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
@@ -1606,12 +1606,12 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.InternalpoliciesIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.InternalpoliciesTable,
-			Columns: []string{organization.InternalpoliciesColumn},
+			Table:   organization.InternalPoliciesTable,
+			Columns: []string{organization.InternalPoliciesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
@@ -1640,12 +1640,12 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.ControlobjectivesTable,
-			Columns: []string{organization.ControlobjectivesColumn},
+			Table:   organization.ControlObjectivesTable,
+			Columns: []string{organization.ControlObjectivesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),

@@ -63,8 +63,8 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
-	// EdgePolicy holds the string denoting the policy edge name in mutations.
-	EdgePolicy = "policy"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
@@ -105,11 +105,11 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
-	// PolicyTable is the table that holds the policy relation/edge. The primary key declared below.
-	PolicyTable = "internal_policy_controlobjectives"
-	// PolicyInverseTable is the table name for the InternalPolicy entity.
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "internal_policy_control_objectives"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
-	PolicyInverseTable = "internal_policies"
+	InternalPoliciesInverseTable = "internal_policies"
 	// ControlsTable is the table that holds the controls relation/edge.
 	ControlsTable = "controls"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -139,7 +139,7 @@ const (
 	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
 	SubcontrolsColumn = "control_objective_subcontrols"
 	// StandardTable is the table that holds the standard relation/edge. The primary key declared below.
-	StandardTable = "standard_controlobjectives"
+	StandardTable = "standard_control_objectives"
 	// StandardInverseTable is the table name for the Standard entity.
 	// It exists in this package in order to avoid circular dependency with the "standard" package.
 	StandardInverseTable = "standards"
@@ -154,7 +154,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
-	ProgramsTable = "program_controlobjectives"
+	ProgramsTable = "program_control_objectives"
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
@@ -188,7 +188,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "control_objectives"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"control_controlobjectives",
+	"control_control_objectives",
 }
 
 var (
@@ -201,9 +201,9 @@ var (
 	// ViewersPrimaryKey and ViewersColumn2 are the table columns denoting the
 	// primary key for the viewers relation (M2M).
 	ViewersPrimaryKey = []string{"control_objective_id", "group_id"}
-	// PolicyPrimaryKey and PolicyColumn2 are the table columns denoting the
-	// primary key for the policy relation (M2M).
-	PolicyPrimaryKey = []string{"internal_policy_id", "control_objective_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "control_objective_id"}
 	// StandardPrimaryKey and StandardColumn2 are the table columns denoting the
 	// primary key for the standard relation (M2M).
 	StandardPrimaryKey = []string{"standard_id", "control_objective_id"}
@@ -407,17 +407,17 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByPolicyCount orders the results by policy count.
-func ByPolicyCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newPolicyStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
 	}
 }
 
-// ByPolicy orders the results by policy terms.
-func ByPolicy(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPolicyStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -560,11 +560,11 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 	)
 }
-func newPolicyStep() *sqlgraph.Step {
+func newInternalPoliciesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PolicyInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, PolicyTable, PolicyPrimaryKey...),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

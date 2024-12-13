@@ -46,8 +46,8 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 				userTuple := fgax.GetTupleKey(fgax.TupleRequest{
 					SubjectID:   a.SubjectID,
 					SubjectType: subject,
-					ObjectID:    objectID, // this is the object id being created
-					ObjectType:  m.Type(), // this is the object type being created
+					ObjectID:    objectID,                        // this is the object id being created
+					ObjectType:  getObjectTypeFromEntMutation(m), // this is the object type being created
 					Relation:    fgax.ParentRelation,
 				})
 

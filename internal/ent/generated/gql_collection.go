@@ -1002,7 +1002,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				*wq = *query
 			})
 
-		case "controlobjectives":
+		case "controlObjectives":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -1011,7 +1011,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedControlobjectives(alias, func(wq *ControlObjectiveQuery) {
+			c.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -1054,7 +1054,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				*wq = *query
 			})
 
-		case "actionplans":
+		case "actionPlans":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -1063,7 +1063,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+			c.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -1486,7 +1486,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				*wq = *query
 			})
 
-		case "policy":
+		case "internalPolicies":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -1495,7 +1495,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			co.WithNamedPolicy(alias, func(wq *InternalPolicyQuery) {
+			co.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -3370,7 +3370,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "usersetting":
+		case "userSetting":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -3379,11 +3379,11 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, usersettingImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedUsersetting(alias, func(wq *UserSettingQuery) {
+			f.WithNamedUserSetting(alias, func(wq *UserSettingQuery) {
 				*wq = *query
 			})
 
-		case "organizationsetting":
+		case "organizationSetting":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -3392,7 +3392,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationsettingImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedOrganizationsetting(alias, func(wq *OrganizationSettingQuery) {
+			f.WithNamedOrganizationSetting(alias, func(wq *OrganizationSettingQuery) {
 				*wq = *query
 			})
 
@@ -3409,7 +3409,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "documentdata":
+		case "documentData":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -3418,7 +3418,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedDocumentdata(alias, func(wq *DocumentDataQuery) {
+			f.WithNamedDocumentData(alias, func(wq *DocumentDataQuery) {
 				*wq = *query
 			})
 
@@ -3945,7 +3945,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				*wq = *query
 			})
 
-		case "internalpolicyEditors":
+		case "internalPolicyEditors":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -3954,11 +3954,11 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			gr.WithNamedInternalpolicyEditors(alias, func(wq *InternalPolicyQuery) {
+			gr.WithNamedInternalPolicyEditors(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
-		case "internalpolicyBlockedGroups":
+		case "internalPolicyBlockedGroups":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -3967,7 +3967,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			gr.WithNamedInternalpolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
+			gr.WithNamedInternalPolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -4049,7 +4049,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				*wq = *query
 			})
 
-		case "controlobjectiveEditors":
+		case "controlObjectiveEditors":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -4058,11 +4058,11 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			gr.WithNamedControlobjectiveEditors(alias, func(wq *ControlObjectiveQuery) {
+			gr.WithNamedControlObjectiveEditors(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
-		case "controlobjectiveBlockedGroups":
+		case "controlObjectiveBlockedGroups":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -4071,11 +4071,11 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			gr.WithNamedControlobjectiveBlockedGroups(alias, func(wq *ControlObjectiveQuery) {
+			gr.WithNamedControlObjectiveBlockedGroups(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
-		case "controlobjectiveViewers":
+		case "controlObjectiveViewers":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -4084,7 +4084,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			gr.WithNamedControlobjectiveViewers(alias, func(wq *ControlObjectiveQuery) {
+			gr.WithNamedControlObjectiveViewers(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -5811,7 +5811,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				*wq = *query
 			})
 
-		case "controlobjectives":
+		case "controlObjectives":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -5820,7 +5820,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			ip.WithNamedControlobjectives(alias, func(wq *ControlObjectiveQuery) {
+			ip.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -6397,7 +6397,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				*wq = *query
 			})
 
-		case "policy":
+		case "internalPolicy":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -6406,7 +6406,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			n.WithNamedPolicy(alias, func(wq *InternalPolicyQuery) {
+			n.WithNamedInternalPolicy(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -6436,7 +6436,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				*wq = *query
 			})
 
-		case "controlobjective":
+		case "controlObjective":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -6445,7 +6445,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			n.WithNamedControlobjective(alias, func(wq *ControlObjectiveQuery) {
+			n.WithNamedControlObjective(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -7859,7 +7859,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			}
 			o.withSetting = query
 
-		case "documentdata":
+		case "documentData":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -7868,11 +7868,11 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
 				return err
 			}
-			o.WithNamedDocumentdata(alias, func(wq *DocumentDataQuery) {
+			o.WithNamedDocumentData(alias, func(wq *DocumentDataQuery) {
 				*wq = *query
 			})
 
-		case "orgsubscriptions":
+		case "orgSubscriptions":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -7881,7 +7881,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, orgsubscriptionImplementors)...); err != nil {
 				return err
 			}
-			o.WithNamedOrgsubscriptions(alias, func(wq *OrgSubscriptionQuery) {
+			o.WithNamedOrgSubscriptions(alias, func(wq *OrgSubscriptionQuery) {
 				*wq = *query
 			})
 
@@ -8002,7 +8002,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
-		case "entitytypes":
+		case "entityTypes":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -8011,7 +8011,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, entitytypeImplementors)...); err != nil {
 				return err
 			}
-			o.WithNamedEntitytypes(alias, func(wq *EntityTypeQuery) {
+			o.WithNamedEntityTypes(alias, func(wq *EntityTypeQuery) {
 				*wq = *query
 			})
 
@@ -8080,7 +8080,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
-		case "internalpolicies":
+		case "internalPolicies":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -8089,7 +8089,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			o.WithNamedInternalpolicies(alias, func(wq *InternalPolicyQuery) {
+			o.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -8106,7 +8106,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
-		case "controlobjectives":
+		case "controlObjectives":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -8115,7 +8115,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			o.WithNamedControlobjectives(alias, func(wq *ControlObjectiveQuery) {
+			o.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -9020,7 +9020,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				*wq = *query
 			})
 
-		case "control":
+		case "controls":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -9029,11 +9029,11 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
 				return err
 			}
-			pr.WithNamedControl(alias, func(wq *ControlQuery) {
+			pr.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
-		case "internalpolicy":
+		case "internalPolicies":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -9042,7 +9042,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			pr.WithNamedInternalpolicy(alias, func(wq *InternalPolicyQuery) {
+			pr.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -9487,7 +9487,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				*wq = *query
 			})
 
-		case "controlobjectives":
+		case "controlObjectives":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -9496,11 +9496,11 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			pr.WithNamedControlobjectives(alias, func(wq *ControlObjectiveQuery) {
+			pr.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
-		case "policies":
+		case "internalPolicies":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -9509,7 +9509,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			pr.WithNamedPolicies(alias, func(wq *InternalPolicyQuery) {
+			pr.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -9591,7 +9591,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				*wq = *query
 			})
 
-		case "actionplans":
+		case "actionPlans":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -9600,7 +9600,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
 				return err
 			}
-			pr.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+			pr.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -10281,7 +10281,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "actionplans":
+		case "actionPlans":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -10290,7 +10290,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
 				return err
 			}
-			r.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+			r.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -10626,7 +10626,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "controlobjectives":
+		case "controlObjectives":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -10635,7 +10635,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
 				return err
 			}
-			s.WithNamedControlobjectives(alias, func(wq *ControlObjectiveQuery) {
+			s.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -10665,7 +10665,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				*wq = *query
 			})
 
-		case "actionplans":
+		case "actionPlans":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -10674,7 +10674,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
 				return err
 			}
-			s.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+			s.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -11792,7 +11792,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "policy":
+		case "internalPolicy":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -11801,7 +11801,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
 				return err
 			}
-			t.WithNamedPolicy(alias, func(wq *InternalPolicyQuery) {
+			t.WithNamedInternalPolicy(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -12597,7 +12597,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "actionplans":
+		case "actionPlans":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -12606,7 +12606,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
 				return err
 			}
-			u.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+			u.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 

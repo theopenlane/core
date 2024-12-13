@@ -55,8 +55,8 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
-	// EdgeControlobjectives holds the string denoting the controlobjectives edge name in mutations.
-	EdgeControlobjectives = "controlobjectives"
+	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
+	EdgeControlObjectives = "control_objectives"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
@@ -86,11 +86,11 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
-	// ControlobjectivesTable is the table that holds the controlobjectives relation/edge. The primary key declared below.
-	ControlobjectivesTable = "internal_policy_controlobjectives"
-	// ControlobjectivesInverseTable is the table name for the ControlObjective entity.
+	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
+	ControlObjectivesTable = "internal_policy_control_objectives"
+	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
-	ControlobjectivesInverseTable = "control_objectives"
+	ControlObjectivesInverseTable = "control_objectives"
 	// ControlsTable is the table that holds the controls relation/edge.
 	ControlsTable = "controls"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -114,7 +114,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
-	ProgramsTable = "program_policies"
+	ProgramsTable = "program_internal_policies"
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
@@ -149,9 +149,9 @@ var (
 	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
 	// primary key for the editors relation (M2M).
 	EditorsPrimaryKey = []string{"internal_policy_id", "group_id"}
-	// ControlobjectivesPrimaryKey and ControlobjectivesColumn2 are the table columns denoting the
-	// primary key for the controlobjectives relation (M2M).
-	ControlobjectivesPrimaryKey = []string{"internal_policy_id", "control_objective_id"}
+	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
+	// primary key for the control_objectives relation (M2M).
+	ControlObjectivesPrimaryKey = []string{"internal_policy_id", "control_objective_id"}
 	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
 	// primary key for the procedures relation (M2M).
 	ProceduresPrimaryKey = []string{"internal_policy_id", "procedure_id"}
@@ -321,17 +321,17 @@ func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByControlobjectivesCount orders the results by controlobjectives count.
-func ByControlobjectivesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByControlObjectivesCount orders the results by control_objectives count.
+func ByControlObjectivesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlobjectivesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectivesStep(), opts...)
 	}
 }
 
-// ByControlobjectives orders the results by controlobjectives terms.
-func ByControlobjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByControlObjectives orders the results by control_objectives terms.
+func ByControlObjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlobjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -425,11 +425,11 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 	)
 }
-func newControlobjectivesStep() *sqlgraph.Step {
+func newControlObjectivesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlobjectivesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ControlobjectivesTable, ControlobjectivesPrimaryKey...),
+		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

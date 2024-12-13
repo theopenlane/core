@@ -82,8 +82,8 @@ const (
 	EdgeFile = "file"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
-	// EdgeActionplans holds the string denoting the actionplans edge name in mutations.
-	EdgeActionplans = "actionplans"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
 	// EdgeAssignerTasks holds the string denoting the assigner_tasks edge name in mutations.
@@ -169,11 +169,11 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
-	// ActionplansTable is the table that holds the actionplans relation/edge. The primary key declared below.
-	ActionplansTable = "user_actionplans"
-	// ActionplansInverseTable is the table name for the ActionPlan entity.
+	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
+	ActionPlansTable = "user_action_plans"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
-	ActionplansInverseTable = "action_plans"
+	ActionPlansInverseTable = "action_plans"
 	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
 	SubcontrolsTable = "user_subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
@@ -260,9 +260,9 @@ var (
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"user_id", "event_id"}
-	// ActionplansPrimaryKey and ActionplansColumn2 are the table columns denoting the
-	// primary key for the actionplans relation (M2M).
-	ActionplansPrimaryKey = []string{"user_id", "action_plan_id"}
+	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
+	// primary key for the action_plans relation (M2M).
+	ActionPlansPrimaryKey = []string{"user_id", "action_plan_id"}
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"user_id", "subcontrol_id"}
@@ -592,17 +592,17 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByActionplansCount orders the results by actionplans count.
-func ByActionplansCount(opts ...sql.OrderTermOption) OrderOption {
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newActionplansStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
 	}
 }
 
-// ByActionplans orders the results by actionplans terms.
-func ByActionplans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newActionplansStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -780,11 +780,11 @@ func newEventsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 	)
 }
-func newActionplansStep() *sqlgraph.Step {
+func newActionPlansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ActionplansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ActionplansTable, ActionplansPrimaryKey...),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
 	)
 }
 func newSubcontrolsStep() *sqlgraph.Step {

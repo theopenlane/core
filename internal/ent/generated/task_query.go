@@ -39,7 +39,7 @@ type TaskQuery struct {
 	withAssignee              *UserQuery
 	withOrganization          *OrganizationQuery
 	withGroup                 *GroupQuery
-	withPolicy                *InternalPolicyQuery
+	withInternalPolicy        *InternalPolicyQuery
 	withProcedure             *ProcedureQuery
 	withControl               *ControlQuery
 	withControlObjective      *ControlObjectiveQuery
@@ -50,7 +50,7 @@ type TaskQuery struct {
 	modifiers                 []func(*sql.Selector)
 	withNamedOrganization     map[string]*OrganizationQuery
 	withNamedGroup            map[string]*GroupQuery
-	withNamedPolicy           map[string]*InternalPolicyQuery
+	withNamedInternalPolicy   map[string]*InternalPolicyQuery
 	withNamedProcedure        map[string]*ProcedureQuery
 	withNamedControl          map[string]*ControlQuery
 	withNamedControlObjective map[string]*ControlObjectiveQuery
@@ -192,8 +192,8 @@ func (tq *TaskQuery) QueryGroup() *GroupQuery {
 	return query
 }
 
-// QueryPolicy chains the current query on the "policy" edge.
-func (tq *TaskQuery) QueryPolicy() *InternalPolicyQuery {
+// QueryInternalPolicy chains the current query on the "internal_policy" edge.
+func (tq *TaskQuery) QueryInternalPolicy() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
@@ -206,7 +206,7 @@ func (tq *TaskQuery) QueryPolicy() *InternalPolicyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, selector),
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, task.PolicyTable, task.PolicyPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.InternalPolicyTable, task.InternalPolicyPrimaryKey...),
 		)
 		schemaConfig := tq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
@@ -538,7 +538,7 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 		withAssignee:         tq.withAssignee.Clone(),
 		withOrganization:     tq.withOrganization.Clone(),
 		withGroup:            tq.withGroup.Clone(),
-		withPolicy:           tq.withPolicy.Clone(),
+		withInternalPolicy:   tq.withInternalPolicy.Clone(),
 		withProcedure:        tq.withProcedure.Clone(),
 		withControl:          tq.withControl.Clone(),
 		withControlObjective: tq.withControlObjective.Clone(),
@@ -595,14 +595,14 @@ func (tq *TaskQuery) WithGroup(opts ...func(*GroupQuery)) *TaskQuery {
 	return tq
 }
 
-// WithPolicy tells the query-builder to eager-load the nodes that are connected to
-// the "policy" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithPolicy(opts ...func(*InternalPolicyQuery)) *TaskQuery {
+// WithInternalPolicy tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policy" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithInternalPolicy(opts ...func(*InternalPolicyQuery)) *TaskQuery {
 	query := (&InternalPolicyClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withPolicy = query
+	tq.withInternalPolicy = query
 	return tq
 }
 
@@ -751,7 +751,7 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			tq.withAssignee != nil,
 			tq.withOrganization != nil,
 			tq.withGroup != nil,
-			tq.withPolicy != nil,
+			tq.withInternalPolicy != nil,
 			tq.withProcedure != nil,
 			tq.withControl != nil,
 			tq.withControlObjective != nil,
@@ -814,10 +814,10 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
-	if query := tq.withPolicy; query != nil {
-		if err := tq.loadPolicy(ctx, query, nodes,
-			func(n *Task) { n.Edges.Policy = []*InternalPolicy{} },
-			func(n *Task, e *InternalPolicy) { n.Edges.Policy = append(n.Edges.Policy, e) }); err != nil {
+	if query := tq.withInternalPolicy; query != nil {
+		if err := tq.loadInternalPolicy(ctx, query, nodes,
+			func(n *Task) { n.Edges.InternalPolicy = []*InternalPolicy{} },
+			func(n *Task, e *InternalPolicy) { n.Edges.InternalPolicy = append(n.Edges.InternalPolicy, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -870,10 +870,10 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedPolicy {
-		if err := tq.loadPolicy(ctx, query, nodes,
-			func(n *Task) { n.appendNamedPolicy(name) },
-			func(n *Task, e *InternalPolicy) { n.appendNamedPolicy(name, e) }); err != nil {
+	for name, query := range tq.withNamedInternalPolicy {
+		if err := tq.loadInternalPolicy(ctx, query, nodes,
+			func(n *Task) { n.appendNamedInternalPolicy(name) },
+			func(n *Task, e *InternalPolicy) { n.appendNamedInternalPolicy(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1108,7 +1108,7 @@ func (tq *TaskQuery) loadGroup(ctx context.Context, query *GroupQuery, nodes []*
 	}
 	return nil
 }
-func (tq *TaskQuery) loadPolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*Task, init func(*Task), assign func(*Task, *InternalPolicy)) error {
+func (tq *TaskQuery) loadInternalPolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*Task, init func(*Task), assign func(*Task, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1120,12 +1120,12 @@ func (tq *TaskQuery) loadPolicy(ctx context.Context, query *InternalPolicyQuery,
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(task.PolicyTable)
+		joinT := sql.Table(task.InternalPolicyTable)
 		joinT.Schema(tq.schemaConfig.InternalPolicyTasks)
-		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(task.PolicyPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(task.PolicyPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(task.InternalPolicyPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(task.InternalPolicyPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(task.PolicyPrimaryKey[1]))
+		s.Select(joinT.C(task.InternalPolicyPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1162,7 +1162,7 @@ func (tq *TaskQuery) loadPolicy(ctx context.Context, query *InternalPolicyQuery,
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "policy" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "internal_policy" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1607,17 +1607,17 @@ func (tq *TaskQuery) WithNamedGroup(name string, opts ...func(*GroupQuery)) *Tas
 	return tq
 }
 
-// WithNamedPolicy tells the query-builder to eager-load the nodes that are connected to the "policy"
+// WithNamedInternalPolicy tells the query-builder to eager-load the nodes that are connected to the "internal_policy"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedPolicy(name string, opts ...func(*InternalPolicyQuery)) *TaskQuery {
+func (tq *TaskQuery) WithNamedInternalPolicy(name string, opts ...func(*InternalPolicyQuery)) *TaskQuery {
 	query := (&InternalPolicyClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedPolicy == nil {
-		tq.withNamedPolicy = make(map[string]*InternalPolicyQuery)
+	if tq.withNamedInternalPolicy == nil {
+		tq.withNamedInternalPolicy = make(map[string]*InternalPolicyQuery)
 	}
-	tq.withNamedPolicy[name] = query
+	tq.withNamedInternalPolicy[name] = query
 	return tq
 }
 

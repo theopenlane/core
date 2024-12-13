@@ -291,19 +291,19 @@ func (ipc *InternalPolicyCreate) AddEditors(g ...*Group) *InternalPolicyCreate {
 	return ipc.AddEditorIDs(ids...)
 }
 
-// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
-func (ipc *InternalPolicyCreate) AddControlobjectiveIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddControlobjectiveIDs(ids...)
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (ipc *InternalPolicyCreate) AddControlObjectiveIDs(ids ...string) *InternalPolicyCreate {
+	ipc.mutation.AddControlObjectiveIDs(ids...)
 	return ipc
 }
 
-// AddControlobjectives adds the "controlobjectives" edges to the ControlObjective entity.
-func (ipc *InternalPolicyCreate) AddControlobjectives(c ...*ControlObjective) *InternalPolicyCreate {
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (ipc *InternalPolicyCreate) AddControlObjectives(c ...*ControlObjective) *InternalPolicyCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return ipc.AddControlobjectiveIDs(ids...)
+	return ipc.AddControlObjectiveIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -623,18 +623,18 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
+	if nodes := ipc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   internalpolicy.ControlobjectivesTable,
-			Columns: internalpolicy.ControlobjectivesPrimaryKey,
+			Table:   internalpolicy.ControlObjectivesTable,
+			Columns: internalpolicy.ControlObjectivesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyControlobjectives
+		edge.Schema = ipc.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -719,7 +719,7 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.ProgramPolicies
+		edge.Schema = ipc.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
