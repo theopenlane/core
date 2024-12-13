@@ -130,6 +130,8 @@ steps:
         key: "gobuild-server"
         cancel_on_build_failing: true
         artifact_paths: "bin/${APP_NAME}"
+        agents:
+          queue: "hosted-medium"
         plugins:
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -189,7 +191,7 @@ steps:
       - label: ":docker: docker pr build"
         key: "docker-pr-build"
         agents:
-          queue: "hosted-medium"
+          queue: "hosted-large"
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         commands: |
