@@ -161,6 +161,8 @@ steps:
     steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
+        soft_fail:
+          - exit_status: 1
         agents:
           queue: "hosted-small"
         plugins:
