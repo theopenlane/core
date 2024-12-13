@@ -160,8 +160,6 @@ steps:
         key: "atlas_lint"
         soft_fail:
           - exit_status: 1
-        agents:
-          queue: "hosted-small"
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -173,8 +171,6 @@ steps:
               step: lint
       - label: ":rocket: atlas push"
         if: build.branch == "main"
-        agents:
-          queue: "hosted-small"
         key: "atlas_migrate"
         plugins:
           - cluster-secrets#v1.0.0:
@@ -192,8 +188,6 @@ steps:
     steps:
       - label: ":docker: docker pr build"
         key: "docker-pr-build"
-        agents:
-          queue: "hosted-large"
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         commands: |
@@ -229,9 +223,6 @@ steps:
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.57.1"
       - label: ":docker: docker build and publish"
-        key: "docker-build"
-        agents:
-          queue: "hosted-large"
         cancel_on_build_failing: true
         if: build.branch == "main"
         commands: |
@@ -296,8 +287,6 @@ steps:
                 - NAME=${APP_NAME}
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
-        agents:
-          queue: "hosted-large"
         cancel_on_build_failing: true
         if: build.tag != null
         commands: |
