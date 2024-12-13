@@ -975,8 +975,8 @@ github.com/theopenlane/entx v0.3.0 h1:8aSordsEdpH1Fo0N6qgPgIcSryMBiF+sx/1bYjXuqY
 github.com/theopenlane/entx v0.3.0/go.mod h1:JhpipQ1Rcg/XYYIDUB4PcaWMqsUE0VO9tZzMHqYjQtQ=
 github.com/theopenlane/gqlgen-plugins v0.3.1 h1:kLWqO7sOZlXmYP/8CeDegWEId9RYcD+qASF+8oaANh8=
 github.com/theopenlane/gqlgen-plugins v0.3.1/go.mod h1:F5ZmQPbNagqZ2c/dK3anXe2pYRQpiAh6QghUQLownIU=
-github.com/theopenlane/httpsling v0.2.1 h1:fWK6emqVOv/al4TamApcf/rNHfpWmobWl5nnxJr/9/A=
-github.com/theopenlane/httpsling v0.2.1/go.mod h1:17xyZnSgSHHZISpYxqBhbztSNxz9ihZrmjyce3ShfRc=
+github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=
+github.com/theopenlane/httpsling v0.2.2/go.mod h1:mrSaIZs4lhcBsOJCv/n67N7eDZ/skD6vA8l8y9MDrKk=
 github.com/theopenlane/iam v0.5.0 h1:Pumnam4ATT8tz+LM6Un+dwFQwd7j8wlJxInprwaC2DE=
 github.com/theopenlane/iam v0.5.0/go.mod h1:SIhLEl3YrHVcvXxG5r/BVxa36yEUwksQx1AtmWld3os=
 github.com/theopenlane/newman v0.1.2 h1:BKn1fjT4tU7AxonFjx+4QNAIq0B9ZlT2wM9cWgBA6Hs=
