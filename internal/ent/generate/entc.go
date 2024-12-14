@@ -39,6 +39,7 @@ const (
 )
 
 func main() {
+	// setup logging
 	genhelpers.SetupLogging()
 
 	// change to the root of the repo so that the config hierarchy is correct
