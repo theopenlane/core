@@ -20884,7 +20884,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../../../schema/actionplan.graphql", Input: `extend type Query {
+	{Name: "../schema/actionplan.graphql", Input: `extend type Query {
     """
     Look up actionPlan by ID
     """
@@ -20987,7 +20987,7 @@ type ActionPlanBulkCreatePayload {
     """
     actionPlans: [ActionPlan!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/adminsearch.graphql", Input: `extend type Query{
+	{Name: "../schema/adminsearch.graphql", Input: `extend type Query{
     """
     Search across APIToken objects
     """
@@ -21259,7 +21259,7 @@ type ActionPlanBulkCreatePayload {
         query: String!
     ): UserSettingSearchResult
 }`, BuiltIn: false},
-	{Name: "../../../schema/apitoken.graphql", Input: `extend type Query {
+	{Name: "../schema/apitoken.graphql", Input: `extend type Query {
     """
     Look up apiToken by ID
     """
@@ -21362,7 +21362,7 @@ type APITokenBulkCreatePayload {
     """
     apiTokens: [APIToken!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/audit.graphql", Input: `extend type Query {
+	{Name: "../schema/audit.graphql", Input: `extend type Query {
   auditLogs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -21440,7 +21440,7 @@ extend input AuditLogWhereInput {
   before: Time
   after: Time
 }`, BuiltIn: false},
-	{Name: "../../../schema/contact.graphql", Input: `extend type Query {
+	{Name: "../schema/contact.graphql", Input: `extend type Query {
     """
     Look up contact by ID
     """
@@ -21543,7 +21543,7 @@ type ContactBulkCreatePayload {
     """
     contacts: [Contact!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/control.graphql", Input: `extend type Query {
+	{Name: "../schema/control.graphql", Input: `extend type Query {
     """
     Look up control by ID
     """
@@ -21646,7 +21646,7 @@ type ControlBulkCreatePayload {
     """
     controls: [Control!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/controlobjective.graphql", Input: `extend type Query {
+	{Name: "../schema/controlobjective.graphql", Input: `extend type Query {
     """
     Look up controlObjective by ID
     """
@@ -21749,7 +21749,7 @@ type ControlObjectiveBulkCreatePayload {
     """
     controlObjectives: [ControlObjective!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/documentdata.graphql", Input: `extend type Query {
+	{Name: "../schema/documentdata.graphql", Input: `extend type Query {
     """
     Look up documentData by ID
     """
@@ -21852,7 +21852,7 @@ type DocumentDataBulkCreatePayload {
     """
     documentData: [DocumentData!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+	{Name: "../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type APIToken implements Node {
   id: ID!
@@ -49849,7 +49849,7 @@ input UserWhereInput {
   hasProgramMembershipsWith: [ProgramMembershipWhereInput!]
 }
 `, BuiltIn: false},
-	{Name: "../../../schema/entity.graphql", Input: `extend type Query {
+	{Name: "../schema/entity.graphql", Input: `extend type Query {
     """
     Look up entity by ID
     """
@@ -49952,7 +49952,7 @@ type EntityBulkCreatePayload {
     """
     entities: [Entity!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
+	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
   note: CreateNoteInput
 }
 
@@ -49960,7 +49960,7 @@ extend input UpdateEntityInput {
   note:  CreateNoteInput
 }
 `, BuiltIn: false},
-	{Name: "../../../schema/entitytype.graphql", Input: `extend type Query {
+	{Name: "../schema/entitytype.graphql", Input: `extend type Query {
     """
     Look up entityType by ID
     """
@@ -50063,7 +50063,7 @@ type EntityTypeBulkCreatePayload {
     """
     entityTypes: [EntityType!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/event.graphql", Input: `extend type Query {
+	{Name: "../schema/event.graphql", Input: `extend type Query {
     """
     Look up event by ID
     """
@@ -50166,7 +50166,7 @@ type EventBulkCreatePayload {
     """
     events: [Event!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/file.graphql", Input: `extend type Query {
+	{Name: "../schema/file.graphql", Input: `extend type Query {
     """
     Look up file by ID
     """
@@ -50201,7 +50201,7 @@ type FileDeletePayload {
 }
 
 `, BuiltIn: false},
-	{Name: "../../../schema/group.graphql", Input: `extend type Query {
+	{Name: "../schema/group.graphql", Input: `extend type Query {
     """
     Look up group by ID
     """
@@ -50304,7 +50304,7 @@ type GroupBulkCreatePayload {
     """
     groups: [Group!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/groupextended.graphql", Input: `extend input CreateGroupInput {
+	{Name: "../schema/groupextended.graphql", Input: `extend input CreateGroupInput {
   createGroupSettings: CreateGroupSettingInput
 }
 
@@ -50317,7 +50317,7 @@ extend input GroupMembershipWhereInput {
   groupID: String
   userID: String
 }`, BuiltIn: false},
-	{Name: "../../../schema/groupmembership.graphql", Input: `extend type Query {
+	{Name: "../schema/groupmembership.graphql", Input: `extend type Query {
     """
     Look up groupMembership by ID
     """
@@ -50420,7 +50420,7 @@ type GroupMembershipBulkCreatePayload {
     """
     groupMemberships: [GroupMembership!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/groupsetting.graphql", Input: `extend type Query {
+	{Name: "../schema/groupsetting.graphql", Input: `extend type Query {
     """
     Look up groupSetting by ID
     """
@@ -50523,7 +50523,7 @@ type GroupSettingBulkCreatePayload {
     """
     groupSettings: [GroupSetting!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/hush.graphql", Input: `extend type Query {
+	{Name: "../schema/hush.graphql", Input: `extend type Query {
     """
     Look up hush by ID
     """
@@ -50626,7 +50626,7 @@ type HushBulkCreatePayload {
     """
     hushes: [Hush!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/integration.graphql", Input: `extend type Query {
+	{Name: "../schema/integration.graphql", Input: `extend type Query {
     """
     Look up integration by ID
     """
@@ -50729,7 +50729,7 @@ type IntegrationBulkCreatePayload {
     """
     integrations: [Integration!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/internalpolicy.graphql", Input: `extend type Query {
+	{Name: "../schema/internalpolicy.graphql", Input: `extend type Query {
     """
     Look up internalPolicy by ID
     """
@@ -50832,7 +50832,7 @@ type InternalPolicyBulkCreatePayload {
     """
     internalPolicies: [InternalPolicy!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/invite.graphql", Input: `extend type Query {
+	{Name: "../schema/invite.graphql", Input: `extend type Query {
     """
     Look up invite by ID
     """
@@ -50935,7 +50935,7 @@ type InviteBulkCreatePayload {
     """
     invites: [Invite!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/narrative.graphql", Input: `extend type Query {
+	{Name: "../schema/narrative.graphql", Input: `extend type Query {
     """
     Look up narrative by ID
     """
@@ -51038,7 +51038,7 @@ type NarrativeBulkCreatePayload {
     """
     narratives: [Narrative!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/organization.graphql", Input: `extend type Query {
+	{Name: "../schema/organization.graphql", Input: `extend type Query {
     """
     Look up organization by ID
     """
@@ -51141,7 +51141,7 @@ type OrganizationBulkCreatePayload {
     """
     organizations: [Organization!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/organizationsetting.graphql", Input: `extend type Query {
+	{Name: "../schema/organizationsetting.graphql", Input: `extend type Query {
     """
     Look up organizationSetting by ID
     """
@@ -51244,7 +51244,7 @@ type OrganizationSettingBulkCreatePayload {
     """
     organizationSettings: [OrganizationSetting!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/orgextended.graphql", Input: `extend input CreateOrganizationInput {
+	{Name: "../schema/orgextended.graphql", Input: `extend input CreateOrganizationInput {
   createOrgSettings: CreateOrganizationSettingInput
 }
 
@@ -51257,7 +51257,7 @@ extend input OrgMembershipWhereInput {
   organizationID: String
   userID: String
 }`, BuiltIn: false},
-	{Name: "../../../schema/orgmembership.graphql", Input: `extend type Query {
+	{Name: "../schema/orgmembership.graphql", Input: `extend type Query {
     """
     Look up orgMembership by ID
     """
@@ -51360,7 +51360,7 @@ type OrgMembershipBulkCreatePayload {
     """
     orgMemberships: [OrgMembership!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/orgsubscription.graphql", Input: `extend type Query {
+	{Name: "../schema/orgsubscription.graphql", Input: `extend type Query {
     """
     Look up orgSubscription by ID
     """
@@ -51463,7 +51463,7 @@ type OrgSubscriptionBulkCreatePayload {
     """
     orgSubscriptions: [OrgSubscription!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/personalaccesstoken.graphql", Input: `extend type Query {
+	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """
     Look up personalAccessToken by ID
     """
@@ -51566,7 +51566,7 @@ type PersonalAccessTokenBulkCreatePayload {
     """
     personalAccessTokens: [PersonalAccessToken!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/procedure.graphql", Input: `extend type Query {
+	{Name: "../schema/procedure.graphql", Input: `extend type Query {
     """
     Look up procedure by ID
     """
@@ -51669,7 +51669,7 @@ type ProcedureBulkCreatePayload {
     """
     procedures: [Procedure!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/program.graphql", Input: `extend type Query {
+	{Name: "../schema/program.graphql", Input: `extend type Query {
     """
     Look up program by ID
     """
@@ -51772,7 +51772,7 @@ type ProgramBulkCreatePayload {
     """
     programs: [Program!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/programextended.graphql", Input: `extend input UpdateProgramInput {
+	{Name: "../schema/programextended.graphql", Input: `extend input UpdateProgramInput {
   addProgramMembers: [CreateProgramMembershipInput!]
 }
 
@@ -51835,7 +51835,7 @@ extend type Mutation{
         input: CreateControlWithSubcontrolsInput!
     ): ControlCreatePayload!
 }`, BuiltIn: false},
-	{Name: "../../../schema/programmembership.graphql", Input: `extend type Query {
+	{Name: "../schema/programmembership.graphql", Input: `extend type Query {
     """
     Look up programMembership by ID
     """
@@ -51938,7 +51938,7 @@ type ProgramMembershipBulkCreatePayload {
     """
     programMemberships: [ProgramMembership!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/risk.graphql", Input: `extend type Query {
+	{Name: "../schema/risk.graphql", Input: `extend type Query {
     """
     Look up risk by ID
     """
@@ -52041,8 +52041,8 @@ type RiskBulkCreatePayload {
     """
     risks: [Risk!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/scalars.graphql", Input: `scalar Upload`, BuiltIn: false},
-	{Name: "../../../schema/search.graphql", Input: `extend type Query{
+	{Name: "../schema/scalars.graphql", Input: `scalar Upload`, BuiltIn: false},
+	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
     Search across APIToken objects
     """
@@ -52493,7 +52493,7 @@ type  UserSettingSearchResult {
    userSettings: [ UserSetting!]
 }
 `, BuiltIn: false},
-	{Name: "../../../schema/standard.graphql", Input: `extend type Query {
+	{Name: "../schema/standard.graphql", Input: `extend type Query {
     """
     Look up standard by ID
     """
@@ -52596,7 +52596,7 @@ type StandardBulkCreatePayload {
     """
     standards: [Standard!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/subcontrol.graphql", Input: `extend type Query {
+	{Name: "../schema/subcontrol.graphql", Input: `extend type Query {
     """
     Look up subcontrol by ID
     """
@@ -52699,7 +52699,7 @@ type SubcontrolBulkCreatePayload {
     """
     subcontrols: [Subcontrol!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/subscriber.graphql", Input: `extend type Query {
+	{Name: "../schema/subscriber.graphql", Input: `extend type Query {
     """
     Look up subscriber by Email
     """
@@ -52808,7 +52808,7 @@ type SubscriberBulkCreatePayload {
 }
 
 `, BuiltIn: false},
-	{Name: "../../../schema/task.graphql", Input: `extend type Query {
+	{Name: "../schema/task.graphql", Input: `extend type Query {
     """
     Look up task by ID
     """
@@ -52911,7 +52911,7 @@ type TaskBulkCreatePayload {
     """
     tasks: [Task!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/template.graphql", Input: `extend type Query {
+	{Name: "../schema/template.graphql", Input: `extend type Query {
     """
     Look up template by ID
     """
@@ -53014,7 +53014,7 @@ type TemplateBulkCreatePayload {
     """
     templates: [Template!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/tfasetting.graphql", Input: `extend type Query {
+	{Name: "../schema/tfasetting.graphql", Input: `extend type Query {
     """
     Look up tfaSetting for the current user
     """
@@ -53073,7 +53073,7 @@ extend input UpdateTFASettingInput {
     """
     regenBackupCodes: Boolean
 }`, BuiltIn: false},
-	{Name: "../../../schema/user.graphql", Input: `extend type Query {
+	{Name: "../schema/user.graphql", Input: `extend type Query {
     """
     Look up user by ID
     """
@@ -53160,7 +53160,7 @@ type UserBulkCreatePayload {
     """
     users: [User!]
 }`, BuiltIn: false},
-	{Name: "../../../schema/usersetting.graphql", Input: `extend type Query {
+	{Name: "../schema/usersetting.graphql", Input: `extend type Query {
     """
     Look up userSetting by ID
     """

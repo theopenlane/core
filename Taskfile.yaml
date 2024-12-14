@@ -56,13 +56,13 @@ tasks:
   generate:ent:
     desc: generate ent models
     cmds:
-      - go-generate-fast generate_ent.go
+      - go-generate-fast internal/ent/generate/generate.go
       - task: tidy
 
   generate:gql:
     desc: generate gql graphql models and resolvers, along with the client
     cmds:
-      - go-generate-fast generate_gql.go
+      - go-generate-fast internal/graphapi/generate/generate.go
       - task: tidy
 
   ## Go tasks

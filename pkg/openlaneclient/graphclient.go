@@ -159,8 +159,8 @@ type OpenlaneGraphClient interface {
 	CreateBulkInvite(ctx context.Context, input []*CreateInviteInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInvite, error)
 	CreateInvite(ctx context.Context, input CreateInviteInput, interceptors ...clientv2.RequestInterceptor) (*CreateInvite, error)
 	DeleteInvite(ctx context.Context, deleteInviteID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInvite, error)
-	GetInviteByID(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor) (*GetInviteByID, error)
 	GetAllInvites(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInvites, error)
+	GetInviteByID(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor) (*GetInviteByID, error)
 	InvitesByOrgID(ctx context.Context, where *InviteWhereInput, interceptors ...clientv2.RequestInterceptor) (*InvitesByOrgID, error)
 	CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVNarrative, error)
 	CreateBulkNarrative(ctx context.Context, input []*CreateNarrativeInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkNarrative, error)
@@ -21281,6 +21281,60 @@ func (t *DeleteInvite_DeleteInvite) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllInvites_Invites_Edges_Node struct {
+	ID        string             "json:\"id\" graphql:\"id\""
+	Recipient string             "json:\"recipient\" graphql:\"recipient\""
+	Role      enums.Role         "json:\"role\" graphql:\"role\""
+	Status    enums.InviteStatus "json:\"status\" graphql:\"status\""
+}
+
+func (t *GetAllInvites_Invites_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllInvites_Invites_Edges_Node) GetRecipient() string {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node{}
+	}
+	return t.Recipient
+}
+func (t *GetAllInvites_Invites_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetAllInvites_Invites_Edges_Node) GetStatus() *enums.InviteStatus {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node{}
+	}
+	return &t.Status
+}
+
+type GetAllInvites_Invites_Edges struct {
+	Node *GetAllInvites_Invites_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllInvites_Invites_Edges) GetNode() *GetAllInvites_Invites_Edges_Node {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllInvites_Invites struct {
+	Edges []*GetAllInvites_Invites_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllInvites_Invites) GetEdges() []*GetAllInvites_Invites_Edges {
+	if t == nil {
+		t = &GetAllInvites_Invites{}
+	}
+	return t.Edges
+}
+
 type GetInviteByID_Invite_Owner struct {
 	DisplayName string "json:\"displayName\" graphql:\"displayName\""
 	ID          string "json:\"id\" graphql:\"id\""
@@ -21392,60 +21446,6 @@ func (t *GetInviteByID_Invite) GetUpdatedBy() *string {
 		t = &GetInviteByID_Invite{}
 	}
 	return t.UpdatedBy
-}
-
-type GetAllInvites_Invites_Edges_Node struct {
-	ID        string             "json:\"id\" graphql:\"id\""
-	Recipient string             "json:\"recipient\" graphql:\"recipient\""
-	Role      enums.Role         "json:\"role\" graphql:\"role\""
-	Status    enums.InviteStatus "json:\"status\" graphql:\"status\""
-}
-
-func (t *GetAllInvites_Invites_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllInvites_Invites_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetAllInvites_Invites_Edges_Node) GetRecipient() string {
-	if t == nil {
-		t = &GetAllInvites_Invites_Edges_Node{}
-	}
-	return t.Recipient
-}
-func (t *GetAllInvites_Invites_Edges_Node) GetRole() *enums.Role {
-	if t == nil {
-		t = &GetAllInvites_Invites_Edges_Node{}
-	}
-	return &t.Role
-}
-func (t *GetAllInvites_Invites_Edges_Node) GetStatus() *enums.InviteStatus {
-	if t == nil {
-		t = &GetAllInvites_Invites_Edges_Node{}
-	}
-	return &t.Status
-}
-
-type GetAllInvites_Invites_Edges struct {
-	Node *GetAllInvites_Invites_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllInvites_Invites_Edges) GetNode() *GetAllInvites_Invites_Edges_Node {
-	if t == nil {
-		t = &GetAllInvites_Invites_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllInvites_Invites struct {
-	Edges []*GetAllInvites_Invites_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllInvites_Invites) GetEdges() []*GetAllInvites_Invites_Edges {
-	if t == nil {
-		t = &GetAllInvites_Invites{}
-	}
-	return t.Edges
 }
 
 type InvitesByOrgID_Invites_Edges_Node_Owner_Invites struct {
@@ -46648,17 +46648,6 @@ func (t *DeleteInvite) GetDeleteInvite() *DeleteInvite_DeleteInvite {
 	return &t.DeleteInvite
 }
 
-type GetInviteByID struct {
-	Invite GetInviteByID_Invite "json:\"invite\" graphql:\"invite\""
-}
-
-func (t *GetInviteByID) GetInvite() *GetInviteByID_Invite {
-	if t == nil {
-		t = &GetInviteByID{}
-	}
-	return &t.Invite
-}
-
 type GetAllInvites struct {
 	Invites GetAllInvites_Invites "json:\"invites\" graphql:\"invites\""
 }
@@ -46668,6 +46657,17 @@ func (t *GetAllInvites) GetInvites() *GetAllInvites_Invites {
 		t = &GetAllInvites{}
 	}
 	return &t.Invites
+}
+
+type GetInviteByID struct {
+	Invite GetInviteByID_Invite "json:\"invite\" graphql:\"invite\""
+}
+
+func (t *GetInviteByID) GetInvite() *GetInviteByID_Invite {
+	if t == nil {
+		t = &GetInviteByID{}
+	}
+	return &t.Invite
 }
 
 type InvitesByOrgID struct {
@@ -54910,6 +54910,35 @@ func (c *Client) DeleteInvite(ctx context.Context, deleteInviteID string, interc
 	return &res, nil
 }
 
+const GetAllInvitesDocument = `query GetAllInvites {
+	invites {
+		edges {
+			node {
+				id
+				recipient
+				role
+				status
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllInvites(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInvites, error) {
+	vars := map[string]any{}
+
+	var res GetAllInvites
+	if err := c.Client.Post(ctx, "GetAllInvites", GetAllInvitesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetInviteByIDDocument = `query GetInviteByID ($inviteId: ID!) {
 	invite(id: $inviteId) {
 		expires
@@ -54939,35 +54968,6 @@ func (c *Client) GetInviteByID(ctx context.Context, inviteID string, interceptor
 
 	var res GetInviteByID
 	if err := c.Client.Post(ctx, "GetInviteByID", GetInviteByIDDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetAllInvitesDocument = `query GetAllInvites {
-	invites {
-		edges {
-			node {
-				id
-				recipient
-				role
-				status
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetAllInvites(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInvites, error) {
-	vars := map[string]any{}
-
-	var res GetAllInvites
-	if err := c.Client.Post(ctx, "GetAllInvites", GetAllInvitesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -62410,8 +62410,8 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkInviteDocument:                   "CreateBulkInvite",
 	CreateInviteDocument:                       "CreateInvite",
 	DeleteInviteDocument:                       "DeleteInvite",
-	GetInviteByIDDocument:                      "GetInviteByID",
 	GetAllInvitesDocument:                      "GetAllInvites",
+	GetInviteByIDDocument:                      "GetInviteByID",
 	InvitesByOrgIDDocument:                     "InvitesByOrgID",
 	CreateBulkCSVNarrativeDocument:             "CreateBulkCSVNarrative",
 	CreateBulkNarrativeDocument:                "CreateBulkNarrative",

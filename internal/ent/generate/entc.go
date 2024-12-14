@@ -5,8 +5,9 @@
 package main
 
 import (
-	"log"
 	"os"
+
+	"github.com/rs/zerolog/log"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
@@ -26,17 +27,25 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/entitlements"
+
+	"github.com/theopenlane/core/internal/genhelpers"
 )
 
 const (
-	graphSchemaDir = "./schema/"
-	graphQueryDir  = "./query/"
+	graphDir       = "./internal/graphapi/"
+	graphSchemaDir = graphDir + "schema/"
+	graphQueryDir  = graphDir + "query/"
 	schemaPath     = "./internal/ent/schema"
 )
 
 func main() {
+	genhelpers.SetupLogging()
+
+	// change to the root of the repo so that the config hierarchy is correct
+	genhelpers.ChangeToRootDir("../../../")
+
 	if err := os.Mkdir("schema", 0755); err != nil && !os.IsExist(err) {
-		log.Fatalf("creating schema directory: %v", err)
+		log.Fatal().Err(err).Msg("creating schema directory")
 	}
 
 	// generate the history schemas
@@ -44,19 +53,21 @@ func main() {
 
 	xExt, err := entx.NewExtension(entx.WithJSONScalar())
 	if err != nil {
-		log.Fatalf("creating entx extension: %v", err)
+		log.Fatal().Err(err).Msg("creating entx extension")
 	}
 
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
-		entgql.WithSchemaPath("schema/ent.graphql"),
-		entgql.WithConfigPath("gqlgen.yml"),
+		entgql.WithSchemaPath(graphSchemaDir+"ent.graphql"),
+		entgql.WithConfigPath(graphDir+"/generate/.gqlgen.yml"),
 		entgql.WithWhereInputs(true),
 		entgql.WithSchemaHook(xExt.GQLSchemaHooks()...),
 	)
 	if err != nil {
-		log.Fatalf("creating entgql extension: %v", err)
+		log.Fatal().Err(err).Msg("creating entgql extension")
 	}
+
+	log.Info().Msg("running ent codegen with extensions")
 
 	if err := entc.Generate(schemaPath, &gen.Config{
 		Target:    "./internal/ent/generated",
@@ -117,7 +128,7 @@ func main() {
 			historyExt,
 			entfgaExt,
 		)); err != nil {
-		log.Fatalf("running ent codegen: %v", err)
+		log.Fatal().Err(err).Msg("running ent codegen")
 	}
 }
 
@@ -125,6 +136,8 @@ func main() {
 // and returns the history and fga extensions to be used in the ent codegen
 func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
 	// generate the history schemas
+	log.Info().Msg("pre-run: generating the history schemas")
+
 	historyExt := history.New(
 		history.WithAuditing(),
 		history.WithImmutableFields(),
@@ -139,8 +152,10 @@ func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
 	)
 
 	if err := historyExt.GenerateSchemas(); err != nil {
-		log.Fatalf("generating history schema: %v", err)
+		log.Fatal().Err(err).Msg("generating history schema")
 	}
+
+	log.Info().Msg("pre-run: generating the authz checks")
 
 	// initialize the entfga extension
 	entfgaExt := entfga.New(
@@ -151,15 +166,17 @@ func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
 	// generate authz checks, this needs to happen before we regenerate the schema
 	// because the authz checks are generated based on the schema
 	if err := entfgaExt.GenerateAuthzChecks(); err != nil {
-		log.Fatalf("generating authz checks: %v", err)
+		log.Fatal().Err(err).Msg("generating authz checks")
 	}
+
+	log.Info().Msg("pre-run: generating the history schemas with authz checks")
 
 	// run again with policy
 	historyExt.SetFirstRun(false)
 
 	// generate the updated history schemas with authz checks
 	if err := historyExt.GenerateSchemas(); err != nil {
-		log.Fatalf("generating history schema: %v", err)
+		log.Fatal().Err(err).Msg("generating history schema")
 	}
 
 	return historyExt, entfgaExt

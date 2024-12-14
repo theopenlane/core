@@ -49,6 +49,19 @@ mutation DeleteInvite($deleteInviteId: ID!) {
   }
 }
 
+query GetAllInvites {
+  invites {
+    edges {
+      node {
+        id
+        recipient
+        role
+        status
+      }
+    }
+  }
+}
+
 query GetInviteByID($inviteId: ID!) {
   invite(id: $inviteId) {
     expires
@@ -67,19 +80,6 @@ query GetInviteByID($inviteId: ID!) {
     createdBy
     updatedAt
     updatedBy
-  }
-}
-
-query GetAllInvites {
-  invites {
-    edges {
-      node {
-        id
-        recipient
-        role
-        status
-      }
-    }
   }
 }
 
