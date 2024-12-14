@@ -27,11 +27,11 @@ repos:
         entry: npx format-graphql@1.4.0 --write=true
         language: node
         files: 'query/.*\.graphql$'
-# - repo: local
-#   hooks:
-#     - id: generate
-#       name: Run Go Generate
-#       description: This hook runs go generate on the project
-#       entry: go-generate-fast ./...
-#       language: golang
-#       files: \.(go|graphql|tmpl)$
+  - repo: local
+    hooks:
+      - id: generate
+        name: Run Go Generate
+        description: This hook runs go generate on the project
+        entry: go-generate-fast ./...
+        language: golang
+        files: \.(go|graphql|tmpl)$
