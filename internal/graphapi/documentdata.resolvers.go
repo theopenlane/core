@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateDocumentData is the resolver for the createDocumentData field.
-func (r *mutationResolver) CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*DocumentDataCreatePayload, error) {
+func (r *mutationResolver) CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*model.DocumentDataCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateDocumentData(ctx context.Context, input generat
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "documentdata"})
 	}
 
-	return &DocumentDataCreatePayload{
+	return &model.DocumentDataCreatePayload{
 		DocumentData: res,
 	}, nil
 }
 
 // CreateBulkDocumentData is the resolver for the createBulkDocumentData field.
-func (r *mutationResolver) CreateBulkDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*DocumentDataBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error) {
 	return r.bulkCreateDocumentData(ctx, input)
 }
 
 // CreateBulkCSVDocumentData is the resolver for the createBulkCSVDocumentData field.
-func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*DocumentDataBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateDocumentDataInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 }
 
 // UpdateDocumentData is the resolver for the updateDocumentData field.
-func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput) (*DocumentDataUpdatePayload, error) {
+func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput) (*model.DocumentDataUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).DocumentData.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "documentdata"})
@@ -70,13 +71,13 @@ func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, in
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "documentdata"})
 	}
 
-	return &DocumentDataUpdatePayload{
+	return &model.DocumentDataUpdatePayload{
 		DocumentData: res,
 	}, nil
 }
 
 // DeleteDocumentData is the resolver for the deleteDocumentData field.
-func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*DocumentDataDeletePayload, error) {
+func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*model.DocumentDataDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "documentdata"})
 	}
@@ -85,7 +86,7 @@ func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &DocumentDataDeletePayload{
+	return &model.DocumentDataDeletePayload{
 		DeletedID: id,
 	}, nil
 }

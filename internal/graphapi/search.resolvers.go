@@ -7,10 +7,11 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // Search is the resolver for the search field.
-func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResultConnection, error) {
+func (r *queryResolver) Search(ctx context.Context, query string) (*model.SearchResultConnection, error) {
 	if len(query) < 3 {
 		return nil, ErrSearchQueryTooShort
 	}
@@ -270,102 +271,102 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 	}
 
 	// return the results
-	return &SearchResultConnection{
-		Nodes: []SearchResult{
-			APITokenSearchResult{
+	return &model.SearchResultConnection{
+		Nodes: []model.SearchResult{
+			model.APITokenSearchResult{
 				APITokens: apitokenResults,
 			},
-			ActionPlanSearchResult{
+			model.ActionPlanSearchResult{
 				ActionPlans: actionplanResults,
 			},
-			ContactSearchResult{
+			model.ContactSearchResult{
 				Contacts: contactResults,
 			},
-			ControlSearchResult{
+			model.ControlSearchResult{
 				Controls: controlResults,
 			},
-			ControlObjectiveSearchResult{
+			model.ControlObjectiveSearchResult{
 				ControlObjectives: controlobjectiveResults,
 			},
-			DocumentDataSearchResult{
+			model.DocumentDataSearchResult{
 				DocumentData: documentdataResults,
 			},
-			EntitySearchResult{
+			model.EntitySearchResult{
 				Entities: entityResults,
 			},
-			EntityTypeSearchResult{
+			model.EntityTypeSearchResult{
 				EntityTypes: entitytypeResults,
 			},
-			EventSearchResult{
+			model.EventSearchResult{
 				Events: eventResults,
 			},
-			FileSearchResult{
+			model.FileSearchResult{
 				Files: fileResults,
 			},
-			GroupSearchResult{
+			model.GroupSearchResult{
 				Groups: groupResults,
 			},
-			GroupSettingSearchResult{
+			model.GroupSettingSearchResult{
 				GroupSettings: groupsettingResults,
 			},
-			IntegrationSearchResult{
+			model.IntegrationSearchResult{
 				Integrations: integrationResults,
 			},
-			InternalPolicySearchResult{
+			model.InternalPolicySearchResult{
 				InternalPolicies: internalpolicyResults,
 			},
-			NarrativeSearchResult{
+			model.NarrativeSearchResult{
 				Narratives: narrativeResults,
 			},
-			OrgSubscriptionSearchResult{
+			model.OrgSubscriptionSearchResult{
 				OrgSubscriptions: orgsubscriptionResults,
 			},
-			OrganizationSearchResult{
+			model.OrganizationSearchResult{
 				Organizations: organizationResults,
 			},
-			OrganizationSettingSearchResult{
+			model.OrganizationSettingSearchResult{
 				OrganizationSettings: organizationsettingResults,
 			},
-			PersonalAccessTokenSearchResult{
+			model.PersonalAccessTokenSearchResult{
 				PersonalAccessTokens: personalaccesstokenResults,
 			},
-			ProcedureSearchResult{
+			model.ProcedureSearchResult{
 				Procedures: procedureResults,
 			},
-			ProgramSearchResult{
+			model.ProgramSearchResult{
 				Programs: programResults,
 			},
-			RiskSearchResult{
+			model.RiskSearchResult{
 				Risks: riskResults,
 			},
-			StandardSearchResult{
+			model.StandardSearchResult{
 				Standards: standardResults,
 			},
-			SubcontrolSearchResult{
+			model.SubcontrolSearchResult{
 				Subcontrols: subcontrolResults,
 			},
-			SubscriberSearchResult{
+			model.SubscriberSearchResult{
 				Subscribers: subscriberResults,
 			},
-			TFASettingSearchResult{
+			model.TFASettingSearchResult{
 				TFASettings: tfasettingResults,
 			},
-			TaskSearchResult{
+			model.TaskSearchResult{
 				Tasks: taskResults,
 			},
-			TemplateSearchResult{
+			model.TemplateSearchResult{
 				Templates: templateResults,
 			},
-			UserSearchResult{
+			model.UserSearchResult{
 				Users: userResults,
 			},
-			UserSettingSearchResult{
+			model.UserSettingSearchResult{
 				UserSettings: usersettingResults,
 			},
 		},
 	}, nil
 }
-func (r *queryResolver) APITokenSearch(ctx context.Context, query string) (*APITokenSearchResult, error) {
+func (r *queryResolver) APITokenSearch(ctx context.Context, query string) (*model.APITokenSearchResult, error) {
 	apitokenResults, err := searchAPITokens(ctx, query)
 
 	if err != nil {
@@ -373,11 +374,11 @@ func (r *queryResolver) APITokenSearch(ctx context.Context, query string) (*APIT
 	}
 
 	// return the results
-	return &APITokenSearchResult{
+	return &model.APITokenSearchResult{
 		APITokens: apitokenResults,
 	}, nil
 }
-func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string) (*ActionPlanSearchResult, error) {
+func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string) (*model.ActionPlanSearchResult, error) {
 	actionplanResults, err := searchActionPlans(ctx, query)
 
 	if err != nil {
@@ -385,11 +386,11 @@ func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string) (*Ac
 	}
 
 	// return the results
-	return &ActionPlanSearchResult{
+	return &model.ActionPlanSearchResult{
 		ActionPlans: actionplanResults,
 	}, nil
 }
-func (r *queryResolver) ContactSearch(ctx context.Context, query string) (*ContactSearchResult, error) {
+func (r *queryResolver) ContactSearch(ctx context.Context, query string) (*model.ContactSearchResult, error) {
 	contactResults, err := searchContacts(ctx, query)
 
 	if err != nil {
@@ -397,11 +398,11 @@ func (r *queryResolver) ContactSearch(ctx context.Context, query string) (*Conta
 	}
 
 	// return the results
-	return &ContactSearchResult{
+	return &model.ContactSearchResult{
 		Contacts: contactResults,
 	}, nil
 }
-func (r *queryResolver) ControlSearch(ctx context.Context, query string) (*ControlSearchResult, error) {
+func (r *queryResolver) ControlSearch(ctx context.Context, query string) (*model.ControlSearchResult, error) {
 	controlResults, err := searchControls(ctx, query)
 
 	if err != nil {
@@ -409,11 +410,11 @@ func (r *queryResolver) ControlSearch(ctx context.Context, query string) (*Contr
 	}
 
 	// return the results
-	return &ControlSearchResult{
+	return &model.ControlSearchResult{
 		Controls: controlResults,
 	}, nil
 }
-func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string) (*ControlObjectiveSearchResult, error) {
+func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string) (*model.ControlObjectiveSearchResult, error) {
 	controlobjectiveResults, err := searchControlObjectives(ctx, query)
 
 	if err != nil {
@@ -421,11 +422,11 @@ func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string
 	}
 
 	// return the results
-	return &ControlObjectiveSearchResult{
+	return &model.ControlObjectiveSearchResult{
 		ControlObjectives: controlobjectiveResults,
 	}, nil
 }
-func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string) (*DocumentDataSearchResult, error) {
+func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string) (*model.DocumentDataSearchResult, error) {
 	documentdataResults, err := searchDocumentData(ctx, query)
 
 	if err != nil {
@@ -433,11 +434,11 @@ func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string) (*
 	}
 
 	// return the results
-	return &DocumentDataSearchResult{
+	return &model.DocumentDataSearchResult{
 		DocumentData: documentdataResults,
 	}, nil
 }
-func (r *queryResolver) EntitySearch(ctx context.Context, query string) (*EntitySearchResult, error) {
+func (r *queryResolver) EntitySearch(ctx context.Context, query string) (*model.EntitySearchResult, error) {
 	entityResults, err := searchEntities(ctx, query)
 
 	if err != nil {
@@ -445,11 +446,11 @@ func (r *queryResolver) EntitySearch(ctx context.Context, query string) (*Entity
 	}
 
 	// return the results
-	return &EntitySearchResult{
+	return &model.EntitySearchResult{
 		Entities: entityResults,
 	}, nil
 }
-func (r *queryResolver) EntityTypeSearch(ctx context.Context, query string) (*EntityTypeSearchResult, error) {
+func (r *queryResolver) EntityTypeSearch(ctx context.Context, query string) (*model.EntityTypeSearchResult, error) {
 	entitytypeResults, err := searchEntityTypes(ctx, query)
 
 	if err != nil {
@@ -457,11 +458,11 @@ func (r *queryResolver) EntityTypeSearch(ctx context.Context, query string) (*En
 	}
 
 	// return the results
-	return &EntityTypeSearchResult{
+	return &model.EntityTypeSearchResult{
 		EntityTypes: entitytypeResults,
 	}, nil
 }
-func (r *queryResolver) EventSearch(ctx context.Context, query string) (*EventSearchResult, error) {
+func (r *queryResolver) EventSearch(ctx context.Context, query string) (*model.EventSearchResult, error) {
 	eventResults, err := searchEvents(ctx, query)
 
 	if err != nil {
@@ -469,11 +470,11 @@ func (r *queryResolver) EventSearch(ctx context.Context, query string) (*EventSe
 	}
 
 	// return the results
-	return &EventSearchResult{
+	return &model.EventSearchResult{
 		Events: eventResults,
 	}, nil
 }
-func (r *queryResolver) FileSearch(ctx context.Context, query string) (*FileSearchResult, error) {
+func (r *queryResolver) FileSearch(ctx context.Context, query string) (*model.FileSearchResult, error) {
 	fileResults, err := searchFiles(ctx, query)
 
 	if err != nil {
@@ -481,11 +482,11 @@ func (r *queryResolver) FileSearch(ctx context.Context, query string) (*FileSear
 	}
 
 	// return the results
-	return &FileSearchResult{
+	return &model.FileSearchResult{
 		Files: fileResults,
 	}, nil
 }
-func (r *queryResolver) GroupSearch(ctx context.Context, query string) (*GroupSearchResult, error) {
+func (r *queryResolver) GroupSearch(ctx context.Context, query string) (*model.GroupSearchResult, error) {
 	groupResults, err := searchGroups(ctx, query)
 
 	if err != nil {
@@ -493,11 +494,11 @@ func (r *queryResolver) GroupSearch(ctx context.Context, query string) (*GroupSe
 	}
 
 	// return the results
-	return &GroupSearchResult{
+	return &model.GroupSearchResult{
 		Groups: groupResults,
 	}, nil
 }
-func (r *queryResolver) GroupSettingSearch(ctx context.Context, query string) (*GroupSettingSearchResult, error) {
+func (r *queryResolver) GroupSettingSearch(ctx context.Context, query string) (*model.GroupSettingSearchResult, error) {
 	groupsettingResults, err := searchGroupSettings(ctx, query)
 
 	if err != nil {
@@ -505,11 +506,11 @@ func (r *queryResolver) GroupSettingSearch(ctx context.Context, query string) (*
 	}
 
 	// return the results
-	return &GroupSettingSearchResult{
+	return &model.GroupSettingSearchResult{
 		GroupSettings: groupsettingResults,
 	}, nil
 }
-func (r *queryResolver) IntegrationSearch(ctx context.Context, query string) (*IntegrationSearchResult, error) {
+func (r *queryResolver) IntegrationSearch(ctx context.Context, query string) (*model.IntegrationSearchResult, error) {
 	integrationResults, err := searchIntegrations(ctx, query)
 
 	if err != nil {
@@ -517,11 +518,11 @@ func (r *queryResolver) IntegrationSearch(ctx context.Context, query string) (*I
 	}
 
 	// return the results
-	return &IntegrationSearchResult{
+	return &model.IntegrationSearchResult{
 		Integrations: integrationResults,
 	}, nil
 }
-func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string) (*InternalPolicySearchResult, error) {
+func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string) (*model.InternalPolicySearchResult, error) {
 	internalpolicyResults, err := searchInternalPolicies(ctx, query)
 
 	if err != nil {
@@ -529,11 +530,11 @@ func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string) 
 	}
 
 	// return the results
-	return &InternalPolicySearchResult{
+	return &model.InternalPolicySearchResult{
 		InternalPolicies: internalpolicyResults,
 	}, nil
 }
-func (r *queryResolver) NarrativeSearch(ctx context.Context, query string) (*NarrativeSearchResult, error) {
+func (r *queryResolver) NarrativeSearch(ctx context.Context, query string) (*model.NarrativeSearchResult, error) {
 	narrativeResults, err := searchNarratives(ctx, query)
 
 	if err != nil {
@@ -541,11 +542,11 @@ func (r *queryResolver) NarrativeSearch(ctx context.Context, query string) (*Nar
 	}
 
 	// return the results
-	return &NarrativeSearchResult{
+	return &model.NarrativeSearchResult{
 		Narratives: narrativeResults,
 	}, nil
 }
-func (r *queryResolver) OrgSubscriptionSearch(ctx context.Context, query string) (*OrgSubscriptionSearchResult, error) {
+func (r *queryResolver) OrgSubscriptionSearch(ctx context.Context, query string) (*model.OrgSubscriptionSearchResult, error) {
 	orgsubscriptionResults, err := searchOrgSubscriptions(ctx, query)
 
 	if err != nil {
@@ -553,11 +554,11 @@ func (r *queryResolver) OrgSubscriptionSearch(ctx context.Context, query string)
 	}
 
 	// return the results
-	return &OrgSubscriptionSearchResult{
+	return &model.OrgSubscriptionSearchResult{
 		OrgSubscriptions: orgsubscriptionResults,
 	}, nil
 }
-func (r *queryResolver) OrganizationSearch(ctx context.Context, query string) (*OrganizationSearchResult, error) {
+func (r *queryResolver) OrganizationSearch(ctx context.Context, query string) (*model.OrganizationSearchResult, error) {
 	organizationResults, err := searchOrganizations(ctx, query)
 
 	if err != nil {
@@ -565,11 +566,11 @@ func (r *queryResolver) OrganizationSearch(ctx context.Context, query string) (*
 	}
 
 	// return the results
-	return &OrganizationSearchResult{
+	return &model.OrganizationSearchResult{
 		Organizations: organizationResults,
 	}, nil
 }
-func (r *queryResolver) OrganizationSettingSearch(ctx context.Context, query string) (*OrganizationSettingSearchResult, error) {
+func (r *queryResolver) OrganizationSettingSearch(ctx context.Context, query string) (*model.OrganizationSettingSearchResult, error) {
 	organizationsettingResults, err := searchOrganizationSettings(ctx, query)
 
 	if err != nil {
@@ -577,11 +578,11 @@ func (r *queryResolver) OrganizationSettingSearch(ctx context.Context, query str
 	}
 
 	// return the results
-	return &OrganizationSettingSearchResult{
+	return &model.OrganizationSettingSearchResult{
 		OrganizationSettings: organizationsettingResults,
 	}, nil
 }
-func (r *queryResolver) PersonalAccessTokenSearch(ctx context.Context, query string) (*PersonalAccessTokenSearchResult, error) {
+func (r *queryResolver) PersonalAccessTokenSearch(ctx context.Context, query string) (*model.PersonalAccessTokenSearchResult, error) {
 	personalaccesstokenResults, err := searchPersonalAccessTokens(ctx, query)
 
 	if err != nil {
@@ -589,11 +590,11 @@ func (r *queryResolver) PersonalAccessTokenSearch(ctx context.Context, query str
 	}
 
 	// return the results
-	return &PersonalAccessTokenSearchResult{
+	return &model.PersonalAccessTokenSearchResult{
 		PersonalAccessTokens: personalaccesstokenResults,
 	}, nil
 }
-func (r *queryResolver) ProcedureSearch(ctx context.Context, query string) (*ProcedureSearchResult, error) {
+func (r *queryResolver) ProcedureSearch(ctx context.Context, query string) (*model.ProcedureSearchResult, error) {
 	procedureResults, err := searchProcedures(ctx, query)
 
 	if err != nil {
@@ -601,11 +602,11 @@ func (r *queryResolver) ProcedureSearch(ctx context.Context, query string) (*Pro
 	}
 
 	// return the results
-	return &ProcedureSearchResult{
+	return &model.ProcedureSearchResult{
 		Procedures: procedureResults,
 	}, nil
 }
-func (r *queryResolver) ProgramSearch(ctx context.Context, query string) (*ProgramSearchResult, error) {
+func (r *queryResolver) ProgramSearch(ctx context.Context, query string) (*model.ProgramSearchResult, error) {
 	programResults, err := searchPrograms(ctx, query)
 
 	if err != nil {
@@ -613,11 +614,11 @@ func (r *queryResolver) ProgramSearch(ctx context.Context, query string) (*Progr
 	}
 
 	// return the results
-	return &ProgramSearchResult{
+	return &model.ProgramSearchResult{
 		Programs: programResults,
 	}, nil
 }
-func (r *queryResolver) RiskSearch(ctx context.Context, query string) (*RiskSearchResult, error) {
+func (r *queryResolver) RiskSearch(ctx context.Context, query string) (*model.RiskSearchResult, error) {
 	riskResults, err := searchRisks(ctx, query)
 
 	if err != nil {
@@ -625,11 +626,11 @@ func (r *queryResolver) RiskSearch(ctx context.Context, query string) (*RiskSear
 	}
 
 	// return the results
-	return &RiskSearchResult{
+	return &model.RiskSearchResult{
 		Risks: riskResults,
 	}, nil
 }
-func (r *queryResolver) StandardSearch(ctx context.Context, query string) (*StandardSearchResult, error) {
+func (r *queryResolver) StandardSearch(ctx context.Context, query string) (*model.StandardSearchResult, error) {
 	standardResults, err := searchStandards(ctx, query)
 
 	if err != nil {
@@ -637,11 +638,11 @@ func (r *queryResolver) StandardSearch(ctx context.Context, query string) (*Stan
 	}
 
 	// return the results
-	return &StandardSearchResult{
+	return &model.StandardSearchResult{
 		Standards: standardResults,
 	}, nil
 }
-func (r *queryResolver) SubcontrolSearch(ctx context.Context, query string) (*SubcontrolSearchResult, error) {
+func (r *queryResolver) SubcontrolSearch(ctx context.Context, query string) (*model.SubcontrolSearchResult, error) {
 	subcontrolResults, err := searchSubcontrols(ctx, query)
 
 	if err != nil {
@@ -649,11 +650,11 @@ func (r *queryResolver) SubcontrolSearch(ctx context.Context, query string) (*Su
 	}
 
 	// return the results
-	return &SubcontrolSearchResult{
+	return &model.SubcontrolSearchResult{
 		Subcontrols: subcontrolResults,
 	}, nil
 }
-func (r *queryResolver) SubscriberSearch(ctx context.Context, query string) (*SubscriberSearchResult, error) {
+func (r *queryResolver) SubscriberSearch(ctx context.Context, query string) (*model.SubscriberSearchResult, error) {
 	subscriberResults, err := searchSubscribers(ctx, query)
 
 	if err != nil {
@@ -661,11 +662,11 @@ func (r *queryResolver) SubscriberSearch(ctx context.Context, query string) (*Su
 	}
 
 	// return the results
-	return &SubscriberSearchResult{
+	return &model.SubscriberSearchResult{
 		Subscribers: subscriberResults,
 	}, nil
 }
-func (r *queryResolver) TFASettingSearch(ctx context.Context, query string) (*TFASettingSearchResult, error) {
+func (r *queryResolver) TFASettingSearch(ctx context.Context, query string) (*model.TFASettingSearchResult, error) {
 	tfasettingResults, err := searchTFASettings(ctx, query)
 
 	if err != nil {
@@ -673,11 +674,11 @@ func (r *queryResolver) TFASettingSearch(ctx context.Context, query string) (*TF
 	}
 
 	// return the results
-	return &TFASettingSearchResult{
+	return &model.TFASettingSearchResult{
 		TFASettings: tfasettingResults,
 	}, nil
 }
-func (r *queryResolver) TaskSearch(ctx context.Context, query string) (*TaskSearchResult, error) {
+func (r *queryResolver) TaskSearch(ctx context.Context, query string) (*model.TaskSearchResult, error) {
 	taskResults, err := searchTasks(ctx, query)
 
 	if err != nil {
@@ -685,11 +686,11 @@ func (r *queryResolver) TaskSearch(ctx context.Context, query string) (*TaskSear
 	}
 
 	// return the results
-	return &TaskSearchResult{
+	return &model.TaskSearchResult{
 		Tasks: taskResults,
 	}, nil
 }
-func (r *queryResolver) TemplateSearch(ctx context.Context, query string) (*TemplateSearchResult, error) {
+func (r *queryResolver) TemplateSearch(ctx context.Context, query string) (*model.TemplateSearchResult, error) {
 	templateResults, err := searchTemplates(ctx, query)
 
 	if err != nil {
@@ -697,11 +698,11 @@ func (r *queryResolver) TemplateSearch(ctx context.Context, query string) (*Temp
 	}
 
 	// return the results
-	return &TemplateSearchResult{
+	return &model.TemplateSearchResult{
 		Templates: templateResults,
 	}, nil
 }
-func (r *queryResolver) UserSearch(ctx context.Context, query string) (*UserSearchResult, error) {
+func (r *queryResolver) UserSearch(ctx context.Context, query string) (*model.UserSearchResult, error) {
 	userResults, err := searchUsers(ctx, query)
 
 	if err != nil {
@@ -709,11 +710,11 @@ func (r *queryResolver) UserSearch(ctx context.Context, query string) (*UserSear
 	}
 
 	// return the results
-	return &UserSearchResult{
+	return &model.UserSearchResult{
 		Users: userResults,
 	}, nil
 }
-func (r *queryResolver) UserSettingSearch(ctx context.Context, query string) (*UserSettingSearchResult, error) {
+func (r *queryResolver) UserSettingSearch(ctx context.Context, query string) (*model.UserSettingSearchResult, error) {
 	usersettingResults, err := searchUserSettings(ctx, query)
 
 	if err != nil {
@@ -721,7 +722,7 @@ func (r *queryResolver) UserSettingSearch(ctx context.Context, query string) (*U
 	}
 
 	// return the results
-	return &UserSettingSearchResult{
+	return &model.UserSettingSearchResult{
 		UserSettings: usersettingResults,
 	}, nil
 }

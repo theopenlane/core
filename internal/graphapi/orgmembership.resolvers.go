@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateOrgMembership is the resolver for the createOrgMembership field.
-func (r *mutationResolver) CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*OrgMembershipCreatePayload, error) {
+func (r *mutationResolver) CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*model.OrgMembershipCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &input.OrganizationID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -26,16 +27,16 @@ func (r *mutationResolver) CreateOrgMembership(ctx context.Context, input genera
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "orgmembership"})
 	}
 
-	return &OrgMembershipCreatePayload{OrgMembership: om}, nil
+	return &model.OrgMembershipCreatePayload{OrgMembership: om}, nil
 }
 
 // CreateBulkOrgMembership is the resolver for the createBulkOrgMembership field.
-func (r *mutationResolver) CreateBulkOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*OrgMembershipBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*model.OrgMembershipBulkCreatePayload, error) {
 	return r.bulkCreateOrgMembership(ctx, input)
 }
 
 // CreateBulkCSVOrgMembership is the resolver for the createBulkCSVOrgMembership field.
-func (r *mutationResolver) CreateBulkCSVOrgMembership(ctx context.Context, input graphql.Upload) (*OrgMembershipBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVOrgMembership(ctx context.Context, input graphql.Upload) (*model.OrgMembershipBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateOrgMembershipInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -47,7 +48,7 @@ func (r *mutationResolver) CreateBulkCSVOrgMembership(ctx context.Context, input
 }
 
 // UpdateOrgMembership is the resolver for the updateOrgMembership field.
-func (r *mutationResolver) UpdateOrgMembership(ctx context.Context, id string, input generated.UpdateOrgMembershipInput) (*OrgMembershipUpdatePayload, error) {
+func (r *mutationResolver) UpdateOrgMembership(ctx context.Context, id string, input generated.UpdateOrgMembershipInput) (*model.OrgMembershipUpdatePayload, error) {
 	orgMember, err := withTransactionalMutation(ctx).OrgMembership.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "orgmembership"})
@@ -64,11 +65,11 @@ func (r *mutationResolver) UpdateOrgMembership(ctx context.Context, id string, i
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "orgmembership"})
 	}
 
-	return &OrgMembershipUpdatePayload{OrgMembership: orgMember}, nil
+	return &model.OrgMembershipUpdatePayload{OrgMembership: orgMember}, nil
 }
 
 // DeleteOrgMembership is the resolver for the deleteOrgMembership field.
-func (r *mutationResolver) DeleteOrgMembership(ctx context.Context, id string) (*OrgMembershipDeletePayload, error) {
+func (r *mutationResolver) DeleteOrgMembership(ctx context.Context, id string) (*model.OrgMembershipDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "orgmembership"})
 	}
@@ -77,7 +78,7 @@ func (r *mutationResolver) DeleteOrgMembership(ctx context.Context, id string) (
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &OrgMembershipDeletePayload{DeletedID: id}, nil
+	return &model.OrgMembershipDeletePayload{DeletedID: id}, nil
 }
 
 // OrgMembership is the resolver for the orgMembership field.

@@ -10,27 +10,28 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateStandard is the resolver for the createStandard field.
-func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput) (*StandardCreatePayload, error) {
+func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput) (*model.StandardCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Standard.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "standard"})
 	}
 
-	return &StandardCreatePayload{
+	return &model.StandardCreatePayload{
 		Standard: res,
 	}, nil
 }
 
 // CreateBulkStandard is the resolver for the createBulkStandard field.
-func (r *mutationResolver) CreateBulkStandard(ctx context.Context, input []*generated.CreateStandardInput) (*StandardBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkStandard(ctx context.Context, input []*generated.CreateStandardInput) (*model.StandardBulkCreatePayload, error) {
 	return r.bulkCreateStandard(ctx, input)
 }
 
 // CreateBulkCSVStandard is the resolver for the createBulkCSVStandard field.
-func (r *mutationResolver) CreateBulkCSVStandard(ctx context.Context, input graphql.Upload) (*StandardBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVStandard(ctx context.Context, input graphql.Upload) (*model.StandardBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateStandardInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVStandard(ctx context.Context, input grap
 }
 
 // UpdateStandard is the resolver for the updateStandard field.
-func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput) (*StandardUpdatePayload, error) {
+func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput) (*model.StandardUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "standard"})
@@ -56,13 +57,13 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "standard"})
 	}
 
-	return &StandardUpdatePayload{
+	return &model.StandardUpdatePayload{
 		Standard: res,
 	}, nil
 }
 
 // DeleteStandard is the resolver for the deleteStandard field.
-func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*StandardDeletePayload, error) {
+func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*model.StandardDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Standard.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "standard"})
 	}
@@ -71,7 +72,7 @@ func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*Stan
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &StandardDeletePayload{
+	return &model.StandardDeletePayload{
 		DeletedID: id,
 	}, nil
 }

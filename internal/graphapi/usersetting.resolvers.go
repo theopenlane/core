@@ -10,27 +10,28 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateUserSetting is the resolver for the createUserSetting field.
-func (r *mutationResolver) CreateUserSetting(ctx context.Context, input generated.CreateUserSettingInput) (*UserSettingCreatePayload, error) {
+func (r *mutationResolver) CreateUserSetting(ctx context.Context, input generated.CreateUserSettingInput) (*model.UserSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).UserSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "usersetting"})
 	}
 
-	return &UserSettingCreatePayload{
+	return &model.UserSettingCreatePayload{
 		UserSetting: res,
 	}, nil
 }
 
 // CreateBulkUserSetting is the resolver for the createBulkUserSetting field.
-func (r *mutationResolver) CreateBulkUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*UserSettingBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error) {
 	return r.bulkCreateUserSetting(ctx, input)
 }
 
 // CreateBulkCSVUserSetting is the resolver for the createBulkCSVUserSetting field.
-func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*UserSettingBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateUserSettingInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input g
 }
 
 // UpdateUserSetting is the resolver for the updateUserSetting field.
-func (r *mutationResolver) UpdateUserSetting(ctx context.Context, id string, input generated.UpdateUserSettingInput) (*UserSettingUpdatePayload, error) {
+func (r *mutationResolver) UpdateUserSetting(ctx context.Context, id string, input generated.UpdateUserSettingInput) (*model.UserSettingUpdatePayload, error) {
 	userSetting, err := withTransactionalMutation(ctx).UserSetting.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "usersetting"})
@@ -53,7 +54,7 @@ func (r *mutationResolver) UpdateUserSetting(ctx context.Context, id string, inp
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "usersetting"})
 	}
 
-	return &UserSettingUpdatePayload{UserSetting: userSetting}, nil
+	return &model.UserSettingUpdatePayload{UserSetting: userSetting}, nil
 }
 
 // UserSetting is the resolver for the UserSetting field.

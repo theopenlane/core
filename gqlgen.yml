@@ -1,12 +1,14 @@
 schema:
   - schema/*.graphql
 exec:
-  filename: internal/graphapi/gen_server.go
-  package: graphapi
+  dir: internal/graphapi/generated/
+  package: gqlgenerated
+  layout: follow-schema
 
 model:
-  filename: internal/graphapi/gen_models.go
-  package: graphapi
+  filename: internal/graphapi/model/gen_models.go
+  package: model
+
 resolver:
   layout: follow-schema
   dir: internal/graphapi

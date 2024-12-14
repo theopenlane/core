@@ -9,11 +9,12 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/iam/auth"
 )
 
 // CreateTFASetting is the resolver for the createTFASetting field.
-func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated.CreateTFASettingInput) (*TFASettingCreatePayload, error) {
+func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated.CreateTFASettingInput) (*model.TFASettingCreatePayload, error) {
 	if err := checkAllowedAuthType(ctx); err != nil {
 		return nil, err
 	}
@@ -23,11 +24,11 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "tfasetting"})
 	}
 
-	return &TFASettingCreatePayload{TfaSetting: settings}, nil
+	return &model.TFASettingCreatePayload{TfaSetting: settings}, nil
 }
 
 // UpdateTFASetting is the resolver for the updateTFASetting field.
-func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated.UpdateTFASettingInput) (*TFASettingUpdatePayload, error) {
+func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated.UpdateTFASettingInput) (*model.TFASettingUpdatePayload, error) {
 	if err := checkAllowedAuthType(ctx); err != nil {
 		return nil, err
 	}
@@ -48,7 +49,7 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
-	return &TFASettingUpdatePayload{TfaSetting: settings}, nil
+	return &model.TFASettingUpdatePayload{TfaSetting: settings}, nil
 }
 
 // TfaSetting is the resolver for the tfaSettings field.

@@ -6,10 +6,11 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // bulkCreateActionPlan uses the CreateBulk function to create multiple ActionPlan entities
-func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*generated.CreateActionPlanInput) (*ActionPlanBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*generated.CreateActionPlanInput) (*model.ActionPlanBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.ActionPlanCreate, len(input))
 	for i, data := range input {
@@ -22,13 +23,13 @@ func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*ge
 	}
 
 	// return response
-	return &ActionPlanBulkCreatePayload{
+	return &model.ActionPlanBulkCreatePayload{
 		ActionPlans: res,
 	}, nil
 }
 
 // bulkCreateAPIToken uses the CreateBulk function to create multiple APIToken entities
-func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*APITokenBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*model.APITokenBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.APITokenCreate, len(input))
 	for i, data := range input {
@@ -41,13 +42,13 @@ func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*gene
 	}
 
 	// return response
-	return &APITokenBulkCreatePayload{
+	return &model.APITokenBulkCreatePayload{
 		APITokens: res,
 	}, nil
 }
 
 // bulkCreateContact uses the CreateBulk function to create multiple Contact entities
-func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*generated.CreateContactInput) (*ContactBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*generated.CreateContactInput) (*model.ContactBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.ContactCreate, len(input))
 	for i, data := range input {
@@ -60,13 +61,13 @@ func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*gener
 	}
 
 	// return response
-	return &ContactBulkCreatePayload{
+	return &model.ContactBulkCreatePayload{
 		Contacts: res,
 	}, nil
 }
 
 // bulkCreateControl uses the CreateBulk function to create multiple Control entities
-func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*generated.CreateControlInput) (*ControlBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*generated.CreateControlInput) (*model.ControlBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.ControlCreate, len(input))
 	for i, data := range input {
@@ -79,13 +80,13 @@ func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*gener
 	}
 
 	// return response
-	return &ControlBulkCreatePayload{
+	return &model.ControlBulkCreatePayload{
 		Controls: res,
 	}, nil
 }
 
 // bulkCreateControlObjective uses the CreateBulk function to create multiple ControlObjective entities
-func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*ControlObjectiveBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*model.ControlObjectiveBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.ControlObjectiveCreate, len(input))
 	for i, data := range input {
@@ -98,13 +99,13 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 	}
 
 	// return response
-	return &ControlObjectiveBulkCreatePayload{
+	return &model.ControlObjectiveBulkCreatePayload{
 		ControlObjectives: res,
 	}, nil
 }
 
 // bulkCreateDocumentData uses the CreateBulk function to create multiple DocumentData entities
-func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*DocumentDataBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.DocumentDataCreate, len(input))
 	for i, data := range input {
@@ -117,13 +118,13 @@ func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*
 	}
 
 	// return response
-	return &DocumentDataBulkCreatePayload{
+	return &model.DocumentDataBulkCreatePayload{
 		DocumentData: res,
 	}, nil
 }
 
 // bulkCreateEntity uses the CreateBulk function to create multiple Entity entities
-func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*generated.CreateEntityInput) (*EntityBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*generated.CreateEntityInput) (*model.EntityBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.EntityCreate, len(input))
 	for i, data := range input {
@@ -136,13 +137,13 @@ func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*genera
 	}
 
 	// return response
-	return &EntityBulkCreatePayload{
+	return &model.EntityBulkCreatePayload{
 		Entities: res,
 	}, nil
 }
 
 // bulkCreateEntityType uses the CreateBulk function to create multiple EntityType entities
-func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*generated.CreateEntityTypeInput) (*EntityTypeBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*generated.CreateEntityTypeInput) (*model.EntityTypeBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.EntityTypeCreate, len(input))
 	for i, data := range input {
@@ -155,13 +156,13 @@ func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*ge
 	}
 
 	// return response
-	return &EntityTypeBulkCreatePayload{
+	return &model.EntityTypeBulkCreatePayload{
 		EntityTypes: res,
 	}, nil
 }
 
 // bulkCreateEvent uses the CreateBulk function to create multiple Event entities
-func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generated.CreateEventInput) (*EventBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generated.CreateEventInput) (*model.EventBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.EventCreate, len(input))
 	for i, data := range input {
@@ -174,13 +175,13 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 	}
 
 	// return response
-	return &EventBulkCreatePayload{
+	return &model.EventBulkCreatePayload{
 		Events: res,
 	}, nil
 }
 
 // bulkCreateGroup uses the CreateBulk function to create multiple Group entities
-func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generated.CreateGroupInput) (*GroupBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.GroupCreate, len(input))
 	for i, data := range input {
@@ -193,13 +194,13 @@ func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generat
 	}
 
 	// return response
-	return &GroupBulkCreatePayload{
+	return &model.GroupBulkCreatePayload{
 		Groups: res,
 	}, nil
 }
 
 // bulkCreateGroupMembership uses the CreateBulk function to create multiple GroupMembership entities
-func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input []*generated.CreateGroupMembershipInput) (*GroupMembershipBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input []*generated.CreateGroupMembershipInput) (*model.GroupMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.GroupMembershipCreate, len(input))
 	for i, data := range input {
@@ -212,13 +213,13 @@ func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input 
 	}
 
 	// return response
-	return &GroupMembershipBulkCreatePayload{
+	return &model.GroupMembershipBulkCreatePayload{
 		GroupMemberships: res,
 	}, nil
 }
 
 // bulkCreateGroupSetting uses the CreateBulk function to create multiple GroupSetting entities
-func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*generated.CreateGroupSettingInput) (*GroupSettingBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*generated.CreateGroupSettingInput) (*model.GroupSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.GroupSettingCreate, len(input))
 	for i, data := range input {
@@ -231,13 +232,13 @@ func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*
 	}
 
 	// return response
-	return &GroupSettingBulkCreatePayload{
+	return &model.GroupSettingBulkCreatePayload{
 		GroupSettings: res,
 	}, nil
 }
 
 // bulkCreateHush uses the CreateBulk function to create multiple Hush entities
-func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generated.CreateHushInput) (*HushBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generated.CreateHushInput) (*model.HushBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.HushCreate, len(input))
 	for i, data := range input {
@@ -250,13 +251,13 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 	}
 
 	// return response
-	return &HushBulkCreatePayload{
+	return &model.HushBulkCreatePayload{
 		Hushes: res,
 	}, nil
 }
 
 // bulkCreateIntegration uses the CreateBulk function to create multiple Integration entities
-func (r *mutationResolver) bulkCreateIntegration(ctx context.Context, input []*generated.CreateIntegrationInput) (*IntegrationBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateIntegration(ctx context.Context, input []*generated.CreateIntegrationInput) (*model.IntegrationBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.IntegrationCreate, len(input))
 	for i, data := range input {
@@ -269,13 +270,13 @@ func (r *mutationResolver) bulkCreateIntegration(ctx context.Context, input []*g
 	}
 
 	// return response
-	return &IntegrationBulkCreatePayload{
+	return &model.IntegrationBulkCreatePayload{
 		Integrations: res,
 	}, nil
 }
 
 // bulkCreateInternalPolicy uses the CreateBulk function to create multiple InternalPolicy entities
-func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*InternalPolicyBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.InternalPolicyCreate, len(input))
 	for i, data := range input {
@@ -288,13 +289,13 @@ func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input [
 	}
 
 	// return response
-	return &InternalPolicyBulkCreatePayload{
+	return &model.InternalPolicyBulkCreatePayload{
 		InternalPolicies: res,
 	}, nil
 }
 
 // bulkCreateInvite uses the CreateBulk function to create multiple Invite entities
-func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*generated.CreateInviteInput) (*InviteBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*generated.CreateInviteInput) (*model.InviteBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.InviteCreate, len(input))
 	for i, data := range input {
@@ -307,13 +308,13 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	}
 
 	// return response
-	return &InviteBulkCreatePayload{
+	return &model.InviteBulkCreatePayload{
 		Invites: res,
 	}, nil
 }
 
 // bulkCreateNarrative uses the CreateBulk function to create multiple Narrative entities
-func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*generated.CreateNarrativeInput) (*NarrativeBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*generated.CreateNarrativeInput) (*model.NarrativeBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.NarrativeCreate, len(input))
 	for i, data := range input {
@@ -326,13 +327,13 @@ func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*gen
 	}
 
 	// return response
-	return &NarrativeBulkCreatePayload{
+	return &model.NarrativeBulkCreatePayload{
 		Narratives: res,
 	}, nil
 }
 
 // bulkCreateOrganization uses the CreateBulk function to create multiple Organization entities
-func (r *mutationResolver) bulkCreateOrganization(ctx context.Context, input []*generated.CreateOrganizationInput) (*OrganizationBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateOrganization(ctx context.Context, input []*generated.CreateOrganizationInput) (*model.OrganizationBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.OrganizationCreate, len(input))
 	for i, data := range input {
@@ -345,13 +346,13 @@ func (r *mutationResolver) bulkCreateOrganization(ctx context.Context, input []*
 	}
 
 	// return response
-	return &OrganizationBulkCreatePayload{
+	return &model.OrganizationBulkCreatePayload{
 		Organizations: res,
 	}, nil
 }
 
 // bulkCreateOrganizationSetting uses the CreateBulk function to create multiple OrganizationSetting entities
-func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*OrganizationSettingBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.OrganizationSettingCreate, len(input))
 	for i, data := range input {
@@ -364,13 +365,13 @@ func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, in
 	}
 
 	// return response
-	return &OrganizationSettingBulkCreatePayload{
+	return &model.OrganizationSettingBulkCreatePayload{
 		OrganizationSettings: res,
 	}, nil
 }
 
 // bulkCreateOrgMembership uses the CreateBulk function to create multiple OrgMembership entities
-func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*OrgMembershipBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*model.OrgMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.OrgMembershipCreate, len(input))
 	for i, data := range input {
@@ -383,13 +384,13 @@ func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []
 	}
 
 	// return response
-	return &OrgMembershipBulkCreatePayload{
+	return &model.OrgMembershipBulkCreatePayload{
 		OrgMemberships: res,
 	}, nil
 }
 
 // bulkCreateOrgSubscription uses the CreateBulk function to create multiple OrgSubscription entities
-func (r *mutationResolver) bulkCreateOrgSubscription(ctx context.Context, input []*generated.CreateOrgSubscriptionInput) (*OrgSubscriptionBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateOrgSubscription(ctx context.Context, input []*generated.CreateOrgSubscriptionInput) (*model.OrgSubscriptionBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.OrgSubscriptionCreate, len(input))
 	for i, data := range input {
@@ -402,13 +403,13 @@ func (r *mutationResolver) bulkCreateOrgSubscription(ctx context.Context, input 
 	}
 
 	// return response
-	return &OrgSubscriptionBulkCreatePayload{
+	return &model.OrgSubscriptionBulkCreatePayload{
 		OrgSubscriptions: res,
 	}, nil
 }
 
 // bulkCreatePersonalAccessToken uses the CreateBulk function to create multiple PersonalAccessToken entities
-func (r *mutationResolver) bulkCreatePersonalAccessToken(ctx context.Context, input []*generated.CreatePersonalAccessTokenInput) (*PersonalAccessTokenBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreatePersonalAccessToken(ctx context.Context, input []*generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.PersonalAccessTokenCreate, len(input))
 	for i, data := range input {
@@ -421,13 +422,13 @@ func (r *mutationResolver) bulkCreatePersonalAccessToken(ctx context.Context, in
 	}
 
 	// return response
-	return &PersonalAccessTokenBulkCreatePayload{
+	return &model.PersonalAccessTokenBulkCreatePayload{
 		PersonalAccessTokens: res,
 	}, nil
 }
 
 // bulkCreateProcedure uses the CreateBulk function to create multiple Procedure entities
-func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*ProcedureBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.ProcedureCreate, len(input))
 	for i, data := range input {
@@ -440,13 +441,13 @@ func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*gen
 	}
 
 	// return response
-	return &ProcedureBulkCreatePayload{
+	return &model.ProcedureBulkCreatePayload{
 		Procedures: res,
 	}, nil
 }
 
 // bulkCreateProgram uses the CreateBulk function to create multiple Program entities
-func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*generated.CreateProgramInput) (*ProgramBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*generated.CreateProgramInput) (*model.ProgramBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.ProgramCreate, len(input))
 	for i, data := range input {
@@ -459,13 +460,13 @@ func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*gener
 	}
 
 	// return response
-	return &ProgramBulkCreatePayload{
+	return &model.ProgramBulkCreatePayload{
 		Programs: res,
 	}, nil
 }
 
 // bulkCreateProgramMembership uses the CreateBulk function to create multiple ProgramMembership entities
-func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, input []*generated.CreateProgramMembershipInput) (*ProgramMembershipBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, input []*generated.CreateProgramMembershipInput) (*model.ProgramMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.ProgramMembershipCreate, len(input))
 	for i, data := range input {
@@ -478,13 +479,13 @@ func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, inpu
 	}
 
 	// return response
-	return &ProgramMembershipBulkCreatePayload{
+	return &model.ProgramMembershipBulkCreatePayload{
 		ProgramMemberships: res,
 	}, nil
 }
 
 // bulkCreateRisk uses the CreateBulk function to create multiple Risk entities
-func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generated.CreateRiskInput) (*RiskBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generated.CreateRiskInput) (*model.RiskBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.RiskCreate, len(input))
 	for i, data := range input {
@@ -497,13 +498,13 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 	}
 
 	// return response
-	return &RiskBulkCreatePayload{
+	return &model.RiskBulkCreatePayload{
 		Risks: res,
 	}, nil
 }
 
 // bulkCreateStandard uses the CreateBulk function to create multiple Standard entities
-func (r *mutationResolver) bulkCreateStandard(ctx context.Context, input []*generated.CreateStandardInput) (*StandardBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateStandard(ctx context.Context, input []*generated.CreateStandardInput) (*model.StandardBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.StandardCreate, len(input))
 	for i, data := range input {
@@ -516,13 +517,13 @@ func (r *mutationResolver) bulkCreateStandard(ctx context.Context, input []*gene
 	}
 
 	// return response
-	return &StandardBulkCreatePayload{
+	return &model.StandardBulkCreatePayload{
 		Standards: res,
 	}, nil
 }
 
 // bulkCreateSubcontrol uses the CreateBulk function to create multiple Subcontrol entities
-func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*SubcontrolBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.SubcontrolCreate, len(input))
 	for i, data := range input {
@@ -535,13 +536,13 @@ func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*ge
 	}
 
 	// return response
-	return &SubcontrolBulkCreatePayload{
+	return &model.SubcontrolBulkCreatePayload{
 		Subcontrols: res,
 	}, nil
 }
 
 // bulkCreateSubscriber uses the CreateBulk function to create multiple Subscriber entities
-func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*SubscriberBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.SubscriberCreate, len(input))
 	for i, data := range input {
@@ -554,13 +555,13 @@ func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*ge
 	}
 
 	// return response
-	return &SubscriberBulkCreatePayload{
+	return &model.SubscriberBulkCreatePayload{
 		Subscribers: res,
 	}, nil
 }
 
 // bulkCreateTask uses the CreateBulk function to create multiple Task entities
-func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generated.CreateTaskInput) (*TaskBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generated.CreateTaskInput) (*model.TaskBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.TaskCreate, len(input))
 	for i, data := range input {
@@ -573,13 +574,13 @@ func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generate
 	}
 
 	// return response
-	return &TaskBulkCreatePayload{
+	return &model.TaskBulkCreatePayload{
 		Tasks: res,
 	}, nil
 }
 
 // bulkCreateTemplate uses the CreateBulk function to create multiple Template entities
-func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*generated.CreateTemplateInput) (*TemplateBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*generated.CreateTemplateInput) (*model.TemplateBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.TemplateCreate, len(input))
 	for i, data := range input {
@@ -592,13 +593,13 @@ func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*gene
 	}
 
 	// return response
-	return &TemplateBulkCreatePayload{
+	return &model.TemplateBulkCreatePayload{
 		Templates: res,
 	}, nil
 }
 
 // bulkCreateUserSetting uses the CreateBulk function to create multiple UserSetting entities
-func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*UserSettingBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.UserSettingCreate, len(input))
 	for i, data := range input {
@@ -611,7 +612,7 @@ func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*g
 	}
 
 	// return response
-	return &UserSettingBulkCreatePayload{
+	return &model.UserSettingBulkCreatePayload{
 		UserSettings: res,
 	}, nil
 }

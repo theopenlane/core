@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateIntegration is the resolver for the createIntegration field.
-func (r *mutationResolver) CreateIntegration(ctx context.Context, input generated.CreateIntegrationInput) (*IntegrationCreatePayload, error) {
+func (r *mutationResolver) CreateIntegration(ctx context.Context, input generated.CreateIntegrationInput) (*model.IntegrationCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateIntegration(ctx context.Context, input generate
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "integration"})
 	}
 
-	return &IntegrationCreatePayload{
+	return &model.IntegrationCreatePayload{
 		Integration: res,
 	}, nil
 }
 
 // CreateBulkIntegration is the resolver for the createBulkIntegration field.
-func (r *mutationResolver) CreateBulkIntegration(ctx context.Context, input []*generated.CreateIntegrationInput) (*IntegrationBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkIntegration(ctx context.Context, input []*generated.CreateIntegrationInput) (*model.IntegrationBulkCreatePayload, error) {
 	return r.bulkCreateIntegration(ctx, input)
 }
 
 // CreateBulkCSVIntegration is the resolver for the createBulkCSVIntegration field.
-func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input graphql.Upload) (*IntegrationBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input graphql.Upload) (*model.IntegrationBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateIntegrationInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input g
 }
 
 // UpdateIntegration is the resolver for the updateIntegration field.
-func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, input generated.UpdateIntegrationInput) (*IntegrationUpdatePayload, error) {
+func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, input generated.UpdateIntegrationInput) (*model.IntegrationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Integration.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"})
@@ -70,13 +71,13 @@ func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, inp
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"})
 	}
 
-	return &IntegrationUpdatePayload{
+	return &model.IntegrationUpdatePayload{
 		Integration: res,
 	}, nil
 }
 
 // DeleteIntegration is the resolver for the deleteIntegration field.
-func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*IntegrationDeletePayload, error) {
+func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Integration.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "integration"})
 	}
@@ -85,7 +86,7 @@ func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*I
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &IntegrationDeletePayload{
+	return &model.IntegrationDeletePayload{
 		DeletedID: id,
 	}, nil
 }

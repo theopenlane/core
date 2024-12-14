@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateControl is the resolver for the createControl field.
-func (r *mutationResolver) CreateControl(ctx context.Context, input generated.CreateControlInput) (*ControlCreatePayload, error) {
+func (r *mutationResolver) CreateControl(ctx context.Context, input generated.CreateControlInput) (*model.ControlCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateControl(ctx context.Context, input generated.Cr
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
 	}
 
-	return &ControlCreatePayload{
+	return &model.ControlCreatePayload{
 		Control: res,
 	}, nil
 }
 
 // CreateBulkControl is the resolver for the createBulkControl field.
-func (r *mutationResolver) CreateBulkControl(ctx context.Context, input []*generated.CreateControlInput) (*ControlBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkControl(ctx context.Context, input []*generated.CreateControlInput) (*model.ControlBulkCreatePayload, error) {
 	return r.bulkCreateControl(ctx, input)
 }
 
 // CreateBulkCSVControl is the resolver for the createBulkCSVControl field.
-func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graphql.Upload) (*ControlBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateControlInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graph
 }
 
 // UpdateControl is the resolver for the updateControl field.
-func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*ControlUpdatePayload, error) {
+func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*model.ControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Control.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
@@ -71,13 +72,13 @@ func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input g
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
 	}
 
-	return &ControlUpdatePayload{
+	return &model.ControlUpdatePayload{
 		Control: res,
 	}, nil
 }
 
 // DeleteControl is the resolver for the deleteControl field.
-func (r *mutationResolver) DeleteControl(ctx context.Context, id string) (*ControlDeletePayload, error) {
+func (r *mutationResolver) DeleteControl(ctx context.Context, id string) (*model.ControlDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Control.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "control"})
 	}
@@ -86,7 +87,7 @@ func (r *mutationResolver) DeleteControl(ctx context.Context, id string) (*Contr
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &ControlDeletePayload{
+	return &model.ControlDeletePayload{
 		DeletedID: id,
 	}, nil
 }

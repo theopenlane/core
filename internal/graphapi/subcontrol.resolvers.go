@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateSubcontrol is the resolver for the createSubcontrol field.
-func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*SubcontrolCreatePayload, error) {
+func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*model.SubcontrolCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "subcontrol"})
 	}
 
-	return &SubcontrolCreatePayload{
+	return &model.SubcontrolCreatePayload{
 		Subcontrol: res,
 	}, nil
 }
 
 // CreateBulkSubcontrol is the resolver for the createBulkSubcontrol field.
-func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*SubcontrolBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
 	return r.bulkCreateSubcontrol(ctx, input)
 }
 
 // CreateBulkCSVSubcontrol is the resolver for the createBulkCSVSubcontrol field.
-func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*SubcontrolBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateSubcontrolInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input gr
 }
 
 // UpdateSubcontrol is the resolver for the updateSubcontrol field.
-func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, input generated.UpdateSubcontrolInput) (*SubcontrolUpdatePayload, error) {
+func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, input generated.UpdateSubcontrolInput) (*model.SubcontrolUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Subcontrol.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
@@ -71,13 +72,13 @@ func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, inpu
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
 	}
 
-	return &SubcontrolUpdatePayload{
+	return &model.SubcontrolUpdatePayload{
 		Subcontrol: res,
 	}, nil
 }
 
 // DeleteSubcontrol is the resolver for the deleteSubcontrol field.
-func (r *mutationResolver) DeleteSubcontrol(ctx context.Context, id string) (*SubcontrolDeletePayload, error) {
+func (r *mutationResolver) DeleteSubcontrol(ctx context.Context, id string) (*model.SubcontrolDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Subcontrol.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "subcontrol"})
 	}
@@ -86,7 +87,7 @@ func (r *mutationResolver) DeleteSubcontrol(ctx context.Context, id string) (*Su
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &SubcontrolDeletePayload{
+	return &model.SubcontrolDeletePayload{
 		DeletedID: id,
 	}, nil
 }

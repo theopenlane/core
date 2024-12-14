@@ -10,27 +10,28 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreatePersonalAccessToken is the resolver for the createPersonalAccessToken field.
-func (r *mutationResolver) CreatePersonalAccessToken(ctx context.Context, input generated.CreatePersonalAccessTokenInput) (*PersonalAccessTokenCreatePayload, error) {
+func (r *mutationResolver) CreatePersonalAccessToken(ctx context.Context, input generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).PersonalAccessToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "personalaccesstoken"})
 	}
 
-	return &PersonalAccessTokenCreatePayload{
+	return &model.PersonalAccessTokenCreatePayload{
 		PersonalAccessToken: res,
 	}, nil
 }
 
 // CreateBulkPersonalAccessToken is the resolver for the createBulkPersonalAccessToken field.
-func (r *mutationResolver) CreateBulkPersonalAccessToken(ctx context.Context, input []*generated.CreatePersonalAccessTokenInput) (*PersonalAccessTokenBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkPersonalAccessToken(ctx context.Context, input []*generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenBulkCreatePayload, error) {
 	return r.bulkCreatePersonalAccessToken(ctx, input)
 }
 
 // CreateBulkCSVPersonalAccessToken is the resolver for the createBulkCSVPersonalAccessToken field.
-func (r *mutationResolver) CreateBulkCSVPersonalAccessToken(ctx context.Context, input graphql.Upload) (*PersonalAccessTokenBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVPersonalAccessToken(ctx context.Context, input graphql.Upload) (*model.PersonalAccessTokenBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreatePersonalAccessTokenInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVPersonalAccessToken(ctx context.Context,
 }
 
 // UpdatePersonalAccessToken is the resolver for the updatePersonalAccessToken field.
-func (r *mutationResolver) UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*PersonalAccessTokenUpdatePayload, error) {
+func (r *mutationResolver) UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*model.PersonalAccessTokenUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).PersonalAccessToken.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "personalaccesstoken"})
@@ -56,13 +57,13 @@ func (r *mutationResolver) UpdatePersonalAccessToken(ctx context.Context, id str
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "personalaccesstoken"})
 	}
 
-	return &PersonalAccessTokenUpdatePayload{
+	return &model.PersonalAccessTokenUpdatePayload{
 		PersonalAccessToken: res,
 	}, nil
 }
 
 // DeletePersonalAccessToken is the resolver for the deletePersonalAccessToken field.
-func (r *mutationResolver) DeletePersonalAccessToken(ctx context.Context, id string) (*PersonalAccessTokenDeletePayload, error) {
+func (r *mutationResolver) DeletePersonalAccessToken(ctx context.Context, id string) (*model.PersonalAccessTokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).PersonalAccessToken.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "personalaccesstoken"})
 	}
@@ -71,7 +72,7 @@ func (r *mutationResolver) DeletePersonalAccessToken(ctx context.Context, id str
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &PersonalAccessTokenDeletePayload{
+	return &model.PersonalAccessTokenDeletePayload{
 		DeletedID: id,
 	}, nil
 }

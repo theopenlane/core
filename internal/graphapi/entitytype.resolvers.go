@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateEntityType is the resolver for the createEntityType field.
-func (r *mutationResolver) CreateEntityType(ctx context.Context, input generated.CreateEntityTypeInput) (*EntityTypeCreatePayload, error) {
+func (r *mutationResolver) CreateEntityType(ctx context.Context, input generated.CreateEntityTypeInput) (*model.EntityTypeCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -26,18 +27,18 @@ func (r *mutationResolver) CreateEntityType(ctx context.Context, input generated
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitytype"})
 	}
 
-	return &EntityTypeCreatePayload{
+	return &model.EntityTypeCreatePayload{
 		EntityType: res,
 	}, nil
 }
 
 // CreateBulkEntityType is the resolver for the createBulkEntityType field.
-func (r *mutationResolver) CreateBulkEntityType(ctx context.Context, input []*generated.CreateEntityTypeInput) (*EntityTypeBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkEntityType(ctx context.Context, input []*generated.CreateEntityTypeInput) (*model.EntityTypeBulkCreatePayload, error) {
 	return r.bulkCreateEntityType(ctx, input)
 }
 
 // CreateBulkCSVEntityType is the resolver for the createBulkCSVEntityType field.
-func (r *mutationResolver) CreateBulkCSVEntityType(ctx context.Context, input graphql.Upload) (*EntityTypeBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVEntityType(ctx context.Context, input graphql.Upload) (*model.EntityTypeBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateEntityTypeInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -49,7 +50,7 @@ func (r *mutationResolver) CreateBulkCSVEntityType(ctx context.Context, input gr
 }
 
 // UpdateEntityType is the resolver for the updateEntityType field.
-func (r *mutationResolver) UpdateEntityType(ctx context.Context, id string, input generated.UpdateEntityTypeInput) (*EntityTypeUpdatePayload, error) {
+func (r *mutationResolver) UpdateEntityType(ctx context.Context, id string, input generated.UpdateEntityTypeInput) (*model.EntityTypeUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).EntityType.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitytype"})
@@ -68,13 +69,13 @@ func (r *mutationResolver) UpdateEntityType(ctx context.Context, id string, inpu
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitytype"})
 	}
 
-	return &EntityTypeUpdatePayload{
+	return &model.EntityTypeUpdatePayload{
 		EntityType: res,
 	}, nil
 }
 
 // DeleteEntityType is the resolver for the deleteEntityType field.
-func (r *mutationResolver) DeleteEntityType(ctx context.Context, id string) (*EntityTypeDeletePayload, error) {
+func (r *mutationResolver) DeleteEntityType(ctx context.Context, id string) (*model.EntityTypeDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).EntityType.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "entitytype"})
 	}
@@ -83,7 +84,7 @@ func (r *mutationResolver) DeleteEntityType(ctx context.Context, id string) (*En
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &EntityTypeDeletePayload{
+	return &model.EntityTypeDeletePayload{
 		DeletedID: id,
 	}, nil
 }

@@ -10,10 +10,11 @@ import (
 	"time"
 
 	"entgo.io/contrib/entgql"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // AuditLogs is the resolver for the auditLogs field.
-func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *AuditLogWhereInput) (*AuditLogConnection, error) {
+func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *model.AuditLogWhereInput) (*model.AuditLogConnection, error) {
 	var (
 		auditLogs [][]string
 		err       error
@@ -33,8 +34,8 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 
 	count := len(auditLogs) - 1
 
-	logs := &AuditLogConnection{
-		Edges:      []*AuditLogEdge{},
+	logs := &model.AuditLogConnection{
+		Edges:      []*model.AuditLogEdge{},
 		TotalCount: count,
 	}
 
@@ -92,8 +93,8 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 			}
 		}
 
-		edge := AuditLogEdge{
-			Node: &AuditLog{
+		edge := model.AuditLogEdge{
+			Node: &model.AuditLog{
 				Table:     &tableName,
 				ID:        objectID,
 				Time:      &ts,

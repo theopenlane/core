@@ -1,7 +1,7 @@
 package main
 
 //go:generate_input  internal/graphapi/generate/generate.go gqlgen.yml github.com/theopenlane/core/internal/ent/generated/ schema/*
-//go:generate_output internal/graphapi/*.resolver.go pkg/openlaneclient/models.go
+//go:generate_output internal/graphapi/generated/*.generated.go internal/graphapi/model/gen_models.go internal/graphapi/*.resolver.go pkg/openlaneclient/models.go
 //go:generate go run ./internal/graphapi/generate/generate.go
 
 //go:generate_input gen_schema.go internal/graphapi/gen_server.go

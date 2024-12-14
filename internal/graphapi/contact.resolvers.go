@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateContact is the resolver for the createContact field.
-func (r *mutationResolver) CreateContact(ctx context.Context, input generated.CreateContactInput) (*ContactCreatePayload, error) {
+func (r *mutationResolver) CreateContact(ctx context.Context, input generated.CreateContactInput) (*model.ContactCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateContact(ctx context.Context, input generated.Cr
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "contact"})
 	}
 
-	return &ContactCreatePayload{
+	return &model.ContactCreatePayload{
 		Contact: res,
 	}, nil
 }
 
 // CreateBulkContact is the resolver for the createBulkContact field.
-func (r *mutationResolver) CreateBulkContact(ctx context.Context, input []*generated.CreateContactInput) (*ContactBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkContact(ctx context.Context, input []*generated.CreateContactInput) (*model.ContactBulkCreatePayload, error) {
 	return r.bulkCreateContact(ctx, input)
 }
 
 // CreateBulkCSVContact is the resolver for the createBulkCSVContact field.
-func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graphql.Upload) (*ContactBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graphql.Upload) (*model.ContactBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateContactInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graph
 }
 
 // UpdateContact is the resolver for the updateContact field.
-func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*ContactUpdatePayload, error) {
+func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*model.ContactUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Contact.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "contact"})
@@ -70,13 +71,13 @@ func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input g
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "contact"})
 	}
 
-	return &ContactUpdatePayload{
+	return &model.ContactUpdatePayload{
 		Contact: res,
 	}, nil
 }
 
 // DeleteContact is the resolver for the deleteContact field.
-func (r *mutationResolver) DeleteContact(ctx context.Context, id string) (*ContactDeletePayload, error) {
+func (r *mutationResolver) DeleteContact(ctx context.Context, id string) (*model.ContactDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Contact.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "contact"})
 	}
@@ -85,7 +86,7 @@ func (r *mutationResolver) DeleteContact(ctx context.Context, id string) (*Conta
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &ContactDeletePayload{
+	return &model.ContactDeletePayload{
 		DeletedID: id,
 	}, nil
 }

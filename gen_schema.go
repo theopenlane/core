@@ -6,14 +6,13 @@ import (
 	"log"
 	"os"
 
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/vektah/gqlparser/v2/formatter"
-
-	"github.com/theopenlane/core/internal/graphapi"
 )
 
 // read in schema from internal package and save it to the schema file
 func main() {
-	execSchema := graphapi.NewExecutableSchema(graphapi.Config{})
+	execSchema := gqlgenerated.NewExecutableSchema(gqlgenerated.Config{})
 	schema := execSchema.Schema()
 
 	f, err := os.Create("schema.graphql")

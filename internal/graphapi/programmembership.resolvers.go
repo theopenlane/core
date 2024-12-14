@@ -10,27 +10,28 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateProgramMembership is the resolver for the createProgramMembership field.
-func (r *mutationResolver) CreateProgramMembership(ctx context.Context, input generated.CreateProgramMembershipInput) (*ProgramMembershipCreatePayload, error) {
+func (r *mutationResolver) CreateProgramMembership(ctx context.Context, input generated.CreateProgramMembershipInput) (*model.ProgramMembershipCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ProgramMembership.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "programmembership"})
 	}
 
-	return &ProgramMembershipCreatePayload{
+	return &model.ProgramMembershipCreatePayload{
 		ProgramMembership: res,
 	}, nil
 }
 
 // CreateBulkProgramMembership is the resolver for the createBulkProgramMembership field.
-func (r *mutationResolver) CreateBulkProgramMembership(ctx context.Context, input []*generated.CreateProgramMembershipInput) (*ProgramMembershipBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkProgramMembership(ctx context.Context, input []*generated.CreateProgramMembershipInput) (*model.ProgramMembershipBulkCreatePayload, error) {
 	return r.bulkCreateProgramMembership(ctx, input)
 }
 
 // CreateBulkCSVProgramMembership is the resolver for the createBulkCSVProgramMembership field.
-func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*ProgramMembershipBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateProgramMembershipInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, i
 }
 
 // UpdateProgramMembership is the resolver for the updateProgramMembership field.
-func (r *mutationResolver) UpdateProgramMembership(ctx context.Context, id string, input generated.UpdateProgramMembershipInput) (*ProgramMembershipUpdatePayload, error) {
+func (r *mutationResolver) UpdateProgramMembership(ctx context.Context, id string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ProgramMembership.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "programmembership"})
@@ -56,13 +57,13 @@ func (r *mutationResolver) UpdateProgramMembership(ctx context.Context, id strin
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "programmembership"})
 	}
 
-	return &ProgramMembershipUpdatePayload{
+	return &model.ProgramMembershipUpdatePayload{
 		ProgramMembership: res,
 	}, nil
 }
 
 // DeleteProgramMembership is the resolver for the deleteProgramMembership field.
-func (r *mutationResolver) DeleteProgramMembership(ctx context.Context, id string) (*ProgramMembershipDeletePayload, error) {
+func (r *mutationResolver) DeleteProgramMembership(ctx context.Context, id string) (*model.ProgramMembershipDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ProgramMembership.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "programmembership"})
 	}
@@ -71,7 +72,7 @@ func (r *mutationResolver) DeleteProgramMembership(ctx context.Context, id strin
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &ProgramMembershipDeletePayload{
+	return &model.ProgramMembershipDeletePayload{
 		DeletedID: id,
 	}, nil
 }

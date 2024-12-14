@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 )
 
 // Node is the resolver for the node field.
@@ -1119,42 +1120,46 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 	return res, err
 }
 
-// Query returns QueryResolver implementation.
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+// Query returns gqlgenerated.QueryResolver implementation.
+func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
 
-// CreateEntityInput returns CreateEntityInputResolver implementation.
-func (r *Resolver) CreateEntityInput() CreateEntityInputResolver {
+// CreateEntityInput returns gqlgenerated.CreateEntityInputResolver implementation.
+func (r *Resolver) CreateEntityInput() gqlgenerated.CreateEntityInputResolver {
 	return &createEntityInputResolver{r}
 }
 
-// CreateGroupInput returns CreateGroupInputResolver implementation.
-func (r *Resolver) CreateGroupInput() CreateGroupInputResolver { return &createGroupInputResolver{r} }
+// CreateGroupInput returns gqlgenerated.CreateGroupInputResolver implementation.
+func (r *Resolver) CreateGroupInput() gqlgenerated.CreateGroupInputResolver {
+	return &createGroupInputResolver{r}
+}
 
-// CreateOrganizationInput returns CreateOrganizationInputResolver implementation.
-func (r *Resolver) CreateOrganizationInput() CreateOrganizationInputResolver {
+// CreateOrganizationInput returns gqlgenerated.CreateOrganizationInputResolver implementation.
+func (r *Resolver) CreateOrganizationInput() gqlgenerated.CreateOrganizationInputResolver {
 	return &createOrganizationInputResolver{r}
 }
 
-// UpdateEntityInput returns UpdateEntityInputResolver implementation.
-func (r *Resolver) UpdateEntityInput() UpdateEntityInputResolver {
+// UpdateEntityInput returns gqlgenerated.UpdateEntityInputResolver implementation.
+func (r *Resolver) UpdateEntityInput() gqlgenerated.UpdateEntityInputResolver {
 	return &updateEntityInputResolver{r}
 }
 
-// UpdateGroupInput returns UpdateGroupInputResolver implementation.
-func (r *Resolver) UpdateGroupInput() UpdateGroupInputResolver { return &updateGroupInputResolver{r} }
+// UpdateGroupInput returns gqlgenerated.UpdateGroupInputResolver implementation.
+func (r *Resolver) UpdateGroupInput() gqlgenerated.UpdateGroupInputResolver {
+	return &updateGroupInputResolver{r}
+}
 
-// UpdateOrganizationInput returns UpdateOrganizationInputResolver implementation.
-func (r *Resolver) UpdateOrganizationInput() UpdateOrganizationInputResolver {
+// UpdateOrganizationInput returns gqlgenerated.UpdateOrganizationInputResolver implementation.
+func (r *Resolver) UpdateOrganizationInput() gqlgenerated.UpdateOrganizationInputResolver {
 	return &updateOrganizationInputResolver{r}
 }
 
-// UpdateProgramInput returns UpdateProgramInputResolver implementation.
-func (r *Resolver) UpdateProgramInput() UpdateProgramInputResolver {
+// UpdateProgramInput returns gqlgenerated.UpdateProgramInputResolver implementation.
+func (r *Resolver) UpdateProgramInput() gqlgenerated.UpdateProgramInputResolver {
 	return &updateProgramInputResolver{r}
 }
 
-// UpdateTFASettingInput returns UpdateTFASettingInputResolver implementation.
-func (r *Resolver) UpdateTFASettingInput() UpdateTFASettingInputResolver {
+// UpdateTFASettingInput returns gqlgenerated.UpdateTFASettingInputResolver implementation.
+func (r *Resolver) UpdateTFASettingInput() gqlgenerated.UpdateTFASettingInputResolver {
 	return &updateTFASettingInputResolver{r}
 }
 

@@ -10,27 +10,28 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateOrganization is the resolver for the createOrganization field.
-func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput) (*OrganizationCreatePayload, error) {
+func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput) (*model.OrganizationCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Organization.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
 	}
 
-	return &OrganizationCreatePayload{
+	return &model.OrganizationCreatePayload{
 		Organization: res,
 	}, nil
 }
 
 // CreateBulkOrganization is the resolver for the createBulkOrganization field.
-func (r *mutationResolver) CreateBulkOrganization(ctx context.Context, input []*generated.CreateOrganizationInput) (*OrganizationBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkOrganization(ctx context.Context, input []*generated.CreateOrganizationInput) (*model.OrganizationBulkCreatePayload, error) {
 	return r.bulkCreateOrganization(ctx, input)
 }
 
 // CreateBulkCSVOrganization is the resolver for the createBulkCSVOrganization field.
-func (r *mutationResolver) CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload) (*OrganizationBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVOrganization(ctx context.Context, input graphql.Upload) (*model.OrganizationBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateOrganizationInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVOrganization(ctx context.Context, input 
 }
 
 // UpdateOrganization is the resolver for the updateOrganization field.
-func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput) (*OrganizationUpdatePayload, error) {
+func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput) (*model.OrganizationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Organization.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organization"})
@@ -56,13 +57,13 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organization"})
 	}
 
-	return &OrganizationUpdatePayload{
+	return &model.OrganizationUpdatePayload{
 		Organization: res,
 	}, nil
 }
 
 // DeleteOrganization is the resolver for the deleteOrganization field.
-func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*OrganizationDeletePayload, error) {
+func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*model.OrganizationDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Organization.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "organization"})
 	}
@@ -71,7 +72,7 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &OrganizationDeletePayload{
+	return &model.OrganizationDeletePayload{
 		DeletedID: id,
 	}, nil
 }

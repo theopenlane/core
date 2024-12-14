@@ -10,25 +10,26 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateEvent is the resolver for the createEvent field
-func (r *mutationResolver) CreateEvent(ctx context.Context, input generated.CreateEventInput) (*EventCreatePayload, error) {
+func (r *mutationResolver) CreateEvent(ctx context.Context, input generated.CreateEventInput) (*model.EventCreatePayload, error) {
 	t, err := withTransactionalMutation(ctx).Event.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "event"})
 	}
 
-	return &EventCreatePayload{Event: t}, nil
+	return &model.EventCreatePayload{Event: t}, nil
 }
 
 // CreateBulkEvent is the resolver for the createBulkEvent field.
-func (r *mutationResolver) CreateBulkEvent(ctx context.Context, input []*generated.CreateEventInput) (*EventBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkEvent(ctx context.Context, input []*generated.CreateEventInput) (*model.EventBulkCreatePayload, error) {
 	return r.bulkCreateEvent(ctx, input)
 }
 
 // CreateBulkCSVEvent is the resolver for the createBulkCSVEvent field.
-func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*EventBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*model.EventBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateEventInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql
 }
 
 // UpdateEvent is the resolver for the updateEvent field
-func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input generated.UpdateEventInput) (*EventUpdatePayload, error) {
+func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input generated.UpdateEventInput) (*model.EventUpdatePayload, error) {
 	event, err := withTransactionalMutation(ctx).Event.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "event"})
@@ -51,11 +52,11 @@ func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input gen
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "event"})
 	}
 
-	return &EventUpdatePayload{Event: event}, nil
+	return &model.EventUpdatePayload{Event: event}, nil
 }
 
 // DeleteEvent is the resolver for the deleteEvent field
-func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*EventDeletePayload, error) {
+func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*model.EventDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Event.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "event"})
 	}
@@ -64,7 +65,7 @@ func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*EventDe
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &EventDeletePayload{DeletedID: id}, nil
+	return &model.EventDeletePayload{DeletedID: id}, nil
 }
 
 // Event is the resolver for the event field

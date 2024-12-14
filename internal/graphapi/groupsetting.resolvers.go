@@ -10,27 +10,28 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateGroupSetting is the resolver for the createGroupSetting field.
-func (r *mutationResolver) CreateGroupSetting(ctx context.Context, input generated.CreateGroupSettingInput) (*GroupSettingCreatePayload, error) {
+func (r *mutationResolver) CreateGroupSetting(ctx context.Context, input generated.CreateGroupSettingInput) (*model.GroupSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).GroupSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "groupsetting"})
 	}
 
-	return &GroupSettingCreatePayload{
+	return &model.GroupSettingCreatePayload{
 		GroupSetting: res,
 	}, nil
 }
 
 // CreateBulkGroupSetting is the resolver for the createBulkGroupSetting field.
-func (r *mutationResolver) CreateBulkGroupSetting(ctx context.Context, input []*generated.CreateGroupSettingInput) (*GroupSettingBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkGroupSetting(ctx context.Context, input []*generated.CreateGroupSettingInput) (*model.GroupSettingBulkCreatePayload, error) {
 	return r.bulkCreateGroupSetting(ctx, input)
 }
 
 // CreateBulkCSVGroupSetting is the resolver for the createBulkCSVGroupSetting field.
-func (r *mutationResolver) CreateBulkCSVGroupSetting(ctx context.Context, input graphql.Upload) (*GroupSettingBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVGroupSetting(ctx context.Context, input graphql.Upload) (*model.GroupSettingBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateGroupSettingInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVGroupSetting(ctx context.Context, input 
 }
 
 // UpdateGroupSetting is the resolver for the updateGroupSetting field.
-func (r *mutationResolver) UpdateGroupSetting(ctx context.Context, id string, input generated.UpdateGroupSettingInput) (*GroupSettingUpdatePayload, error) {
+func (r *mutationResolver) UpdateGroupSetting(ctx context.Context, id string, input generated.UpdateGroupSettingInput) (*model.GroupSettingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).GroupSetting.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "groupsetting"})
@@ -56,13 +57,13 @@ func (r *mutationResolver) UpdateGroupSetting(ctx context.Context, id string, in
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "groupsetting"})
 	}
 
-	return &GroupSettingUpdatePayload{
+	return &model.GroupSettingUpdatePayload{
 		GroupSetting: res,
 	}, nil
 }
 
 // DeleteGroupSetting is the resolver for the deleteGroupSetting field.
-func (r *mutationResolver) DeleteGroupSetting(ctx context.Context, id string) (*GroupSettingDeletePayload, error) {
+func (r *mutationResolver) DeleteGroupSetting(ctx context.Context, id string) (*model.GroupSettingDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).GroupSetting.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "groupsetting"})
 	}
@@ -71,7 +72,7 @@ func (r *mutationResolver) DeleteGroupSetting(ctx context.Context, id string) (*
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &GroupSettingDeletePayload{
+	return &model.GroupSettingDeletePayload{
 		DeletedID: id,
 	}, nil
 }

@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateOrgSubscription is the resolver for the createOrgSubscription field.
-func (r *mutationResolver) CreateOrgSubscription(ctx context.Context, input generated.CreateOrgSubscriptionInput) (*OrgSubscriptionCreatePayload, error) {
+func (r *mutationResolver) CreateOrgSubscription(ctx context.Context, input generated.CreateOrgSubscriptionInput) (*model.OrgSubscriptionCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateOrgSubscription(ctx context.Context, input gene
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "orgsubscription"})
 	}
 
-	return &OrgSubscriptionCreatePayload{
+	return &model.OrgSubscriptionCreatePayload{
 		OrgSubscription: res,
 	}, nil
 }
 
 // CreateBulkOrgSubscription is the resolver for the createBulkOrgSubscription field.
-func (r *mutationResolver) CreateBulkOrgSubscription(ctx context.Context, input []*generated.CreateOrgSubscriptionInput) (*OrgSubscriptionBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkOrgSubscription(ctx context.Context, input []*generated.CreateOrgSubscriptionInput) (*model.OrgSubscriptionBulkCreatePayload, error) {
 	return r.bulkCreateOrgSubscription(ctx, input)
 }
 
 // CreateBulkCSVOrgSubscription is the resolver for the createBulkCSVOrgSubscription field.
-func (r *mutationResolver) CreateBulkCSVOrgSubscription(ctx context.Context, input graphql.Upload) (*OrgSubscriptionBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVOrgSubscription(ctx context.Context, input graphql.Upload) (*model.OrgSubscriptionBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateOrgSubscriptionInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVOrgSubscription(ctx context.Context, inp
 }
 
 // UpdateOrgSubscription is the resolver for the updateOrgSubscription field.
-func (r *mutationResolver) UpdateOrgSubscription(ctx context.Context, id string, input generated.UpdateOrgSubscriptionInput) (*OrgSubscriptionUpdatePayload, error) {
+func (r *mutationResolver) UpdateOrgSubscription(ctx context.Context, id string, input generated.UpdateOrgSubscriptionInput) (*model.OrgSubscriptionUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OrgSubscription.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "orgsubscription"})
@@ -70,13 +71,13 @@ func (r *mutationResolver) UpdateOrgSubscription(ctx context.Context, id string,
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "orgsubscription"})
 	}
 
-	return &OrgSubscriptionUpdatePayload{
+	return &model.OrgSubscriptionUpdatePayload{
 		OrgSubscription: res,
 	}, nil
 }
 
 // DeleteOrgSubscription is the resolver for the deleteOrgSubscription field.
-func (r *mutationResolver) DeleteOrgSubscription(ctx context.Context, id string) (*OrgSubscriptionDeletePayload, error) {
+func (r *mutationResolver) DeleteOrgSubscription(ctx context.Context, id string) (*model.OrgSubscriptionDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).OrgSubscription.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "orgsubscription"})
 	}
@@ -85,7 +86,7 @@ func (r *mutationResolver) DeleteOrgSubscription(ctx context.Context, id string)
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &OrgSubscriptionDeletePayload{
+	return &model.OrgSubscriptionDeletePayload{
 		DeletedID: id,
 	}, nil
 }

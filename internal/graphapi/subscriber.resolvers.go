@@ -11,11 +11,12 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateSubscriber is the resolver for the createSubscriber field.
-func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*SubscriberCreatePayload, error) {
+func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*model.SubscriberCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,16 +28,16 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "subscriber"})
 	}
 
-	return &SubscriberCreatePayload{Subscriber: sub}, nil
+	return &model.SubscriberCreatePayload{Subscriber: sub}, nil
 }
 
 // CreateBulkSubscriber is the resolver for the createBulkSubscriber field.
-func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*SubscriberBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
 	return r.bulkCreateSubscriber(ctx, input)
 }
 
 // CreateBulkCSVSubscriber is the resolver for the createBulkCSVSubscriber field.
-func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*SubscriberBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*model.SubscriberBulkCreatePayload, error) {
 	subscriberInput, err := unmarshalBulkData[generated.CreateSubscriberInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -48,7 +49,7 @@ func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input gr
 }
 
 // UpdateSubscriber is the resolver for the updateSubscriber field.
-func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, input generated.UpdateSubscriberInput) (*SubscriberUpdatePayload, error) {
+func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, input generated.UpdateSubscriberInput) (*model.SubscriberUpdatePayload, error) {
 	subscriber, err := withTransactionalMutation(ctx).Subscriber.Query().
 		Where(
 			subscriber.EmailEQ(email),
@@ -67,11 +68,11 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subscriber"})
 	}
 
-	return &SubscriberUpdatePayload{Subscriber: subscriber}, nil
+	return &model.SubscriberUpdatePayload{Subscriber: subscriber}, nil
 }
 
 // DeleteSubscriber is the resolver for the deleteSubscriber field.
-func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, ownerID *string) (*SubscriberDeletePayload, error) {
+func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, ownerID *string) (*model.SubscriberDeletePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -90,7 +91,7 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 		return nil, newNotFoundError("subscriber")
 	}
 
-	return &SubscriberDeletePayload{Email: email}, nil
+	return &model.SubscriberDeletePayload{Email: email}, nil
 }
 
 // Subscriber is the resolver for the subscriber field.

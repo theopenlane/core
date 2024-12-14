@@ -8,10 +8,11 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // DeleteFile is the resolver for the deleteFile field.
-func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*FileDeletePayload, error) {
+func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*model.FileDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).File.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "file"})
 	}
@@ -20,7 +21,7 @@ func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*FileDele
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &FileDeletePayload{
+	return &model.FileDeletePayload{
 		DeletedID: id,
 	}, nil
 }

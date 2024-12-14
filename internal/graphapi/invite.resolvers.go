@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateInvite is the resolver for the createInvite field.
-func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.CreateInviteInput) (*InviteCreatePayload, error) {
+func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.CreateInviteInput) (*model.InviteCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.Cre
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
 	}
 
-	return &InviteCreatePayload{
+	return &model.InviteCreatePayload{
 		Invite: res,
 	}, nil
 }
 
 // CreateBulkInvite is the resolver for the createBulkInvite field.
-func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*generated.CreateInviteInput) (*InviteBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*generated.CreateInviteInput) (*model.InviteBulkCreatePayload, error) {
 	return r.bulkCreateInvite(ctx, input)
 }
 
 // CreateBulkCSVInvite is the resolver for the createBulkCSVInvite field.
-func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*InviteBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateInviteInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphq
 }
 
 // UpdateInvite is the resolver for the updateInvite field.
-func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input generated.UpdateInviteInput) (*InviteUpdatePayload, error) {
+func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input generated.UpdateInviteInput) (*model.InviteUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Invite.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"})
@@ -70,13 +71,13 @@ func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input ge
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"})
 	}
 
-	return &InviteUpdatePayload{
+	return &model.InviteUpdatePayload{
 		Invite: res,
 	}, nil
 }
 
 // DeleteInvite is the resolver for the deleteInvite field.
-func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*InviteDeletePayload, error) {
+func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*model.InviteDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Invite.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "invite"})
 	}
@@ -85,7 +86,7 @@ func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*Invite
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &InviteDeletePayload{
+	return &model.InviteDeletePayload{
 		DeletedID: id,
 	}, nil
 }

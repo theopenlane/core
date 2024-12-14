@@ -10,27 +10,28 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateOrganizationSetting is the resolver for the createOrganizationSetting field.
-func (r *mutationResolver) CreateOrganizationSetting(ctx context.Context, input generated.CreateOrganizationSettingInput) (*OrganizationSettingCreatePayload, error) {
+func (r *mutationResolver) CreateOrganizationSetting(ctx context.Context, input generated.CreateOrganizationSettingInput) (*model.OrganizationSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OrganizationSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "organizationsetting"})
 	}
 
-	return &OrganizationSettingCreatePayload{
+	return &model.OrganizationSettingCreatePayload{
 		OrganizationSetting: res,
 	}, nil
 }
 
 // CreateBulkOrganizationSetting is the resolver for the createBulkOrganizationSetting field.
-func (r *mutationResolver) CreateBulkOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*OrganizationSettingBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error) {
 	return r.bulkCreateOrganizationSetting(ctx, input)
 }
 
 // CreateBulkCSVOrganizationSetting is the resolver for the createBulkCSVOrganizationSetting field.
-func (r *mutationResolver) CreateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*OrganizationSettingBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateOrganizationSettingInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVOrganizationSetting(ctx context.Context,
 }
 
 // UpdateOrganizationSetting is the resolver for the updateOrganizationSetting field.
-func (r *mutationResolver) UpdateOrganizationSetting(ctx context.Context, id string, input generated.UpdateOrganizationSettingInput) (*OrganizationSettingUpdatePayload, error) {
+func (r *mutationResolver) UpdateOrganizationSetting(ctx context.Context, id string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OrganizationSetting.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organizationsetting"})
@@ -56,13 +57,13 @@ func (r *mutationResolver) UpdateOrganizationSetting(ctx context.Context, id str
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organizationsetting"})
 	}
 
-	return &OrganizationSettingUpdatePayload{
+	return &model.OrganizationSettingUpdatePayload{
 		OrganizationSetting: res,
 	}, nil
 }
 
 // DeleteOrganizationSetting is the resolver for the deleteOrganizationSetting field.
-func (r *mutationResolver) DeleteOrganizationSetting(ctx context.Context, id string) (*OrganizationSettingDeletePayload, error) {
+func (r *mutationResolver) DeleteOrganizationSetting(ctx context.Context, id string) (*model.OrganizationSettingDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).OrganizationSetting.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "organizationsetting"})
 	}
@@ -71,7 +72,7 @@ func (r *mutationResolver) DeleteOrganizationSetting(ctx context.Context, id str
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &OrganizationSettingDeletePayload{
+	return &model.OrganizationSettingDeletePayload{
 		DeletedID: id,
 	}, nil
 }

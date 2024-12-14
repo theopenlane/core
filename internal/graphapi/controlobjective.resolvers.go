@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateControlObjective is the resolver for the createControlObjective field.
-func (r *mutationResolver) CreateControlObjective(ctx context.Context, input generated.CreateControlObjectiveInput) (*ControlObjectiveCreatePayload, error) {
+func (r *mutationResolver) CreateControlObjective(ctx context.Context, input generated.CreateControlObjectiveInput) (*model.ControlObjectiveCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateControlObjective(ctx context.Context, input gen
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlobjective"})
 	}
 
-	return &ControlObjectiveCreatePayload{
+	return &model.ControlObjectiveCreatePayload{
 		ControlObjective: res,
 	}, nil
 }
 
 // CreateBulkControlObjective is the resolver for the createBulkControlObjective field.
-func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*ControlObjectiveBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*model.ControlObjectiveBulkCreatePayload, error) {
 	return r.bulkCreateControlObjective(ctx, input)
 }
 
 // CreateBulkCSVControlObjective is the resolver for the createBulkCSVControlObjective field.
-func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*ControlObjectiveBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*model.ControlObjectiveBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateControlObjectiveInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 }
 
 // UpdateControlObjective is the resolver for the updateControlObjective field.
-func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string, input generated.UpdateControlObjectiveInput) (*ControlObjectiveUpdatePayload, error) {
+func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string, input generated.UpdateControlObjectiveInput) (*model.ControlObjectiveUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ControlObjective.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "controlobjective"})
@@ -71,13 +72,13 @@ func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "controlobjective"})
 	}
 
-	return &ControlObjectiveUpdatePayload{
+	return &model.ControlObjectiveUpdatePayload{
 		ControlObjective: res,
 	}, nil
 }
 
 // DeleteControlObjective is the resolver for the deleteControlObjective field.
-func (r *mutationResolver) DeleteControlObjective(ctx context.Context, id string) (*ControlObjectiveDeletePayload, error) {
+func (r *mutationResolver) DeleteControlObjective(ctx context.Context, id string) (*model.ControlObjectiveDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ControlObjective.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "controlobjective"})
 	}
@@ -86,7 +87,7 @@ func (r *mutationResolver) DeleteControlObjective(ctx context.Context, id string
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &ControlObjectiveDeletePayload{
+	return &model.ControlObjectiveDeletePayload{
 		DeletedID: id,
 	}, nil
 }
