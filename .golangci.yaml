@@ -53,13 +53,13 @@ issues:
     - fga/tests/*
     - docs/*
     - internal/graphapi/generate/*
+    - internal/graphapi/generated/*
     - db/migrations/*
     - db/migrations-goose-postgres/*
     - pkg/entitlements/test/*
     - cmd/cli/cmd/*
   exclude-files:
-    - internal/graphapi/gen_server.go
-    - internal/graphapi/gen_models.go
+    - internal/graphapi/model/gen_models.go
     - pkg/openlaneclient/graphclient.go
     - schema.graphql
 output:
