@@ -1,0 +1,200 @@
+
+mutation CreateBulkCSVProcedure($input: Upload!) {
+  createBulkCSVProcedure(input: $input) {
+    procedures {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      procedureType
+      purposeAndScope
+      satisfies
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
+  createBulkProcedure(input: $input) {
+    procedures {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      procedureType
+      purposeAndScope
+      satisfies
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateProcedure($input: CreateProcedureInput!) {
+  createProcedure(input: $input) {
+    procedure {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      procedureType
+      purposeAndScope
+      satisfies
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+      editors{
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation DeleteProcedure($deleteProcedureId: ID!) {
+  deleteProcedure(id: $deleteProcedureId) {
+    deletedID
+  }
+}
+
+query GetAllProcedures {
+  procedures {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        id
+        name
+        procedureType
+        purposeAndScope
+        satisfies
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+        editors{
+          id
+          name
+        }
+        blockedGroups{
+          id
+          name
+        }
+      }
+    }
+  }
+}
+query GetProcedureByID($procedureId: ID!) {
+  procedure(id: $procedureId) {
+    background
+    createdAt
+    createdBy
+    description
+    details
+    id
+    name
+    procedureType
+    purposeAndScope
+    satisfies
+    status
+    tags
+    updatedAt
+    updatedBy
+    version
+    editors{
+      id
+      name
+    }
+    blockedGroups{
+      id
+      name
+    }
+  }
+}
+
+query GetProcedures($where: ProcedureWhereInput) {
+  procedures(where: $where) {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        id
+        name
+        procedureType
+        purposeAndScope
+        satisfies
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+        editors{
+          id
+          name
+        }
+        blockedGroups{
+          id
+          name
+        }
+      }
+    }
+  }
+}
+mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!) {
+  updateProcedure(id: $updateProcedureId, input: $input) {
+    procedure {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      procedureType
+      purposeAndScope
+      satisfies
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+      editors{
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
+    }
+  }
+}

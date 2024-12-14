@@ -1,31 +1,13 @@
-// go:build ignore
-
 package main
 
-import (
-	"fmt"
-	"os"
+//go:generate_input gen_gqlgen.go .gqlgen.yml ../schema/*
+//go:generate_output ../generated/* ../model/gen_models.go ../* ../../../pkg/openlaneclient/models.go
+//go:generate go run gen_gqlgen.go
 
-	"github.com/99designs/gqlgen/api"
-	"github.com/99designs/gqlgen/codegen/config"
-	"github.com/theopenlane/gqlgen-plugins/bulkgen"
-	"github.com/theopenlane/gqlgen-plugins/resolvergen"
-	"github.com/theopenlane/gqlgen-plugins/searchgen"
-)
+//go:generate_input gen_schema.go ../generated/*.generated.go ../model/gen_models.go
+//go:generate_output ../clientschema/schema.graphql
+//go:generate go run gen_schema.go
 
-func main() {
-	cfg, err := config.LoadConfigFromDefaultLocations()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "failed to load config", err.Error())
-		os.Exit(2)
-	}
-
-	if err := api.Generate(cfg,
-		api.ReplacePlugin(resolvergen.New()), // replace the resolvergen plugin
-		api.AddPlugin(bulkgen.New()),         // add the bulkgen plugin
-		api.AddPlugin(searchgen.New("github.com/theopenlane/core/internal/ent/generated")), // add the search plugin
-	); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-		os.Exit(3)
-	}
-}
+//go:generate_input ../query/*.graphql ../schema/*.graphql ../clientschema/schema.graphql .gqlgenc.yml
+//go:generate_output ../../pkg/openlaneclient/graphqlclient.go
+//go:generate go run gen_client.go

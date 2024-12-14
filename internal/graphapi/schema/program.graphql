@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up program by ID
+    """
+     program(
+        """
+        ID of the program
+        """
+        id: ID!
+    ):  Program!
+}
+
+extend type Mutation{
+    """
+    Create a new program
+    """
+    createProgram(
+        """
+        values of the program
+        """
+        input: CreateProgramInput!
+    ): ProgramCreatePayload!
+    """
+    Create multiple new programs
+    """
+    createBulkProgram(
+        """
+        values of the program
+        """
+        input: [CreateProgramInput!]
+    ): ProgramBulkCreatePayload!
+    """
+    Create multiple new programs via file upload
+    """
+    createBulkCSVProgram(
+        """
+        csv file containing values of the program
+        """
+        input: Upload!
+    ): ProgramBulkCreatePayload!
+    """
+    Update an existing program
+    """
+    updateProgram(
+        """
+        ID of the program
+        """
+        id: ID!
+        """
+        New values for the program
+        """
+        input: UpdateProgramInput!
+    ): ProgramUpdatePayload!
+    """
+    Delete an existing program
+    """
+    deleteProgram(
+        """
+        ID of the program
+        """
+        id: ID!
+    ): ProgramDeletePayload!
+}
+
+"""
+Return response for createProgram mutation
+"""
+type ProgramCreatePayload {
+    """
+    Created program
+    """
+    program: Program!
+}
+
+"""
+Return response for updateProgram mutation
+"""
+type ProgramUpdatePayload {
+    """
+    Updated program
+    """
+    program: Program!
+}
+
+"""
+Return response for deleteProgram mutation
+"""
+type ProgramDeletePayload {
+    """
+    Deleted program ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkProgram mutation
+"""
+type ProgramBulkCreatePayload {
+    """
+    Created programs
+    """
+    programs: [Program!]
+}

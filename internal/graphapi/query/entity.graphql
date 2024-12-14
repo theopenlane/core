@@ -1,0 +1,205 @@
+mutation CreateBulkCSVEntity($input: Upload!) {
+  createBulkCSVEntity(input: $input) {
+    entities {
+      createdAt
+      createdBy
+      description
+      displayName
+      status
+      domains
+      notes {
+        text
+        updatedAt
+        updatedBy
+      }
+      entityType {
+        name
+      }
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkEntity($input: [CreateEntityInput!]) {
+  createBulkEntity(input: $input) {
+    entities {
+      createdAt
+      createdBy
+      description
+      displayName
+      status
+      domains
+      notes {
+        text
+        updatedAt
+        updatedBy
+      }
+      entityType {
+        name
+      }
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateEntity($input: CreateEntityInput!) {
+  createEntity(input: $input) {
+    entity {
+      createdAt
+      createdBy
+      description
+      displayName
+      status
+      domains
+      notes {
+        text
+        updatedAt
+        updatedBy
+      }
+      entityType {
+        name
+      }
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteEntity($deleteEntityId: ID!) {
+  deleteEntity(id: $deleteEntityId) {
+    deletedID
+  }
+}
+
+query GetAllEntities {
+  entities {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        status
+        domains
+        notes {
+          text
+          updatedAt
+          updatedBy
+        }
+        entityType {
+          name
+        }
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetEntities($where: EntityWhereInput) {
+  entities(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        status
+        domains
+        notes {
+          text
+          updatedAt
+          updatedBy
+        }
+        entityType {
+          name
+        }
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetEntityByID($entityId: ID!) {
+  entity(id: $entityId) {
+    createdAt
+    createdBy
+    description
+    displayName
+    status
+    domains
+    notes {
+      text
+      updatedAt
+      updatedBy
+    }
+    entityType {
+      name
+    }
+    id
+    name
+    ownerID
+    contacts {
+      id
+      fullName
+      email
+      title
+      company
+      address
+      phoneNumber
+    }
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
+  updateEntity(id: $updateEntityId, input: $input) {
+    entity {
+      createdAt
+      createdBy
+      description
+      displayName
+      status
+      domains
+      notes {
+        text
+        updatedAt
+        updatedBy
+      }
+      entityType {
+        name
+      }
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

@@ -1,0 +1,254 @@
+
+mutation CreateBulkCSVControlObjective($input: Upload!) {
+  createBulkCSVControlObjective(input: $input) {
+    controlObjectives {
+      class
+      controlNumber
+      controlObjectiveType
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      mappedFrameworks
+      name
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
+  createBulkControlObjective(input: $input) {
+    controlObjectives {
+      class
+      controlNumber
+      controlObjectiveType
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      mappedFrameworks
+      name
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
+  createControlObjective(input: $input) {
+    controlObjective {
+      class
+      controlNumber
+      controlObjectiveType
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      mappedFrameworks
+      name
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation DeleteControlObjective($deleteControlObjectiveId: ID!) {
+  deleteControlObjective(id: $deleteControlObjectiveId) {
+    deletedID
+  }
+}
+
+query GetAllControlObjectives {
+  controlObjectives {
+    edges {
+      node {
+        class
+        controlNumber
+        controlObjectiveType
+        createdAt
+        createdBy
+        description
+        details
+        family
+        id
+        mappedFrameworks
+        name
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+query GetControlObjectiveByID($controlObjectiveId: ID!) {
+  controlObjective(id: $controlObjectiveId) {
+    class
+    controlNumber
+    controlObjectiveType
+    createdAt
+    createdBy
+    description
+    details
+    family
+    id
+    mappedFrameworks
+    name
+    source
+    status
+    tags
+    updatedAt
+    updatedBy
+    version
+    programs {
+      id
+      name
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
+    }
+  }
+}
+
+query GetControlObjectives($where: ControlObjectiveWhereInput) {
+  controlObjectives(where: $where) {
+    edges {
+      node {
+        class
+        controlNumber
+        controlObjectiveType
+        createdAt
+        createdBy
+        description
+        details
+        family
+        id
+        mappedFrameworks
+        name
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
+  updateControlObjective(id: $updateControlObjectiveId, input: $input) {
+    controlObjective {
+      class
+      controlNumber
+      controlObjectiveType
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      mappedFrameworks
+      name
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
+    }
+  }
+}

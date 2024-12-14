@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTemplate is the resolver for the createTemplate field.
-func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.CreateTemplateInput) (*TemplateCreatePayload, error) {
+func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.CreateTemplateInput) (*model.TemplateCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -26,18 +27,18 @@ func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.C
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "template"})
 	}
 
-	return &TemplateCreatePayload{
+	return &model.TemplateCreatePayload{
 		Template: res,
 	}, nil
 }
 
 // CreateBulkTemplate is the resolver for the createBulkTemplate field.
-func (r *mutationResolver) CreateBulkTemplate(ctx context.Context, input []*generated.CreateTemplateInput) (*TemplateBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkTemplate(ctx context.Context, input []*generated.CreateTemplateInput) (*model.TemplateBulkCreatePayload, error) {
 	return r.bulkCreateTemplate(ctx, input)
 }
 
 // CreateBulkCSVTemplate is the resolver for the createBulkCSVTemplate field.
-func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload) (*TemplateBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload) (*model.TemplateBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateTemplateInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -49,7 +50,7 @@ func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input grap
 }
 
 // UpdateTemplate is the resolver for the updateTemplate field.
-func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput) (*TemplateUpdatePayload, error) {
+func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput) (*model.TemplateUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Template.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "template"})
@@ -68,13 +69,13 @@ func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input 
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "template"})
 	}
 
-	return &TemplateUpdatePayload{
+	return &model.TemplateUpdatePayload{
 		Template: res,
 	}, nil
 }
 
 // DeleteTemplate is the resolver for the deleteTemplate field.
-func (r *mutationResolver) DeleteTemplate(ctx context.Context, id string) (*TemplateDeletePayload, error) {
+func (r *mutationResolver) DeleteTemplate(ctx context.Context, id string) (*model.TemplateDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Template.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "template"})
 	}
@@ -83,7 +84,7 @@ func (r *mutationResolver) DeleteTemplate(ctx context.Context, id string) (*Temp
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &TemplateDeletePayload{
+	return &model.TemplateDeletePayload{
 		DeletedID: id,
 	}, nil
 }

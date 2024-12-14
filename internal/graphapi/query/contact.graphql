@@ -1,0 +1,154 @@
+mutation CreateBulkContact($input: [CreateContactInput!]) {
+  createBulkContact(input: $input) {
+    contacts {
+      address
+      company
+      createdAt
+      createdBy
+      email
+      fullName
+      id
+      ownerID
+      phoneNumber
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkCSVContact($input: Upload!) {
+  createBulkCSVContact(input: $input) {
+    contacts {
+      address
+      company
+      createdAt
+      createdBy
+      email
+      fullName
+      id
+      ownerID
+      phoneNumber
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateContact($input: CreateContactInput!) {
+  createContact(input: $input) {
+    contact {
+      address
+      company
+      createdAt
+      createdBy
+      email
+      fullName
+      id
+      ownerID
+      phoneNumber
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteContact($deleteContactId: ID!) {
+  deleteContact(id: $deleteContactId) {
+    deletedID
+  }
+}
+
+query GetAllContacts {
+  contacts {
+    edges {
+      node {
+        address
+        company
+        createdAt
+        createdBy
+        email
+        fullName
+        id
+        ownerID
+        phoneNumber
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetContactByID($contactId: ID!) {
+  contact(id: $contactId) {
+    address
+    company
+    createdAt
+    createdBy
+    email
+    fullName
+    id
+    ownerID
+    phoneNumber
+    status
+    tags
+    title
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetContacts($where: ContactWhereInput) {
+  contacts(where: $where) {
+    edges {
+      node {
+        address
+        company
+        createdAt
+        createdBy
+        email
+        fullName
+        id
+        ownerID
+        phoneNumber
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateContact($updateContactId: ID!, $input: UpdateContactInput!) {
+  updateContact(id: $updateContactId, input: $input) {
+    contact {
+      address
+      company
+      createdAt
+      createdBy
+      email
+      fullName
+      id
+      ownerID
+      phoneNumber
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}

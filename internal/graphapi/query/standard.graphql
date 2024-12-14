@@ -1,0 +1,168 @@
+mutation CreateBulkCSVStandard($input: Upload!) {
+  createBulkCSVStandard(input: $input) {
+    standards {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      name
+      purposeAndScope
+      satisfies
+      standardType
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkStandard($input: [CreateStandardInput!]) {
+  createBulkStandard(input: $input) {
+    standards {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      name
+      purposeAndScope
+      satisfies
+      standardType
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateStandard($input: CreateStandardInput!) {
+  createStandard(input: $input) {
+    standard {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      name
+      purposeAndScope
+      satisfies
+      standardType
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation DeleteStandard($deleteStandardId: ID!) {
+  deleteStandard(id: $deleteStandardId) {
+    deletedID
+  }
+}
+
+query GetAllStandards {
+  standards {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        family
+        id
+        name
+        purposeAndScope
+        satisfies
+        standardType
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+query GetStandardByID($standardId: ID!) {
+  standard(id: $standardId) {
+    background
+    createdAt
+    createdBy
+    description
+    details
+    family
+    id
+    name
+    purposeAndScope
+    satisfies
+    standardType
+    status
+    tags
+    updatedAt
+    updatedBy
+    version
+  }
+}
+
+query GetStandards($where: StandardWhereInput) {
+  standards(where: $where) {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        family
+        id
+        name
+        purposeAndScope
+        satisfies
+        standardType
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
+  updateStandard(id: $updateStandardId, input: $input) {
+    standard {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      name
+      purposeAndScope
+      satisfies
+      standardType
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}

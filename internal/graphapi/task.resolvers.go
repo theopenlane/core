@@ -10,27 +10,28 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateTask is the resolver for the createTask field.
-func (r *mutationResolver) CreateTask(ctx context.Context, input generated.CreateTaskInput) (*TaskCreatePayload, error) {
+func (r *mutationResolver) CreateTask(ctx context.Context, input generated.CreateTaskInput) (*model.TaskCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Task.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "task"})
 	}
 
-	return &TaskCreatePayload{
+	return &model.TaskCreatePayload{
 		Task: res,
 	}, nil
 }
 
 // CreateBulkTask is the resolver for the createBulkTask field.
-func (r *mutationResolver) CreateBulkTask(ctx context.Context, input []*generated.CreateTaskInput) (*TaskBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkTask(ctx context.Context, input []*generated.CreateTaskInput) (*model.TaskBulkCreatePayload, error) {
 	return r.bulkCreateTask(ctx, input)
 }
 
 // CreateBulkCSVTask is the resolver for the createBulkCSVTask field.
-func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.Upload) (*TaskBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.Upload) (*model.TaskBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateTaskInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.
 }
 
 // UpdateTask is the resolver for the updateTask field.
-func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*TaskUpdatePayload, error) {
+func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
@@ -56,13 +57,13 @@ func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input gene
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
 	}
 
-	return &TaskUpdatePayload{
+	return &model.TaskUpdatePayload{
 		Task: res,
 	}, nil
 }
 
 // DeleteTask is the resolver for the deleteTask field.
-func (r *mutationResolver) DeleteTask(ctx context.Context, id string) (*TaskDeletePayload, error) {
+func (r *mutationResolver) DeleteTask(ctx context.Context, id string) (*model.TaskDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Task.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "task"})
 	}
@@ -71,7 +72,7 @@ func (r *mutationResolver) DeleteTask(ctx context.Context, id string) (*TaskDele
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &TaskDeletePayload{
+	return &model.TaskDeletePayload{
 		DeletedID: id,
 	}, nil
 }

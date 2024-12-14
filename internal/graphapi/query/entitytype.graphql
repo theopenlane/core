@@ -1,0 +1,112 @@
+
+mutation CreateBulkCSVEntityType($input: Upload!) {
+  createBulkCSVEntityType(input: $input) {
+    entityTypes {
+      createdAt
+      createdBy
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkEntityType($input: [CreateEntityTypeInput!]) {
+  createBulkEntityType(input: $input) {
+    entityTypes {
+      createdAt
+      createdBy
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateEntityType($input: CreateEntityTypeInput!) {
+  createEntityType(input: $input) {
+    entityType {
+      createdAt
+      createdBy
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteEntityType($deleteEntityTypeId: ID!) {
+  deleteEntityType(id: $deleteEntityTypeId) {
+    deletedID
+  }
+}
+
+query GetAllEntityTypes {
+  entityTypes {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetEntityTypeByID($entityTypeId: ID!) {
+  entityType(id: $entityTypeId) {
+    createdAt
+    createdBy
+    id
+    name
+    ownerID
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetEntityTypes($where: EntityTypeWhereInput) {
+  entityTypes(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateEntityType($updateEntityTypeId: ID!, $input: UpdateEntityTypeInput!) {
+  updateEntityType(id: $updateEntityTypeId, input: $input) {
+    entityType {
+      createdAt
+      createdBy
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

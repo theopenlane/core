@@ -1,0 +1,53 @@
+query GetAllProcedureHistories {
+  procedureHistories {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        historyTime
+        id
+        name
+        operation
+        procedureType
+        purposeAndScope
+        ref
+        satisfies
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+query GetProcedureHistories($where: ProcedureHistoryWhereInput) {
+  procedureHistories(where: $where) {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        historyTime
+        id
+        name
+        operation
+        procedureType
+        purposeAndScope
+        ref
+        satisfies
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}

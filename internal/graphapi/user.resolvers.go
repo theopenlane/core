@@ -11,19 +11,20 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload) (*UserCreatePayload, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload) (*model.UserCreatePayload, error) {
 	// TODO: look at allowing this resolver to invite the user instead of creating them directly
 	// for now, return permission denied
 	return nil, rout.ErrPermissionDenied
 }
 
 // UpdateUser is the resolver for the updateUser field.
-func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) (*UserUpdatePayload, error) {
+func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) (*model.UserUpdatePayload, error) {
 	user, err := withTransactionalMutation(ctx).User.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "user"})
@@ -40,11 +41,11 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input gene
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "user"})
 	}
 
-	return &UserUpdatePayload{User: user}, nil
+	return &model.UserUpdatePayload{User: user}, nil
 }
 
 // DeleteUser is the resolver for the deleteUser field.
-func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*UserDeletePayload, error) {
+func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.UserDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).User.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "user"})
 	}
@@ -53,7 +54,7 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*UserDele
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &UserDeletePayload{DeletedID: id}, nil
+	return &model.UserDeletePayload{DeletedID: id}, nil
 }
 
 // User is the resolver for the user field.

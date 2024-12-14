@@ -1,0 +1,101 @@
+query GetAllOrganizationSettings {
+  organizationSettings {
+    edges {
+      node {
+        billingAddress
+        billingContact
+        billingEmail
+        billingPhone
+        createdAt
+        createdBy
+        domains
+        geoLocation
+        id
+        tags
+        taxIdentifier
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+        }
+        stripeID
+      }
+    }
+  }
+}
+
+query GetOrganizationSettingByID($organizationSettingId: ID!) {
+  organizationSetting(id: $organizationSettingId) {
+    billingAddress
+    billingContact
+    billingEmail
+    billingPhone
+    createdAt
+    createdBy
+    domains
+    geoLocation
+    id
+    tags
+    taxIdentifier
+    updatedAt
+    updatedBy
+    organization {
+      id
+      name
+    }
+    stripeID
+  }
+}
+
+query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
+  organizationSettings(where: $where) {
+    edges {
+      node {
+        billingAddress
+        billingContact
+        billingEmail
+        billingPhone
+        createdAt
+        createdBy
+        domains
+        geoLocation
+        id
+        tags
+        taxIdentifier
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+        }
+        stripeID
+      }
+    }
+  }
+}
+
+mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: UpdateOrganizationSettingInput!) {
+  updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
+    organizationSetting {
+      billingAddress
+      billingContact
+      billingEmail
+      billingPhone
+      createdAt
+      createdBy
+      domains
+      geoLocation
+      id
+      tags
+      taxIdentifier
+      updatedAt
+      updatedBy
+      organization {
+        id
+        name
+      }
+      stripeID
+    }
+  }
+}

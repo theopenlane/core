@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up narrative by ID
+    """
+     narrative(
+        """
+        ID of the narrative
+        """
+        id: ID!
+    ):  Narrative!
+}
+
+extend type Mutation{
+    """
+    Create a new narrative
+    """
+    createNarrative(
+        """
+        values of the narrative
+        """
+        input: CreateNarrativeInput!
+    ): NarrativeCreatePayload!
+    """
+    Create multiple new narratives
+    """
+    createBulkNarrative(
+        """
+        values of the narrative
+        """
+        input: [CreateNarrativeInput!]
+    ): NarrativeBulkCreatePayload!
+    """
+    Create multiple new narratives via file upload
+    """
+    createBulkCSVNarrative(
+        """
+        csv file containing values of the narrative
+        """
+        input: Upload!
+    ): NarrativeBulkCreatePayload!
+    """
+    Update an existing narrative
+    """
+    updateNarrative(
+        """
+        ID of the narrative
+        """
+        id: ID!
+        """
+        New values for the narrative
+        """
+        input: UpdateNarrativeInput!
+    ): NarrativeUpdatePayload!
+    """
+    Delete an existing narrative
+    """
+    deleteNarrative(
+        """
+        ID of the narrative
+        """
+        id: ID!
+    ): NarrativeDeletePayload!
+}
+
+"""
+Return response for createNarrative mutation
+"""
+type NarrativeCreatePayload {
+    """
+    Created narrative
+    """
+    narrative: Narrative!
+}
+
+"""
+Return response for updateNarrative mutation
+"""
+type NarrativeUpdatePayload {
+    """
+    Updated narrative
+    """
+    narrative: Narrative!
+}
+
+"""
+Return response for deleteNarrative mutation
+"""
+type NarrativeDeletePayload {
+    """
+    Deleted narrative ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkNarrative mutation
+"""
+type NarrativeBulkCreatePayload {
+    """
+    Created narratives
+    """
+    narratives: [Narrative!]
+}

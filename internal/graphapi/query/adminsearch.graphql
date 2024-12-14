@@ -1,0 +1,393 @@
+query AdminSearch($query: String!) {
+  adminSearch(query: $query) {
+    nodes {
+      ... on APITokenSearchResult {
+        apiTokens {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          scopes
+        }
+      }
+      ... on ActionPlanSearchResult {
+        actionPlans {
+          deletedBy
+          id
+          tags
+          name
+          description
+          status
+          priority
+          source
+          details
+        }
+      }
+      ... on ContactSearchResult {
+        contacts {
+          id
+          deletedBy
+          tags
+          ownerID
+          fullName
+          title
+          company
+          email
+          phoneNumber
+          address
+        }
+      }
+      ... on ControlSearchResult {
+        controls {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          status
+          controlType
+          version
+          controlNumber
+          family
+          class
+          source
+          satisfies
+          mappedFrameworks
+          details
+        }
+      }
+      ... on ControlObjectiveSearchResult {
+        controlObjectives {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          status
+          controlObjectiveType
+          version
+          controlNumber
+          family
+          class
+          source
+          mappedFrameworks
+          details
+        }
+      }
+      ... on DocumentDataSearchResult {
+        documentData {
+          id
+          tags
+          deletedBy
+          ownerID
+          templateID
+          data
+        }
+      }
+      ... on EntitySearchResult {
+        entities {
+          id
+          deletedBy
+          tags
+          ownerID
+          name
+          displayName
+          description
+          domains
+          entityTypeID
+          status
+        }
+      }
+      ... on EntityTypeSearchResult {
+        entityTypes {
+          id
+          deletedBy
+          tags
+          ownerID
+          name
+        }
+      }
+      ... on EventSearchResult {
+        events {
+          id
+          tags
+          eventID
+          correlationID
+          eventType
+          metadata
+        }
+      }
+      ... on FileSearchResult {
+        files {
+          deletedBy
+          id
+          tags
+          providedFileName
+          providedFileExtension
+          detectedMimeType
+          md5Hash
+          detectedContentType
+          storeKey
+          categoryType
+          uri
+          storageScheme
+          storageVolume
+          storagePath
+        }
+      }
+      ... on GroupSearchResult {
+        groups {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          displayName
+        }
+      }
+      ... on GroupSettingSearchResult {
+        groupSettings {
+          id
+          tags
+          deletedBy
+          groupID
+        }
+      }
+      ... on IntegrationSearchResult {
+        integrations {
+          id
+          tags
+          deletedBy
+          ownerID
+          name
+          kind
+        }
+      }
+      ... on InternalPolicySearchResult {
+        internalPolicies {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          status
+          policyType
+          version
+          purposeAndScope
+          background
+          details
+        }
+      }
+      ... on NarrativeSearchResult {
+        narratives {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          satisfies
+          details
+        }
+      }
+      ... on OrgSubscriptionSearchResult {
+        orgSubscriptions {
+          id
+          tags
+          deletedBy
+          ownerID
+          stripeSubscriptionID
+          productTier
+          stripeProductTierID
+          stripeSubscriptionStatus
+          stripeCustomerID
+          features
+        }
+      }
+      ... on OrganizationSearchResult {
+        organizations {
+          id
+          tags
+          deletedBy
+          name
+          displayName
+          avatarRemoteURL
+        }
+      }
+      ... on OrganizationSettingSearchResult {
+        organizationSettings {
+          id
+          tags
+          deletedBy
+          domains
+          billingContact
+          billingEmail
+          billingPhone
+          billingAddress
+          taxIdentifier
+          organizationID
+          stripeID
+        }
+      }
+      ... on PersonalAccessTokenSearchResult {
+        personalAccessTokens {
+          deletedBy
+          id
+          tags
+          name
+          scopes
+        }
+      }
+      ... on ProcedureSearchResult {
+        procedures {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          status
+          procedureType
+          version
+          purposeAndScope
+          background
+          satisfies
+          details
+        }
+      }
+      ... on ProgramSearchResult {
+        programs {
+          id
+          deletedBy
+          tags
+          ownerID
+          name
+          description
+        }
+      }
+      ... on RiskSearchResult {
+        risks {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          status
+          riskType
+          businessCosts
+          mitigation
+          satisfies
+          details
+        }
+      }
+      ... on StandardSearchResult {
+        standards {
+          deletedBy
+          id
+          tags
+          name
+          description
+          family
+          status
+          standardType
+          version
+          purposeAndScope
+          background
+          satisfies
+          details
+        }
+      }
+      ... on SubcontrolSearchResult {
+        subcontrols {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          status
+          subcontrolType
+          version
+          subcontrolNumber
+          family
+          class
+          source
+          mappedFrameworks
+          implementationEvidence
+          implementationStatus
+          implementationVerification
+          details
+        }
+      }
+      ... on SubscriberSearchResult {
+        subscribers {
+          id
+          tags
+          deletedBy
+          ownerID
+          email
+          phoneNumber
+        }
+      }
+      ... on TFASettingSearchResult {
+        tFASettings {
+          id
+          deletedBy
+          tags
+          tfaSecret
+          recoveryCodes
+        }
+      }
+      ... on TaskSearchResult {
+        tasks {
+          id
+          deletedBy
+          tags
+          title
+          description
+          details
+        }
+      }
+      ... on TemplateSearchResult {
+        templates {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          jsonconfig
+          uischema
+        }
+      }
+      ... on UserSearchResult {
+        users {
+          deletedBy
+          id
+          tags
+          email
+          firstName
+          lastName
+          displayName
+          avatarRemoteURL
+          avatarLocalFile
+          avatarLocalFileID
+          sub
+        }
+      }
+      ... on UserSettingSearchResult {
+        userSettings {
+          id
+          tags
+          deletedBy
+          userID
+        }
+      }
+    }
+  }
+}

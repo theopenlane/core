@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProgram is the resolver for the createProgram field.
-func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*ProgramCreatePayload, error) {
+func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -26,18 +27,18 @@ func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.Cr
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}
 
-	return &ProgramCreatePayload{
+	return &model.ProgramCreatePayload{
 		Program: res,
 	}, nil
 }
 
 // CreateBulkProgram is the resolver for the createBulkProgram field.
-func (r *mutationResolver) CreateBulkProgram(ctx context.Context, input []*generated.CreateProgramInput) (*ProgramBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkProgram(ctx context.Context, input []*generated.CreateProgramInput) (*model.ProgramBulkCreatePayload, error) {
 	return r.bulkCreateProgram(ctx, input)
 }
 
 // CreateBulkCSVProgram is the resolver for the createBulkCSVProgram field.
-func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graphql.Upload) (*ProgramBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graphql.Upload) (*model.ProgramBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateProgramInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -49,7 +50,7 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 }
 
 // UpdateProgram is the resolver for the updateProgram field.
-func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input generated.UpdateProgramInput) (*ProgramUpdatePayload, error) {
+func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input generated.UpdateProgramInput) (*model.ProgramUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Program.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "program"})
@@ -69,13 +70,13 @@ func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input g
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "program"})
 	}
 
-	return &ProgramUpdatePayload{
+	return &model.ProgramUpdatePayload{
 		Program: res,
 	}, nil
 }
 
 // DeleteProgram is the resolver for the deleteProgram field.
-func (r *mutationResolver) DeleteProgram(ctx context.Context, id string) (*ProgramDeletePayload, error) {
+func (r *mutationResolver) DeleteProgram(ctx context.Context, id string) (*model.ProgramDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Program.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "program"})
 	}
@@ -84,7 +85,7 @@ func (r *mutationResolver) DeleteProgram(ctx context.Context, id string) (*Progr
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &ProgramDeletePayload{
+	return &model.ProgramDeletePayload{
 		DeletedID: id,
 	}, nil
 }

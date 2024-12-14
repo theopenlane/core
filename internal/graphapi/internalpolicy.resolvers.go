@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateInternalPolicy is the resolver for the createInternalPolicy field.
-func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*InternalPolicyCreatePayload, error) {
+func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -26,13 +27,13 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "internalpolicy"})
 	}
 
-	return &InternalPolicyCreatePayload{
+	return &model.InternalPolicyCreatePayload{
 		InternalPolicy: res,
 	}, nil
 }
 
 // CreateBulkInternalPolicy is the resolver for the createBulkInternalPolicy field.
-func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*InternalPolicyBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error) {
 	if len(input) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
@@ -47,7 +48,7 @@ func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input [
 }
 
 // CreateBulkCSVInternalPolicy is the resolver for the createBulkCSVInternalPolicy field.
-func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*InternalPolicyBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateInternalPolicyInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -69,7 +70,7 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 }
 
 // UpdateInternalPolicy is the resolver for the updateInternalPolicy field.
-func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput) (*InternalPolicyUpdatePayload, error) {
+func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
@@ -89,13 +90,13 @@ func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, 
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
 	}
 
-	return &InternalPolicyUpdatePayload{
+	return &model.InternalPolicyUpdatePayload{
 		InternalPolicy: res,
 	}, nil
 }
 
 // DeleteInternalPolicy is the resolver for the deleteInternalPolicy field.
-func (r *mutationResolver) DeleteInternalPolicy(ctx context.Context, id string) (*InternalPolicyDeletePayload, error) {
+func (r *mutationResolver) DeleteInternalPolicy(ctx context.Context, id string) (*model.InternalPolicyDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).InternalPolicy.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "internalpolicy"})
 	}
@@ -104,7 +105,7 @@ func (r *mutationResolver) DeleteInternalPolicy(ctx context.Context, id string) 
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &InternalPolicyDeletePayload{
+	return &model.InternalPolicyDeletePayload{
 		DeletedID: id,
 	}, nil
 }

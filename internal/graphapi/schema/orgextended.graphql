@@ -1,0 +1,13 @@
+extend input CreateOrganizationInput {
+  createOrgSettings: CreateOrganizationSettingInput
+}
+
+extend input UpdateOrganizationInput {
+  addOrgMembers: [CreateOrgMembershipInput!]
+  updateOrgSettings: UpdateOrganizationSettingInput
+}
+
+extend input OrgMembershipWhereInput {
+  organizationID: String
+  userID: String
+}

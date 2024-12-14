@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProgramWithMembers is the resolver for the createProgramWithMembers field.
-func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input CreateProgramWithMembersInput) (*ProgramCreatePayload, error) {
+func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input model.CreateProgramWithMembersInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -43,13 +44,13 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input C
 		return nil, err
 	}
 
-	return &ProgramCreatePayload{
+	return &model.ProgramCreatePayload{
 		Program: program,
 	}, nil
 }
 
 // CreateFullProgram is the resolver for the createFullProgram field.
-func (r *mutationResolver) CreateFullProgram(ctx context.Context, input CreateFullProgramInput) (*ProgramCreatePayload, error) {
+func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.CreateFullProgramInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -148,13 +149,13 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input CreateFu
 		}
 	}
 
-	return &ProgramCreatePayload{
+	return &model.ProgramCreatePayload{
 		Program: program,
 	}, nil
 }
 
 // CreateControlWithSubcontrols is the resolver for the createControlWithSubcontrols field.
-func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, input CreateControlWithSubcontrolsInput) (*ControlCreatePayload, error) {
+func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, input model.CreateControlWithSubcontrolsInput) (*model.ControlCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Control.Create().SetInput(*input.Control).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
@@ -176,7 +177,7 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 		}
 	}
 
-	return &ControlCreatePayload{
+	return &model.ControlCreatePayload{
 		Control: res,
 	}, nil
 }

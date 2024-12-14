@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up template by ID
+    """
+     template(
+        """
+        ID of the template
+        """
+        id: ID!
+    ):  Template!
+}
+
+extend type Mutation{
+    """
+    Create a new template
+    """
+    createTemplate(
+        """
+        values of the template
+        """
+        input: CreateTemplateInput!
+    ): TemplateCreatePayload!
+    """
+    Create multiple new templates
+    """
+    createBulkTemplate(
+        """
+        values of the template
+        """
+        input: [CreateTemplateInput!]
+    ): TemplateBulkCreatePayload!
+    """
+    Create multiple new templates via file upload
+    """
+    createBulkCSVTemplate(
+        """
+        csv file containing values of the template
+        """
+        input: Upload!
+    ): TemplateBulkCreatePayload!
+    """
+    Update an existing template
+    """
+    updateTemplate(
+        """
+        ID of the template
+        """
+        id: ID!
+        """
+        New values for the template
+        """
+        input: UpdateTemplateInput!
+    ): TemplateUpdatePayload!
+    """
+    Delete an existing template
+    """
+    deleteTemplate(
+        """
+        ID of the template
+        """
+        id: ID!
+    ): TemplateDeletePayload!
+}
+
+"""
+Return response for createTemplate mutation
+"""
+type TemplateCreatePayload {
+    """
+    Created template
+    """
+    template: Template!
+}
+
+"""
+Return response for updateTemplate mutation
+"""
+type TemplateUpdatePayload {
+    """
+    Updated template
+    """
+    template: Template!
+}
+
+"""
+Return response for deleteTemplate mutation
+"""
+type TemplateDeletePayload {
+    """
+    Deleted template ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTemplate mutation
+"""
+type TemplateBulkCreatePayload {
+    """
+    Created templates
+    """
+    templates: [Template!]
+}

@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateAPIToken is the resolver for the createAPIToken field.
-func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*APITokenCreatePayload, error) {
+func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*model.APITokenCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,16 +28,16 @@ func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.C
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "api token"})
 	}
 
-	return &APITokenCreatePayload{APIToken: apiToken}, err
+	return &model.APITokenCreatePayload{APIToken: apiToken}, err
 }
 
 // CreateBulkAPIToken is the resolver for the createBulkAPIToken field.
-func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*APITokenBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*model.APITokenBulkCreatePayload, error) {
 	return r.bulkCreateAPIToken(ctx, input)
 }
 
 // CreateBulkCSVAPIToken is the resolver for the createBulkCSVAPIToken field.
-func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*APITokenBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*model.APITokenBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateAPITokenInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -48,7 +49,7 @@ func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input grap
 }
 
 // UpdateAPIToken is the resolver for the updateAPIToken field.
-func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*APITokenUpdatePayload, error) {
+func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error) {
 	apiToken, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "api token"})
@@ -65,11 +66,11 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "api token"})
 	}
 
-	return &APITokenUpdatePayload{APIToken: apiToken}, err
+	return &model.APITokenUpdatePayload{APIToken: apiToken}, err
 }
 
 // DeleteAPIToken is the resolver for the deleteAPIToken field.
-func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*APITokenDeletePayload, error) {
+func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*model.APITokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).APIToken.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "api token"})
 	}
@@ -78,7 +79,7 @@ func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*APIT
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &APITokenDeletePayload{DeletedID: id}, nil
+	return &model.APITokenDeletePayload{DeletedID: id}, nil
 }
 
 // APIToken is the resolver for the apiToken field.

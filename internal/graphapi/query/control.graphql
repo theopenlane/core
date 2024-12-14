@@ -1,0 +1,281 @@
+
+mutation CreateBulkCSVControl($input: Upload!) {
+  createBulkCSVControl(input: $input) {
+    controls {
+      class
+      controlNumber
+      controlType
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      mappedFrameworks
+      name
+      satisfies
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkControl($input: [CreateControlInput!]) {
+  createBulkControl(input: $input) {
+    controls {
+      class
+      controlNumber
+      controlType
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      mappedFrameworks
+      name
+      satisfies
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateControl($input: CreateControlInput!) {
+  createControl(input: $input) {
+    control {
+      class
+      controlNumber
+      controlType
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      mappedFrameworks
+      name
+      satisfies
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+      subcontrols {
+        id
+        name
+      }
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation DeleteControl($deleteControlId: ID!) {
+  deleteControl(id: $deleteControlId) {
+    deletedID
+  }
+}
+
+query GetAllControls {
+  controls {
+    edges {
+      node {
+        class
+        controlNumber
+        controlType
+        createdAt
+        createdBy
+        description
+        details
+        family
+        id
+        mappedFrameworks
+        name
+        satisfies
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+        subcontrols {
+          id
+          name
+        }
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+query GetControlByID($controlId: ID!) {
+  control(id: $controlId) {
+    class
+    controlNumber
+    controlType
+    createdAt
+    createdBy
+    description
+    details
+    family
+    id
+    mappedFrameworks
+    name
+    satisfies
+    source
+    status
+    tags
+    updatedAt
+    updatedBy
+    version
+    subcontrols {
+      id
+      name
+    }
+    programs {
+      id
+      name
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
+    }
+  }
+}
+
+query GetControls($where: ControlWhereInput) {
+  controls(where: $where) {
+    edges {
+      node {
+        class
+        controlNumber
+        controlType
+        createdAt
+        createdBy
+        description
+        details
+        family
+        id
+        mappedFrameworks
+        name
+        satisfies
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+        subcontrols {
+          id
+          name
+       }
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
+  updateControl(id: $updateControlId, input: $input) {
+    control {
+      class
+      controlNumber
+      controlType
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      mappedFrameworks
+      name
+      satisfies
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+      subcontrols {
+        id
+        name
+      }
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
+    }
+  }
+}

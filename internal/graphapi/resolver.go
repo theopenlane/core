@@ -22,6 +22,7 @@ import (
 	"github.com/wundergraph/graphql-go-tools/pkg/playground"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -76,8 +77,8 @@ type Handler struct {
 
 // Handler returns an http handler for a graph resolver
 func (r *Resolver) Handler(withPlayground bool) *Handler {
-	srv := handler.New(NewExecutableSchema(
-		Config{
+	srv := handler.New(gqlgenerated.NewExecutableSchema(
+		gqlgenerated.Config{
 			Resolvers: r,
 		},
 	))

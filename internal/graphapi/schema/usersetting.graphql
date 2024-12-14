@@ -1,0 +1,84 @@
+extend type Query {
+    """
+    Look up userSetting by ID
+    """
+     userSetting(
+        """
+        ID of the userSetting
+        """
+        id: ID!
+    ):  UserSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new userSetting
+    """
+    createUserSetting(
+        """
+        values of the userSetting
+        """
+        input: CreateUserSettingInput!
+    ): UserSettingCreatePayload!
+    """
+    Create multiple new userSettings
+    """
+    createBulkUserSetting(
+        """
+        values of the userSetting
+        """
+        input: [CreateUserSettingInput!]
+    ): UserSettingBulkCreatePayload!
+    """
+    Create multiple new userSettings via file upload
+    """
+    createBulkCSVUserSetting(
+        """
+        csv file containing values of the userSetting
+        """
+        input: Upload!
+    ): UserSettingBulkCreatePayload!
+    """
+    Update an existing userSetting
+    """
+    updateUserSetting(
+        """
+        ID of the userSetting
+        """
+        id: ID!
+        """
+        New values for the userSetting
+        """
+        input: UpdateUserSettingInput!
+    ): UserSettingUpdatePayload!
+}
+
+"""
+Return response for createUserSetting mutation
+"""
+type UserSettingCreatePayload {
+    """
+    Created userSetting
+    """
+    userSetting: UserSetting!
+}
+
+"""
+Return response for updateUserSetting mutation
+"""
+type UserSettingUpdatePayload {
+    """
+    Updated userSetting
+    """
+    userSetting: UserSetting!
+}
+
+"""
+Return response for createBulkUserSetting mutation
+"""
+type UserSettingBulkCreatePayload {
+    """
+    Created userSettings
+    """
+    userSettings: [UserSetting!]
+}

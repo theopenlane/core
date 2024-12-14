@@ -1,0 +1,34 @@
+extend type Query {
+    """
+    Look up file by ID
+    """
+     file(
+        """
+        ID of the file
+        """
+        id: ID!
+    ):  File!
+}
+
+extend type Mutation{
+    """
+    Delete an existing file
+    """
+    deleteFile(
+        """
+        ID of the file
+        """
+        id: ID!
+    ): FileDeletePayload!
+}
+
+"""
+Return response for deleteFile mutation
+"""
+type FileDeletePayload {
+    """
+    Deleted file ID
+    """
+    deletedID: ID!
+}
+

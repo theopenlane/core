@@ -10,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/theopenlane/core/internal/graphapi"
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/objects"
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
@@ -108,8 +109,8 @@ func createAuthConfig(c *ent.Client) *auth.AuthOptions {
 // testGraphServer creates a new graphql server for testing the graph api
 func testGraphServer(t *testing.T, c *ent.Client, u *objects.Objects) *handler.Server {
 	srv := handler.New(
-		graphapi.NewExecutableSchema(
-			graphapi.Config{Resolvers: graphapi.NewResolver(c, u)},
+		gqlgenerated.NewExecutableSchema(
+			gqlgenerated.Config{Resolvers: graphapi.NewResolver(c, u)},
 		))
 
 	// add all the transports to the server

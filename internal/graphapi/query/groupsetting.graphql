@@ -1,0 +1,85 @@
+query GetAllGroupSettings {
+  groupSettings {
+    edges {
+      node {
+        id
+        joinPolicy
+        syncToGithub
+        syncToSlack
+        tags
+        visibility
+        group {
+          id
+          name
+        }
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetGroupSettingByID($groupSettingId: ID!) {
+  groupSetting(id: $groupSettingId) {
+    id
+    joinPolicy
+    syncToGithub
+    syncToSlack
+    tags
+    visibility
+    group {
+      id
+      name
+    }
+    createdAt
+    createdBy
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetGroupSettings($where: GroupSettingWhereInput!) {
+  groupSettings(where: $where) {
+    edges {
+      node {
+        id
+        joinPolicy
+        syncToGithub
+        syncToSlack
+        tags
+        visibility
+        group {
+          id
+          name
+        }
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateGroupSetting($updateGroupSettingId: ID!, $input: UpdateGroupSettingInput!) {
+  updateGroupSetting(id: $updateGroupSettingId, input: $input) {
+    groupSetting {
+      id
+      joinPolicy
+      syncToGithub
+      syncToSlack
+      tags
+      visibility
+      group {
+        id
+        name
+      }
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+    }
+  }
+}

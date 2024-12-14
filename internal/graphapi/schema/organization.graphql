@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up organization by ID
+    """
+     organization(
+        """
+        ID of the organization
+        """
+        id: ID!
+    ):  Organization!
+}
+
+extend type Mutation{
+    """
+    Create a new organization
+    """
+    createOrganization(
+        """
+        values of the organization
+        """
+        input: CreateOrganizationInput!
+    ): OrganizationCreatePayload!
+    """
+    Create multiple new organizations
+    """
+    createBulkOrganization(
+        """
+        values of the organization
+        """
+        input: [CreateOrganizationInput!]
+    ): OrganizationBulkCreatePayload!
+    """
+    Create multiple new organizations via file upload
+    """
+    createBulkCSVOrganization(
+        """
+        csv file containing values of the organization
+        """
+        input: Upload!
+    ): OrganizationBulkCreatePayload!
+    """
+    Update an existing organization
+    """
+    updateOrganization(
+        """
+        ID of the organization
+        """
+        id: ID!
+        """
+        New values for the organization
+        """
+        input: UpdateOrganizationInput!
+    ): OrganizationUpdatePayload!
+    """
+    Delete an existing organization
+    """
+    deleteOrganization(
+        """
+        ID of the organization
+        """
+        id: ID!
+    ): OrganizationDeletePayload!
+}
+
+"""
+Return response for createOrganization mutation
+"""
+type OrganizationCreatePayload {
+    """
+    Created organization
+    """
+    organization: Organization!
+}
+
+"""
+Return response for updateOrganization mutation
+"""
+type OrganizationUpdatePayload {
+    """
+    Updated organization
+    """
+    organization: Organization!
+}
+
+"""
+Return response for deleteOrganization mutation
+"""
+type OrganizationDeletePayload {
+    """
+    Deleted organization ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkOrganization mutation
+"""
+type OrganizationBulkCreatePayload {
+    """
+    Created organizations
+    """
+    organizations: [Organization!]
+}

@@ -10,27 +10,29 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	generated1 "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateActionPlan is the resolver for the createActionPlan field.
-func (r *mutationResolver) CreateActionPlan(ctx context.Context, input generated.CreateActionPlanInput) (*ActionPlanCreatePayload, error) {
+func (r *mutationResolver) CreateActionPlan(ctx context.Context, input generated.CreateActionPlanInput) (*model.ActionPlanCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ActionPlan.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "actionplan"})
 	}
 
-	return &ActionPlanCreatePayload{
+	return &model.ActionPlanCreatePayload{
 		ActionPlan: res,
 	}, nil
 }
 
 // CreateBulkActionPlan is the resolver for the createBulkActionPlan field.
-func (r *mutationResolver) CreateBulkActionPlan(ctx context.Context, input []*generated.CreateActionPlanInput) (*ActionPlanBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkActionPlan(ctx context.Context, input []*generated.CreateActionPlanInput) (*model.ActionPlanBulkCreatePayload, error) {
 	return r.bulkCreateActionPlan(ctx, input)
 }
 
 // CreateBulkCSVActionPlan is the resolver for the createBulkCSVActionPlan field.
-func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*ActionPlanBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*model.ActionPlanBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateActionPlanInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -42,7 +44,7 @@ func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input gr
 }
 
 // UpdateActionPlan is the resolver for the updateActionPlan field.
-func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput) (*ActionPlanUpdatePayload, error) {
+func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput) (*model.ActionPlanUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ActionPlan.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "actionplan"})
@@ -56,13 +58,13 @@ func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, inpu
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "actionplan"})
 	}
 
-	return &ActionPlanUpdatePayload{
+	return &model.ActionPlanUpdatePayload{
 		ActionPlan: res,
 	}, nil
 }
 
 // DeleteActionPlan is the resolver for the deleteActionPlan field.
-func (r *mutationResolver) DeleteActionPlan(ctx context.Context, id string) (*ActionPlanDeletePayload, error) {
+func (r *mutationResolver) DeleteActionPlan(ctx context.Context, id string) (*model.ActionPlanDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ActionPlan.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "actionplan"})
 	}
@@ -71,7 +73,7 @@ func (r *mutationResolver) DeleteActionPlan(ctx context.Context, id string) (*Ac
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &ActionPlanDeletePayload{
+	return &model.ActionPlanDeletePayload{
 		DeletedID: id,
 	}, nil
 }
@@ -86,7 +88,7 @@ func (r *queryResolver) ActionPlan(ctx context.Context, id string) (*generated.A
 	return res, nil
 }
 
-// Mutation returns MutationResolver implementation.
-func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+// Mutation returns generated1.MutationResolver implementation.
+func (r *Resolver) Mutation() generated1.MutationResolver { return &mutationResolver{r} }
 
 type mutationResolver struct{ *Resolver }

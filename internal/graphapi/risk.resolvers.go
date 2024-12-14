@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateRisk is the resolver for the createRisk field.
-func (r *mutationResolver) CreateRisk(ctx context.Context, input generated.CreateRiskInput) (*RiskCreatePayload, error) {
+func (r *mutationResolver) CreateRisk(ctx context.Context, input generated.CreateRiskInput) (*model.RiskCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateRisk(ctx context.Context, input generated.Creat
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "risk"})
 	}
 
-	return &RiskCreatePayload{
+	return &model.RiskCreatePayload{
 		Risk: res,
 	}, nil
 }
 
 // CreateBulkRisk is the resolver for the createBulkRisk field.
-func (r *mutationResolver) CreateBulkRisk(ctx context.Context, input []*generated.CreateRiskInput) (*RiskBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkRisk(ctx context.Context, input []*generated.CreateRiskInput) (*model.RiskBulkCreatePayload, error) {
 	return r.bulkCreateRisk(ctx, input)
 }
 
 // CreateBulkCSVRisk is the resolver for the createBulkCSVRisk field.
-func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.Upload) (*RiskBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.Upload) (*model.RiskBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateRiskInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.
 }
 
 // UpdateRisk is the resolver for the updateRisk field.
-func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input generated.UpdateRiskInput) (*RiskUpdatePayload, error) {
+func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input generated.UpdateRiskInput) (*model.RiskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Risk.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
@@ -71,13 +72,13 @@ func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input gene
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
 	}
 
-	return &RiskUpdatePayload{
+	return &model.RiskUpdatePayload{
 		Risk: res,
 	}, nil
 }
 
 // DeleteRisk is the resolver for the deleteRisk field.
-func (r *mutationResolver) DeleteRisk(ctx context.Context, id string) (*RiskDeletePayload, error) {
+func (r *mutationResolver) DeleteRisk(ctx context.Context, id string) (*model.RiskDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Risk.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "risk"})
 	}
@@ -86,7 +87,7 @@ func (r *mutationResolver) DeleteRisk(ctx context.Context, id string) (*RiskDele
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &RiskDeletePayload{
+	return &model.RiskDeletePayload{
 		DeletedID: id,
 	}, nil
 }

@@ -25,7 +25,7 @@ dbschema:
       - any-glob-to-any-file: internal/ent/schema/*
 graphqlschema:
   - changed-files:
-      - any-glob-to-any-file: schema/**
+      - any-glob-to-any-file: internal/graphapi/schema/**
 migrations:
   - changed-files:
       - any-glob-to-any-file: db/**
@@ -46,18 +46,23 @@ httpserve:
 graphapi:
   - changed-files:
       - any-glob-to-any-file: internal/graphapi/**
+      - any-glob-to-any-file: internal/graphapi/query/**
+      - any-glob-to-any-file: internal/graphapi/schema/**
+      - any-glob-to-any-file: internal/graphapi/generated/**
+      - any-glob-to-any-file: internal/graphapi/model/**
+      - any-glob-to-any-file: internal/graphapi/clientschema/**
 codegenerators:
   - changed-files:
-      - any-glob-to-any-file: gen_schema.go
-      - any-glob-to-any-file: generate.go
-      - any-glob-to-any-file: gqlgen.yml
-      - any-glob-to-any-file: gqlgenc.yml
-      - any-glob-to-any-file: internal/ent/entc.go
+      - any-glob-to-any-file: internal/graphapi/generate/gen_schema.go
+      - any-glob-to-any-file: internal/graphapi/generate/generate.go
+      - any-glob-to-any-file: internal/graphapi/generate/.gqlgen.yml
+      - any-glob-to-any-file: internal/graphapi/generate/.gqlgenc.yml
+      - any-glob-to-any-file: internal/ent/generate/entc.go
       - any-glob-to-any-file: internal/ent/templates/**
 coreclient:
   - changed-files:
-      - any-glob-to-any-file: internal/coreclient/**
-      - any-glob-to-any-file: query/**
+      - any-glob-to-any-file: pkg/openalneclient/**
+      - any-glob-to-any-file: nternal/graphapi/query/**
 config:
   - changed-files:
       - any-glob-to-any-file: config/**

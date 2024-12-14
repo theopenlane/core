@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up subcontrol by ID
+    """
+     subcontrol(
+        """
+        ID of the subcontrol
+        """
+        id: ID!
+    ):  Subcontrol!
+}
+
+extend type Mutation{
+    """
+    Create a new subcontrol
+    """
+    createSubcontrol(
+        """
+        values of the subcontrol
+        """
+        input: CreateSubcontrolInput!
+    ): SubcontrolCreatePayload!
+    """
+    Create multiple new subcontrols
+    """
+    createBulkSubcontrol(
+        """
+        values of the subcontrol
+        """
+        input: [CreateSubcontrolInput!]
+    ): SubcontrolBulkCreatePayload!
+    """
+    Create multiple new subcontrols via file upload
+    """
+    createBulkCSVSubcontrol(
+        """
+        csv file containing values of the subcontrol
+        """
+        input: Upload!
+    ): SubcontrolBulkCreatePayload!
+    """
+    Update an existing subcontrol
+    """
+    updateSubcontrol(
+        """
+        ID of the subcontrol
+        """
+        id: ID!
+        """
+        New values for the subcontrol
+        """
+        input: UpdateSubcontrolInput!
+    ): SubcontrolUpdatePayload!
+    """
+    Delete an existing subcontrol
+    """
+    deleteSubcontrol(
+        """
+        ID of the subcontrol
+        """
+        id: ID!
+    ): SubcontrolDeletePayload!
+}
+
+"""
+Return response for createSubcontrol mutation
+"""
+type SubcontrolCreatePayload {
+    """
+    Created subcontrol
+    """
+    subcontrol: Subcontrol!
+}
+
+"""
+Return response for updateSubcontrol mutation
+"""
+type SubcontrolUpdatePayload {
+    """
+    Updated subcontrol
+    """
+    subcontrol: Subcontrol!
+}
+
+"""
+Return response for deleteSubcontrol mutation
+"""
+type SubcontrolDeletePayload {
+    """
+    Deleted subcontrol ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkSubcontrol mutation
+"""
+type SubcontrolBulkCreatePayload {
+    """
+    Created subcontrols
+    """
+    subcontrols: [Subcontrol!]
+}

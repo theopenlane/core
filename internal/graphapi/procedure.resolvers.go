@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProcedure is the resolver for the createProcedure field.
-func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*ProcedureCreatePayload, error) {
+func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -26,18 +27,18 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "procedure"})
 	}
 
-	return &ProcedureCreatePayload{
+	return &model.ProcedureCreatePayload{
 		Procedure: res,
 	}, nil
 }
 
 // CreateBulkProcedure is the resolver for the createBulkProcedure field.
-func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*ProcedureBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error) {
 	return r.bulkCreateProcedure(ctx, input)
 }
 
 // CreateBulkCSVProcedure is the resolver for the createBulkCSVProcedure field.
-func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*ProcedureBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateProcedureInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -49,7 +50,7 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 }
 
 // UpdateProcedure is the resolver for the updateProcedure field.
-func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput) (*ProcedureUpdatePayload, error) {
+func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput) (*model.ProcedureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Procedure.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
@@ -69,13 +70,13 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
 	}
 
-	return &ProcedureUpdatePayload{
+	return &model.ProcedureUpdatePayload{
 		Procedure: res,
 	}, nil
 }
 
 // DeleteProcedure is the resolver for the deleteProcedure field.
-func (r *mutationResolver) DeleteProcedure(ctx context.Context, id string) (*ProcedureDeletePayload, error) {
+func (r *mutationResolver) DeleteProcedure(ctx context.Context, id string) (*model.ProcedureDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Procedure.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "procedure"})
 	}
@@ -84,7 +85,7 @@ func (r *mutationResolver) DeleteProcedure(ctx context.Context, id string) (*Pro
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &ProcedureDeletePayload{
+	return &model.ProcedureDeletePayload{
 		DeletedID: id,
 	}, nil
 }

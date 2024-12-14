@@ -1,0 +1,272 @@
+extend type Query{
+    """
+    Search across APIToken objects
+    """
+    adminAPITokenSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): APITokenSearchResult
+    """
+    Search across ActionPlan objects
+    """
+    adminActionPlanSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ActionPlanSearchResult
+    """
+    Search across Contact objects
+    """
+    adminContactSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ContactSearchResult
+    """
+    Search across Control objects
+    """
+    adminControlSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlSearchResult
+    """
+    Search across ControlObjective objects
+    """
+    adminControlObjectiveSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlObjectiveSearchResult
+    """
+    Search across DocumentData objects
+    """
+    adminDocumentDataSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): DocumentDataSearchResult
+    """
+    Search across Entity objects
+    """
+    adminEntitySearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitySearchResult
+    """
+    Search across EntityType objects
+    """
+    adminEntityTypeSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntityTypeSearchResult
+    """
+    Search across Event objects
+    """
+    adminEventSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EventSearchResult
+    """
+    Search across File objects
+    """
+    adminFileSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): FileSearchResult
+    """
+    Search across Group objects
+    """
+    adminGroupSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): GroupSearchResult
+    """
+    Search across GroupSetting objects
+    """
+    adminGroupSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): GroupSettingSearchResult
+    """
+    Search across Integration objects
+    """
+    adminIntegrationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): IntegrationSearchResult
+    """
+    Search across InternalPolicy objects
+    """
+    adminInternalPolicySearch(
+        """
+        Search query
+        """
+        query: String!
+    ): InternalPolicySearchResult
+    """
+    Search across Narrative objects
+    """
+    adminNarrativeSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): NarrativeSearchResult
+    """
+    Search across OrgSubscription objects
+    """
+    adminOrgSubscriptionSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrgSubscriptionSearchResult
+    """
+    Search across Organization objects
+    """
+    adminOrganizationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrganizationSearchResult
+    """
+    Search across OrganizationSetting objects
+    """
+    adminOrganizationSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrganizationSettingSearchResult
+    """
+    Search across PersonalAccessToken objects
+    """
+    adminPersonalAccessTokenSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): PersonalAccessTokenSearchResult
+    """
+    Search across Procedure objects
+    """
+    adminProcedureSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ProcedureSearchResult
+    """
+    Search across Program objects
+    """
+    adminProgramSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ProgramSearchResult
+    """
+    Search across Risk objects
+    """
+    adminRiskSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): RiskSearchResult
+    """
+    Search across Standard objects
+    """
+    adminStandardSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): StandardSearchResult
+    """
+    Search across Subcontrol objects
+    """
+    adminSubcontrolSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): SubcontrolSearchResult
+    """
+    Search across Subscriber objects
+    """
+    adminSubscriberSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): SubscriberSearchResult
+    """
+    Search across TFASetting objects
+    """
+    adminTFASettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TFASettingSearchResult
+    """
+    Search across Task objects
+    """
+    adminTaskSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TaskSearchResult
+    """
+    Search across Template objects
+    """
+    adminTemplateSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TemplateSearchResult
+    """
+    Search across User objects
+    """
+    adminUserSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): UserSearchResult
+    """
+    Search across UserSetting objects
+    """
+    adminUserSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): UserSettingSearchResult
+}

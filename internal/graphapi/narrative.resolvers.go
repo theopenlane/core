@@ -10,11 +10,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateNarrative is the resolver for the createNarrative field.
-func (r *mutationResolver) CreateNarrative(ctx context.Context, input generated.CreateNarrativeInput) (*NarrativeCreatePayload, error) {
+func (r *mutationResolver) CreateNarrative(ctx context.Context, input generated.CreateNarrativeInput) (*model.NarrativeCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -27,18 +28,18 @@ func (r *mutationResolver) CreateNarrative(ctx context.Context, input generated.
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "narrative"})
 	}
 
-	return &NarrativeCreatePayload{
+	return &model.NarrativeCreatePayload{
 		Narrative: res,
 	}, nil
 }
 
 // CreateBulkNarrative is the resolver for the createBulkNarrative field.
-func (r *mutationResolver) CreateBulkNarrative(ctx context.Context, input []*generated.CreateNarrativeInput) (*NarrativeBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkNarrative(ctx context.Context, input []*generated.CreateNarrativeInput) (*model.NarrativeBulkCreatePayload, error) {
 	return r.bulkCreateNarrative(ctx, input)
 }
 
 // CreateBulkCSVNarrative is the resolver for the createBulkCSVNarrative field.
-func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*NarrativeBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateNarrativeInput](input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -50,7 +51,7 @@ func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input gra
 }
 
 // UpdateNarrative is the resolver for the updateNarrative field.
-func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input generated.UpdateNarrativeInput) (*NarrativeUpdatePayload, error) {
+func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input generated.UpdateNarrativeInput) (*model.NarrativeUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Narrative.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "narrative"})
@@ -71,13 +72,13 @@ func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "narrative"})
 	}
 
-	return &NarrativeUpdatePayload{
+	return &model.NarrativeUpdatePayload{
 		Narrative: res,
 	}, nil
 }
 
 // DeleteNarrative is the resolver for the deleteNarrative field.
-func (r *mutationResolver) DeleteNarrative(ctx context.Context, id string) (*NarrativeDeletePayload, error) {
+func (r *mutationResolver) DeleteNarrative(ctx context.Context, id string) (*model.NarrativeDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Narrative.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "narrative"})
 	}
@@ -86,7 +87,7 @@ func (r *mutationResolver) DeleteNarrative(ctx context.Context, id string) (*Nar
 		return nil, newCascadeDeleteError(err)
 	}
 
-	return &NarrativeDeletePayload{
+	return &model.NarrativeDeletePayload{
 		DeletedID: id,
 	}, nil
 }
