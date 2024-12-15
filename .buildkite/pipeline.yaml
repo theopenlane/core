@@ -5,6 +5,10 @@ env:
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
   GOFLAGS: -buildvcs=false
+  LARGE_RUNNER_QUEUE: self-hosted-garage-vms
+  SMALL_RUNNER_QUEUE: self-hosted-garage-vms
+  RUNNER_LARGE: "large"
+  RUNNER_SMALL: "small"
 
 steps:
   - group: ":knife: Pre-check"
@@ -13,7 +17,8 @@ steps:
       - label: ":golang: go generate"
         key: "generate"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
         cancel_on_build_failing: true
         plugins:
           - docker#v5.12.0:
@@ -38,7 +43,8 @@ steps:
       - label: ":golangci-lint: lint :lint-roller:"
         if: build.branch !~ /^renovate\//
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
         cancel_on_build_failing: true
         timeout_in_minutes: 20
         key: "lint"
@@ -52,7 +58,8 @@ steps:
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
         key: "go_test"
         cancel_on_build_failing: true
         env:
@@ -77,7 +84,8 @@ steps:
       - label: ":auth0: fga model test"
         if: build.branch !~ /^renovate\//
         agents:
-          queue: "hosted-small"
+          queue: $SMALL_RUNNER_QUEUE
+          size: $RUNNER_SMALL
         key: "fga_test"
         plugins:
           - docker#v5.12.0:
@@ -131,7 +139,8 @@ steps:
         cancel_on_build_failing: true
         artifact_paths: "bin/${APP_NAME}"
         agents:
-          queue: "hosted-medium"
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
         plugins:
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -143,7 +152,8 @@ steps:
       - label: ":terminal: build cli"
         key: "gobuild-cli"
         agents:
-          queue: "hosted-small"
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
@@ -191,7 +201,8 @@ steps:
       - label: ":docker: docker pr build"
         key: "docker-pr-build"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         commands: |
@@ -264,7 +275,8 @@ steps:
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
         if: build.branch == "main"
         cancel_on_build_failing: true
         commands: |
@@ -321,7 +333,8 @@ steps:
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio-and-tag"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
         cancel_on_build_failing: true
         if: build.tag != null
         commands: |
