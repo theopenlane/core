@@ -5,6 +5,8 @@ env:
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
   GOFLAGS: -buildvcs=false
+  LARGE_RUNNER: self-hosted-garage-vms
+  RUNNER_SIZE: "large"
 
 steps:
   - group: ":knife: Pre-check"
@@ -13,7 +15,8 @@ steps:
       - label: ":golang: go generate"
         key: "generate"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER
+          size: $RUNNER_SIZE
         cancel_on_build_failing: true
         plugins:
           - docker#v5.12.0:
@@ -38,7 +41,8 @@ steps:
       - label: ":golangci-lint: lint :lint-roller:"
         if: build.branch !~ /^renovate\//
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER
+          size: $RUNNER_SIZE
         cancel_on_build_failing: true
         timeout_in_minutes: 20
         key: "lint"
@@ -52,7 +56,8 @@ steps:
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER
+          size: $RUNNER_SIZE
         key: "go_test"
         cancel_on_build_failing: true
         env:
@@ -191,7 +196,8 @@ steps:
       - label: ":docker: docker pr build"
         key: "docker-pr-build"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER
+          size: $RUNNER_SIZE
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         commands: |
@@ -264,7 +270,8 @@ steps:
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER
+          size: $RUNNER_SIZE
         if: build.branch == "main"
         cancel_on_build_failing: true
         commands: |
@@ -321,7 +328,8 @@ steps:
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio-and-tag"
         agents:
-          queue: "hosted-large"
+          queue: $LARGE_RUNNER
+          size: $RUNNER_SIZE
         cancel_on_build_failing: true
         if: build.tag != null
         commands: |
