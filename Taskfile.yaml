@@ -41,14 +41,24 @@ tasks:
     cmds:
       - task --list
 
-  generate:ci:
+  generate:no-cache:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
     cmds:
       - go generate ./...
       - task: tidy
 
-  generate:
+  generate:fast:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
+    aliases: [generate]
+    cmds:
+      - go-generate-fast ./...
+      - task: tidy
+
+  generate:fast:recache:
+    desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
+    aliases: ['generate:recache']
+    env:
+      GO_GENERATE_FAST_RECACHE: "true"
     cmds:
       - go-generate-fast ./...
       - task: tidy
@@ -167,7 +177,7 @@ tasks:
   ci:
     desc: a task that runs during CI
     cmds:
-      - task: generate:ci
+      - task: generate
       - task: tidy
       - "git config --global --add safe.directory /workdir"
       - |
