@@ -2,8 +2,10 @@ package graphapi_test
 
 import (
 	"context"
+	"os"
 	"testing"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -342,6 +344,29 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			(&OrganizationCleanup{client: suite.client, ID: resp.CreateOrganization.Organization.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
+}
+
+func (suite *GraphTestSuite) TestMutationBulkCSVUploadOrganization() {
+	t := suite.T()
+
+	fileName := "testdata/uploads/orgs.csv"
+
+	input, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	require.NoError(t, err)
+
+	file := graphql.Upload{
+		File:        input,
+		Filename:    fileName,
+		ContentType: "text/csv",
+	}
+
+	resp, err := suite.client.api.CreateBulkCSVOrganization(testUser1.UserCtx, file)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	// make sure the orgs were created
+	assert.Len(t, resp.CreateBulkCSVOrganization.Organizations, 2)
 }
 
 func (suite *GraphTestSuite) TestMutationUpdateOrganization() {

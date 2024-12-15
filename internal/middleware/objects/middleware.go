@@ -2,8 +2,8 @@ package objects
 
 import (
 	"context"
-	"errors"
 	"path/filepath"
+	"slices"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -14,13 +14,19 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 )
 
+var (
+	// keys that should be skipped when uploading files
+	// these keys are used for bulk uploads
+	skipKeys = []string{"input"}
+)
+
 // Upload handles the file Upload process per key in the multipart form and returns the uploaded files
 // in addition to uploading the files to the storage, it also creates the file in the database
 func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload) ([]objects.File, error) {
 	uploadedFiles := make([]objects.File, 0, len(files))
 
 	for _, f := range files {
-		if f.Key == "input" {
+		if slices.Contains(skipKeys, f.Key) {
 			// skip the input key
 			log.Debug().Str("file", f.Filename).Msg("skipping input key, this is for bulk upload")
 			continue
@@ -132,12 +138,6 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		log.Error().Err(err).Str("file", f.Filename).Msg("failed to read file contents")
 
 		return nil, err
-	}
-
-	if len(contents) == 0 {
-		log.Error().Str("file", f.Filename).Msg("file is empty")
-
-		return nil, errors.New("file is empty")
 	}
 
 	entFile, err := txClientFromContext(ctx).Create().
