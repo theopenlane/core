@@ -2,6 +2,7 @@ package objects
 
 import (
 	"context"
+	"errors"
 	"path/filepath"
 	"time"
 
@@ -19,6 +20,12 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 	uploadedFiles := make([]objects.File, 0, len(files))
 
 	for _, f := range files {
+		if f.Key == "input" {
+			// skip the input key
+			log.Debug().Str("file", f.Filename).Msg("skipping input key, this is for bulk upload")
+			continue
+		}
+
 		// create the file in the database
 		entFile, err := createFile(ctx, u, f)
 		if err != nil {
@@ -125,6 +132,12 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		log.Error().Err(err).Str("file", f.Filename).Msg("failed to read file contents")
 
 		return nil, err
+	}
+
+	if len(contents) == 0 {
+		log.Error().Str("file", f.Filename).Msg("file is empty")
+
+		return nil, errors.New("file is empty")
 	}
 
 	entFile, err := txClientFromContext(ctx).Create().

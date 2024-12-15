@@ -61,8 +61,8 @@ codegenerators:
       - any-glob-to-any-file: internal/ent/templates/**
 coreclient:
   - changed-files:
-      - any-glob-to-any-file: pkg/openalneclient/**
-      - any-glob-to-any-file: nternal/graphapi/query/**
+      - any-glob-to-any-file: pkg/openlaneclient/**
+      - any-glob-to-any-file: internal/graphapi/query/**
 config:
   - changed-files:
       - any-glob-to-any-file: config/**
