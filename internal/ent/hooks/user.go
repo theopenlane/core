@@ -59,7 +59,7 @@ func HookUser() ent.Hook {
 				if m.Op().Is(ent.OpCreate) {
 					displayName, _ := m.DisplayName()
 					if displayName == "" {
-						displayName := strings.Split(email, "@")[0]
+						displayName = strings.Split(email, "@")[0]
 
 						m.SetDisplayName(displayName)
 					}
