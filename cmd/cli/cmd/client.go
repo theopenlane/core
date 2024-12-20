@@ -9,7 +9,6 @@ import (
 
 	"github.com/99designs/keyring"
 	"github.com/knadh/koanf/v2"
-	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/iam/tokens"
@@ -25,6 +24,8 @@ const (
 	sessionKey      = "open_lane_session"
 )
 
+// TokenAuth uses the token or personal access token to authenticate the client
+// if the token is not provided, it will fall back to JWT and session auth
 func TokenAuth(ctx context.Context, k *koanf.Koanf) (*openlaneclient.OpenlaneClient, error) {
 	token := k.String("token")
 	if token == "" {
@@ -35,7 +36,6 @@ func TokenAuth(ctx context.Context, k *koanf.Koanf) (*openlaneclient.OpenlaneCli
 		return nil, fmt.Errorf("no token provided, will fall back to JWT and session auth")
 	}
 
-	log.Debug().Msg("setting up client with token")
 	config, opts, err := configureDefaultOpts()
 	if err != nil {
 		return nil, err

@@ -69,8 +69,8 @@ func init() {
 	RootCmd.PersistentFlags().String("host", defaultRootHost, "api host url")
 
 	// Token flags
-	RootCmd.PersistentFlags().String("token", "", "api token")
-	RootCmd.PersistentFlags().String("path", "", "personal access token")
+	RootCmd.PersistentFlags().String("token", "", "api token used for authentication, takes precedence over other auth methods")
+	RootCmd.PersistentFlags().String("pat", "", "personal access token used for authentication")
 
 	// Logging flags
 	RootCmd.PersistentFlags().Bool("debug", false, "enable debug logging")
