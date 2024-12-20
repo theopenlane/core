@@ -29,7 +29,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	}
 
 	errorResponse := &openapi3.SchemaRef{
-		Ref: "#/components/schemas/ErrorResponse",
+		Ref: "#/components/schemas/ErrorReply",
 	}
 
 	_, err := openapi3gen.NewSchemaRefForValue(&rout.StatusError{}, schemas)
@@ -71,7 +71,6 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		Value: openapi3.NewSecurityScheme().
 			WithType("http").
 			WithScheme("bearer").
-			WithIn("header").
 			WithDescription("Bearer authentication, the token must be a valid API token"),
 	}
 
@@ -90,19 +89,6 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	securityschemes["openid"] = &openapi3.SecuritySchemeRef{
 		Value: (*OpenID)(&OpenID{
 			ConnectURL: "https://api.theopenlane.io/.well-known/openid-configuration",
-		}).Scheme(),
-	}
-
-	securityschemes["apikey"] = &openapi3.SecuritySchemeRef{
-		Value: (*APIKey)(&APIKey{
-			Name: "X-API-Key",
-		}).Scheme(),
-	}
-
-	securityschemes["basic"] = &openapi3.SecuritySchemeRef{
-		Value: (*Basic)(&Basic{
-			Username: "username",
-			Password: "password",
 		}).Scheme(),
 	}
 
