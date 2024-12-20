@@ -81,10 +81,14 @@ func createValidation() (input openlaneclient.CreateRiskInput, err error) {
 
 // create a new risk
 func create(ctx context.Context) error {
-	// setup http client
-	client, err := cmd.SetupClientWithAuth(ctx)
-	cobra.CheckErr(err)
-	defer cmd.StoreSessionCookies(client)
+	// attempt to setup with token, otherwise fall back to JWT with session
+	client, err := cmd.TokenAuth(ctx, cmd.Config)
+	if err != nil || client == nil {
+		// setup http client
+		client, err = cmd.SetupClientWithAuth(ctx)
+		cobra.CheckErr(err)
+		defer cmd.StoreSessionCookies(client)
+	}
 
 	input, err := createValidation()
 	cobra.CheckErr(err)

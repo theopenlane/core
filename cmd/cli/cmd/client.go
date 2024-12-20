@@ -8,6 +8,8 @@ import (
 	"path"
 
 	"github.com/99designs/keyring"
+	"github.com/knadh/koanf/v2"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/iam/tokens"
@@ -22,6 +24,29 @@ const (
 	refreshTokenKey = "open_lane_refresh_token" // nolint:gosec
 	sessionKey      = "open_lane_session"
 )
+
+func TokenAuth(ctx context.Context, k *koanf.Koanf) (*openlaneclient.OpenlaneClient, error) {
+	token := k.String("token")
+	if token == "" {
+		token = k.String("pat")
+	}
+
+	if token == "" {
+		return nil, fmt.Errorf("no token provided, will fall back to JWT and session auth")
+	}
+
+	log.Debug().Msg("setting up client with token")
+	config, opts, err := configureDefaultOpts()
+	if err != nil {
+		return nil, err
+	}
+
+	opts = append(opts, openlaneclient.WithCredentials(openlaneclient.Authorization{
+		BearerToken: token,
+	}))
+
+	return openlaneclient.New(config, opts...)
+}
 
 // SetupClientWithAuth will setup the openlane client with the the bearer token passed in the Authorization header
 // and the session cookie passed in the Cookie header. If the token is expired, it will be refreshed.

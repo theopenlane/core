@@ -82,10 +82,13 @@ func createValidation() (input openlaneclient.CreateUserInput, avatarFile *graph
 
 // create a new user
 func create(ctx context.Context) error {
-	// setup http client
-	client, err := cmd.SetupClientWithAuth(ctx)
-	cobra.CheckErr(err)
-	defer cmd.StoreSessionCookies(client)
+	client, err := cmd.TokenAuth(ctx, cmd.Config)
+	if err != nil || client == nil {
+		// setup http client
+		client, err := cmd.SetupClientWithAuth(ctx)
+		cobra.CheckErr(err)
+		defer cmd.StoreSessionCookies(client)
+	}
 
 	input, avatarFile, err := createValidation()
 	cobra.CheckErr(err)

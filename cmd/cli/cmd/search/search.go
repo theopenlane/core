@@ -43,10 +43,14 @@ func validate() (string, error) {
 
 // search searches for organizations, groups, users, subscribers, etc in the system
 func search(ctx context.Context) error { // setup http client
-	// setup http client
-	client, err := cmd.SetupClientWithAuth(ctx)
-	cobra.CheckErr(err)
-	defer cmd.StoreSessionCookies(client)
+	// attempt to setup with token, otherwise fall back to JWT with session
+	client, err := cmd.TokenAuth(ctx, cmd.Config)
+	if err != nil || client == nil {
+		// setup http client
+		client, err = cmd.SetupClientWithAuth(ctx)
+		cobra.CheckErr(err)
+		defer cmd.StoreSessionCookies(client)
+	}
 
 	// filter options
 	query, err := validate()
