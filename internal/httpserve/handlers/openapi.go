@@ -58,6 +58,24 @@ func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Ope
 	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
 }
 
+// AddQueryParameter is used to add a query parameter definition to the OpenAPI schema (e.g ?name=value)
+func (h *Handler) AddQueryParameter(name string, paramName string, body interface{}, op *openapi3.Operation) {
+	schemaRef := &openapi3.SchemaRef{Ref: "#/components/schemas/" + name}
+	param := openapi3.NewQueryParameter(paramName)
+
+	param.Schema = schemaRef
+	op.AddParameter(param)
+}
+
+// AddPathParameter is used to add a path parameter definition to the OpenAPI schema (e.g. /users/{id})
+func (h *Handler) AddPathParameter(name string, paramName string, body interface{}, op *openapi3.Operation) {
+	schemaRef := &openapi3.SchemaRef{Ref: "#/components/schemas/" + name}
+	param := openapi3.NewPathParameter(paramName)
+
+	param.Schema = schemaRef
+	op.AddParameter(param)
+}
+
 // AddResponse is used to add a response definition to the OpenAPI schema
 func (h *Handler) AddResponse(name string, description string, body interface{}, op *openapi3.Operation, status int) {
 	response := openapi3.NewResponse().

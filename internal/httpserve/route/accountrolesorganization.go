@@ -30,9 +30,12 @@ func registerAccountRolesOrganizationHandler(router *Router) (err error) {
 	}
 
 	// add an additional route with the path param
-	route.Path = "/account/roles/organization/:id"
+	route.Path = "/account/roles/organization/:{id}"
+	route.Name = name + "ByID"
 
-	if err := router.Addv1Route(route.Path, route.Method, rolesOrganizationOperation, route); err != nil {
+	rolesOrganizationOperationByID := router.Handler.BindAccountRolesOrganizationByID()
+
+	if err := router.Addv1Route(route.Path, route.Method, rolesOrganizationOperationByID, route); err != nil {
 		return err
 	}
 
