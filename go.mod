@@ -72,7 +72,7 @@ require (
 	github.com/theopenlane/newman v0.1.2
 	github.com/theopenlane/riverboat v0.0.7
 	github.com/theopenlane/utils v0.4.2
-	github.com/vektah/gqlparser/v2 v2.5.20
+	github.com/vektah/gqlparser/v2 v2.5.21
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.40.0
