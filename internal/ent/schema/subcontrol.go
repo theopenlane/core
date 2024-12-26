@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -26,7 +27,8 @@ func (Subcontrol) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			NotEmpty().
-			Comment("the name of the subcontrol"),
+			Comment("the name of the subcontrol").
+			Annotations(entx.FieldSearchable()),
 		field.Text("description").
 			Optional().
 			Comment("description of the subcontrol"),
@@ -35,7 +37,8 @@ func (Subcontrol) Fields() []ent.Field {
 			Comment("status of the subcontrol"),
 		field.String("subcontrol_type").
 			Optional().
-			Comment("type of the subcontrol"),
+			Comment("type of the subcontrol").
+			Annotations(entx.FieldSearchable()),
 		field.String("version").
 			Optional().
 			Comment("version of the control"),
@@ -44,7 +47,8 @@ func (Subcontrol) Fields() []ent.Field {
 			Comment("number of the subcontrol"),
 		field.Text("family").
 			Optional().
-			Comment("subcontrol family"),
+			Comment("subcontrol family").
+			Annotations(entx.FieldSearchable()),
 		field.String("class").
 			Optional().
 			Comment("subcontrol class"),

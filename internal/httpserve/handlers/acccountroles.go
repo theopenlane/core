@@ -76,6 +76,7 @@ func (h *Handler) AccountRolesHandler(ctx echo.Context) error {
 func (h *Handler) BindAccountRoles() *openapi3.Operation {
 	roles := openapi3.NewOperation()
 	roles.Description = "List roles a subject has in relation to an object"
+	roles.Tags = []string{"account"}
 	roles.OperationID = "AccountRoles"
 	roles.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{

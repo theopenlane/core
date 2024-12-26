@@ -97,6 +97,7 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 func (h *Handler) BindForgotPassword() *openapi3.Operation {
 	forgotPassword := openapi3.NewOperation()
 	forgotPassword.Description = "ForgotPassword is a service for users to request a password reset email. The email address must be provided in the POST request and the user must exist in the database. This endpoint always returns 200 regardless of whether the user exists or not to avoid leaking information about users in the database"
+	forgotPassword.Tags = []string{"authentication"}
 	forgotPassword.OperationID = "ForgotPassword"
 	forgotPassword.Security = &openapi3.SecurityRequirements{}
 

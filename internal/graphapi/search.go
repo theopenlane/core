@@ -760,10 +760,11 @@ func adminSearchProcedures(ctx context.Context, query string) ([]*generated.Proc
 func searchPrograms(ctx context.Context, query string) ([]*generated.Program, error) {
 	return withTransactionalMutation(ctx).Program.Query().Where(
 		program.Or(
-			program.IDContainsFold(query), // search by ID
+			program.IDContainsFold(query),   // search by ID
+			program.NameContainsFold(query), // search by Name
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
 		),
 	).All(ctx)
@@ -829,10 +830,11 @@ func adminSearchRisks(ctx context.Context, query string) ([]*generated.Risk, err
 func searchStandards(ctx context.Context, query string) ([]*generated.Standard, error) {
 	return withTransactionalMutation(ctx).Standard.Query().Where(
 		standard.Or(
-			standard.IDContainsFold(query), // search by ID
+			standard.IDContainsFold(query),   // search by ID
+			standard.NameContainsFold(query), // search by Name
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
 		),
 	).All(ctx)
@@ -869,10 +871,13 @@ func adminSearchStandards(ctx context.Context, query string) ([]*generated.Stand
 func searchSubcontrols(ctx context.Context, query string) ([]*generated.Subcontrol, error) {
 	return withTransactionalMutation(ctx).Subcontrol.Query().Where(
 		subcontrol.Or(
-			subcontrol.IDContainsFold(query), // search by ID
+			subcontrol.FamilyContainsFold(query),         // search by Family
+			subcontrol.IDContainsFold(query),             // search by ID
+			subcontrol.NameContainsFold(query),           // search by Name
+			subcontrol.SubcontrolTypeContainsFold(query), // search by SubcontrolType
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 			},
 		),
 	).All(ctx)

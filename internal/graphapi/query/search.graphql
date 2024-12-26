@@ -132,6 +132,7 @@ query GlobalSearch($query: String!) {
       ... on ProgramSearchResult {
         programs {
           id
+          name
           tags
         }
       }
@@ -144,12 +145,16 @@ query GlobalSearch($query: String!) {
       ... on StandardSearchResult {
         standards {
           id
+          name
           tags
         }
       }
       ... on SubcontrolSearchResult {
         subcontrols {
+          family
           id
+          name
+          subcontrolType
           tags
         }
       }

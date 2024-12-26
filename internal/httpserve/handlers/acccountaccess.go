@@ -59,6 +59,7 @@ func (h *Handler) AccountAccessHandler(ctx echo.Context) error {
 func (h *Handler) BindAccountAccess() *openapi3.Operation {
 	checkAccess := openapi3.NewOperation()
 	checkAccess.Description = "Check Subject Access to Object"
+	checkAccess.Tags = []string{"account"}
 	checkAccess.OperationID = "AccountAccess"
 	checkAccess.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{

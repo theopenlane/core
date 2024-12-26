@@ -36209,6 +36209,7 @@ func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult) GetProcedures() []*Glo
 
 type GlobalSearch_Search_Nodes_ProgramSearchResult_Programs struct {
 	ID   string   "json:\"id\" graphql:\"id\""
+	Name string   "json:\"name\" graphql:\"name\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -36217,6 +36218,12 @@ func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetID() string 
 		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
 	}
 	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.Name
 }
 func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetTags() []string {
 	if t == nil {
@@ -36267,6 +36274,7 @@ func (t *GlobalSearch_Search_Nodes_RiskSearchResult) GetRisks() []*GlobalSearch_
 
 type GlobalSearch_Search_Nodes_StandardSearchResult_Standards struct {
 	ID   string   "json:\"id\" graphql:\"id\""
+	Name string   "json:\"name\" graphql:\"name\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -36275,6 +36283,12 @@ func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetID() strin
 		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
 	}
 	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_StandardSearchResult_Standards{}
+	}
+	return t.Name
 }
 func (t *GlobalSearch_Search_Nodes_StandardSearchResult_Standards) GetTags() []string {
 	if t == nil {
@@ -36295,15 +36309,36 @@ func (t *GlobalSearch_Search_Nodes_StandardSearchResult) GetStandards() []*Globa
 }
 
 type GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Family         *string  "json:\"family,omitempty\" graphql:\"family\""
+	ID             string   "json:\"id\" graphql:\"id\""
+	Name           string   "json:\"name\" graphql:\"name\""
+	SubcontrolType *string  "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
+	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetFamily() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+	}
+	return t.Family
+}
 func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetID() string {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
 	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+	}
+	return t.Name
+}
+func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetSubcontrolType() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols{}
+	}
+	return t.SubcontrolType
 }
 func (t *GlobalSearch_Search_Nodes_SubcontrolSearchResult_Subcontrols) GetTags() []string {
 	if t == nil {
@@ -59525,6 +59560,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on ProgramSearchResult {
 				programs {
 					id
+					name
 					tags
 				}
 			}
@@ -59537,12 +59573,16 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			... on StandardSearchResult {
 				standards {
 					id
+					name
 					tags
 				}
 			}
 			... on SubcontrolSearchResult {
 				subcontrols {
+					family
 					id
+					name
+					subcontrolType
 					tags
 				}
 			}

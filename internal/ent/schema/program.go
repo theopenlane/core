@@ -28,7 +28,8 @@ func (Program) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name of the program").
-			NotEmpty(),
+			NotEmpty().
+			Annotations(entx.FieldSearchable()),
 		field.String("description").
 			Comment("the description of the program").
 			Optional(),

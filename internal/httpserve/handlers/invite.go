@@ -261,6 +261,7 @@ func updateInviteStatusExpired(ctx context.Context, i *generated.Invite) error {
 func (h *Handler) BindOrganizationInviteAccept() *openapi3.Operation {
 	inviteAccept := openapi3.NewOperation()
 	inviteAccept.Description = "Accept an Organization Invite"
+	inviteAccept.Tags = []string{"organization"}
 	inviteAccept.OperationID = "OrganizationInviteAccept"
 	inviteAccept.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{

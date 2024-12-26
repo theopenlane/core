@@ -97,6 +97,7 @@ func (h *Handler) getOrganizationID(in models.AccountRolesOrganizationRequest, a
 func (h *Handler) BindAccountRolesOrganization() *openapi3.Operation {
 	orgRoles := openapi3.NewOperation()
 	orgRoles.Description = "List roles a subject has in relation to the authenticated organization"
+	orgRoles.Tags = []string{"account"}
 	orgRoles.OperationID = "AccountRolesOrganization"
 	orgRoles.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{
@@ -115,6 +116,7 @@ func (h *Handler) BindAccountRolesOrganization() *openapi3.Operation {
 func (h *Handler) BindAccountRolesOrganizationByID() *openapi3.Operation {
 	orgRoles := openapi3.NewOperation()
 	orgRoles.Description = "List roles a subject has in relation to the organization ID provided"
+	orgRoles.Tags = []string{"account"}
 	orgRoles.OperationID = "AccountRolesOrganizationByID"
 	orgRoles.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{

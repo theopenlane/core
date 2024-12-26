@@ -149,6 +149,7 @@ func (u *User) setUserTokens(user *generated.User, reqToken string) error {
 func (h *Handler) BindVerifyEmailHandler() *openapi3.Operation {
 	verify := openapi3.NewOperation()
 	verify.Description = "VerifyEmail verifies a user's email address by validating the token in the request and setting the user's validated field in the database to true. This endpoint is intended to be called by frontend applications after the user has followed the link in the verification email"
+	verify.Tags = []string{"register"}
 	verify.OperationID = "VerifyEmail"
 	verify.Security = &openapi3.SecurityRequirements{}
 
