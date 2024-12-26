@@ -41,7 +41,7 @@ func (ec *executionContext) _PersonalAccessTokenBulkCreatePayload_personalAccess
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.PersonalAccessTokens, nil
 	})
@@ -118,7 +118,7 @@ func (ec *executionContext) _PersonalAccessTokenCreatePayload_personalAccessToke
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.PersonalAccessToken, nil
 	})
@@ -198,7 +198,7 @@ func (ec *executionContext) _PersonalAccessTokenDeletePayload_deletedID(ctx cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.DeletedID, nil
 	})
@@ -242,7 +242,7 @@ func (ec *executionContext) _PersonalAccessTokenUpdatePayload_personalAccessToke
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.PersonalAccessToken, nil
 	})

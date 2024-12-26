@@ -46,7 +46,7 @@ func (InternalPolicy) Fields() []ent.Field {
 		field.Text("background").
 			Optional().
 			Comment("background of the policy"),
-		field.JSON("details", map[string]interface{}{}).
+		field.JSON("details", map[string]any{}).
 			Optional().
 			Comment("json data for the policy document"),
 	}

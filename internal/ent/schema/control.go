@@ -56,7 +56,7 @@ func (Control) Fields() []ent.Field {
 		field.Text("mapped_frameworks").
 			Optional().
 			Comment("mapped frameworks"),
-		field.JSON("details", map[string]interface{}{}).
+		field.JSON("details", map[string]any{}).
 			Optional().
 			Comment("json data including details of the control"),
 	}

@@ -69,7 +69,7 @@ func (Subcontrol) Fields() []ent.Field {
 		field.Time("implementation_verification_date").
 			Optional().
 			Comment("date the subcontrol implementation was verified"),
-		field.JSON("details", map[string]interface{}{}).
+		field.JSON("details", map[string]any{}).
 			Optional().
 			Comment("json data details of the subcontrol"),
 	}

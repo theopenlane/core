@@ -53,6 +53,14 @@ tasks:
       - go-generate-fast ./...
       - task: tidy
 
+  regenerate:
+    desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
+    env:
+      GO_GENERATE_FAST_RECACHE: "true"
+    cmds:
+      - go-generate-fast ./...
+      - task: tidy
+
   generate:ent:
     desc: generate ent models
     cmds:

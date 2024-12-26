@@ -192,9 +192,9 @@ type MutationResolver interface {
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_createAPIToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createAPIToken_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -204,7 +204,7 @@ func (ec *executionContext) field_Mutation_createAPIToken_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_createAPIToken_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateAPITokenInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -224,9 +224,9 @@ func (ec *executionContext) field_Mutation_createAPIToken_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createActionPlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createActionPlan_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -236,7 +236,7 @@ func (ec *executionContext) field_Mutation_createActionPlan_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_createActionPlan_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateActionPlanInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -256,9 +256,9 @@ func (ec *executionContext) field_Mutation_createActionPlan_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkAPIToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkAPIToken_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -268,7 +268,7 @@ func (ec *executionContext) field_Mutation_createBulkAPIToken_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_createBulkAPIToken_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateAPITokenInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -288,9 +288,9 @@ func (ec *executionContext) field_Mutation_createBulkAPIToken_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkActionPlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkActionPlan_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -300,7 +300,7 @@ func (ec *executionContext) field_Mutation_createBulkActionPlan_args(ctx context
 }
 func (ec *executionContext) field_Mutation_createBulkActionPlan_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateActionPlanInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -320,9 +320,9 @@ func (ec *executionContext) field_Mutation_createBulkActionPlan_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVAPIToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVAPIToken_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -332,7 +332,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVAPIToken_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_createBulkCSVAPIToken_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -352,9 +352,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVAPIToken_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVActionPlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVActionPlan_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -364,7 +364,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVActionPlan_args(ctx cont
 }
 func (ec *executionContext) field_Mutation_createBulkCSVActionPlan_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -384,9 +384,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVActionPlan_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVContact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVContact_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -396,7 +396,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVContact_args(ctx context
 }
 func (ec *executionContext) field_Mutation_createBulkCSVContact_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -416,9 +416,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVContact_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVControlObjective_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVControlObjective_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -428,7 +428,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVControlObjective_args(ct
 }
 func (ec *executionContext) field_Mutation_createBulkCSVControlObjective_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -448,9 +448,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVControlObjective_argsInp
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVControl_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVControl_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -460,7 +460,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVControl_args(ctx context
 }
 func (ec *executionContext) field_Mutation_createBulkCSVControl_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -480,9 +480,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVControl_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVDocumentData_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVDocumentData_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -492,7 +492,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVDocumentData_args(ctx co
 }
 func (ec *executionContext) field_Mutation_createBulkCSVDocumentData_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -512,9 +512,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVDocumentData_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVEntityType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVEntityType_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -524,7 +524,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVEntityType_args(ctx cont
 }
 func (ec *executionContext) field_Mutation_createBulkCSVEntityType_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -544,9 +544,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVEntityType_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVEntity_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVEntity_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -556,7 +556,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVEntity_args(ctx context.
 }
 func (ec *executionContext) field_Mutation_createBulkCSVEntity_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -576,9 +576,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVEntity_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVEvent_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVEvent_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -588,7 +588,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVEvent_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_createBulkCSVEvent_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -608,9 +608,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVEvent_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVGroupMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVGroupMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -620,7 +620,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVGroupMembership_args(ctx
 }
 func (ec *executionContext) field_Mutation_createBulkCSVGroupMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -640,9 +640,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVGroupMembership_argsInpu
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVGroupSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVGroupSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -652,7 +652,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVGroupSetting_args(ctx co
 }
 func (ec *executionContext) field_Mutation_createBulkCSVGroupSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -672,9 +672,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVGroupSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVGroup_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -684,7 +684,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVGroup_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_createBulkCSVGroup_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -704,9 +704,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVGroup_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVHush_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVHush_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -716,7 +716,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVHush_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createBulkCSVHush_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -736,9 +736,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVHush_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVIntegration_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVIntegration_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVIntegration_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -748,7 +748,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVIntegration_args(ctx con
 }
 func (ec *executionContext) field_Mutation_createBulkCSVIntegration_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -768,9 +768,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVIntegration_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVInternalPolicy_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVInternalPolicy_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -780,7 +780,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVInternalPolicy_args(ctx 
 }
 func (ec *executionContext) field_Mutation_createBulkCSVInternalPolicy_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -800,9 +800,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVInternalPolicy_argsInput
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVInvite_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVInvite_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -812,7 +812,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVInvite_args(ctx context.
 }
 func (ec *executionContext) field_Mutation_createBulkCSVInvite_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -832,9 +832,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVInvite_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVNarrative_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVNarrative_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -844,7 +844,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVNarrative_args(ctx conte
 }
 func (ec *executionContext) field_Mutation_createBulkCSVNarrative_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -864,9 +864,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVNarrative_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVOrgMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVOrgMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -876,7 +876,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVOrgMembership_args(ctx c
 }
 func (ec *executionContext) field_Mutation_createBulkCSVOrgMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -896,9 +896,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVOrgMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVOrgSubscription_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVOrgSubscription_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVOrgSubscription_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -908,7 +908,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVOrgSubscription_args(ctx
 }
 func (ec *executionContext) field_Mutation_createBulkCSVOrgSubscription_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -928,9 +928,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVOrgSubscription_argsInpu
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVOrganizationSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVOrganizationSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -940,7 +940,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVOrganizationSetting_args
 }
 func (ec *executionContext) field_Mutation_createBulkCSVOrganizationSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -960,9 +960,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVOrganizationSetting_args
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVOrganization_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -972,7 +972,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVOrganization_args(ctx co
 }
 func (ec *executionContext) field_Mutation_createBulkCSVOrganization_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -992,9 +992,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVOrganization_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVPersonalAccessToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVPersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVPersonalAccessToken_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1004,7 +1004,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVPersonalAccessToken_args
 }
 func (ec *executionContext) field_Mutation_createBulkCSVPersonalAccessToken_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1024,9 +1024,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVPersonalAccessToken_args
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVProcedure_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVProcedure_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1036,7 +1036,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVProcedure_args(ctx conte
 }
 func (ec *executionContext) field_Mutation_createBulkCSVProcedure_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1056,9 +1056,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVProcedure_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVProgramMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVProgramMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1068,7 +1068,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVProgramMembership_args(c
 }
 func (ec *executionContext) field_Mutation_createBulkCSVProgramMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1088,9 +1088,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVProgramMembership_argsIn
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVProgram_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVProgram_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1100,7 +1100,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVProgram_args(ctx context
 }
 func (ec *executionContext) field_Mutation_createBulkCSVProgram_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1120,9 +1120,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVProgram_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVRisk_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVRisk_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1132,7 +1132,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVRisk_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createBulkCSVRisk_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1152,9 +1152,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVRisk_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVStandard_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVStandard_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1164,7 +1164,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVStandard_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_createBulkCSVStandard_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1184,9 +1184,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVStandard_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVSubcontrol_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVSubcontrol_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1196,7 +1196,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVSubcontrol_args(ctx cont
 }
 func (ec *executionContext) field_Mutation_createBulkCSVSubcontrol_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1216,9 +1216,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVSubcontrol_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVSubscriber_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1228,7 +1228,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_args(ctx cont
 }
 func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1248,9 +1248,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVTask_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVTask_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1260,7 +1260,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVTask_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createBulkCSVTask_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1280,9 +1280,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVTask_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVTemplate_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVTemplate_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1292,7 +1292,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVTemplate_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_createBulkCSVTemplate_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1312,9 +1312,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVTemplate_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVUserSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkCSVUserSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1324,7 +1324,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVUserSetting_args(ctx con
 }
 func (ec *executionContext) field_Mutation_createBulkCSVUserSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1344,9 +1344,9 @@ func (ec *executionContext) field_Mutation_createBulkCSVUserSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkContact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkContact_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1356,7 +1356,7 @@ func (ec *executionContext) field_Mutation_createBulkContact_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createBulkContact_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateContactInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1376,9 +1376,9 @@ func (ec *executionContext) field_Mutation_createBulkContact_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkControlObjective_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkControlObjective_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1388,7 +1388,7 @@ func (ec *executionContext) field_Mutation_createBulkControlObjective_args(ctx c
 }
 func (ec *executionContext) field_Mutation_createBulkControlObjective_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateControlObjectiveInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1408,9 +1408,9 @@ func (ec *executionContext) field_Mutation_createBulkControlObjective_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkControl_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkControl_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1420,7 +1420,7 @@ func (ec *executionContext) field_Mutation_createBulkControl_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createBulkControl_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateControlInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1440,9 +1440,9 @@ func (ec *executionContext) field_Mutation_createBulkControl_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkDocumentData_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkDocumentData_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1452,7 +1452,7 @@ func (ec *executionContext) field_Mutation_createBulkDocumentData_args(ctx conte
 }
 func (ec *executionContext) field_Mutation_createBulkDocumentData_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateDocumentDataInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1472,9 +1472,9 @@ func (ec *executionContext) field_Mutation_createBulkDocumentData_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkEntityType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkEntityType_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1484,7 +1484,7 @@ func (ec *executionContext) field_Mutation_createBulkEntityType_args(ctx context
 }
 func (ec *executionContext) field_Mutation_createBulkEntityType_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateEntityTypeInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1504,9 +1504,9 @@ func (ec *executionContext) field_Mutation_createBulkEntityType_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkEntity_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkEntity_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1516,7 +1516,7 @@ func (ec *executionContext) field_Mutation_createBulkEntity_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_createBulkEntity_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateEntityInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1536,9 +1536,9 @@ func (ec *executionContext) field_Mutation_createBulkEntity_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkEvent_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkEvent_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1548,7 +1548,7 @@ func (ec *executionContext) field_Mutation_createBulkEvent_args(ctx context.Cont
 }
 func (ec *executionContext) field_Mutation_createBulkEvent_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateEventInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1568,9 +1568,9 @@ func (ec *executionContext) field_Mutation_createBulkEvent_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkGroupMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkGroupMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1580,7 +1580,7 @@ func (ec *executionContext) field_Mutation_createBulkGroupMembership_args(ctx co
 }
 func (ec *executionContext) field_Mutation_createBulkGroupMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateGroupMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1600,9 +1600,9 @@ func (ec *executionContext) field_Mutation_createBulkGroupMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkGroupSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkGroupSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1612,7 +1612,7 @@ func (ec *executionContext) field_Mutation_createBulkGroupSetting_args(ctx conte
 }
 func (ec *executionContext) field_Mutation_createBulkGroupSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateGroupSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1632,9 +1632,9 @@ func (ec *executionContext) field_Mutation_createBulkGroupSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkGroup_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1644,7 +1644,7 @@ func (ec *executionContext) field_Mutation_createBulkGroup_args(ctx context.Cont
 }
 func (ec *executionContext) field_Mutation_createBulkGroup_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateGroupInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1664,9 +1664,9 @@ func (ec *executionContext) field_Mutation_createBulkGroup_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkHush_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkHush_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1676,7 +1676,7 @@ func (ec *executionContext) field_Mutation_createBulkHush_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_createBulkHush_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateHushInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1696,9 +1696,9 @@ func (ec *executionContext) field_Mutation_createBulkHush_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkIntegration_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkIntegration_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkIntegration_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1708,7 +1708,7 @@ func (ec *executionContext) field_Mutation_createBulkIntegration_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_createBulkIntegration_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateIntegrationInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1728,9 +1728,9 @@ func (ec *executionContext) field_Mutation_createBulkIntegration_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkInternalPolicy_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkInternalPolicy_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1740,7 +1740,7 @@ func (ec *executionContext) field_Mutation_createBulkInternalPolicy_args(ctx con
 }
 func (ec *executionContext) field_Mutation_createBulkInternalPolicy_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateInternalPolicyInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1760,9 +1760,9 @@ func (ec *executionContext) field_Mutation_createBulkInternalPolicy_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkInvite_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkInvite_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1772,7 +1772,7 @@ func (ec *executionContext) field_Mutation_createBulkInvite_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_createBulkInvite_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateInviteInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1792,9 +1792,9 @@ func (ec *executionContext) field_Mutation_createBulkInvite_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkNarrative_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkNarrative_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1804,7 +1804,7 @@ func (ec *executionContext) field_Mutation_createBulkNarrative_args(ctx context.
 }
 func (ec *executionContext) field_Mutation_createBulkNarrative_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateNarrativeInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1824,9 +1824,9 @@ func (ec *executionContext) field_Mutation_createBulkNarrative_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkOrgMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkOrgMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1836,7 +1836,7 @@ func (ec *executionContext) field_Mutation_createBulkOrgMembership_args(ctx cont
 }
 func (ec *executionContext) field_Mutation_createBulkOrgMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateOrgMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1856,9 +1856,9 @@ func (ec *executionContext) field_Mutation_createBulkOrgMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkOrgSubscription_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkOrgSubscription_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkOrgSubscription_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1868,7 +1868,7 @@ func (ec *executionContext) field_Mutation_createBulkOrgSubscription_args(ctx co
 }
 func (ec *executionContext) field_Mutation_createBulkOrgSubscription_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateOrgSubscriptionInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1888,9 +1888,9 @@ func (ec *executionContext) field_Mutation_createBulkOrgSubscription_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkOrganizationSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1900,7 +1900,7 @@ func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_args(ct
 }
 func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateOrganizationSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1920,9 +1920,9 @@ func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_argsInp
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkOrganization_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1932,7 +1932,7 @@ func (ec *executionContext) field_Mutation_createBulkOrganization_args(ctx conte
 }
 func (ec *executionContext) field_Mutation_createBulkOrganization_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateOrganizationInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1952,9 +1952,9 @@ func (ec *executionContext) field_Mutation_createBulkOrganization_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkPersonalAccessToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkPersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkPersonalAccessToken_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1964,7 +1964,7 @@ func (ec *executionContext) field_Mutation_createBulkPersonalAccessToken_args(ct
 }
 func (ec *executionContext) field_Mutation_createBulkPersonalAccessToken_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreatePersonalAccessTokenInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -1984,9 +1984,9 @@ func (ec *executionContext) field_Mutation_createBulkPersonalAccessToken_argsInp
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkProcedure_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkProcedure_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -1996,7 +1996,7 @@ func (ec *executionContext) field_Mutation_createBulkProcedure_args(ctx context.
 }
 func (ec *executionContext) field_Mutation_createBulkProcedure_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateProcedureInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2016,9 +2016,9 @@ func (ec *executionContext) field_Mutation_createBulkProcedure_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkProgramMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkProgramMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2028,7 +2028,7 @@ func (ec *executionContext) field_Mutation_createBulkProgramMembership_args(ctx 
 }
 func (ec *executionContext) field_Mutation_createBulkProgramMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateProgramMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2048,9 +2048,9 @@ func (ec *executionContext) field_Mutation_createBulkProgramMembership_argsInput
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkProgram_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkProgram_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2060,7 +2060,7 @@ func (ec *executionContext) field_Mutation_createBulkProgram_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createBulkProgram_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateProgramInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2080,9 +2080,9 @@ func (ec *executionContext) field_Mutation_createBulkProgram_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkRisk_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkRisk_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2092,7 +2092,7 @@ func (ec *executionContext) field_Mutation_createBulkRisk_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_createBulkRisk_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateRiskInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2112,9 +2112,9 @@ func (ec *executionContext) field_Mutation_createBulkRisk_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkStandard_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkStandard_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2124,7 +2124,7 @@ func (ec *executionContext) field_Mutation_createBulkStandard_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_createBulkStandard_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateStandardInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2144,9 +2144,9 @@ func (ec *executionContext) field_Mutation_createBulkStandard_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkSubcontrol_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkSubcontrol_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2156,7 +2156,7 @@ func (ec *executionContext) field_Mutation_createBulkSubcontrol_args(ctx context
 }
 func (ec *executionContext) field_Mutation_createBulkSubcontrol_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateSubcontrolInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2176,9 +2176,9 @@ func (ec *executionContext) field_Mutation_createBulkSubcontrol_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkSubscriber_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkSubscriber_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2188,7 +2188,7 @@ func (ec *executionContext) field_Mutation_createBulkSubscriber_args(ctx context
 }
 func (ec *executionContext) field_Mutation_createBulkSubscriber_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateSubscriberInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2208,9 +2208,9 @@ func (ec *executionContext) field_Mutation_createBulkSubscriber_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkTask_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkTask_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2220,7 +2220,7 @@ func (ec *executionContext) field_Mutation_createBulkTask_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_createBulkTask_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateTaskInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2240,9 +2240,9 @@ func (ec *executionContext) field_Mutation_createBulkTask_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkTemplate_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkTemplate_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2252,7 +2252,7 @@ func (ec *executionContext) field_Mutation_createBulkTemplate_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_createBulkTemplate_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateTemplateInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2272,9 +2272,9 @@ func (ec *executionContext) field_Mutation_createBulkTemplate_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkUserSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createBulkUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createBulkUserSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2284,7 +2284,7 @@ func (ec *executionContext) field_Mutation_createBulkUserSetting_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_createBulkUserSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) ([]*generated.CreateUserSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2304,9 +2304,9 @@ func (ec *executionContext) field_Mutation_createBulkUserSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createContact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createContact_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2316,7 +2316,7 @@ func (ec *executionContext) field_Mutation_createContact_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_createContact_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateContactInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2336,9 +2336,9 @@ func (ec *executionContext) field_Mutation_createContact_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createControlObjective_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createControlObjective_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2348,7 +2348,7 @@ func (ec *executionContext) field_Mutation_createControlObjective_args(ctx conte
 }
 func (ec *executionContext) field_Mutation_createControlObjective_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateControlObjectiveInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2368,9 +2368,9 @@ func (ec *executionContext) field_Mutation_createControlObjective_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createControlWithSubcontrols_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createControlWithSubcontrols_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createControlWithSubcontrols_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2380,7 +2380,7 @@ func (ec *executionContext) field_Mutation_createControlWithSubcontrols_args(ctx
 }
 func (ec *executionContext) field_Mutation_createControlWithSubcontrols_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (model.CreateControlWithSubcontrolsInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2400,9 +2400,9 @@ func (ec *executionContext) field_Mutation_createControlWithSubcontrols_argsInpu
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createControl_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createControl_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2412,7 +2412,7 @@ func (ec *executionContext) field_Mutation_createControl_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_createControl_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateControlInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2432,9 +2432,9 @@ func (ec *executionContext) field_Mutation_createControl_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createDocumentData_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createDocumentData_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2444,7 +2444,7 @@ func (ec *executionContext) field_Mutation_createDocumentData_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_createDocumentData_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateDocumentDataInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2464,9 +2464,9 @@ func (ec *executionContext) field_Mutation_createDocumentData_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createEntityType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createEntityType_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2476,7 +2476,7 @@ func (ec *executionContext) field_Mutation_createEntityType_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_createEntityType_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateEntityTypeInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2496,9 +2496,9 @@ func (ec *executionContext) field_Mutation_createEntityType_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createEntity_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2508,7 +2508,7 @@ func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context
 }
 func (ec *executionContext) field_Mutation_createEntity_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateEntityInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2528,9 +2528,9 @@ func (ec *executionContext) field_Mutation_createEntity_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createEvent_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createEvent_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2540,7 +2540,7 @@ func (ec *executionContext) field_Mutation_createEvent_args(ctx context.Context,
 }
 func (ec *executionContext) field_Mutation_createEvent_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateEventInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2560,9 +2560,9 @@ func (ec *executionContext) field_Mutation_createEvent_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createFullProgram_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createFullProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createFullProgram_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2572,7 +2572,7 @@ func (ec *executionContext) field_Mutation_createFullProgram_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createFullProgram_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (model.CreateFullProgramInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2592,9 +2592,9 @@ func (ec *executionContext) field_Mutation_createFullProgram_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createGroupMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createGroupMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2604,7 +2604,7 @@ func (ec *executionContext) field_Mutation_createGroupMembership_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_createGroupMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateGroupMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2624,9 +2624,9 @@ func (ec *executionContext) field_Mutation_createGroupMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createGroupSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createGroupSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2636,7 +2636,7 @@ func (ec *executionContext) field_Mutation_createGroupSetting_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_createGroupSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateGroupSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2656,9 +2656,9 @@ func (ec *executionContext) field_Mutation_createGroupSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createGroup_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2668,7 +2668,7 @@ func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context,
 }
 func (ec *executionContext) field_Mutation_createGroup_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateGroupInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2688,9 +2688,9 @@ func (ec *executionContext) field_Mutation_createGroup_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createHush_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createHush_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2700,7 +2700,7 @@ func (ec *executionContext) field_Mutation_createHush_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_createHush_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateHushInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2720,9 +2720,9 @@ func (ec *executionContext) field_Mutation_createHush_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createIntegration_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createIntegration_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createIntegration_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2732,7 +2732,7 @@ func (ec *executionContext) field_Mutation_createIntegration_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createIntegration_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateIntegrationInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2752,9 +2752,9 @@ func (ec *executionContext) field_Mutation_createIntegration_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createInternalPolicy_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createInternalPolicy_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2764,7 +2764,7 @@ func (ec *executionContext) field_Mutation_createInternalPolicy_args(ctx context
 }
 func (ec *executionContext) field_Mutation_createInternalPolicy_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateInternalPolicyInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2784,9 +2784,9 @@ func (ec *executionContext) field_Mutation_createInternalPolicy_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createInvite_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createInvite_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2796,7 +2796,7 @@ func (ec *executionContext) field_Mutation_createInvite_args(ctx context.Context
 }
 func (ec *executionContext) field_Mutation_createInvite_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateInviteInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2816,9 +2816,9 @@ func (ec *executionContext) field_Mutation_createInvite_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createNarrative_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createNarrative_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2828,7 +2828,7 @@ func (ec *executionContext) field_Mutation_createNarrative_args(ctx context.Cont
 }
 func (ec *executionContext) field_Mutation_createNarrative_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateNarrativeInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2848,9 +2848,9 @@ func (ec *executionContext) field_Mutation_createNarrative_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createOrgMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createOrgMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2860,7 +2860,7 @@ func (ec *executionContext) field_Mutation_createOrgMembership_args(ctx context.
 }
 func (ec *executionContext) field_Mutation_createOrgMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateOrgMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2880,9 +2880,9 @@ func (ec *executionContext) field_Mutation_createOrgMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createOrgSubscription_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createOrgSubscription_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createOrgSubscription_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2892,7 +2892,7 @@ func (ec *executionContext) field_Mutation_createOrgSubscription_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_createOrgSubscription_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateOrgSubscriptionInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2912,9 +2912,9 @@ func (ec *executionContext) field_Mutation_createOrgSubscription_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createOrganizationSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createOrganizationSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2924,7 +2924,7 @@ func (ec *executionContext) field_Mutation_createOrganizationSetting_args(ctx co
 }
 func (ec *executionContext) field_Mutation_createOrganizationSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateOrganizationSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2944,9 +2944,9 @@ func (ec *executionContext) field_Mutation_createOrganizationSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createOrganization_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2956,7 +2956,7 @@ func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_createOrganization_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateOrganizationInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -2976,9 +2976,9 @@ func (ec *executionContext) field_Mutation_createOrganization_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createPersonalAccessToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createPersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createPersonalAccessToken_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -2988,7 +2988,7 @@ func (ec *executionContext) field_Mutation_createPersonalAccessToken_args(ctx co
 }
 func (ec *executionContext) field_Mutation_createPersonalAccessToken_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreatePersonalAccessTokenInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3008,9 +3008,9 @@ func (ec *executionContext) field_Mutation_createPersonalAccessToken_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createProcedure_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createProcedure_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3020,7 +3020,7 @@ func (ec *executionContext) field_Mutation_createProcedure_args(ctx context.Cont
 }
 func (ec *executionContext) field_Mutation_createProcedure_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateProcedureInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3040,9 +3040,9 @@ func (ec *executionContext) field_Mutation_createProcedure_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createProgramMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createProgramMembership_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3052,7 +3052,7 @@ func (ec *executionContext) field_Mutation_createProgramMembership_args(ctx cont
 }
 func (ec *executionContext) field_Mutation_createProgramMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateProgramMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3072,9 +3072,9 @@ func (ec *executionContext) field_Mutation_createProgramMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createProgramWithMembers_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createProgramWithMembers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createProgramWithMembers_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3084,7 +3084,7 @@ func (ec *executionContext) field_Mutation_createProgramWithMembers_args(ctx con
 }
 func (ec *executionContext) field_Mutation_createProgramWithMembers_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (model.CreateProgramWithMembersInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3104,9 +3104,9 @@ func (ec *executionContext) field_Mutation_createProgramWithMembers_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createProgram_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createProgram_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3116,7 +3116,7 @@ func (ec *executionContext) field_Mutation_createProgram_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_createProgram_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateProgramInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3136,9 +3136,9 @@ func (ec *executionContext) field_Mutation_createProgram_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createRisk_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createRisk_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3148,7 +3148,7 @@ func (ec *executionContext) field_Mutation_createRisk_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_createRisk_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateRiskInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3168,9 +3168,9 @@ func (ec *executionContext) field_Mutation_createRisk_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createStandard_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createStandard_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3180,7 +3180,7 @@ func (ec *executionContext) field_Mutation_createStandard_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_createStandard_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateStandardInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3200,9 +3200,9 @@ func (ec *executionContext) field_Mutation_createStandard_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createSubcontrol_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createSubcontrol_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3212,7 +3212,7 @@ func (ec *executionContext) field_Mutation_createSubcontrol_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_createSubcontrol_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateSubcontrolInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3232,9 +3232,9 @@ func (ec *executionContext) field_Mutation_createSubcontrol_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createSubscriber_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createSubscriber_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3244,7 +3244,7 @@ func (ec *executionContext) field_Mutation_createSubscriber_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_createSubscriber_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateSubscriberInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3264,9 +3264,9 @@ func (ec *executionContext) field_Mutation_createSubscriber_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createTFASetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createTFASetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createTFASetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3276,7 +3276,7 @@ func (ec *executionContext) field_Mutation_createTFASetting_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_createTFASetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateTFASettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3296,9 +3296,9 @@ func (ec *executionContext) field_Mutation_createTFASetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createTask_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createTask_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3308,7 +3308,7 @@ func (ec *executionContext) field_Mutation_createTask_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_createTask_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateTaskInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3328,9 +3328,9 @@ func (ec *executionContext) field_Mutation_createTask_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createTemplate_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createTemplate_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3340,7 +3340,7 @@ func (ec *executionContext) field_Mutation_createTemplate_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_createTemplate_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateTemplateInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3360,9 +3360,9 @@ func (ec *executionContext) field_Mutation_createTemplate_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createUserSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createUserSetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3372,7 +3372,7 @@ func (ec *executionContext) field_Mutation_createUserSetting_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_createUserSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateUserSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3392,9 +3392,9 @@ func (ec *executionContext) field_Mutation_createUserSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_createUser_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3409,7 +3409,7 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_createUser_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.CreateUserInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3431,7 +3431,7 @@ func (ec *executionContext) field_Mutation_createUser_argsInput(
 
 func (ec *executionContext) field_Mutation_createUser_argsAvatarFile(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (*graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3451,9 +3451,9 @@ func (ec *executionContext) field_Mutation_createUser_argsAvatarFile(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteAPIToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteAPIToken_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3463,7 +3463,7 @@ func (ec *executionContext) field_Mutation_deleteAPIToken_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_deleteAPIToken_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3483,9 +3483,9 @@ func (ec *executionContext) field_Mutation_deleteAPIToken_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteActionPlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteActionPlan_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3495,7 +3495,7 @@ func (ec *executionContext) field_Mutation_deleteActionPlan_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_deleteActionPlan_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3515,9 +3515,9 @@ func (ec *executionContext) field_Mutation_deleteActionPlan_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteContact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteContact_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3527,7 +3527,7 @@ func (ec *executionContext) field_Mutation_deleteContact_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_deleteContact_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3547,9 +3547,9 @@ func (ec *executionContext) field_Mutation_deleteContact_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteControlObjective_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteControlObjective_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3559,7 +3559,7 @@ func (ec *executionContext) field_Mutation_deleteControlObjective_args(ctx conte
 }
 func (ec *executionContext) field_Mutation_deleteControlObjective_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3579,9 +3579,9 @@ func (ec *executionContext) field_Mutation_deleteControlObjective_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteControl_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteControl_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3591,7 +3591,7 @@ func (ec *executionContext) field_Mutation_deleteControl_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_deleteControl_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3611,9 +3611,9 @@ func (ec *executionContext) field_Mutation_deleteControl_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteDocumentData_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteDocumentData_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3623,7 +3623,7 @@ func (ec *executionContext) field_Mutation_deleteDocumentData_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_deleteDocumentData_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3643,9 +3643,9 @@ func (ec *executionContext) field_Mutation_deleteDocumentData_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteEntityType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteEntityType_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3655,7 +3655,7 @@ func (ec *executionContext) field_Mutation_deleteEntityType_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_deleteEntityType_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3675,9 +3675,9 @@ func (ec *executionContext) field_Mutation_deleteEntityType_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteEntity_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteEntity_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3687,7 +3687,7 @@ func (ec *executionContext) field_Mutation_deleteEntity_args(ctx context.Context
 }
 func (ec *executionContext) field_Mutation_deleteEntity_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3707,9 +3707,9 @@ func (ec *executionContext) field_Mutation_deleteEntity_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteEvent_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteEvent_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3719,7 +3719,7 @@ func (ec *executionContext) field_Mutation_deleteEvent_args(ctx context.Context,
 }
 func (ec *executionContext) field_Mutation_deleteEvent_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3739,9 +3739,9 @@ func (ec *executionContext) field_Mutation_deleteEvent_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteFile_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteFile_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteFile_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3751,7 +3751,7 @@ func (ec *executionContext) field_Mutation_deleteFile_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_deleteFile_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3771,9 +3771,9 @@ func (ec *executionContext) field_Mutation_deleteFile_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteGroupMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteGroupMembership_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3783,7 +3783,7 @@ func (ec *executionContext) field_Mutation_deleteGroupMembership_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_deleteGroupMembership_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3803,9 +3803,9 @@ func (ec *executionContext) field_Mutation_deleteGroupMembership_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteGroupSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteGroupSetting_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3815,7 +3815,7 @@ func (ec *executionContext) field_Mutation_deleteGroupSetting_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_deleteGroupSetting_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3835,9 +3835,9 @@ func (ec *executionContext) field_Mutation_deleteGroupSetting_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteGroup_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3847,7 +3847,7 @@ func (ec *executionContext) field_Mutation_deleteGroup_args(ctx context.Context,
 }
 func (ec *executionContext) field_Mutation_deleteGroup_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3867,9 +3867,9 @@ func (ec *executionContext) field_Mutation_deleteGroup_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteHush_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteHush_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3879,7 +3879,7 @@ func (ec *executionContext) field_Mutation_deleteHush_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_deleteHush_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3899,9 +3899,9 @@ func (ec *executionContext) field_Mutation_deleteHush_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteIntegration_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteIntegration_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteIntegration_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3911,7 +3911,7 @@ func (ec *executionContext) field_Mutation_deleteIntegration_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_deleteIntegration_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3931,9 +3931,9 @@ func (ec *executionContext) field_Mutation_deleteIntegration_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteInternalPolicy_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteInternalPolicy_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3943,7 +3943,7 @@ func (ec *executionContext) field_Mutation_deleteInternalPolicy_args(ctx context
 }
 func (ec *executionContext) field_Mutation_deleteInternalPolicy_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3963,9 +3963,9 @@ func (ec *executionContext) field_Mutation_deleteInternalPolicy_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteInvite_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteInvite_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -3975,7 +3975,7 @@ func (ec *executionContext) field_Mutation_deleteInvite_args(ctx context.Context
 }
 func (ec *executionContext) field_Mutation_deleteInvite_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -3995,9 +3995,9 @@ func (ec *executionContext) field_Mutation_deleteInvite_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteNarrative_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteNarrative_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4007,7 +4007,7 @@ func (ec *executionContext) field_Mutation_deleteNarrative_args(ctx context.Cont
 }
 func (ec *executionContext) field_Mutation_deleteNarrative_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4027,9 +4027,9 @@ func (ec *executionContext) field_Mutation_deleteNarrative_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteOrgMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteOrgMembership_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4039,7 +4039,7 @@ func (ec *executionContext) field_Mutation_deleteOrgMembership_args(ctx context.
 }
 func (ec *executionContext) field_Mutation_deleteOrgMembership_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4059,9 +4059,9 @@ func (ec *executionContext) field_Mutation_deleteOrgMembership_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteOrgSubscription_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteOrgSubscription_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteOrgSubscription_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4071,7 +4071,7 @@ func (ec *executionContext) field_Mutation_deleteOrgSubscription_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_deleteOrgSubscription_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4091,9 +4091,9 @@ func (ec *executionContext) field_Mutation_deleteOrgSubscription_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteOrganizationSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteOrganizationSetting_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4103,7 +4103,7 @@ func (ec *executionContext) field_Mutation_deleteOrganizationSetting_args(ctx co
 }
 func (ec *executionContext) field_Mutation_deleteOrganizationSetting_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4123,9 +4123,9 @@ func (ec *executionContext) field_Mutation_deleteOrganizationSetting_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteOrganization_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4135,7 +4135,7 @@ func (ec *executionContext) field_Mutation_deleteOrganization_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_deleteOrganization_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4155,9 +4155,9 @@ func (ec *executionContext) field_Mutation_deleteOrganization_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deletePersonalAccessToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deletePersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deletePersonalAccessToken_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4167,7 +4167,7 @@ func (ec *executionContext) field_Mutation_deletePersonalAccessToken_args(ctx co
 }
 func (ec *executionContext) field_Mutation_deletePersonalAccessToken_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4187,9 +4187,9 @@ func (ec *executionContext) field_Mutation_deletePersonalAccessToken_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteProcedure_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteProcedure_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4199,7 +4199,7 @@ func (ec *executionContext) field_Mutation_deleteProcedure_args(ctx context.Cont
 }
 func (ec *executionContext) field_Mutation_deleteProcedure_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4219,9 +4219,9 @@ func (ec *executionContext) field_Mutation_deleteProcedure_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteProgramMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteProgramMembership_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4231,7 +4231,7 @@ func (ec *executionContext) field_Mutation_deleteProgramMembership_args(ctx cont
 }
 func (ec *executionContext) field_Mutation_deleteProgramMembership_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4251,9 +4251,9 @@ func (ec *executionContext) field_Mutation_deleteProgramMembership_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteProgram_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteProgram_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4263,7 +4263,7 @@ func (ec *executionContext) field_Mutation_deleteProgram_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_deleteProgram_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4283,9 +4283,9 @@ func (ec *executionContext) field_Mutation_deleteProgram_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteRisk_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteRisk_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4295,7 +4295,7 @@ func (ec *executionContext) field_Mutation_deleteRisk_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_deleteRisk_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4315,9 +4315,9 @@ func (ec *executionContext) field_Mutation_deleteRisk_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteStandard_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteStandard_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4327,7 +4327,7 @@ func (ec *executionContext) field_Mutation_deleteStandard_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_deleteStandard_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4347,9 +4347,9 @@ func (ec *executionContext) field_Mutation_deleteStandard_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteSubcontrol_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteSubcontrol_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4359,7 +4359,7 @@ func (ec *executionContext) field_Mutation_deleteSubcontrol_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_deleteSubcontrol_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4379,9 +4379,9 @@ func (ec *executionContext) field_Mutation_deleteSubcontrol_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteSubscriber_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteSubscriber_argsEmail(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4396,7 +4396,7 @@ func (ec *executionContext) field_Mutation_deleteSubscriber_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_deleteSubscriber_argsEmail(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4418,7 +4418,7 @@ func (ec *executionContext) field_Mutation_deleteSubscriber_argsEmail(
 
 func (ec *executionContext) field_Mutation_deleteSubscriber_argsOwnerID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (*string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4438,9 +4438,9 @@ func (ec *executionContext) field_Mutation_deleteSubscriber_argsOwnerID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteTask_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteTask_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4450,7 +4450,7 @@ func (ec *executionContext) field_Mutation_deleteTask_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_deleteTask_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4470,9 +4470,9 @@ func (ec *executionContext) field_Mutation_deleteTask_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteTemplate_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteTemplate_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4482,7 +4482,7 @@ func (ec *executionContext) field_Mutation_deleteTemplate_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_deleteTemplate_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4502,9 +4502,9 @@ func (ec *executionContext) field_Mutation_deleteTemplate_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_deleteUser_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4514,7 +4514,7 @@ func (ec *executionContext) field_Mutation_deleteUser_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_deleteUser_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4534,9 +4534,9 @@ func (ec *executionContext) field_Mutation_deleteUser_argsID(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateAPIToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateAPIToken_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4551,7 +4551,7 @@ func (ec *executionContext) field_Mutation_updateAPIToken_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_updateAPIToken_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4573,7 +4573,7 @@ func (ec *executionContext) field_Mutation_updateAPIToken_argsID(
 
 func (ec *executionContext) field_Mutation_updateAPIToken_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateAPITokenInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4593,9 +4593,9 @@ func (ec *executionContext) field_Mutation_updateAPIToken_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateActionPlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateActionPlan_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4610,7 +4610,7 @@ func (ec *executionContext) field_Mutation_updateActionPlan_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_updateActionPlan_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4632,7 +4632,7 @@ func (ec *executionContext) field_Mutation_updateActionPlan_argsID(
 
 func (ec *executionContext) field_Mutation_updateActionPlan_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateActionPlanInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4652,9 +4652,9 @@ func (ec *executionContext) field_Mutation_updateActionPlan_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateContact_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateContact_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4669,7 +4669,7 @@ func (ec *executionContext) field_Mutation_updateContact_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_updateContact_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4691,7 +4691,7 @@ func (ec *executionContext) field_Mutation_updateContact_argsID(
 
 func (ec *executionContext) field_Mutation_updateContact_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateContactInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4711,9 +4711,9 @@ func (ec *executionContext) field_Mutation_updateContact_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateControlObjective_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateControlObjective_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4728,7 +4728,7 @@ func (ec *executionContext) field_Mutation_updateControlObjective_args(ctx conte
 }
 func (ec *executionContext) field_Mutation_updateControlObjective_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4750,7 +4750,7 @@ func (ec *executionContext) field_Mutation_updateControlObjective_argsID(
 
 func (ec *executionContext) field_Mutation_updateControlObjective_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateControlObjectiveInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4770,9 +4770,9 @@ func (ec *executionContext) field_Mutation_updateControlObjective_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateControl_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateControl_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4787,7 +4787,7 @@ func (ec *executionContext) field_Mutation_updateControl_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_updateControl_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4809,7 +4809,7 @@ func (ec *executionContext) field_Mutation_updateControl_argsID(
 
 func (ec *executionContext) field_Mutation_updateControl_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateControlInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4829,9 +4829,9 @@ func (ec *executionContext) field_Mutation_updateControl_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateDocumentData_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateDocumentData_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4846,7 +4846,7 @@ func (ec *executionContext) field_Mutation_updateDocumentData_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_updateDocumentData_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4868,7 +4868,7 @@ func (ec *executionContext) field_Mutation_updateDocumentData_argsID(
 
 func (ec *executionContext) field_Mutation_updateDocumentData_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateDocumentDataInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4888,9 +4888,9 @@ func (ec *executionContext) field_Mutation_updateDocumentData_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateEntityType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateEntityType_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4905,7 +4905,7 @@ func (ec *executionContext) field_Mutation_updateEntityType_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_updateEntityType_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4927,7 +4927,7 @@ func (ec *executionContext) field_Mutation_updateEntityType_argsID(
 
 func (ec *executionContext) field_Mutation_updateEntityType_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateEntityTypeInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4947,9 +4947,9 @@ func (ec *executionContext) field_Mutation_updateEntityType_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateEntity_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateEntity_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -4964,7 +4964,7 @@ func (ec *executionContext) field_Mutation_updateEntity_args(ctx context.Context
 }
 func (ec *executionContext) field_Mutation_updateEntity_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -4986,7 +4986,7 @@ func (ec *executionContext) field_Mutation_updateEntity_argsID(
 
 func (ec *executionContext) field_Mutation_updateEntity_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateEntityInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5006,9 +5006,9 @@ func (ec *executionContext) field_Mutation_updateEntity_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateEvent_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateEvent_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5023,7 +5023,7 @@ func (ec *executionContext) field_Mutation_updateEvent_args(ctx context.Context,
 }
 func (ec *executionContext) field_Mutation_updateEvent_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5045,7 +5045,7 @@ func (ec *executionContext) field_Mutation_updateEvent_argsID(
 
 func (ec *executionContext) field_Mutation_updateEvent_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateEventInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5065,9 +5065,9 @@ func (ec *executionContext) field_Mutation_updateEvent_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateGroupMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateGroupMembership_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5082,7 +5082,7 @@ func (ec *executionContext) field_Mutation_updateGroupMembership_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_updateGroupMembership_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5104,7 +5104,7 @@ func (ec *executionContext) field_Mutation_updateGroupMembership_argsID(
 
 func (ec *executionContext) field_Mutation_updateGroupMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateGroupMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5124,9 +5124,9 @@ func (ec *executionContext) field_Mutation_updateGroupMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateGroupSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateGroupSetting_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5141,7 +5141,7 @@ func (ec *executionContext) field_Mutation_updateGroupSetting_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_updateGroupSetting_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5163,7 +5163,7 @@ func (ec *executionContext) field_Mutation_updateGroupSetting_argsID(
 
 func (ec *executionContext) field_Mutation_updateGroupSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateGroupSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5183,9 +5183,9 @@ func (ec *executionContext) field_Mutation_updateGroupSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateGroup_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5200,7 +5200,7 @@ func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context,
 }
 func (ec *executionContext) field_Mutation_updateGroup_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5222,7 +5222,7 @@ func (ec *executionContext) field_Mutation_updateGroup_argsID(
 
 func (ec *executionContext) field_Mutation_updateGroup_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateGroupInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5242,9 +5242,9 @@ func (ec *executionContext) field_Mutation_updateGroup_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateHush_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateHush_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5259,7 +5259,7 @@ func (ec *executionContext) field_Mutation_updateHush_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_updateHush_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5281,7 +5281,7 @@ func (ec *executionContext) field_Mutation_updateHush_argsID(
 
 func (ec *executionContext) field_Mutation_updateHush_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateHushInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5301,9 +5301,9 @@ func (ec *executionContext) field_Mutation_updateHush_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateIntegration_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateIntegration_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateIntegration_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5318,7 +5318,7 @@ func (ec *executionContext) field_Mutation_updateIntegration_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_updateIntegration_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5340,7 +5340,7 @@ func (ec *executionContext) field_Mutation_updateIntegration_argsID(
 
 func (ec *executionContext) field_Mutation_updateIntegration_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateIntegrationInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5360,9 +5360,9 @@ func (ec *executionContext) field_Mutation_updateIntegration_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateInternalPolicy_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateInternalPolicy_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5377,7 +5377,7 @@ func (ec *executionContext) field_Mutation_updateInternalPolicy_args(ctx context
 }
 func (ec *executionContext) field_Mutation_updateInternalPolicy_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5399,7 +5399,7 @@ func (ec *executionContext) field_Mutation_updateInternalPolicy_argsID(
 
 func (ec *executionContext) field_Mutation_updateInternalPolicy_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateInternalPolicyInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5419,9 +5419,9 @@ func (ec *executionContext) field_Mutation_updateInternalPolicy_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateInvite_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateInvite_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5436,7 +5436,7 @@ func (ec *executionContext) field_Mutation_updateInvite_args(ctx context.Context
 }
 func (ec *executionContext) field_Mutation_updateInvite_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5458,7 +5458,7 @@ func (ec *executionContext) field_Mutation_updateInvite_argsID(
 
 func (ec *executionContext) field_Mutation_updateInvite_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateInviteInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5478,9 +5478,9 @@ func (ec *executionContext) field_Mutation_updateInvite_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateNarrative_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateNarrative_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5495,7 +5495,7 @@ func (ec *executionContext) field_Mutation_updateNarrative_args(ctx context.Cont
 }
 func (ec *executionContext) field_Mutation_updateNarrative_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5517,7 +5517,7 @@ func (ec *executionContext) field_Mutation_updateNarrative_argsID(
 
 func (ec *executionContext) field_Mutation_updateNarrative_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateNarrativeInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5537,9 +5537,9 @@ func (ec *executionContext) field_Mutation_updateNarrative_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateOrgMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateOrgMembership_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5554,7 +5554,7 @@ func (ec *executionContext) field_Mutation_updateOrgMembership_args(ctx context.
 }
 func (ec *executionContext) field_Mutation_updateOrgMembership_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5576,7 +5576,7 @@ func (ec *executionContext) field_Mutation_updateOrgMembership_argsID(
 
 func (ec *executionContext) field_Mutation_updateOrgMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateOrgMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5596,9 +5596,9 @@ func (ec *executionContext) field_Mutation_updateOrgMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateOrgSubscription_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateOrgSubscription_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateOrgSubscription_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5613,7 +5613,7 @@ func (ec *executionContext) field_Mutation_updateOrgSubscription_args(ctx contex
 }
 func (ec *executionContext) field_Mutation_updateOrgSubscription_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5635,7 +5635,7 @@ func (ec *executionContext) field_Mutation_updateOrgSubscription_argsID(
 
 func (ec *executionContext) field_Mutation_updateOrgSubscription_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateOrgSubscriptionInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5655,9 +5655,9 @@ func (ec *executionContext) field_Mutation_updateOrgSubscription_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateOrganizationSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateOrganizationSetting_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5672,7 +5672,7 @@ func (ec *executionContext) field_Mutation_updateOrganizationSetting_args(ctx co
 }
 func (ec *executionContext) field_Mutation_updateOrganizationSetting_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5694,7 +5694,7 @@ func (ec *executionContext) field_Mutation_updateOrganizationSetting_argsID(
 
 func (ec *executionContext) field_Mutation_updateOrganizationSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateOrganizationSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5714,9 +5714,9 @@ func (ec *executionContext) field_Mutation_updateOrganizationSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateOrganization_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5731,7 +5731,7 @@ func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.C
 }
 func (ec *executionContext) field_Mutation_updateOrganization_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5753,7 +5753,7 @@ func (ec *executionContext) field_Mutation_updateOrganization_argsID(
 
 func (ec *executionContext) field_Mutation_updateOrganization_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateOrganizationInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5773,9 +5773,9 @@ func (ec *executionContext) field_Mutation_updateOrganization_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updatePersonalAccessToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updatePersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updatePersonalAccessToken_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5790,7 +5790,7 @@ func (ec *executionContext) field_Mutation_updatePersonalAccessToken_args(ctx co
 }
 func (ec *executionContext) field_Mutation_updatePersonalAccessToken_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5812,7 +5812,7 @@ func (ec *executionContext) field_Mutation_updatePersonalAccessToken_argsID(
 
 func (ec *executionContext) field_Mutation_updatePersonalAccessToken_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdatePersonalAccessTokenInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5832,9 +5832,9 @@ func (ec *executionContext) field_Mutation_updatePersonalAccessToken_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateProcedure_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateProcedure_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5849,7 +5849,7 @@ func (ec *executionContext) field_Mutation_updateProcedure_args(ctx context.Cont
 }
 func (ec *executionContext) field_Mutation_updateProcedure_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5871,7 +5871,7 @@ func (ec *executionContext) field_Mutation_updateProcedure_argsID(
 
 func (ec *executionContext) field_Mutation_updateProcedure_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateProcedureInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5891,9 +5891,9 @@ func (ec *executionContext) field_Mutation_updateProcedure_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateProgramMembership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateProgramMembership_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5908,7 +5908,7 @@ func (ec *executionContext) field_Mutation_updateProgramMembership_args(ctx cont
 }
 func (ec *executionContext) field_Mutation_updateProgramMembership_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5930,7 +5930,7 @@ func (ec *executionContext) field_Mutation_updateProgramMembership_argsID(
 
 func (ec *executionContext) field_Mutation_updateProgramMembership_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateProgramMembershipInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5950,9 +5950,9 @@ func (ec *executionContext) field_Mutation_updateProgramMembership_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateProgram_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateProgram_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -5967,7 +5967,7 @@ func (ec *executionContext) field_Mutation_updateProgram_args(ctx context.Contex
 }
 func (ec *executionContext) field_Mutation_updateProgram_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -5989,7 +5989,7 @@ func (ec *executionContext) field_Mutation_updateProgram_argsID(
 
 func (ec *executionContext) field_Mutation_updateProgram_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateProgramInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6009,9 +6009,9 @@ func (ec *executionContext) field_Mutation_updateProgram_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateRisk_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateRisk_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6026,7 +6026,7 @@ func (ec *executionContext) field_Mutation_updateRisk_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_updateRisk_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6048,7 +6048,7 @@ func (ec *executionContext) field_Mutation_updateRisk_argsID(
 
 func (ec *executionContext) field_Mutation_updateRisk_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateRiskInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6068,9 +6068,9 @@ func (ec *executionContext) field_Mutation_updateRisk_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateStandard_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateStandard_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6085,7 +6085,7 @@ func (ec *executionContext) field_Mutation_updateStandard_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_updateStandard_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6107,7 +6107,7 @@ func (ec *executionContext) field_Mutation_updateStandard_argsID(
 
 func (ec *executionContext) field_Mutation_updateStandard_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateStandardInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6127,9 +6127,9 @@ func (ec *executionContext) field_Mutation_updateStandard_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateSubcontrol_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateSubcontrol_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6144,7 +6144,7 @@ func (ec *executionContext) field_Mutation_updateSubcontrol_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_updateSubcontrol_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6166,7 +6166,7 @@ func (ec *executionContext) field_Mutation_updateSubcontrol_argsID(
 
 func (ec *executionContext) field_Mutation_updateSubcontrol_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateSubcontrolInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6186,9 +6186,9 @@ func (ec *executionContext) field_Mutation_updateSubcontrol_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateSubscriber_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateSubscriber_argsEmail(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6203,7 +6203,7 @@ func (ec *executionContext) field_Mutation_updateSubscriber_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_updateSubscriber_argsEmail(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6225,7 +6225,7 @@ func (ec *executionContext) field_Mutation_updateSubscriber_argsEmail(
 
 func (ec *executionContext) field_Mutation_updateSubscriber_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateSubscriberInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6245,9 +6245,9 @@ func (ec *executionContext) field_Mutation_updateSubscriber_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateTFASetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateTFASetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateTFASetting_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6257,7 +6257,7 @@ func (ec *executionContext) field_Mutation_updateTFASetting_args(ctx context.Con
 }
 func (ec *executionContext) field_Mutation_updateTFASetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateTFASettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6277,9 +6277,9 @@ func (ec *executionContext) field_Mutation_updateTFASetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateTask_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateTask_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6294,7 +6294,7 @@ func (ec *executionContext) field_Mutation_updateTask_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_updateTask_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6316,7 +6316,7 @@ func (ec *executionContext) field_Mutation_updateTask_argsID(
 
 func (ec *executionContext) field_Mutation_updateTask_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateTaskInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6336,9 +6336,9 @@ func (ec *executionContext) field_Mutation_updateTask_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateTemplate_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateTemplate_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6353,7 +6353,7 @@ func (ec *executionContext) field_Mutation_updateTemplate_args(ctx context.Conte
 }
 func (ec *executionContext) field_Mutation_updateTemplate_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6375,7 +6375,7 @@ func (ec *executionContext) field_Mutation_updateTemplate_argsID(
 
 func (ec *executionContext) field_Mutation_updateTemplate_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateTemplateInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6395,9 +6395,9 @@ func (ec *executionContext) field_Mutation_updateTemplate_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateUserSetting_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateUserSetting_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6412,7 +6412,7 @@ func (ec *executionContext) field_Mutation_updateUserSetting_args(ctx context.Co
 }
 func (ec *executionContext) field_Mutation_updateUserSetting_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6434,7 +6434,7 @@ func (ec *executionContext) field_Mutation_updateUserSetting_argsID(
 
 func (ec *executionContext) field_Mutation_updateUserSetting_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateUserSettingInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6454,9 +6454,9 @@ func (ec *executionContext) field_Mutation_updateUserSetting_argsInput(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
-	args := map[string]interface{}{}
+	args := map[string]any{}
 	arg0, err := ec.field_Mutation_updateUser_argsID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
@@ -6476,7 +6476,7 @@ func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, 
 }
 func (ec *executionContext) field_Mutation_updateUser_argsID(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (string, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6498,7 +6498,7 @@ func (ec *executionContext) field_Mutation_updateUser_argsID(
 
 func (ec *executionContext) field_Mutation_updateUser_argsInput(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (generated.UpdateUserInput, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6520,7 +6520,7 @@ func (ec *executionContext) field_Mutation_updateUser_argsInput(
 
 func (ec *executionContext) field_Mutation_updateUser_argsAvatarFile(
 	ctx context.Context,
-	rawArgs map[string]interface{},
+	rawArgs map[string]any,
 ) (*graphql.Upload, error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
@@ -6560,7 +6560,7 @@ func (ec *executionContext) _ActionPlanBulkCreatePayload_actionPlans(ctx context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.ActionPlans, nil
 	})
@@ -6643,7 +6643,7 @@ func (ec *executionContext) _ActionPlanCreatePayload_actionPlan(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.ActionPlan, nil
 	})
@@ -6729,7 +6729,7 @@ func (ec *executionContext) _ActionPlanDeletePayload_deletedID(ctx context.Conte
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.DeletedID, nil
 	})
@@ -6773,7 +6773,7 @@ func (ec *executionContext) _ActionPlanUpdatePayload_actionPlan(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.ActionPlan, nil
 	})
@@ -6859,7 +6859,7 @@ func (ec *executionContext) _Mutation_createActionPlan(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateActionPlan(rctx, fc.Args["input"].(generated.CreateActionPlanInput))
 	})
@@ -6918,7 +6918,7 @@ func (ec *executionContext) _Mutation_createBulkActionPlan(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkActionPlan(rctx, fc.Args["input"].([]*generated.CreateActionPlanInput))
 	})
@@ -6977,7 +6977,7 @@ func (ec *executionContext) _Mutation_createBulkCSVActionPlan(ctx context.Contex
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVActionPlan(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -7036,7 +7036,7 @@ func (ec *executionContext) _Mutation_updateActionPlan(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateActionPlan(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateActionPlanInput))
 	})
@@ -7095,7 +7095,7 @@ func (ec *executionContext) _Mutation_deleteActionPlan(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteActionPlan(rctx, fc.Args["id"].(string))
 	})
@@ -7154,7 +7154,7 @@ func (ec *executionContext) _Mutation_createAPIToken(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateAPIToken(rctx, fc.Args["input"].(generated.CreateAPITokenInput))
 	})
@@ -7213,7 +7213,7 @@ func (ec *executionContext) _Mutation_createBulkAPIToken(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkAPIToken(rctx, fc.Args["input"].([]*generated.CreateAPITokenInput))
 	})
@@ -7272,7 +7272,7 @@ func (ec *executionContext) _Mutation_createBulkCSVAPIToken(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVAPIToken(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -7331,7 +7331,7 @@ func (ec *executionContext) _Mutation_updateAPIToken(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateAPIToken(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAPITokenInput))
 	})
@@ -7390,7 +7390,7 @@ func (ec *executionContext) _Mutation_deleteAPIToken(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteAPIToken(rctx, fc.Args["id"].(string))
 	})
@@ -7449,7 +7449,7 @@ func (ec *executionContext) _Mutation_createContact(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateContact(rctx, fc.Args["input"].(generated.CreateContactInput))
 	})
@@ -7508,7 +7508,7 @@ func (ec *executionContext) _Mutation_createBulkContact(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkContact(rctx, fc.Args["input"].([]*generated.CreateContactInput))
 	})
@@ -7567,7 +7567,7 @@ func (ec *executionContext) _Mutation_createBulkCSVContact(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVContact(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -7626,7 +7626,7 @@ func (ec *executionContext) _Mutation_updateContact(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateContact(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateContactInput))
 	})
@@ -7685,7 +7685,7 @@ func (ec *executionContext) _Mutation_deleteContact(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteContact(rctx, fc.Args["id"].(string))
 	})
@@ -7744,7 +7744,7 @@ func (ec *executionContext) _Mutation_createControl(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateControl(rctx, fc.Args["input"].(generated.CreateControlInput))
 	})
@@ -7803,7 +7803,7 @@ func (ec *executionContext) _Mutation_createBulkControl(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkControl(rctx, fc.Args["input"].([]*generated.CreateControlInput))
 	})
@@ -7862,7 +7862,7 @@ func (ec *executionContext) _Mutation_createBulkCSVControl(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVControl(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -7921,7 +7921,7 @@ func (ec *executionContext) _Mutation_updateControl(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateControl(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateControlInput))
 	})
@@ -7980,7 +7980,7 @@ func (ec *executionContext) _Mutation_deleteControl(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteControl(rctx, fc.Args["id"].(string))
 	})
@@ -8039,7 +8039,7 @@ func (ec *executionContext) _Mutation_createControlObjective(ctx context.Context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateControlObjective(rctx, fc.Args["input"].(generated.CreateControlObjectiveInput))
 	})
@@ -8098,7 +8098,7 @@ func (ec *executionContext) _Mutation_createBulkControlObjective(ctx context.Con
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkControlObjective(rctx, fc.Args["input"].([]*generated.CreateControlObjectiveInput))
 	})
@@ -8157,7 +8157,7 @@ func (ec *executionContext) _Mutation_createBulkCSVControlObjective(ctx context.
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVControlObjective(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -8216,7 +8216,7 @@ func (ec *executionContext) _Mutation_updateControlObjective(ctx context.Context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateControlObjective(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateControlObjectiveInput))
 	})
@@ -8275,7 +8275,7 @@ func (ec *executionContext) _Mutation_deleteControlObjective(ctx context.Context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteControlObjective(rctx, fc.Args["id"].(string))
 	})
@@ -8334,7 +8334,7 @@ func (ec *executionContext) _Mutation_createDocumentData(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateDocumentData(rctx, fc.Args["input"].(generated.CreateDocumentDataInput))
 	})
@@ -8393,7 +8393,7 @@ func (ec *executionContext) _Mutation_createBulkDocumentData(ctx context.Context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkDocumentData(rctx, fc.Args["input"].([]*generated.CreateDocumentDataInput))
 	})
@@ -8452,7 +8452,7 @@ func (ec *executionContext) _Mutation_createBulkCSVDocumentData(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVDocumentData(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -8511,7 +8511,7 @@ func (ec *executionContext) _Mutation_updateDocumentData(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateDocumentData(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDocumentDataInput))
 	})
@@ -8570,7 +8570,7 @@ func (ec *executionContext) _Mutation_deleteDocumentData(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteDocumentData(rctx, fc.Args["id"].(string))
 	})
@@ -8629,7 +8629,7 @@ func (ec *executionContext) _Mutation_createEntity(ctx context.Context, field gr
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateEntity(rctx, fc.Args["input"].(generated.CreateEntityInput))
 	})
@@ -8688,7 +8688,7 @@ func (ec *executionContext) _Mutation_createBulkEntity(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkEntity(rctx, fc.Args["input"].([]*generated.CreateEntityInput))
 	})
@@ -8747,7 +8747,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEntity(ctx context.Context, f
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVEntity(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -8806,7 +8806,7 @@ func (ec *executionContext) _Mutation_updateEntity(ctx context.Context, field gr
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateEntity(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput))
 	})
@@ -8865,7 +8865,7 @@ func (ec *executionContext) _Mutation_deleteEntity(ctx context.Context, field gr
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteEntity(rctx, fc.Args["id"].(string))
 	})
@@ -8924,7 +8924,7 @@ func (ec *executionContext) _Mutation_createEntityType(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateEntityType(rctx, fc.Args["input"].(generated.CreateEntityTypeInput))
 	})
@@ -8983,7 +8983,7 @@ func (ec *executionContext) _Mutation_createBulkEntityType(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkEntityType(rctx, fc.Args["input"].([]*generated.CreateEntityTypeInput))
 	})
@@ -9042,7 +9042,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEntityType(ctx context.Contex
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVEntityType(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -9101,7 +9101,7 @@ func (ec *executionContext) _Mutation_updateEntityType(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateEntityType(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityTypeInput))
 	})
@@ -9160,7 +9160,7 @@ func (ec *executionContext) _Mutation_deleteEntityType(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteEntityType(rctx, fc.Args["id"].(string))
 	})
@@ -9219,7 +9219,7 @@ func (ec *executionContext) _Mutation_createEvent(ctx context.Context, field gra
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateEvent(rctx, fc.Args["input"].(generated.CreateEventInput))
 	})
@@ -9278,7 +9278,7 @@ func (ec *executionContext) _Mutation_createBulkEvent(ctx context.Context, field
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkEvent(rctx, fc.Args["input"].([]*generated.CreateEventInput))
 	})
@@ -9337,7 +9337,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEvent(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVEvent(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -9396,7 +9396,7 @@ func (ec *executionContext) _Mutation_updateEvent(ctx context.Context, field gra
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateEvent(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEventInput))
 	})
@@ -9455,7 +9455,7 @@ func (ec *executionContext) _Mutation_deleteEvent(ctx context.Context, field gra
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteEvent(rctx, fc.Args["id"].(string))
 	})
@@ -9514,7 +9514,7 @@ func (ec *executionContext) _Mutation_deleteFile(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteFile(rctx, fc.Args["id"].(string))
 	})
@@ -9573,7 +9573,7 @@ func (ec *executionContext) _Mutation_createGroup(ctx context.Context, field gra
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateGroup(rctx, fc.Args["input"].(generated.CreateGroupInput))
 	})
@@ -9632,7 +9632,7 @@ func (ec *executionContext) _Mutation_createBulkGroup(ctx context.Context, field
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkGroup(rctx, fc.Args["input"].([]*generated.CreateGroupInput))
 	})
@@ -9691,7 +9691,7 @@ func (ec *executionContext) _Mutation_createBulkCSVGroup(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVGroup(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -9750,7 +9750,7 @@ func (ec *executionContext) _Mutation_updateGroup(ctx context.Context, field gra
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateGroup(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput))
 	})
@@ -9809,7 +9809,7 @@ func (ec *executionContext) _Mutation_deleteGroup(ctx context.Context, field gra
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteGroup(rctx, fc.Args["id"].(string))
 	})
@@ -9868,7 +9868,7 @@ func (ec *executionContext) _Mutation_createGroupMembership(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateGroupMembership(rctx, fc.Args["input"].(generated.CreateGroupMembershipInput))
 	})
@@ -9927,7 +9927,7 @@ func (ec *executionContext) _Mutation_createBulkGroupMembership(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkGroupMembership(rctx, fc.Args["input"].([]*generated.CreateGroupMembershipInput))
 	})
@@ -9986,7 +9986,7 @@ func (ec *executionContext) _Mutation_createBulkCSVGroupMembership(ctx context.C
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVGroupMembership(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -10045,7 +10045,7 @@ func (ec *executionContext) _Mutation_updateGroupMembership(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateGroupMembership(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupMembershipInput))
 	})
@@ -10104,7 +10104,7 @@ func (ec *executionContext) _Mutation_deleteGroupMembership(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteGroupMembership(rctx, fc.Args["id"].(string))
 	})
@@ -10163,7 +10163,7 @@ func (ec *executionContext) _Mutation_createGroupSetting(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateGroupSetting(rctx, fc.Args["input"].(generated.CreateGroupSettingInput))
 	})
@@ -10222,7 +10222,7 @@ func (ec *executionContext) _Mutation_createBulkGroupSetting(ctx context.Context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkGroupSetting(rctx, fc.Args["input"].([]*generated.CreateGroupSettingInput))
 	})
@@ -10281,7 +10281,7 @@ func (ec *executionContext) _Mutation_createBulkCSVGroupSetting(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVGroupSetting(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -10340,7 +10340,7 @@ func (ec *executionContext) _Mutation_updateGroupSetting(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateGroupSetting(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupSettingInput))
 	})
@@ -10399,7 +10399,7 @@ func (ec *executionContext) _Mutation_deleteGroupSetting(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteGroupSetting(rctx, fc.Args["id"].(string))
 	})
@@ -10458,7 +10458,7 @@ func (ec *executionContext) _Mutation_createHush(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateHush(rctx, fc.Args["input"].(generated.CreateHushInput))
 	})
@@ -10517,7 +10517,7 @@ func (ec *executionContext) _Mutation_createBulkHush(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkHush(rctx, fc.Args["input"].([]*generated.CreateHushInput))
 	})
@@ -10576,7 +10576,7 @@ func (ec *executionContext) _Mutation_createBulkCSVHush(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVHush(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -10635,7 +10635,7 @@ func (ec *executionContext) _Mutation_updateHush(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateHush(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateHushInput))
 	})
@@ -10694,7 +10694,7 @@ func (ec *executionContext) _Mutation_deleteHush(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteHush(rctx, fc.Args["id"].(string))
 	})
@@ -10753,7 +10753,7 @@ func (ec *executionContext) _Mutation_createIntegration(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateIntegration(rctx, fc.Args["input"].(generated.CreateIntegrationInput))
 	})
@@ -10812,7 +10812,7 @@ func (ec *executionContext) _Mutation_createBulkIntegration(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkIntegration(rctx, fc.Args["input"].([]*generated.CreateIntegrationInput))
 	})
@@ -10871,7 +10871,7 @@ func (ec *executionContext) _Mutation_createBulkCSVIntegration(ctx context.Conte
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVIntegration(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -10930,7 +10930,7 @@ func (ec *executionContext) _Mutation_updateIntegration(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateIntegration(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateIntegrationInput))
 	})
@@ -10989,7 +10989,7 @@ func (ec *executionContext) _Mutation_deleteIntegration(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteIntegration(rctx, fc.Args["id"].(string))
 	})
@@ -11048,7 +11048,7 @@ func (ec *executionContext) _Mutation_createInternalPolicy(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateInternalPolicy(rctx, fc.Args["input"].(generated.CreateInternalPolicyInput))
 	})
@@ -11107,7 +11107,7 @@ func (ec *executionContext) _Mutation_createBulkInternalPolicy(ctx context.Conte
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkInternalPolicy(rctx, fc.Args["input"].([]*generated.CreateInternalPolicyInput))
 	})
@@ -11166,7 +11166,7 @@ func (ec *executionContext) _Mutation_createBulkCSVInternalPolicy(ctx context.Co
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVInternalPolicy(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -11225,7 +11225,7 @@ func (ec *executionContext) _Mutation_updateInternalPolicy(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateInternalPolicy(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInternalPolicyInput))
 	})
@@ -11284,7 +11284,7 @@ func (ec *executionContext) _Mutation_deleteInternalPolicy(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteInternalPolicy(rctx, fc.Args["id"].(string))
 	})
@@ -11343,7 +11343,7 @@ func (ec *executionContext) _Mutation_createInvite(ctx context.Context, field gr
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateInvite(rctx, fc.Args["input"].(generated.CreateInviteInput))
 	})
@@ -11402,7 +11402,7 @@ func (ec *executionContext) _Mutation_createBulkInvite(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkInvite(rctx, fc.Args["input"].([]*generated.CreateInviteInput))
 	})
@@ -11461,7 +11461,7 @@ func (ec *executionContext) _Mutation_createBulkCSVInvite(ctx context.Context, f
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVInvite(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -11520,7 +11520,7 @@ func (ec *executionContext) _Mutation_updateInvite(ctx context.Context, field gr
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateInvite(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInviteInput))
 	})
@@ -11579,7 +11579,7 @@ func (ec *executionContext) _Mutation_deleteInvite(ctx context.Context, field gr
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteInvite(rctx, fc.Args["id"].(string))
 	})
@@ -11638,7 +11638,7 @@ func (ec *executionContext) _Mutation_createNarrative(ctx context.Context, field
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateNarrative(rctx, fc.Args["input"].(generated.CreateNarrativeInput))
 	})
@@ -11697,7 +11697,7 @@ func (ec *executionContext) _Mutation_createBulkNarrative(ctx context.Context, f
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkNarrative(rctx, fc.Args["input"].([]*generated.CreateNarrativeInput))
 	})
@@ -11756,7 +11756,7 @@ func (ec *executionContext) _Mutation_createBulkCSVNarrative(ctx context.Context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVNarrative(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -11815,7 +11815,7 @@ func (ec *executionContext) _Mutation_updateNarrative(ctx context.Context, field
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateNarrative(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNarrativeInput))
 	})
@@ -11874,7 +11874,7 @@ func (ec *executionContext) _Mutation_deleteNarrative(ctx context.Context, field
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteNarrative(rctx, fc.Args["id"].(string))
 	})
@@ -11933,7 +11933,7 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateOrganization(rctx, fc.Args["input"].(generated.CreateOrganizationInput))
 	})
@@ -11992,7 +11992,7 @@ func (ec *executionContext) _Mutation_createBulkOrganization(ctx context.Context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkOrganization(rctx, fc.Args["input"].([]*generated.CreateOrganizationInput))
 	})
@@ -12051,7 +12051,7 @@ func (ec *executionContext) _Mutation_createBulkCSVOrganization(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVOrganization(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -12110,7 +12110,7 @@ func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateOrganization(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationInput))
 	})
@@ -12169,7 +12169,7 @@ func (ec *executionContext) _Mutation_deleteOrganization(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteOrganization(rctx, fc.Args["id"].(string))
 	})
@@ -12228,7 +12228,7 @@ func (ec *executionContext) _Mutation_createOrganizationSetting(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateOrganizationSetting(rctx, fc.Args["input"].(generated.CreateOrganizationSettingInput))
 	})
@@ -12287,7 +12287,7 @@ func (ec *executionContext) _Mutation_createBulkOrganizationSetting(ctx context.
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkOrganizationSetting(rctx, fc.Args["input"].([]*generated.CreateOrganizationSettingInput))
 	})
@@ -12346,7 +12346,7 @@ func (ec *executionContext) _Mutation_createBulkCSVOrganizationSetting(ctx conte
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVOrganizationSetting(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -12405,7 +12405,7 @@ func (ec *executionContext) _Mutation_updateOrganizationSetting(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateOrganizationSetting(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationSettingInput))
 	})
@@ -12464,7 +12464,7 @@ func (ec *executionContext) _Mutation_deleteOrganizationSetting(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteOrganizationSetting(rctx, fc.Args["id"].(string))
 	})
@@ -12523,7 +12523,7 @@ func (ec *executionContext) _Mutation_createOrgMembership(ctx context.Context, f
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateOrgMembership(rctx, fc.Args["input"].(generated.CreateOrgMembershipInput))
 	})
@@ -12582,7 +12582,7 @@ func (ec *executionContext) _Mutation_createBulkOrgMembership(ctx context.Contex
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkOrgMembership(rctx, fc.Args["input"].([]*generated.CreateOrgMembershipInput))
 	})
@@ -12641,7 +12641,7 @@ func (ec *executionContext) _Mutation_createBulkCSVOrgMembership(ctx context.Con
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVOrgMembership(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -12700,7 +12700,7 @@ func (ec *executionContext) _Mutation_updateOrgMembership(ctx context.Context, f
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateOrgMembership(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrgMembershipInput))
 	})
@@ -12759,7 +12759,7 @@ func (ec *executionContext) _Mutation_deleteOrgMembership(ctx context.Context, f
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteOrgMembership(rctx, fc.Args["id"].(string))
 	})
@@ -12818,7 +12818,7 @@ func (ec *executionContext) _Mutation_createOrgSubscription(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateOrgSubscription(rctx, fc.Args["input"].(generated.CreateOrgSubscriptionInput))
 	})
@@ -12877,7 +12877,7 @@ func (ec *executionContext) _Mutation_createBulkOrgSubscription(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkOrgSubscription(rctx, fc.Args["input"].([]*generated.CreateOrgSubscriptionInput))
 	})
@@ -12936,7 +12936,7 @@ func (ec *executionContext) _Mutation_createBulkCSVOrgSubscription(ctx context.C
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVOrgSubscription(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -12995,7 +12995,7 @@ func (ec *executionContext) _Mutation_updateOrgSubscription(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateOrgSubscription(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrgSubscriptionInput))
 	})
@@ -13054,7 +13054,7 @@ func (ec *executionContext) _Mutation_deleteOrgSubscription(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteOrgSubscription(rctx, fc.Args["id"].(string))
 	})
@@ -13113,7 +13113,7 @@ func (ec *executionContext) _Mutation_createPersonalAccessToken(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreatePersonalAccessToken(rctx, fc.Args["input"].(generated.CreatePersonalAccessTokenInput))
 	})
@@ -13172,7 +13172,7 @@ func (ec *executionContext) _Mutation_createBulkPersonalAccessToken(ctx context.
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkPersonalAccessToken(rctx, fc.Args["input"].([]*generated.CreatePersonalAccessTokenInput))
 	})
@@ -13231,7 +13231,7 @@ func (ec *executionContext) _Mutation_createBulkCSVPersonalAccessToken(ctx conte
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVPersonalAccessToken(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -13290,7 +13290,7 @@ func (ec *executionContext) _Mutation_updatePersonalAccessToken(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdatePersonalAccessToken(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePersonalAccessTokenInput))
 	})
@@ -13349,7 +13349,7 @@ func (ec *executionContext) _Mutation_deletePersonalAccessToken(ctx context.Cont
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeletePersonalAccessToken(rctx, fc.Args["id"].(string))
 	})
@@ -13408,7 +13408,7 @@ func (ec *executionContext) _Mutation_createProcedure(ctx context.Context, field
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateProcedure(rctx, fc.Args["input"].(generated.CreateProcedureInput))
 	})
@@ -13467,7 +13467,7 @@ func (ec *executionContext) _Mutation_createBulkProcedure(ctx context.Context, f
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkProcedure(rctx, fc.Args["input"].([]*generated.CreateProcedureInput))
 	})
@@ -13526,7 +13526,7 @@ func (ec *executionContext) _Mutation_createBulkCSVProcedure(ctx context.Context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVProcedure(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -13585,7 +13585,7 @@ func (ec *executionContext) _Mutation_updateProcedure(ctx context.Context, field
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateProcedure(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProcedureInput))
 	})
@@ -13644,7 +13644,7 @@ func (ec *executionContext) _Mutation_deleteProcedure(ctx context.Context, field
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteProcedure(rctx, fc.Args["id"].(string))
 	})
@@ -13703,7 +13703,7 @@ func (ec *executionContext) _Mutation_createProgram(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateProgram(rctx, fc.Args["input"].(generated.CreateProgramInput))
 	})
@@ -13762,7 +13762,7 @@ func (ec *executionContext) _Mutation_createBulkProgram(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkProgram(rctx, fc.Args["input"].([]*generated.CreateProgramInput))
 	})
@@ -13821,7 +13821,7 @@ func (ec *executionContext) _Mutation_createBulkCSVProgram(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVProgram(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -13880,7 +13880,7 @@ func (ec *executionContext) _Mutation_updateProgram(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateProgram(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProgramInput))
 	})
@@ -13939,7 +13939,7 @@ func (ec *executionContext) _Mutation_deleteProgram(ctx context.Context, field g
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteProgram(rctx, fc.Args["id"].(string))
 	})
@@ -13998,7 +13998,7 @@ func (ec *executionContext) _Mutation_createProgramWithMembers(ctx context.Conte
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateProgramWithMembers(rctx, fc.Args["input"].(model.CreateProgramWithMembersInput))
 	})
@@ -14057,7 +14057,7 @@ func (ec *executionContext) _Mutation_createFullProgram(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateFullProgram(rctx, fc.Args["input"].(model.CreateFullProgramInput))
 	})
@@ -14116,7 +14116,7 @@ func (ec *executionContext) _Mutation_createControlWithSubcontrols(ctx context.C
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateControlWithSubcontrols(rctx, fc.Args["input"].(model.CreateControlWithSubcontrolsInput))
 	})
@@ -14175,7 +14175,7 @@ func (ec *executionContext) _Mutation_createProgramMembership(ctx context.Contex
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateProgramMembership(rctx, fc.Args["input"].(generated.CreateProgramMembershipInput))
 	})
@@ -14234,7 +14234,7 @@ func (ec *executionContext) _Mutation_createBulkProgramMembership(ctx context.Co
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkProgramMembership(rctx, fc.Args["input"].([]*generated.CreateProgramMembershipInput))
 	})
@@ -14293,7 +14293,7 @@ func (ec *executionContext) _Mutation_createBulkCSVProgramMembership(ctx context
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVProgramMembership(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -14352,7 +14352,7 @@ func (ec *executionContext) _Mutation_updateProgramMembership(ctx context.Contex
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateProgramMembership(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProgramMembershipInput))
 	})
@@ -14411,7 +14411,7 @@ func (ec *executionContext) _Mutation_deleteProgramMembership(ctx context.Contex
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteProgramMembership(rctx, fc.Args["id"].(string))
 	})
@@ -14470,7 +14470,7 @@ func (ec *executionContext) _Mutation_createRisk(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateRisk(rctx, fc.Args["input"].(generated.CreateRiskInput))
 	})
@@ -14529,7 +14529,7 @@ func (ec *executionContext) _Mutation_createBulkRisk(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkRisk(rctx, fc.Args["input"].([]*generated.CreateRiskInput))
 	})
@@ -14588,7 +14588,7 @@ func (ec *executionContext) _Mutation_createBulkCSVRisk(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVRisk(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -14647,7 +14647,7 @@ func (ec *executionContext) _Mutation_updateRisk(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateRisk(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateRiskInput))
 	})
@@ -14706,7 +14706,7 @@ func (ec *executionContext) _Mutation_deleteRisk(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteRisk(rctx, fc.Args["id"].(string))
 	})
@@ -14765,7 +14765,7 @@ func (ec *executionContext) _Mutation_createStandard(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateStandard(rctx, fc.Args["input"].(generated.CreateStandardInput))
 	})
@@ -14824,7 +14824,7 @@ func (ec *executionContext) _Mutation_createBulkStandard(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkStandard(rctx, fc.Args["input"].([]*generated.CreateStandardInput))
 	})
@@ -14883,7 +14883,7 @@ func (ec *executionContext) _Mutation_createBulkCSVStandard(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVStandard(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -14942,7 +14942,7 @@ func (ec *executionContext) _Mutation_updateStandard(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateStandard(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateStandardInput))
 	})
@@ -15001,7 +15001,7 @@ func (ec *executionContext) _Mutation_deleteStandard(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteStandard(rctx, fc.Args["id"].(string))
 	})
@@ -15060,7 +15060,7 @@ func (ec *executionContext) _Mutation_createSubcontrol(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateSubcontrol(rctx, fc.Args["input"].(generated.CreateSubcontrolInput))
 	})
@@ -15119,7 +15119,7 @@ func (ec *executionContext) _Mutation_createBulkSubcontrol(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkSubcontrol(rctx, fc.Args["input"].([]*generated.CreateSubcontrolInput))
 	})
@@ -15178,7 +15178,7 @@ func (ec *executionContext) _Mutation_createBulkCSVSubcontrol(ctx context.Contex
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVSubcontrol(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -15237,7 +15237,7 @@ func (ec *executionContext) _Mutation_updateSubcontrol(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateSubcontrol(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubcontrolInput))
 	})
@@ -15296,7 +15296,7 @@ func (ec *executionContext) _Mutation_deleteSubcontrol(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteSubcontrol(rctx, fc.Args["id"].(string))
 	})
@@ -15355,7 +15355,7 @@ func (ec *executionContext) _Mutation_createSubscriber(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateSubscriber(rctx, fc.Args["input"].(generated.CreateSubscriberInput))
 	})
@@ -15414,7 +15414,7 @@ func (ec *executionContext) _Mutation_createBulkSubscriber(ctx context.Context, 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkSubscriber(rctx, fc.Args["input"].([]*generated.CreateSubscriberInput))
 	})
@@ -15473,7 +15473,7 @@ func (ec *executionContext) _Mutation_createBulkCSVSubscriber(ctx context.Contex
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVSubscriber(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -15532,7 +15532,7 @@ func (ec *executionContext) _Mutation_updateSubscriber(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateSubscriber(rctx, fc.Args["email"].(string), fc.Args["input"].(generated.UpdateSubscriberInput))
 	})
@@ -15591,7 +15591,7 @@ func (ec *executionContext) _Mutation_deleteSubscriber(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteSubscriber(rctx, fc.Args["email"].(string), fc.Args["ownerID"].(*string))
 	})
@@ -15650,7 +15650,7 @@ func (ec *executionContext) _Mutation_createTask(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateTask(rctx, fc.Args["input"].(generated.CreateTaskInput))
 	})
@@ -15709,7 +15709,7 @@ func (ec *executionContext) _Mutation_createBulkTask(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkTask(rctx, fc.Args["input"].([]*generated.CreateTaskInput))
 	})
@@ -15768,7 +15768,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTask(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVTask(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -15827,7 +15827,7 @@ func (ec *executionContext) _Mutation_updateTask(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateTask(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTaskInput))
 	})
@@ -15886,7 +15886,7 @@ func (ec *executionContext) _Mutation_deleteTask(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteTask(rctx, fc.Args["id"].(string))
 	})
@@ -15945,7 +15945,7 @@ func (ec *executionContext) _Mutation_createTemplate(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateTemplate(rctx, fc.Args["input"].(generated.CreateTemplateInput))
 	})
@@ -16004,7 +16004,7 @@ func (ec *executionContext) _Mutation_createBulkTemplate(ctx context.Context, fi
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkTemplate(rctx, fc.Args["input"].([]*generated.CreateTemplateInput))
 	})
@@ -16063,7 +16063,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTemplate(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVTemplate(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -16122,7 +16122,7 @@ func (ec *executionContext) _Mutation_updateTemplate(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateTemplate(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTemplateInput))
 	})
@@ -16181,7 +16181,7 @@ func (ec *executionContext) _Mutation_deleteTemplate(ctx context.Context, field 
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteTemplate(rctx, fc.Args["id"].(string))
 	})
@@ -16240,7 +16240,7 @@ func (ec *executionContext) _Mutation_createTFASetting(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateTFASetting(rctx, fc.Args["input"].(generated.CreateTFASettingInput))
 	})
@@ -16299,7 +16299,7 @@ func (ec *executionContext) _Mutation_updateTFASetting(ctx context.Context, fiel
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateTFASetting(rctx, fc.Args["input"].(generated.UpdateTFASettingInput))
 	})
@@ -16358,7 +16358,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["input"].(generated.CreateUserInput), fc.Args["avatarFile"].(*graphql.Upload))
 	})
@@ -16417,7 +16417,7 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateUser(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateUserInput), fc.Args["avatarFile"].(*graphql.Upload))
 	})
@@ -16476,7 +16476,7 @@ func (ec *executionContext) _Mutation_deleteUser(ctx context.Context, field grap
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteUser(rctx, fc.Args["id"].(string))
 	})
@@ -16535,7 +16535,7 @@ func (ec *executionContext) _Mutation_createUserSetting(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateUserSetting(rctx, fc.Args["input"].(generated.CreateUserSettingInput))
 	})
@@ -16594,7 +16594,7 @@ func (ec *executionContext) _Mutation_createBulkUserSetting(ctx context.Context,
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkUserSetting(rctx, fc.Args["input"].([]*generated.CreateUserSettingInput))
 	})
@@ -16653,7 +16653,7 @@ func (ec *executionContext) _Mutation_createBulkCSVUserSetting(ctx context.Conte
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateBulkCSVUserSetting(rctx, fc.Args["input"].(graphql.Upload))
 	})
@@ -16712,7 +16712,7 @@ func (ec *executionContext) _Mutation_updateUserSetting(ctx context.Context, fie
 			ret = graphql.Null
 		}
 	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdateUserSetting(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateUserSettingInput))
 	})
