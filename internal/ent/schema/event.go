@@ -21,7 +21,7 @@ func (Event) Fields() []ent.Field {
 		field.String("correlation_id").
 			Optional(),
 		field.String("event_type"),
-		field.JSON("metadata", map[string]interface{}{}).Optional(),
+		field.JSON("metadata", map[string]any{}).Optional(),
 	}
 }
 

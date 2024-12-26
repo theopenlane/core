@@ -269,12 +269,12 @@ type ActionPlan struct {
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
 	// json data including details of the action plan
-	Details  map[string]interface{} `json:"details,omitempty"`
-	Standard []*Standard            `json:"standard,omitempty"`
-	Risk     []*Risk                `json:"risk,omitempty"`
-	Control  []*Control             `json:"control,omitempty"`
-	User     []*User                `json:"user,omitempty"`
-	Program  []*Program             `json:"program,omitempty"`
+	Details  map[string]any `json:"details,omitempty"`
+	Standard []*Standard    `json:"standard,omitempty"`
+	Risk     []*Risk        `json:"risk,omitempty"`
+	Control  []*Control     `json:"control,omitempty"`
+	User     []*User        `json:"user,omitempty"`
+	Program  []*Program     `json:"program,omitempty"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -341,7 +341,7 @@ type ActionPlanHistory struct {
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
 	// json data including details of the action plan
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (ActionPlanHistory) IsNode() {}
@@ -1473,8 +1473,8 @@ type Control struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control
-	Details map[string]interface{} `json:"details,omitempty"`
-	Owner   *Organization          `json:"owner"`
+	Details map[string]any `json:"details,omitempty"`
+	Owner   *Organization  `json:"owner"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -1568,7 +1568,7 @@ type ControlHistory struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (ControlHistory) IsNode() {}
@@ -1942,8 +1942,8 @@ type ControlObjective struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control objective
-	Details map[string]interface{} `json:"details,omitempty"`
-	Owner   *Organization          `json:"owner"`
+	Details map[string]any `json:"details,omitempty"`
+	Owner   *Organization  `json:"owner"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -2035,7 +2035,7 @@ type ControlObjectiveHistory struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control objective
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (ControlObjectiveHistory) IsNode() {}
@@ -3056,12 +3056,12 @@ type CreateActionPlanInput struct {
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
 	// json data including details of the action plan
-	Details     map[string]interface{} `json:"details,omitempty"`
-	StandardIDs []string               `json:"standardIDs,omitempty"`
-	RiskIDs     []string               `json:"riskIDs,omitempty"`
-	ControlIDs  []string               `json:"controlIDs,omitempty"`
-	UserIDs     []string               `json:"userIDs,omitempty"`
-	ProgramIDs  []string               `json:"programIDs,omitempty"`
+	Details     map[string]any `json:"details,omitempty"`
+	StandardIDs []string       `json:"standardIDs,omitempty"`
+	RiskIDs     []string       `json:"riskIDs,omitempty"`
+	ControlIDs  []string       `json:"controlIDs,omitempty"`
+	UserIDs     []string       `json:"userIDs,omitempty"`
+	ProgramIDs  []string       `json:"programIDs,omitempty"`
 }
 
 // CreateContactInput is used for create Contact object.
@@ -3116,20 +3116,20 @@ type CreateControlInput struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control
-	Details             map[string]interface{} `json:"details,omitempty"`
-	OwnerID             string                 `json:"ownerID"`
-	BlockedGroupIDs     []string               `json:"blockedGroupIDs,omitempty"`
-	EditorIDs           []string               `json:"editorIDs,omitempty"`
-	ViewerIDs           []string               `json:"viewerIDs,omitempty"`
-	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
-	SubcontrolIDs       []string               `json:"subcontrolIDs,omitempty"`
-	ControlObjectiveIDs []string               `json:"controlObjectiveIDs,omitempty"`
-	StandardIDs         []string               `json:"standardIDs,omitempty"`
-	NarrativeIDs        []string               `json:"narrativeIDs,omitempty"`
-	RiskIDs             []string               `json:"riskIDs,omitempty"`
-	ActionPlanIDs       []string               `json:"actionPlanIDs,omitempty"`
-	TaskIDs             []string               `json:"taskIDs,omitempty"`
-	ProgramIDs          []string               `json:"programIDs,omitempty"`
+	Details             map[string]any `json:"details,omitempty"`
+	OwnerID             string         `json:"ownerID"`
+	BlockedGroupIDs     []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs           []string       `json:"editorIDs,omitempty"`
+	ViewerIDs           []string       `json:"viewerIDs,omitempty"`
+	ProcedureIDs        []string       `json:"procedureIDs,omitempty"`
+	SubcontrolIDs       []string       `json:"subcontrolIDs,omitempty"`
+	ControlObjectiveIDs []string       `json:"controlObjectiveIDs,omitempty"`
+	StandardIDs         []string       `json:"standardIDs,omitempty"`
+	NarrativeIDs        []string       `json:"narrativeIDs,omitempty"`
+	RiskIDs             []string       `json:"riskIDs,omitempty"`
+	ActionPlanIDs       []string       `json:"actionPlanIDs,omitempty"`
+	TaskIDs             []string       `json:"taskIDs,omitempty"`
+	ProgramIDs          []string       `json:"programIDs,omitempty"`
 }
 
 // CreateControlObjectiveInput is used for create ControlObjective object.
@@ -3158,20 +3158,20 @@ type CreateControlObjectiveInput struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control objective
-	Details           map[string]interface{} `json:"details,omitempty"`
-	OwnerID           string                 `json:"ownerID"`
-	BlockedGroupIDs   []string               `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string               `json:"editorIDs,omitempty"`
-	ViewerIDs         []string               `json:"viewerIDs,omitempty"`
-	InternalPolicyIDs []string               `json:"internalPolicyIDs,omitempty"`
-	ControlIDs        []string               `json:"controlIDs,omitempty"`
-	ProcedureIDs      []string               `json:"procedureIDs,omitempty"`
-	RiskIDs           []string               `json:"riskIDs,omitempty"`
-	SubcontrolIDs     []string               `json:"subcontrolIDs,omitempty"`
-	StandardIDs       []string               `json:"standardIDs,omitempty"`
-	NarrativeIDs      []string               `json:"narrativeIDs,omitempty"`
-	TaskIDs           []string               `json:"taskIDs,omitempty"`
-	ProgramIDs        []string               `json:"programIDs,omitempty"`
+	Details           map[string]any `json:"details,omitempty"`
+	OwnerID           string         `json:"ownerID"`
+	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string       `json:"editorIDs,omitempty"`
+	ViewerIDs         []string       `json:"viewerIDs,omitempty"`
+	InternalPolicyIDs []string       `json:"internalPolicyIDs,omitempty"`
+	ControlIDs        []string       `json:"controlIDs,omitempty"`
+	ProcedureIDs      []string       `json:"procedureIDs,omitempty"`
+	RiskIDs           []string       `json:"riskIDs,omitempty"`
+	SubcontrolIDs     []string       `json:"subcontrolIDs,omitempty"`
+	StandardIDs       []string       `json:"standardIDs,omitempty"`
+	NarrativeIDs      []string       `json:"narrativeIDs,omitempty"`
+	TaskIDs           []string       `json:"taskIDs,omitempty"`
+	ProgramIDs        []string       `json:"programIDs,omitempty"`
 }
 
 type CreateControlWithSubcontrolsInput struct {
@@ -3231,20 +3231,20 @@ type CreateEntityTypeInput struct {
 // Input was generated by ent.
 type CreateEventInput struct {
 	// tags associated with the object
-	Tags                   []string               `json:"tags,omitempty"`
-	EventID                *string                `json:"eventID,omitempty"`
-	CorrelationID          *string                `json:"correlationID,omitempty"`
-	EventType              string                 `json:"eventType"`
-	Metadata               map[string]interface{} `json:"metadata,omitempty"`
-	UserIDs                []string               `json:"userIDs,omitempty"`
-	GroupIDs               []string               `json:"groupIDs,omitempty"`
-	IntegrationIDs         []string               `json:"integrationIDs,omitempty"`
-	OrganizationIDs        []string               `json:"organizationIDs,omitempty"`
-	InviteIDs              []string               `json:"inviteIDs,omitempty"`
-	PersonalAccessTokenIDs []string               `json:"personalAccessTokenIDs,omitempty"`
-	HushIDs                []string               `json:"hushIDs,omitempty"`
-	SubscriberIDs          []string               `json:"subscriberIDs,omitempty"`
-	FileIDs                []string               `json:"fileIDs,omitempty"`
+	Tags                   []string       `json:"tags,omitempty"`
+	EventID                *string        `json:"eventID,omitempty"`
+	CorrelationID          *string        `json:"correlationID,omitempty"`
+	EventType              string         `json:"eventType"`
+	Metadata               map[string]any `json:"metadata,omitempty"`
+	UserIDs                []string       `json:"userIDs,omitempty"`
+	GroupIDs               []string       `json:"groupIDs,omitempty"`
+	IntegrationIDs         []string       `json:"integrationIDs,omitempty"`
+	OrganizationIDs        []string       `json:"organizationIDs,omitempty"`
+	InviteIDs              []string       `json:"inviteIDs,omitempty"`
+	PersonalAccessTokenIDs []string       `json:"personalAccessTokenIDs,omitempty"`
+	HushIDs                []string       `json:"hushIDs,omitempty"`
+	SubscriberIDs          []string       `json:"subscriberIDs,omitempty"`
+	FileIDs                []string       `json:"fileIDs,omitempty"`
 }
 
 // CreateFileInput is used for create File object.
@@ -3431,16 +3431,16 @@ type CreateInternalPolicyInput struct {
 	// background of the policy
 	Background *string `json:"background,omitempty"`
 	// json data for the policy document
-	Details             map[string]interface{} `json:"details,omitempty"`
-	OwnerID             *string                `json:"ownerID,omitempty"`
-	BlockedGroupIDs     []string               `json:"blockedGroupIDs,omitempty"`
-	EditorIDs           []string               `json:"editorIDs,omitempty"`
-	ControlObjectiveIDs []string               `json:"controlObjectiveIDs,omitempty"`
-	ControlIDs          []string               `json:"controlIDs,omitempty"`
-	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
-	NarrativeIDs        []string               `json:"narrativeIDs,omitempty"`
-	TaskIDs             []string               `json:"taskIDs,omitempty"`
-	ProgramIDs          []string               `json:"programIDs,omitempty"`
+	Details             map[string]any `json:"details,omitempty"`
+	OwnerID             *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs     []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs           []string       `json:"editorIDs,omitempty"`
+	ControlObjectiveIDs []string       `json:"controlObjectiveIDs,omitempty"`
+	ControlIDs          []string       `json:"controlIDs,omitempty"`
+	ProcedureIDs        []string       `json:"procedureIDs,omitempty"`
+	NarrativeIDs        []string       `json:"narrativeIDs,omitempty"`
+	TaskIDs             []string       `json:"taskIDs,omitempty"`
+	ProgramIDs          []string       `json:"programIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -3478,16 +3478,16 @@ type CreateNarrativeInput struct {
 	// which controls are satisfied by the narrative
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the narrative document
-	Details             map[string]interface{} `json:"details,omitempty"`
-	OwnerID             string                 `json:"ownerID"`
-	BlockedGroupIDs     []string               `json:"blockedGroupIDs,omitempty"`
-	EditorIDs           []string               `json:"editorIDs,omitempty"`
-	ViewerIDs           []string               `json:"viewerIDs,omitempty"`
-	InternalPolicyIDs   []string               `json:"internalPolicyIDs,omitempty"`
-	ControlIDs          []string               `json:"controlIDs,omitempty"`
-	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
-	ControlObjectiveIDs []string               `json:"controlObjectiveIDs,omitempty"`
-	ProgramIDs          []string               `json:"programIDs,omitempty"`
+	Details             map[string]any `json:"details,omitempty"`
+	OwnerID             string         `json:"ownerID"`
+	BlockedGroupIDs     []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs           []string       `json:"editorIDs,omitempty"`
+	ViewerIDs           []string       `json:"viewerIDs,omitempty"`
+	InternalPolicyIDs   []string       `json:"internalPolicyIDs,omitempty"`
+	ControlIDs          []string       `json:"controlIDs,omitempty"`
+	ProcedureIDs        []string       `json:"procedureIDs,omitempty"`
+	ControlObjectiveIDs []string       `json:"controlObjectiveIDs,omitempty"`
+	ProgramIDs          []string       `json:"programIDs,omitempty"`
 }
 
 // CreateNoteInput is used for create Note object.
@@ -3658,16 +3658,16 @@ type CreateProcedureInput struct {
 	// which controls are satisfied by the procedure
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the procedure document
-	Details           map[string]interface{} `json:"details,omitempty"`
-	OwnerID           *string                `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string               `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string               `json:"editorIDs,omitempty"`
-	ControlIDs        []string               `json:"controlIDs,omitempty"`
-	InternalPolicyIDs []string               `json:"internalPolicyIDs,omitempty"`
-	NarrativeIDs      []string               `json:"narrativeIDs,omitempty"`
-	RiskIDs           []string               `json:"riskIDs,omitempty"`
-	TaskIDs           []string               `json:"taskIDs,omitempty"`
-	ProgramIDs        []string               `json:"programIDs,omitempty"`
+	Details           map[string]any `json:"details,omitempty"`
+	OwnerID           *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string       `json:"editorIDs,omitempty"`
+	ControlIDs        []string       `json:"controlIDs,omitempty"`
+	InternalPolicyIDs []string       `json:"internalPolicyIDs,omitempty"`
+	NarrativeIDs      []string       `json:"narrativeIDs,omitempty"`
+	RiskIDs           []string       `json:"riskIDs,omitempty"`
+	TaskIDs           []string       `json:"taskIDs,omitempty"`
+	ProgramIDs        []string       `json:"programIDs,omitempty"`
 }
 
 // CreateProgramInput is used for create Program object.
@@ -3747,15 +3747,15 @@ type CreateRiskInput struct {
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the risk document
-	Details         map[string]interface{} `json:"details,omitempty"`
-	OwnerID         string                 `json:"ownerID"`
-	BlockedGroupIDs []string               `json:"blockedGroupIDs,omitempty"`
-	EditorIDs       []string               `json:"editorIDs,omitempty"`
-	ViewerIDs       []string               `json:"viewerIDs,omitempty"`
-	ControlIDs      []string               `json:"controlIDs,omitempty"`
-	ProcedureIDs    []string               `json:"procedureIDs,omitempty"`
-	ActionPlanIDs   []string               `json:"actionPlanIDs,omitempty"`
-	ProgramIDs      []string               `json:"programIDs,omitempty"`
+	Details         map[string]any `json:"details,omitempty"`
+	OwnerID         string         `json:"ownerID"`
+	BlockedGroupIDs []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs       []string       `json:"editorIDs,omitempty"`
+	ViewerIDs       []string       `json:"viewerIDs,omitempty"`
+	ControlIDs      []string       `json:"controlIDs,omitempty"`
+	ProcedureIDs    []string       `json:"procedureIDs,omitempty"`
+	ActionPlanIDs   []string       `json:"actionPlanIDs,omitempty"`
+	ProgramIDs      []string       `json:"programIDs,omitempty"`
 }
 
 // CreateStandardInput is used for create Standard object.
@@ -3782,12 +3782,12 @@ type CreateStandardInput struct {
 	// which controls are satisfied by the standard
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data with details of the standard
-	Details             map[string]interface{} `json:"details,omitempty"`
-	ControlObjectiveIDs []string               `json:"controlObjectiveIDs,omitempty"`
-	ControlIDs          []string               `json:"controlIDs,omitempty"`
-	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
-	ActionPlanIDs       []string               `json:"actionPlanIDs,omitempty"`
-	ProgramIDs          []string               `json:"programIDs,omitempty"`
+	Details             map[string]any `json:"details,omitempty"`
+	ControlObjectiveIDs []string       `json:"controlObjectiveIDs,omitempty"`
+	ControlIDs          []string       `json:"controlIDs,omitempty"`
+	ProcedureIDs        []string       `json:"procedureIDs,omitempty"`
+	ActionPlanIDs       []string       `json:"actionPlanIDs,omitempty"`
+	ProgramIDs          []string       `json:"programIDs,omitempty"`
 }
 
 // CreateSubcontrolInput is used for create Subcontrol object.
@@ -3826,13 +3826,13 @@ type CreateSubcontrolInput struct {
 	// date the subcontrol implementation was verified
 	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
 	// json data details of the subcontrol
-	Details    map[string]interface{} `json:"details,omitempty"`
-	OwnerID    string                 `json:"ownerID"`
-	ControlIDs []string               `json:"controlIDs"`
-	UserIDs    []string               `json:"userIDs,omitempty"`
-	TaskIDs    []string               `json:"taskIDs,omitempty"`
-	NotesID    *string                `json:"notesID,omitempty"`
-	ProgramIDs []string               `json:"programIDs,omitempty"`
+	Details    map[string]any `json:"details,omitempty"`
+	OwnerID    string         `json:"ownerID"`
+	ControlIDs []string       `json:"controlIDs"`
+	UserIDs    []string       `json:"userIDs,omitempty"`
+	TaskIDs    []string       `json:"taskIDs,omitempty"`
+	NotesID    *string        `json:"notesID,omitempty"`
+	ProgramIDs []string       `json:"programIDs,omitempty"`
 }
 
 // CreateSubscriberInput is used for create Subscriber object.
@@ -3868,7 +3868,7 @@ type CreateTaskInput struct {
 	// the description of the task
 	Description *string `json:"description,omitempty"`
 	// the details of the task
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
@@ -5375,7 +5375,7 @@ type Event struct {
 	EventID             *string                `json:"eventID,omitempty"`
 	CorrelationID       *string                `json:"correlationID,omitempty"`
 	EventType           string                 `json:"eventType"`
-	Metadata            map[string]interface{} `json:"metadata,omitempty"`
+	Metadata            map[string]any         `json:"metadata,omitempty"`
 	User                []*User                `json:"user,omitempty"`
 	Group               []*Group               `json:"group,omitempty"`
 	Integration         []*Integration         `json:"integration,omitempty"`
@@ -5437,11 +5437,11 @@ type EventHistory struct {
 	CreatedBy   *string        `json:"createdBy,omitempty"`
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
-	Tags          []string               `json:"tags,omitempty"`
-	EventID       *string                `json:"eventID,omitempty"`
-	CorrelationID *string                `json:"correlationID,omitempty"`
-	EventType     string                 `json:"eventType"`
-	Metadata      map[string]interface{} `json:"metadata,omitempty"`
+	Tags          []string       `json:"tags,omitempty"`
+	EventID       *string        `json:"eventID,omitempty"`
+	CorrelationID *string        `json:"correlationID,omitempty"`
+	EventType     string         `json:"eventType"`
+	Metadata      map[string]any `json:"metadata,omitempty"`
 }
 
 func (EventHistory) IsNode() {}
@@ -8895,8 +8895,8 @@ type InternalPolicy struct {
 	// background of the policy
 	Background *string `json:"background,omitempty"`
 	// json data for the policy document
-	Details map[string]interface{} `json:"details,omitempty"`
-	Owner   *Organization          `json:"owner,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
+	Owner   *Organization  `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -8977,7 +8977,7 @@ type InternalPolicyHistory struct {
 	// background of the policy
 	Background *string `json:"background,omitempty"`
 	// json data for the policy document
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -9794,8 +9794,8 @@ type Narrative struct {
 	// which controls are satisfied by the narrative
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the narrative document
-	Details map[string]interface{} `json:"details,omitempty"`
-	Owner   *Organization          `json:"owner"`
+	Details map[string]any `json:"details,omitempty"`
+	Owner   *Organization  `json:"owner"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -9869,7 +9869,7 @@ type NarrativeHistory struct {
 	// which controls are satisfied by the narrative
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the narrative document
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (NarrativeHistory) IsNode() {}
@@ -13120,8 +13120,8 @@ type Procedure struct {
 	// which controls are satisfied by the procedure
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the procedure document
-	Details map[string]interface{} `json:"details,omitempty"`
-	Owner   *Organization          `json:"owner,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
+	Owner   *Organization  `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -13204,7 +13204,7 @@ type ProcedureHistory struct {
 	// which controls are satisfied by the procedure
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the procedure document
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (ProcedureHistory) IsNode() {}
@@ -14782,8 +14782,8 @@ type Risk struct {
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the risk document
-	Details map[string]interface{} `json:"details,omitempty"`
-	Owner   *Organization          `json:"owner"`
+	Details map[string]any `json:"details,omitempty"`
+	Owner   *Organization  `json:"owner"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -14868,7 +14868,7 @@ type RiskHistory struct {
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the risk document
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (RiskHistory) IsNode() {}
@@ -15467,12 +15467,12 @@ type Standard struct {
 	// which controls are satisfied by the standard
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data with details of the standard
-	Details           map[string]interface{} `json:"details,omitempty"`
-	ControlObjectives []*ControlObjective    `json:"controlObjectives,omitempty"`
-	Controls          []*Control             `json:"controls,omitempty"`
-	Procedures        []*Procedure           `json:"procedures,omitempty"`
-	ActionPlans       []*ActionPlan          `json:"actionPlans,omitempty"`
-	Programs          []*Program             `json:"programs,omitempty"`
+	Details           map[string]any      `json:"details,omitempty"`
+	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
+	Controls          []*Control          `json:"controls,omitempty"`
+	Procedures        []*Procedure        `json:"procedures,omitempty"`
+	ActionPlans       []*ActionPlan       `json:"actionPlans,omitempty"`
+	Programs          []*Program          `json:"programs,omitempty"`
 }
 
 func (Standard) IsNode() {}
@@ -15545,7 +15545,7 @@ type StandardHistory struct {
 	// which controls are satisfied by the standard
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data with details of the standard
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (StandardHistory) IsNode() {}
@@ -16152,13 +16152,13 @@ type Subcontrol struct {
 	// date the subcontrol implementation was verified
 	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
 	// json data details of the subcontrol
-	Details  map[string]interface{} `json:"details,omitempty"`
-	Owner    *Organization          `json:"owner"`
-	Controls []*Control             `json:"controls"`
-	User     []*User                `json:"user,omitempty"`
-	Tasks    []*Task                `json:"tasks,omitempty"`
-	Notes    *Note                  `json:"notes,omitempty"`
-	Programs []*Program             `json:"programs,omitempty"`
+	Details  map[string]any `json:"details,omitempty"`
+	Owner    *Organization  `json:"owner"`
+	Controls []*Control     `json:"controls"`
+	User     []*User        `json:"user,omitempty"`
+	Tasks    []*Task        `json:"tasks,omitempty"`
+	Notes    *Note          `json:"notes,omitempty"`
+	Programs []*Program     `json:"programs,omitempty"`
 }
 
 func (Subcontrol) IsNode() {}
@@ -16245,7 +16245,7 @@ type SubcontrolHistory struct {
 	// date the subcontrol implementation was verified
 	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
 	// json data details of the subcontrol
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 func (SubcontrolHistory) IsNode() {}
@@ -17450,7 +17450,7 @@ type Task struct {
 	// the description of the task
 	Description *string `json:"description,omitempty"`
 	// the details of the task
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
 	// the due date of the task
@@ -17525,7 +17525,7 @@ type TaskHistory struct {
 	// the description of the task
 	Description *string `json:"description,omitempty"`
 	// the details of the task
-	Details map[string]interface{} `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
 	// the due date of the task
@@ -18467,23 +18467,23 @@ type UpdateActionPlanInput struct {
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`
 	// json data including details of the action plan
-	Details           map[string]interface{} `json:"details,omitempty"`
-	ClearDetails      *bool                  `json:"clearDetails,omitempty"`
-	AddStandardIDs    []string               `json:"addStandardIDs,omitempty"`
-	RemoveStandardIDs []string               `json:"removeStandardIDs,omitempty"`
-	ClearStandard     *bool                  `json:"clearStandard,omitempty"`
-	AddRiskIDs        []string               `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs     []string               `json:"removeRiskIDs,omitempty"`
-	ClearRisk         *bool                  `json:"clearRisk,omitempty"`
-	AddControlIDs     []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs  []string               `json:"removeControlIDs,omitempty"`
-	ClearControl      *bool                  `json:"clearControl,omitempty"`
-	AddUserIDs        []string               `json:"addUserIDs,omitempty"`
-	RemoveUserIDs     []string               `json:"removeUserIDs,omitempty"`
-	ClearUser         *bool                  `json:"clearUser,omitempty"`
-	AddProgramIDs     []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs  []string               `json:"removeProgramIDs,omitempty"`
-	ClearProgram      *bool                  `json:"clearProgram,omitempty"`
+	Details           map[string]any `json:"details,omitempty"`
+	ClearDetails      *bool          `json:"clearDetails,omitempty"`
+	AddStandardIDs    []string       `json:"addStandardIDs,omitempty"`
+	RemoveStandardIDs []string       `json:"removeStandardIDs,omitempty"`
+	ClearStandard     *bool          `json:"clearStandard,omitempty"`
+	AddRiskIDs        []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs     []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisk         *bool          `json:"clearRisk,omitempty"`
+	AddControlIDs     []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs  []string       `json:"removeControlIDs,omitempty"`
+	ClearControl      *bool          `json:"clearControl,omitempty"`
+	AddUserIDs        []string       `json:"addUserIDs,omitempty"`
+	RemoveUserIDs     []string       `json:"removeUserIDs,omitempty"`
+	ClearUser         *bool          `json:"clearUser,omitempty"`
+	AddProgramIDs     []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs  []string       `json:"removeProgramIDs,omitempty"`
+	ClearProgram      *bool          `json:"clearProgram,omitempty"`
 }
 
 // UpdateContactInput is used for update Contact object.
@@ -18562,45 +18562,45 @@ type UpdateControlInput struct {
 	MappedFrameworks      *string `json:"mappedFrameworks,omitempty"`
 	ClearMappedFrameworks *bool   `json:"clearMappedFrameworks,omitempty"`
 	// json data including details of the control
-	Details                   map[string]interface{} `json:"details,omitempty"`
-	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
-	OwnerID                   *string                `json:"ownerID,omitempty"`
-	AddBlockedGroupIDs        []string               `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs     []string               `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups        *bool                  `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs              []string               `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs           []string               `json:"removeEditorIDs,omitempty"`
-	ClearEditors              *bool                  `json:"clearEditors,omitempty"`
-	AddViewerIDs              []string               `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs           []string               `json:"removeViewerIDs,omitempty"`
-	ClearViewers              *bool                  `json:"clearViewers,omitempty"`
-	AddProcedureIDs           []string               `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs        []string               `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures           *bool                  `json:"clearProcedures,omitempty"`
-	AddSubcontrolIDs          []string               `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs       []string               `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols          *bool                  `json:"clearSubcontrols,omitempty"`
-	AddControlObjectiveIDs    []string               `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string               `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives    *bool                  `json:"clearControlObjectives,omitempty"`
-	AddStandardIDs            []string               `json:"addStandardIDs,omitempty"`
-	RemoveStandardIDs         []string               `json:"removeStandardIDs,omitempty"`
-	ClearStandard             *bool                  `json:"clearStandard,omitempty"`
-	AddNarrativeIDs           []string               `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs        []string               `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives           *bool                  `json:"clearNarratives,omitempty"`
-	AddRiskIDs                []string               `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs             []string               `json:"removeRiskIDs,omitempty"`
-	ClearRisks                *bool                  `json:"clearRisks,omitempty"`
-	AddActionPlanIDs          []string               `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs       []string               `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans          *bool                  `json:"clearActionPlans,omitempty"`
-	AddTaskIDs                []string               `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs             []string               `json:"removeTaskIDs,omitempty"`
-	ClearTasks                *bool                  `json:"clearTasks,omitempty"`
-	AddProgramIDs             []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string               `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool                  `json:"clearPrograms,omitempty"`
+	Details                   map[string]any `json:"details,omitempty"`
+	ClearDetails              *bool          `json:"clearDetails,omitempty"`
+	OwnerID                   *string        `json:"ownerID,omitempty"`
+	AddBlockedGroupIDs        []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs     []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups        *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs              []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs           []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors              *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs              []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs           []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers              *bool          `json:"clearViewers,omitempty"`
+	AddProcedureIDs           []string       `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs        []string       `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures           *bool          `json:"clearProcedures,omitempty"`
+	AddSubcontrolIDs          []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs       []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols          *bool          `json:"clearSubcontrols,omitempty"`
+	AddControlObjectiveIDs    []string       `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs []string       `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives    *bool          `json:"clearControlObjectives,omitempty"`
+	AddStandardIDs            []string       `json:"addStandardIDs,omitempty"`
+	RemoveStandardIDs         []string       `json:"removeStandardIDs,omitempty"`
+	ClearStandard             *bool          `json:"clearStandard,omitempty"`
+	AddNarrativeIDs           []string       `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs        []string       `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives           *bool          `json:"clearNarratives,omitempty"`
+	AddRiskIDs                []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs             []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks                *bool          `json:"clearRisks,omitempty"`
+	AddActionPlanIDs          []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs       []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans          *bool          `json:"clearActionPlans,omitempty"`
+	AddTaskIDs                []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs             []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks                *bool          `json:"clearTasks,omitempty"`
+	AddProgramIDs             []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs          []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms             *bool          `json:"clearPrograms,omitempty"`
 }
 
 // UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -18640,45 +18640,45 @@ type UpdateControlObjectiveInput struct {
 	MappedFrameworks      *string `json:"mappedFrameworks,omitempty"`
 	ClearMappedFrameworks *bool   `json:"clearMappedFrameworks,omitempty"`
 	// json data including details of the control objective
-	Details                 map[string]interface{} `json:"details,omitempty"`
-	ClearDetails            *bool                  `json:"clearDetails,omitempty"`
-	OwnerID                 *string                `json:"ownerID,omitempty"`
-	AddBlockedGroupIDs      []string               `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string               `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool                  `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string               `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string               `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool                  `json:"clearEditors,omitempty"`
-	AddViewerIDs            []string               `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs         []string               `json:"removeViewerIDs,omitempty"`
-	ClearViewers            *bool                  `json:"clearViewers,omitempty"`
-	AddInternalPolicyIDs    []string               `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string               `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool                  `json:"clearInternalPolicies,omitempty"`
-	AddControlIDs           []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string               `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool                  `json:"clearControls,omitempty"`
-	AddProcedureIDs         []string               `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs      []string               `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures         *bool                  `json:"clearProcedures,omitempty"`
-	AddRiskIDs              []string               `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs           []string               `json:"removeRiskIDs,omitempty"`
-	ClearRisks              *bool                  `json:"clearRisks,omitempty"`
-	AddSubcontrolIDs        []string               `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string               `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool                  `json:"clearSubcontrols,omitempty"`
-	AddStandardIDs          []string               `json:"addStandardIDs,omitempty"`
-	RemoveStandardIDs       []string               `json:"removeStandardIDs,omitempty"`
-	ClearStandard           *bool                  `json:"clearStandard,omitempty"`
-	AddNarrativeIDs         []string               `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs      []string               `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives         *bool                  `json:"clearNarratives,omitempty"`
-	AddTaskIDs              []string               `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string               `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool                  `json:"clearTasks,omitempty"`
-	AddProgramIDs           []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string               `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool                  `json:"clearPrograms,omitempty"`
+	Details                 map[string]any `json:"details,omitempty"`
+	ClearDetails            *bool          `json:"clearDetails,omitempty"`
+	OwnerID                 *string        `json:"ownerID,omitempty"`
+	AddBlockedGroupIDs      []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs            []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs         []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers            *bool          `json:"clearViewers,omitempty"`
+	AddInternalPolicyIDs    []string       `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string       `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool          `json:"clearInternalPolicies,omitempty"`
+	AddControlIDs           []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string       `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool          `json:"clearControls,omitempty"`
+	AddProcedureIDs         []string       `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs      []string       `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures         *bool          `json:"clearProcedures,omitempty"`
+	AddRiskIDs              []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs           []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks              *bool          `json:"clearRisks,omitempty"`
+	AddSubcontrolIDs        []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs     []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols        *bool          `json:"clearSubcontrols,omitempty"`
+	AddStandardIDs          []string       `json:"addStandardIDs,omitempty"`
+	RemoveStandardIDs       []string       `json:"removeStandardIDs,omitempty"`
+	ClearStandard           *bool          `json:"clearStandard,omitempty"`
+	AddNarrativeIDs         []string       `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs      []string       `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives         *bool          `json:"clearNarratives,omitempty"`
+	AddTaskIDs              []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool          `json:"clearTasks,omitempty"`
+	AddProgramIDs           []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool          `json:"clearPrograms,omitempty"`
 }
 
 // UpdateDocumentDataInput is used for update DocumentData object.
@@ -18763,43 +18763,43 @@ type UpdateEntityTypeInput struct {
 // Input was generated by ent.
 type UpdateEventInput struct {
 	// tags associated with the object
-	Tags                         []string               `json:"tags,omitempty"`
-	AppendTags                   []string               `json:"appendTags,omitempty"`
-	ClearTags                    *bool                  `json:"clearTags,omitempty"`
-	EventID                      *string                `json:"eventID,omitempty"`
-	ClearEventID                 *bool                  `json:"clearEventID,omitempty"`
-	CorrelationID                *string                `json:"correlationID,omitempty"`
-	ClearCorrelationID           *bool                  `json:"clearCorrelationID,omitempty"`
-	EventType                    *string                `json:"eventType,omitempty"`
-	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
-	ClearMetadata                *bool                  `json:"clearMetadata,omitempty"`
-	AddUserIDs                   []string               `json:"addUserIDs,omitempty"`
-	RemoveUserIDs                []string               `json:"removeUserIDs,omitempty"`
-	ClearUser                    *bool                  `json:"clearUser,omitempty"`
-	AddGroupIDs                  []string               `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs               []string               `json:"removeGroupIDs,omitempty"`
-	ClearGroup                   *bool                  `json:"clearGroup,omitempty"`
-	AddIntegrationIDs            []string               `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs         []string               `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegration             *bool                  `json:"clearIntegration,omitempty"`
-	AddOrganizationIDs           []string               `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs        []string               `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganization            *bool                  `json:"clearOrganization,omitempty"`
-	AddInviteIDs                 []string               `json:"addInviteIDs,omitempty"`
-	RemoveInviteIDs              []string               `json:"removeInviteIDs,omitempty"`
-	ClearInvite                  *bool                  `json:"clearInvite,omitempty"`
-	AddPersonalAccessTokenIDs    []string               `json:"addPersonalAccessTokenIDs,omitempty"`
-	RemovePersonalAccessTokenIDs []string               `json:"removePersonalAccessTokenIDs,omitempty"`
-	ClearPersonalAccessToken     *bool                  `json:"clearPersonalAccessToken,omitempty"`
-	AddHushIDs                   []string               `json:"addHushIDs,omitempty"`
-	RemoveHushIDs                []string               `json:"removeHushIDs,omitempty"`
-	ClearHush                    *bool                  `json:"clearHush,omitempty"`
-	AddSubscriberIDs             []string               `json:"addSubscriberIDs,omitempty"`
-	RemoveSubscriberIDs          []string               `json:"removeSubscriberIDs,omitempty"`
-	ClearSubscriber              *bool                  `json:"clearSubscriber,omitempty"`
-	AddFileIDs                   []string               `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                []string               `json:"removeFileIDs,omitempty"`
-	ClearFile                    *bool                  `json:"clearFile,omitempty"`
+	Tags                         []string       `json:"tags,omitempty"`
+	AppendTags                   []string       `json:"appendTags,omitempty"`
+	ClearTags                    *bool          `json:"clearTags,omitempty"`
+	EventID                      *string        `json:"eventID,omitempty"`
+	ClearEventID                 *bool          `json:"clearEventID,omitempty"`
+	CorrelationID                *string        `json:"correlationID,omitempty"`
+	ClearCorrelationID           *bool          `json:"clearCorrelationID,omitempty"`
+	EventType                    *string        `json:"eventType,omitempty"`
+	Metadata                     map[string]any `json:"metadata,omitempty"`
+	ClearMetadata                *bool          `json:"clearMetadata,omitempty"`
+	AddUserIDs                   []string       `json:"addUserIDs,omitempty"`
+	RemoveUserIDs                []string       `json:"removeUserIDs,omitempty"`
+	ClearUser                    *bool          `json:"clearUser,omitempty"`
+	AddGroupIDs                  []string       `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs               []string       `json:"removeGroupIDs,omitempty"`
+	ClearGroup                   *bool          `json:"clearGroup,omitempty"`
+	AddIntegrationIDs            []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs         []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegration             *bool          `json:"clearIntegration,omitempty"`
+	AddOrganizationIDs           []string       `json:"addOrganizationIDs,omitempty"`
+	RemoveOrganizationIDs        []string       `json:"removeOrganizationIDs,omitempty"`
+	ClearOrganization            *bool          `json:"clearOrganization,omitempty"`
+	AddInviteIDs                 []string       `json:"addInviteIDs,omitempty"`
+	RemoveInviteIDs              []string       `json:"removeInviteIDs,omitempty"`
+	ClearInvite                  *bool          `json:"clearInvite,omitempty"`
+	AddPersonalAccessTokenIDs    []string       `json:"addPersonalAccessTokenIDs,omitempty"`
+	RemovePersonalAccessTokenIDs []string       `json:"removePersonalAccessTokenIDs,omitempty"`
+	ClearPersonalAccessToken     *bool          `json:"clearPersonalAccessToken,omitempty"`
+	AddHushIDs                   []string       `json:"addHushIDs,omitempty"`
+	RemoveHushIDs                []string       `json:"removeHushIDs,omitempty"`
+	ClearHush                    *bool          `json:"clearHush,omitempty"`
+	AddSubscriberIDs             []string       `json:"addSubscriberIDs,omitempty"`
+	RemoveSubscriberIDs          []string       `json:"removeSubscriberIDs,omitempty"`
+	ClearSubscriber              *bool          `json:"clearSubscriber,omitempty"`
+	AddFileIDs                   []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                []string       `json:"removeFileIDs,omitempty"`
+	ClearFile                    *bool          `json:"clearFile,omitempty"`
 }
 
 // UpdateFileInput is used for update File object.
@@ -19109,34 +19109,34 @@ type UpdateInternalPolicyInput struct {
 	Background      *string `json:"background,omitempty"`
 	ClearBackground *bool   `json:"clearBackground,omitempty"`
 	// json data for the policy document
-	Details                   map[string]interface{} `json:"details,omitempty"`
-	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
-	OwnerID                   *string                `json:"ownerID,omitempty"`
-	ClearOwner                *bool                  `json:"clearOwner,omitempty"`
-	AddBlockedGroupIDs        []string               `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs     []string               `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups        *bool                  `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs              []string               `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs           []string               `json:"removeEditorIDs,omitempty"`
-	ClearEditors              *bool                  `json:"clearEditors,omitempty"`
-	AddControlObjectiveIDs    []string               `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string               `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives    *bool                  `json:"clearControlObjectives,omitempty"`
-	AddControlIDs             []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs          []string               `json:"removeControlIDs,omitempty"`
-	ClearControls             *bool                  `json:"clearControls,omitempty"`
-	AddProcedureIDs           []string               `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs        []string               `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures           *bool                  `json:"clearProcedures,omitempty"`
-	AddNarrativeIDs           []string               `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs        []string               `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives           *bool                  `json:"clearNarratives,omitempty"`
-	AddTaskIDs                []string               `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs             []string               `json:"removeTaskIDs,omitempty"`
-	ClearTasks                *bool                  `json:"clearTasks,omitempty"`
-	AddProgramIDs             []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string               `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool                  `json:"clearPrograms,omitempty"`
+	Details                   map[string]any `json:"details,omitempty"`
+	ClearDetails              *bool          `json:"clearDetails,omitempty"`
+	OwnerID                   *string        `json:"ownerID,omitempty"`
+	ClearOwner                *bool          `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs        []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs     []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups        *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs              []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs           []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors              *bool          `json:"clearEditors,omitempty"`
+	AddControlObjectiveIDs    []string       `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs []string       `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives    *bool          `json:"clearControlObjectives,omitempty"`
+	AddControlIDs             []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs          []string       `json:"removeControlIDs,omitempty"`
+	ClearControls             *bool          `json:"clearControls,omitempty"`
+	AddProcedureIDs           []string       `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs        []string       `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures           *bool          `json:"clearProcedures,omitempty"`
+	AddNarrativeIDs           []string       `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs        []string       `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives           *bool          `json:"clearNarratives,omitempty"`
+	AddTaskIDs                []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs             []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks                *bool          `json:"clearTasks,omitempty"`
+	AddProgramIDs             []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs          []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms             *bool          `json:"clearPrograms,omitempty"`
 }
 
 // UpdateInviteInput is used for update Invite object.
@@ -19173,33 +19173,33 @@ type UpdateNarrativeInput struct {
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
 	// json data for the narrative document
-	Details                   map[string]interface{} `json:"details,omitempty"`
-	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
-	OwnerID                   *string                `json:"ownerID,omitempty"`
-	AddBlockedGroupIDs        []string               `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs     []string               `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups        *bool                  `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs              []string               `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs           []string               `json:"removeEditorIDs,omitempty"`
-	ClearEditors              *bool                  `json:"clearEditors,omitempty"`
-	AddViewerIDs              []string               `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs           []string               `json:"removeViewerIDs,omitempty"`
-	ClearViewers              *bool                  `json:"clearViewers,omitempty"`
-	AddInternalPolicyIDs      []string               `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs   []string               `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicy       *bool                  `json:"clearInternalPolicy,omitempty"`
-	AddControlIDs             []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs          []string               `json:"removeControlIDs,omitempty"`
-	ClearControl              *bool                  `json:"clearControl,omitempty"`
-	AddProcedureIDs           []string               `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs        []string               `json:"removeProcedureIDs,omitempty"`
-	ClearProcedure            *bool                  `json:"clearProcedure,omitempty"`
-	AddControlObjectiveIDs    []string               `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string               `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjective     *bool                  `json:"clearControlObjective,omitempty"`
-	AddProgramIDs             []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string               `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool                  `json:"clearPrograms,omitempty"`
+	Details                   map[string]any `json:"details,omitempty"`
+	ClearDetails              *bool          `json:"clearDetails,omitempty"`
+	OwnerID                   *string        `json:"ownerID,omitempty"`
+	AddBlockedGroupIDs        []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs     []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups        *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs              []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs           []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors              *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs              []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs           []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers              *bool          `json:"clearViewers,omitempty"`
+	AddInternalPolicyIDs      []string       `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs   []string       `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicy       *bool          `json:"clearInternalPolicy,omitempty"`
+	AddControlIDs             []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs          []string       `json:"removeControlIDs,omitempty"`
+	ClearControl              *bool          `json:"clearControl,omitempty"`
+	AddProcedureIDs           []string       `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs        []string       `json:"removeProcedureIDs,omitempty"`
+	ClearProcedure            *bool          `json:"clearProcedure,omitempty"`
+	AddControlObjectiveIDs    []string       `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs []string       `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjective     *bool          `json:"clearControlObjective,omitempty"`
+	AddProgramIDs             []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs          []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms             *bool          `json:"clearPrograms,omitempty"`
 }
 
 // UpdateNoteInput is used for update Note object.
@@ -19490,34 +19490,34 @@ type UpdateProcedureInput struct {
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
 	// json data for the procedure document
-	Details                 map[string]interface{} `json:"details,omitempty"`
-	ClearDetails            *bool                  `json:"clearDetails,omitempty"`
-	OwnerID                 *string                `json:"ownerID,omitempty"`
-	ClearOwner              *bool                  `json:"clearOwner,omitempty"`
-	AddBlockedGroupIDs      []string               `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string               `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool                  `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string               `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string               `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool                  `json:"clearEditors,omitempty"`
-	AddControlIDs           []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string               `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool                  `json:"clearControls,omitempty"`
-	AddInternalPolicyIDs    []string               `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string               `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool                  `json:"clearInternalPolicies,omitempty"`
-	AddNarrativeIDs         []string               `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs      []string               `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives         *bool                  `json:"clearNarratives,omitempty"`
-	AddRiskIDs              []string               `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs           []string               `json:"removeRiskIDs,omitempty"`
-	ClearRisks              *bool                  `json:"clearRisks,omitempty"`
-	AddTaskIDs              []string               `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string               `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool                  `json:"clearTasks,omitempty"`
-	AddProgramIDs           []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string               `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool                  `json:"clearPrograms,omitempty"`
+	Details                 map[string]any `json:"details,omitempty"`
+	ClearDetails            *bool          `json:"clearDetails,omitempty"`
+	OwnerID                 *string        `json:"ownerID,omitempty"`
+	ClearOwner              *bool          `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs      []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool          `json:"clearEditors,omitempty"`
+	AddControlIDs           []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string       `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool          `json:"clearControls,omitempty"`
+	AddInternalPolicyIDs    []string       `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string       `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool          `json:"clearInternalPolicies,omitempty"`
+	AddNarrativeIDs         []string       `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs      []string       `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives         *bool          `json:"clearNarratives,omitempty"`
+	AddRiskIDs              []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs           []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks              *bool          `json:"clearRisks,omitempty"`
+	AddTaskIDs              []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool          `json:"clearTasks,omitempty"`
+	AddProgramIDs           []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool          `json:"clearPrograms,omitempty"`
 }
 
 // UpdateProgramInput is used for update Program object.
@@ -19639,30 +19639,30 @@ type UpdateRiskInput struct {
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
 	// json data for the risk document
-	Details               map[string]interface{} `json:"details,omitempty"`
-	ClearDetails          *bool                  `json:"clearDetails,omitempty"`
-	OwnerID               *string                `json:"ownerID,omitempty"`
-	AddBlockedGroupIDs    []string               `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs []string               `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups    *bool                  `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs          []string               `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs       []string               `json:"removeEditorIDs,omitempty"`
-	ClearEditors          *bool                  `json:"clearEditors,omitempty"`
-	AddViewerIDs          []string               `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs       []string               `json:"removeViewerIDs,omitempty"`
-	ClearViewers          *bool                  `json:"clearViewers,omitempty"`
-	AddControlIDs         []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs      []string               `json:"removeControlIDs,omitempty"`
-	ClearControl          *bool                  `json:"clearControl,omitempty"`
-	AddProcedureIDs       []string               `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs    []string               `json:"removeProcedureIDs,omitempty"`
-	ClearProcedure        *bool                  `json:"clearProcedure,omitempty"`
-	AddActionPlanIDs      []string               `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs   []string               `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans      *bool                  `json:"clearActionPlans,omitempty"`
-	AddProgramIDs         []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs      []string               `json:"removeProgramIDs,omitempty"`
-	ClearPrograms         *bool                  `json:"clearPrograms,omitempty"`
+	Details               map[string]any `json:"details,omitempty"`
+	ClearDetails          *bool          `json:"clearDetails,omitempty"`
+	OwnerID               *string        `json:"ownerID,omitempty"`
+	AddBlockedGroupIDs    []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups    *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs          []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs       []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors          *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs          []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs       []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers          *bool          `json:"clearViewers,omitempty"`
+	AddControlIDs         []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs      []string       `json:"removeControlIDs,omitempty"`
+	ClearControl          *bool          `json:"clearControl,omitempty"`
+	AddProcedureIDs       []string       `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs    []string       `json:"removeProcedureIDs,omitempty"`
+	ClearProcedure        *bool          `json:"clearProcedure,omitempty"`
+	AddActionPlanIDs      []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs   []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans      *bool          `json:"clearActionPlans,omitempty"`
+	AddProgramIDs         []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs      []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms         *bool          `json:"clearPrograms,omitempty"`
 }
 
 // UpdateStandardInput is used for update Standard object.
@@ -19699,23 +19699,23 @@ type UpdateStandardInput struct {
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
 	// json data with details of the standard
-	Details                   map[string]interface{} `json:"details,omitempty"`
-	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
-	AddControlObjectiveIDs    []string               `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string               `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives    *bool                  `json:"clearControlObjectives,omitempty"`
-	AddControlIDs             []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs          []string               `json:"removeControlIDs,omitempty"`
-	ClearControls             *bool                  `json:"clearControls,omitempty"`
-	AddProcedureIDs           []string               `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs        []string               `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures           *bool                  `json:"clearProcedures,omitempty"`
-	AddActionPlanIDs          []string               `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs       []string               `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans          *bool                  `json:"clearActionPlans,omitempty"`
-	AddProgramIDs             []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string               `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool                  `json:"clearPrograms,omitempty"`
+	Details                   map[string]any `json:"details,omitempty"`
+	ClearDetails              *bool          `json:"clearDetails,omitempty"`
+	AddControlObjectiveIDs    []string       `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs []string       `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives    *bool          `json:"clearControlObjectives,omitempty"`
+	AddControlIDs             []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs          []string       `json:"removeControlIDs,omitempty"`
+	ClearControls             *bool          `json:"clearControls,omitempty"`
+	AddProcedureIDs           []string       `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs        []string       `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures           *bool          `json:"clearProcedures,omitempty"`
+	AddActionPlanIDs          []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs       []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans          *bool          `json:"clearActionPlans,omitempty"`
+	AddProgramIDs             []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs          []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms             *bool          `json:"clearPrograms,omitempty"`
 }
 
 // UpdateSubcontrolInput is used for update Subcontrol object.
@@ -19770,22 +19770,22 @@ type UpdateSubcontrolInput struct {
 	ImplementationVerificationDate      *time.Time `json:"implementationVerificationDate,omitempty"`
 	ClearImplementationVerificationDate *bool      `json:"clearImplementationVerificationDate,omitempty"`
 	// json data details of the subcontrol
-	Details          map[string]interface{} `json:"details,omitempty"`
-	ClearDetails     *bool                  `json:"clearDetails,omitempty"`
-	OwnerID          *string                `json:"ownerID,omitempty"`
-	AddControlIDs    []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs []string               `json:"removeControlIDs,omitempty"`
-	AddUserIDs       []string               `json:"addUserIDs,omitempty"`
-	RemoveUserIDs    []string               `json:"removeUserIDs,omitempty"`
-	ClearUser        *bool                  `json:"clearUser,omitempty"`
-	AddTaskIDs       []string               `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs    []string               `json:"removeTaskIDs,omitempty"`
-	ClearTasks       *bool                  `json:"clearTasks,omitempty"`
-	NotesID          *string                `json:"notesID,omitempty"`
-	ClearNotes       *bool                  `json:"clearNotes,omitempty"`
-	AddProgramIDs    []string               `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs []string               `json:"removeProgramIDs,omitempty"`
-	ClearPrograms    *bool                  `json:"clearPrograms,omitempty"`
+	Details          map[string]any `json:"details,omitempty"`
+	ClearDetails     *bool          `json:"clearDetails,omitempty"`
+	OwnerID          *string        `json:"ownerID,omitempty"`
+	AddControlIDs    []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs []string       `json:"removeControlIDs,omitempty"`
+	AddUserIDs       []string       `json:"addUserIDs,omitempty"`
+	RemoveUserIDs    []string       `json:"removeUserIDs,omitempty"`
+	ClearUser        *bool          `json:"clearUser,omitempty"`
+	AddTaskIDs       []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs    []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks       *bool          `json:"clearTasks,omitempty"`
+	NotesID          *string        `json:"notesID,omitempty"`
+	ClearNotes       *bool          `json:"clearNotes,omitempty"`
+	AddProgramIDs    []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms    *bool          `json:"clearPrograms,omitempty"`
 }
 
 // UpdateSubscriberInput is used for update Subscriber object.
@@ -19836,8 +19836,8 @@ type UpdateTaskInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the details of the task
-	Details      map[string]interface{} `json:"details,omitempty"`
-	ClearDetails *bool                  `json:"clearDetails,omitempty"`
+	Details      map[string]any `json:"details,omitempty"`
+	ClearDetails *bool          `json:"clearDetails,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
@@ -21294,7 +21294,7 @@ func (e EntityHistoryOrderField) String() string {
 	return string(e)
 }
 
-func (e *EntityHistoryOrderField) UnmarshalGQL(v interface{}) error {
+func (e *EntityHistoryOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21336,7 +21336,7 @@ func (e EntityOrderField) String() string {
 	return string(e)
 }
 
-func (e *EntityOrderField) UnmarshalGQL(v interface{}) error {
+func (e *EntityOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21376,7 +21376,7 @@ func (e EntityTypeHistoryOrderField) String() string {
 	return string(e)
 }
 
-func (e *EntityTypeHistoryOrderField) UnmarshalGQL(v interface{}) error {
+func (e *EntityTypeHistoryOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21416,7 +21416,7 @@ func (e EntityTypeOrderField) String() string {
 	return string(e)
 }
 
-func (e *EntityTypeOrderField) UnmarshalGQL(v interface{}) error {
+func (e *EntityTypeOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21458,7 +21458,7 @@ func (e GroupHistoryOrderField) String() string {
 	return string(e)
 }
 
-func (e *GroupHistoryOrderField) UnmarshalGQL(v interface{}) error {
+func (e *GroupHistoryOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21500,7 +21500,7 @@ func (e GroupOrderField) String() string {
 	return string(e)
 }
 
-func (e *GroupOrderField) UnmarshalGQL(v interface{}) error {
+func (e *GroupOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21542,7 +21542,7 @@ func (e HushHistoryOrderField) String() string {
 	return string(e)
 }
 
-func (e *HushHistoryOrderField) UnmarshalGQL(v interface{}) error {
+func (e *HushHistoryOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21584,7 +21584,7 @@ func (e HushOrderField) String() string {
 	return string(e)
 }
 
-func (e *HushOrderField) UnmarshalGQL(v interface{}) error {
+func (e *HushOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21626,7 +21626,7 @@ func (e IntegrationHistoryOrderField) String() string {
 	return string(e)
 }
 
-func (e *IntegrationHistoryOrderField) UnmarshalGQL(v interface{}) error {
+func (e *IntegrationHistoryOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21668,7 +21668,7 @@ func (e IntegrationOrderField) String() string {
 	return string(e)
 }
 
-func (e *IntegrationOrderField) UnmarshalGQL(v interface{}) error {
+func (e *IntegrationOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21712,7 +21712,7 @@ func (e OrderDirection) String() string {
 	return string(e)
 }
 
-func (e *OrderDirection) UnmarshalGQL(v interface{}) error {
+func (e *OrderDirection) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21754,7 +21754,7 @@ func (e OrganizationHistoryOrderField) String() string {
 	return string(e)
 }
 
-func (e *OrganizationHistoryOrderField) UnmarshalGQL(v interface{}) error {
+func (e *OrganizationHistoryOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21796,7 +21796,7 @@ func (e OrganizationOrderField) String() string {
 	return string(e)
 }
 
-func (e *OrganizationOrderField) UnmarshalGQL(v interface{}) error {
+func (e *OrganizationOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21836,7 +21836,7 @@ func (e TemplateHistoryOrderField) String() string {
 	return string(e)
 }
 
-func (e *TemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
+func (e *TemplateHistoryOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21876,7 +21876,7 @@ func (e TemplateOrderField) String() string {
 	return string(e)
 }
 
-func (e *TemplateOrderField) UnmarshalGQL(v interface{}) error {
+func (e *TemplateOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21920,7 +21920,7 @@ func (e UserHistoryOrderField) String() string {
 	return string(e)
 }
 
-func (e *UserHistoryOrderField) UnmarshalGQL(v interface{}) error {
+func (e *UserHistoryOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -21964,7 +21964,7 @@ func (e UserOrderField) String() string {
 	return string(e)
 }
 
-func (e *UserOrderField) UnmarshalGQL(v interface{}) error {
+func (e *UserOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")

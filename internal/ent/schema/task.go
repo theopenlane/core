@@ -30,7 +30,7 @@ func (Task) Fields() []ent.Field {
 		field.String("description").
 			Comment("the description of the task").
 			Optional(),
-		field.JSON("details", map[string]interface{}{}).
+		field.JSON("details", map[string]any{}).
 			Comment("the details of the task").
 			Optional(),
 		field.Enum("status").

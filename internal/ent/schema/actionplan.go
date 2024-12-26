@@ -36,7 +36,7 @@ func (ActionPlan) Fields() []ent.Field {
 		field.String("source").
 			Optional().
 			Comment("source of the action plan"),
-		field.JSON("details", map[string]interface{}{}).
+		field.JSON("details", map[string]any{}).
 			Optional().
 			Comment("json data including details of the action plan"),
 	}

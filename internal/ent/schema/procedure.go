@@ -49,7 +49,7 @@ func (Procedure) Fields() []ent.Field {
 		field.Text("satisfies").
 			Optional().
 			Comment("which controls are satisfied by the procedure"),
-		field.JSON("details", map[string]interface{}{}).
+		field.JSON("details", map[string]any{}).
 			Optional().
 			Comment("json data for the procedure document"),
 	}
