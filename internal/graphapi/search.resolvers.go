@@ -271,99 +271,222 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*model.Search
 	}
 
 	// return the results
+	var nodes []model.SearchResult
+	resultCount := 0
+	if len(apitokenResults) > 0 {
+		nodes = append(nodes, model.APITokenSearchResult{
+			APITokens: apitokenResults,
+		})
+
+		resultCount += len(apitokenResults)
+	}
+	if len(actionplanResults) > 0 {
+		nodes = append(nodes, model.ActionPlanSearchResult{
+			ActionPlans: actionplanResults,
+		})
+
+		resultCount += len(actionplanResults)
+	}
+	if len(contactResults) > 0 {
+		nodes = append(nodes, model.ContactSearchResult{
+			Contacts: contactResults,
+		})
+
+		resultCount += len(contactResults)
+	}
+	if len(controlResults) > 0 {
+		nodes = append(nodes, model.ControlSearchResult{
+			Controls: controlResults,
+		})
+
+		resultCount += len(controlResults)
+	}
+	if len(controlobjectiveResults) > 0 {
+		nodes = append(nodes, model.ControlObjectiveSearchResult{
+			ControlObjectives: controlobjectiveResults,
+		})
+
+		resultCount += len(controlobjectiveResults)
+	}
+	if len(documentdataResults) > 0 {
+		nodes = append(nodes, model.DocumentDataSearchResult{
+			DocumentData: documentdataResults,
+		})
+
+		resultCount += len(documentdataResults)
+	}
+	if len(entityResults) > 0 {
+		nodes = append(nodes, model.EntitySearchResult{
+			Entities: entityResults,
+		})
+
+		resultCount += len(entityResults)
+	}
+	if len(entitytypeResults) > 0 {
+		nodes = append(nodes, model.EntityTypeSearchResult{
+			EntityTypes: entitytypeResults,
+		})
+
+		resultCount += len(entitytypeResults)
+	}
+	if len(eventResults) > 0 {
+		nodes = append(nodes, model.EventSearchResult{
+			Events: eventResults,
+		})
+
+		resultCount += len(eventResults)
+	}
+	if len(fileResults) > 0 {
+		nodes = append(nodes, model.FileSearchResult{
+			Files: fileResults,
+		})
+
+		resultCount += len(fileResults)
+	}
+	if len(groupResults) > 0 {
+		nodes = append(nodes, model.GroupSearchResult{
+			Groups: groupResults,
+		})
+
+		resultCount += len(groupResults)
+	}
+	if len(groupsettingResults) > 0 {
+		nodes = append(nodes, model.GroupSettingSearchResult{
+			GroupSettings: groupsettingResults,
+		})
+
+		resultCount += len(groupsettingResults)
+	}
+	if len(integrationResults) > 0 {
+		nodes = append(nodes, model.IntegrationSearchResult{
+			Integrations: integrationResults,
+		})
+
+		resultCount += len(integrationResults)
+	}
+	if len(internalpolicyResults) > 0 {
+		nodes = append(nodes, model.InternalPolicySearchResult{
+			InternalPolicies: internalpolicyResults,
+		})
+
+		resultCount += len(internalpolicyResults)
+	}
+	if len(narrativeResults) > 0 {
+		nodes = append(nodes, model.NarrativeSearchResult{
+			Narratives: narrativeResults,
+		})
+
+		resultCount += len(narrativeResults)
+	}
+	if len(orgsubscriptionResults) > 0 {
+		nodes = append(nodes, model.OrgSubscriptionSearchResult{
+			OrgSubscriptions: orgsubscriptionResults,
+		})
+
+		resultCount += len(orgsubscriptionResults)
+	}
+	if len(organizationResults) > 0 {
+		nodes = append(nodes, model.OrganizationSearchResult{
+			Organizations: organizationResults,
+		})
+
+		resultCount += len(organizationResults)
+	}
+	if len(organizationsettingResults) > 0 {
+		nodes = append(nodes, model.OrganizationSettingSearchResult{
+			OrganizationSettings: organizationsettingResults,
+		})
+
+		resultCount += len(organizationsettingResults)
+	}
+	if len(personalaccesstokenResults) > 0 {
+		nodes = append(nodes, model.PersonalAccessTokenSearchResult{
+			PersonalAccessTokens: personalaccesstokenResults,
+		})
+
+		resultCount += len(personalaccesstokenResults)
+	}
+	if len(procedureResults) > 0 {
+		nodes = append(nodes, model.ProcedureSearchResult{
+			Procedures: procedureResults,
+		})
+
+		resultCount += len(procedureResults)
+	}
+	if len(programResults) > 0 {
+		nodes = append(nodes, model.ProgramSearchResult{
+			Programs: programResults,
+		})
+
+		resultCount += len(programResults)
+	}
+	if len(riskResults) > 0 {
+		nodes = append(nodes, model.RiskSearchResult{
+			Risks: riskResults,
+		})
+
+		resultCount += len(riskResults)
+	}
+	if len(standardResults) > 0 {
+		nodes = append(nodes, model.StandardSearchResult{
+			Standards: standardResults,
+		})
+
+		resultCount += len(standardResults)
+	}
+	if len(subcontrolResults) > 0 {
+		nodes = append(nodes, model.SubcontrolSearchResult{
+			Subcontrols: subcontrolResults,
+		})
+
+		resultCount += len(subcontrolResults)
+	}
+	if len(subscriberResults) > 0 {
+		nodes = append(nodes, model.SubscriberSearchResult{
+			Subscribers: subscriberResults,
+		})
+
+		resultCount += len(subscriberResults)
+	}
+	if len(tfasettingResults) > 0 {
+		nodes = append(nodes, model.TFASettingSearchResult{
+			TFASettings: tfasettingResults,
+		})
+
+		resultCount += len(tfasettingResults)
+	}
+	if len(taskResults) > 0 {
+		nodes = append(nodes, model.TaskSearchResult{
+			Tasks: taskResults,
+		})
+
+		resultCount += len(taskResults)
+	}
+	if len(templateResults) > 0 {
+		nodes = append(nodes, model.TemplateSearchResult{
+			Templates: templateResults,
+		})
+
+		resultCount += len(templateResults)
+	}
+	if len(userResults) > 0 {
+		nodes = append(nodes, model.UserSearchResult{
+			Users: userResults,
+		})
+
+		resultCount += len(userResults)
+	}
+	if len(usersettingResults) > 0 {
+		nodes = append(nodes, model.UserSettingSearchResult{
+			UserSettings: usersettingResults,
+		})
+
+		resultCount += len(usersettingResults)
+	}
+
 	return &model.SearchResultConnection{
-		Nodes: []model.SearchResult{
-			model.APITokenSearchResult{
-				APITokens: apitokenResults,
-			},
-			model.ActionPlanSearchResult{
-				ActionPlans: actionplanResults,
-			},
-			model.ContactSearchResult{
-				Contacts: contactResults,
-			},
-			model.ControlSearchResult{
-				Controls: controlResults,
-			},
-			model.ControlObjectiveSearchResult{
-				ControlObjectives: controlobjectiveResults,
-			},
-			model.DocumentDataSearchResult{
-				DocumentData: documentdataResults,
-			},
-			model.EntitySearchResult{
-				Entities: entityResults,
-			},
-			model.EntityTypeSearchResult{
-				EntityTypes: entitytypeResults,
-			},
-			model.EventSearchResult{
-				Events: eventResults,
-			},
-			model.FileSearchResult{
-				Files: fileResults,
-			},
-			model.GroupSearchResult{
-				Groups: groupResults,
-			},
-			model.GroupSettingSearchResult{
-				GroupSettings: groupsettingResults,
-			},
-			model.IntegrationSearchResult{
-				Integrations: integrationResults,
-			},
-			model.InternalPolicySearchResult{
-				InternalPolicies: internalpolicyResults,
-			},
-			model.NarrativeSearchResult{
-				Narratives: narrativeResults,
-			},
-			model.OrgSubscriptionSearchResult{
-				OrgSubscriptions: orgsubscriptionResults,
-			},
-			model.OrganizationSearchResult{
-				Organizations: organizationResults,
-			},
-			model.OrganizationSettingSearchResult{
-				OrganizationSettings: organizationsettingResults,
-			},
-			model.PersonalAccessTokenSearchResult{
-				PersonalAccessTokens: personalaccesstokenResults,
-			},
-			model.ProcedureSearchResult{
-				Procedures: procedureResults,
-			},
-			model.ProgramSearchResult{
-				Programs: programResults,
-			},
-			model.RiskSearchResult{
-				Risks: riskResults,
-			},
-			model.StandardSearchResult{
-				Standards: standardResults,
-			},
-			model.SubcontrolSearchResult{
-				Subcontrols: subcontrolResults,
-			},
-			model.SubscriberSearchResult{
-				Subscribers: subscriberResults,
-			},
-			model.TFASettingSearchResult{
-				TFASettings: tfasettingResults,
-			},
-			model.TaskSearchResult{
-				Tasks: taskResults,
-			},
-			model.TemplateSearchResult{
-				Templates: templateResults,
-			},
-			model.UserSearchResult{
-				Users: userResults,
-			},
-			model.UserSettingSearchResult{
-				UserSettings: usersettingResults,
-			},
-		},
+		TotalCount: resultCount,
+		Nodes:      nodes,
 	}, nil
 }
 func (r *queryResolver) APITokenSearch(ctx context.Context, query string) (*model.APITokenSearchResult, error) {

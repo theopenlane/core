@@ -2734,8 +2734,9 @@ type ComplexityRoot struct {
 	}
 
 	SearchResultConnection struct {
-		Nodes func(childComplexity int) int
-		Page  func(childComplexity int) int
+		Nodes      func(childComplexity int) int
+		Page       func(childComplexity int) int
+		TotalCount func(childComplexity int) int
 	}
 
 	Standard struct {
@@ -17741,6 +17742,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SearchResultConnection.Page(childComplexity), true
+
+	case "SearchResultConnection.totalCount":
+		if e.complexity.SearchResultConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.SearchResultConnection.TotalCount(childComplexity), true
 
 	case "Standard.actionPlans":
 		if e.complexity.Standard.ActionPlans == nil {
@@ -52347,8 +52355,17 @@ union SearchResult =
   | UserSettingSearchResult
 
 type SearchResultConnection {
+  """
+  Information to aid in pagination.
+  """
   page: PageInfo!
-
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+  """
+  A list of nodes with results.
+  """
   nodes: [SearchResult!]!
 }
 

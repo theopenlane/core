@@ -840,8 +840,12 @@ type RiskUpdatePayload struct {
 }
 
 type SearchResultConnection struct {
-	Page  *entgql.PageInfo[string] `json:"page"`
-	Nodes []SearchResult           `json:"nodes"`
+	// Information to aid in pagination.
+	Page *entgql.PageInfo[string] `json:"page"`
+	// Identifies the total count of items in the connection.
+	TotalCount int `json:"totalCount"`
+	// A list of nodes with results.
+	Nodes []SearchResult `json:"nodes"`
 }
 
 // Return response for createBulkStandard mutation
