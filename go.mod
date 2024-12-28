@@ -4,10 +4,6 @@ go 1.23.3
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
-replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
-
-replace github.com/theopenlane/entx => ../entx
-
 require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.1
@@ -69,8 +65,8 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.0
 	github.com/theopenlane/emailtemplates v0.1.2
-	github.com/theopenlane/entx v0.3.0
-	github.com/theopenlane/gqlgen-plugins v0.4.1
+	github.com/theopenlane/entx v0.3.1
+	github.com/theopenlane/gqlgen-plugins v0.4.2
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.5.0
 	github.com/theopenlane/newman v0.1.2
@@ -318,7 +314,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
-	github.com/XSAM/otelsql v0.35.0 // indirect
+	github.com/XSAM/otelsql v0.36.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.0 // indirect
 	github.com/alicebob/gopher-json v0.0.0-20230218143504-906a9b012302 // indirect
