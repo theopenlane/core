@@ -32,6 +32,9 @@ func (Program) Fields() []ent.Field {
 			Annotations(entx.FieldSearchable()),
 		field.String("description").
 			Comment("the description of the program").
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Optional(),
 		field.Enum("status").
 			Comment("the status of the program").

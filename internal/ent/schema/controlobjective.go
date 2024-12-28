@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -25,9 +26,15 @@ func (ControlObjective) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			NotEmpty().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("the name of the control objective"),
 		field.Text("description").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("description of the control objective"),
 		field.String("status").
 			Optional().
@@ -43,6 +50,9 @@ func (ControlObjective) Fields() []ent.Field {
 			Comment("number of the control objective"),
 		field.Text("family").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("family of the control objective"),
 		field.String("class").
 			Optional().

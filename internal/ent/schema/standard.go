@@ -26,6 +26,9 @@ func (Standard) Fields() []ent.Field {
 			Annotations(entx.FieldSearchable()),
 		field.Text("description").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("description of the standard"),
 		field.String("family").
 			Optional().

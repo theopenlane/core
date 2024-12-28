@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -25,9 +26,15 @@ func (Control) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			NotEmpty().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("the name of the control"),
 		field.Text("description").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("description of the control"),
 		field.String("status").
 			Optional().
@@ -43,6 +50,9 @@ func (Control) Fields() []ent.Field {
 			Comment("control number or identifier"),
 		field.Text("family").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("family associated with the control"),
 		field.String("class").
 			Optional().

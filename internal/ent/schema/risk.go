@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -26,9 +27,15 @@ func (Risk) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			NotEmpty().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("the name of the risk"),
 		field.Text("description").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("description of the risk"),
 		field.String("status").
 			Optional().
