@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -21,9 +22,13 @@ func (Standard) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			NotEmpty().
-			Comment("the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc."),
+			Comment("the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.").
+			Annotations(entx.FieldSearchable()),
 		field.Text("description").
 			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("description of the standard"),
 		field.String("family").
 			Optional().

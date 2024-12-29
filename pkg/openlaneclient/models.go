@@ -15434,7 +15434,11 @@ type RiskWhereInput struct {
 }
 
 type SearchResultConnection struct {
-	Page  *PageInfo      `json:"page"`
+	// Information to aid in pagination.
+	Page *PageInfo `json:"page"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+	// A list of nodes with results.
 	Nodes []SearchResult `json:"nodes"`
 }
 

@@ -22,13 +22,19 @@ query GlobalSearch($query: String!) {
       }
       ... on ControlSearchResult {
         controls {
+          description
+          family
           id
+          name
           tags
         }
       }
       ... on ControlObjectiveSearchResult {
         controlObjectives {
+          description
+          family
           id
+          name
           tags
         }
       }
@@ -87,13 +93,17 @@ query GlobalSearch($query: String!) {
       }
       ... on InternalPolicySearchResult {
         internalPolicies {
+          description
           id
+          name
           tags
         }
       }
       ... on NarrativeSearchResult {
         narratives {
+          description
           id
+          name
           tags
         }
       }
@@ -125,31 +135,42 @@ query GlobalSearch($query: String!) {
       }
       ... on ProcedureSearchResult {
         procedures {
+          description
           id
+          name
           tags
         }
       }
       ... on ProgramSearchResult {
         programs {
+          description
           id
+          name
           tags
         }
       }
       ... on RiskSearchResult {
         risks {
+          description
           id
+          name
           tags
         }
       }
       ... on StandardSearchResult {
         standards {
+          description
           id
+          name
           tags
         }
       }
       ... on SubcontrolSearchResult {
         subcontrols {
+          family
           id
+          name
+          subcontrolType
           tags
         }
       }
@@ -168,8 +189,10 @@ query GlobalSearch($query: String!) {
       }
       ... on TaskSearchResult {
         tasks {
+          description
           id
           tags
+          title
         }
       }
       ... on TemplateSearchResult {

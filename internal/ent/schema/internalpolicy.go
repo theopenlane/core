@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -27,8 +28,14 @@ func (InternalPolicy) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name of the policy").
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			NotEmpty(),
 		field.Text("description").
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Optional().
 			Comment("description of the policy"),
 		field.String("status").

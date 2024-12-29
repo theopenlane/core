@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -26,8 +27,14 @@ func (Task) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("title").
 			Comment("the title of the task").
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			NotEmpty(),
 		field.String("description").
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Comment("the description of the task").
 			Optional(),
 		field.JSON("details", map[string]any{}).

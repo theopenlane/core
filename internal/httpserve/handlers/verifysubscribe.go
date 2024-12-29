@@ -152,6 +152,7 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 func (h *Handler) BindVerifySubscriberHandler() *openapi3.Operation {
 	verify := openapi3.NewOperation()
 	verify.Description = "Verify an email address for a subscription"
+	verify.Tags = []string{"subscribe"}
 	verify.OperationID = "VerifySubscriberEmail"
 	verify.Security = &openapi3.SecurityRequirements{}
 

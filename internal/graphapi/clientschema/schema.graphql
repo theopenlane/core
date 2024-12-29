@@ -24423,7 +24423,17 @@ input RiskWhereInput {
 }
 union SearchResult = APITokenSearchResult | ActionPlanSearchResult | ContactSearchResult | ControlSearchResult | ControlObjectiveSearchResult | DocumentDataSearchResult | EntitySearchResult | EntityTypeSearchResult | EventSearchResult | FileSearchResult | GroupSearchResult | GroupSettingSearchResult | IntegrationSearchResult | InternalPolicySearchResult | NarrativeSearchResult | OrgSubscriptionSearchResult | OrganizationSearchResult | OrganizationSettingSearchResult | PersonalAccessTokenSearchResult | ProcedureSearchResult | ProgramSearchResult | RiskSearchResult | StandardSearchResult | SubcontrolSearchResult | SubscriberSearchResult | TFASettingSearchResult | TaskSearchResult | TemplateSearchResult | UserSearchResult | UserSettingSearchResult
 type SearchResultConnection {
+	"""
+	Information to aid in pagination.
+	"""
 	page: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+	"""
+	A list of nodes with results.
+	"""
 	nodes: [SearchResult!]!
 }
 type Standard implements Node {

@@ -100,6 +100,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 func (h *Handler) BindSwitchHandler() *openapi3.Operation {
 	switchHandler := openapi3.NewOperation()
 	switchHandler.Description = "Switch the user's organization context"
+	switchHandler.Tags = []string{"authentication"}
 	switchHandler.OperationID = "OrganizationSwitch"
 
 	h.AddRequestBody("SwitchOrganizationRequest", models.ExampleSwitchSuccessRequest, switchHandler)
