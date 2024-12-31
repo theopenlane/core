@@ -13,5 +13,3 @@ To test webhooks locally:
 ## Unprocessed
 
 If your webhook endpoint temporarily can’t process events, Stripe automatically resends the undelivered events to your endpoint for up to three days, increasing the time for your webhook endpoint to eventually receive and process all events.
-
-

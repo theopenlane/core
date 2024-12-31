@@ -327,7 +327,7 @@ func WithOTP() ServerOption {
 				}),
 			}
 
-			// append redis client if enabed
+			// append redis client if enabled
 			if s.Config.Settings.TOTP.WithRedis {
 				opts = append(opts, totp.WithRedis(s.Config.Handler.RedisClient))
 			}
