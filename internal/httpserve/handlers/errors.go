@@ -17,77 +17,56 @@ import (
 var (
 	// ErrBadRequest is returned when the request cannot be processed
 	ErrBadRequest = errors.New("invalid request")
-
 	// ErrProcessingRequest is returned when the request cannot be processed
 	ErrProcessingRequest = errors.New("error processing request, please try again")
-
 	// ErrMissingRequiredFields is returned when the login request has an empty username or password
 	ErrMissingRequiredFields = errors.New("invalid request, missing username and/or password")
-
 	// ErrInvalidInput is returned when the input is invalid
 	ErrInvalidInput = errors.New("invalid input")
-
 	// ErrNotFound is returned when the requested object is not found
 	ErrNotFound = errors.New("object not found in the database")
-
 	// ErrMissingField is returned when a field is missing duh
 	ErrMissingField = errors.New("missing required field")
-
 	// ErrInvalidCredentials is returned when the password is invalid or missing
 	ErrInvalidCredentials = errors.New("credentials are missing or invalid")
-
 	// ErrUnverifiedUser is returned when email_verified on the user is false
 	ErrUnverifiedUser = errors.New("user is not verified")
-
 	// ErrUnableToVerifyEmail is returned when user's email is not able to be verified
 	ErrUnableToVerifyEmail = errors.New("could not verify email")
-
 	// ErrMaxAttempts is returned when user has requested the max retry attempts to verify their email
 	ErrMaxAttempts = errors.New("max attempts verifying email address")
-
 	// ErrNoEmailFound is returned when using an oauth provider and the email address cannot be determined
 	ErrNoEmailFound = errors.New("no email found from oauth provider")
-
 	// ErrInvalidProvider is returned when registering a user with an unsupported oauth provider
 	ErrInvalidProvider = errors.New("oauth2 provider not supported")
-
 	// ErrNoAuthUser is returned when the user couldn't be identified by the request
 	ErrNoAuthUser = errors.New("could not identify authenticated user in request")
-
 	// ErrPassWordResetTokenInvalid is returned when the provided token and secret do not match the stored
 	ErrPassWordResetTokenInvalid = errors.New("password reset token invalid")
-
 	// ErrNonUniquePassword is returned when the password was already used
 	ErrNonUniquePassword = errors.New("password was already used, please try again")
-
 	// ErrPasswordTooWeak is returned when the password is too weak
 	ErrPasswordTooWeak = errors.New("password is too weak: use a combination of upper and lower case letters, numbers, and special characters")
-
 	// ErrMaxDeviceLimit is returned when the user has reached the max device limit
 	ErrMaxDeviceLimit = errors.New("max device limit reached")
-
 	// ErrDeviceAlreadyRegistered is returned when the device is already registered
 	ErrDeviceAlreadyRegistered = errors.New("device already registered")
-
 	// ErrSubscriberNotFound is returned when the subscriber is not found
 	ErrSubscriberNotFound = errors.New("subscriber not found")
-
 	// ErrExpiredToken is returned when the token has expired
 	ErrExpiredToken = errors.New("token has expired")
-
 	// ErrUnauthorized is returned when the user is not authorized to make the request
 	ErrUnauthorized = errors.New("not authorized")
-
 	// ErrConflict is returned when the request cannot be processed due to a conflict
 	ErrConflict = errors.New("conflict")
-
 	// ErrAlreadySwitchedIntoOrg is returned when a user attempts to switch into an org they are currently authenticated in
 	ErrAlreadySwitchedIntoOrg = errors.New("user already switched into organization")
-
 	// ErrNoBillingEmail is returned when the user has no billing email
 	ErrNoBillingEmail = errors.New("no billing email found")
 	// ErrPersonalOrgsNoBilling is returned when the org ID looked up is a personal org
 	ErrPersonalOrgsNoBilling = errors.New("personal orgs do not have billing")
+	// ErrEventNotFound is returned when the event is not found
+	ErrEventNotFound = errors.New("generated: event not found")
 )
 
 var (

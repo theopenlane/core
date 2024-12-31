@@ -20,6 +20,13 @@ func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Custome
 		Email: &c.BillingEmail,
 		Name:  &c.OrganizationID,
 		Phone: &c.BillingPhone,
+		Address: &stripe.AddressParams{
+			Line1:      c.ContactInfo.Line1,
+			City:       c.ContactInfo.City,
+			State:      c.ContactInfo.State,
+			PostalCode: c.ContactInfo.PostalCode,
+			Country:    c.ContactInfo.Country,
+		},
 		Metadata: map[string]string{
 			"organization_id":          c.OrganizationID,
 			"organization_settings_id": c.OrganizationSettingsID,
