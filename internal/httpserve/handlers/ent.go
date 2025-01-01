@@ -9,6 +9,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -498,4 +499,27 @@ func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization,
 	}
 
 	return org, nil
+}
+
+// createEvent creates a new event in the database but requires mapped input
+func (h *Handler) createEvent(ctx context.Context, input ent.CreateEventInput) (*ent.Event, error) {
+	event, err := transaction.FromContext(ctx).Event.Create().SetInput(input).Save(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error creating event")
+
+		return nil, err
+	}
+
+	return event, nil
+}
+
+// checkForEventID checks if the event ID exists in the database
+func (h *Handler) checkForEventID(ctx context.Context, id string) (bool, error) {
+	exists, err := transaction.FromContext(ctx).Event.Query().Where(event.EventID(id)).Exist(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error checking for event ID")
+		return false, err
+	}
+
+	return exists, nil
 }

@@ -17,14 +17,34 @@ type OrganizationCustomer struct {
 	OrganizationName       string `json:"organization_name"`
 	Features               []string
 	Subscription
+	ContactInfo
 }
 
-// MapToStripeCustomer maps the OrganizationCustomer to a stripe customer for more easy querying
+// ContactInfo holds the contact information for the organization
+type ContactInfo struct {
+	Email      string  `json:"email"`
+	Phone      string  `json:"phone"`
+	City       *string `form:"city"`
+	Country    *string `form:"country"`
+	Line1      *string `form:"line1"`
+	Line2      *string `form:"line2"`
+	PostalCode *string `form:"postal_code"`
+	State      *string `form:"state"`
+}
+
 func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 	return &stripe.CustomerParams{
 		Email: &o.BillingEmail,
 		Name:  &o.OrganizationID,
 		Phone: &o.BillingPhone,
+		Address: &stripe.AddressParams{
+			Line1:      o.Line1,
+			Line2:      o.Line2,
+			City:       o.City,
+			State:      o.State,
+			PostalCode: o.PostalCode,
+			Country:    o.Country,
+		},
 		Metadata: map[string]string{
 			"organization_id":          o.OrganizationID,
 			"organization_settings_id": o.OrganizationSettingsID,

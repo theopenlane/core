@@ -79,7 +79,7 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 		Customer: stripe.String(customerID),
 		Items: []*stripe.SubscriptionItemsParams{
 			{
-				Price: &sc.config.TrialSubscriptionPriceID,
+				Price: &sc.Config.TrialSubscriptionPriceID,
 			},
 		},
 		TrialPeriodDays: stripe.Int64(trialdays),
@@ -111,7 +111,7 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscriptio
 func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
 	params := &stripe.BillingPortalSessionParams{
 		Customer:  &custID,
-		ReturnURL: &sc.config.StripeBillingPortalSuccessURL,
+		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
 		FlowData: &stripe.BillingPortalSessionFlowDataParams{
 			Type: stripe.String("subscription_update"),
 			SubscriptionUpdate: &stripe.BillingPortalSessionFlowDataSubscriptionUpdateParams{

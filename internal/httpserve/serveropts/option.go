@@ -327,7 +327,7 @@ func WithOTP() ServerOption {
 				}),
 			}
 
-			// append redis client if enabed
+			// append redis client if enabled
 			if s.Config.Settings.TOTP.WithRedis {
 				opts = append(opts, totp.WithRedis(s.Config.Handler.RedisClient))
 			}
@@ -460,7 +460,7 @@ func WithObjectStorage() ServerOption {
 func WithEntitlements() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Entitlements.Enabled {
-			config := entitlements.NewConfig(entitlements.WithTrialSubscriptionPriceID(s.Config.Settings.Entitlements.TrialSubscriptionPriceID))
+			config := entitlements.NewConfig(entitlements.WithTrialSubscriptionPriceID(s.Config.Settings.Entitlements.TrialSubscriptionPriceID), entitlements.WithStripeWebhookSecret(s.Config.Settings.Entitlements.StripeWebhookSecret))
 
 			client := entitlements.NewStripeClient(
 				entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey),
