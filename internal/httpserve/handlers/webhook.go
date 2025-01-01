@@ -30,25 +30,13 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 		return ctx.String(http.StatusBadRequest, fmt.Errorf("error verifying webhook signature. Error: %w", err).Error())
 	}
 
-	exists, err := h.checkForEventID(ctx.Request().Context(), event.ID)
+	exists, err := h.checkForEventID(req.Context(), event.ID)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
-	if exists {
-		log.Warn().Msgf("Event already received: %v", event.ID)
-
-		out := WebhookResponse{
-			Message: "Event already received",
-		}
-
-		return h.Success(ctx, out)
-	}
-
 	if !exists {
-		log.Warn().Msgf("Event not exists loop: %v", event.ID)
-
-		if err := h.Entitlements.HandleEvent(ctx.Request().Context(), &event); err != nil {
+		if err := h.Entitlements.HandleEvent(req.Context(), &event); err != nil {
 			return h.InternalServerError(ctx, err)
 		}
 
@@ -58,12 +46,12 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 			// TODO unmarshall event data into internal event
 		}
 
-		meowevent, err := h.createEvent(ctx.Request().Context(), input)
+		meowevent, err := h.createEvent(req.Context(), input)
 		if err != nil {
 			return h.InternalServerError(ctx, err)
 		}
 
-		log.Warn().Msgf("Internal event: %v", meowevent)
+		log.Debug().Msgf("Internal event: %v", meowevent)
 	}
 
 	out := WebhookResponse{
