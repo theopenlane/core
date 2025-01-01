@@ -117,7 +117,7 @@ steps:
       - label: ":github: upload reports"
         key: "scan-upload"
         cancel_on_build_failing: true
-        if: build.branch == "main"
+        if: build.branch == "main" && build.tag == null
         depends_on: ["go_test"]
         plugins:
           - cluster-secrets#v1.0.0:
@@ -183,7 +183,7 @@ steps:
               dir: "file://db/migrations"
               step: lint
       - label: ":rocket: atlas push"
-        if: build.branch == "main"
+        if: build.branch == "main" && build.tag == null
         key: "atlas_migrate"
         plugins:
           - cluster-secrets#v1.0.0:
@@ -240,7 +240,7 @@ steps:
               trivy-version: "0.57.1"
       - label: ":docker: docker build and publish"
         cancel_on_build_failing: true
-        if: build.branch == "main"
+        if: build.branch == "main" && build.tag == null
         commands: |
           #!/bin/bash
           ls
@@ -278,7 +278,7 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-        if: build.branch == "main"
+        if: build.branch == "main" && build.tag == null
         cancel_on_build_failing: true
         commands: |
           #!/bin/bash
@@ -360,3 +360,24 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
+  - group: ":rocket: Publish"
+    key: "publish"
+    if: build.tag != null
+    steps:
+      - label: ":graphql: publish graphql schema"
+        key: "apollo-publish-schema"
+        cancel_on_build_failing: true
+        command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
+        env:
+          GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
+          GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                APOLLO_KEY: APOLLO_KEY
+          - docker#v5.12.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              propagate-environment: true
+              environment:
+                - "APOLLO_KEY"
