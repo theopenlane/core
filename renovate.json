@@ -7,5 +7,17 @@
     ],
     "labels": [
         "dependencies"
+    ],
+    "packageRules": [
+        {
+            "groupName": "all patch dependencies",
+            "groupSlug": "all-patch",
+            "matchPackageNames": [
+                "*"
+            ],
+            "matchUpdateTypes": [
+                "patch"
+            ]
+        }
     ]
 }
