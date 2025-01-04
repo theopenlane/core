@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // SubscriberCreate is the builder for creating a Subscriber entity.
@@ -50,30 +51,30 @@ func (sc *SubscriberCreate) SetNillableUpdatedAt(t *time.Time) *SubscriberCreate
 	return sc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (sc *SubscriberCreate) SetCreatedBy(s string) *SubscriberCreate {
-	sc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (sc *SubscriberCreate) SetCreatedByID(s string) *SubscriberCreate {
+	sc.mutation.SetCreatedByID(s)
 	return sc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableCreatedBy(s *string) *SubscriberCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (sc *SubscriberCreate) SetNillableCreatedByID(s *string) *SubscriberCreate {
 	if s != nil {
-		sc.SetCreatedBy(*s)
+		sc.SetCreatedByID(*s)
 	}
 	return sc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (sc *SubscriberCreate) SetUpdatedBy(s string) *SubscriberCreate {
-	sc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (sc *SubscriberCreate) SetUpdatedByID(s string) *SubscriberCreate {
+	sc.mutation.SetUpdatedByID(s)
 	return sc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableUpdatedBy(s *string) *SubscriberCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (sc *SubscriberCreate) SetNillableUpdatedByID(s *string) *SubscriberCreate {
 	if s != nil {
-		sc.SetUpdatedBy(*s)
+		sc.SetUpdatedByID(*s)
 	}
 	return sc
 }
@@ -112,16 +113,16 @@ func (sc *SubscriberCreate) SetNillableDeletedAt(t *time.Time) *SubscriberCreate
 	return sc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (sc *SubscriberCreate) SetDeletedBy(s string) *SubscriberCreate {
-	sc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (sc *SubscriberCreate) SetDeletedByID(s string) *SubscriberCreate {
+	sc.mutation.SetDeletedByID(s)
 	return sc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableDeletedBy(s *string) *SubscriberCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (sc *SubscriberCreate) SetNillableDeletedByID(s *string) *SubscriberCreate {
 	if s != nil {
-		sc.SetDeletedBy(*s)
+		sc.SetDeletedByID(*s)
 	}
 	return sc
 }
@@ -232,6 +233,16 @@ func (sc *SubscriberCreate) SetNillableID(s *string) *SubscriberCreate {
 		sc.SetID(*s)
 	}
 	return sc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (sc *SubscriberCreate) SetCreatedBy(u *User) *SubscriberCreate {
+	return sc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (sc *SubscriberCreate) SetUpdatedBy(u *User) *SubscriberCreate {
+	return sc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -433,14 +444,6 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 		_spec.SetField(subscriber.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.CreatedBy(); ok {
-		_spec.SetField(subscriber.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := sc.mutation.UpdatedBy(); ok {
-		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := sc.mutation.MappingID(); ok {
 		_spec.SetField(subscriber.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -453,9 +456,9 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.DeletedBy(); ok {
-		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := sc.mutation.DeletedByID(); ok {
+		_spec.SetField(subscriber.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := sc.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)
@@ -488,6 +491,42 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
+	}
+	if nodes := sc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subscriber.CreatedByTable,
+			Columns: []string{subscriber.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subscriber.UpdatedByTable,
+			Columns: []string{subscriber.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

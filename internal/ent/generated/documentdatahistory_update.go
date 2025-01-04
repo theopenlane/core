@@ -45,23 +45,23 @@ func (ddhu *DocumentDataHistoryUpdate) ClearUpdatedAt() *DocumentDataHistoryUpda
 	return ddhu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ddhu *DocumentDataHistoryUpdate) SetUpdatedBy(s string) *DocumentDataHistoryUpdate {
-	ddhu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ddhu *DocumentDataHistoryUpdate) SetUpdatedByID(s string) *DocumentDataHistoryUpdate {
+	ddhu.mutation.SetUpdatedByID(s)
 	return ddhu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ddhu *DocumentDataHistoryUpdate) SetNillableUpdatedBy(s *string) *DocumentDataHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ddhu *DocumentDataHistoryUpdate) SetNillableUpdatedByID(s *string) *DocumentDataHistoryUpdate {
 	if s != nil {
-		ddhu.SetUpdatedBy(*s)
+		ddhu.SetUpdatedByID(*s)
 	}
 	return ddhu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ddhu *DocumentDataHistoryUpdate) ClearUpdatedBy() *DocumentDataHistoryUpdate {
-	ddhu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ddhu *DocumentDataHistoryUpdate) ClearUpdatedByID() *DocumentDataHistoryUpdate {
+	ddhu.mutation.ClearUpdatedByID()
 	return ddhu
 }
 
@@ -80,46 +80,6 @@ func (ddhu *DocumentDataHistoryUpdate) AppendTags(s []string) *DocumentDataHisto
 // ClearTags clears the value of the "tags" field.
 func (ddhu *DocumentDataHistoryUpdate) ClearTags() *DocumentDataHistoryUpdate {
 	ddhu.mutation.ClearTags()
-	return ddhu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ddhu *DocumentDataHistoryUpdate) SetDeletedAt(t time.Time) *DocumentDataHistoryUpdate {
-	ddhu.mutation.SetDeletedAt(t)
-	return ddhu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ddhu *DocumentDataHistoryUpdate) SetNillableDeletedAt(t *time.Time) *DocumentDataHistoryUpdate {
-	if t != nil {
-		ddhu.SetDeletedAt(*t)
-	}
-	return ddhu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ddhu *DocumentDataHistoryUpdate) ClearDeletedAt() *DocumentDataHistoryUpdate {
-	ddhu.mutation.ClearDeletedAt()
-	return ddhu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ddhu *DocumentDataHistoryUpdate) SetDeletedBy(s string) *DocumentDataHistoryUpdate {
-	ddhu.mutation.SetDeletedBy(s)
-	return ddhu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ddhu *DocumentDataHistoryUpdate) SetNillableDeletedBy(s *string) *DocumentDataHistoryUpdate {
-	if s != nil {
-		ddhu.SetDeletedBy(*s)
-	}
-	return ddhu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ddhu *DocumentDataHistoryUpdate) ClearDeletedBy() *DocumentDataHistoryUpdate {
-	ddhu.mutation.ClearDeletedBy()
 	return ddhu
 }
 
@@ -228,6 +188,9 @@ func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if ddhu.mutation.RefCleared() {
 		_spec.ClearField(documentdatahistory.FieldRef, field.TypeString)
 	}
+	if ddhu.mutation.UpdatedByCleared() {
+		_spec.ClearField(documentdatahistory.FieldUpdatedBy, field.TypeString)
+	}
 	if ddhu.mutation.CreatedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -237,14 +200,14 @@ func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if ddhu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ddhu.mutation.CreatedByCleared() {
-		_spec.ClearField(documentdatahistory.FieldCreatedBy, field.TypeString)
+	if ddhu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ddhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ddhu.mutation.UpdatedByID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ddhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(documentdatahistory.FieldUpdatedBy, field.TypeString)
+	if ddhu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ddhu.mutation.Tags(); ok {
 		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
@@ -257,17 +220,11 @@ func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if ddhu.mutation.TagsCleared() {
 		_spec.ClearField(documentdatahistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ddhu.mutation.DeletedAt(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ddhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ddhu.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if ddhu.mutation.DeletedByCleared() {
-		_spec.ClearField(documentdatahistory.FieldDeletedBy, field.TypeString)
+	if ddhu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ddhu.mutation.OwnerID(); ok {
 		_spec.SetField(documentdatahistory.FieldOwnerID, field.TypeString, value)
@@ -317,23 +274,23 @@ func (ddhuo *DocumentDataHistoryUpdateOne) ClearUpdatedAt() *DocumentDataHistory
 	return ddhuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) SetUpdatedBy(s string) *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) SetUpdatedByID(s string) *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.SetUpdatedByID(s)
 	return ddhuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableUpdatedBy(s *string) *DocumentDataHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableUpdatedByID(s *string) *DocumentDataHistoryUpdateOne {
 	if s != nil {
-		ddhuo.SetUpdatedBy(*s)
+		ddhuo.SetUpdatedByID(*s)
 	}
 	return ddhuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) ClearUpdatedBy() *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) ClearUpdatedByID() *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.ClearUpdatedByID()
 	return ddhuo
 }
 
@@ -352,46 +309,6 @@ func (ddhuo *DocumentDataHistoryUpdateOne) AppendTags(s []string) *DocumentDataH
 // ClearTags clears the value of the "tags" field.
 func (ddhuo *DocumentDataHistoryUpdateOne) ClearTags() *DocumentDataHistoryUpdateOne {
 	ddhuo.mutation.ClearTags()
-	return ddhuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) SetDeletedAt(t time.Time) *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.SetDeletedAt(t)
-	return ddhuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *DocumentDataHistoryUpdateOne {
-	if t != nil {
-		ddhuo.SetDeletedAt(*t)
-	}
-	return ddhuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) ClearDeletedAt() *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.ClearDeletedAt()
-	return ddhuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) SetDeletedBy(s string) *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.SetDeletedBy(s)
-	return ddhuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableDeletedBy(s *string) *DocumentDataHistoryUpdateOne {
-	if s != nil {
-		ddhuo.SetDeletedBy(*s)
-	}
-	return ddhuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ddhuo *DocumentDataHistoryUpdateOne) ClearDeletedBy() *DocumentDataHistoryUpdateOne {
-	ddhuo.mutation.ClearDeletedBy()
 	return ddhuo
 }
 
@@ -530,6 +447,9 @@ func (ddhuo *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if ddhuo.mutation.RefCleared() {
 		_spec.ClearField(documentdatahistory.FieldRef, field.TypeString)
 	}
+	if ddhuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(documentdatahistory.FieldUpdatedBy, field.TypeString)
+	}
 	if ddhuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -539,14 +459,14 @@ func (ddhuo *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if ddhuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ddhuo.mutation.CreatedByCleared() {
-		_spec.ClearField(documentdatahistory.FieldCreatedBy, field.TypeString)
+	if ddhuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ddhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ddhuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ddhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(documentdatahistory.FieldUpdatedBy, field.TypeString)
+	if ddhuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ddhuo.mutation.Tags(); ok {
 		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
@@ -559,17 +479,11 @@ func (ddhuo *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if ddhuo.mutation.TagsCleared() {
 		_spec.ClearField(documentdatahistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ddhuo.mutation.DeletedAt(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ddhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ddhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if ddhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(documentdatahistory.FieldDeletedBy, field.TypeString)
+	if ddhuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ddhuo.mutation.OwnerID(); ok {
 		_spec.SetField(documentdatahistory.FieldOwnerID, field.TypeString, value)

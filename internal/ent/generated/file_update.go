@@ -55,63 +55,23 @@ func (fu *FileUpdate) ClearUpdatedAt() *FileUpdate {
 	return fu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fu *FileUpdate) SetUpdatedBy(s string) *FileUpdate {
-	fu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (fu *FileUpdate) SetUpdatedByID(s string) *FileUpdate {
+	fu.mutation.SetUpdatedByID(s)
 	return fu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableUpdatedBy(s *string) *FileUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableUpdatedByID(s *string) *FileUpdate {
 	if s != nil {
-		fu.SetUpdatedBy(*s)
+		fu.SetUpdatedByID(*s)
 	}
 	return fu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (fu *FileUpdate) ClearUpdatedBy() *FileUpdate {
-	fu.mutation.ClearUpdatedBy()
-	return fu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (fu *FileUpdate) SetDeletedAt(t time.Time) *FileUpdate {
-	fu.mutation.SetDeletedAt(t)
-	return fu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableDeletedAt(t *time.Time) *FileUpdate {
-	if t != nil {
-		fu.SetDeletedAt(*t)
-	}
-	return fu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (fu *FileUpdate) ClearDeletedAt() *FileUpdate {
-	fu.mutation.ClearDeletedAt()
-	return fu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (fu *FileUpdate) SetDeletedBy(s string) *FileUpdate {
-	fu.mutation.SetDeletedBy(s)
-	return fu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableDeletedBy(s *string) *FileUpdate {
-	if s != nil {
-		fu.SetDeletedBy(*s)
-	}
-	return fu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (fu *FileUpdate) ClearDeletedBy() *FileUpdate {
-	fu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (fu *FileUpdate) ClearUpdatedByID() *FileUpdate {
+	fu.mutation.ClearUpdatedByID()
 	return fu
 }
 
@@ -401,6 +361,11 @@ func (fu *FileUpdate) ClearFileContents() *FileUpdate {
 	return fu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (fu *FileUpdate) SetUpdatedBy(u *User) *FileUpdate {
+	return fu.SetUpdatedByID(u.ID)
+}
+
 // AddUserIDs adds the "user" edge to the User entity by IDs.
 func (fu *FileUpdate) AddUserIDs(ids ...string) *FileUpdate {
 	fu.mutation.AddUserIDs(ids...)
@@ -569,6 +534,12 @@ func (fu *FileUpdate) AddProgram(p ...*Program) *FileUpdate {
 // Mutation returns the FileMutation object of the builder.
 func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (fu *FileUpdate) ClearUpdatedBy() *FileUpdate {
+	fu.mutation.ClearUpdatedBy()
+	return fu
 }
 
 // ClearUser clears all "user" edges to the User entity.
@@ -886,26 +857,11 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(file.FieldUpdatedAt, field.TypeTime)
 	}
-	if fu.mutation.CreatedByCleared() {
-		_spec.ClearField(file.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := fu.mutation.UpdatedBy(); ok {
-		_spec.SetField(file.FieldUpdatedBy, field.TypeString, value)
-	}
-	if fu.mutation.UpdatedByCleared() {
-		_spec.ClearField(file.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := fu.mutation.DeletedAt(); ok {
-		_spec.SetField(file.FieldDeletedAt, field.TypeTime, value)
-	}
 	if fu.mutation.DeletedAtCleared() {
 		_spec.ClearField(file.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := fu.mutation.DeletedBy(); ok {
-		_spec.SetField(file.FieldDeletedBy, field.TypeString, value)
-	}
-	if fu.mutation.DeletedByCleared() {
-		_spec.ClearField(file.FieldDeletedBy, field.TypeString)
+	if fu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(file.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := fu.mutation.Tags(); ok {
 		_spec.SetField(file.FieldTags, field.TypeJSON, value)
@@ -998,6 +954,37 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if fu.mutation.FileContentsCleared() {
 		_spec.ClearField(file.FieldFileContents, field.TypeBytes)
+	}
+	if fu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByTable,
+			Columns: []string{file.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByTable,
+			Columns: []string{file.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if fu.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1563,63 +1550,23 @@ func (fuo *FileUpdateOne) ClearUpdatedAt() *FileUpdateOne {
 	return fuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fuo *FileUpdateOne) SetUpdatedBy(s string) *FileUpdateOne {
-	fuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (fuo *FileUpdateOne) SetUpdatedByID(s string) *FileUpdateOne {
+	fuo.mutation.SetUpdatedByID(s)
 	return fuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableUpdatedBy(s *string) *FileUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableUpdatedByID(s *string) *FileUpdateOne {
 	if s != nil {
-		fuo.SetUpdatedBy(*s)
+		fuo.SetUpdatedByID(*s)
 	}
 	return fuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (fuo *FileUpdateOne) ClearUpdatedBy() *FileUpdateOne {
-	fuo.mutation.ClearUpdatedBy()
-	return fuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (fuo *FileUpdateOne) SetDeletedAt(t time.Time) *FileUpdateOne {
-	fuo.mutation.SetDeletedAt(t)
-	return fuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableDeletedAt(t *time.Time) *FileUpdateOne {
-	if t != nil {
-		fuo.SetDeletedAt(*t)
-	}
-	return fuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (fuo *FileUpdateOne) ClearDeletedAt() *FileUpdateOne {
-	fuo.mutation.ClearDeletedAt()
-	return fuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (fuo *FileUpdateOne) SetDeletedBy(s string) *FileUpdateOne {
-	fuo.mutation.SetDeletedBy(s)
-	return fuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableDeletedBy(s *string) *FileUpdateOne {
-	if s != nil {
-		fuo.SetDeletedBy(*s)
-	}
-	return fuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (fuo *FileUpdateOne) ClearDeletedBy() *FileUpdateOne {
-	fuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (fuo *FileUpdateOne) ClearUpdatedByID() *FileUpdateOne {
+	fuo.mutation.ClearUpdatedByID()
 	return fuo
 }
 
@@ -1909,6 +1856,11 @@ func (fuo *FileUpdateOne) ClearFileContents() *FileUpdateOne {
 	return fuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (fuo *FileUpdateOne) SetUpdatedBy(u *User) *FileUpdateOne {
+	return fuo.SetUpdatedByID(u.ID)
+}
+
 // AddUserIDs adds the "user" edge to the User entity by IDs.
 func (fuo *FileUpdateOne) AddUserIDs(ids ...string) *FileUpdateOne {
 	fuo.mutation.AddUserIDs(ids...)
@@ -2077,6 +2029,12 @@ func (fuo *FileUpdateOne) AddProgram(p ...*Program) *FileUpdateOne {
 // Mutation returns the FileMutation object of the builder.
 func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (fuo *FileUpdateOne) ClearUpdatedBy() *FileUpdateOne {
+	fuo.mutation.ClearUpdatedBy()
+	return fuo
 }
 
 // ClearUser clears all "user" edges to the User entity.
@@ -2424,26 +2382,11 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 	if fuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(file.FieldUpdatedAt, field.TypeTime)
 	}
-	if fuo.mutation.CreatedByCleared() {
-		_spec.ClearField(file.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := fuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(file.FieldUpdatedBy, field.TypeString, value)
-	}
-	if fuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(file.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := fuo.mutation.DeletedAt(); ok {
-		_spec.SetField(file.FieldDeletedAt, field.TypeTime, value)
-	}
 	if fuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(file.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := fuo.mutation.DeletedBy(); ok {
-		_spec.SetField(file.FieldDeletedBy, field.TypeString, value)
-	}
-	if fuo.mutation.DeletedByCleared() {
-		_spec.ClearField(file.FieldDeletedBy, field.TypeString)
+	if fuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(file.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := fuo.mutation.Tags(); ok {
 		_spec.SetField(file.FieldTags, field.TypeJSON, value)
@@ -2536,6 +2479,37 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 	}
 	if fuo.mutation.FileContentsCleared() {
 		_spec.ClearField(file.FieldFileContents, field.TypeBytes)
+	}
+	if fuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByTable,
+			Columns: []string{file.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByTable,
+			Columns: []string{file.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if fuo.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -50,30 +51,30 @@ func (gsc *GroupSettingCreate) SetNillableUpdatedAt(t *time.Time) *GroupSettingC
 	return gsc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (gsc *GroupSettingCreate) SetCreatedBy(s string) *GroupSettingCreate {
-	gsc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (gsc *GroupSettingCreate) SetCreatedByID(s string) *GroupSettingCreate {
+	gsc.mutation.SetCreatedByID(s)
 	return gsc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableCreatedBy(s *string) *GroupSettingCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (gsc *GroupSettingCreate) SetNillableCreatedByID(s *string) *GroupSettingCreate {
 	if s != nil {
-		gsc.SetCreatedBy(*s)
+		gsc.SetCreatedByID(*s)
 	}
 	return gsc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gsc *GroupSettingCreate) SetUpdatedBy(s string) *GroupSettingCreate {
-	gsc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gsc *GroupSettingCreate) SetUpdatedByID(s string) *GroupSettingCreate {
+	gsc.mutation.SetUpdatedByID(s)
 	return gsc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableUpdatedBy(s *string) *GroupSettingCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gsc *GroupSettingCreate) SetNillableUpdatedByID(s *string) *GroupSettingCreate {
 	if s != nil {
-		gsc.SetUpdatedBy(*s)
+		gsc.SetUpdatedByID(*s)
 	}
 	return gsc
 }
@@ -112,16 +113,16 @@ func (gsc *GroupSettingCreate) SetNillableDeletedAt(t *time.Time) *GroupSettingC
 	return gsc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (gsc *GroupSettingCreate) SetDeletedBy(s string) *GroupSettingCreate {
-	gsc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (gsc *GroupSettingCreate) SetDeletedByID(s string) *GroupSettingCreate {
+	gsc.mutation.SetDeletedByID(s)
 	return gsc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableDeletedBy(s *string) *GroupSettingCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (gsc *GroupSettingCreate) SetNillableDeletedByID(s *string) *GroupSettingCreate {
 	if s != nil {
-		gsc.SetDeletedBy(*s)
+		gsc.SetDeletedByID(*s)
 	}
 	return gsc
 }
@@ -208,6 +209,16 @@ func (gsc *GroupSettingCreate) SetNillableID(s *string) *GroupSettingCreate {
 		gsc.SetID(*s)
 	}
 	return gsc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (gsc *GroupSettingCreate) SetCreatedBy(u *User) *GroupSettingCreate {
+	return gsc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (gsc *GroupSettingCreate) SetUpdatedBy(u *User) *GroupSettingCreate {
+	return gsc.SetUpdatedByID(u.ID)
 }
 
 // SetGroup sets the "group" edge to the Group entity.
@@ -368,14 +379,6 @@ func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec
 		_spec.SetField(groupsetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := gsc.mutation.CreatedBy(); ok {
-		_spec.SetField(groupsetting.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := gsc.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupsetting.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := gsc.mutation.MappingID(); ok {
 		_spec.SetField(groupsetting.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -388,9 +391,9 @@ func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec
 		_spec.SetField(groupsetting.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := gsc.mutation.DeletedBy(); ok {
-		_spec.SetField(groupsetting.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := gsc.mutation.DeletedByID(); ok {
+		_spec.SetField(groupsetting.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := gsc.mutation.Visibility(); ok {
 		_spec.SetField(groupsetting.FieldVisibility, field.TypeEnum, value)
@@ -407,6 +410,42 @@ func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec
 	if value, ok := gsc.mutation.SyncToGithub(); ok {
 		_spec.SetField(groupsetting.FieldSyncToGithub, field.TypeBool, value)
 		_node.SyncToGithub = value
+	}
+	if nodes := gsc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupsetting.CreatedByTable,
+			Columns: []string{groupsetting.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gsc.schemaConfig.GroupSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gsc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupsetting.UpdatedByTable,
+			Columns: []string{groupsetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gsc.schemaConfig.GroupSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := gsc.mutation.GroupIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

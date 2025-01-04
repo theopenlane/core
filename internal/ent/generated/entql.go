@@ -97,10 +97,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			apitoken.FieldCreatedAt:   {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
 			apitoken.FieldUpdatedAt:   {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
-			apitoken.FieldCreatedBy:   {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
-			apitoken.FieldUpdatedBy:   {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
+			apitoken.FieldCreatedByID: {Type: field.TypeString, Column: apitoken.FieldCreatedByID},
+			apitoken.FieldUpdatedByID: {Type: field.TypeString, Column: apitoken.FieldUpdatedByID},
 			apitoken.FieldDeletedAt:   {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
-			apitoken.FieldDeletedBy:   {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
+			apitoken.FieldDeletedByID: {Type: field.TypeString, Column: apitoken.FieldDeletedByID},
 			apitoken.FieldMappingID:   {Type: field.TypeString, Column: apitoken.FieldMappingID},
 			apitoken.FieldTags:        {Type: field.TypeJSON, Column: apitoken.FieldTags},
 			apitoken.FieldOwnerID:     {Type: field.TypeString, Column: apitoken.FieldOwnerID},
@@ -125,10 +125,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			actionplan.FieldCreatedAt:   {Type: field.TypeTime, Column: actionplan.FieldCreatedAt},
 			actionplan.FieldUpdatedAt:   {Type: field.TypeTime, Column: actionplan.FieldUpdatedAt},
-			actionplan.FieldCreatedBy:   {Type: field.TypeString, Column: actionplan.FieldCreatedBy},
-			actionplan.FieldUpdatedBy:   {Type: field.TypeString, Column: actionplan.FieldUpdatedBy},
+			actionplan.FieldCreatedByID: {Type: field.TypeString, Column: actionplan.FieldCreatedByID},
+			actionplan.FieldUpdatedByID: {Type: field.TypeString, Column: actionplan.FieldUpdatedByID},
 			actionplan.FieldDeletedAt:   {Type: field.TypeTime, Column: actionplan.FieldDeletedAt},
-			actionplan.FieldDeletedBy:   {Type: field.TypeString, Column: actionplan.FieldDeletedBy},
+			actionplan.FieldDeletedByID: {Type: field.TypeString, Column: actionplan.FieldDeletedByID},
 			actionplan.FieldMappingID:   {Type: field.TypeString, Column: actionplan.FieldMappingID},
 			actionplan.FieldTags:        {Type: field.TypeJSON, Column: actionplan.FieldTags},
 			actionplan.FieldName:        {Type: field.TypeString, Column: actionplan.FieldName},
@@ -154,12 +154,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldHistoryTime: {Type: field.TypeTime, Column: actionplanhistory.FieldHistoryTime},
 			actionplanhistory.FieldRef:         {Type: field.TypeString, Column: actionplanhistory.FieldRef},
 			actionplanhistory.FieldOperation:   {Type: field.TypeEnum, Column: actionplanhistory.FieldOperation},
+			actionplanhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: actionplanhistory.FieldUpdatedBy},
 			actionplanhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: actionplanhistory.FieldCreatedAt},
 			actionplanhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: actionplanhistory.FieldUpdatedAt},
-			actionplanhistory.FieldCreatedBy:   {Type: field.TypeString, Column: actionplanhistory.FieldCreatedBy},
-			actionplanhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: actionplanhistory.FieldUpdatedBy},
+			actionplanhistory.FieldCreatedByID: {Type: field.TypeString, Column: actionplanhistory.FieldCreatedByID},
+			actionplanhistory.FieldUpdatedByID: {Type: field.TypeString, Column: actionplanhistory.FieldUpdatedByID},
 			actionplanhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: actionplanhistory.FieldDeletedAt},
-			actionplanhistory.FieldDeletedBy:   {Type: field.TypeString, Column: actionplanhistory.FieldDeletedBy},
+			actionplanhistory.FieldDeletedByID: {Type: field.TypeString, Column: actionplanhistory.FieldDeletedByID},
 			actionplanhistory.FieldMappingID:   {Type: field.TypeString, Column: actionplanhistory.FieldMappingID},
 			actionplanhistory.FieldTags:        {Type: field.TypeJSON, Column: actionplanhistory.FieldTags},
 			actionplanhistory.FieldName:        {Type: field.TypeString, Column: actionplanhistory.FieldName},
@@ -184,11 +185,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			contact.FieldCreatedAt:   {Type: field.TypeTime, Column: contact.FieldCreatedAt},
 			contact.FieldUpdatedAt:   {Type: field.TypeTime, Column: contact.FieldUpdatedAt},
-			contact.FieldCreatedBy:   {Type: field.TypeString, Column: contact.FieldCreatedBy},
-			contact.FieldUpdatedBy:   {Type: field.TypeString, Column: contact.FieldUpdatedBy},
+			contact.FieldCreatedByID: {Type: field.TypeString, Column: contact.FieldCreatedByID},
+			contact.FieldUpdatedByID: {Type: field.TypeString, Column: contact.FieldUpdatedByID},
 			contact.FieldMappingID:   {Type: field.TypeString, Column: contact.FieldMappingID},
 			contact.FieldDeletedAt:   {Type: field.TypeTime, Column: contact.FieldDeletedAt},
-			contact.FieldDeletedBy:   {Type: field.TypeString, Column: contact.FieldDeletedBy},
+			contact.FieldDeletedByID: {Type: field.TypeString, Column: contact.FieldDeletedByID},
 			contact.FieldTags:        {Type: field.TypeJSON, Column: contact.FieldTags},
 			contact.FieldOwnerID:     {Type: field.TypeString, Column: contact.FieldOwnerID},
 			contact.FieldFullName:    {Type: field.TypeString, Column: contact.FieldFullName},
@@ -214,13 +215,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			contacthistory.FieldHistoryTime: {Type: field.TypeTime, Column: contacthistory.FieldHistoryTime},
 			contacthistory.FieldRef:         {Type: field.TypeString, Column: contacthistory.FieldRef},
 			contacthistory.FieldOperation:   {Type: field.TypeEnum, Column: contacthistory.FieldOperation},
+			contacthistory.FieldUpdatedBy:   {Type: field.TypeString, Column: contacthistory.FieldUpdatedBy},
 			contacthistory.FieldCreatedAt:   {Type: field.TypeTime, Column: contacthistory.FieldCreatedAt},
 			contacthistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: contacthistory.FieldUpdatedAt},
-			contacthistory.FieldCreatedBy:   {Type: field.TypeString, Column: contacthistory.FieldCreatedBy},
-			contacthistory.FieldUpdatedBy:   {Type: field.TypeString, Column: contacthistory.FieldUpdatedBy},
+			contacthistory.FieldCreatedByID: {Type: field.TypeString, Column: contacthistory.FieldCreatedByID},
+			contacthistory.FieldUpdatedByID: {Type: field.TypeString, Column: contacthistory.FieldUpdatedByID},
 			contacthistory.FieldMappingID:   {Type: field.TypeString, Column: contacthistory.FieldMappingID},
 			contacthistory.FieldDeletedAt:   {Type: field.TypeTime, Column: contacthistory.FieldDeletedAt},
-			contacthistory.FieldDeletedBy:   {Type: field.TypeString, Column: contacthistory.FieldDeletedBy},
+			contacthistory.FieldDeletedByID: {Type: field.TypeString, Column: contacthistory.FieldDeletedByID},
 			contacthistory.FieldTags:        {Type: field.TypeJSON, Column: contacthistory.FieldTags},
 			contacthistory.FieldOwnerID:     {Type: field.TypeString, Column: contacthistory.FieldOwnerID},
 			contacthistory.FieldFullName:    {Type: field.TypeString, Column: contacthistory.FieldFullName},
@@ -245,10 +247,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			control.FieldCreatedAt:        {Type: field.TypeTime, Column: control.FieldCreatedAt},
 			control.FieldUpdatedAt:        {Type: field.TypeTime, Column: control.FieldUpdatedAt},
-			control.FieldCreatedBy:        {Type: field.TypeString, Column: control.FieldCreatedBy},
-			control.FieldUpdatedBy:        {Type: field.TypeString, Column: control.FieldUpdatedBy},
+			control.FieldCreatedByID:      {Type: field.TypeString, Column: control.FieldCreatedByID},
+			control.FieldUpdatedByID:      {Type: field.TypeString, Column: control.FieldUpdatedByID},
 			control.FieldDeletedAt:        {Type: field.TypeTime, Column: control.FieldDeletedAt},
-			control.FieldDeletedBy:        {Type: field.TypeString, Column: control.FieldDeletedBy},
+			control.FieldDeletedByID:      {Type: field.TypeString, Column: control.FieldDeletedByID},
 			control.FieldMappingID:        {Type: field.TypeString, Column: control.FieldMappingID},
 			control.FieldTags:             {Type: field.TypeJSON, Column: control.FieldTags},
 			control.FieldOwnerID:          {Type: field.TypeString, Column: control.FieldOwnerID},
@@ -280,12 +282,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldHistoryTime:      {Type: field.TypeTime, Column: controlhistory.FieldHistoryTime},
 			controlhistory.FieldRef:              {Type: field.TypeString, Column: controlhistory.FieldRef},
 			controlhistory.FieldOperation:        {Type: field.TypeEnum, Column: controlhistory.FieldOperation},
+			controlhistory.FieldUpdatedBy:        {Type: field.TypeString, Column: controlhistory.FieldUpdatedBy},
 			controlhistory.FieldCreatedAt:        {Type: field.TypeTime, Column: controlhistory.FieldCreatedAt},
 			controlhistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: controlhistory.FieldUpdatedAt},
-			controlhistory.FieldCreatedBy:        {Type: field.TypeString, Column: controlhistory.FieldCreatedBy},
-			controlhistory.FieldUpdatedBy:        {Type: field.TypeString, Column: controlhistory.FieldUpdatedBy},
+			controlhistory.FieldCreatedByID:      {Type: field.TypeString, Column: controlhistory.FieldCreatedByID},
+			controlhistory.FieldUpdatedByID:      {Type: field.TypeString, Column: controlhistory.FieldUpdatedByID},
 			controlhistory.FieldDeletedAt:        {Type: field.TypeTime, Column: controlhistory.FieldDeletedAt},
-			controlhistory.FieldDeletedBy:        {Type: field.TypeString, Column: controlhistory.FieldDeletedBy},
+			controlhistory.FieldDeletedByID:      {Type: field.TypeString, Column: controlhistory.FieldDeletedByID},
 			controlhistory.FieldMappingID:        {Type: field.TypeString, Column: controlhistory.FieldMappingID},
 			controlhistory.FieldTags:             {Type: field.TypeJSON, Column: controlhistory.FieldTags},
 			controlhistory.FieldOwnerID:          {Type: field.TypeString, Column: controlhistory.FieldOwnerID},
@@ -316,10 +319,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			controlobjective.FieldCreatedAt:            {Type: field.TypeTime, Column: controlobjective.FieldCreatedAt},
 			controlobjective.FieldUpdatedAt:            {Type: field.TypeTime, Column: controlobjective.FieldUpdatedAt},
-			controlobjective.FieldCreatedBy:            {Type: field.TypeString, Column: controlobjective.FieldCreatedBy},
-			controlobjective.FieldUpdatedBy:            {Type: field.TypeString, Column: controlobjective.FieldUpdatedBy},
+			controlobjective.FieldCreatedByID:          {Type: field.TypeString, Column: controlobjective.FieldCreatedByID},
+			controlobjective.FieldUpdatedByID:          {Type: field.TypeString, Column: controlobjective.FieldUpdatedByID},
 			controlobjective.FieldDeletedAt:            {Type: field.TypeTime, Column: controlobjective.FieldDeletedAt},
-			controlobjective.FieldDeletedBy:            {Type: field.TypeString, Column: controlobjective.FieldDeletedBy},
+			controlobjective.FieldDeletedByID:          {Type: field.TypeString, Column: controlobjective.FieldDeletedByID},
 			controlobjective.FieldMappingID:            {Type: field.TypeString, Column: controlobjective.FieldMappingID},
 			controlobjective.FieldTags:                 {Type: field.TypeJSON, Column: controlobjective.FieldTags},
 			controlobjective.FieldOwnerID:              {Type: field.TypeString, Column: controlobjective.FieldOwnerID},
@@ -350,12 +353,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlobjectivehistory.FieldHistoryTime:          {Type: field.TypeTime, Column: controlobjectivehistory.FieldHistoryTime},
 			controlobjectivehistory.FieldRef:                  {Type: field.TypeString, Column: controlobjectivehistory.FieldRef},
 			controlobjectivehistory.FieldOperation:            {Type: field.TypeEnum, Column: controlobjectivehistory.FieldOperation},
+			controlobjectivehistory.FieldUpdatedBy:            {Type: field.TypeString, Column: controlobjectivehistory.FieldUpdatedBy},
 			controlobjectivehistory.FieldCreatedAt:            {Type: field.TypeTime, Column: controlobjectivehistory.FieldCreatedAt},
 			controlobjectivehistory.FieldUpdatedAt:            {Type: field.TypeTime, Column: controlobjectivehistory.FieldUpdatedAt},
-			controlobjectivehistory.FieldCreatedBy:            {Type: field.TypeString, Column: controlobjectivehistory.FieldCreatedBy},
-			controlobjectivehistory.FieldUpdatedBy:            {Type: field.TypeString, Column: controlobjectivehistory.FieldUpdatedBy},
+			controlobjectivehistory.FieldCreatedByID:          {Type: field.TypeString, Column: controlobjectivehistory.FieldCreatedByID},
+			controlobjectivehistory.FieldUpdatedByID:          {Type: field.TypeString, Column: controlobjectivehistory.FieldUpdatedByID},
 			controlobjectivehistory.FieldDeletedAt:            {Type: field.TypeTime, Column: controlobjectivehistory.FieldDeletedAt},
-			controlobjectivehistory.FieldDeletedBy:            {Type: field.TypeString, Column: controlobjectivehistory.FieldDeletedBy},
+			controlobjectivehistory.FieldDeletedByID:          {Type: field.TypeString, Column: controlobjectivehistory.FieldDeletedByID},
 			controlobjectivehistory.FieldMappingID:            {Type: field.TypeString, Column: controlobjectivehistory.FieldMappingID},
 			controlobjectivehistory.FieldTags:                 {Type: field.TypeJSON, Column: controlobjectivehistory.FieldTags},
 			controlobjectivehistory.FieldOwnerID:              {Type: field.TypeString, Column: controlobjectivehistory.FieldOwnerID},
@@ -383,17 +387,17 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "DocumentData",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			documentdata.FieldCreatedAt:  {Type: field.TypeTime, Column: documentdata.FieldCreatedAt},
-			documentdata.FieldUpdatedAt:  {Type: field.TypeTime, Column: documentdata.FieldUpdatedAt},
-			documentdata.FieldCreatedBy:  {Type: field.TypeString, Column: documentdata.FieldCreatedBy},
-			documentdata.FieldUpdatedBy:  {Type: field.TypeString, Column: documentdata.FieldUpdatedBy},
-			documentdata.FieldMappingID:  {Type: field.TypeString, Column: documentdata.FieldMappingID},
-			documentdata.FieldTags:       {Type: field.TypeJSON, Column: documentdata.FieldTags},
-			documentdata.FieldDeletedAt:  {Type: field.TypeTime, Column: documentdata.FieldDeletedAt},
-			documentdata.FieldDeletedBy:  {Type: field.TypeString, Column: documentdata.FieldDeletedBy},
-			documentdata.FieldOwnerID:    {Type: field.TypeString, Column: documentdata.FieldOwnerID},
-			documentdata.FieldTemplateID: {Type: field.TypeString, Column: documentdata.FieldTemplateID},
-			documentdata.FieldData:       {Type: field.TypeJSON, Column: documentdata.FieldData},
+			documentdata.FieldCreatedAt:   {Type: field.TypeTime, Column: documentdata.FieldCreatedAt},
+			documentdata.FieldUpdatedAt:   {Type: field.TypeTime, Column: documentdata.FieldUpdatedAt},
+			documentdata.FieldCreatedByID: {Type: field.TypeString, Column: documentdata.FieldCreatedByID},
+			documentdata.FieldUpdatedByID: {Type: field.TypeString, Column: documentdata.FieldUpdatedByID},
+			documentdata.FieldMappingID:   {Type: field.TypeString, Column: documentdata.FieldMappingID},
+			documentdata.FieldTags:        {Type: field.TypeJSON, Column: documentdata.FieldTags},
+			documentdata.FieldDeletedAt:   {Type: field.TypeTime, Column: documentdata.FieldDeletedAt},
+			documentdata.FieldDeletedByID: {Type: field.TypeString, Column: documentdata.FieldDeletedByID},
+			documentdata.FieldOwnerID:     {Type: field.TypeString, Column: documentdata.FieldOwnerID},
+			documentdata.FieldTemplateID:  {Type: field.TypeString, Column: documentdata.FieldTemplateID},
+			documentdata.FieldData:        {Type: field.TypeJSON, Column: documentdata.FieldData},
 		},
 	}
 	graph.Nodes[10] = &sqlgraph.Node{
@@ -410,14 +414,15 @@ var schemaGraph = func() *sqlgraph.Schema {
 			documentdatahistory.FieldHistoryTime: {Type: field.TypeTime, Column: documentdatahistory.FieldHistoryTime},
 			documentdatahistory.FieldRef:         {Type: field.TypeString, Column: documentdatahistory.FieldRef},
 			documentdatahistory.FieldOperation:   {Type: field.TypeEnum, Column: documentdatahistory.FieldOperation},
+			documentdatahistory.FieldUpdatedBy:   {Type: field.TypeString, Column: documentdatahistory.FieldUpdatedBy},
 			documentdatahistory.FieldCreatedAt:   {Type: field.TypeTime, Column: documentdatahistory.FieldCreatedAt},
 			documentdatahistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: documentdatahistory.FieldUpdatedAt},
-			documentdatahistory.FieldCreatedBy:   {Type: field.TypeString, Column: documentdatahistory.FieldCreatedBy},
-			documentdatahistory.FieldUpdatedBy:   {Type: field.TypeString, Column: documentdatahistory.FieldUpdatedBy},
+			documentdatahistory.FieldCreatedByID: {Type: field.TypeString, Column: documentdatahistory.FieldCreatedByID},
+			documentdatahistory.FieldUpdatedByID: {Type: field.TypeString, Column: documentdatahistory.FieldUpdatedByID},
 			documentdatahistory.FieldMappingID:   {Type: field.TypeString, Column: documentdatahistory.FieldMappingID},
 			documentdatahistory.FieldTags:        {Type: field.TypeJSON, Column: documentdatahistory.FieldTags},
 			documentdatahistory.FieldDeletedAt:   {Type: field.TypeTime, Column: documentdatahistory.FieldDeletedAt},
-			documentdatahistory.FieldDeletedBy:   {Type: field.TypeString, Column: documentdatahistory.FieldDeletedBy},
+			documentdatahistory.FieldDeletedByID: {Type: field.TypeString, Column: documentdatahistory.FieldDeletedByID},
 			documentdatahistory.FieldOwnerID:     {Type: field.TypeString, Column: documentdatahistory.FieldOwnerID},
 			documentdatahistory.FieldTemplateID:  {Type: field.TypeString, Column: documentdatahistory.FieldTemplateID},
 			documentdatahistory.FieldData:        {Type: field.TypeJSON, Column: documentdatahistory.FieldData},
@@ -434,18 +439,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EmailVerificationToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			emailverificationtoken.FieldCreatedAt: {Type: field.TypeTime, Column: emailverificationtoken.FieldCreatedAt},
-			emailverificationtoken.FieldUpdatedAt: {Type: field.TypeTime, Column: emailverificationtoken.FieldUpdatedAt},
-			emailverificationtoken.FieldCreatedBy: {Type: field.TypeString, Column: emailverificationtoken.FieldCreatedBy},
-			emailverificationtoken.FieldUpdatedBy: {Type: field.TypeString, Column: emailverificationtoken.FieldUpdatedBy},
-			emailverificationtoken.FieldMappingID: {Type: field.TypeString, Column: emailverificationtoken.FieldMappingID},
-			emailverificationtoken.FieldDeletedAt: {Type: field.TypeTime, Column: emailverificationtoken.FieldDeletedAt},
-			emailverificationtoken.FieldDeletedBy: {Type: field.TypeString, Column: emailverificationtoken.FieldDeletedBy},
-			emailverificationtoken.FieldOwnerID:   {Type: field.TypeString, Column: emailverificationtoken.FieldOwnerID},
-			emailverificationtoken.FieldToken:     {Type: field.TypeString, Column: emailverificationtoken.FieldToken},
-			emailverificationtoken.FieldTTL:       {Type: field.TypeTime, Column: emailverificationtoken.FieldTTL},
-			emailverificationtoken.FieldEmail:     {Type: field.TypeString, Column: emailverificationtoken.FieldEmail},
-			emailverificationtoken.FieldSecret:    {Type: field.TypeBytes, Column: emailverificationtoken.FieldSecret},
+			emailverificationtoken.FieldCreatedAt:   {Type: field.TypeTime, Column: emailverificationtoken.FieldCreatedAt},
+			emailverificationtoken.FieldUpdatedAt:   {Type: field.TypeTime, Column: emailverificationtoken.FieldUpdatedAt},
+			emailverificationtoken.FieldCreatedByID: {Type: field.TypeString, Column: emailverificationtoken.FieldCreatedByID},
+			emailverificationtoken.FieldUpdatedByID: {Type: field.TypeString, Column: emailverificationtoken.FieldUpdatedByID},
+			emailverificationtoken.FieldMappingID:   {Type: field.TypeString, Column: emailverificationtoken.FieldMappingID},
+			emailverificationtoken.FieldDeletedAt:   {Type: field.TypeTime, Column: emailverificationtoken.FieldDeletedAt},
+			emailverificationtoken.FieldDeletedByID: {Type: field.TypeString, Column: emailverificationtoken.FieldDeletedByID},
+			emailverificationtoken.FieldOwnerID:     {Type: field.TypeString, Column: emailverificationtoken.FieldOwnerID},
+			emailverificationtoken.FieldToken:       {Type: field.TypeString, Column: emailverificationtoken.FieldToken},
+			emailverificationtoken.FieldTTL:         {Type: field.TypeTime, Column: emailverificationtoken.FieldTTL},
+			emailverificationtoken.FieldEmail:       {Type: field.TypeString, Column: emailverificationtoken.FieldEmail},
+			emailverificationtoken.FieldSecret:      {Type: field.TypeBytes, Column: emailverificationtoken.FieldSecret},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -461,11 +466,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			entity.FieldCreatedAt:    {Type: field.TypeTime, Column: entity.FieldCreatedAt},
 			entity.FieldUpdatedAt:    {Type: field.TypeTime, Column: entity.FieldUpdatedAt},
-			entity.FieldCreatedBy:    {Type: field.TypeString, Column: entity.FieldCreatedBy},
-			entity.FieldUpdatedBy:    {Type: field.TypeString, Column: entity.FieldUpdatedBy},
+			entity.FieldCreatedByID:  {Type: field.TypeString, Column: entity.FieldCreatedByID},
+			entity.FieldUpdatedByID:  {Type: field.TypeString, Column: entity.FieldUpdatedByID},
 			entity.FieldMappingID:    {Type: field.TypeString, Column: entity.FieldMappingID},
 			entity.FieldDeletedAt:    {Type: field.TypeTime, Column: entity.FieldDeletedAt},
-			entity.FieldDeletedBy:    {Type: field.TypeString, Column: entity.FieldDeletedBy},
+			entity.FieldDeletedByID:  {Type: field.TypeString, Column: entity.FieldDeletedByID},
 			entity.FieldTags:         {Type: field.TypeJSON, Column: entity.FieldTags},
 			entity.FieldOwnerID:      {Type: field.TypeString, Column: entity.FieldOwnerID},
 			entity.FieldName:         {Type: field.TypeString, Column: entity.FieldName},
@@ -490,13 +495,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldHistoryTime:  {Type: field.TypeTime, Column: entityhistory.FieldHistoryTime},
 			entityhistory.FieldRef:          {Type: field.TypeString, Column: entityhistory.FieldRef},
 			entityhistory.FieldOperation:    {Type: field.TypeEnum, Column: entityhistory.FieldOperation},
+			entityhistory.FieldUpdatedBy:    {Type: field.TypeString, Column: entityhistory.FieldUpdatedBy},
 			entityhistory.FieldCreatedAt:    {Type: field.TypeTime, Column: entityhistory.FieldCreatedAt},
 			entityhistory.FieldUpdatedAt:    {Type: field.TypeTime, Column: entityhistory.FieldUpdatedAt},
-			entityhistory.FieldCreatedBy:    {Type: field.TypeString, Column: entityhistory.FieldCreatedBy},
-			entityhistory.FieldUpdatedBy:    {Type: field.TypeString, Column: entityhistory.FieldUpdatedBy},
+			entityhistory.FieldCreatedByID:  {Type: field.TypeString, Column: entityhistory.FieldCreatedByID},
+			entityhistory.FieldUpdatedByID:  {Type: field.TypeString, Column: entityhistory.FieldUpdatedByID},
 			entityhistory.FieldMappingID:    {Type: field.TypeString, Column: entityhistory.FieldMappingID},
 			entityhistory.FieldDeletedAt:    {Type: field.TypeTime, Column: entityhistory.FieldDeletedAt},
-			entityhistory.FieldDeletedBy:    {Type: field.TypeString, Column: entityhistory.FieldDeletedBy},
+			entityhistory.FieldDeletedByID:  {Type: field.TypeString, Column: entityhistory.FieldDeletedByID},
 			entityhistory.FieldTags:         {Type: field.TypeJSON, Column: entityhistory.FieldTags},
 			entityhistory.FieldOwnerID:      {Type: field.TypeString, Column: entityhistory.FieldOwnerID},
 			entityhistory.FieldName:         {Type: field.TypeString, Column: entityhistory.FieldName},
@@ -518,16 +524,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EntityType",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			entitytype.FieldCreatedAt: {Type: field.TypeTime, Column: entitytype.FieldCreatedAt},
-			entitytype.FieldUpdatedAt: {Type: field.TypeTime, Column: entitytype.FieldUpdatedAt},
-			entitytype.FieldCreatedBy: {Type: field.TypeString, Column: entitytype.FieldCreatedBy},
-			entitytype.FieldUpdatedBy: {Type: field.TypeString, Column: entitytype.FieldUpdatedBy},
-			entitytype.FieldMappingID: {Type: field.TypeString, Column: entitytype.FieldMappingID},
-			entitytype.FieldDeletedAt: {Type: field.TypeTime, Column: entitytype.FieldDeletedAt},
-			entitytype.FieldDeletedBy: {Type: field.TypeString, Column: entitytype.FieldDeletedBy},
-			entitytype.FieldTags:      {Type: field.TypeJSON, Column: entitytype.FieldTags},
-			entitytype.FieldOwnerID:   {Type: field.TypeString, Column: entitytype.FieldOwnerID},
-			entitytype.FieldName:      {Type: field.TypeString, Column: entitytype.FieldName},
+			entitytype.FieldCreatedAt:   {Type: field.TypeTime, Column: entitytype.FieldCreatedAt},
+			entitytype.FieldUpdatedAt:   {Type: field.TypeTime, Column: entitytype.FieldUpdatedAt},
+			entitytype.FieldCreatedByID: {Type: field.TypeString, Column: entitytype.FieldCreatedByID},
+			entitytype.FieldUpdatedByID: {Type: field.TypeString, Column: entitytype.FieldUpdatedByID},
+			entitytype.FieldMappingID:   {Type: field.TypeString, Column: entitytype.FieldMappingID},
+			entitytype.FieldDeletedAt:   {Type: field.TypeTime, Column: entitytype.FieldDeletedAt},
+			entitytype.FieldDeletedByID: {Type: field.TypeString, Column: entitytype.FieldDeletedByID},
+			entitytype.FieldTags:        {Type: field.TypeJSON, Column: entitytype.FieldTags},
+			entitytype.FieldOwnerID:     {Type: field.TypeString, Column: entitytype.FieldOwnerID},
+			entitytype.FieldName:        {Type: field.TypeString, Column: entitytype.FieldName},
 		},
 	}
 	graph.Nodes[15] = &sqlgraph.Node{
@@ -544,13 +550,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entitytypehistory.FieldHistoryTime: {Type: field.TypeTime, Column: entitytypehistory.FieldHistoryTime},
 			entitytypehistory.FieldRef:         {Type: field.TypeString, Column: entitytypehistory.FieldRef},
 			entitytypehistory.FieldOperation:   {Type: field.TypeEnum, Column: entitytypehistory.FieldOperation},
+			entitytypehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: entitytypehistory.FieldUpdatedBy},
 			entitytypehistory.FieldCreatedAt:   {Type: field.TypeTime, Column: entitytypehistory.FieldCreatedAt},
 			entitytypehistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: entitytypehistory.FieldUpdatedAt},
-			entitytypehistory.FieldCreatedBy:   {Type: field.TypeString, Column: entitytypehistory.FieldCreatedBy},
-			entitytypehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: entitytypehistory.FieldUpdatedBy},
+			entitytypehistory.FieldCreatedByID: {Type: field.TypeString, Column: entitytypehistory.FieldCreatedByID},
+			entitytypehistory.FieldUpdatedByID: {Type: field.TypeString, Column: entitytypehistory.FieldUpdatedByID},
 			entitytypehistory.FieldMappingID:   {Type: field.TypeString, Column: entitytypehistory.FieldMappingID},
 			entitytypehistory.FieldDeletedAt:   {Type: field.TypeTime, Column: entitytypehistory.FieldDeletedAt},
-			entitytypehistory.FieldDeletedBy:   {Type: field.TypeString, Column: entitytypehistory.FieldDeletedBy},
+			entitytypehistory.FieldDeletedByID: {Type: field.TypeString, Column: entitytypehistory.FieldDeletedByID},
 			entitytypehistory.FieldTags:        {Type: field.TypeJSON, Column: entitytypehistory.FieldTags},
 			entitytypehistory.FieldOwnerID:     {Type: field.TypeString, Column: entitytypehistory.FieldOwnerID},
 			entitytypehistory.FieldName:        {Type: field.TypeString, Column: entitytypehistory.FieldName},
@@ -569,8 +576,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			event.FieldCreatedAt:     {Type: field.TypeTime, Column: event.FieldCreatedAt},
 			event.FieldUpdatedAt:     {Type: field.TypeTime, Column: event.FieldUpdatedAt},
-			event.FieldCreatedBy:     {Type: field.TypeString, Column: event.FieldCreatedBy},
-			event.FieldUpdatedBy:     {Type: field.TypeString, Column: event.FieldUpdatedBy},
+			event.FieldCreatedByID:   {Type: field.TypeString, Column: event.FieldCreatedByID},
+			event.FieldUpdatedByID:   {Type: field.TypeString, Column: event.FieldUpdatedByID},
 			event.FieldMappingID:     {Type: field.TypeString, Column: event.FieldMappingID},
 			event.FieldTags:          {Type: field.TypeJSON, Column: event.FieldTags},
 			event.FieldEventID:       {Type: field.TypeString, Column: event.FieldEventID},
@@ -593,10 +600,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			eventhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: eventhistory.FieldHistoryTime},
 			eventhistory.FieldRef:           {Type: field.TypeString, Column: eventhistory.FieldRef},
 			eventhistory.FieldOperation:     {Type: field.TypeEnum, Column: eventhistory.FieldOperation},
+			eventhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: eventhistory.FieldUpdatedBy},
 			eventhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: eventhistory.FieldCreatedAt},
 			eventhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: eventhistory.FieldUpdatedAt},
-			eventhistory.FieldCreatedBy:     {Type: field.TypeString, Column: eventhistory.FieldCreatedBy},
-			eventhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: eventhistory.FieldUpdatedBy},
+			eventhistory.FieldCreatedByID:   {Type: field.TypeString, Column: eventhistory.FieldCreatedByID},
+			eventhistory.FieldUpdatedByID:   {Type: field.TypeString, Column: eventhistory.FieldUpdatedByID},
 			eventhistory.FieldMappingID:     {Type: field.TypeString, Column: eventhistory.FieldMappingID},
 			eventhistory.FieldTags:          {Type: field.TypeJSON, Column: eventhistory.FieldTags},
 			eventhistory.FieldEventID:       {Type: field.TypeString, Column: eventhistory.FieldEventID},
@@ -618,10 +626,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			file.FieldCreatedAt:             {Type: field.TypeTime, Column: file.FieldCreatedAt},
 			file.FieldUpdatedAt:             {Type: field.TypeTime, Column: file.FieldUpdatedAt},
-			file.FieldCreatedBy:             {Type: field.TypeString, Column: file.FieldCreatedBy},
-			file.FieldUpdatedBy:             {Type: field.TypeString, Column: file.FieldUpdatedBy},
+			file.FieldCreatedByID:           {Type: field.TypeString, Column: file.FieldCreatedByID},
+			file.FieldUpdatedByID:           {Type: field.TypeString, Column: file.FieldUpdatedByID},
 			file.FieldDeletedAt:             {Type: field.TypeTime, Column: file.FieldDeletedAt},
-			file.FieldDeletedBy:             {Type: field.TypeString, Column: file.FieldDeletedBy},
+			file.FieldDeletedByID:           {Type: field.TypeString, Column: file.FieldDeletedByID},
 			file.FieldMappingID:             {Type: field.TypeString, Column: file.FieldMappingID},
 			file.FieldTags:                  {Type: field.TypeJSON, Column: file.FieldTags},
 			file.FieldProvidedFileName:      {Type: field.TypeString, Column: file.FieldProvidedFileName},
@@ -654,12 +662,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldHistoryTime:           {Type: field.TypeTime, Column: filehistory.FieldHistoryTime},
 			filehistory.FieldRef:                   {Type: field.TypeString, Column: filehistory.FieldRef},
 			filehistory.FieldOperation:             {Type: field.TypeEnum, Column: filehistory.FieldOperation},
+			filehistory.FieldUpdatedBy:             {Type: field.TypeString, Column: filehistory.FieldUpdatedBy},
 			filehistory.FieldCreatedAt:             {Type: field.TypeTime, Column: filehistory.FieldCreatedAt},
 			filehistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: filehistory.FieldUpdatedAt},
-			filehistory.FieldCreatedBy:             {Type: field.TypeString, Column: filehistory.FieldCreatedBy},
-			filehistory.FieldUpdatedBy:             {Type: field.TypeString, Column: filehistory.FieldUpdatedBy},
+			filehistory.FieldCreatedByID:           {Type: field.TypeString, Column: filehistory.FieldCreatedByID},
+			filehistory.FieldUpdatedByID:           {Type: field.TypeString, Column: filehistory.FieldUpdatedByID},
 			filehistory.FieldDeletedAt:             {Type: field.TypeTime, Column: filehistory.FieldDeletedAt},
-			filehistory.FieldDeletedBy:             {Type: field.TypeString, Column: filehistory.FieldDeletedBy},
+			filehistory.FieldDeletedByID:           {Type: field.TypeString, Column: filehistory.FieldDeletedByID},
 			filehistory.FieldMappingID:             {Type: field.TypeString, Column: filehistory.FieldMappingID},
 			filehistory.FieldTags:                  {Type: field.TypeJSON, Column: filehistory.FieldTags},
 			filehistory.FieldProvidedFileName:      {Type: field.TypeString, Column: filehistory.FieldProvidedFileName},
@@ -691,10 +700,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			group.FieldCreatedAt:       {Type: field.TypeTime, Column: group.FieldCreatedAt},
 			group.FieldUpdatedAt:       {Type: field.TypeTime, Column: group.FieldUpdatedAt},
-			group.FieldCreatedBy:       {Type: field.TypeString, Column: group.FieldCreatedBy},
-			group.FieldUpdatedBy:       {Type: field.TypeString, Column: group.FieldUpdatedBy},
+			group.FieldCreatedByID:     {Type: field.TypeString, Column: group.FieldCreatedByID},
+			group.FieldUpdatedByID:     {Type: field.TypeString, Column: group.FieldUpdatedByID},
 			group.FieldDeletedAt:       {Type: field.TypeTime, Column: group.FieldDeletedAt},
-			group.FieldDeletedBy:       {Type: field.TypeString, Column: group.FieldDeletedBy},
+			group.FieldDeletedByID:     {Type: field.TypeString, Column: group.FieldDeletedByID},
 			group.FieldMappingID:       {Type: field.TypeString, Column: group.FieldMappingID},
 			group.FieldTags:            {Type: field.TypeJSON, Column: group.FieldTags},
 			group.FieldOwnerID:         {Type: field.TypeString, Column: group.FieldOwnerID},
@@ -719,12 +728,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldHistoryTime:     {Type: field.TypeTime, Column: grouphistory.FieldHistoryTime},
 			grouphistory.FieldRef:             {Type: field.TypeString, Column: grouphistory.FieldRef},
 			grouphistory.FieldOperation:       {Type: field.TypeEnum, Column: grouphistory.FieldOperation},
+			grouphistory.FieldUpdatedBy:       {Type: field.TypeString, Column: grouphistory.FieldUpdatedBy},
 			grouphistory.FieldCreatedAt:       {Type: field.TypeTime, Column: grouphistory.FieldCreatedAt},
 			grouphistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: grouphistory.FieldUpdatedAt},
-			grouphistory.FieldCreatedBy:       {Type: field.TypeString, Column: grouphistory.FieldCreatedBy},
-			grouphistory.FieldUpdatedBy:       {Type: field.TypeString, Column: grouphistory.FieldUpdatedBy},
+			grouphistory.FieldCreatedByID:     {Type: field.TypeString, Column: grouphistory.FieldCreatedByID},
+			grouphistory.FieldUpdatedByID:     {Type: field.TypeString, Column: grouphistory.FieldUpdatedByID},
 			grouphistory.FieldDeletedAt:       {Type: field.TypeTime, Column: grouphistory.FieldDeletedAt},
-			grouphistory.FieldDeletedBy:       {Type: field.TypeString, Column: grouphistory.FieldDeletedBy},
+			grouphistory.FieldDeletedByID:     {Type: field.TypeString, Column: grouphistory.FieldDeletedByID},
 			grouphistory.FieldMappingID:       {Type: field.TypeString, Column: grouphistory.FieldMappingID},
 			grouphistory.FieldTags:            {Type: field.TypeJSON, Column: grouphistory.FieldTags},
 			grouphistory.FieldOwnerID:         {Type: field.TypeString, Column: grouphistory.FieldOwnerID},
@@ -746,16 +756,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "GroupMembership",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			groupmembership.FieldCreatedAt: {Type: field.TypeTime, Column: groupmembership.FieldCreatedAt},
-			groupmembership.FieldUpdatedAt: {Type: field.TypeTime, Column: groupmembership.FieldUpdatedAt},
-			groupmembership.FieldCreatedBy: {Type: field.TypeString, Column: groupmembership.FieldCreatedBy},
-			groupmembership.FieldUpdatedBy: {Type: field.TypeString, Column: groupmembership.FieldUpdatedBy},
-			groupmembership.FieldMappingID: {Type: field.TypeString, Column: groupmembership.FieldMappingID},
-			groupmembership.FieldDeletedAt: {Type: field.TypeTime, Column: groupmembership.FieldDeletedAt},
-			groupmembership.FieldDeletedBy: {Type: field.TypeString, Column: groupmembership.FieldDeletedBy},
-			groupmembership.FieldRole:      {Type: field.TypeEnum, Column: groupmembership.FieldRole},
-			groupmembership.FieldGroupID:   {Type: field.TypeString, Column: groupmembership.FieldGroupID},
-			groupmembership.FieldUserID:    {Type: field.TypeString, Column: groupmembership.FieldUserID},
+			groupmembership.FieldCreatedAt:   {Type: field.TypeTime, Column: groupmembership.FieldCreatedAt},
+			groupmembership.FieldUpdatedAt:   {Type: field.TypeTime, Column: groupmembership.FieldUpdatedAt},
+			groupmembership.FieldCreatedByID: {Type: field.TypeString, Column: groupmembership.FieldCreatedByID},
+			groupmembership.FieldUpdatedByID: {Type: field.TypeString, Column: groupmembership.FieldUpdatedByID},
+			groupmembership.FieldMappingID:   {Type: field.TypeString, Column: groupmembership.FieldMappingID},
+			groupmembership.FieldDeletedAt:   {Type: field.TypeTime, Column: groupmembership.FieldDeletedAt},
+			groupmembership.FieldDeletedByID: {Type: field.TypeString, Column: groupmembership.FieldDeletedByID},
+			groupmembership.FieldRole:        {Type: field.TypeEnum, Column: groupmembership.FieldRole},
+			groupmembership.FieldGroupID:     {Type: field.TypeString, Column: groupmembership.FieldGroupID},
+			groupmembership.FieldUserID:      {Type: field.TypeString, Column: groupmembership.FieldUserID},
 		},
 	}
 	graph.Nodes[23] = &sqlgraph.Node{
@@ -772,13 +782,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembershiphistory.FieldHistoryTime: {Type: field.TypeTime, Column: groupmembershiphistory.FieldHistoryTime},
 			groupmembershiphistory.FieldRef:         {Type: field.TypeString, Column: groupmembershiphistory.FieldRef},
 			groupmembershiphistory.FieldOperation:   {Type: field.TypeEnum, Column: groupmembershiphistory.FieldOperation},
+			groupmembershiphistory.FieldUpdatedBy:   {Type: field.TypeString, Column: groupmembershiphistory.FieldUpdatedBy},
 			groupmembershiphistory.FieldCreatedAt:   {Type: field.TypeTime, Column: groupmembershiphistory.FieldCreatedAt},
 			groupmembershiphistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: groupmembershiphistory.FieldUpdatedAt},
-			groupmembershiphistory.FieldCreatedBy:   {Type: field.TypeString, Column: groupmembershiphistory.FieldCreatedBy},
-			groupmembershiphistory.FieldUpdatedBy:   {Type: field.TypeString, Column: groupmembershiphistory.FieldUpdatedBy},
+			groupmembershiphistory.FieldCreatedByID: {Type: field.TypeString, Column: groupmembershiphistory.FieldCreatedByID},
+			groupmembershiphistory.FieldUpdatedByID: {Type: field.TypeString, Column: groupmembershiphistory.FieldUpdatedByID},
 			groupmembershiphistory.FieldMappingID:   {Type: field.TypeString, Column: groupmembershiphistory.FieldMappingID},
 			groupmembershiphistory.FieldDeletedAt:   {Type: field.TypeTime, Column: groupmembershiphistory.FieldDeletedAt},
-			groupmembershiphistory.FieldDeletedBy:   {Type: field.TypeString, Column: groupmembershiphistory.FieldDeletedBy},
+			groupmembershiphistory.FieldDeletedByID: {Type: field.TypeString, Column: groupmembershiphistory.FieldDeletedByID},
 			groupmembershiphistory.FieldRole:        {Type: field.TypeEnum, Column: groupmembershiphistory.FieldRole},
 			groupmembershiphistory.FieldGroupID:     {Type: field.TypeString, Column: groupmembershiphistory.FieldGroupID},
 			groupmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: groupmembershiphistory.FieldUserID},
@@ -797,12 +808,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			groupsetting.FieldCreatedAt:    {Type: field.TypeTime, Column: groupsetting.FieldCreatedAt},
 			groupsetting.FieldUpdatedAt:    {Type: field.TypeTime, Column: groupsetting.FieldUpdatedAt},
-			groupsetting.FieldCreatedBy:    {Type: field.TypeString, Column: groupsetting.FieldCreatedBy},
-			groupsetting.FieldUpdatedBy:    {Type: field.TypeString, Column: groupsetting.FieldUpdatedBy},
+			groupsetting.FieldCreatedByID:  {Type: field.TypeString, Column: groupsetting.FieldCreatedByID},
+			groupsetting.FieldUpdatedByID:  {Type: field.TypeString, Column: groupsetting.FieldUpdatedByID},
 			groupsetting.FieldMappingID:    {Type: field.TypeString, Column: groupsetting.FieldMappingID},
 			groupsetting.FieldTags:         {Type: field.TypeJSON, Column: groupsetting.FieldTags},
 			groupsetting.FieldDeletedAt:    {Type: field.TypeTime, Column: groupsetting.FieldDeletedAt},
-			groupsetting.FieldDeletedBy:    {Type: field.TypeString, Column: groupsetting.FieldDeletedBy},
+			groupsetting.FieldDeletedByID:  {Type: field.TypeString, Column: groupsetting.FieldDeletedByID},
 			groupsetting.FieldVisibility:   {Type: field.TypeEnum, Column: groupsetting.FieldVisibility},
 			groupsetting.FieldJoinPolicy:   {Type: field.TypeEnum, Column: groupsetting.FieldJoinPolicy},
 			groupsetting.FieldSyncToSlack:  {Type: field.TypeBool, Column: groupsetting.FieldSyncToSlack},
@@ -824,14 +835,15 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsettinghistory.FieldHistoryTime:  {Type: field.TypeTime, Column: groupsettinghistory.FieldHistoryTime},
 			groupsettinghistory.FieldRef:          {Type: field.TypeString, Column: groupsettinghistory.FieldRef},
 			groupsettinghistory.FieldOperation:    {Type: field.TypeEnum, Column: groupsettinghistory.FieldOperation},
+			groupsettinghistory.FieldUpdatedBy:    {Type: field.TypeString, Column: groupsettinghistory.FieldUpdatedBy},
 			groupsettinghistory.FieldCreatedAt:    {Type: field.TypeTime, Column: groupsettinghistory.FieldCreatedAt},
 			groupsettinghistory.FieldUpdatedAt:    {Type: field.TypeTime, Column: groupsettinghistory.FieldUpdatedAt},
-			groupsettinghistory.FieldCreatedBy:    {Type: field.TypeString, Column: groupsettinghistory.FieldCreatedBy},
-			groupsettinghistory.FieldUpdatedBy:    {Type: field.TypeString, Column: groupsettinghistory.FieldUpdatedBy},
+			groupsettinghistory.FieldCreatedByID:  {Type: field.TypeString, Column: groupsettinghistory.FieldCreatedByID},
+			groupsettinghistory.FieldUpdatedByID:  {Type: field.TypeString, Column: groupsettinghistory.FieldUpdatedByID},
 			groupsettinghistory.FieldMappingID:    {Type: field.TypeString, Column: groupsettinghistory.FieldMappingID},
 			groupsettinghistory.FieldTags:         {Type: field.TypeJSON, Column: groupsettinghistory.FieldTags},
 			groupsettinghistory.FieldDeletedAt:    {Type: field.TypeTime, Column: groupsettinghistory.FieldDeletedAt},
-			groupsettinghistory.FieldDeletedBy:    {Type: field.TypeString, Column: groupsettinghistory.FieldDeletedBy},
+			groupsettinghistory.FieldDeletedByID:  {Type: field.TypeString, Column: groupsettinghistory.FieldDeletedByID},
 			groupsettinghistory.FieldVisibility:   {Type: field.TypeEnum, Column: groupsettinghistory.FieldVisibility},
 			groupsettinghistory.FieldJoinPolicy:   {Type: field.TypeEnum, Column: groupsettinghistory.FieldJoinPolicy},
 			groupsettinghistory.FieldSyncToSlack:  {Type: field.TypeBool, Column: groupsettinghistory.FieldSyncToSlack},
@@ -852,11 +864,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			hush.FieldCreatedAt:   {Type: field.TypeTime, Column: hush.FieldCreatedAt},
 			hush.FieldUpdatedAt:   {Type: field.TypeTime, Column: hush.FieldUpdatedAt},
-			hush.FieldCreatedBy:   {Type: field.TypeString, Column: hush.FieldCreatedBy},
-			hush.FieldUpdatedBy:   {Type: field.TypeString, Column: hush.FieldUpdatedBy},
+			hush.FieldCreatedByID: {Type: field.TypeString, Column: hush.FieldCreatedByID},
+			hush.FieldUpdatedByID: {Type: field.TypeString, Column: hush.FieldUpdatedByID},
 			hush.FieldMappingID:   {Type: field.TypeString, Column: hush.FieldMappingID},
 			hush.FieldDeletedAt:   {Type: field.TypeTime, Column: hush.FieldDeletedAt},
-			hush.FieldDeletedBy:   {Type: field.TypeString, Column: hush.FieldDeletedBy},
+			hush.FieldDeletedByID: {Type: field.TypeString, Column: hush.FieldDeletedByID},
 			hush.FieldName:        {Type: field.TypeString, Column: hush.FieldName},
 			hush.FieldDescription: {Type: field.TypeString, Column: hush.FieldDescription},
 			hush.FieldKind:        {Type: field.TypeString, Column: hush.FieldKind},
@@ -878,13 +890,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hushhistory.FieldHistoryTime: {Type: field.TypeTime, Column: hushhistory.FieldHistoryTime},
 			hushhistory.FieldRef:         {Type: field.TypeString, Column: hushhistory.FieldRef},
 			hushhistory.FieldOperation:   {Type: field.TypeEnum, Column: hushhistory.FieldOperation},
+			hushhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: hushhistory.FieldUpdatedBy},
 			hushhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: hushhistory.FieldCreatedAt},
 			hushhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: hushhistory.FieldUpdatedAt},
-			hushhistory.FieldCreatedBy:   {Type: field.TypeString, Column: hushhistory.FieldCreatedBy},
-			hushhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: hushhistory.FieldUpdatedBy},
+			hushhistory.FieldCreatedByID: {Type: field.TypeString, Column: hushhistory.FieldCreatedByID},
+			hushhistory.FieldUpdatedByID: {Type: field.TypeString, Column: hushhistory.FieldUpdatedByID},
 			hushhistory.FieldMappingID:   {Type: field.TypeString, Column: hushhistory.FieldMappingID},
 			hushhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: hushhistory.FieldDeletedAt},
-			hushhistory.FieldDeletedBy:   {Type: field.TypeString, Column: hushhistory.FieldDeletedBy},
+			hushhistory.FieldDeletedByID: {Type: field.TypeString, Column: hushhistory.FieldDeletedByID},
 			hushhistory.FieldName:        {Type: field.TypeString, Column: hushhistory.FieldName},
 			hushhistory.FieldDescription: {Type: field.TypeString, Column: hushhistory.FieldDescription},
 			hushhistory.FieldKind:        {Type: field.TypeString, Column: hushhistory.FieldKind},
@@ -905,12 +918,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			integration.FieldCreatedAt:   {Type: field.TypeTime, Column: integration.FieldCreatedAt},
 			integration.FieldUpdatedAt:   {Type: field.TypeTime, Column: integration.FieldUpdatedAt},
-			integration.FieldCreatedBy:   {Type: field.TypeString, Column: integration.FieldCreatedBy},
-			integration.FieldUpdatedBy:   {Type: field.TypeString, Column: integration.FieldUpdatedBy},
+			integration.FieldCreatedByID: {Type: field.TypeString, Column: integration.FieldCreatedByID},
+			integration.FieldUpdatedByID: {Type: field.TypeString, Column: integration.FieldUpdatedByID},
 			integration.FieldMappingID:   {Type: field.TypeString, Column: integration.FieldMappingID},
 			integration.FieldTags:        {Type: field.TypeJSON, Column: integration.FieldTags},
 			integration.FieldDeletedAt:   {Type: field.TypeTime, Column: integration.FieldDeletedAt},
-			integration.FieldDeletedBy:   {Type: field.TypeString, Column: integration.FieldDeletedBy},
+			integration.FieldDeletedByID: {Type: field.TypeString, Column: integration.FieldDeletedByID},
 			integration.FieldOwnerID:     {Type: field.TypeString, Column: integration.FieldOwnerID},
 			integration.FieldName:        {Type: field.TypeString, Column: integration.FieldName},
 			integration.FieldDescription: {Type: field.TypeString, Column: integration.FieldDescription},
@@ -931,14 +944,15 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldHistoryTime: {Type: field.TypeTime, Column: integrationhistory.FieldHistoryTime},
 			integrationhistory.FieldRef:         {Type: field.TypeString, Column: integrationhistory.FieldRef},
 			integrationhistory.FieldOperation:   {Type: field.TypeEnum, Column: integrationhistory.FieldOperation},
+			integrationhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: integrationhistory.FieldUpdatedBy},
 			integrationhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: integrationhistory.FieldCreatedAt},
 			integrationhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: integrationhistory.FieldUpdatedAt},
-			integrationhistory.FieldCreatedBy:   {Type: field.TypeString, Column: integrationhistory.FieldCreatedBy},
-			integrationhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: integrationhistory.FieldUpdatedBy},
+			integrationhistory.FieldCreatedByID: {Type: field.TypeString, Column: integrationhistory.FieldCreatedByID},
+			integrationhistory.FieldUpdatedByID: {Type: field.TypeString, Column: integrationhistory.FieldUpdatedByID},
 			integrationhistory.FieldMappingID:   {Type: field.TypeString, Column: integrationhistory.FieldMappingID},
 			integrationhistory.FieldTags:        {Type: field.TypeJSON, Column: integrationhistory.FieldTags},
 			integrationhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: integrationhistory.FieldDeletedAt},
-			integrationhistory.FieldDeletedBy:   {Type: field.TypeString, Column: integrationhistory.FieldDeletedBy},
+			integrationhistory.FieldDeletedByID: {Type: field.TypeString, Column: integrationhistory.FieldDeletedByID},
 			integrationhistory.FieldOwnerID:     {Type: field.TypeString, Column: integrationhistory.FieldOwnerID},
 			integrationhistory.FieldName:        {Type: field.TypeString, Column: integrationhistory.FieldName},
 			integrationhistory.FieldDescription: {Type: field.TypeString, Column: integrationhistory.FieldDescription},
@@ -958,10 +972,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			internalpolicy.FieldCreatedAt:       {Type: field.TypeTime, Column: internalpolicy.FieldCreatedAt},
 			internalpolicy.FieldUpdatedAt:       {Type: field.TypeTime, Column: internalpolicy.FieldUpdatedAt},
-			internalpolicy.FieldCreatedBy:       {Type: field.TypeString, Column: internalpolicy.FieldCreatedBy},
-			internalpolicy.FieldUpdatedBy:       {Type: field.TypeString, Column: internalpolicy.FieldUpdatedBy},
+			internalpolicy.FieldCreatedByID:     {Type: field.TypeString, Column: internalpolicy.FieldCreatedByID},
+			internalpolicy.FieldUpdatedByID:     {Type: field.TypeString, Column: internalpolicy.FieldUpdatedByID},
 			internalpolicy.FieldDeletedAt:       {Type: field.TypeTime, Column: internalpolicy.FieldDeletedAt},
-			internalpolicy.FieldDeletedBy:       {Type: field.TypeString, Column: internalpolicy.FieldDeletedBy},
+			internalpolicy.FieldDeletedByID:     {Type: field.TypeString, Column: internalpolicy.FieldDeletedByID},
 			internalpolicy.FieldMappingID:       {Type: field.TypeString, Column: internalpolicy.FieldMappingID},
 			internalpolicy.FieldTags:            {Type: field.TypeJSON, Column: internalpolicy.FieldTags},
 			internalpolicy.FieldOwnerID:         {Type: field.TypeString, Column: internalpolicy.FieldOwnerID},
@@ -989,12 +1003,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: internalpolicyhistory.FieldHistoryTime},
 			internalpolicyhistory.FieldRef:             {Type: field.TypeString, Column: internalpolicyhistory.FieldRef},
 			internalpolicyhistory.FieldOperation:       {Type: field.TypeEnum, Column: internalpolicyhistory.FieldOperation},
+			internalpolicyhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: internalpolicyhistory.FieldUpdatedBy},
 			internalpolicyhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: internalpolicyhistory.FieldCreatedAt},
 			internalpolicyhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: internalpolicyhistory.FieldUpdatedAt},
-			internalpolicyhistory.FieldCreatedBy:       {Type: field.TypeString, Column: internalpolicyhistory.FieldCreatedBy},
-			internalpolicyhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: internalpolicyhistory.FieldUpdatedBy},
+			internalpolicyhistory.FieldCreatedByID:     {Type: field.TypeString, Column: internalpolicyhistory.FieldCreatedByID},
+			internalpolicyhistory.FieldUpdatedByID:     {Type: field.TypeString, Column: internalpolicyhistory.FieldUpdatedByID},
 			internalpolicyhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: internalpolicyhistory.FieldDeletedAt},
-			internalpolicyhistory.FieldDeletedBy:       {Type: field.TypeString, Column: internalpolicyhistory.FieldDeletedBy},
+			internalpolicyhistory.FieldDeletedByID:     {Type: field.TypeString, Column: internalpolicyhistory.FieldDeletedByID},
 			internalpolicyhistory.FieldMappingID:       {Type: field.TypeString, Column: internalpolicyhistory.FieldMappingID},
 			internalpolicyhistory.FieldTags:            {Type: field.TypeJSON, Column: internalpolicyhistory.FieldTags},
 			internalpolicyhistory.FieldOwnerID:         {Type: field.TypeString, Column: internalpolicyhistory.FieldOwnerID},
@@ -1021,11 +1036,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			invite.FieldCreatedAt:    {Type: field.TypeTime, Column: invite.FieldCreatedAt},
 			invite.FieldUpdatedAt:    {Type: field.TypeTime, Column: invite.FieldUpdatedAt},
-			invite.FieldCreatedBy:    {Type: field.TypeString, Column: invite.FieldCreatedBy},
-			invite.FieldUpdatedBy:    {Type: field.TypeString, Column: invite.FieldUpdatedBy},
+			invite.FieldCreatedByID:  {Type: field.TypeString, Column: invite.FieldCreatedByID},
+			invite.FieldUpdatedByID:  {Type: field.TypeString, Column: invite.FieldUpdatedByID},
 			invite.FieldMappingID:    {Type: field.TypeString, Column: invite.FieldMappingID},
 			invite.FieldDeletedAt:    {Type: field.TypeTime, Column: invite.FieldDeletedAt},
-			invite.FieldDeletedBy:    {Type: field.TypeString, Column: invite.FieldDeletedBy},
+			invite.FieldDeletedByID:  {Type: field.TypeString, Column: invite.FieldDeletedByID},
 			invite.FieldOwnerID:      {Type: field.TypeString, Column: invite.FieldOwnerID},
 			invite.FieldToken:        {Type: field.TypeString, Column: invite.FieldToken},
 			invite.FieldExpires:      {Type: field.TypeTime, Column: invite.FieldExpires},
@@ -1050,10 +1065,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			narrative.FieldCreatedAt:   {Type: field.TypeTime, Column: narrative.FieldCreatedAt},
 			narrative.FieldUpdatedAt:   {Type: field.TypeTime, Column: narrative.FieldUpdatedAt},
-			narrative.FieldCreatedBy:   {Type: field.TypeString, Column: narrative.FieldCreatedBy},
-			narrative.FieldUpdatedBy:   {Type: field.TypeString, Column: narrative.FieldUpdatedBy},
+			narrative.FieldCreatedByID: {Type: field.TypeString, Column: narrative.FieldCreatedByID},
+			narrative.FieldUpdatedByID: {Type: field.TypeString, Column: narrative.FieldUpdatedByID},
 			narrative.FieldDeletedAt:   {Type: field.TypeTime, Column: narrative.FieldDeletedAt},
-			narrative.FieldDeletedBy:   {Type: field.TypeString, Column: narrative.FieldDeletedBy},
+			narrative.FieldDeletedByID: {Type: field.TypeString, Column: narrative.FieldDeletedByID},
 			narrative.FieldMappingID:   {Type: field.TypeString, Column: narrative.FieldMappingID},
 			narrative.FieldTags:        {Type: field.TypeJSON, Column: narrative.FieldTags},
 			narrative.FieldOwnerID:     {Type: field.TypeString, Column: narrative.FieldOwnerID},
@@ -1077,12 +1092,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrativehistory.FieldHistoryTime: {Type: field.TypeTime, Column: narrativehistory.FieldHistoryTime},
 			narrativehistory.FieldRef:         {Type: field.TypeString, Column: narrativehistory.FieldRef},
 			narrativehistory.FieldOperation:   {Type: field.TypeEnum, Column: narrativehistory.FieldOperation},
+			narrativehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: narrativehistory.FieldUpdatedBy},
 			narrativehistory.FieldCreatedAt:   {Type: field.TypeTime, Column: narrativehistory.FieldCreatedAt},
 			narrativehistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: narrativehistory.FieldUpdatedAt},
-			narrativehistory.FieldCreatedBy:   {Type: field.TypeString, Column: narrativehistory.FieldCreatedBy},
-			narrativehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: narrativehistory.FieldUpdatedBy},
+			narrativehistory.FieldCreatedByID: {Type: field.TypeString, Column: narrativehistory.FieldCreatedByID},
+			narrativehistory.FieldUpdatedByID: {Type: field.TypeString, Column: narrativehistory.FieldUpdatedByID},
 			narrativehistory.FieldDeletedAt:   {Type: field.TypeTime, Column: narrativehistory.FieldDeletedAt},
-			narrativehistory.FieldDeletedBy:   {Type: field.TypeString, Column: narrativehistory.FieldDeletedBy},
+			narrativehistory.FieldDeletedByID: {Type: field.TypeString, Column: narrativehistory.FieldDeletedByID},
 			narrativehistory.FieldMappingID:   {Type: field.TypeString, Column: narrativehistory.FieldMappingID},
 			narrativehistory.FieldTags:        {Type: field.TypeJSON, Column: narrativehistory.FieldTags},
 			narrativehistory.FieldOwnerID:     {Type: field.TypeString, Column: narrativehistory.FieldOwnerID},
@@ -1103,16 +1119,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Note",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			note.FieldCreatedAt: {Type: field.TypeTime, Column: note.FieldCreatedAt},
-			note.FieldUpdatedAt: {Type: field.TypeTime, Column: note.FieldUpdatedAt},
-			note.FieldCreatedBy: {Type: field.TypeString, Column: note.FieldCreatedBy},
-			note.FieldUpdatedBy: {Type: field.TypeString, Column: note.FieldUpdatedBy},
-			note.FieldMappingID: {Type: field.TypeString, Column: note.FieldMappingID},
-			note.FieldDeletedAt: {Type: field.TypeTime, Column: note.FieldDeletedAt},
-			note.FieldDeletedBy: {Type: field.TypeString, Column: note.FieldDeletedBy},
-			note.FieldTags:      {Type: field.TypeJSON, Column: note.FieldTags},
-			note.FieldOwnerID:   {Type: field.TypeString, Column: note.FieldOwnerID},
-			note.FieldText:      {Type: field.TypeString, Column: note.FieldText},
+			note.FieldCreatedAt:   {Type: field.TypeTime, Column: note.FieldCreatedAt},
+			note.FieldUpdatedAt:   {Type: field.TypeTime, Column: note.FieldUpdatedAt},
+			note.FieldCreatedByID: {Type: field.TypeString, Column: note.FieldCreatedByID},
+			note.FieldUpdatedByID: {Type: field.TypeString, Column: note.FieldUpdatedByID},
+			note.FieldMappingID:   {Type: field.TypeString, Column: note.FieldMappingID},
+			note.FieldDeletedAt:   {Type: field.TypeTime, Column: note.FieldDeletedAt},
+			note.FieldDeletedByID: {Type: field.TypeString, Column: note.FieldDeletedByID},
+			note.FieldTags:        {Type: field.TypeJSON, Column: note.FieldTags},
+			note.FieldOwnerID:     {Type: field.TypeString, Column: note.FieldOwnerID},
+			note.FieldText:        {Type: field.TypeString, Column: note.FieldText},
 		},
 	}
 	graph.Nodes[36] = &sqlgraph.Node{
@@ -1129,13 +1145,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notehistory.FieldHistoryTime: {Type: field.TypeTime, Column: notehistory.FieldHistoryTime},
 			notehistory.FieldRef:         {Type: field.TypeString, Column: notehistory.FieldRef},
 			notehistory.FieldOperation:   {Type: field.TypeEnum, Column: notehistory.FieldOperation},
+			notehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: notehistory.FieldUpdatedBy},
 			notehistory.FieldCreatedAt:   {Type: field.TypeTime, Column: notehistory.FieldCreatedAt},
 			notehistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: notehistory.FieldUpdatedAt},
-			notehistory.FieldCreatedBy:   {Type: field.TypeString, Column: notehistory.FieldCreatedBy},
-			notehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: notehistory.FieldUpdatedBy},
+			notehistory.FieldCreatedByID: {Type: field.TypeString, Column: notehistory.FieldCreatedByID},
+			notehistory.FieldUpdatedByID: {Type: field.TypeString, Column: notehistory.FieldUpdatedByID},
 			notehistory.FieldMappingID:   {Type: field.TypeString, Column: notehistory.FieldMappingID},
 			notehistory.FieldDeletedAt:   {Type: field.TypeTime, Column: notehistory.FieldDeletedAt},
-			notehistory.FieldDeletedBy:   {Type: field.TypeString, Column: notehistory.FieldDeletedBy},
+			notehistory.FieldDeletedByID: {Type: field.TypeString, Column: notehistory.FieldDeletedByID},
 			notehistory.FieldTags:        {Type: field.TypeJSON, Column: notehistory.FieldTags},
 			notehistory.FieldOwnerID:     {Type: field.TypeString, Column: notehistory.FieldOwnerID},
 			notehistory.FieldText:        {Type: field.TypeString, Column: notehistory.FieldText},
@@ -1154,11 +1171,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			orgmembership.FieldCreatedAt:      {Type: field.TypeTime, Column: orgmembership.FieldCreatedAt},
 			orgmembership.FieldUpdatedAt:      {Type: field.TypeTime, Column: orgmembership.FieldUpdatedAt},
-			orgmembership.FieldCreatedBy:      {Type: field.TypeString, Column: orgmembership.FieldCreatedBy},
-			orgmembership.FieldUpdatedBy:      {Type: field.TypeString, Column: orgmembership.FieldUpdatedBy},
+			orgmembership.FieldCreatedByID:    {Type: field.TypeString, Column: orgmembership.FieldCreatedByID},
+			orgmembership.FieldUpdatedByID:    {Type: field.TypeString, Column: orgmembership.FieldUpdatedByID},
 			orgmembership.FieldMappingID:      {Type: field.TypeString, Column: orgmembership.FieldMappingID},
 			orgmembership.FieldDeletedAt:      {Type: field.TypeTime, Column: orgmembership.FieldDeletedAt},
-			orgmembership.FieldDeletedBy:      {Type: field.TypeString, Column: orgmembership.FieldDeletedBy},
+			orgmembership.FieldDeletedByID:    {Type: field.TypeString, Column: orgmembership.FieldDeletedByID},
 			orgmembership.FieldRole:           {Type: field.TypeEnum, Column: orgmembership.FieldRole},
 			orgmembership.FieldOrganizationID: {Type: field.TypeString, Column: orgmembership.FieldOrganizationID},
 			orgmembership.FieldUserID:         {Type: field.TypeString, Column: orgmembership.FieldUserID},
@@ -1178,13 +1195,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembershiphistory.FieldHistoryTime:    {Type: field.TypeTime, Column: orgmembershiphistory.FieldHistoryTime},
 			orgmembershiphistory.FieldRef:            {Type: field.TypeString, Column: orgmembershiphistory.FieldRef},
 			orgmembershiphistory.FieldOperation:      {Type: field.TypeEnum, Column: orgmembershiphistory.FieldOperation},
+			orgmembershiphistory.FieldUpdatedBy:      {Type: field.TypeString, Column: orgmembershiphistory.FieldUpdatedBy},
 			orgmembershiphistory.FieldCreatedAt:      {Type: field.TypeTime, Column: orgmembershiphistory.FieldCreatedAt},
 			orgmembershiphistory.FieldUpdatedAt:      {Type: field.TypeTime, Column: orgmembershiphistory.FieldUpdatedAt},
-			orgmembershiphistory.FieldCreatedBy:      {Type: field.TypeString, Column: orgmembershiphistory.FieldCreatedBy},
-			orgmembershiphistory.FieldUpdatedBy:      {Type: field.TypeString, Column: orgmembershiphistory.FieldUpdatedBy},
+			orgmembershiphistory.FieldCreatedByID:    {Type: field.TypeString, Column: orgmembershiphistory.FieldCreatedByID},
+			orgmembershiphistory.FieldUpdatedByID:    {Type: field.TypeString, Column: orgmembershiphistory.FieldUpdatedByID},
 			orgmembershiphistory.FieldMappingID:      {Type: field.TypeString, Column: orgmembershiphistory.FieldMappingID},
 			orgmembershiphistory.FieldDeletedAt:      {Type: field.TypeTime, Column: orgmembershiphistory.FieldDeletedAt},
-			orgmembershiphistory.FieldDeletedBy:      {Type: field.TypeString, Column: orgmembershiphistory.FieldDeletedBy},
+			orgmembershiphistory.FieldDeletedByID:    {Type: field.TypeString, Column: orgmembershiphistory.FieldDeletedByID},
 			orgmembershiphistory.FieldRole:           {Type: field.TypeEnum, Column: orgmembershiphistory.FieldRole},
 			orgmembershiphistory.FieldOrganizationID: {Type: field.TypeString, Column: orgmembershiphistory.FieldOrganizationID},
 			orgmembershiphistory.FieldUserID:         {Type: field.TypeString, Column: orgmembershiphistory.FieldUserID},
@@ -1203,12 +1221,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			orgsubscription.FieldCreatedAt:                {Type: field.TypeTime, Column: orgsubscription.FieldCreatedAt},
 			orgsubscription.FieldUpdatedAt:                {Type: field.TypeTime, Column: orgsubscription.FieldUpdatedAt},
-			orgsubscription.FieldCreatedBy:                {Type: field.TypeString, Column: orgsubscription.FieldCreatedBy},
-			orgsubscription.FieldUpdatedBy:                {Type: field.TypeString, Column: orgsubscription.FieldUpdatedBy},
+			orgsubscription.FieldCreatedByID:              {Type: field.TypeString, Column: orgsubscription.FieldCreatedByID},
+			orgsubscription.FieldUpdatedByID:              {Type: field.TypeString, Column: orgsubscription.FieldUpdatedByID},
 			orgsubscription.FieldMappingID:                {Type: field.TypeString, Column: orgsubscription.FieldMappingID},
 			orgsubscription.FieldTags:                     {Type: field.TypeJSON, Column: orgsubscription.FieldTags},
 			orgsubscription.FieldDeletedAt:                {Type: field.TypeTime, Column: orgsubscription.FieldDeletedAt},
-			orgsubscription.FieldDeletedBy:                {Type: field.TypeString, Column: orgsubscription.FieldDeletedBy},
+			orgsubscription.FieldDeletedByID:              {Type: field.TypeString, Column: orgsubscription.FieldDeletedByID},
 			orgsubscription.FieldOwnerID:                  {Type: field.TypeString, Column: orgsubscription.FieldOwnerID},
 			orgsubscription.FieldStripeSubscriptionID:     {Type: field.TypeString, Column: orgsubscription.FieldStripeSubscriptionID},
 			orgsubscription.FieldProductTier:              {Type: field.TypeString, Column: orgsubscription.FieldProductTier},
@@ -1234,14 +1252,15 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldHistoryTime:              {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldHistoryTime},
 			orgsubscriptionhistory.FieldRef:                      {Type: field.TypeString, Column: orgsubscriptionhistory.FieldRef},
 			orgsubscriptionhistory.FieldOperation:                {Type: field.TypeEnum, Column: orgsubscriptionhistory.FieldOperation},
+			orgsubscriptionhistory.FieldUpdatedBy:                {Type: field.TypeString, Column: orgsubscriptionhistory.FieldUpdatedBy},
 			orgsubscriptionhistory.FieldCreatedAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldCreatedAt},
 			orgsubscriptionhistory.FieldUpdatedAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldUpdatedAt},
-			orgsubscriptionhistory.FieldCreatedBy:                {Type: field.TypeString, Column: orgsubscriptionhistory.FieldCreatedBy},
-			orgsubscriptionhistory.FieldUpdatedBy:                {Type: field.TypeString, Column: orgsubscriptionhistory.FieldUpdatedBy},
+			orgsubscriptionhistory.FieldCreatedByID:              {Type: field.TypeString, Column: orgsubscriptionhistory.FieldCreatedByID},
+			orgsubscriptionhistory.FieldUpdatedByID:              {Type: field.TypeString, Column: orgsubscriptionhistory.FieldUpdatedByID},
 			orgsubscriptionhistory.FieldMappingID:                {Type: field.TypeString, Column: orgsubscriptionhistory.FieldMappingID},
 			orgsubscriptionhistory.FieldTags:                     {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldTags},
 			orgsubscriptionhistory.FieldDeletedAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldDeletedAt},
-			orgsubscriptionhistory.FieldDeletedBy:                {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDeletedBy},
+			orgsubscriptionhistory.FieldDeletedByID:              {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDeletedByID},
 			orgsubscriptionhistory.FieldOwnerID:                  {Type: field.TypeString, Column: orgsubscriptionhistory.FieldOwnerID},
 			orgsubscriptionhistory.FieldStripeSubscriptionID:     {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeSubscriptionID},
 			orgsubscriptionhistory.FieldProductTier:              {Type: field.TypeString, Column: orgsubscriptionhistory.FieldProductTier},
@@ -1266,12 +1285,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			organization.FieldCreatedAt:            {Type: field.TypeTime, Column: organization.FieldCreatedAt},
 			organization.FieldUpdatedAt:            {Type: field.TypeTime, Column: organization.FieldUpdatedAt},
-			organization.FieldCreatedBy:            {Type: field.TypeString, Column: organization.FieldCreatedBy},
-			organization.FieldUpdatedBy:            {Type: field.TypeString, Column: organization.FieldUpdatedBy},
+			organization.FieldCreatedByID:          {Type: field.TypeString, Column: organization.FieldCreatedByID},
+			organization.FieldUpdatedByID:          {Type: field.TypeString, Column: organization.FieldUpdatedByID},
 			organization.FieldMappingID:            {Type: field.TypeString, Column: organization.FieldMappingID},
 			organization.FieldTags:                 {Type: field.TypeJSON, Column: organization.FieldTags},
 			organization.FieldDeletedAt:            {Type: field.TypeTime, Column: organization.FieldDeletedAt},
-			organization.FieldDeletedBy:            {Type: field.TypeString, Column: organization.FieldDeletedBy},
+			organization.FieldDeletedByID:          {Type: field.TypeString, Column: organization.FieldDeletedByID},
 			organization.FieldName:                 {Type: field.TypeString, Column: organization.FieldName},
 			organization.FieldDisplayName:          {Type: field.TypeString, Column: organization.FieldDisplayName},
 			organization.FieldDescription:          {Type: field.TypeString, Column: organization.FieldDescription},
@@ -1295,14 +1314,15 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldHistoryTime:          {Type: field.TypeTime, Column: organizationhistory.FieldHistoryTime},
 			organizationhistory.FieldRef:                  {Type: field.TypeString, Column: organizationhistory.FieldRef},
 			organizationhistory.FieldOperation:            {Type: field.TypeEnum, Column: organizationhistory.FieldOperation},
+			organizationhistory.FieldUpdatedBy:            {Type: field.TypeString, Column: organizationhistory.FieldUpdatedBy},
 			organizationhistory.FieldCreatedAt:            {Type: field.TypeTime, Column: organizationhistory.FieldCreatedAt},
 			organizationhistory.FieldUpdatedAt:            {Type: field.TypeTime, Column: organizationhistory.FieldUpdatedAt},
-			organizationhistory.FieldCreatedBy:            {Type: field.TypeString, Column: organizationhistory.FieldCreatedBy},
-			organizationhistory.FieldUpdatedBy:            {Type: field.TypeString, Column: organizationhistory.FieldUpdatedBy},
+			organizationhistory.FieldCreatedByID:          {Type: field.TypeString, Column: organizationhistory.FieldCreatedByID},
+			organizationhistory.FieldUpdatedByID:          {Type: field.TypeString, Column: organizationhistory.FieldUpdatedByID},
 			organizationhistory.FieldMappingID:            {Type: field.TypeString, Column: organizationhistory.FieldMappingID},
 			organizationhistory.FieldTags:                 {Type: field.TypeJSON, Column: organizationhistory.FieldTags},
 			organizationhistory.FieldDeletedAt:            {Type: field.TypeTime, Column: organizationhistory.FieldDeletedAt},
-			organizationhistory.FieldDeletedBy:            {Type: field.TypeString, Column: organizationhistory.FieldDeletedBy},
+			organizationhistory.FieldDeletedByID:          {Type: field.TypeString, Column: organizationhistory.FieldDeletedByID},
 			organizationhistory.FieldName:                 {Type: field.TypeString, Column: organizationhistory.FieldName},
 			organizationhistory.FieldDisplayName:          {Type: field.TypeString, Column: organizationhistory.FieldDisplayName},
 			organizationhistory.FieldDescription:          {Type: field.TypeString, Column: organizationhistory.FieldDescription},
@@ -1325,12 +1345,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			organizationsetting.FieldCreatedAt:      {Type: field.TypeTime, Column: organizationsetting.FieldCreatedAt},
 			organizationsetting.FieldUpdatedAt:      {Type: field.TypeTime, Column: organizationsetting.FieldUpdatedAt},
-			organizationsetting.FieldCreatedBy:      {Type: field.TypeString, Column: organizationsetting.FieldCreatedBy},
-			organizationsetting.FieldUpdatedBy:      {Type: field.TypeString, Column: organizationsetting.FieldUpdatedBy},
+			organizationsetting.FieldCreatedByID:    {Type: field.TypeString, Column: organizationsetting.FieldCreatedByID},
+			organizationsetting.FieldUpdatedByID:    {Type: field.TypeString, Column: organizationsetting.FieldUpdatedByID},
 			organizationsetting.FieldMappingID:      {Type: field.TypeString, Column: organizationsetting.FieldMappingID},
 			organizationsetting.FieldTags:           {Type: field.TypeJSON, Column: organizationsetting.FieldTags},
 			organizationsetting.FieldDeletedAt:      {Type: field.TypeTime, Column: organizationsetting.FieldDeletedAt},
-			organizationsetting.FieldDeletedBy:      {Type: field.TypeString, Column: organizationsetting.FieldDeletedBy},
+			organizationsetting.FieldDeletedByID:    {Type: field.TypeString, Column: organizationsetting.FieldDeletedByID},
 			organizationsetting.FieldDomains:        {Type: field.TypeJSON, Column: organizationsetting.FieldDomains},
 			organizationsetting.FieldBillingContact: {Type: field.TypeString, Column: organizationsetting.FieldBillingContact},
 			organizationsetting.FieldBillingEmail:   {Type: field.TypeString, Column: organizationsetting.FieldBillingEmail},
@@ -1356,14 +1376,15 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldHistoryTime:    {Type: field.TypeTime, Column: organizationsettinghistory.FieldHistoryTime},
 			organizationsettinghistory.FieldRef:            {Type: field.TypeString, Column: organizationsettinghistory.FieldRef},
 			organizationsettinghistory.FieldOperation:      {Type: field.TypeEnum, Column: organizationsettinghistory.FieldOperation},
+			organizationsettinghistory.FieldUpdatedBy:      {Type: field.TypeString, Column: organizationsettinghistory.FieldUpdatedBy},
 			organizationsettinghistory.FieldCreatedAt:      {Type: field.TypeTime, Column: organizationsettinghistory.FieldCreatedAt},
 			organizationsettinghistory.FieldUpdatedAt:      {Type: field.TypeTime, Column: organizationsettinghistory.FieldUpdatedAt},
-			organizationsettinghistory.FieldCreatedBy:      {Type: field.TypeString, Column: organizationsettinghistory.FieldCreatedBy},
-			organizationsettinghistory.FieldUpdatedBy:      {Type: field.TypeString, Column: organizationsettinghistory.FieldUpdatedBy},
+			organizationsettinghistory.FieldCreatedByID:    {Type: field.TypeString, Column: organizationsettinghistory.FieldCreatedByID},
+			organizationsettinghistory.FieldUpdatedByID:    {Type: field.TypeString, Column: organizationsettinghistory.FieldUpdatedByID},
 			organizationsettinghistory.FieldMappingID:      {Type: field.TypeString, Column: organizationsettinghistory.FieldMappingID},
 			organizationsettinghistory.FieldTags:           {Type: field.TypeJSON, Column: organizationsettinghistory.FieldTags},
 			organizationsettinghistory.FieldDeletedAt:      {Type: field.TypeTime, Column: organizationsettinghistory.FieldDeletedAt},
-			organizationsettinghistory.FieldDeletedBy:      {Type: field.TypeString, Column: organizationsettinghistory.FieldDeletedBy},
+			organizationsettinghistory.FieldDeletedByID:    {Type: field.TypeString, Column: organizationsettinghistory.FieldDeletedByID},
 			organizationsettinghistory.FieldDomains:        {Type: field.TypeJSON, Column: organizationsettinghistory.FieldDomains},
 			organizationsettinghistory.FieldBillingContact: {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingContact},
 			organizationsettinghistory.FieldBillingEmail:   {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingEmail},
@@ -1386,18 +1407,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "PasswordResetToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			passwordresettoken.FieldCreatedAt: {Type: field.TypeTime, Column: passwordresettoken.FieldCreatedAt},
-			passwordresettoken.FieldUpdatedAt: {Type: field.TypeTime, Column: passwordresettoken.FieldUpdatedAt},
-			passwordresettoken.FieldCreatedBy: {Type: field.TypeString, Column: passwordresettoken.FieldCreatedBy},
-			passwordresettoken.FieldUpdatedBy: {Type: field.TypeString, Column: passwordresettoken.FieldUpdatedBy},
-			passwordresettoken.FieldMappingID: {Type: field.TypeString, Column: passwordresettoken.FieldMappingID},
-			passwordresettoken.FieldDeletedAt: {Type: field.TypeTime, Column: passwordresettoken.FieldDeletedAt},
-			passwordresettoken.FieldDeletedBy: {Type: field.TypeString, Column: passwordresettoken.FieldDeletedBy},
-			passwordresettoken.FieldOwnerID:   {Type: field.TypeString, Column: passwordresettoken.FieldOwnerID},
-			passwordresettoken.FieldToken:     {Type: field.TypeString, Column: passwordresettoken.FieldToken},
-			passwordresettoken.FieldTTL:       {Type: field.TypeTime, Column: passwordresettoken.FieldTTL},
-			passwordresettoken.FieldEmail:     {Type: field.TypeString, Column: passwordresettoken.FieldEmail},
-			passwordresettoken.FieldSecret:    {Type: field.TypeBytes, Column: passwordresettoken.FieldSecret},
+			passwordresettoken.FieldCreatedAt:   {Type: field.TypeTime, Column: passwordresettoken.FieldCreatedAt},
+			passwordresettoken.FieldUpdatedAt:   {Type: field.TypeTime, Column: passwordresettoken.FieldUpdatedAt},
+			passwordresettoken.FieldCreatedByID: {Type: field.TypeString, Column: passwordresettoken.FieldCreatedByID},
+			passwordresettoken.FieldUpdatedByID: {Type: field.TypeString, Column: passwordresettoken.FieldUpdatedByID},
+			passwordresettoken.FieldMappingID:   {Type: field.TypeString, Column: passwordresettoken.FieldMappingID},
+			passwordresettoken.FieldDeletedAt:   {Type: field.TypeTime, Column: passwordresettoken.FieldDeletedAt},
+			passwordresettoken.FieldDeletedByID: {Type: field.TypeString, Column: passwordresettoken.FieldDeletedByID},
+			passwordresettoken.FieldOwnerID:     {Type: field.TypeString, Column: passwordresettoken.FieldOwnerID},
+			passwordresettoken.FieldToken:       {Type: field.TypeString, Column: passwordresettoken.FieldToken},
+			passwordresettoken.FieldTTL:         {Type: field.TypeTime, Column: passwordresettoken.FieldTTL},
+			passwordresettoken.FieldEmail:       {Type: field.TypeString, Column: passwordresettoken.FieldEmail},
+			passwordresettoken.FieldSecret:      {Type: field.TypeBytes, Column: passwordresettoken.FieldSecret},
 		},
 	}
 	graph.Nodes[46] = &sqlgraph.Node{
@@ -1413,10 +1434,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			personalaccesstoken.FieldCreatedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
 			personalaccesstoken.FieldUpdatedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
-			personalaccesstoken.FieldCreatedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
-			personalaccesstoken.FieldUpdatedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
+			personalaccesstoken.FieldCreatedByID: {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedByID},
+			personalaccesstoken.FieldUpdatedByID: {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedByID},
 			personalaccesstoken.FieldDeletedAt:   {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
-			personalaccesstoken.FieldDeletedBy:   {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
+			personalaccesstoken.FieldDeletedByID: {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedByID},
 			personalaccesstoken.FieldMappingID:   {Type: field.TypeString, Column: personalaccesstoken.FieldMappingID},
 			personalaccesstoken.FieldTags:        {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
 			personalaccesstoken.FieldOwnerID:     {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
@@ -1441,10 +1462,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			procedure.FieldCreatedAt:       {Type: field.TypeTime, Column: procedure.FieldCreatedAt},
 			procedure.FieldUpdatedAt:       {Type: field.TypeTime, Column: procedure.FieldUpdatedAt},
-			procedure.FieldCreatedBy:       {Type: field.TypeString, Column: procedure.FieldCreatedBy},
-			procedure.FieldUpdatedBy:       {Type: field.TypeString, Column: procedure.FieldUpdatedBy},
+			procedure.FieldCreatedByID:     {Type: field.TypeString, Column: procedure.FieldCreatedByID},
+			procedure.FieldUpdatedByID:     {Type: field.TypeString, Column: procedure.FieldUpdatedByID},
 			procedure.FieldDeletedAt:       {Type: field.TypeTime, Column: procedure.FieldDeletedAt},
-			procedure.FieldDeletedBy:       {Type: field.TypeString, Column: procedure.FieldDeletedBy},
+			procedure.FieldDeletedByID:     {Type: field.TypeString, Column: procedure.FieldDeletedByID},
 			procedure.FieldMappingID:       {Type: field.TypeString, Column: procedure.FieldMappingID},
 			procedure.FieldTags:            {Type: field.TypeJSON, Column: procedure.FieldTags},
 			procedure.FieldOwnerID:         {Type: field.TypeString, Column: procedure.FieldOwnerID},
@@ -1473,12 +1494,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldHistoryTime:     {Type: field.TypeTime, Column: procedurehistory.FieldHistoryTime},
 			procedurehistory.FieldRef:             {Type: field.TypeString, Column: procedurehistory.FieldRef},
 			procedurehistory.FieldOperation:       {Type: field.TypeEnum, Column: procedurehistory.FieldOperation},
+			procedurehistory.FieldUpdatedBy:       {Type: field.TypeString, Column: procedurehistory.FieldUpdatedBy},
 			procedurehistory.FieldCreatedAt:       {Type: field.TypeTime, Column: procedurehistory.FieldCreatedAt},
 			procedurehistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: procedurehistory.FieldUpdatedAt},
-			procedurehistory.FieldCreatedBy:       {Type: field.TypeString, Column: procedurehistory.FieldCreatedBy},
-			procedurehistory.FieldUpdatedBy:       {Type: field.TypeString, Column: procedurehistory.FieldUpdatedBy},
+			procedurehistory.FieldCreatedByID:     {Type: field.TypeString, Column: procedurehistory.FieldCreatedByID},
+			procedurehistory.FieldUpdatedByID:     {Type: field.TypeString, Column: procedurehistory.FieldUpdatedByID},
 			procedurehistory.FieldDeletedAt:       {Type: field.TypeTime, Column: procedurehistory.FieldDeletedAt},
-			procedurehistory.FieldDeletedBy:       {Type: field.TypeString, Column: procedurehistory.FieldDeletedBy},
+			procedurehistory.FieldDeletedByID:     {Type: field.TypeString, Column: procedurehistory.FieldDeletedByID},
 			procedurehistory.FieldMappingID:       {Type: field.TypeString, Column: procedurehistory.FieldMappingID},
 			procedurehistory.FieldTags:            {Type: field.TypeJSON, Column: procedurehistory.FieldTags},
 			procedurehistory.FieldOwnerID:         {Type: field.TypeString, Column: procedurehistory.FieldOwnerID},
@@ -1506,11 +1528,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			program.FieldCreatedAt:            {Type: field.TypeTime, Column: program.FieldCreatedAt},
 			program.FieldUpdatedAt:            {Type: field.TypeTime, Column: program.FieldUpdatedAt},
-			program.FieldCreatedBy:            {Type: field.TypeString, Column: program.FieldCreatedBy},
-			program.FieldUpdatedBy:            {Type: field.TypeString, Column: program.FieldUpdatedBy},
+			program.FieldCreatedByID:          {Type: field.TypeString, Column: program.FieldCreatedByID},
+			program.FieldUpdatedByID:          {Type: field.TypeString, Column: program.FieldUpdatedByID},
 			program.FieldMappingID:            {Type: field.TypeString, Column: program.FieldMappingID},
 			program.FieldDeletedAt:            {Type: field.TypeTime, Column: program.FieldDeletedAt},
-			program.FieldDeletedBy:            {Type: field.TypeString, Column: program.FieldDeletedBy},
+			program.FieldDeletedByID:          {Type: field.TypeString, Column: program.FieldDeletedByID},
 			program.FieldTags:                 {Type: field.TypeJSON, Column: program.FieldTags},
 			program.FieldOwnerID:              {Type: field.TypeString, Column: program.FieldOwnerID},
 			program.FieldName:                 {Type: field.TypeString, Column: program.FieldName},
@@ -1537,13 +1559,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldHistoryTime:          {Type: field.TypeTime, Column: programhistory.FieldHistoryTime},
 			programhistory.FieldRef:                  {Type: field.TypeString, Column: programhistory.FieldRef},
 			programhistory.FieldOperation:            {Type: field.TypeEnum, Column: programhistory.FieldOperation},
+			programhistory.FieldUpdatedBy:            {Type: field.TypeString, Column: programhistory.FieldUpdatedBy},
 			programhistory.FieldCreatedAt:            {Type: field.TypeTime, Column: programhistory.FieldCreatedAt},
 			programhistory.FieldUpdatedAt:            {Type: field.TypeTime, Column: programhistory.FieldUpdatedAt},
-			programhistory.FieldCreatedBy:            {Type: field.TypeString, Column: programhistory.FieldCreatedBy},
-			programhistory.FieldUpdatedBy:            {Type: field.TypeString, Column: programhistory.FieldUpdatedBy},
+			programhistory.FieldCreatedByID:          {Type: field.TypeString, Column: programhistory.FieldCreatedByID},
+			programhistory.FieldUpdatedByID:          {Type: field.TypeString, Column: programhistory.FieldUpdatedByID},
 			programhistory.FieldMappingID:            {Type: field.TypeString, Column: programhistory.FieldMappingID},
 			programhistory.FieldDeletedAt:            {Type: field.TypeTime, Column: programhistory.FieldDeletedAt},
-			programhistory.FieldDeletedBy:            {Type: field.TypeString, Column: programhistory.FieldDeletedBy},
+			programhistory.FieldDeletedByID:          {Type: field.TypeString, Column: programhistory.FieldDeletedByID},
 			programhistory.FieldTags:                 {Type: field.TypeJSON, Column: programhistory.FieldTags},
 			programhistory.FieldOwnerID:              {Type: field.TypeString, Column: programhistory.FieldOwnerID},
 			programhistory.FieldName:                 {Type: field.TypeString, Column: programhistory.FieldName},
@@ -1567,16 +1590,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ProgramMembership",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			programmembership.FieldCreatedAt: {Type: field.TypeTime, Column: programmembership.FieldCreatedAt},
-			programmembership.FieldUpdatedAt: {Type: field.TypeTime, Column: programmembership.FieldUpdatedAt},
-			programmembership.FieldCreatedBy: {Type: field.TypeString, Column: programmembership.FieldCreatedBy},
-			programmembership.FieldUpdatedBy: {Type: field.TypeString, Column: programmembership.FieldUpdatedBy},
-			programmembership.FieldMappingID: {Type: field.TypeString, Column: programmembership.FieldMappingID},
-			programmembership.FieldDeletedAt: {Type: field.TypeTime, Column: programmembership.FieldDeletedAt},
-			programmembership.FieldDeletedBy: {Type: field.TypeString, Column: programmembership.FieldDeletedBy},
-			programmembership.FieldRole:      {Type: field.TypeEnum, Column: programmembership.FieldRole},
-			programmembership.FieldProgramID: {Type: field.TypeString, Column: programmembership.FieldProgramID},
-			programmembership.FieldUserID:    {Type: field.TypeString, Column: programmembership.FieldUserID},
+			programmembership.FieldCreatedAt:   {Type: field.TypeTime, Column: programmembership.FieldCreatedAt},
+			programmembership.FieldUpdatedAt:   {Type: field.TypeTime, Column: programmembership.FieldUpdatedAt},
+			programmembership.FieldCreatedByID: {Type: field.TypeString, Column: programmembership.FieldCreatedByID},
+			programmembership.FieldUpdatedByID: {Type: field.TypeString, Column: programmembership.FieldUpdatedByID},
+			programmembership.FieldMappingID:   {Type: field.TypeString, Column: programmembership.FieldMappingID},
+			programmembership.FieldDeletedAt:   {Type: field.TypeTime, Column: programmembership.FieldDeletedAt},
+			programmembership.FieldDeletedByID: {Type: field.TypeString, Column: programmembership.FieldDeletedByID},
+			programmembership.FieldRole:        {Type: field.TypeEnum, Column: programmembership.FieldRole},
+			programmembership.FieldProgramID:   {Type: field.TypeString, Column: programmembership.FieldProgramID},
+			programmembership.FieldUserID:      {Type: field.TypeString, Column: programmembership.FieldUserID},
 		},
 	}
 	graph.Nodes[52] = &sqlgraph.Node{
@@ -1593,13 +1616,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programmembershiphistory.FieldHistoryTime: {Type: field.TypeTime, Column: programmembershiphistory.FieldHistoryTime},
 			programmembershiphistory.FieldRef:         {Type: field.TypeString, Column: programmembershiphistory.FieldRef},
 			programmembershiphistory.FieldOperation:   {Type: field.TypeEnum, Column: programmembershiphistory.FieldOperation},
+			programmembershiphistory.FieldUpdatedBy:   {Type: field.TypeString, Column: programmembershiphistory.FieldUpdatedBy},
 			programmembershiphistory.FieldCreatedAt:   {Type: field.TypeTime, Column: programmembershiphistory.FieldCreatedAt},
 			programmembershiphistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: programmembershiphistory.FieldUpdatedAt},
-			programmembershiphistory.FieldCreatedBy:   {Type: field.TypeString, Column: programmembershiphistory.FieldCreatedBy},
-			programmembershiphistory.FieldUpdatedBy:   {Type: field.TypeString, Column: programmembershiphistory.FieldUpdatedBy},
+			programmembershiphistory.FieldCreatedByID: {Type: field.TypeString, Column: programmembershiphistory.FieldCreatedByID},
+			programmembershiphistory.FieldUpdatedByID: {Type: field.TypeString, Column: programmembershiphistory.FieldUpdatedByID},
 			programmembershiphistory.FieldMappingID:   {Type: field.TypeString, Column: programmembershiphistory.FieldMappingID},
 			programmembershiphistory.FieldDeletedAt:   {Type: field.TypeTime, Column: programmembershiphistory.FieldDeletedAt},
-			programmembershiphistory.FieldDeletedBy:   {Type: field.TypeString, Column: programmembershiphistory.FieldDeletedBy},
+			programmembershiphistory.FieldDeletedByID: {Type: field.TypeString, Column: programmembershiphistory.FieldDeletedByID},
 			programmembershiphistory.FieldRole:        {Type: field.TypeEnum, Column: programmembershiphistory.FieldRole},
 			programmembershiphistory.FieldProgramID:   {Type: field.TypeString, Column: programmembershiphistory.FieldProgramID},
 			programmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: programmembershiphistory.FieldUserID},
@@ -1618,10 +1642,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			risk.FieldCreatedAt:     {Type: field.TypeTime, Column: risk.FieldCreatedAt},
 			risk.FieldUpdatedAt:     {Type: field.TypeTime, Column: risk.FieldUpdatedAt},
-			risk.FieldCreatedBy:     {Type: field.TypeString, Column: risk.FieldCreatedBy},
-			risk.FieldUpdatedBy:     {Type: field.TypeString, Column: risk.FieldUpdatedBy},
+			risk.FieldCreatedByID:   {Type: field.TypeString, Column: risk.FieldCreatedByID},
+			risk.FieldUpdatedByID:   {Type: field.TypeString, Column: risk.FieldUpdatedByID},
 			risk.FieldDeletedAt:     {Type: field.TypeTime, Column: risk.FieldDeletedAt},
-			risk.FieldDeletedBy:     {Type: field.TypeString, Column: risk.FieldDeletedBy},
+			risk.FieldDeletedByID:   {Type: field.TypeString, Column: risk.FieldDeletedByID},
 			risk.FieldMappingID:     {Type: field.TypeString, Column: risk.FieldMappingID},
 			risk.FieldTags:          {Type: field.TypeJSON, Column: risk.FieldTags},
 			risk.FieldOwnerID:       {Type: field.TypeString, Column: risk.FieldOwnerID},
@@ -1651,12 +1675,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: riskhistory.FieldHistoryTime},
 			riskhistory.FieldRef:           {Type: field.TypeString, Column: riskhistory.FieldRef},
 			riskhistory.FieldOperation:     {Type: field.TypeEnum, Column: riskhistory.FieldOperation},
+			riskhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: riskhistory.FieldUpdatedBy},
 			riskhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: riskhistory.FieldCreatedAt},
 			riskhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: riskhistory.FieldUpdatedAt},
-			riskhistory.FieldCreatedBy:     {Type: field.TypeString, Column: riskhistory.FieldCreatedBy},
-			riskhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: riskhistory.FieldUpdatedBy},
+			riskhistory.FieldCreatedByID:   {Type: field.TypeString, Column: riskhistory.FieldCreatedByID},
+			riskhistory.FieldUpdatedByID:   {Type: field.TypeString, Column: riskhistory.FieldUpdatedByID},
 			riskhistory.FieldDeletedAt:     {Type: field.TypeTime, Column: riskhistory.FieldDeletedAt},
-			riskhistory.FieldDeletedBy:     {Type: field.TypeString, Column: riskhistory.FieldDeletedBy},
+			riskhistory.FieldDeletedByID:   {Type: field.TypeString, Column: riskhistory.FieldDeletedByID},
 			riskhistory.FieldMappingID:     {Type: field.TypeString, Column: riskhistory.FieldMappingID},
 			riskhistory.FieldTags:          {Type: field.TypeJSON, Column: riskhistory.FieldTags},
 			riskhistory.FieldOwnerID:       {Type: field.TypeString, Column: riskhistory.FieldOwnerID},
@@ -1685,10 +1710,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			standard.FieldCreatedAt:       {Type: field.TypeTime, Column: standard.FieldCreatedAt},
 			standard.FieldUpdatedAt:       {Type: field.TypeTime, Column: standard.FieldUpdatedAt},
-			standard.FieldCreatedBy:       {Type: field.TypeString, Column: standard.FieldCreatedBy},
-			standard.FieldUpdatedBy:       {Type: field.TypeString, Column: standard.FieldUpdatedBy},
+			standard.FieldCreatedByID:     {Type: field.TypeString, Column: standard.FieldCreatedByID},
+			standard.FieldUpdatedByID:     {Type: field.TypeString, Column: standard.FieldUpdatedByID},
 			standard.FieldDeletedAt:       {Type: field.TypeTime, Column: standard.FieldDeletedAt},
-			standard.FieldDeletedBy:       {Type: field.TypeString, Column: standard.FieldDeletedBy},
+			standard.FieldDeletedByID:     {Type: field.TypeString, Column: standard.FieldDeletedByID},
 			standard.FieldMappingID:       {Type: field.TypeString, Column: standard.FieldMappingID},
 			standard.FieldTags:            {Type: field.TypeJSON, Column: standard.FieldTags},
 			standard.FieldName:            {Type: field.TypeString, Column: standard.FieldName},
@@ -1717,12 +1742,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: standardhistory.FieldHistoryTime},
 			standardhistory.FieldRef:             {Type: field.TypeString, Column: standardhistory.FieldRef},
 			standardhistory.FieldOperation:       {Type: field.TypeEnum, Column: standardhistory.FieldOperation},
+			standardhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: standardhistory.FieldUpdatedBy},
 			standardhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: standardhistory.FieldCreatedAt},
 			standardhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: standardhistory.FieldUpdatedAt},
-			standardhistory.FieldCreatedBy:       {Type: field.TypeString, Column: standardhistory.FieldCreatedBy},
-			standardhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: standardhistory.FieldUpdatedBy},
+			standardhistory.FieldCreatedByID:     {Type: field.TypeString, Column: standardhistory.FieldCreatedByID},
+			standardhistory.FieldUpdatedByID:     {Type: field.TypeString, Column: standardhistory.FieldUpdatedByID},
 			standardhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: standardhistory.FieldDeletedAt},
-			standardhistory.FieldDeletedBy:       {Type: field.TypeString, Column: standardhistory.FieldDeletedBy},
+			standardhistory.FieldDeletedByID:     {Type: field.TypeString, Column: standardhistory.FieldDeletedByID},
 			standardhistory.FieldMappingID:       {Type: field.TypeString, Column: standardhistory.FieldMappingID},
 			standardhistory.FieldTags:            {Type: field.TypeJSON, Column: standardhistory.FieldTags},
 			standardhistory.FieldName:            {Type: field.TypeString, Column: standardhistory.FieldName},
@@ -1750,10 +1776,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			subcontrol.FieldCreatedAt:                      {Type: field.TypeTime, Column: subcontrol.FieldCreatedAt},
 			subcontrol.FieldUpdatedAt:                      {Type: field.TypeTime, Column: subcontrol.FieldUpdatedAt},
-			subcontrol.FieldCreatedBy:                      {Type: field.TypeString, Column: subcontrol.FieldCreatedBy},
-			subcontrol.FieldUpdatedBy:                      {Type: field.TypeString, Column: subcontrol.FieldUpdatedBy},
+			subcontrol.FieldCreatedByID:                    {Type: field.TypeString, Column: subcontrol.FieldCreatedByID},
+			subcontrol.FieldUpdatedByID:                    {Type: field.TypeString, Column: subcontrol.FieldUpdatedByID},
 			subcontrol.FieldDeletedAt:                      {Type: field.TypeTime, Column: subcontrol.FieldDeletedAt},
-			subcontrol.FieldDeletedBy:                      {Type: field.TypeString, Column: subcontrol.FieldDeletedBy},
+			subcontrol.FieldDeletedByID:                    {Type: field.TypeString, Column: subcontrol.FieldDeletedByID},
 			subcontrol.FieldMappingID:                      {Type: field.TypeString, Column: subcontrol.FieldMappingID},
 			subcontrol.FieldTags:                           {Type: field.TypeJSON, Column: subcontrol.FieldTags},
 			subcontrol.FieldOwnerID:                        {Type: field.TypeString, Column: subcontrol.FieldOwnerID},
@@ -1789,12 +1815,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldHistoryTime:                    {Type: field.TypeTime, Column: subcontrolhistory.FieldHistoryTime},
 			subcontrolhistory.FieldRef:                            {Type: field.TypeString, Column: subcontrolhistory.FieldRef},
 			subcontrolhistory.FieldOperation:                      {Type: field.TypeEnum, Column: subcontrolhistory.FieldOperation},
+			subcontrolhistory.FieldUpdatedBy:                      {Type: field.TypeString, Column: subcontrolhistory.FieldUpdatedBy},
 			subcontrolhistory.FieldCreatedAt:                      {Type: field.TypeTime, Column: subcontrolhistory.FieldCreatedAt},
 			subcontrolhistory.FieldUpdatedAt:                      {Type: field.TypeTime, Column: subcontrolhistory.FieldUpdatedAt},
-			subcontrolhistory.FieldCreatedBy:                      {Type: field.TypeString, Column: subcontrolhistory.FieldCreatedBy},
-			subcontrolhistory.FieldUpdatedBy:                      {Type: field.TypeString, Column: subcontrolhistory.FieldUpdatedBy},
+			subcontrolhistory.FieldCreatedByID:                    {Type: field.TypeString, Column: subcontrolhistory.FieldCreatedByID},
+			subcontrolhistory.FieldUpdatedByID:                    {Type: field.TypeString, Column: subcontrolhistory.FieldUpdatedByID},
 			subcontrolhistory.FieldDeletedAt:                      {Type: field.TypeTime, Column: subcontrolhistory.FieldDeletedAt},
-			subcontrolhistory.FieldDeletedBy:                      {Type: field.TypeString, Column: subcontrolhistory.FieldDeletedBy},
+			subcontrolhistory.FieldDeletedByID:                    {Type: field.TypeString, Column: subcontrolhistory.FieldDeletedByID},
 			subcontrolhistory.FieldMappingID:                      {Type: field.TypeString, Column: subcontrolhistory.FieldMappingID},
 			subcontrolhistory.FieldTags:                           {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
 			subcontrolhistory.FieldOwnerID:                        {Type: field.TypeString, Column: subcontrolhistory.FieldOwnerID},
@@ -1829,12 +1856,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			subscriber.FieldCreatedAt:     {Type: field.TypeTime, Column: subscriber.FieldCreatedAt},
 			subscriber.FieldUpdatedAt:     {Type: field.TypeTime, Column: subscriber.FieldUpdatedAt},
-			subscriber.FieldCreatedBy:     {Type: field.TypeString, Column: subscriber.FieldCreatedBy},
-			subscriber.FieldUpdatedBy:     {Type: field.TypeString, Column: subscriber.FieldUpdatedBy},
+			subscriber.FieldCreatedByID:   {Type: field.TypeString, Column: subscriber.FieldCreatedByID},
+			subscriber.FieldUpdatedByID:   {Type: field.TypeString, Column: subscriber.FieldUpdatedByID},
 			subscriber.FieldMappingID:     {Type: field.TypeString, Column: subscriber.FieldMappingID},
 			subscriber.FieldTags:          {Type: field.TypeJSON, Column: subscriber.FieldTags},
 			subscriber.FieldDeletedAt:     {Type: field.TypeTime, Column: subscriber.FieldDeletedAt},
-			subscriber.FieldDeletedBy:     {Type: field.TypeString, Column: subscriber.FieldDeletedBy},
+			subscriber.FieldDeletedByID:   {Type: field.TypeString, Column: subscriber.FieldDeletedByID},
 			subscriber.FieldOwnerID:       {Type: field.TypeString, Column: subscriber.FieldOwnerID},
 			subscriber.FieldEmail:         {Type: field.TypeString, Column: subscriber.FieldEmail},
 			subscriber.FieldPhoneNumber:   {Type: field.TypeString, Column: subscriber.FieldPhoneNumber},
@@ -1859,11 +1886,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			tfasetting.FieldCreatedAt:       {Type: field.TypeTime, Column: tfasetting.FieldCreatedAt},
 			tfasetting.FieldUpdatedAt:       {Type: field.TypeTime, Column: tfasetting.FieldUpdatedAt},
-			tfasetting.FieldCreatedBy:       {Type: field.TypeString, Column: tfasetting.FieldCreatedBy},
-			tfasetting.FieldUpdatedBy:       {Type: field.TypeString, Column: tfasetting.FieldUpdatedBy},
+			tfasetting.FieldCreatedByID:     {Type: field.TypeString, Column: tfasetting.FieldCreatedByID},
+			tfasetting.FieldUpdatedByID:     {Type: field.TypeString, Column: tfasetting.FieldUpdatedByID},
 			tfasetting.FieldMappingID:       {Type: field.TypeString, Column: tfasetting.FieldMappingID},
 			tfasetting.FieldDeletedAt:       {Type: field.TypeTime, Column: tfasetting.FieldDeletedAt},
-			tfasetting.FieldDeletedBy:       {Type: field.TypeString, Column: tfasetting.FieldDeletedBy},
+			tfasetting.FieldDeletedByID:     {Type: field.TypeString, Column: tfasetting.FieldDeletedByID},
 			tfasetting.FieldTags:            {Type: field.TypeJSON, Column: tfasetting.FieldTags},
 			tfasetting.FieldOwnerID:         {Type: field.TypeString, Column: tfasetting.FieldOwnerID},
 			tfasetting.FieldTfaSecret:       {Type: field.TypeString, Column: tfasetting.FieldTfaSecret},
@@ -1887,11 +1914,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			task.FieldCreatedAt:   {Type: field.TypeTime, Column: task.FieldCreatedAt},
 			task.FieldUpdatedAt:   {Type: field.TypeTime, Column: task.FieldUpdatedAt},
-			task.FieldCreatedBy:   {Type: field.TypeString, Column: task.FieldCreatedBy},
-			task.FieldUpdatedBy:   {Type: field.TypeString, Column: task.FieldUpdatedBy},
+			task.FieldCreatedByID: {Type: field.TypeString, Column: task.FieldCreatedByID},
+			task.FieldUpdatedByID: {Type: field.TypeString, Column: task.FieldUpdatedByID},
 			task.FieldMappingID:   {Type: field.TypeString, Column: task.FieldMappingID},
 			task.FieldDeletedAt:   {Type: field.TypeTime, Column: task.FieldDeletedAt},
-			task.FieldDeletedBy:   {Type: field.TypeString, Column: task.FieldDeletedBy},
+			task.FieldDeletedByID: {Type: field.TypeString, Column: task.FieldDeletedByID},
 			task.FieldTags:        {Type: field.TypeJSON, Column: task.FieldTags},
 			task.FieldTitle:       {Type: field.TypeString, Column: task.FieldTitle},
 			task.FieldDescription: {Type: field.TypeString, Column: task.FieldDescription},
@@ -1915,13 +1942,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldHistoryTime: {Type: field.TypeTime, Column: taskhistory.FieldHistoryTime},
 			taskhistory.FieldRef:         {Type: field.TypeString, Column: taskhistory.FieldRef},
 			taskhistory.FieldOperation:   {Type: field.TypeEnum, Column: taskhistory.FieldOperation},
+			taskhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: taskhistory.FieldUpdatedBy},
 			taskhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: taskhistory.FieldCreatedAt},
 			taskhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: taskhistory.FieldUpdatedAt},
-			taskhistory.FieldCreatedBy:   {Type: field.TypeString, Column: taskhistory.FieldCreatedBy},
-			taskhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: taskhistory.FieldUpdatedBy},
+			taskhistory.FieldCreatedByID: {Type: field.TypeString, Column: taskhistory.FieldCreatedByID},
+			taskhistory.FieldUpdatedByID: {Type: field.TypeString, Column: taskhistory.FieldUpdatedByID},
 			taskhistory.FieldMappingID:   {Type: field.TypeString, Column: taskhistory.FieldMappingID},
 			taskhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: taskhistory.FieldDeletedAt},
-			taskhistory.FieldDeletedBy:   {Type: field.TypeString, Column: taskhistory.FieldDeletedBy},
+			taskhistory.FieldDeletedByID: {Type: field.TypeString, Column: taskhistory.FieldDeletedByID},
 			taskhistory.FieldTags:        {Type: field.TypeJSON, Column: taskhistory.FieldTags},
 			taskhistory.FieldTitle:       {Type: field.TypeString, Column: taskhistory.FieldTitle},
 			taskhistory.FieldDescription: {Type: field.TypeString, Column: taskhistory.FieldDescription},
@@ -1944,10 +1972,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			template.FieldCreatedAt:    {Type: field.TypeTime, Column: template.FieldCreatedAt},
 			template.FieldUpdatedAt:    {Type: field.TypeTime, Column: template.FieldUpdatedAt},
-			template.FieldCreatedBy:    {Type: field.TypeString, Column: template.FieldCreatedBy},
-			template.FieldUpdatedBy:    {Type: field.TypeString, Column: template.FieldUpdatedBy},
+			template.FieldCreatedByID:  {Type: field.TypeString, Column: template.FieldCreatedByID},
+			template.FieldUpdatedByID:  {Type: field.TypeString, Column: template.FieldUpdatedByID},
 			template.FieldDeletedAt:    {Type: field.TypeTime, Column: template.FieldDeletedAt},
-			template.FieldDeletedBy:    {Type: field.TypeString, Column: template.FieldDeletedBy},
+			template.FieldDeletedByID:  {Type: field.TypeString, Column: template.FieldDeletedByID},
 			template.FieldMappingID:    {Type: field.TypeString, Column: template.FieldMappingID},
 			template.FieldTags:         {Type: field.TypeJSON, Column: template.FieldTags},
 			template.FieldOwnerID:      {Type: field.TypeString, Column: template.FieldOwnerID},
@@ -1972,12 +2000,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldHistoryTime:  {Type: field.TypeTime, Column: templatehistory.FieldHistoryTime},
 			templatehistory.FieldRef:          {Type: field.TypeString, Column: templatehistory.FieldRef},
 			templatehistory.FieldOperation:    {Type: field.TypeEnum, Column: templatehistory.FieldOperation},
+			templatehistory.FieldUpdatedBy:    {Type: field.TypeString, Column: templatehistory.FieldUpdatedBy},
 			templatehistory.FieldCreatedAt:    {Type: field.TypeTime, Column: templatehistory.FieldCreatedAt},
 			templatehistory.FieldUpdatedAt:    {Type: field.TypeTime, Column: templatehistory.FieldUpdatedAt},
-			templatehistory.FieldCreatedBy:    {Type: field.TypeString, Column: templatehistory.FieldCreatedBy},
-			templatehistory.FieldUpdatedBy:    {Type: field.TypeString, Column: templatehistory.FieldUpdatedBy},
+			templatehistory.FieldCreatedByID:  {Type: field.TypeString, Column: templatehistory.FieldCreatedByID},
+			templatehistory.FieldUpdatedByID:  {Type: field.TypeString, Column: templatehistory.FieldUpdatedByID},
 			templatehistory.FieldDeletedAt:    {Type: field.TypeTime, Column: templatehistory.FieldDeletedAt},
-			templatehistory.FieldDeletedBy:    {Type: field.TypeString, Column: templatehistory.FieldDeletedBy},
+			templatehistory.FieldDeletedByID:  {Type: field.TypeString, Column: templatehistory.FieldDeletedByID},
 			templatehistory.FieldMappingID:    {Type: field.TypeString, Column: templatehistory.FieldMappingID},
 			templatehistory.FieldTags:         {Type: field.TypeJSON, Column: templatehistory.FieldTags},
 			templatehistory.FieldOwnerID:      {Type: field.TypeString, Column: templatehistory.FieldOwnerID},
@@ -2001,10 +2030,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			user.FieldCreatedAt:         {Type: field.TypeTime, Column: user.FieldCreatedAt},
 			user.FieldUpdatedAt:         {Type: field.TypeTime, Column: user.FieldUpdatedAt},
-			user.FieldCreatedBy:         {Type: field.TypeString, Column: user.FieldCreatedBy},
-			user.FieldUpdatedBy:         {Type: field.TypeString, Column: user.FieldUpdatedBy},
+			user.FieldCreatedByID:       {Type: field.TypeString, Column: user.FieldCreatedByID},
+			user.FieldUpdatedByID:       {Type: field.TypeString, Column: user.FieldUpdatedByID},
 			user.FieldDeletedAt:         {Type: field.TypeTime, Column: user.FieldDeletedAt},
-			user.FieldDeletedBy:         {Type: field.TypeString, Column: user.FieldDeletedBy},
+			user.FieldDeletedByID:       {Type: field.TypeString, Column: user.FieldDeletedByID},
 			user.FieldMappingID:         {Type: field.TypeString, Column: user.FieldMappingID},
 			user.FieldTags:              {Type: field.TypeJSON, Column: user.FieldTags},
 			user.FieldEmail:             {Type: field.TypeString, Column: user.FieldEmail},
@@ -2036,12 +2065,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldHistoryTime:       {Type: field.TypeTime, Column: userhistory.FieldHistoryTime},
 			userhistory.FieldRef:               {Type: field.TypeString, Column: userhistory.FieldRef},
 			userhistory.FieldOperation:         {Type: field.TypeEnum, Column: userhistory.FieldOperation},
+			userhistory.FieldUpdatedBy:         {Type: field.TypeString, Column: userhistory.FieldUpdatedBy},
 			userhistory.FieldCreatedAt:         {Type: field.TypeTime, Column: userhistory.FieldCreatedAt},
 			userhistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: userhistory.FieldUpdatedAt},
-			userhistory.FieldCreatedBy:         {Type: field.TypeString, Column: userhistory.FieldCreatedBy},
-			userhistory.FieldUpdatedBy:         {Type: field.TypeString, Column: userhistory.FieldUpdatedBy},
+			userhistory.FieldCreatedByID:       {Type: field.TypeString, Column: userhistory.FieldCreatedByID},
+			userhistory.FieldUpdatedByID:       {Type: field.TypeString, Column: userhistory.FieldUpdatedByID},
 			userhistory.FieldDeletedAt:         {Type: field.TypeTime, Column: userhistory.FieldDeletedAt},
-			userhistory.FieldDeletedBy:         {Type: field.TypeString, Column: userhistory.FieldDeletedBy},
+			userhistory.FieldDeletedByID:       {Type: field.TypeString, Column: userhistory.FieldDeletedByID},
 			userhistory.FieldMappingID:         {Type: field.TypeString, Column: userhistory.FieldMappingID},
 			userhistory.FieldTags:              {Type: field.TypeJSON, Column: userhistory.FieldTags},
 			userhistory.FieldEmail:             {Type: field.TypeString, Column: userhistory.FieldEmail},
@@ -2072,12 +2102,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			usersetting.FieldCreatedAt:         {Type: field.TypeTime, Column: usersetting.FieldCreatedAt},
 			usersetting.FieldUpdatedAt:         {Type: field.TypeTime, Column: usersetting.FieldUpdatedAt},
-			usersetting.FieldCreatedBy:         {Type: field.TypeString, Column: usersetting.FieldCreatedBy},
-			usersetting.FieldUpdatedBy:         {Type: field.TypeString, Column: usersetting.FieldUpdatedBy},
+			usersetting.FieldCreatedByID:       {Type: field.TypeString, Column: usersetting.FieldCreatedByID},
+			usersetting.FieldUpdatedByID:       {Type: field.TypeString, Column: usersetting.FieldUpdatedByID},
 			usersetting.FieldMappingID:         {Type: field.TypeString, Column: usersetting.FieldMappingID},
 			usersetting.FieldTags:              {Type: field.TypeJSON, Column: usersetting.FieldTags},
 			usersetting.FieldDeletedAt:         {Type: field.TypeTime, Column: usersetting.FieldDeletedAt},
-			usersetting.FieldDeletedBy:         {Type: field.TypeString, Column: usersetting.FieldDeletedBy},
+			usersetting.FieldDeletedByID:       {Type: field.TypeString, Column: usersetting.FieldDeletedByID},
 			usersetting.FieldUserID:            {Type: field.TypeString, Column: usersetting.FieldUserID},
 			usersetting.FieldLocked:            {Type: field.TypeBool, Column: usersetting.FieldLocked},
 			usersetting.FieldSilencedAt:        {Type: field.TypeTime, Column: usersetting.FieldSilencedAt},
@@ -2103,14 +2133,15 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldHistoryTime:       {Type: field.TypeTime, Column: usersettinghistory.FieldHistoryTime},
 			usersettinghistory.FieldRef:               {Type: field.TypeString, Column: usersettinghistory.FieldRef},
 			usersettinghistory.FieldOperation:         {Type: field.TypeEnum, Column: usersettinghistory.FieldOperation},
+			usersettinghistory.FieldUpdatedBy:         {Type: field.TypeString, Column: usersettinghistory.FieldUpdatedBy},
 			usersettinghistory.FieldCreatedAt:         {Type: field.TypeTime, Column: usersettinghistory.FieldCreatedAt},
 			usersettinghistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: usersettinghistory.FieldUpdatedAt},
-			usersettinghistory.FieldCreatedBy:         {Type: field.TypeString, Column: usersettinghistory.FieldCreatedBy},
-			usersettinghistory.FieldUpdatedBy:         {Type: field.TypeString, Column: usersettinghistory.FieldUpdatedBy},
+			usersettinghistory.FieldCreatedByID:       {Type: field.TypeString, Column: usersettinghistory.FieldCreatedByID},
+			usersettinghistory.FieldUpdatedByID:       {Type: field.TypeString, Column: usersettinghistory.FieldUpdatedByID},
 			usersettinghistory.FieldMappingID:         {Type: field.TypeString, Column: usersettinghistory.FieldMappingID},
 			usersettinghistory.FieldTags:              {Type: field.TypeJSON, Column: usersettinghistory.FieldTags},
 			usersettinghistory.FieldDeletedAt:         {Type: field.TypeTime, Column: usersettinghistory.FieldDeletedAt},
-			usersettinghistory.FieldDeletedBy:         {Type: field.TypeString, Column: usersettinghistory.FieldDeletedBy},
+			usersettinghistory.FieldDeletedByID:       {Type: field.TypeString, Column: usersettinghistory.FieldDeletedByID},
 			usersettinghistory.FieldUserID:            {Type: field.TypeString, Column: usersettinghistory.FieldUserID},
 			usersettinghistory.FieldLocked:            {Type: field.TypeBool, Column: usersettinghistory.FieldLocked},
 			usersettinghistory.FieldSilencedAt:        {Type: field.TypeTime, Column: usersettinghistory.FieldSilencedAt},
@@ -2135,8 +2166,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Fields: map[string]*sqlgraph.FieldSpec{
 			webauthn.FieldCreatedAt:       {Type: field.TypeTime, Column: webauthn.FieldCreatedAt},
 			webauthn.FieldUpdatedAt:       {Type: field.TypeTime, Column: webauthn.FieldUpdatedAt},
-			webauthn.FieldCreatedBy:       {Type: field.TypeString, Column: webauthn.FieldCreatedBy},
-			webauthn.FieldUpdatedBy:       {Type: field.TypeString, Column: webauthn.FieldUpdatedBy},
+			webauthn.FieldCreatedByID:     {Type: field.TypeString, Column: webauthn.FieldCreatedByID},
+			webauthn.FieldUpdatedByID:     {Type: field.TypeString, Column: webauthn.FieldUpdatedByID},
 			webauthn.FieldMappingID:       {Type: field.TypeString, Column: webauthn.FieldMappingID},
 			webauthn.FieldTags:            {Type: field.TypeJSON, Column: webauthn.FieldTags},
 			webauthn.FieldOwnerID:         {Type: field.TypeString, Column: webauthn.FieldOwnerID},
@@ -2153,6 +2184,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 	}
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   apitoken.CreatedByTable,
+			Columns: []string{apitoken.CreatedByColumn},
+			Bidi:    false,
+		},
+		"APIToken",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   apitoken.UpdatedByTable,
+			Columns: []string{apitoken.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"APIToken",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2163,6 +2218,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"APIToken",
 		"Organization",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.CreatedByTable,
+			Columns: []string{actionplan.CreatedByColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByTable,
+			Columns: []string{actionplan.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"User",
 	)
 	graph.MustAddE(
 		"standard",
@@ -2225,6 +2304,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.CreatedByTable,
+			Columns: []string{contact.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Contact",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.UpdatedByTable,
+			Columns: []string{contact.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Contact",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2259,6 +2362,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Contact",
 		"File",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.CreatedByTable,
+			Columns: []string{control.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.UpdatedByTable,
+			Columns: []string{control.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2417,6 +2544,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlobjective.CreatedByTable,
+			Columns: []string{controlobjective.CreatedByColumn},
+			Bidi:    false,
+		},
+		"ControlObjective",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlobjective.UpdatedByTable,
+			Columns: []string{controlobjective.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"ControlObjective",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2573,6 +2724,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.CreatedByTable,
+			Columns: []string{documentdata.CreatedByColumn},
+			Bidi:    false,
+		},
+		"DocumentData",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.UpdatedByTable,
+			Columns: []string{documentdata.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"DocumentData",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2621,6 +2796,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   emailverificationtoken.CreatedByTable,
+			Columns: []string{emailverificationtoken.CreatedByColumn},
+			Bidi:    false,
+		},
+		"EmailVerificationToken",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   emailverificationtoken.UpdatedByTable,
+			Columns: []string{emailverificationtoken.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"EmailVerificationToken",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2630,6 +2829,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"EmailVerificationToken",
+		"User",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.CreatedByTable,
+			Columns: []string{entity.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Entity",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.UpdatedByTable,
+			Columns: []string{entity.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Entity",
 		"User",
 	)
 	graph.MustAddE(
@@ -2705,6 +2928,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"EntityType",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entitytype.CreatedByTable,
+			Columns: []string{entitytype.CreatedByColumn},
+			Bidi:    false,
+		},
+		"EntityType",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entitytype.UpdatedByTable,
+			Columns: []string{entitytype.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"EntityType",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2727,6 +2974,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"EntityType",
 		"Entity",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   event.CreatedByTable,
+			Columns: []string{event.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Event",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   event.UpdatedByTable,
+			Columns: []string{event.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Event",
+		"User",
 	)
 	graph.MustAddE(
 		"user",
@@ -2861,6 +3132,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.CreatedByTable,
+			Columns: []string{file.CreatedByColumn},
+			Bidi:    false,
+		},
+		"File",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByTable,
+			Columns: []string{file.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"File",
+		"User",
+	)
+	graph.MustAddE(
 		"user",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2991,6 +3286,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"File",
 		"Program",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.CreatedByTable,
+			Columns: []string{group.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Group",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByTable,
+			Columns: []string{group.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Group",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -3425,6 +3744,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"GroupMembership",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.CreatedByTable,
+			Columns: []string{groupmembership.CreatedByColumn},
+			Bidi:    false,
+		},
+		"GroupMembership",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByTable,
+			Columns: []string{groupmembership.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"GroupMembership",
+		"User",
+	)
+	graph.MustAddE(
 		"group",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3461,6 +3804,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Event",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupsetting.CreatedByTable,
+			Columns: []string{groupsetting.CreatedByColumn},
+			Bidi:    false,
+		},
+		"GroupSetting",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupsetting.UpdatedByTable,
+			Columns: []string{groupsetting.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"GroupSetting",
+		"User",
+	)
+	graph.MustAddE(
 		"group",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -3471,6 +3838,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"GroupSetting",
 		"Group",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.CreatedByTable,
+			Columns: []string{hush.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Hush",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByTable,
+			Columns: []string{hush.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Hush",
+		"User",
 	)
 	graph.MustAddE(
 		"integrations",
@@ -3509,6 +3900,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Event",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.CreatedByTable,
+			Columns: []string{integration.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Integration",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.UpdatedByTable,
+			Columns: []string{integration.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Integration",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3543,6 +3958,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Integration",
 		"Event",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.CreatedByTable,
+			Columns: []string{internalpolicy.CreatedByColumn},
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByTable,
+			Columns: []string{internalpolicy.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -3653,6 +4092,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.CreatedByTable,
+			Columns: []string{invite.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Invite",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByTable,
+			Columns: []string{invite.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Invite",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3675,6 +4138,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Invite",
 		"Event",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.CreatedByTable,
+			Columns: []string{narrative.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Narrative",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByTable,
+			Columns: []string{narrative.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Narrative",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -3785,6 +4272,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   note.CreatedByTable,
+			Columns: []string{note.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   note.UpdatedByTable,
+			Columns: []string{note.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3833,6 +4344,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgmembership.CreatedByTable,
+			Columns: []string{orgmembership.CreatedByColumn},
+			Bidi:    false,
+		},
+		"OrgMembership",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgmembership.UpdatedByTable,
+			Columns: []string{orgmembership.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"OrgMembership",
+		"User",
+	)
+	graph.MustAddE(
 		"organization",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3869,6 +4404,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Event",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.CreatedByTable,
+			Columns: []string{orgsubscription.CreatedByColumn},
+			Bidi:    false,
+		},
+		"OrgSubscription",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.UpdatedByTable,
+			Columns: []string{orgsubscription.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"OrgSubscription",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3879,6 +4438,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"OrgSubscription",
 		"Organization",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.CreatedByTable,
+			Columns: []string{organization.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.UpdatedByTable,
+			Columns: []string{organization.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"User",
 	)
 	graph.MustAddE(
 		"control_creators",
@@ -4349,6 +4932,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"OrgMembership",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organizationsetting.CreatedByTable,
+			Columns: []string{organizationsetting.CreatedByColumn},
+			Bidi:    false,
+		},
+		"OrganizationSetting",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organizationsetting.UpdatedByTable,
+			Columns: []string{organizationsetting.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"OrganizationSetting",
+		"User",
+	)
+	graph.MustAddE(
 		"organization",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -4373,6 +4980,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.CreatedByTable,
+			Columns: []string{passwordresettoken.CreatedByColumn},
+			Bidi:    false,
+		},
+		"PasswordResetToken",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.UpdatedByTable,
+			Columns: []string{passwordresettoken.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"PasswordResetToken",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -4382,6 +5013,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"PasswordResetToken",
+		"User",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.CreatedByTable,
+			Columns: []string{personalaccesstoken.CreatedByColumn},
+			Bidi:    false,
+		},
+		"PersonalAccessToken",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.UpdatedByTable,
+			Columns: []string{personalaccesstoken.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"PersonalAccessToken",
 		"User",
 	)
 	graph.MustAddE(
@@ -4419,6 +5074,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"PersonalAccessToken",
 		"Event",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.CreatedByTable,
+			Columns: []string{procedure.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Procedure",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.UpdatedByTable,
+			Columns: []string{procedure.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Procedure",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4527,6 +5206,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Procedure",
 		"Program",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.CreatedByTable,
+			Columns: []string{program.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Program",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByTable,
+			Columns: []string{program.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Program",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4745,6 +5448,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"ProgramMembership",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.CreatedByTable,
+			Columns: []string{programmembership.CreatedByColumn},
+			Bidi:    false,
+		},
+		"ProgramMembership",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByTable,
+			Columns: []string{programmembership.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"ProgramMembership",
+		"User",
+	)
+	graph.MustAddE(
 		"program",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -4766,6 +5493,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"ProgramMembership",
+		"User",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.CreatedByTable,
+			Columns: []string{risk.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Risk",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByTable,
+			Columns: []string{risk.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Risk",
 		"User",
 	)
 	graph.MustAddE(
@@ -4865,6 +5616,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.CreatedByTable,
+			Columns: []string{standard.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Standard",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.UpdatedByTable,
+			Columns: []string{standard.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Standard",
+		"User",
+	)
+	graph.MustAddE(
 		"control_objectives",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4923,6 +5698,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Standard",
 		"Program",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.CreatedByTable,
+			Columns: []string{subcontrol.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.UpdatedByTable,
+			Columns: []string{subcontrol.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4997,6 +5796,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subscriber.CreatedByTable,
+			Columns: []string{subscriber.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Subscriber",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subscriber.UpdatedByTable,
+			Columns: []string{subscriber.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Subscriber",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5021,6 +5844,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Event",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.CreatedByTable,
+			Columns: []string{tfasetting.CreatedByColumn},
+			Bidi:    false,
+		},
+		"TFASetting",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByTable,
+			Columns: []string{tfasetting.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"TFASetting",
+		"User",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5030,6 +5877,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"TFASetting",
+		"User",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.CreatedByTable,
+			Columns: []string{task.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Task",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByTable,
+			Columns: []string{task.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Task",
 		"User",
 	)
 	graph.MustAddE(
@@ -5151,6 +6022,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Task",
 		"Program",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.CreatedByTable,
+			Columns: []string{template.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Template",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.UpdatedByTable,
+			Columns: []string{template.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Template",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5417,6 +6312,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"ProgramMembership",
 	)
 	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.CreatedByTable,
+			Columns: []string{usersetting.CreatedByColumn},
+			Bidi:    false,
+		},
+		"UserSetting",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.UpdatedByTable,
+			Columns: []string{usersetting.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"UserSetting",
+		"User",
+	)
+	graph.MustAddE(
 		"user",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -5451,6 +6370,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"UserSetting",
 		"File",
+	)
+	graph.MustAddE(
+		"created_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthn.CreatedByTable,
+			Columns: []string{webauthn.CreatedByColumn},
+			Bidi:    false,
+		},
+		"Webauthn",
+		"User",
+	)
+	graph.MustAddE(
+		"updated_by",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthn.UpdatedByTable,
+			Columns: []string{webauthn.UpdatedByColumn},
+			Bidi:    false,
+		},
+		"Webauthn",
+		"User",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5523,14 +6466,14 @@ func (f *APITokenFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(apitoken.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *APITokenFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(apitoken.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *APITokenFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *APITokenFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(apitoken.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *APITokenFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -5538,9 +6481,9 @@ func (f *APITokenFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(apitoken.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *APITokenFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(apitoken.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *APITokenFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -5586,6 +6529,34 @@ func (f *APITokenFilter) WhereScopes(p entql.BytesP) {
 // WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
 func (f *APITokenFilter) WhereLastUsedAt(p entql.TimeP) {
 	f.Where(p.Field(apitoken.FieldLastUsedAt))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *APITokenFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *APITokenFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *APITokenFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *APITokenFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -5652,14 +6623,14 @@ func (f *ActionPlanFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(actionplan.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ActionPlanFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(actionplan.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ActionPlanFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ActionPlanFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(actionplan.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ActionPlanFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -5667,9 +6638,9 @@ func (f *ActionPlanFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(actionplan.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ActionPlanFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(actionplan.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ActionPlanFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -5715,6 +6686,34 @@ func (f *ActionPlanFilter) WhereSource(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *ActionPlanFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(actionplan.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *ActionPlanFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *ActionPlanFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasStandard applies a predicate to check if query has an edge standard.
@@ -5842,6 +6841,11 @@ func (f *ActionPlanHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ActionPlanHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *ActionPlanHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(actionplanhistory.FieldCreatedAt))
@@ -5852,14 +6856,14 @@ func (f *ActionPlanHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(actionplanhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ActionPlanHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(actionplanhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ActionPlanHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ActionPlanHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(actionplanhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ActionPlanHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -5867,9 +6871,9 @@ func (f *ActionPlanHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(actionplanhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ActionPlanHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(actionplanhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ActionPlanHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -5967,14 +6971,14 @@ func (f *ContactFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(contact.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ContactFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(contact.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ContactFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(contact.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ContactFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(contact.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ContactFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(contact.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -5987,9 +6991,9 @@ func (f *ContactFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(contact.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ContactFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(contact.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ContactFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(contact.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -6035,6 +7039,34 @@ func (f *ContactFilter) WhereAddress(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ContactFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(contact.FieldStatus))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *ContactFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *ContactFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *ContactFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *ContactFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -6134,6 +7166,11 @@ func (f *ContactHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(contacthistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ContactHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(contacthistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *ContactHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(contacthistory.FieldCreatedAt))
@@ -6144,14 +7181,14 @@ func (f *ContactHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(contacthistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ContactHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(contacthistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ContactHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(contacthistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ContactHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(contacthistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ContactHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(contacthistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -6164,9 +7201,9 @@ func (f *ContactHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(contacthistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ContactHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(contacthistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ContactHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(contacthistory.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -6264,14 +7301,14 @@ func (f *ControlFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(control.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ControlFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(control.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ControlFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(control.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ControlFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(control.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ControlFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(control.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -6279,9 +7316,9 @@ func (f *ControlFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(control.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ControlFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(control.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ControlFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(control.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -6357,6 +7394,34 @@ func (f *ControlFilter) WhereMappedFrameworks(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *ControlFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(control.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *ControlFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *ControlFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -6596,6 +7661,11 @@ func (f *ControlHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ControlHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *ControlHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(controlhistory.FieldCreatedAt))
@@ -6606,14 +7676,14 @@ func (f *ControlHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(controlhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ControlHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(controlhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ControlHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ControlHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(controlhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ControlHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -6621,9 +7691,9 @@ func (f *ControlHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(controlhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ControlHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(controlhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ControlHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -6751,14 +7821,14 @@ func (f *ControlObjectiveFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(controlobjective.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ControlObjectiveFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(controlobjective.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ControlObjectiveFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(controlobjective.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ControlObjectiveFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(controlobjective.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ControlObjectiveFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(controlobjective.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -6766,9 +7836,9 @@ func (f *ControlObjectiveFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(controlobjective.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ControlObjectiveFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(controlobjective.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ControlObjectiveFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(controlobjective.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -6839,6 +7909,34 @@ func (f *ControlObjectiveFilter) WhereMappedFrameworks(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *ControlObjectiveFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(controlobjective.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *ControlObjectiveFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *ControlObjectiveFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *ControlObjectiveFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *ControlObjectiveFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -7078,6 +8176,11 @@ func (f *ControlObjectiveHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(controlobjectivehistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ControlObjectiveHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(controlobjectivehistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *ControlObjectiveHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(controlobjectivehistory.FieldCreatedAt))
@@ -7088,14 +8191,14 @@ func (f *ControlObjectiveHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(controlobjectivehistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ControlObjectiveHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(controlobjectivehistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ControlObjectiveHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(controlobjectivehistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ControlObjectiveHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(controlobjectivehistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ControlObjectiveHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(controlobjectivehistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -7103,9 +8206,9 @@ func (f *ControlObjectiveHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(controlobjectivehistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ControlObjectiveHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(controlobjectivehistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ControlObjectiveHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(controlobjectivehistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -7228,14 +8331,14 @@ func (f *DocumentDataFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(documentdata.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *DocumentDataFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(documentdata.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *DocumentDataFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(documentdata.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *DocumentDataFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(documentdata.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *DocumentDataFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(documentdata.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -7253,9 +8356,9 @@ func (f *DocumentDataFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(documentdata.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *DocumentDataFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(documentdata.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *DocumentDataFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(documentdata.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -7271,6 +8374,34 @@ func (f *DocumentDataFilter) WhereTemplateID(p entql.StringP) {
 // WhereData applies the entql json.RawMessage predicate on the data field.
 func (f *DocumentDataFilter) WhereData(p entql.BytesP) {
 	f.Where(p.Field(documentdata.FieldData))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *DocumentDataFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *DocumentDataFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *DocumentDataFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *DocumentDataFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -7384,6 +8515,11 @@ func (f *DocumentDataHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(documentdatahistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *DocumentDataHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(documentdatahistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *DocumentDataHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(documentdatahistory.FieldCreatedAt))
@@ -7394,14 +8530,14 @@ func (f *DocumentDataHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(documentdatahistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *DocumentDataHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(documentdatahistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *DocumentDataHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(documentdatahistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *DocumentDataHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(documentdatahistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *DocumentDataHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(documentdatahistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -7419,9 +8555,9 @@ func (f *DocumentDataHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(documentdatahistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *DocumentDataHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(documentdatahistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *DocumentDataHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(documentdatahistory.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -7489,14 +8625,14 @@ func (f *EmailVerificationTokenFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(emailverificationtoken.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *EmailVerificationTokenFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(emailverificationtoken.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *EmailVerificationTokenFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(emailverificationtoken.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *EmailVerificationTokenFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(emailverificationtoken.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *EmailVerificationTokenFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(emailverificationtoken.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -7509,9 +8645,9 @@ func (f *EmailVerificationTokenFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(emailverificationtoken.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *EmailVerificationTokenFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(emailverificationtoken.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *EmailVerificationTokenFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(emailverificationtoken.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -7537,6 +8673,34 @@ func (f *EmailVerificationTokenFilter) WhereEmail(p entql.StringP) {
 // WhereSecret applies the entql []byte predicate on the secret field.
 func (f *EmailVerificationTokenFilter) WhereSecret(p entql.BytesP) {
 	f.Where(p.Field(emailverificationtoken.FieldSecret))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *EmailVerificationTokenFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *EmailVerificationTokenFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *EmailVerificationTokenFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *EmailVerificationTokenFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -7603,14 +8767,14 @@ func (f *EntityFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(entity.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *EntityFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(entity.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *EntityFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(entity.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *EntityFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(entity.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *EntityFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(entity.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -7623,9 +8787,9 @@ func (f *EntityFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(entity.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *EntityFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(entity.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *EntityFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(entity.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -7666,6 +8830,34 @@ func (f *EntityFilter) WhereEntityTypeID(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *EntityFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(entity.FieldStatus))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *EntityFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *EntityFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -7807,6 +8999,11 @@ func (f *EntityHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(entityhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *EntityHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *EntityHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(entityhistory.FieldCreatedAt))
@@ -7817,14 +9014,14 @@ func (f *EntityHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(entityhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *EntityHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(entityhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *EntityHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *EntityHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(entityhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *EntityHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -7837,9 +9034,9 @@ func (f *EntityHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(entityhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *EntityHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(entityhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *EntityHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -7932,14 +9129,14 @@ func (f *EntityTypeFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(entitytype.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *EntityTypeFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(entitytype.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *EntityTypeFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(entitytype.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *EntityTypeFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(entitytype.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *EntityTypeFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(entitytype.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -7952,9 +9149,9 @@ func (f *EntityTypeFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(entitytype.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *EntityTypeFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(entitytype.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *EntityTypeFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(entitytype.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -7970,6 +9167,34 @@ func (f *EntityTypeFilter) WhereOwnerID(p entql.StringP) {
 // WhereName applies the entql string predicate on the name field.
 func (f *EntityTypeFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(entitytype.FieldName))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *EntityTypeFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *EntityTypeFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *EntityTypeFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *EntityTypeFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -8055,6 +9280,11 @@ func (f *EntityTypeHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(entitytypehistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *EntityTypeHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(entitytypehistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *EntityTypeHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(entitytypehistory.FieldCreatedAt))
@@ -8065,14 +9295,14 @@ func (f *EntityTypeHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(entitytypehistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *EntityTypeHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(entitytypehistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *EntityTypeHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(entitytypehistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *EntityTypeHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(entitytypehistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *EntityTypeHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(entitytypehistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -8085,9 +9315,9 @@ func (f *EntityTypeHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(entitytypehistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *EntityTypeHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(entitytypehistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *EntityTypeHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(entitytypehistory.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -8155,14 +9385,14 @@ func (f *EventFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(event.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *EventFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(event.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *EventFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(event.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *EventFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(event.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *EventFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(event.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -8193,6 +9423,34 @@ func (f *EventFilter) WhereEventType(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *EventFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(event.FieldMetadata))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *EventFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *EventFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *EventFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *EventFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasUser applies a predicate to check if query has an edge user.
@@ -8404,6 +9662,11 @@ func (f *EventHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(eventhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *EventHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *EventHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(eventhistory.FieldCreatedAt))
@@ -8414,14 +9677,14 @@ func (f *EventHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(eventhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *EventHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(eventhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *EventHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *EventHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(eventhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *EventHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(eventhistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -8504,14 +9767,14 @@ func (f *FileFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(file.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *FileFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(file.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *FileFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(file.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *FileFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(file.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *FileFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(file.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -8519,9 +9782,9 @@ func (f *FileFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(file.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *FileFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(file.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *FileFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(file.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -8602,6 +9865,34 @@ func (f *FileFilter) WhereStoragePath(p entql.StringP) {
 // WhereFileContents applies the entql []byte predicate on the file_contents field.
 func (f *FileFilter) WhereFileContents(p entql.BytesP) {
 	f.Where(p.Field(file.FieldFileContents))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *FileFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *FileFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *FileFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *FileFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasUser applies a predicate to check if query has an edge user.
@@ -8813,6 +10104,11 @@ func (f *FileHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *FileHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *FileHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(filehistory.FieldCreatedAt))
@@ -8823,14 +10119,14 @@ func (f *FileHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(filehistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *FileHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *FileHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *FileHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *FileHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -8838,9 +10134,9 @@ func (f *FileHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(filehistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *FileHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *FileHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -8973,14 +10269,14 @@ func (f *GroupFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(group.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *GroupFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(group.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *GroupFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(group.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *GroupFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(group.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *GroupFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(group.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -8988,9 +10284,9 @@ func (f *GroupFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(group.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *GroupFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(group.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *GroupFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(group.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -9031,6 +10327,34 @@ func (f *GroupFilter) WhereLogoURL(p entql.StringP) {
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *GroupFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(group.FieldDisplayName))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *GroupFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *GroupFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -9592,6 +10916,11 @@ func (f *GroupHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(grouphistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *GroupHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *GroupHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(grouphistory.FieldCreatedAt))
@@ -9602,14 +10931,14 @@ func (f *GroupHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(grouphistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *GroupHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(grouphistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *GroupHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *GroupHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(grouphistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *GroupHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -9617,9 +10946,9 @@ func (f *GroupHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(grouphistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *GroupHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(grouphistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *GroupHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -9712,14 +11041,14 @@ func (f *GroupMembershipFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(groupmembership.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *GroupMembershipFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(groupmembership.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *GroupMembershipFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(groupmembership.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *GroupMembershipFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(groupmembership.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *GroupMembershipFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(groupmembership.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -9732,9 +11061,9 @@ func (f *GroupMembershipFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(groupmembership.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *GroupMembershipFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(groupmembership.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *GroupMembershipFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(groupmembership.FieldDeletedByID))
 }
 
 // WhereRole applies the entql string predicate on the role field.
@@ -9750,6 +11079,34 @@ func (f *GroupMembershipFilter) WhereGroupID(p entql.StringP) {
 // WhereUserID applies the entql string predicate on the user_id field.
 func (f *GroupMembershipFilter) WhereUserID(p entql.StringP) {
 	f.Where(p.Field(groupmembership.FieldUserID))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *GroupMembershipFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *GroupMembershipFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *GroupMembershipFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *GroupMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasGroup applies a predicate to check if query has an edge group.
@@ -9849,6 +11206,11 @@ func (f *GroupMembershipHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(groupmembershiphistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *GroupMembershipHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(groupmembershiphistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *GroupMembershipHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(groupmembershiphistory.FieldCreatedAt))
@@ -9859,14 +11221,14 @@ func (f *GroupMembershipHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(groupmembershiphistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *GroupMembershipHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(groupmembershiphistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *GroupMembershipHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(groupmembershiphistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *GroupMembershipHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(groupmembershiphistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *GroupMembershipHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(groupmembershiphistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -9879,9 +11241,9 @@ func (f *GroupMembershipHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(groupmembershiphistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *GroupMembershipHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(groupmembershiphistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *GroupMembershipHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(groupmembershiphistory.FieldDeletedByID))
 }
 
 // WhereRole applies the entql string predicate on the role field.
@@ -9949,14 +11311,14 @@ func (f *GroupSettingFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(groupsetting.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *GroupSettingFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(groupsetting.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *GroupSettingFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(groupsetting.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *GroupSettingFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(groupsetting.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *GroupSettingFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(groupsetting.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -9974,9 +11336,9 @@ func (f *GroupSettingFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(groupsetting.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *GroupSettingFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(groupsetting.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *GroupSettingFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(groupsetting.FieldDeletedByID))
 }
 
 // WhereVisibility applies the entql string predicate on the visibility field.
@@ -10002,6 +11364,34 @@ func (f *GroupSettingFilter) WhereSyncToGithub(p entql.BoolP) {
 // WhereGroupID applies the entql string predicate on the group_id field.
 func (f *GroupSettingFilter) WhereGroupID(p entql.StringP) {
 	f.Where(p.Field(groupsetting.FieldGroupID))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *GroupSettingFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *GroupSettingFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *GroupSettingFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *GroupSettingFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasGroup applies a predicate to check if query has an edge group.
@@ -10073,6 +11463,11 @@ func (f *GroupSettingHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(groupsettinghistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *GroupSettingHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(groupsettinghistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *GroupSettingHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(groupsettinghistory.FieldCreatedAt))
@@ -10083,14 +11478,14 @@ func (f *GroupSettingHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(groupsettinghistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *GroupSettingHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(groupsettinghistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *GroupSettingHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(groupsettinghistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *GroupSettingHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(groupsettinghistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *GroupSettingHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(groupsettinghistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -10108,9 +11503,9 @@ func (f *GroupSettingHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(groupsettinghistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *GroupSettingHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(groupsettinghistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *GroupSettingHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(groupsettinghistory.FieldDeletedByID))
 }
 
 // WhereVisibility applies the entql string predicate on the visibility field.
@@ -10188,14 +11583,14 @@ func (f *HushFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(hush.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *HushFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(hush.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *HushFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(hush.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *HushFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(hush.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *HushFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(hush.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -10208,9 +11603,9 @@ func (f *HushFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(hush.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *HushFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(hush.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *HushFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(hush.FieldDeletedByID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -10236,6 +11631,34 @@ func (f *HushFilter) WhereSecretName(p entql.StringP) {
 // WhereSecretValue applies the entql string predicate on the secret_value field.
 func (f *HushFilter) WhereSecretValue(p entql.StringP) {
 	f.Where(p.Field(hush.FieldSecretValue))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *HushFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *HushFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *HushFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *HushFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasIntegrations applies a predicate to check if query has an edge integrations.
@@ -10335,6 +11758,11 @@ func (f *HushHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(hushhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *HushHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(hushhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *HushHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(hushhistory.FieldCreatedAt))
@@ -10345,14 +11773,14 @@ func (f *HushHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(hushhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *HushHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(hushhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *HushHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(hushhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *HushHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(hushhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *HushHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(hushhistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -10365,9 +11793,9 @@ func (f *HushHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(hushhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *HushHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(hushhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *HushHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(hushhistory.FieldDeletedByID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -10445,14 +11873,14 @@ func (f *IntegrationFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(integration.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *IntegrationFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(integration.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *IntegrationFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(integration.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *IntegrationFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(integration.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *IntegrationFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(integration.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -10470,9 +11898,9 @@ func (f *IntegrationFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(integration.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *IntegrationFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(integration.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *IntegrationFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(integration.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -10493,6 +11921,34 @@ func (f *IntegrationFilter) WhereDescription(p entql.StringP) {
 // WhereKind applies the entql string predicate on the kind field.
 func (f *IntegrationFilter) WhereKind(p entql.StringP) {
 	f.Where(p.Field(integration.FieldKind))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *IntegrationFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *IntegrationFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -10592,6 +12048,11 @@ func (f *IntegrationHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(integrationhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *IntegrationHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(integrationhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *IntegrationHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(integrationhistory.FieldCreatedAt))
@@ -10602,14 +12063,14 @@ func (f *IntegrationHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(integrationhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *IntegrationHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *IntegrationHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(integrationhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *IntegrationHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *IntegrationHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(integrationhistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -10627,9 +12088,9 @@ func (f *IntegrationHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(integrationhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *IntegrationHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *IntegrationHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(integrationhistory.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -10702,14 +12163,14 @@ func (f *InternalPolicyFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(internalpolicy.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *InternalPolicyFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(internalpolicy.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *InternalPolicyFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *InternalPolicyFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(internalpolicy.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *InternalPolicyFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -10717,9 +12178,9 @@ func (f *InternalPolicyFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(internalpolicy.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *InternalPolicyFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(internalpolicy.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *InternalPolicyFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -10775,6 +12236,34 @@ func (f *InternalPolicyFilter) WhereBackground(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *InternalPolicyFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(internalpolicy.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *InternalPolicyFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *InternalPolicyFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -10958,6 +12447,11 @@ func (f *InternalPolicyHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *InternalPolicyHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *InternalPolicyHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(internalpolicyhistory.FieldCreatedAt))
@@ -10968,14 +12462,14 @@ func (f *InternalPolicyHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(internalpolicyhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *InternalPolicyHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(internalpolicyhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *InternalPolicyHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *InternalPolicyHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(internalpolicyhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *InternalPolicyHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -10983,9 +12477,9 @@ func (f *InternalPolicyHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(internalpolicyhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *InternalPolicyHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(internalpolicyhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *InternalPolicyHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -11093,14 +12587,14 @@ func (f *InviteFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(invite.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *InviteFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(invite.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *InviteFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(invite.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *InviteFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(invite.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *InviteFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(invite.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -11113,9 +12607,9 @@ func (f *InviteFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(invite.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *InviteFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(invite.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *InviteFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(invite.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -11161,6 +12655,34 @@ func (f *InviteFilter) WhereRequestorID(p entql.StringP) {
 // WhereSecret applies the entql []byte predicate on the secret field.
 func (f *InviteFilter) WhereSecret(p entql.BytesP) {
 	f.Where(p.Field(invite.FieldSecret))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *InviteFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *InviteFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *InviteFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *InviteFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -11241,14 +12763,14 @@ func (f *NarrativeFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(narrative.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *NarrativeFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(narrative.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *NarrativeFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(narrative.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *NarrativeFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(narrative.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *NarrativeFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(narrative.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -11256,9 +12778,9 @@ func (f *NarrativeFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(narrative.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *NarrativeFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(narrative.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *NarrativeFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(narrative.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -11294,6 +12816,34 @@ func (f *NarrativeFilter) WhereSatisfies(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *NarrativeFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(narrative.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *NarrativeFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *NarrativeFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *NarrativeFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *NarrativeFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -11477,6 +13027,11 @@ func (f *NarrativeHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(narrativehistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *NarrativeHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(narrativehistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *NarrativeHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(narrativehistory.FieldCreatedAt))
@@ -11487,14 +13042,14 @@ func (f *NarrativeHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(narrativehistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *NarrativeHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(narrativehistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *NarrativeHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(narrativehistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *NarrativeHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(narrativehistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *NarrativeHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(narrativehistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -11502,9 +13057,9 @@ func (f *NarrativeHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(narrativehistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *NarrativeHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(narrativehistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *NarrativeHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(narrativehistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -11592,14 +13147,14 @@ func (f *NoteFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(note.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *NoteFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(note.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *NoteFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(note.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *NoteFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(note.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *NoteFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(note.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -11612,9 +13167,9 @@ func (f *NoteFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(note.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *NoteFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(note.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *NoteFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(note.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -11630,6 +13185,34 @@ func (f *NoteFilter) WhereOwnerID(p entql.StringP) {
 // WhereText applies the entql string predicate on the text field.
 func (f *NoteFilter) WhereText(p entql.StringP) {
 	f.Where(p.Field(note.FieldText))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *NoteFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *NoteFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -11743,6 +13326,11 @@ func (f *NoteHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(notehistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *NoteHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(notehistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *NoteHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(notehistory.FieldCreatedAt))
@@ -11753,14 +13341,14 @@ func (f *NoteHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(notehistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *NoteHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(notehistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *NoteHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(notehistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *NoteHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(notehistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *NoteHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(notehistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -11773,9 +13361,9 @@ func (f *NoteHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(notehistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *NoteHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(notehistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *NoteHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(notehistory.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -11843,14 +13431,14 @@ func (f *OrgMembershipFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(orgmembership.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrgMembershipFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(orgmembership.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *OrgMembershipFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(orgmembership.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrgMembershipFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(orgmembership.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *OrgMembershipFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(orgmembership.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -11863,9 +13451,9 @@ func (f *OrgMembershipFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(orgmembership.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrgMembershipFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(orgmembership.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *OrgMembershipFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(orgmembership.FieldDeletedByID))
 }
 
 // WhereRole applies the entql string predicate on the role field.
@@ -11881,6 +13469,34 @@ func (f *OrgMembershipFilter) WhereOrganizationID(p entql.StringP) {
 // WhereUserID applies the entql string predicate on the user_id field.
 func (f *OrgMembershipFilter) WhereUserID(p entql.StringP) {
 	f.Where(p.Field(orgmembership.FieldUserID))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *OrgMembershipFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *OrgMembershipFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *OrgMembershipFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *OrgMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
@@ -11980,6 +13596,11 @@ func (f *OrgMembershipHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(orgmembershiphistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *OrgMembershipHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(orgmembershiphistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *OrgMembershipHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(orgmembershiphistory.FieldCreatedAt))
@@ -11990,14 +13611,14 @@ func (f *OrgMembershipHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(orgmembershiphistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrgMembershipHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(orgmembershiphistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *OrgMembershipHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(orgmembershiphistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrgMembershipHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(orgmembershiphistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *OrgMembershipHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(orgmembershiphistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -12010,9 +13631,9 @@ func (f *OrgMembershipHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(orgmembershiphistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrgMembershipHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(orgmembershiphistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *OrgMembershipHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(orgmembershiphistory.FieldDeletedByID))
 }
 
 // WhereRole applies the entql string predicate on the role field.
@@ -12080,14 +13701,14 @@ func (f *OrgSubscriptionFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscription.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrgSubscriptionFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscription.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *OrgSubscriptionFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(orgsubscription.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrgSubscriptionFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscription.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *OrgSubscriptionFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(orgsubscription.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -12105,9 +13726,9 @@ func (f *OrgSubscriptionFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscription.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrgSubscriptionFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscription.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *OrgSubscriptionFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(orgsubscription.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -12153,6 +13774,34 @@ func (f *OrgSubscriptionFilter) WhereExpiresAt(p entql.TimeP) {
 // WhereFeatures applies the entql json.RawMessage predicate on the features field.
 func (f *OrgSubscriptionFilter) WhereFeatures(p entql.BytesP) {
 	f.Where(p.Field(orgsubscription.FieldFeatures))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *OrgSubscriptionFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *OrgSubscriptionFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *OrgSubscriptionFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *OrgSubscriptionFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -12224,6 +13873,11 @@ func (f *OrgSubscriptionHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *OrgSubscriptionHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *OrgSubscriptionHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldCreatedAt))
@@ -12234,14 +13888,14 @@ func (f *OrgSubscriptionHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrgSubscriptionHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *OrgSubscriptionHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrgSubscriptionHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *OrgSubscriptionHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -12259,9 +13913,9 @@ func (f *OrgSubscriptionHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrgSubscriptionHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *OrgSubscriptionHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(orgsubscriptionhistory.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -12359,14 +14013,14 @@ func (f *OrganizationFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(organization.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrganizationFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(organization.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *OrganizationFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(organization.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrganizationFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(organization.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *OrganizationFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(organization.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -12384,9 +14038,9 @@ func (f *OrganizationFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(organization.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrganizationFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(organization.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *OrganizationFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(organization.FieldDeletedByID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -12422,6 +14076,34 @@ func (f *OrganizationFilter) WhereAvatarRemoteURL(p entql.StringP) {
 // WhereDedicatedDb applies the entql bool predicate on the dedicated_db field.
 func (f *OrganizationFilter) WhereDedicatedDb(p entql.BoolP) {
 	f.Where(p.Field(organization.FieldDedicatedDb))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *OrganizationFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *OrganizationFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasControlCreators applies a predicate to check if query has an edge control_creators.
@@ -13025,6 +14707,11 @@ func (f *OrganizationHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(organizationhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *OrganizationHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(organizationhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *OrganizationHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationhistory.FieldCreatedAt))
@@ -13035,14 +14722,14 @@ func (f *OrganizationHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrganizationHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(organizationhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *OrganizationHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(organizationhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrganizationHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(organizationhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *OrganizationHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(organizationhistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -13060,9 +14747,9 @@ func (f *OrganizationHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrganizationHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(organizationhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *OrganizationHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(organizationhistory.FieldDeletedByID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -13150,14 +14837,14 @@ func (f *OrganizationSettingFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationsetting.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrganizationSettingFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(organizationsetting.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *OrganizationSettingFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(organizationsetting.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrganizationSettingFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(organizationsetting.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *OrganizationSettingFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(organizationsetting.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -13175,9 +14862,9 @@ func (f *OrganizationSettingFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationsetting.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrganizationSettingFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(organizationsetting.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *OrganizationSettingFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(organizationsetting.FieldDeletedByID))
 }
 
 // WhereDomains applies the entql json.RawMessage predicate on the domains field.
@@ -13223,6 +14910,34 @@ func (f *OrganizationSettingFilter) WhereOrganizationID(p entql.StringP) {
 // WhereStripeID applies the entql string predicate on the stripe_id field.
 func (f *OrganizationSettingFilter) WhereStripeID(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldStripeID))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *OrganizationSettingFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *OrganizationSettingFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *OrganizationSettingFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *OrganizationSettingFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
@@ -13308,6 +15023,11 @@ func (f *OrganizationSettingHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *OrganizationSettingHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(organizationsettinghistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *OrganizationSettingHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationsettinghistory.FieldCreatedAt))
@@ -13318,14 +15038,14 @@ func (f *OrganizationSettingHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationsettinghistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrganizationSettingHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(organizationsettinghistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *OrganizationSettingHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(organizationsettinghistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrganizationSettingHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(organizationsettinghistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *OrganizationSettingHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(organizationsettinghistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -13343,9 +15063,9 @@ func (f *OrganizationSettingHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationsettinghistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrganizationSettingHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(organizationsettinghistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *OrganizationSettingHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(organizationsettinghistory.FieldDeletedByID))
 }
 
 // WhereDomains applies the entql json.RawMessage predicate on the domains field.
@@ -13443,14 +15163,14 @@ func (f *PasswordResetTokenFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(passwordresettoken.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *PasswordResetTokenFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(passwordresettoken.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *PasswordResetTokenFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(passwordresettoken.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *PasswordResetTokenFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(passwordresettoken.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *PasswordResetTokenFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(passwordresettoken.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -13463,9 +15183,9 @@ func (f *PasswordResetTokenFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(passwordresettoken.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *PasswordResetTokenFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(passwordresettoken.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *PasswordResetTokenFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(passwordresettoken.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -13491,6 +15211,34 @@ func (f *PasswordResetTokenFilter) WhereEmail(p entql.StringP) {
 // WhereSecret applies the entql []byte predicate on the secret field.
 func (f *PasswordResetTokenFilter) WhereSecret(p entql.BytesP) {
 	f.Where(p.Field(passwordresettoken.FieldSecret))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *PasswordResetTokenFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *PasswordResetTokenFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *PasswordResetTokenFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *PasswordResetTokenFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -13557,14 +15305,14 @@ func (f *PersonalAccessTokenFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(personalaccesstoken.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *PersonalAccessTokenFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(personalaccesstoken.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *PersonalAccessTokenFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *PersonalAccessTokenFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(personalaccesstoken.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *PersonalAccessTokenFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -13572,9 +15320,9 @@ func (f *PersonalAccessTokenFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(personalaccesstoken.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *PersonalAccessTokenFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(personalaccesstoken.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *PersonalAccessTokenFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -13620,6 +15368,34 @@ func (f *PersonalAccessTokenFilter) WhereScopes(p entql.BytesP) {
 // WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
 func (f *PersonalAccessTokenFilter) WhereLastUsedAt(p entql.TimeP) {
 	f.Where(p.Field(personalaccesstoken.FieldLastUsedAt))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *PersonalAccessTokenFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *PersonalAccessTokenFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *PersonalAccessTokenFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *PersonalAccessTokenFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -13714,14 +15490,14 @@ func (f *ProcedureFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(procedure.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ProcedureFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(procedure.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ProcedureFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ProcedureFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(procedure.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ProcedureFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -13729,9 +15505,9 @@ func (f *ProcedureFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(procedure.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ProcedureFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(procedure.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ProcedureFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -13792,6 +15568,34 @@ func (f *ProcedureFilter) WhereSatisfies(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *ProcedureFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(procedure.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *ProcedureFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *ProcedureFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -13975,6 +15779,11 @@ func (f *ProcedureHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(procedurehistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ProcedureHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *ProcedureHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(procedurehistory.FieldCreatedAt))
@@ -13985,14 +15794,14 @@ func (f *ProcedureHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(procedurehistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ProcedureHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(procedurehistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ProcedureHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ProcedureHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(procedurehistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ProcedureHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -14000,9 +15809,9 @@ func (f *ProcedureHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(procedurehistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ProcedureHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(procedurehistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ProcedureHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -14115,14 +15924,14 @@ func (f *ProgramFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(program.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ProgramFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(program.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ProgramFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(program.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ProgramFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(program.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ProgramFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(program.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -14135,9 +15944,9 @@ func (f *ProgramFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(program.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ProgramFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(program.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ProgramFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(program.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -14188,6 +15997,34 @@ func (f *ProgramFilter) WhereAuditorWriteComments(p entql.BoolP) {
 // WhereAuditorReadComments applies the entql bool predicate on the auditor_read_comments field.
 func (f *ProgramFilter) WhereAuditorReadComments(p entql.BoolP) {
 	f.Where(p.Field(program.FieldAuditorReadComments))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *ProgramFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *ProgramFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -14497,6 +16334,11 @@ func (f *ProgramHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(programhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ProgramHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *ProgramHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(programhistory.FieldCreatedAt))
@@ -14507,14 +16349,14 @@ func (f *ProgramHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(programhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ProgramHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(programhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ProgramHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ProgramHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(programhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ProgramHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -14527,9 +16369,9 @@ func (f *ProgramHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(programhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ProgramHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(programhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ProgramHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -14632,14 +16474,14 @@ func (f *ProgramMembershipFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(programmembership.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ProgramMembershipFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(programmembership.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ProgramMembershipFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(programmembership.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ProgramMembershipFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(programmembership.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ProgramMembershipFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(programmembership.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -14652,9 +16494,9 @@ func (f *ProgramMembershipFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(programmembership.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ProgramMembershipFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(programmembership.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ProgramMembershipFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(programmembership.FieldDeletedByID))
 }
 
 // WhereRole applies the entql string predicate on the role field.
@@ -14670,6 +16512,34 @@ func (f *ProgramMembershipFilter) WhereProgramID(p entql.StringP) {
 // WhereUserID applies the entql string predicate on the user_id field.
 func (f *ProgramMembershipFilter) WhereUserID(p entql.StringP) {
 	f.Where(p.Field(programmembership.FieldUserID))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *ProgramMembershipFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *ProgramMembershipFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *ProgramMembershipFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *ProgramMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasProgram applies a predicate to check if query has an edge program.
@@ -14755,6 +16625,11 @@ func (f *ProgramMembershipHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(programmembershiphistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ProgramMembershipHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(programmembershiphistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *ProgramMembershipHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(programmembershiphistory.FieldCreatedAt))
@@ -14765,14 +16640,14 @@ func (f *ProgramMembershipHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(programmembershiphistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ProgramMembershipHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(programmembershiphistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *ProgramMembershipHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(programmembershiphistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ProgramMembershipHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(programmembershiphistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *ProgramMembershipHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(programmembershiphistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -14785,9 +16660,9 @@ func (f *ProgramMembershipHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(programmembershiphistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ProgramMembershipHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(programmembershiphistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *ProgramMembershipHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(programmembershiphistory.FieldDeletedByID))
 }
 
 // WhereRole applies the entql string predicate on the role field.
@@ -14855,14 +16730,14 @@ func (f *RiskFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(risk.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *RiskFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(risk.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *RiskFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *RiskFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(risk.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *RiskFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -14870,9 +16745,9 @@ func (f *RiskFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(risk.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *RiskFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(risk.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *RiskFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -14938,6 +16813,34 @@ func (f *RiskFilter) WhereSatisfies(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *RiskFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(risk.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *RiskFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *RiskFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -15107,6 +17010,11 @@ func (f *RiskHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *RiskHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *RiskHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(riskhistory.FieldCreatedAt))
@@ -15117,14 +17025,14 @@ func (f *RiskHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(riskhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *RiskHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(riskhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *RiskHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *RiskHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(riskhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *RiskHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -15132,9 +17040,9 @@ func (f *RiskHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(riskhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *RiskHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(riskhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *RiskHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -15252,14 +17160,14 @@ func (f *StandardFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(standard.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *StandardFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(standard.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *StandardFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(standard.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *StandardFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(standard.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *StandardFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(standard.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -15267,9 +17175,9 @@ func (f *StandardFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(standard.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *StandardFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(standard.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *StandardFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(standard.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -15330,6 +17238,34 @@ func (f *StandardFilter) WhereSatisfies(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *StandardFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(standard.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *StandardFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *StandardFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *StandardFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *StandardFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasControlObjectives applies a predicate to check if query has an edge control_objectives.
@@ -15457,6 +17393,11 @@ func (f *StandardHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(standardhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *StandardHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(standardhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *StandardHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(standardhistory.FieldCreatedAt))
@@ -15467,14 +17408,14 @@ func (f *StandardHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(standardhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *StandardHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(standardhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *StandardHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(standardhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *StandardHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(standardhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *StandardHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(standardhistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -15482,9 +17423,9 @@ func (f *StandardHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(standardhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *StandardHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(standardhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *StandardHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(standardhistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -15597,14 +17538,14 @@ func (f *SubcontrolFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(subcontrol.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *SubcontrolFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(subcontrol.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *SubcontrolFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *SubcontrolFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(subcontrol.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *SubcontrolFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -15612,9 +17553,9 @@ func (f *SubcontrolFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(subcontrol.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *SubcontrolFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(subcontrol.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *SubcontrolFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -15710,6 +17651,34 @@ func (f *SubcontrolFilter) WhereImplementationVerificationDate(p entql.TimeP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *SubcontrolFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldDetails))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *SubcontrolFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *SubcontrolFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -15851,6 +17820,11 @@ func (f *SubcontrolHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *SubcontrolHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *SubcontrolHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(subcontrolhistory.FieldCreatedAt))
@@ -15861,14 +17835,14 @@ func (f *SubcontrolHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(subcontrolhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *SubcontrolHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(subcontrolhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *SubcontrolHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *SubcontrolHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(subcontrolhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *SubcontrolHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -15876,9 +17850,9 @@ func (f *SubcontrolHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(subcontrolhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *SubcontrolHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(subcontrolhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *SubcontrolHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -16026,14 +18000,14 @@ func (f *SubscriberFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(subscriber.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *SubscriberFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(subscriber.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *SubscriberFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(subscriber.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *SubscriberFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(subscriber.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *SubscriberFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(subscriber.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -16051,9 +18025,9 @@ func (f *SubscriberFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(subscriber.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *SubscriberFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(subscriber.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *SubscriberFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(subscriber.FieldDeletedByID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -16099,6 +18073,34 @@ func (f *SubscriberFilter) WhereTTL(p entql.TimeP) {
 // WhereSecret applies the entql []byte predicate on the secret field.
 func (f *SubscriberFilter) WhereSecret(p entql.BytesP) {
 	f.Where(p.Field(subscriber.FieldSecret))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *SubscriberFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *SubscriberFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *SubscriberFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *SubscriberFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -16179,14 +18181,14 @@ func (f *TFASettingFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(tfasetting.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *TFASettingFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(tfasetting.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *TFASettingFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(tfasetting.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *TFASettingFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(tfasetting.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *TFASettingFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(tfasetting.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -16199,9 +18201,9 @@ func (f *TFASettingFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(tfasetting.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *TFASettingFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(tfasetting.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *TFASettingFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(tfasetting.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -16242,6 +18244,34 @@ func (f *TFASettingFilter) WhereEmailOtpAllowed(p entql.BoolP) {
 // WhereTotpAllowed applies the entql bool predicate on the totp_allowed field.
 func (f *TFASettingFilter) WhereTotpAllowed(p entql.BoolP) {
 	f.Where(p.Field(tfasetting.FieldTotpAllowed))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *TFASettingFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *TFASettingFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *TFASettingFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *TFASettingFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -16308,14 +18338,14 @@ func (f *TaskFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(task.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *TaskFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(task.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *TaskFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(task.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *TaskFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(task.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *TaskFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(task.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -16328,9 +18358,9 @@ func (f *TaskFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(task.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *TaskFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(task.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *TaskFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(task.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -16366,6 +18396,34 @@ func (f *TaskFilter) WhereDue(p entql.TimeP) {
 // WhereCompleted applies the entql time.Time predicate on the completed field.
 func (f *TaskFilter) WhereCompleted(p entql.TimeP) {
 	f.Where(p.Field(task.FieldCompleted))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *TaskFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *TaskFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasAssigner applies a predicate to check if query has an edge assigner.
@@ -16563,6 +18621,11 @@ func (f *TaskHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TaskHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *TaskHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(taskhistory.FieldCreatedAt))
@@ -16573,14 +18636,14 @@ func (f *TaskHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(taskhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *TaskHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(taskhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *TaskHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *TaskHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(taskhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *TaskHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -16593,9 +18656,9 @@ func (f *TaskHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(taskhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *TaskHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(taskhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *TaskHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldDeletedByID))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
@@ -16683,14 +18746,14 @@ func (f *TemplateFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(template.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *TemplateFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(template.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *TemplateFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(template.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *TemplateFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(template.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *TemplateFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(template.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -16698,9 +18761,9 @@ func (f *TemplateFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(template.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *TemplateFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(template.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *TemplateFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(template.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -16741,6 +18804,34 @@ func (f *TemplateFilter) WhereJsonconfig(p entql.BytesP) {
 // WhereUischema applies the entql json.RawMessage predicate on the uischema field.
 func (f *TemplateFilter) WhereUischema(p entql.BytesP) {
 	f.Where(p.Field(template.FieldUischema))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *TemplateFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *TemplateFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *TemplateFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *TemplateFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -16840,6 +18931,11 @@ func (f *TemplateHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(templatehistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TemplateHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(templatehistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *TemplateHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(templatehistory.FieldCreatedAt))
@@ -16850,14 +18946,14 @@ func (f *TemplateHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(templatehistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *TemplateHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(templatehistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *TemplateHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(templatehistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *TemplateHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(templatehistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *TemplateHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(templatehistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -16865,9 +18961,9 @@ func (f *TemplateHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(templatehistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *TemplateHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(templatehistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *TemplateHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(templatehistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -16960,14 +19056,14 @@ func (f *UserFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(user.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *UserFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(user.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *UserFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(user.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *UserFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(user.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *UserFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(user.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -16975,9 +19071,9 @@ func (f *UserFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(user.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *UserFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(user.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *UserFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(user.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -17376,6 +19472,11 @@ func (f *UserHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(userhistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *UserHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *UserHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(userhistory.FieldCreatedAt))
@@ -17386,14 +19487,14 @@ func (f *UserHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(userhistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *UserHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(userhistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *UserHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *UserHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(userhistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *UserHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldUpdatedByID))
 }
 
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
@@ -17401,9 +19502,9 @@ func (f *UserHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(userhistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *UserHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(userhistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *UserHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldDeletedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -17531,14 +19632,14 @@ func (f *UserSettingFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(usersetting.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *UserSettingFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(usersetting.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *UserSettingFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(usersetting.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *UserSettingFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(usersetting.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *UserSettingFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(usersetting.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -17556,9 +19657,9 @@ func (f *UserSettingFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(usersetting.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *UserSettingFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(usersetting.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *UserSettingFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(usersetting.FieldDeletedByID))
 }
 
 // WhereUserID applies the entql string predicate on the user_id field.
@@ -17604,6 +19705,34 @@ func (f *UserSettingFilter) WhereIsTfaEnabled(p entql.BoolP) {
 // WherePhoneNumber applies the entql string predicate on the phone_number field.
 func (f *UserSettingFilter) WherePhoneNumber(p entql.StringP) {
 	f.Where(p.Field(usersetting.FieldPhoneNumber))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *UserSettingFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *UserSettingFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *UserSettingFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *UserSettingFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasUser applies a predicate to check if query has an edge user.
@@ -17703,6 +19832,11 @@ func (f *UserSettingHistoryFilter) WhereOperation(p entql.StringP) {
 	f.Where(p.Field(usersettinghistory.FieldOperation))
 }
 
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *UserSettingHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(usersettinghistory.FieldUpdatedBy))
+}
+
 // WhereCreatedAt applies the entql time.Time predicate on the created_at field.
 func (f *UserSettingHistoryFilter) WhereCreatedAt(p entql.TimeP) {
 	f.Where(p.Field(usersettinghistory.FieldCreatedAt))
@@ -17713,14 +19847,14 @@ func (f *UserSettingHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(usersettinghistory.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *UserSettingHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(usersettinghistory.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *UserSettingHistoryFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(usersettinghistory.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *UserSettingHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(usersettinghistory.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *UserSettingHistoryFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(usersettinghistory.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -17738,9 +19872,9 @@ func (f *UserSettingHistoryFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(usersettinghistory.FieldDeletedAt))
 }
 
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *UserSettingHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(usersettinghistory.FieldDeletedBy))
+// WhereDeletedByID applies the entql string predicate on the deleted_by_id field.
+func (f *UserSettingHistoryFilter) WhereDeletedByID(p entql.StringP) {
+	f.Where(p.Field(usersettinghistory.FieldDeletedByID))
 }
 
 // WhereUserID applies the entql string predicate on the user_id field.
@@ -17838,14 +19972,14 @@ func (f *WebauthnFilter) WhereUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(webauthn.FieldUpdatedAt))
 }
 
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *WebauthnFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(webauthn.FieldCreatedBy))
+// WhereCreatedByID applies the entql string predicate on the created_by_id field.
+func (f *WebauthnFilter) WhereCreatedByID(p entql.StringP) {
+	f.Where(p.Field(webauthn.FieldCreatedByID))
 }
 
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *WebauthnFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(webauthn.FieldUpdatedBy))
+// WhereUpdatedByID applies the entql string predicate on the updated_by_id field.
+func (f *WebauthnFilter) WhereUpdatedByID(p entql.StringP) {
+	f.Where(p.Field(webauthn.FieldUpdatedByID))
 }
 
 // WhereMappingID applies the entql string predicate on the mapping_id field.
@@ -17911,6 +20045,34 @@ func (f *WebauthnFilter) WhereUserPresent(p entql.BoolP) {
 // WhereUserVerified applies the entql bool predicate on the user_verified field.
 func (f *WebauthnFilter) WhereUserVerified(p entql.BoolP) {
 	f.Where(p.Field(webauthn.FieldUserVerified))
+}
+
+// WhereHasCreatedBy applies a predicate to check if query has an edge created_by.
+func (f *WebauthnFilter) WhereHasCreatedBy() {
+	f.Where(entql.HasEdge("created_by"))
+}
+
+// WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
+func (f *WebauthnFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdatedBy applies a predicate to check if query has an edge updated_by.
+func (f *WebauthnFilter) WhereHasUpdatedBy() {
+	f.Where(entql.HasEdge("updated_by"))
+}
+
+// WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
+func (f *WebauthnFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

@@ -35,6 +35,17 @@ func (r *mutationResolver) CreateControlObjective(ctx context.Context, input gen
 
 // CreateBulkControlObjective is the resolver for the createBulkControlObjective field.
 func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*model.ControlObjectiveBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return &model.ControlObjectiveBulkCreatePayload{}, nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &input[0].OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("organization_id")
+	}
+
 	return r.bulkCreateControlObjective(ctx, input)
 }
 

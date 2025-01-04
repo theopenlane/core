@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -25,14 +26,14 @@ type Template struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -57,6 +58,10 @@ type Template struct {
 
 // TemplateEdges holds the relations/edges for other nodes in the graph.
 type TemplateEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Documents holds the value of the documents edge.
@@ -65,12 +70,34 @@ type TemplateEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
 	namedDocuments map[string][]*DocumentData
 	namedFiles     map[string][]*File
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TemplateEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TemplateEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -78,7 +105,7 @@ type TemplateEdges struct {
 func (e TemplateEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -87,7 +114,7 @@ func (e TemplateEdges) OwnerOrErr() (*Organization, error) {
 // DocumentsOrErr returns the Documents value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Documents, nil
 	}
 	return nil, &NotLoadedError{edge: "documents"}
@@ -96,7 +123,7 @@ func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -109,7 +136,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case template.FieldTags, template.FieldJsonconfig, template.FieldUischema:
 			values[i] = new([]byte)
-		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldMappingID, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription:
+		case template.FieldID, template.FieldCreatedByID, template.FieldUpdatedByID, template.FieldDeletedByID, template.FieldMappingID, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -146,17 +173,17 @@ func (t *Template) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.UpdatedAt = value.Time
 			}
-		case template.FieldCreatedBy:
+		case template.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				t.CreatedBy = value.String
+				t.CreatedByID = value.String
 			}
-		case template.FieldUpdatedBy:
+		case template.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				t.UpdatedBy = value.String
+				t.UpdatedByID = value.String
 			}
 		case template.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -164,11 +191,11 @@ func (t *Template) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.DeletedAt = value.Time
 			}
-		case template.FieldDeletedBy:
+		case template.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				t.DeletedBy = value.String
+				t.DeletedByID = value.String
 			}
 		case template.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -237,6 +264,16 @@ func (t *Template) Value(name string) (ent.Value, error) {
 	return t.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the Template entity.
+func (t *Template) QueryCreatedBy() *UserQuery {
+	return NewTemplateClient(t.config).QueryCreatedBy(t)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Template entity.
+func (t *Template) QueryUpdatedBy() *UserQuery {
+	return NewTemplateClient(t.config).QueryUpdatedBy(t)
+}
+
 // QueryOwner queries the "owner" edge of the Template entity.
 func (t *Template) QueryOwner() *OrganizationQuery {
 	return NewTemplateClient(t.config).QueryOwner(t)
@@ -281,17 +318,17 @@ func (t *Template) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(t.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(t.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(t.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(t.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(t.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(t.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(t.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(t.MappingID)

@@ -8,9 +8,7 @@ INSERT INTO
         display_name,
         description,
         created_at,
-        updated_at,
-        created_by,
-        updated_by
+        updated_at
     )
 VALUES (
         '01101101011010010111010001100010',
@@ -19,9 +17,7 @@ VALUES (
         'openlane',
         'the openlane system organization',
         '1970-01-01 00:00:00',
-        '1970-01-01 00:00:00',
-        'system',
-        'system'
+        '1970-01-01 00:00:00'
     ) ON CONFLICT DO NOTHING;
 
 -- Add the seed data for the organizations settings table
@@ -31,18 +27,14 @@ INSERT INTO
         organization_id,
         mapping_id,
         created_at,
-        updated_at,
-        created_by,
-        updated_by
+        updated_at
     )
 VALUES (
         '01101101011001010110111101110111',
         '01101101011010010111010001100010',
         '01101100011000010110111001100101',
         '1970-01-01 00:00:00',
-        '1970-01-01 00:00:00',
-        'system',
-        'system'
+        '1970-01-01 00:00:00'
     ) ON CONFLICT DO NOTHING;
 
 -- +goose Down

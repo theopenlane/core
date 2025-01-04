@@ -54,30 +54,30 @@ func (sc *SubcontrolCreate) SetNillableUpdatedAt(t *time.Time) *SubcontrolCreate
 	return sc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (sc *SubcontrolCreate) SetCreatedBy(s string) *SubcontrolCreate {
-	sc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (sc *SubcontrolCreate) SetCreatedByID(s string) *SubcontrolCreate {
+	sc.mutation.SetCreatedByID(s)
 	return sc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableCreatedBy(s *string) *SubcontrolCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableCreatedByID(s *string) *SubcontrolCreate {
 	if s != nil {
-		sc.SetCreatedBy(*s)
+		sc.SetCreatedByID(*s)
 	}
 	return sc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (sc *SubcontrolCreate) SetUpdatedBy(s string) *SubcontrolCreate {
-	sc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (sc *SubcontrolCreate) SetUpdatedByID(s string) *SubcontrolCreate {
+	sc.mutation.SetUpdatedByID(s)
 	return sc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableUpdatedBy(s *string) *SubcontrolCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableUpdatedByID(s *string) *SubcontrolCreate {
 	if s != nil {
-		sc.SetUpdatedBy(*s)
+		sc.SetUpdatedByID(*s)
 	}
 	return sc
 }
@@ -96,16 +96,16 @@ func (sc *SubcontrolCreate) SetNillableDeletedAt(t *time.Time) *SubcontrolCreate
 	return sc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (sc *SubcontrolCreate) SetDeletedBy(s string) *SubcontrolCreate {
-	sc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (sc *SubcontrolCreate) SetDeletedByID(s string) *SubcontrolCreate {
+	sc.mutation.SetDeletedByID(s)
 	return sc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *SubcontrolCreate) SetNillableDeletedBy(s *string) *SubcontrolCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableDeletedByID(s *string) *SubcontrolCreate {
 	if s != nil {
-		sc.SetDeletedBy(*s)
+		sc.SetDeletedByID(*s)
 	}
 	return sc
 }
@@ -358,6 +358,16 @@ func (sc *SubcontrolCreate) SetNillableID(s *string) *SubcontrolCreate {
 	return sc
 }
 
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (sc *SubcontrolCreate) SetCreatedBy(u *User) *SubcontrolCreate {
+	return sc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (sc *SubcontrolCreate) SetUpdatedBy(u *User) *SubcontrolCreate {
+	return sc.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (sc *SubcontrolCreate) SetOwner(o *Organization) *SubcontrolCreate {
 	return sc.SetOwnerID(o.ID)
@@ -585,21 +595,13 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.CreatedBy(); ok {
-		_spec.SetField(subcontrol.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := sc.mutation.UpdatedBy(); ok {
-		_spec.SetField(subcontrol.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := sc.mutation.DeletedAt(); ok {
 		_spec.SetField(subcontrol.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.DeletedBy(); ok {
-		_spec.SetField(subcontrol.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := sc.mutation.DeletedByID(); ok {
+		_spec.SetField(subcontrol.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := sc.mutation.MappingID(); ok {
 		_spec.SetField(subcontrol.FieldMappingID, field.TypeString, value)
@@ -672,6 +674,42 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Details(); ok {
 		_spec.SetField(subcontrol.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if nodes := sc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.CreatedByTable,
+			Columns: []string{subcontrol.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.UpdatedByTable,
+			Columns: []string{subcontrol.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

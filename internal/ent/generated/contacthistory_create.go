@@ -56,6 +56,20 @@ func (chc *ContactHistoryCreate) SetOperation(ht history.OpType) *ContactHistory
 	return chc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (chc *ContactHistoryCreate) SetUpdatedBy(s string) *ContactHistoryCreate {
+	chc.mutation.SetUpdatedBy(s)
+	return chc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (chc *ContactHistoryCreate) SetNillableUpdatedBy(s *string) *ContactHistoryCreate {
+	if s != nil {
+		chc.SetUpdatedBy(*s)
+	}
+	return chc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (chc *ContactHistoryCreate) SetCreatedAt(t time.Time) *ContactHistoryCreate {
 	chc.mutation.SetCreatedAt(t)
@@ -84,30 +98,30 @@ func (chc *ContactHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ContactHist
 	return chc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (chc *ContactHistoryCreate) SetCreatedBy(s string) *ContactHistoryCreate {
-	chc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (chc *ContactHistoryCreate) SetCreatedByID(s string) *ContactHistoryCreate {
+	chc.mutation.SetCreatedByID(s)
 	return chc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableCreatedBy(s *string) *ContactHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (chc *ContactHistoryCreate) SetNillableCreatedByID(s *string) *ContactHistoryCreate {
 	if s != nil {
-		chc.SetCreatedBy(*s)
+		chc.SetCreatedByID(*s)
 	}
 	return chc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (chc *ContactHistoryCreate) SetUpdatedBy(s string) *ContactHistoryCreate {
-	chc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (chc *ContactHistoryCreate) SetUpdatedByID(s string) *ContactHistoryCreate {
+	chc.mutation.SetUpdatedByID(s)
 	return chc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableUpdatedBy(s *string) *ContactHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (chc *ContactHistoryCreate) SetNillableUpdatedByID(s *string) *ContactHistoryCreate {
 	if s != nil {
-		chc.SetUpdatedBy(*s)
+		chc.SetUpdatedByID(*s)
 	}
 	return chc
 }
@@ -140,16 +154,16 @@ func (chc *ContactHistoryCreate) SetNillableDeletedAt(t *time.Time) *ContactHist
 	return chc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (chc *ContactHistoryCreate) SetDeletedBy(s string) *ContactHistoryCreate {
-	chc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (chc *ContactHistoryCreate) SetDeletedByID(s string) *ContactHistoryCreate {
+	chc.mutation.SetDeletedByID(s)
 	return chc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableDeletedBy(s *string) *ContactHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (chc *ContactHistoryCreate) SetNillableDeletedByID(s *string) *ContactHistoryCreate {
 	if s != nil {
-		chc.SetDeletedBy(*s)
+		chc.SetDeletedByID(*s)
 	}
 	return chc
 }
@@ -436,6 +450,10 @@ func (chc *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.Create
 		_spec.SetField(contacthistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := chc.mutation.UpdatedBy(); ok {
+		_spec.SetField(contacthistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := chc.mutation.CreatedAt(); ok {
 		_spec.SetField(contacthistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -444,13 +462,13 @@ func (chc *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.Create
 		_spec.SetField(contacthistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := chc.mutation.CreatedBy(); ok {
-		_spec.SetField(contacthistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := chc.mutation.CreatedByID(); ok {
+		_spec.SetField(contacthistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := chc.mutation.UpdatedBy(); ok {
-		_spec.SetField(contacthistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := chc.mutation.UpdatedByID(); ok {
+		_spec.SetField(contacthistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := chc.mutation.MappingID(); ok {
 		_spec.SetField(contacthistory.FieldMappingID, field.TypeString, value)
@@ -460,9 +478,9 @@ func (chc *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.Create
 		_spec.SetField(contacthistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := chc.mutation.DeletedBy(); ok {
-		_spec.SetField(contacthistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := chc.mutation.DeletedByID(); ok {
+		_spec.SetField(contacthistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := chc.mutation.Tags(); ok {
 		_spec.SetField(contacthistory.FieldTags, field.TypeJSON, value)

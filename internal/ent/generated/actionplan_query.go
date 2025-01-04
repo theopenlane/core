@@ -30,6 +30,8 @@ type ActionPlanQuery struct {
 	order             []actionplan.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.ActionPlan
+	withCreatedBy     *UserQuery
+	withUpdatedBy     *UserQuery
 	withStandard      *StandardQuery
 	withRisk          *RiskQuery
 	withControl       *ControlQuery
@@ -76,6 +78,56 @@ func (apq *ActionPlanQuery) Unique(unique bool) *ActionPlanQuery {
 func (apq *ActionPlanQuery) Order(o ...actionplan.OrderOption) *ActionPlanQuery {
 	apq.order = append(apq.order, o...)
 	return apq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (apq *ActionPlanQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.CreatedByTable, actionplan.CreatedByColumn),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (apq *ActionPlanQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.UpdatedByTable, actionplan.UpdatedByColumn),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryStandard chains the current query on the "standard" edge.
@@ -390,21 +442,45 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 		return nil
 	}
 	return &ActionPlanQuery{
-		config:       apq.config,
-		ctx:          apq.ctx.Clone(),
-		order:        append([]actionplan.OrderOption{}, apq.order...),
-		inters:       append([]Interceptor{}, apq.inters...),
-		predicates:   append([]predicate.ActionPlan{}, apq.predicates...),
-		withStandard: apq.withStandard.Clone(),
-		withRisk:     apq.withRisk.Clone(),
-		withControl:  apq.withControl.Clone(),
-		withUser:     apq.withUser.Clone(),
-		withProgram:  apq.withProgram.Clone(),
+		config:        apq.config,
+		ctx:           apq.ctx.Clone(),
+		order:         append([]actionplan.OrderOption{}, apq.order...),
+		inters:        append([]Interceptor{}, apq.inters...),
+		predicates:    append([]predicate.ActionPlan{}, apq.predicates...),
+		withCreatedBy: apq.withCreatedBy.Clone(),
+		withUpdatedBy: apq.withUpdatedBy.Clone(),
+		withStandard:  apq.withStandard.Clone(),
+		withRisk:      apq.withRisk.Clone(),
+		withControl:   apq.withControl.Clone(),
+		withUser:      apq.withUser.Clone(),
+		withProgram:   apq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       apq.sql.Clone(),
 		path:      apq.path,
 		modifiers: append([]func(*sql.Selector){}, apq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithCreatedBy(opts ...func(*UserQuery)) *ActionPlanQuery {
+	query := (&UserClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withCreatedBy = query
+	return apq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ActionPlanQuery {
+	query := (&UserClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withUpdatedBy = query
+	return apq
 }
 
 // WithStandard tells the query-builder to eager-load the nodes that are connected to
@@ -540,7 +616,9 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*ActionPlan{}
 		_spec       = apq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [7]bool{
+			apq.withCreatedBy != nil,
+			apq.withUpdatedBy != nil,
 			apq.withStandard != nil,
 			apq.withRisk != nil,
 			apq.withControl != nil,
@@ -570,6 +648,18 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := apq.withCreatedBy; query != nil {
+		if err := apq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := apq.withUpdatedBy; query != nil {
+		if err := apq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := apq.withStandard; query != nil {
 		if err := apq.loadStandard(ctx, query, nodes,
@@ -649,6 +739,64 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
+func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (apq *ActionPlanQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (apq *ActionPlanQuery) loadStandard(ctx context.Context, query *StandardQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Standard)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ActionPlan)
@@ -989,6 +1137,12 @@ func (apq *ActionPlanQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != actionplan.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if apq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldCreatedByID)
+		}
+		if apq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldUpdatedByID)
 		}
 	}
 	if ps := apq.predicates; len(ps) > 0 {

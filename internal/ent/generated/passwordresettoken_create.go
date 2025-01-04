@@ -49,30 +49,30 @@ func (prtc *PasswordResetTokenCreate) SetNillableUpdatedAt(t *time.Time) *Passwo
 	return prtc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (prtc *PasswordResetTokenCreate) SetCreatedBy(s string) *PasswordResetTokenCreate {
-	prtc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (prtc *PasswordResetTokenCreate) SetCreatedByID(s string) *PasswordResetTokenCreate {
+	prtc.mutation.SetCreatedByID(s)
 	return prtc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (prtc *PasswordResetTokenCreate) SetNillableCreatedBy(s *string) *PasswordResetTokenCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (prtc *PasswordResetTokenCreate) SetNillableCreatedByID(s *string) *PasswordResetTokenCreate {
 	if s != nil {
-		prtc.SetCreatedBy(*s)
+		prtc.SetCreatedByID(*s)
 	}
 	return prtc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (prtc *PasswordResetTokenCreate) SetUpdatedBy(s string) *PasswordResetTokenCreate {
-	prtc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (prtc *PasswordResetTokenCreate) SetUpdatedByID(s string) *PasswordResetTokenCreate {
+	prtc.mutation.SetUpdatedByID(s)
 	return prtc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (prtc *PasswordResetTokenCreate) SetNillableUpdatedBy(s *string) *PasswordResetTokenCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (prtc *PasswordResetTokenCreate) SetNillableUpdatedByID(s *string) *PasswordResetTokenCreate {
 	if s != nil {
-		prtc.SetUpdatedBy(*s)
+		prtc.SetUpdatedByID(*s)
 	}
 	return prtc
 }
@@ -105,16 +105,16 @@ func (prtc *PasswordResetTokenCreate) SetNillableDeletedAt(t *time.Time) *Passwo
 	return prtc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (prtc *PasswordResetTokenCreate) SetDeletedBy(s string) *PasswordResetTokenCreate {
-	prtc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (prtc *PasswordResetTokenCreate) SetDeletedByID(s string) *PasswordResetTokenCreate {
+	prtc.mutation.SetDeletedByID(s)
 	return prtc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (prtc *PasswordResetTokenCreate) SetNillableDeletedBy(s *string) *PasswordResetTokenCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (prtc *PasswordResetTokenCreate) SetNillableDeletedByID(s *string) *PasswordResetTokenCreate {
 	if s != nil {
-		prtc.SetDeletedBy(*s)
+		prtc.SetDeletedByID(*s)
 	}
 	return prtc
 }
@@ -161,6 +161,16 @@ func (prtc *PasswordResetTokenCreate) SetNillableID(s *string) *PasswordResetTok
 		prtc.SetID(*s)
 	}
 	return prtc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (prtc *PasswordResetTokenCreate) SetCreatedBy(u *User) *PasswordResetTokenCreate {
+	return prtc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (prtc *PasswordResetTokenCreate) SetUpdatedBy(u *User) *PasswordResetTokenCreate {
+	return prtc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -318,14 +328,6 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 		_spec.SetField(passwordresettoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := prtc.mutation.CreatedBy(); ok {
-		_spec.SetField(passwordresettoken.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := prtc.mutation.UpdatedBy(); ok {
-		_spec.SetField(passwordresettoken.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := prtc.mutation.MappingID(); ok {
 		_spec.SetField(passwordresettoken.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -334,9 +336,9 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 		_spec.SetField(passwordresettoken.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := prtc.mutation.DeletedBy(); ok {
-		_spec.SetField(passwordresettoken.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := prtc.mutation.DeletedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := prtc.mutation.Token(); ok {
 		_spec.SetField(passwordresettoken.FieldToken, field.TypeString, value)
@@ -353,6 +355,42 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 	if value, ok := prtc.mutation.Secret(); ok {
 		_spec.SetField(passwordresettoken.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
+	}
+	if nodes := prtc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.CreatedByTable,
+			Columns: []string{passwordresettoken.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = prtc.schemaConfig.PasswordResetToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := prtc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.UpdatedByTable,
+			Columns: []string{passwordresettoken.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = prtc.schemaConfig.PasswordResetToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := prtc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

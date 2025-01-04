@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -24,16 +25,16 @@ type Contact struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -60,6 +61,10 @@ type Contact struct {
 
 // ContactEdges holds the relations/edges for other nodes in the graph.
 type ContactEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Entities holds the value of the entities edge.
@@ -68,12 +73,34 @@ type ContactEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
 	namedEntities map[string][]*Entity
 	namedFiles    map[string][]*File
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ContactEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ContactEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -81,7 +108,7 @@ type ContactEdges struct {
 func (e ContactEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -90,7 +117,7 @@ func (e ContactEdges) OwnerOrErr() (*Organization, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ContactEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -99,7 +126,7 @@ func (e ContactEdges) EntitiesOrErr() ([]*Entity, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ContactEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -112,7 +139,7 @@ func (*Contact) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case contact.FieldTags:
 			values[i] = new([]byte)
-		case contact.FieldID, contact.FieldCreatedBy, contact.FieldUpdatedBy, contact.FieldMappingID, contact.FieldDeletedBy, contact.FieldOwnerID, contact.FieldFullName, contact.FieldTitle, contact.FieldCompany, contact.FieldEmail, contact.FieldPhoneNumber, contact.FieldAddress, contact.FieldStatus:
+		case contact.FieldID, contact.FieldCreatedByID, contact.FieldUpdatedByID, contact.FieldMappingID, contact.FieldDeletedByID, contact.FieldOwnerID, contact.FieldFullName, contact.FieldTitle, contact.FieldCompany, contact.FieldEmail, contact.FieldPhoneNumber, contact.FieldAddress, contact.FieldStatus:
 			values[i] = new(sql.NullString)
 		case contact.FieldCreatedAt, contact.FieldUpdatedAt, contact.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -149,17 +176,17 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.UpdatedAt = value.Time
 			}
-		case contact.FieldCreatedBy:
+		case contact.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				c.CreatedBy = value.String
+				c.CreatedByID = value.String
 			}
-		case contact.FieldUpdatedBy:
+		case contact.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				c.UpdatedBy = value.String
+				c.UpdatedByID = value.String
 			}
 		case contact.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -173,11 +200,11 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.DeletedAt = value.Time
 			}
-		case contact.FieldDeletedBy:
+		case contact.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				c.DeletedBy = value.String
+				c.DeletedByID = value.String
 			}
 		case contact.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -248,6 +275,16 @@ func (c *Contact) Value(name string) (ent.Value, error) {
 	return c.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the Contact entity.
+func (c *Contact) QueryCreatedBy() *UserQuery {
+	return NewContactClient(c.config).QueryCreatedBy(c)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Contact entity.
+func (c *Contact) QueryUpdatedBy() *UserQuery {
+	return NewContactClient(c.config).QueryUpdatedBy(c)
+}
+
 // QueryOwner queries the "owner" edge of the Contact entity.
 func (c *Contact) QueryOwner() *OrganizationQuery {
 	return NewContactClient(c.config).QueryOwner(c)
@@ -292,11 +329,11 @@ func (c *Contact) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(c.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(c.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(c.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(c.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(c.MappingID)
@@ -304,8 +341,8 @@ func (c *Contact) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(c.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(c.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(c.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", c.Tags))

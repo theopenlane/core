@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -22,13 +23,15 @@ import (
 // GroupSettingQuery is the builder for querying GroupSetting entities.
 type GroupSettingQuery struct {
 	config
-	ctx        *QueryContext
-	order      []groupsetting.OrderOption
-	inters     []Interceptor
-	predicates []predicate.GroupSetting
-	withGroup  *GroupQuery
-	loadTotal  []func(context.Context, []*GroupSetting) error
-	modifiers  []func(*sql.Selector)
+	ctx           *QueryContext
+	order         []groupsetting.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.GroupSetting
+	withCreatedBy *UserQuery
+	withUpdatedBy *UserQuery
+	withGroup     *GroupQuery
+	loadTotal     []func(context.Context, []*GroupSetting) error
+	modifiers     []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -63,6 +66,56 @@ func (gsq *GroupSettingQuery) Unique(unique bool) *GroupSettingQuery {
 func (gsq *GroupSettingQuery) Order(o ...groupsetting.OrderOption) *GroupSettingQuery {
 	gsq.order = append(gsq.order, o...)
 	return gsq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (gsq *GroupSettingQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: gsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.CreatedByTable, groupsetting.CreatedByColumn),
+		)
+		schemaConfig := gsq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.GroupSetting
+		fromU = sqlgraph.SetNeighbors(gsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (gsq *GroupSettingQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: gsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.UpdatedByTable, groupsetting.UpdatedByColumn),
+		)
+		schemaConfig := gsq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.GroupSetting
+		fromU = sqlgraph.SetNeighbors(gsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryGroup chains the current query on the "group" edge.
@@ -277,17 +330,41 @@ func (gsq *GroupSettingQuery) Clone() *GroupSettingQuery {
 		return nil
 	}
 	return &GroupSettingQuery{
-		config:     gsq.config,
-		ctx:        gsq.ctx.Clone(),
-		order:      append([]groupsetting.OrderOption{}, gsq.order...),
-		inters:     append([]Interceptor{}, gsq.inters...),
-		predicates: append([]predicate.GroupSetting{}, gsq.predicates...),
-		withGroup:  gsq.withGroup.Clone(),
+		config:        gsq.config,
+		ctx:           gsq.ctx.Clone(),
+		order:         append([]groupsetting.OrderOption{}, gsq.order...),
+		inters:        append([]Interceptor{}, gsq.inters...),
+		predicates:    append([]predicate.GroupSetting{}, gsq.predicates...),
+		withCreatedBy: gsq.withCreatedBy.Clone(),
+		withUpdatedBy: gsq.withUpdatedBy.Clone(),
+		withGroup:     gsq.withGroup.Clone(),
 		// clone intermediate query.
 		sql:       gsq.sql.Clone(),
 		path:      gsq.path,
 		modifiers: append([]func(*sql.Selector){}, gsq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (gsq *GroupSettingQuery) WithCreatedBy(opts ...func(*UserQuery)) *GroupSettingQuery {
+	query := (&UserClient{config: gsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gsq.withCreatedBy = query
+	return gsq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (gsq *GroupSettingQuery) WithUpdatedBy(opts ...func(*UserQuery)) *GroupSettingQuery {
+	query := (&UserClient{config: gsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gsq.withUpdatedBy = query
+	return gsq
 }
 
 // WithGroup tells the query-builder to eager-load the nodes that are connected to
@@ -385,7 +462,9 @@ func (gsq *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*GroupSetting{}
 		_spec       = gsq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
+			gsq.withCreatedBy != nil,
+			gsq.withUpdatedBy != nil,
 			gsq.withGroup != nil,
 		}
 	)
@@ -412,6 +491,18 @@ func (gsq *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := gsq.withCreatedBy; query != nil {
+		if err := gsq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *GroupSetting, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gsq.withUpdatedBy; query != nil {
+		if err := gsq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *GroupSetting, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := gsq.withGroup; query != nil {
 		if err := gsq.loadGroup(ctx, query, nodes, nil,
 			func(n *GroupSetting, e *Group) { n.Edges.Group = e }); err != nil {
@@ -426,6 +517,64 @@ func (gsq *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
+func (gsq *GroupSettingQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*GroupSetting)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (gsq *GroupSettingQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*GroupSetting)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (gsq *GroupSettingQuery) loadGroup(ctx context.Context, query *GroupQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*GroupSetting)
@@ -485,6 +634,12 @@ func (gsq *GroupSettingQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != groupsetting.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if gsq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(groupsetting.FieldCreatedByID)
+		}
+		if gsq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(groupsetting.FieldUpdatedByID)
 		}
 		if gsq.withGroup != nil {
 			_spec.Node.AddColumnOnce(groupsetting.FieldGroupID)

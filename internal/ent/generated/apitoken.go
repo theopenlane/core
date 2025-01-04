@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // APIToken is the model entity for the APIToken schema.
@@ -23,14 +24,14 @@ type APIToken struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -57,13 +58,39 @@ type APIToken struct {
 
 // APITokenEdges holds the relations/edges for other nodes in the graph.
 type APITokenEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [3]map[string]int
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e APITokenEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e APITokenEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -71,7 +98,7 @@ type APITokenEdges struct {
 func (e APITokenEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -84,7 +111,7 @@ func (*APIToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case apitoken.FieldTags, apitoken.FieldScopes:
 			values[i] = new([]byte)
-		case apitoken.FieldID, apitoken.FieldCreatedBy, apitoken.FieldUpdatedBy, apitoken.FieldDeletedBy, apitoken.FieldMappingID, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription:
+		case apitoken.FieldID, apitoken.FieldCreatedByID, apitoken.FieldUpdatedByID, apitoken.FieldDeletedByID, apitoken.FieldMappingID, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription:
 			values[i] = new(sql.NullString)
 		case apitoken.FieldCreatedAt, apitoken.FieldUpdatedAt, apitoken.FieldDeletedAt, apitoken.FieldExpiresAt, apitoken.FieldLastUsedAt:
 			values[i] = new(sql.NullTime)
@@ -121,17 +148,17 @@ func (at *APIToken) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				at.UpdatedAt = value.Time
 			}
-		case apitoken.FieldCreatedBy:
+		case apitoken.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				at.CreatedBy = value.String
+				at.CreatedByID = value.String
 			}
-		case apitoken.FieldUpdatedBy:
+		case apitoken.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				at.UpdatedBy = value.String
+				at.UpdatedByID = value.String
 			}
 		case apitoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -139,11 +166,11 @@ func (at *APIToken) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				at.DeletedAt = value.Time
 			}
-		case apitoken.FieldDeletedBy:
+		case apitoken.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				at.DeletedBy = value.String
+				at.DeletedByID = value.String
 			}
 		case apitoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -219,6 +246,16 @@ func (at *APIToken) Value(name string) (ent.Value, error) {
 	return at.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the APIToken entity.
+func (at *APIToken) QueryCreatedBy() *UserQuery {
+	return NewAPITokenClient(at.config).QueryCreatedBy(at)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the APIToken entity.
+func (at *APIToken) QueryUpdatedBy() *UserQuery {
+	return NewAPITokenClient(at.config).QueryUpdatedBy(at)
+}
+
 // QueryOwner queries the "owner" edge of the APIToken entity.
 func (at *APIToken) QueryOwner() *OrganizationQuery {
 	return NewAPITokenClient(at.config).QueryOwner(at)
@@ -253,17 +290,17 @@ func (at *APIToken) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(at.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(at.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(at.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(at.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(at.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(at.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(at.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(at.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(at.MappingID)

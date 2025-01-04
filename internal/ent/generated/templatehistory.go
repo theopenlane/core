@@ -27,18 +27,20 @@ type TemplateHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -67,7 +69,7 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case templatehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldMappingID, templatehistory.FieldOwnerID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription:
+		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldUpdatedBy, templatehistory.FieldCreatedByID, templatehistory.FieldUpdatedByID, templatehistory.FieldDeletedByID, templatehistory.FieldMappingID, templatehistory.FieldOwnerID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription:
 			values[i] = new(sql.NullString)
 		case templatehistory.FieldHistoryTime, templatehistory.FieldCreatedAt, templatehistory.FieldUpdatedAt, templatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -110,6 +112,13 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				th.Operation = *value
 			}
+		case templatehistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				th.UpdatedBy = new(string)
+				*th.UpdatedBy = value.String
+			}
 		case templatehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -122,17 +131,17 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				th.UpdatedAt = value.Time
 			}
-		case templatehistory.FieldCreatedBy:
+		case templatehistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				th.CreatedBy = value.String
+				th.CreatedByID = value.String
 			}
-		case templatehistory.FieldUpdatedBy:
+		case templatehistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				th.UpdatedBy = value.String
+				th.UpdatedByID = value.String
 			}
 		case templatehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -140,11 +149,11 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				th.DeletedAt = value.Time
 			}
-		case templatehistory.FieldDeletedBy:
+		case templatehistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				th.DeletedBy = value.String
+				th.DeletedByID = value.String
 			}
 		case templatehistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -245,23 +254,28 @@ func (th *TemplateHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", th.Operation))
 	builder.WriteString(", ")
+	if v := th.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(th.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(th.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(th.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(th.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(th.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(th.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(th.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(th.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(th.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(th.MappingID)

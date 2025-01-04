@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -34,6 +35,8 @@ type ProcedureQuery struct {
 	order                     []procedure.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.Procedure
+	withCreatedBy             *UserQuery
+	withUpdatedBy             *UserQuery
 	withOwner                 *OrganizationQuery
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
@@ -88,6 +91,56 @@ func (pq *ProcedureQuery) Unique(unique bool) *ProcedureQuery {
 func (pq *ProcedureQuery) Order(o ...procedure.OrderOption) *ProcedureQuery {
 	pq.order = append(pq.order, o...)
 	return pq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (pq *ProcedureQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.CreatedByTable, procedure.CreatedByColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (pq *ProcedureQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.UpdatedByTable, procedure.UpdatedByColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -507,6 +560,8 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 		order:                append([]procedure.OrderOption{}, pq.order...),
 		inters:               append([]Interceptor{}, pq.inters...),
 		predicates:           append([]predicate.Procedure{}, pq.predicates...),
+		withCreatedBy:        pq.withCreatedBy.Clone(),
+		withUpdatedBy:        pq.withUpdatedBy.Clone(),
 		withOwner:            pq.withOwner.Clone(),
 		withBlockedGroups:    pq.withBlockedGroups.Clone(),
 		withEditors:          pq.withEditors.Clone(),
@@ -521,6 +576,28 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 		path:      pq.path,
 		modifiers: append([]func(*sql.Selector){}, pq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithCreatedBy(opts ...func(*UserQuery)) *ProcedureQuery {
+	query := (&UserClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withCreatedBy = query
+	return pq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ProcedureQuery {
+	query := (&UserClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withUpdatedBy = query
+	return pq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -707,7 +784,9 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [11]bool{
+			pq.withCreatedBy != nil,
+			pq.withUpdatedBy != nil,
 			pq.withOwner != nil,
 			pq.withBlockedGroups != nil,
 			pq.withEditors != nil,
@@ -744,6 +823,18 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := pq.withCreatedBy; query != nil {
+		if err := pq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Procedure, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withUpdatedBy; query != nil {
+		if err := pq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Procedure, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := pq.withOwner; query != nil {
 		if err := pq.loadOwner(ctx, query, nodes, nil,
@@ -871,6 +962,64 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 	return nodes, nil
 }
 
+func (pq *ProcedureQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *ProcedureQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (pq *ProcedureQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
@@ -1426,6 +1575,12 @@ func (pq *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != procedure.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if pq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldCreatedByID)
+		}
+		if pq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldUpdatedByID)
 		}
 		if pq.withOwner != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldOwnerID)

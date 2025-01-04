@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -46,23 +47,23 @@ func (gsu *GroupSettingUpdate) ClearUpdatedAt() *GroupSettingUpdate {
 	return gsu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gsu *GroupSettingUpdate) SetUpdatedBy(s string) *GroupSettingUpdate {
-	gsu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gsu *GroupSettingUpdate) SetUpdatedByID(s string) *GroupSettingUpdate {
+	gsu.mutation.SetUpdatedByID(s)
 	return gsu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableUpdatedBy(s *string) *GroupSettingUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gsu *GroupSettingUpdate) SetNillableUpdatedByID(s *string) *GroupSettingUpdate {
 	if s != nil {
-		gsu.SetUpdatedBy(*s)
+		gsu.SetUpdatedByID(*s)
 	}
 	return gsu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gsu *GroupSettingUpdate) ClearUpdatedBy() *GroupSettingUpdate {
-	gsu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gsu *GroupSettingUpdate) ClearUpdatedByID() *GroupSettingUpdate {
+	gsu.mutation.ClearUpdatedByID()
 	return gsu
 }
 
@@ -81,46 +82,6 @@ func (gsu *GroupSettingUpdate) AppendTags(s []string) *GroupSettingUpdate {
 // ClearTags clears the value of the "tags" field.
 func (gsu *GroupSettingUpdate) ClearTags() *GroupSettingUpdate {
 	gsu.mutation.ClearTags()
-	return gsu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gsu *GroupSettingUpdate) SetDeletedAt(t time.Time) *GroupSettingUpdate {
-	gsu.mutation.SetDeletedAt(t)
-	return gsu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableDeletedAt(t *time.Time) *GroupSettingUpdate {
-	if t != nil {
-		gsu.SetDeletedAt(*t)
-	}
-	return gsu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gsu *GroupSettingUpdate) ClearDeletedAt() *GroupSettingUpdate {
-	gsu.mutation.ClearDeletedAt()
-	return gsu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gsu *GroupSettingUpdate) SetDeletedBy(s string) *GroupSettingUpdate {
-	gsu.mutation.SetDeletedBy(s)
-	return gsu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableDeletedBy(s *string) *GroupSettingUpdate {
-	if s != nil {
-		gsu.SetDeletedBy(*s)
-	}
-	return gsu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gsu *GroupSettingUpdate) ClearDeletedBy() *GroupSettingUpdate {
-	gsu.mutation.ClearDeletedBy()
 	return gsu
 }
 
@@ -212,6 +173,11 @@ func (gsu *GroupSettingUpdate) ClearGroupID() *GroupSettingUpdate {
 	return gsu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (gsu *GroupSettingUpdate) SetUpdatedBy(u *User) *GroupSettingUpdate {
+	return gsu.SetUpdatedByID(u.ID)
+}
+
 // SetGroup sets the "group" edge to the Group entity.
 func (gsu *GroupSettingUpdate) SetGroup(g *Group) *GroupSettingUpdate {
 	return gsu.SetGroupID(g.ID)
@@ -220,6 +186,12 @@ func (gsu *GroupSettingUpdate) SetGroup(g *Group) *GroupSettingUpdate {
 // Mutation returns the GroupSettingMutation object of the builder.
 func (gsu *GroupSettingUpdate) Mutation() *GroupSettingMutation {
 	return gsu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (gsu *GroupSettingUpdate) ClearUpdatedBy() *GroupSettingUpdate {
+	gsu.mutation.ClearUpdatedBy()
+	return gsu
 }
 
 // ClearGroup clears the "group" edge to the Group entity.
@@ -312,15 +284,6 @@ func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if gsu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupsetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if gsu.mutation.CreatedByCleared() {
-		_spec.ClearField(groupsetting.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := gsu.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupsetting.FieldUpdatedBy, field.TypeString, value)
-	}
-	if gsu.mutation.UpdatedByCleared() {
-		_spec.ClearField(groupsetting.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := gsu.mutation.Tags(); ok {
 		_spec.SetField(groupsetting.FieldTags, field.TypeJSON, value)
 	}
@@ -332,17 +295,11 @@ func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if gsu.mutation.TagsCleared() {
 		_spec.ClearField(groupsetting.FieldTags, field.TypeJSON)
 	}
-	if value, ok := gsu.mutation.DeletedAt(); ok {
-		_spec.SetField(groupsetting.FieldDeletedAt, field.TypeTime, value)
-	}
 	if gsu.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupsetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gsu.mutation.DeletedBy(); ok {
-		_spec.SetField(groupsetting.FieldDeletedBy, field.TypeString, value)
-	}
-	if gsu.mutation.DeletedByCleared() {
-		_spec.ClearField(groupsetting.FieldDeletedBy, field.TypeString)
+	if gsu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(groupsetting.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gsu.mutation.Visibility(); ok {
 		_spec.SetField(groupsetting.FieldVisibility, field.TypeEnum, value)
@@ -361,6 +318,37 @@ func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if gsu.mutation.SyncToGithubCleared() {
 		_spec.ClearField(groupsetting.FieldSyncToGithub, field.TypeBool)
+	}
+	if gsu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupsetting.UpdatedByTable,
+			Columns: []string{groupsetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gsu.schemaConfig.GroupSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gsu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupsetting.UpdatedByTable,
+			Columns: []string{groupsetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gsu.schemaConfig.GroupSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if gsu.mutation.GroupCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -429,23 +417,23 @@ func (gsuo *GroupSettingUpdateOne) ClearUpdatedAt() *GroupSettingUpdateOne {
 	return gsuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gsuo *GroupSettingUpdateOne) SetUpdatedBy(s string) *GroupSettingUpdateOne {
-	gsuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gsuo *GroupSettingUpdateOne) SetUpdatedByID(s string) *GroupSettingUpdateOne {
+	gsuo.mutation.SetUpdatedByID(s)
 	return gsuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableUpdatedBy(s *string) *GroupSettingUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gsuo *GroupSettingUpdateOne) SetNillableUpdatedByID(s *string) *GroupSettingUpdateOne {
 	if s != nil {
-		gsuo.SetUpdatedBy(*s)
+		gsuo.SetUpdatedByID(*s)
 	}
 	return gsuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gsuo *GroupSettingUpdateOne) ClearUpdatedBy() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gsuo *GroupSettingUpdateOne) ClearUpdatedByID() *GroupSettingUpdateOne {
+	gsuo.mutation.ClearUpdatedByID()
 	return gsuo
 }
 
@@ -464,46 +452,6 @@ func (gsuo *GroupSettingUpdateOne) AppendTags(s []string) *GroupSettingUpdateOne
 // ClearTags clears the value of the "tags" field.
 func (gsuo *GroupSettingUpdateOne) ClearTags() *GroupSettingUpdateOne {
 	gsuo.mutation.ClearTags()
-	return gsuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gsuo *GroupSettingUpdateOne) SetDeletedAt(t time.Time) *GroupSettingUpdateOne {
-	gsuo.mutation.SetDeletedAt(t)
-	return gsuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableDeletedAt(t *time.Time) *GroupSettingUpdateOne {
-	if t != nil {
-		gsuo.SetDeletedAt(*t)
-	}
-	return gsuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gsuo *GroupSettingUpdateOne) ClearDeletedAt() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearDeletedAt()
-	return gsuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gsuo *GroupSettingUpdateOne) SetDeletedBy(s string) *GroupSettingUpdateOne {
-	gsuo.mutation.SetDeletedBy(s)
-	return gsuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableDeletedBy(s *string) *GroupSettingUpdateOne {
-	if s != nil {
-		gsuo.SetDeletedBy(*s)
-	}
-	return gsuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gsuo *GroupSettingUpdateOne) ClearDeletedBy() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearDeletedBy()
 	return gsuo
 }
 
@@ -595,6 +543,11 @@ func (gsuo *GroupSettingUpdateOne) ClearGroupID() *GroupSettingUpdateOne {
 	return gsuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (gsuo *GroupSettingUpdateOne) SetUpdatedBy(u *User) *GroupSettingUpdateOne {
+	return gsuo.SetUpdatedByID(u.ID)
+}
+
 // SetGroup sets the "group" edge to the Group entity.
 func (gsuo *GroupSettingUpdateOne) SetGroup(g *Group) *GroupSettingUpdateOne {
 	return gsuo.SetGroupID(g.ID)
@@ -603,6 +556,12 @@ func (gsuo *GroupSettingUpdateOne) SetGroup(g *Group) *GroupSettingUpdateOne {
 // Mutation returns the GroupSettingMutation object of the builder.
 func (gsuo *GroupSettingUpdateOne) Mutation() *GroupSettingMutation {
 	return gsuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (gsuo *GroupSettingUpdateOne) ClearUpdatedBy() *GroupSettingUpdateOne {
+	gsuo.mutation.ClearUpdatedBy()
+	return gsuo
 }
 
 // ClearGroup clears the "group" edge to the Group entity.
@@ -725,15 +684,6 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 	if gsuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupsetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if gsuo.mutation.CreatedByCleared() {
-		_spec.ClearField(groupsetting.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := gsuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupsetting.FieldUpdatedBy, field.TypeString, value)
-	}
-	if gsuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(groupsetting.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := gsuo.mutation.Tags(); ok {
 		_spec.SetField(groupsetting.FieldTags, field.TypeJSON, value)
 	}
@@ -745,17 +695,11 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 	if gsuo.mutation.TagsCleared() {
 		_spec.ClearField(groupsetting.FieldTags, field.TypeJSON)
 	}
-	if value, ok := gsuo.mutation.DeletedAt(); ok {
-		_spec.SetField(groupsetting.FieldDeletedAt, field.TypeTime, value)
-	}
 	if gsuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupsetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gsuo.mutation.DeletedBy(); ok {
-		_spec.SetField(groupsetting.FieldDeletedBy, field.TypeString, value)
-	}
-	if gsuo.mutation.DeletedByCleared() {
-		_spec.ClearField(groupsetting.FieldDeletedBy, field.TypeString)
+	if gsuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(groupsetting.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gsuo.mutation.Visibility(); ok {
 		_spec.SetField(groupsetting.FieldVisibility, field.TypeEnum, value)
@@ -774,6 +718,37 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 	}
 	if gsuo.mutation.SyncToGithubCleared() {
 		_spec.ClearField(groupsetting.FieldSyncToGithub, field.TypeBool)
+	}
+	if gsuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupsetting.UpdatedByTable,
+			Columns: []string{groupsetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gsuo.schemaConfig.GroupSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gsuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupsetting.UpdatedByTable,
+			Columns: []string{groupsetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gsuo.schemaConfig.GroupSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if gsuo.mutation.GroupCleared() {
 		edge := &sqlgraph.EdgeSpec{

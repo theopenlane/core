@@ -24,16 +24,16 @@ type ProgramMembership struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// ProgramID holds the value of the "program_id" field.
@@ -48,15 +48,41 @@ type ProgramMembership struct {
 
 // ProgramMembershipEdges holds the relations/edges for other nodes in the graph.
 type ProgramMembershipEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Program holds the value of the program edge.
 	Program *Program `json:"program,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [4]map[string]int
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProgramMembershipEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProgramMembershipEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // ProgramOrErr returns the Program value or an error if the edge
@@ -64,7 +90,7 @@ type ProgramMembershipEdges struct {
 func (e ProgramMembershipEdges) ProgramOrErr() (*Program, error) {
 	if e.Program != nil {
 		return e.Program, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: program.Label}
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -75,7 +101,7 @@ func (e ProgramMembershipEdges) ProgramOrErr() (*Program, error) {
 func (e ProgramMembershipEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -86,7 +112,7 @@ func (*ProgramMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case programmembership.FieldID, programmembership.FieldCreatedBy, programmembership.FieldUpdatedBy, programmembership.FieldMappingID, programmembership.FieldDeletedBy, programmembership.FieldRole, programmembership.FieldProgramID, programmembership.FieldUserID:
+		case programmembership.FieldID, programmembership.FieldCreatedByID, programmembership.FieldUpdatedByID, programmembership.FieldMappingID, programmembership.FieldDeletedByID, programmembership.FieldRole, programmembership.FieldProgramID, programmembership.FieldUserID:
 			values[i] = new(sql.NullString)
 		case programmembership.FieldCreatedAt, programmembership.FieldUpdatedAt, programmembership.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -123,17 +149,17 @@ func (pm *ProgramMembership) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				pm.UpdatedAt = value.Time
 			}
-		case programmembership.FieldCreatedBy:
+		case programmembership.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				pm.CreatedBy = value.String
+				pm.CreatedByID = value.String
 			}
-		case programmembership.FieldUpdatedBy:
+		case programmembership.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				pm.UpdatedBy = value.String
+				pm.UpdatedByID = value.String
 			}
 		case programmembership.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -147,11 +173,11 @@ func (pm *ProgramMembership) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				pm.DeletedAt = value.Time
 			}
-		case programmembership.FieldDeletedBy:
+		case programmembership.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				pm.DeletedBy = value.String
+				pm.DeletedByID = value.String
 			}
 		case programmembership.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -182,6 +208,16 @@ func (pm *ProgramMembership) assignValues(columns []string, values []any) error 
 // This includes values selected through modifiers, order, etc.
 func (pm *ProgramMembership) Value(name string) (ent.Value, error) {
 	return pm.selectValues.Get(name)
+}
+
+// QueryCreatedBy queries the "created_by" edge of the ProgramMembership entity.
+func (pm *ProgramMembership) QueryCreatedBy() *UserQuery {
+	return NewProgramMembershipClient(pm.config).QueryCreatedBy(pm)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the ProgramMembership entity.
+func (pm *ProgramMembership) QueryUpdatedBy() *UserQuery {
+	return NewProgramMembershipClient(pm.config).QueryUpdatedBy(pm)
 }
 
 // QueryProgram queries the "program" edge of the ProgramMembership entity.
@@ -223,11 +259,11 @@ func (pm *ProgramMembership) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(pm.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(pm.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(pm.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(pm.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(pm.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(pm.MappingID)
@@ -235,8 +271,8 @@ func (pm *ProgramMembership) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pm.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pm.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(pm.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", pm.Role))

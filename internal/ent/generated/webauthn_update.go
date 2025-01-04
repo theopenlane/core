@@ -45,23 +45,23 @@ func (wu *WebauthnUpdate) ClearUpdatedAt() *WebauthnUpdate {
 	return wu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (wu *WebauthnUpdate) SetUpdatedBy(s string) *WebauthnUpdate {
-	wu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (wu *WebauthnUpdate) SetUpdatedByID(s string) *WebauthnUpdate {
+	wu.mutation.SetUpdatedByID(s)
 	return wu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableUpdatedBy(s *string) *WebauthnUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (wu *WebauthnUpdate) SetNillableUpdatedByID(s *string) *WebauthnUpdate {
 	if s != nil {
-		wu.SetUpdatedBy(*s)
+		wu.SetUpdatedByID(*s)
 	}
 	return wu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (wu *WebauthnUpdate) ClearUpdatedBy() *WebauthnUpdate {
-	wu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (wu *WebauthnUpdate) ClearUpdatedByID() *WebauthnUpdate {
+	wu.mutation.ClearUpdatedByID()
 	return wu
 }
 
@@ -216,6 +216,11 @@ func (wu *WebauthnUpdate) SetNillableUserVerified(b *bool) *WebauthnUpdate {
 	return wu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (wu *WebauthnUpdate) SetUpdatedBy(u *User) *WebauthnUpdate {
+	return wu.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the User entity.
 func (wu *WebauthnUpdate) SetOwner(u *User) *WebauthnUpdate {
 	return wu.SetOwnerID(u.ID)
@@ -224,6 +229,12 @@ func (wu *WebauthnUpdate) SetOwner(u *User) *WebauthnUpdate {
 // Mutation returns the WebauthnMutation object of the builder.
 func (wu *WebauthnUpdate) Mutation() *WebauthnMutation {
 	return wu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (wu *WebauthnUpdate) ClearUpdatedBy() *WebauthnUpdate {
+	wu.mutation.ClearUpdatedBy()
+	return wu
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
@@ -309,15 +320,6 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if wu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(webauthn.FieldUpdatedAt, field.TypeTime)
 	}
-	if wu.mutation.CreatedByCleared() {
-		_spec.ClearField(webauthn.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := wu.mutation.UpdatedBy(); ok {
-		_spec.SetField(webauthn.FieldUpdatedBy, field.TypeString, value)
-	}
-	if wu.mutation.UpdatedByCleared() {
-		_spec.ClearField(webauthn.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := wu.mutation.Tags(); ok {
 		_spec.SetField(webauthn.FieldTags, field.TypeJSON, value)
 	}
@@ -369,6 +371,37 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := wu.mutation.UserVerified(); ok {
 		_spec.SetField(webauthn.FieldUserVerified, field.TypeBool, value)
+	}
+	if wu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthn.UpdatedByTable,
+			Columns: []string{webauthn.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = wu.schemaConfig.Webauthn
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := wu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthn.UpdatedByTable,
+			Columns: []string{webauthn.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = wu.schemaConfig.Webauthn
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if wu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -437,23 +470,23 @@ func (wuo *WebauthnUpdateOne) ClearUpdatedAt() *WebauthnUpdateOne {
 	return wuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (wuo *WebauthnUpdateOne) SetUpdatedBy(s string) *WebauthnUpdateOne {
-	wuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (wuo *WebauthnUpdateOne) SetUpdatedByID(s string) *WebauthnUpdateOne {
+	wuo.mutation.SetUpdatedByID(s)
 	return wuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableUpdatedBy(s *string) *WebauthnUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (wuo *WebauthnUpdateOne) SetNillableUpdatedByID(s *string) *WebauthnUpdateOne {
 	if s != nil {
-		wuo.SetUpdatedBy(*s)
+		wuo.SetUpdatedByID(*s)
 	}
 	return wuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (wuo *WebauthnUpdateOne) ClearUpdatedBy() *WebauthnUpdateOne {
-	wuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (wuo *WebauthnUpdateOne) ClearUpdatedByID() *WebauthnUpdateOne {
+	wuo.mutation.ClearUpdatedByID()
 	return wuo
 }
 
@@ -608,6 +641,11 @@ func (wuo *WebauthnUpdateOne) SetNillableUserVerified(b *bool) *WebauthnUpdateOn
 	return wuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (wuo *WebauthnUpdateOne) SetUpdatedBy(u *User) *WebauthnUpdateOne {
+	return wuo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the User entity.
 func (wuo *WebauthnUpdateOne) SetOwner(u *User) *WebauthnUpdateOne {
 	return wuo.SetOwnerID(u.ID)
@@ -616,6 +654,12 @@ func (wuo *WebauthnUpdateOne) SetOwner(u *User) *WebauthnUpdateOne {
 // Mutation returns the WebauthnMutation object of the builder.
 func (wuo *WebauthnUpdateOne) Mutation() *WebauthnMutation {
 	return wuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (wuo *WebauthnUpdateOne) ClearUpdatedBy() *WebauthnUpdateOne {
+	wuo.mutation.ClearUpdatedBy()
+	return wuo
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
@@ -731,15 +775,6 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 	if wuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(webauthn.FieldUpdatedAt, field.TypeTime)
 	}
-	if wuo.mutation.CreatedByCleared() {
-		_spec.ClearField(webauthn.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := wuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(webauthn.FieldUpdatedBy, field.TypeString, value)
-	}
-	if wuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(webauthn.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := wuo.mutation.Tags(); ok {
 		_spec.SetField(webauthn.FieldTags, field.TypeJSON, value)
 	}
@@ -791,6 +826,37 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 	}
 	if value, ok := wuo.mutation.UserVerified(); ok {
 		_spec.SetField(webauthn.FieldUserVerified, field.TypeBool, value)
+	}
+	if wuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthn.UpdatedByTable,
+			Columns: []string{webauthn.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = wuo.schemaConfig.Webauthn
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := wuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthn.UpdatedByTable,
+			Columns: []string{webauthn.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = wuo.schemaConfig.Webauthn
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if wuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

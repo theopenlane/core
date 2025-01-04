@@ -122,14 +122,14 @@ query GetAllGroups {
         }
         setting {
           createdAt
-          createdBy
+          createdByID
           id
           joinPolicy
           syncToGithub
           syncToSlack
           tags
           updatedAt
-          updatedBy
+          updatedByID
           visibility
         }
         members {
@@ -142,9 +142,15 @@ query GetAllGroups {
           }
         }
         createdAt
-        createdBy
+        createdByID
         updatedAt
-        updatedBy
+        updatedByID
+        updatedBy {
+          id
+          firstName
+          lastName
+          email
+        }
       }
     }
   }
@@ -164,14 +170,20 @@ query GetGroupByID($groupId: ID!) {
     }
     setting {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+        id
+        firstName
+        lastName
+        email
+      }
       id
       joinPolicy
       syncToGithub
       syncToSlack
       tags
       updatedAt
-      updatedBy
+      updatedByID
       visibility
     }
     members {
@@ -184,9 +196,9 @@ query GetGroupByID($groupId: ID!) {
       }
     }
     createdAt
-    createdBy
+    createdByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -206,14 +218,14 @@ query GetGroups($where: GroupWhereInput) {
         }
         setting {
           createdAt
-          createdBy
+          createdByID
           id
           joinPolicy
           syncToGithub
           syncToSlack
           tags
           updatedAt
-          updatedBy
+          updatedByID
           visibility
         }
         members {
@@ -226,9 +238,15 @@ query GetGroups($where: GroupWhereInput) {
           }
         }
         createdAt
-        createdBy
+        createdByID
         updatedAt
-        updatedBy
+        updatedByID
+        updatedBy {
+          id
+          firstName
+          lastName
+          email
+        }
       }
     }
   }
@@ -249,14 +267,20 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
       }
       setting {
         createdAt
-        createdBy
+        createdByID
         id
         joinPolicy
         syncToGithub
         syncToSlack
         tags
         updatedAt
-        updatedBy
+        updatedByID
+        updatedBy {
+          id
+          firstName
+          lastName
+          email
+        }
         visibility
       }
       members {

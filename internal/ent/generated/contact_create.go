@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -52,30 +53,30 @@ func (cc *ContactCreate) SetNillableUpdatedAt(t *time.Time) *ContactCreate {
 	return cc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (cc *ContactCreate) SetCreatedBy(s string) *ContactCreate {
-	cc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (cc *ContactCreate) SetCreatedByID(s string) *ContactCreate {
+	cc.mutation.SetCreatedByID(s)
 	return cc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableCreatedBy(s *string) *ContactCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableCreatedByID(s *string) *ContactCreate {
 	if s != nil {
-		cc.SetCreatedBy(*s)
+		cc.SetCreatedByID(*s)
 	}
 	return cc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cc *ContactCreate) SetUpdatedBy(s string) *ContactCreate {
-	cc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cc *ContactCreate) SetUpdatedByID(s string) *ContactCreate {
+	cc.mutation.SetUpdatedByID(s)
 	return cc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableUpdatedBy(s *string) *ContactCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableUpdatedByID(s *string) *ContactCreate {
 	if s != nil {
-		cc.SetUpdatedBy(*s)
+		cc.SetUpdatedByID(*s)
 	}
 	return cc
 }
@@ -108,16 +109,16 @@ func (cc *ContactCreate) SetNillableDeletedAt(t *time.Time) *ContactCreate {
 	return cc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (cc *ContactCreate) SetDeletedBy(s string) *ContactCreate {
-	cc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (cc *ContactCreate) SetDeletedByID(s string) *ContactCreate {
+	cc.mutation.SetDeletedByID(s)
 	return cc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableDeletedBy(s *string) *ContactCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableDeletedByID(s *string) *ContactCreate {
 	if s != nil {
-		cc.SetDeletedBy(*s)
+		cc.SetDeletedByID(*s)
 	}
 	return cc
 }
@@ -244,6 +245,16 @@ func (cc *ContactCreate) SetNillableID(s *string) *ContactCreate {
 		cc.SetID(*s)
 	}
 	return cc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (cc *ContactCreate) SetCreatedBy(u *User) *ContactCreate {
+	return cc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (cc *ContactCreate) SetUpdatedBy(u *User) *ContactCreate {
+	return cc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -437,14 +448,6 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_spec.SetField(contact.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cc.mutation.CreatedBy(); ok {
-		_spec.SetField(contact.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := cc.mutation.UpdatedBy(); ok {
-		_spec.SetField(contact.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := cc.mutation.MappingID(); ok {
 		_spec.SetField(contact.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -453,9 +456,9 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := cc.mutation.DeletedBy(); ok {
-		_spec.SetField(contact.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := cc.mutation.DeletedByID(); ok {
+		_spec.SetField(contact.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := cc.mutation.Tags(); ok {
 		_spec.SetField(contact.FieldTags, field.TypeJSON, value)
@@ -488,6 +491,42 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if nodes := cc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.CreatedByTable,
+			Columns: []string{contact.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.UpdatedByTable,
+			Columns: []string{contact.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

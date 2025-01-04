@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -46,23 +47,23 @@ func (su *SubscriberUpdate) ClearUpdatedAt() *SubscriberUpdate {
 	return su
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (su *SubscriberUpdate) SetUpdatedBy(s string) *SubscriberUpdate {
-	su.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (su *SubscriberUpdate) SetUpdatedByID(s string) *SubscriberUpdate {
+	su.mutation.SetUpdatedByID(s)
 	return su
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableUpdatedBy(s *string) *SubscriberUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (su *SubscriberUpdate) SetNillableUpdatedByID(s *string) *SubscriberUpdate {
 	if s != nil {
-		su.SetUpdatedBy(*s)
+		su.SetUpdatedByID(*s)
 	}
 	return su
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (su *SubscriberUpdate) ClearUpdatedBy() *SubscriberUpdate {
-	su.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (su *SubscriberUpdate) ClearUpdatedByID() *SubscriberUpdate {
+	su.mutation.ClearUpdatedByID()
 	return su
 }
 
@@ -81,46 +82,6 @@ func (su *SubscriberUpdate) AppendTags(s []string) *SubscriberUpdate {
 // ClearTags clears the value of the "tags" field.
 func (su *SubscriberUpdate) ClearTags() *SubscriberUpdate {
 	su.mutation.ClearTags()
-	return su
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (su *SubscriberUpdate) SetDeletedAt(t time.Time) *SubscriberUpdate {
-	su.mutation.SetDeletedAt(t)
-	return su
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableDeletedAt(t *time.Time) *SubscriberUpdate {
-	if t != nil {
-		su.SetDeletedAt(*t)
-	}
-	return su
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (su *SubscriberUpdate) ClearDeletedAt() *SubscriberUpdate {
-	su.mutation.ClearDeletedAt()
-	return su
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (su *SubscriberUpdate) SetDeletedBy(s string) *SubscriberUpdate {
-	su.mutation.SetDeletedBy(s)
-	return su
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableDeletedBy(s *string) *SubscriberUpdate {
-	if s != nil {
-		su.SetDeletedBy(*s)
-	}
-	return su
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *SubscriberUpdate) ClearDeletedBy() *SubscriberUpdate {
-	su.mutation.ClearDeletedBy()
 	return su
 }
 
@@ -254,6 +215,11 @@ func (su *SubscriberUpdate) SetSecret(b []byte) *SubscriberUpdate {
 	return su
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (su *SubscriberUpdate) SetUpdatedBy(u *User) *SubscriberUpdate {
+	return su.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (su *SubscriberUpdate) SetOwner(o *Organization) *SubscriberUpdate {
 	return su.SetOwnerID(o.ID)
@@ -277,6 +243,12 @@ func (su *SubscriberUpdate) AddEvents(e ...*Event) *SubscriberUpdate {
 // Mutation returns the SubscriberMutation object of the builder.
 func (su *SubscriberUpdate) Mutation() *SubscriberMutation {
 	return su.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (su *SubscriberUpdate) ClearUpdatedBy() *SubscriberUpdate {
+	su.mutation.ClearUpdatedBy()
+	return su
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -405,15 +377,6 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedAt, field.TypeTime)
 	}
-	if su.mutation.CreatedByCleared() {
-		_spec.ClearField(subscriber.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := su.mutation.UpdatedBy(); ok {
-		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
-	}
-	if su.mutation.UpdatedByCleared() {
-		_spec.ClearField(subscriber.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := su.mutation.Tags(); ok {
 		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
 	}
@@ -425,17 +388,11 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.TagsCleared() {
 		_spec.ClearField(subscriber.FieldTags, field.TypeJSON)
 	}
-	if value, ok := su.mutation.DeletedAt(); ok {
-		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
-	}
 	if su.mutation.DeletedAtCleared() {
 		_spec.ClearField(subscriber.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.DeletedBy(); ok {
-		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
-	}
-	if su.mutation.DeletedByCleared() {
-		_spec.ClearField(subscriber.FieldDeletedBy, field.TypeString)
+	if su.mutation.DeletedByIDCleared() {
+		_spec.ClearField(subscriber.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := su.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)
@@ -463,6 +420,37 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := su.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
+	}
+	if su.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subscriber.UpdatedByTable,
+			Columns: []string{subscriber.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subscriber.UpdatedByTable,
+			Columns: []string{subscriber.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if su.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -579,23 +567,23 @@ func (suo *SubscriberUpdateOne) ClearUpdatedAt() *SubscriberUpdateOne {
 	return suo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (suo *SubscriberUpdateOne) SetUpdatedBy(s string) *SubscriberUpdateOne {
-	suo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (suo *SubscriberUpdateOne) SetUpdatedByID(s string) *SubscriberUpdateOne {
+	suo.mutation.SetUpdatedByID(s)
 	return suo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableUpdatedBy(s *string) *SubscriberUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (suo *SubscriberUpdateOne) SetNillableUpdatedByID(s *string) *SubscriberUpdateOne {
 	if s != nil {
-		suo.SetUpdatedBy(*s)
+		suo.SetUpdatedByID(*s)
 	}
 	return suo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (suo *SubscriberUpdateOne) ClearUpdatedBy() *SubscriberUpdateOne {
-	suo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (suo *SubscriberUpdateOne) ClearUpdatedByID() *SubscriberUpdateOne {
+	suo.mutation.ClearUpdatedByID()
 	return suo
 }
 
@@ -614,46 +602,6 @@ func (suo *SubscriberUpdateOne) AppendTags(s []string) *SubscriberUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (suo *SubscriberUpdateOne) ClearTags() *SubscriberUpdateOne {
 	suo.mutation.ClearTags()
-	return suo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (suo *SubscriberUpdateOne) SetDeletedAt(t time.Time) *SubscriberUpdateOne {
-	suo.mutation.SetDeletedAt(t)
-	return suo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableDeletedAt(t *time.Time) *SubscriberUpdateOne {
-	if t != nil {
-		suo.SetDeletedAt(*t)
-	}
-	return suo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (suo *SubscriberUpdateOne) ClearDeletedAt() *SubscriberUpdateOne {
-	suo.mutation.ClearDeletedAt()
-	return suo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (suo *SubscriberUpdateOne) SetDeletedBy(s string) *SubscriberUpdateOne {
-	suo.mutation.SetDeletedBy(s)
-	return suo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableDeletedBy(s *string) *SubscriberUpdateOne {
-	if s != nil {
-		suo.SetDeletedBy(*s)
-	}
-	return suo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *SubscriberUpdateOne) ClearDeletedBy() *SubscriberUpdateOne {
-	suo.mutation.ClearDeletedBy()
 	return suo
 }
 
@@ -787,6 +735,11 @@ func (suo *SubscriberUpdateOne) SetSecret(b []byte) *SubscriberUpdateOne {
 	return suo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (suo *SubscriberUpdateOne) SetUpdatedBy(u *User) *SubscriberUpdateOne {
+	return suo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (suo *SubscriberUpdateOne) SetOwner(o *Organization) *SubscriberUpdateOne {
 	return suo.SetOwnerID(o.ID)
@@ -810,6 +763,12 @@ func (suo *SubscriberUpdateOne) AddEvents(e ...*Event) *SubscriberUpdateOne {
 // Mutation returns the SubscriberMutation object of the builder.
 func (suo *SubscriberUpdateOne) Mutation() *SubscriberMutation {
 	return suo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (suo *SubscriberUpdateOne) ClearUpdatedBy() *SubscriberUpdateOne {
+	suo.mutation.ClearUpdatedBy()
+	return suo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -968,15 +927,6 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	if suo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedAt, field.TypeTime)
 	}
-	if suo.mutation.CreatedByCleared() {
-		_spec.ClearField(subscriber.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := suo.mutation.UpdatedBy(); ok {
-		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
-	}
-	if suo.mutation.UpdatedByCleared() {
-		_spec.ClearField(subscriber.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := suo.mutation.Tags(); ok {
 		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
 	}
@@ -988,17 +938,11 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	if suo.mutation.TagsCleared() {
 		_spec.ClearField(subscriber.FieldTags, field.TypeJSON)
 	}
-	if value, ok := suo.mutation.DeletedAt(); ok {
-		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
-	}
 	if suo.mutation.DeletedAtCleared() {
 		_spec.ClearField(subscriber.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.DeletedBy(); ok {
-		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
-	}
-	if suo.mutation.DeletedByCleared() {
-		_spec.ClearField(subscriber.FieldDeletedBy, field.TypeString)
+	if suo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(subscriber.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := suo.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)
@@ -1026,6 +970,37 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	}
 	if value, ok := suo.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
+	}
+	if suo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subscriber.UpdatedByTable,
+			Columns: []string{subscriber.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subscriber.UpdatedByTable,
+			Columns: []string{subscriber.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if suo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -45,63 +45,23 @@ func (phu *ProgramHistoryUpdate) ClearUpdatedAt() *ProgramHistoryUpdate {
 	return phu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (phu *ProgramHistoryUpdate) SetUpdatedBy(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (phu *ProgramHistoryUpdate) SetUpdatedByID(s string) *ProgramHistoryUpdate {
+	phu.mutation.SetUpdatedByID(s)
 	return phu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableUpdatedBy(s *string) *ProgramHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableUpdatedByID(s *string) *ProgramHistoryUpdate {
 	if s != nil {
-		phu.SetUpdatedBy(*s)
+		phu.SetUpdatedByID(*s)
 	}
 	return phu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (phu *ProgramHistoryUpdate) ClearUpdatedBy() *ProgramHistoryUpdate {
-	phu.mutation.ClearUpdatedBy()
-	return phu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (phu *ProgramHistoryUpdate) SetDeletedAt(t time.Time) *ProgramHistoryUpdate {
-	phu.mutation.SetDeletedAt(t)
-	return phu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ProgramHistoryUpdate {
-	if t != nil {
-		phu.SetDeletedAt(*t)
-	}
-	return phu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (phu *ProgramHistoryUpdate) ClearDeletedAt() *ProgramHistoryUpdate {
-	phu.mutation.ClearDeletedAt()
-	return phu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (phu *ProgramHistoryUpdate) SetDeletedBy(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetDeletedBy(s)
-	return phu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableDeletedBy(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetDeletedBy(*s)
-	}
-	return phu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (phu *ProgramHistoryUpdate) ClearDeletedBy() *ProgramHistoryUpdate {
-	phu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (phu *ProgramHistoryUpdate) ClearUpdatedByID() *ProgramHistoryUpdate {
+	phu.mutation.ClearUpdatedByID()
 	return phu
 }
 
@@ -351,6 +311,9 @@ func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if phu.mutation.RefCleared() {
 		_spec.ClearField(programhistory.FieldRef, field.TypeString)
 	}
+	if phu.mutation.UpdatedByCleared() {
+		_spec.ClearField(programhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if phu.mutation.CreatedAtCleared() {
 		_spec.ClearField(programhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -360,26 +323,20 @@ func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if phu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if phu.mutation.CreatedByCleared() {
-		_spec.ClearField(programhistory.FieldCreatedBy, field.TypeString)
+	if phu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(programhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := phu.mutation.UpdatedBy(); ok {
-		_spec.SetField(programhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := phu.mutation.UpdatedByID(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if phu.mutation.UpdatedByCleared() {
-		_spec.ClearField(programhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := phu.mutation.DeletedAt(); ok {
-		_spec.SetField(programhistory.FieldDeletedAt, field.TypeTime, value)
+	if phu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(programhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if phu.mutation.DeletedAtCleared() {
 		_spec.ClearField(programhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := phu.mutation.DeletedBy(); ok {
-		_spec.SetField(programhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if phu.mutation.DeletedByCleared() {
-		_spec.ClearField(programhistory.FieldDeletedBy, field.TypeString)
+	if phu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(programhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := phu.mutation.Tags(); ok {
 		_spec.SetField(programhistory.FieldTags, field.TypeJSON, value)
@@ -467,63 +424,23 @@ func (phuo *ProgramHistoryUpdateOne) ClearUpdatedAt() *ProgramHistoryUpdateOne {
 	return phuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (phuo *ProgramHistoryUpdateOne) SetUpdatedBy(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (phuo *ProgramHistoryUpdateOne) SetUpdatedByID(s string) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetUpdatedByID(s)
 	return phuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ProgramHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableUpdatedByID(s *string) *ProgramHistoryUpdateOne {
 	if s != nil {
-		phuo.SetUpdatedBy(*s)
+		phuo.SetUpdatedByID(*s)
 	}
 	return phuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (phuo *ProgramHistoryUpdateOne) ClearUpdatedBy() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearUpdatedBy()
-	return phuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (phuo *ProgramHistoryUpdateOne) SetDeletedAt(t time.Time) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetDeletedAt(t)
-	return phuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ProgramHistoryUpdateOne {
-	if t != nil {
-		phuo.SetDeletedAt(*t)
-	}
-	return phuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (phuo *ProgramHistoryUpdateOne) ClearDeletedAt() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearDeletedAt()
-	return phuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (phuo *ProgramHistoryUpdateOne) SetDeletedBy(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetDeletedBy(s)
-	return phuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableDeletedBy(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetDeletedBy(*s)
-	}
-	return phuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (phuo *ProgramHistoryUpdateOne) ClearDeletedBy() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (phuo *ProgramHistoryUpdateOne) ClearUpdatedByID() *ProgramHistoryUpdateOne {
+	phuo.mutation.ClearUpdatedByID()
 	return phuo
 }
 
@@ -803,6 +720,9 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 	if phuo.mutation.RefCleared() {
 		_spec.ClearField(programhistory.FieldRef, field.TypeString)
 	}
+	if phuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(programhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if phuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(programhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -812,26 +732,20 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 	if phuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if phuo.mutation.CreatedByCleared() {
-		_spec.ClearField(programhistory.FieldCreatedBy, field.TypeString)
+	if phuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(programhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := phuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(programhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := phuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if phuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(programhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := phuo.mutation.DeletedAt(); ok {
-		_spec.SetField(programhistory.FieldDeletedAt, field.TypeTime, value)
+	if phuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(programhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if phuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(programhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.DeletedBy(); ok {
-		_spec.SetField(programhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if phuo.mutation.DeletedByCleared() {
-		_spec.ClearField(programhistory.FieldDeletedBy, field.TypeString)
+	if phuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(programhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := phuo.mutation.Tags(); ok {
 		_spec.SetField(programhistory.FieldTags, field.TypeJSON, value)

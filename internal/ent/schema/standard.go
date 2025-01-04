@@ -71,7 +71,7 @@ func (Standard) Edges() []ent.Edge {
 // Mixin of the Standard
 func (Standard) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

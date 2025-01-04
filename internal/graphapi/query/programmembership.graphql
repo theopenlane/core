@@ -3,12 +3,18 @@ mutation CreateBulkCSVProgramMembership($input: Upload!) {
   createBulkCSVProgramMembership(input: $input) {
     programMemberships {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       id
       programID
       role
       updatedAt
-      updatedBy
+      updatedByID
       userID
     }
   }
@@ -18,12 +24,18 @@ mutation CreateBulkProgramMembership($input: [CreateProgramMembershipInput!]) {
   createBulkProgramMembership(input: $input) {
     programMemberships {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       id
       programID
       role
       updatedAt
-      updatedBy
+      updatedByID
       userID
     }
   }
@@ -33,12 +45,18 @@ mutation CreateProgramMembership($input: CreateProgramMembershipInput!) {
   createProgramMembership(input: $input) {
     programMembership {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       id
       programID
       role
       updatedAt
-      updatedBy
+      updatedByID
       userID
     }
   }
@@ -55,12 +73,18 @@ query GetAllProgramMemberships {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         id
         programID
         role
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
         userID
       }
     }
@@ -69,12 +93,12 @@ query GetAllProgramMemberships {
 query GetProgramMembershipByID($programMembershipId: ID!) {
   programMembership(id: $programMembershipId) {
     createdAt
-    createdBy
+    createdByID
     id
     programID
     role
     updatedAt
-    updatedBy
+    updatedByID
     userID
   }
 }
@@ -84,12 +108,18 @@ query GetProgramMemberships($where: ProgramMembershipWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         id
         programID
         role
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
         userID
       }
     }
@@ -99,12 +129,18 @@ mutation UpdateProgramMembership($updateProgramMembershipId: ID!, $input: Update
   updateProgramMembership(id: $updateProgramMembershipId, input: $input) {
     programMembership {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       id
       programID
       role
       updatedAt
-      updatedBy
+      updatedByID
       userID
     }
   }

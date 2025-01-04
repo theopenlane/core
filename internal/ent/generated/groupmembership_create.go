@@ -52,30 +52,30 @@ func (gmc *GroupMembershipCreate) SetNillableUpdatedAt(t *time.Time) *GroupMembe
 	return gmc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (gmc *GroupMembershipCreate) SetCreatedBy(s string) *GroupMembershipCreate {
-	gmc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (gmc *GroupMembershipCreate) SetCreatedByID(s string) *GroupMembershipCreate {
+	gmc.mutation.SetCreatedByID(s)
 	return gmc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (gmc *GroupMembershipCreate) SetNillableCreatedBy(s *string) *GroupMembershipCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (gmc *GroupMembershipCreate) SetNillableCreatedByID(s *string) *GroupMembershipCreate {
 	if s != nil {
-		gmc.SetCreatedBy(*s)
+		gmc.SetCreatedByID(*s)
 	}
 	return gmc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gmc *GroupMembershipCreate) SetUpdatedBy(s string) *GroupMembershipCreate {
-	gmc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gmc *GroupMembershipCreate) SetUpdatedByID(s string) *GroupMembershipCreate {
+	gmc.mutation.SetUpdatedByID(s)
 	return gmc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmc *GroupMembershipCreate) SetNillableUpdatedBy(s *string) *GroupMembershipCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gmc *GroupMembershipCreate) SetNillableUpdatedByID(s *string) *GroupMembershipCreate {
 	if s != nil {
-		gmc.SetUpdatedBy(*s)
+		gmc.SetUpdatedByID(*s)
 	}
 	return gmc
 }
@@ -108,16 +108,16 @@ func (gmc *GroupMembershipCreate) SetNillableDeletedAt(t *time.Time) *GroupMembe
 	return gmc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (gmc *GroupMembershipCreate) SetDeletedBy(s string) *GroupMembershipCreate {
-	gmc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (gmc *GroupMembershipCreate) SetDeletedByID(s string) *GroupMembershipCreate {
+	gmc.mutation.SetDeletedByID(s)
 	return gmc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmc *GroupMembershipCreate) SetNillableDeletedBy(s *string) *GroupMembershipCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (gmc *GroupMembershipCreate) SetNillableDeletedByID(s *string) *GroupMembershipCreate {
 	if s != nil {
-		gmc.SetDeletedBy(*s)
+		gmc.SetDeletedByID(*s)
 	}
 	return gmc
 }
@@ -160,6 +160,16 @@ func (gmc *GroupMembershipCreate) SetNillableID(s *string) *GroupMembershipCreat
 		gmc.SetID(*s)
 	}
 	return gmc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (gmc *GroupMembershipCreate) SetCreatedBy(u *User) *GroupMembershipCreate {
+	return gmc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (gmc *GroupMembershipCreate) SetUpdatedBy(u *User) *GroupMembershipCreate {
+	return gmc.SetUpdatedByID(u.ID)
 }
 
 // SetGroup sets the "group" edge to the Group entity.
@@ -328,14 +338,6 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 		_spec.SetField(groupmembership.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := gmc.mutation.CreatedBy(); ok {
-		_spec.SetField(groupmembership.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := gmc.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupmembership.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := gmc.mutation.MappingID(); ok {
 		_spec.SetField(groupmembership.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -344,13 +346,49 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := gmc.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := gmc.mutation.DeletedByID(); ok {
+		_spec.SetField(groupmembership.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := gmc.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)
 		_node.Role = value
+	}
+	if nodes := gmc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.CreatedByTable,
+			Columns: []string{groupmembership.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmc.schemaConfig.GroupMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gmc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByTable,
+			Columns: []string{groupmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmc.schemaConfig.GroupMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := gmc.mutation.GroupIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

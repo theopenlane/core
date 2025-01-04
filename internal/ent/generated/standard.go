@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Standard is the model entity for the Standard schema.
@@ -22,14 +23,14 @@ type Standard struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -62,6 +63,10 @@ type Standard struct {
 
 // StandardEdges holds the relations/edges for other nodes in the graph.
 type StandardEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// ControlObjectives holds the value of the control_objectives edge.
 	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// Controls holds the value of the controls edge.
@@ -74,9 +79,9 @@ type StandardEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [7]map[string]int
 
 	namedControlObjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
@@ -85,10 +90,32 @@ type StandardEdges struct {
 	namedPrograms          map[string][]*Program
 }
 
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e StandardEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e StandardEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
+}
+
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e StandardEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[2] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -97,7 +124,7 @@ func (e StandardEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e StandardEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -106,7 +133,7 @@ func (e StandardEdges) ControlsOrErr() ([]*Control, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e StandardEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -115,7 +142,7 @@ func (e StandardEdges) ProceduresOrErr() ([]*Procedure, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e StandardEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -124,7 +151,7 @@ func (e StandardEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e StandardEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -137,7 +164,7 @@ func (*Standard) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case standard.FieldTags, standard.FieldDetails:
 			values[i] = new([]byte)
-		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldMappingID, standard.FieldName, standard.FieldDescription, standard.FieldFamily, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldPurposeAndScope, standard.FieldBackground, standard.FieldSatisfies:
+		case standard.FieldID, standard.FieldCreatedByID, standard.FieldUpdatedByID, standard.FieldDeletedByID, standard.FieldMappingID, standard.FieldName, standard.FieldDescription, standard.FieldFamily, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldPurposeAndScope, standard.FieldBackground, standard.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case standard.FieldCreatedAt, standard.FieldUpdatedAt, standard.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -174,17 +201,17 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.UpdatedAt = value.Time
 			}
-		case standard.FieldCreatedBy:
+		case standard.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				s.CreatedBy = value.String
+				s.CreatedByID = value.String
 			}
-		case standard.FieldUpdatedBy:
+		case standard.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				s.UpdatedBy = value.String
+				s.UpdatedByID = value.String
 			}
 		case standard.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -192,11 +219,11 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.DeletedAt = value.Time
 			}
-		case standard.FieldDeletedBy:
+		case standard.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.String
+				s.DeletedByID = value.String
 			}
 		case standard.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -287,6 +314,16 @@ func (s *Standard) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the Standard entity.
+func (s *Standard) QueryCreatedBy() *UserQuery {
+	return NewStandardClient(s.config).QueryCreatedBy(s)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Standard entity.
+func (s *Standard) QueryUpdatedBy() *UserQuery {
+	return NewStandardClient(s.config).QueryUpdatedBy(s)
+}
+
 // QueryControlObjectives queries the "control_objectives" edge of the Standard entity.
 func (s *Standard) QueryControlObjectives() *ControlObjectiveQuery {
 	return NewStandardClient(s.config).QueryControlObjectives(s)
@@ -341,17 +378,17 @@ func (s *Standard) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(s.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(s.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(s.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(s.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(s.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(s.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(s.MappingID)

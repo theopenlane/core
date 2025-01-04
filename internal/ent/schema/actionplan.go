@@ -61,7 +61,7 @@ func (ActionPlan) Edges() []ent.Edge {
 // Mixin of the ActionPlan
 func (ActionPlan) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

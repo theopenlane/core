@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -44,63 +45,23 @@ func (pmu *ProgramMembershipUpdate) ClearUpdatedAt() *ProgramMembershipUpdate {
 	return pmu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (pmu *ProgramMembershipUpdate) SetUpdatedBy(s string) *ProgramMembershipUpdate {
-	pmu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (pmu *ProgramMembershipUpdate) SetUpdatedByID(s string) *ProgramMembershipUpdate {
+	pmu.mutation.SetUpdatedByID(s)
 	return pmu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmu *ProgramMembershipUpdate) SetNillableUpdatedBy(s *string) *ProgramMembershipUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (pmu *ProgramMembershipUpdate) SetNillableUpdatedByID(s *string) *ProgramMembershipUpdate {
 	if s != nil {
-		pmu.SetUpdatedBy(*s)
+		pmu.SetUpdatedByID(*s)
 	}
 	return pmu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (pmu *ProgramMembershipUpdate) ClearUpdatedBy() *ProgramMembershipUpdate {
-	pmu.mutation.ClearUpdatedBy()
-	return pmu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (pmu *ProgramMembershipUpdate) SetDeletedAt(t time.Time) *ProgramMembershipUpdate {
-	pmu.mutation.SetDeletedAt(t)
-	return pmu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pmu *ProgramMembershipUpdate) SetNillableDeletedAt(t *time.Time) *ProgramMembershipUpdate {
-	if t != nil {
-		pmu.SetDeletedAt(*t)
-	}
-	return pmu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (pmu *ProgramMembershipUpdate) ClearDeletedAt() *ProgramMembershipUpdate {
-	pmu.mutation.ClearDeletedAt()
-	return pmu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pmu *ProgramMembershipUpdate) SetDeletedBy(s string) *ProgramMembershipUpdate {
-	pmu.mutation.SetDeletedBy(s)
-	return pmu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmu *ProgramMembershipUpdate) SetNillableDeletedBy(s *string) *ProgramMembershipUpdate {
-	if s != nil {
-		pmu.SetDeletedBy(*s)
-	}
-	return pmu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pmu *ProgramMembershipUpdate) ClearDeletedBy() *ProgramMembershipUpdate {
-	pmu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (pmu *ProgramMembershipUpdate) ClearUpdatedByID() *ProgramMembershipUpdate {
+	pmu.mutation.ClearUpdatedByID()
 	return pmu
 }
 
@@ -118,9 +79,20 @@ func (pmu *ProgramMembershipUpdate) SetNillableRole(e *enums.Role) *ProgramMembe
 	return pmu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (pmu *ProgramMembershipUpdate) SetUpdatedBy(u *User) *ProgramMembershipUpdate {
+	return pmu.SetUpdatedByID(u.ID)
+}
+
 // Mutation returns the ProgramMembershipMutation object of the builder.
 func (pmu *ProgramMembershipUpdate) Mutation() *ProgramMembershipMutation {
 	return pmu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (pmu *ProgramMembershipUpdate) ClearUpdatedBy() *ProgramMembershipUpdate {
+	pmu.mutation.ClearUpdatedBy()
+	return pmu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -208,29 +180,45 @@ func (pmu *ProgramMembershipUpdate) sqlSave(ctx context.Context) (n int, err err
 	if pmu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if pmu.mutation.CreatedByCleared() {
-		_spec.ClearField(programmembership.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := pmu.mutation.UpdatedBy(); ok {
-		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
-	}
-	if pmu.mutation.UpdatedByCleared() {
-		_spec.ClearField(programmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := pmu.mutation.DeletedAt(); ok {
-		_spec.SetField(programmembership.FieldDeletedAt, field.TypeTime, value)
-	}
 	if pmu.mutation.DeletedAtCleared() {
 		_spec.ClearField(programmembership.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := pmu.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if pmu.mutation.DeletedByCleared() {
-		_spec.ClearField(programmembership.FieldDeletedBy, field.TypeString)
+	if pmu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(programmembership.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := pmu.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
+	}
+	if pmu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByTable,
+			Columns: []string{programmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmu.schemaConfig.ProgramMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pmu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByTable,
+			Columns: []string{programmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmu.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = pmu.schemaConfig.ProgramMembership
 	ctx = internal.NewSchemaConfigContext(ctx, pmu.schemaConfig)
@@ -268,63 +256,23 @@ func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedAt() *ProgramMembershipUpdat
 	return pmuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (pmuo *ProgramMembershipUpdateOne) SetUpdatedBy(s string) *ProgramMembershipUpdateOne {
-	pmuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (pmuo *ProgramMembershipUpdateOne) SetUpdatedByID(s string) *ProgramMembershipUpdateOne {
+	pmuo.mutation.SetUpdatedByID(s)
 	return pmuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmuo *ProgramMembershipUpdateOne) SetNillableUpdatedBy(s *string) *ProgramMembershipUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (pmuo *ProgramMembershipUpdateOne) SetNillableUpdatedByID(s *string) *ProgramMembershipUpdateOne {
 	if s != nil {
-		pmuo.SetUpdatedBy(*s)
+		pmuo.SetUpdatedByID(*s)
 	}
 	return pmuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedBy() *ProgramMembershipUpdateOne {
-	pmuo.mutation.ClearUpdatedBy()
-	return pmuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (pmuo *ProgramMembershipUpdateOne) SetDeletedAt(t time.Time) *ProgramMembershipUpdateOne {
-	pmuo.mutation.SetDeletedAt(t)
-	return pmuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pmuo *ProgramMembershipUpdateOne) SetNillableDeletedAt(t *time.Time) *ProgramMembershipUpdateOne {
-	if t != nil {
-		pmuo.SetDeletedAt(*t)
-	}
-	return pmuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (pmuo *ProgramMembershipUpdateOne) ClearDeletedAt() *ProgramMembershipUpdateOne {
-	pmuo.mutation.ClearDeletedAt()
-	return pmuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pmuo *ProgramMembershipUpdateOne) SetDeletedBy(s string) *ProgramMembershipUpdateOne {
-	pmuo.mutation.SetDeletedBy(s)
-	return pmuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmuo *ProgramMembershipUpdateOne) SetNillableDeletedBy(s *string) *ProgramMembershipUpdateOne {
-	if s != nil {
-		pmuo.SetDeletedBy(*s)
-	}
-	return pmuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pmuo *ProgramMembershipUpdateOne) ClearDeletedBy() *ProgramMembershipUpdateOne {
-	pmuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedByID() *ProgramMembershipUpdateOne {
+	pmuo.mutation.ClearUpdatedByID()
 	return pmuo
 }
 
@@ -342,9 +290,20 @@ func (pmuo *ProgramMembershipUpdateOne) SetNillableRole(e *enums.Role) *ProgramM
 	return pmuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (pmuo *ProgramMembershipUpdateOne) SetUpdatedBy(u *User) *ProgramMembershipUpdateOne {
+	return pmuo.SetUpdatedByID(u.ID)
+}
+
 // Mutation returns the ProgramMembershipMutation object of the builder.
 func (pmuo *ProgramMembershipUpdateOne) Mutation() *ProgramMembershipMutation {
 	return pmuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedBy() *ProgramMembershipUpdateOne {
+	pmuo.mutation.ClearUpdatedBy()
+	return pmuo
 }
 
 // Where appends a list predicates to the ProgramMembershipUpdate builder.
@@ -462,29 +421,45 @@ func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 	if pmuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if pmuo.mutation.CreatedByCleared() {
-		_spec.ClearField(programmembership.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := pmuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
-	}
-	if pmuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(programmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := pmuo.mutation.DeletedAt(); ok {
-		_spec.SetField(programmembership.FieldDeletedAt, field.TypeTime, value)
-	}
 	if pmuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(programmembership.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := pmuo.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if pmuo.mutation.DeletedByCleared() {
-		_spec.ClearField(programmembership.FieldDeletedBy, field.TypeString)
+	if pmuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(programmembership.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := pmuo.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
+	}
+	if pmuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByTable,
+			Columns: []string{programmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmuo.schemaConfig.ProgramMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pmuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByTable,
+			Columns: []string{programmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmuo.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = pmuo.schemaConfig.ProgramMembership
 	ctx = internal.NewSchemaConfigContext(ctx, pmuo.schemaConfig)

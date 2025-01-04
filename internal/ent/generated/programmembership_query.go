@@ -23,14 +23,16 @@ import (
 // ProgramMembershipQuery is the builder for querying ProgramMembership entities.
 type ProgramMembershipQuery struct {
 	config
-	ctx         *QueryContext
-	order       []programmembership.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.ProgramMembership
-	withProgram *ProgramQuery
-	withUser    *UserQuery
-	loadTotal   []func(context.Context, []*ProgramMembership) error
-	modifiers   []func(*sql.Selector)
+	ctx           *QueryContext
+	order         []programmembership.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.ProgramMembership
+	withCreatedBy *UserQuery
+	withUpdatedBy *UserQuery
+	withProgram   *ProgramQuery
+	withUser      *UserQuery
+	loadTotal     []func(context.Context, []*ProgramMembership) error
+	modifiers     []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -65,6 +67,56 @@ func (pmq *ProgramMembershipQuery) Unique(unique bool) *ProgramMembershipQuery {
 func (pmq *ProgramMembershipQuery) Order(o ...programmembership.OrderOption) *ProgramMembershipQuery {
 	pmq.order = append(pmq.order, o...)
 	return pmq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (pmq *ProgramMembershipQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: pmq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pmq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pmq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.CreatedByTable, programmembership.CreatedByColumn),
+		)
+		schemaConfig := pmq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (pmq *ProgramMembershipQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: pmq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pmq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pmq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UpdatedByTable, programmembership.UpdatedByColumn),
+		)
+		schemaConfig := pmq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryProgram chains the current query on the "program" edge.
@@ -304,18 +356,42 @@ func (pmq *ProgramMembershipQuery) Clone() *ProgramMembershipQuery {
 		return nil
 	}
 	return &ProgramMembershipQuery{
-		config:      pmq.config,
-		ctx:         pmq.ctx.Clone(),
-		order:       append([]programmembership.OrderOption{}, pmq.order...),
-		inters:      append([]Interceptor{}, pmq.inters...),
-		predicates:  append([]predicate.ProgramMembership{}, pmq.predicates...),
-		withProgram: pmq.withProgram.Clone(),
-		withUser:    pmq.withUser.Clone(),
+		config:        pmq.config,
+		ctx:           pmq.ctx.Clone(),
+		order:         append([]programmembership.OrderOption{}, pmq.order...),
+		inters:        append([]Interceptor{}, pmq.inters...),
+		predicates:    append([]predicate.ProgramMembership{}, pmq.predicates...),
+		withCreatedBy: pmq.withCreatedBy.Clone(),
+		withUpdatedBy: pmq.withUpdatedBy.Clone(),
+		withProgram:   pmq.withProgram.Clone(),
+		withUser:      pmq.withUser.Clone(),
 		// clone intermediate query.
 		sql:       pmq.sql.Clone(),
 		path:      pmq.path,
 		modifiers: append([]func(*sql.Selector){}, pmq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (pmq *ProgramMembershipQuery) WithCreatedBy(opts ...func(*UserQuery)) *ProgramMembershipQuery {
+	query := (&UserClient{config: pmq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pmq.withCreatedBy = query
+	return pmq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (pmq *ProgramMembershipQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ProgramMembershipQuery {
+	query := (&UserClient{config: pmq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pmq.withUpdatedBy = query
+	return pmq
 }
 
 // WithProgram tells the query-builder to eager-load the nodes that are connected to
@@ -424,7 +500,9 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*ProgramMembership{}
 		_spec       = pmq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
+			pmq.withCreatedBy != nil,
+			pmq.withUpdatedBy != nil,
 			pmq.withProgram != nil,
 			pmq.withUser != nil,
 		}
@@ -452,6 +530,18 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := pmq.withCreatedBy; query != nil {
+		if err := pmq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *ProgramMembership, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pmq.withUpdatedBy; query != nil {
+		if err := pmq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *ProgramMembership, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pmq.withProgram; query != nil {
 		if err := pmq.loadProgram(ctx, query, nodes, nil,
 			func(n *ProgramMembership, e *Program) { n.Edges.Program = e }); err != nil {
@@ -472,6 +562,64 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	return nodes, nil
 }
 
+func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ProgramMembership)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pmq *ProgramMembershipQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ProgramMembership)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (pmq *ProgramMembershipQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *Program)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ProgramMembership)
@@ -560,6 +708,12 @@ func (pmq *ProgramMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != programmembership.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if pmq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(programmembership.FieldCreatedByID)
+		}
+		if pmq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(programmembership.FieldUpdatedByID)
 		}
 		if pmq.withProgram != nil {
 			_spec.Node.AddColumnOnce(programmembership.FieldProgramID)

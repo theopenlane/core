@@ -23,14 +23,14 @@ type PersonalAccessToken struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -57,6 +57,10 @@ type PersonalAccessToken struct {
 
 // PersonalAccessTokenEdges holds the relations/edges for other nodes in the graph.
 type PersonalAccessTokenEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// the organization(s) the token is associated with
@@ -65,12 +69,34 @@ type PersonalAccessTokenEdges struct {
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
 	namedOrganizations map[string][]*Organization
 	namedEvents        map[string][]*Event
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PersonalAccessTokenEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PersonalAccessTokenEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -78,7 +104,7 @@ type PersonalAccessTokenEdges struct {
 func (e PersonalAccessTokenEdges) OwnerOrErr() (*User, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -87,7 +113,7 @@ func (e PersonalAccessTokenEdges) OwnerOrErr() (*User, error) {
 // OrganizationsOrErr returns the Organizations value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonalAccessTokenEdges) OrganizationsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Organizations, nil
 	}
 	return nil, &NotLoadedError{edge: "organizations"}
@@ -96,7 +122,7 @@ func (e PersonalAccessTokenEdges) OrganizationsOrErr() ([]*Organization, error) 
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonalAccessTokenEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -109,7 +135,7 @@ func (*PersonalAccessToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case personalaccesstoken.FieldTags, personalaccesstoken.FieldScopes:
 			values[i] = new([]byte)
-		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedBy, personalaccesstoken.FieldUpdatedBy, personalaccesstoken.FieldDeletedBy, personalaccesstoken.FieldMappingID, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
+		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedByID, personalaccesstoken.FieldUpdatedByID, personalaccesstoken.FieldDeletedByID, personalaccesstoken.FieldMappingID, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
 			values[i] = new(sql.NullString)
 		case personalaccesstoken.FieldCreatedAt, personalaccesstoken.FieldUpdatedAt, personalaccesstoken.FieldDeletedAt, personalaccesstoken.FieldExpiresAt, personalaccesstoken.FieldLastUsedAt:
 			values[i] = new(sql.NullTime)
@@ -146,17 +172,17 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				pat.UpdatedAt = value.Time
 			}
-		case personalaccesstoken.FieldCreatedBy:
+		case personalaccesstoken.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				pat.CreatedBy = value.String
+				pat.CreatedByID = value.String
 			}
-		case personalaccesstoken.FieldUpdatedBy:
+		case personalaccesstoken.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				pat.UpdatedBy = value.String
+				pat.UpdatedByID = value.String
 			}
 		case personalaccesstoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -164,11 +190,11 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				pat.DeletedAt = value.Time
 			}
-		case personalaccesstoken.FieldDeletedBy:
+		case personalaccesstoken.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				pat.DeletedBy = value.String
+				pat.DeletedByID = value.String
 			}
 		case personalaccesstoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -244,6 +270,16 @@ func (pat *PersonalAccessToken) Value(name string) (ent.Value, error) {
 	return pat.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the PersonalAccessToken entity.
+func (pat *PersonalAccessToken) QueryCreatedBy() *UserQuery {
+	return NewPersonalAccessTokenClient(pat.config).QueryCreatedBy(pat)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the PersonalAccessToken entity.
+func (pat *PersonalAccessToken) QueryUpdatedBy() *UserQuery {
+	return NewPersonalAccessTokenClient(pat.config).QueryUpdatedBy(pat)
+}
+
 // QueryOwner queries the "owner" edge of the PersonalAccessToken entity.
 func (pat *PersonalAccessToken) QueryOwner() *UserQuery {
 	return NewPersonalAccessTokenClient(pat.config).QueryOwner(pat)
@@ -288,17 +324,17 @@ func (pat *PersonalAccessToken) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(pat.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(pat.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(pat.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(pat.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(pat.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pat.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pat.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(pat.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(pat.MappingID)

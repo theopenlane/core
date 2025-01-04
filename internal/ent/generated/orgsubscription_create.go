@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // OrgSubscriptionCreate is the builder for creating a OrgSubscription entity.
@@ -49,30 +50,30 @@ func (osc *OrgSubscriptionCreate) SetNillableUpdatedAt(t *time.Time) *OrgSubscri
 	return osc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (osc *OrgSubscriptionCreate) SetCreatedBy(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (osc *OrgSubscriptionCreate) SetCreatedByID(s string) *OrgSubscriptionCreate {
+	osc.mutation.SetCreatedByID(s)
 	return osc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableCreatedBy(s *string) *OrgSubscriptionCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableCreatedByID(s *string) *OrgSubscriptionCreate {
 	if s != nil {
-		osc.SetCreatedBy(*s)
+		osc.SetCreatedByID(*s)
 	}
 	return osc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (osc *OrgSubscriptionCreate) SetUpdatedBy(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (osc *OrgSubscriptionCreate) SetUpdatedByID(s string) *OrgSubscriptionCreate {
+	osc.mutation.SetUpdatedByID(s)
 	return osc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableUpdatedBy(s *string) *OrgSubscriptionCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableUpdatedByID(s *string) *OrgSubscriptionCreate {
 	if s != nil {
-		osc.SetUpdatedBy(*s)
+		osc.SetUpdatedByID(*s)
 	}
 	return osc
 }
@@ -111,16 +112,16 @@ func (osc *OrgSubscriptionCreate) SetNillableDeletedAt(t *time.Time) *OrgSubscri
 	return osc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (osc *OrgSubscriptionCreate) SetDeletedBy(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (osc *OrgSubscriptionCreate) SetDeletedByID(s string) *OrgSubscriptionCreate {
+	osc.mutation.SetDeletedByID(s)
 	return osc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableDeletedBy(s *string) *OrgSubscriptionCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableDeletedByID(s *string) *OrgSubscriptionCreate {
 	if s != nil {
-		osc.SetDeletedBy(*s)
+		osc.SetDeletedByID(*s)
 	}
 	return osc
 }
@@ -255,6 +256,16 @@ func (osc *OrgSubscriptionCreate) SetNillableID(s *string) *OrgSubscriptionCreat
 		osc.SetID(*s)
 	}
 	return osc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (osc *OrgSubscriptionCreate) SetCreatedBy(u *User) *OrgSubscriptionCreate {
+	return osc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (osc *OrgSubscriptionCreate) SetUpdatedBy(u *User) *OrgSubscriptionCreate {
+	return osc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -395,14 +406,6 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 		_spec.SetField(orgsubscription.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := osc.mutation.CreatedBy(); ok {
-		_spec.SetField(orgsubscription.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := osc.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := osc.mutation.MappingID(); ok {
 		_spec.SetField(orgsubscription.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -415,9 +418,9 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := osc.mutation.DeletedBy(); ok {
-		_spec.SetField(orgsubscription.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := osc.mutation.DeletedByID(); ok {
+		_spec.SetField(orgsubscription.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := osc.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)
@@ -450,6 +453,42 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 	if value, ok := osc.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 		_node.Features = value
+	}
+	if nodes := osc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.CreatedByTable,
+			Columns: []string{orgsubscription.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.UpdatedByTable,
+			Columns: []string{orgsubscription.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := osc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

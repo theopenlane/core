@@ -19,18 +19,18 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// FieldCreatedBy holds the string denoting the created_by field in the database.
-	FieldCreatedBy = "created_by"
-	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
-	FieldUpdatedBy = "updated_by"
+	// FieldCreatedByID holds the string denoting the created_by_id field in the database.
+	FieldCreatedByID = "created_by_id"
+	// FieldUpdatedByID holds the string denoting the updated_by_id field in the database.
+	FieldUpdatedByID = "updated_by_id"
 	// FieldMappingID holds the string denoting the mapping_id field in the database.
 	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
-	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
-	FieldDeletedBy = "deleted_by"
+	// FieldDeletedByID holds the string denoting the deleted_by_id field in the database.
+	FieldDeletedByID = "deleted_by_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
@@ -39,6 +39,10 @@ const (
 	FieldDescription = "description"
 	// FieldKind holds the string denoting the kind field in the database.
 	FieldKind = "kind"
+	// EdgeCreatedBy holds the string denoting the created_by edge name in mutations.
+	EdgeCreatedBy = "created_by"
+	// EdgeUpdatedBy holds the string denoting the updated_by edge name in mutations.
+	EdgeUpdatedBy = "updated_by"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
@@ -47,6 +51,20 @@ const (
 	EdgeEvents = "events"
 	// Table holds the table name of the integration in the database.
 	Table = "integrations"
+	// CreatedByTable is the table that holds the created_by relation/edge.
+	CreatedByTable = "integrations"
+	// CreatedByInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	CreatedByInverseTable = "users"
+	// CreatedByColumn is the table column denoting the created_by relation/edge.
+	CreatedByColumn = "created_by_id"
+	// UpdatedByTable is the table that holds the updated_by relation/edge.
+	UpdatedByTable = "integrations"
+	// UpdatedByInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UpdatedByInverseTable = "users"
+	// UpdatedByColumn is the table column denoting the updated_by relation/edge.
+	UpdatedByColumn = "updated_by_id"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "integrations"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -71,12 +89,12 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
-	FieldCreatedBy,
-	FieldUpdatedBy,
+	FieldCreatedByID,
+	FieldUpdatedByID,
 	FieldMappingID,
 	FieldTags,
 	FieldDeletedAt,
-	FieldDeletedBy,
+	FieldDeletedByID,
 	FieldOwnerID,
 	FieldName,
 	FieldDescription,
@@ -158,14 +176,14 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
-// ByCreatedBy orders the results by the created_by field.
-func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+// ByCreatedByID orders the results by the created_by_id field.
+func ByCreatedByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedByID, opts...).ToFunc()
 }
 
-// ByUpdatedBy orders the results by the updated_by field.
-func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+// ByUpdatedByID orders the results by the updated_by_id field.
+func ByUpdatedByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByID, opts...).ToFunc()
 }
 
 // ByMappingID orders the results by the mapping_id field.
@@ -178,9 +196,9 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
 }
 
-// ByDeletedBy orders the results by the deleted_by field.
-func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+// ByDeletedByID orders the results by the deleted_by_id field.
+func ByDeletedByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeletedByID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.
@@ -201,6 +219,20 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByKind orders the results by the kind field.
 func ByKind(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldKind, opts...).ToFunc()
+}
+
+// ByCreatedByField orders the results by created_by field.
+func ByCreatedByField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCreatedByStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByUpdatedByField orders the results by updated_by field.
+func ByUpdatedByField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUpdatedByStep(), sql.OrderByField(field, opts...))
+	}
 }
 
 // ByOwnerField orders the results by owner field.
@@ -236,6 +268,20 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newCreatedByStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CreatedByInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CreatedByTable, CreatedByColumn),
+	)
+}
+func newUpdatedByStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UpdatedByInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByTable, UpdatedByColumn),
+	)
 }
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

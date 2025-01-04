@@ -15,11 +15,17 @@ query GetAllUserSettings {
         isTfaEnabled
         emailConfirmed
         createdAt
-        createdBy
+        createdByID
         deletedAt
-        deletedBy
-        updatedAt
-        updatedBy
+        deletedByID
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
     }
   }
@@ -40,11 +46,11 @@ query GetUserSettingByID($userSettingId: ID!) {
     isTfaEnabled
     emailConfirmed
     createdAt
-    createdBy
+    createdByID
     deletedAt
-    deletedBy
+    deletedByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -65,11 +71,17 @@ query GetUserSettings($where: UserSettingWhereInput!) {
         isTfaEnabled
         emailConfirmed
         createdAt
-        createdBy
+        createdByID
         deletedAt
-        deletedBy
-        updatedAt
-        updatedBy
+        deletedByID
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
     }
   }
@@ -91,11 +103,17 @@ mutation UpdateUserSetting($updateUserSettingId: ID!, $input: UpdateUserSettingI
       isTfaEnabled
       emailConfirmed
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       deletedAt
-      deletedBy
+      deletedByID
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }

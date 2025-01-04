@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Integration is the model entity for the Integration schema.
@@ -23,18 +24,18 @@ type Integration struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the integration - must be unique within the organization
@@ -52,6 +53,10 @@ type Integration struct {
 
 // IntegrationEdges holds the relations/edges for other nodes in the graph.
 type IntegrationEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// the secrets associated with the integration
@@ -60,12 +65,34 @@ type IntegrationEdges struct {
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
 	namedSecrets map[string][]*Hush
 	namedEvents  map[string][]*Event
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e IntegrationEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e IntegrationEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -73,7 +100,7 @@ type IntegrationEdges struct {
 func (e IntegrationEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -82,7 +109,7 @@ func (e IntegrationEdges) OwnerOrErr() (*Organization, error) {
 // SecretsOrErr returns the Secrets value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) SecretsOrErr() ([]*Hush, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Secrets, nil
 	}
 	return nil, &NotLoadedError{edge: "secrets"}
@@ -91,7 +118,7 @@ func (e IntegrationEdges) SecretsOrErr() ([]*Hush, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -104,7 +131,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case integration.FieldTags:
 			values[i] = new([]byte)
-		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldMappingID, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldName, integration.FieldDescription, integration.FieldKind:
+		case integration.FieldID, integration.FieldCreatedByID, integration.FieldUpdatedByID, integration.FieldMappingID, integration.FieldDeletedByID, integration.FieldOwnerID, integration.FieldName, integration.FieldDescription, integration.FieldKind:
 			values[i] = new(sql.NullString)
 		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -143,17 +170,17 @@ func (i *Integration) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				i.UpdatedAt = value.Time
 			}
-		case integration.FieldCreatedBy:
+		case integration.FieldCreatedByID:
 			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[j])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[j])
 			} else if value.Valid {
-				i.CreatedBy = value.String
+				i.CreatedByID = value.String
 			}
-		case integration.FieldUpdatedBy:
+		case integration.FieldUpdatedByID:
 			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[j])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[j])
 			} else if value.Valid {
-				i.UpdatedBy = value.String
+				i.UpdatedByID = value.String
 			}
 		case integration.FieldMappingID:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -175,11 +202,11 @@ func (i *Integration) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				i.DeletedAt = value.Time
 			}
-		case integration.FieldDeletedBy:
+		case integration.FieldDeletedByID:
 			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[j])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[j])
 			} else if value.Valid {
-				i.DeletedBy = value.String
+				i.DeletedByID = value.String
 			}
 		case integration.FieldOwnerID:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -223,6 +250,16 @@ func (i *Integration) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (i *Integration) Value(name string) (ent.Value, error) {
 	return i.selectValues.Get(name)
+}
+
+// QueryCreatedBy queries the "created_by" edge of the Integration entity.
+func (i *Integration) QueryCreatedBy() *UserQuery {
+	return NewIntegrationClient(i.config).QueryCreatedBy(i)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Integration entity.
+func (i *Integration) QueryUpdatedBy() *UserQuery {
+	return NewIntegrationClient(i.config).QueryUpdatedBy(i)
 }
 
 // QueryOwner queries the "owner" edge of the Integration entity.
@@ -269,11 +306,11 @@ func (i *Integration) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(i.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(i.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(i.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(i.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(i.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(i.MappingID)
@@ -284,8 +321,8 @@ func (i *Integration) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(i.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(i.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(i.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(i.OwnerID)

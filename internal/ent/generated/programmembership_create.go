@@ -51,30 +51,30 @@ func (pmc *ProgramMembershipCreate) SetNillableUpdatedAt(t *time.Time) *ProgramM
 	return pmc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (pmc *ProgramMembershipCreate) SetCreatedBy(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (pmc *ProgramMembershipCreate) SetCreatedByID(s string) *ProgramMembershipCreate {
+	pmc.mutation.SetCreatedByID(s)
 	return pmc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableCreatedBy(s *string) *ProgramMembershipCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (pmc *ProgramMembershipCreate) SetNillableCreatedByID(s *string) *ProgramMembershipCreate {
 	if s != nil {
-		pmc.SetCreatedBy(*s)
+		pmc.SetCreatedByID(*s)
 	}
 	return pmc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (pmc *ProgramMembershipCreate) SetUpdatedBy(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (pmc *ProgramMembershipCreate) SetUpdatedByID(s string) *ProgramMembershipCreate {
+	pmc.mutation.SetUpdatedByID(s)
 	return pmc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableUpdatedBy(s *string) *ProgramMembershipCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (pmc *ProgramMembershipCreate) SetNillableUpdatedByID(s *string) *ProgramMembershipCreate {
 	if s != nil {
-		pmc.SetUpdatedBy(*s)
+		pmc.SetUpdatedByID(*s)
 	}
 	return pmc
 }
@@ -107,16 +107,16 @@ func (pmc *ProgramMembershipCreate) SetNillableDeletedAt(t *time.Time) *ProgramM
 	return pmc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (pmc *ProgramMembershipCreate) SetDeletedBy(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (pmc *ProgramMembershipCreate) SetDeletedByID(s string) *ProgramMembershipCreate {
+	pmc.mutation.SetDeletedByID(s)
 	return pmc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableDeletedBy(s *string) *ProgramMembershipCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (pmc *ProgramMembershipCreate) SetNillableDeletedByID(s *string) *ProgramMembershipCreate {
 	if s != nil {
-		pmc.SetDeletedBy(*s)
+		pmc.SetDeletedByID(*s)
 	}
 	return pmc
 }
@@ -159,6 +159,16 @@ func (pmc *ProgramMembershipCreate) SetNillableID(s *string) *ProgramMembershipC
 		pmc.SetID(*s)
 	}
 	return pmc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (pmc *ProgramMembershipCreate) SetCreatedBy(u *User) *ProgramMembershipCreate {
+	return pmc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (pmc *ProgramMembershipCreate) SetUpdatedBy(u *User) *ProgramMembershipCreate {
+	return pmc.SetUpdatedByID(u.ID)
 }
 
 // SetProgram sets the "program" edge to the Program entity.
@@ -312,14 +322,6 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 		_spec.SetField(programmembership.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pmc.mutation.CreatedBy(); ok {
-		_spec.SetField(programmembership.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := pmc.mutation.UpdatedBy(); ok {
-		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := pmc.mutation.MappingID(); ok {
 		_spec.SetField(programmembership.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -328,13 +330,49 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 		_spec.SetField(programmembership.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := pmc.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := pmc.mutation.DeletedByID(); ok {
+		_spec.SetField(programmembership.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := pmc.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 		_node.Role = value
+	}
+	if nodes := pmc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.CreatedByTable,
+			Columns: []string{programmembership.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmc.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pmc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByTable,
+			Columns: []string{programmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmc.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pmc.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // ControlObjectiveCreate is the builder for creating a ControlObjective entity.
@@ -59,30 +60,30 @@ func (coc *ControlObjectiveCreate) SetNillableUpdatedAt(t *time.Time) *ControlOb
 	return coc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (coc *ControlObjectiveCreate) SetCreatedBy(s string) *ControlObjectiveCreate {
-	coc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (coc *ControlObjectiveCreate) SetCreatedByID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetCreatedByID(s)
 	return coc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableCreatedBy(s *string) *ControlObjectiveCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableCreatedByID(s *string) *ControlObjectiveCreate {
 	if s != nil {
-		coc.SetCreatedBy(*s)
+		coc.SetCreatedByID(*s)
 	}
 	return coc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (coc *ControlObjectiveCreate) SetUpdatedBy(s string) *ControlObjectiveCreate {
-	coc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (coc *ControlObjectiveCreate) SetUpdatedByID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetUpdatedByID(s)
 	return coc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableUpdatedBy(s *string) *ControlObjectiveCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableUpdatedByID(s *string) *ControlObjectiveCreate {
 	if s != nil {
-		coc.SetUpdatedBy(*s)
+		coc.SetUpdatedByID(*s)
 	}
 	return coc
 }
@@ -101,16 +102,16 @@ func (coc *ControlObjectiveCreate) SetNillableDeletedAt(t *time.Time) *ControlOb
 	return coc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (coc *ControlObjectiveCreate) SetDeletedBy(s string) *ControlObjectiveCreate {
-	coc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (coc *ControlObjectiveCreate) SetDeletedByID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetDeletedByID(s)
 	return coc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableDeletedBy(s *string) *ControlObjectiveCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableDeletedByID(s *string) *ControlObjectiveCreate {
 	if s != nil {
-		coc.SetDeletedBy(*s)
+		coc.SetDeletedByID(*s)
 	}
 	return coc
 }
@@ -291,6 +292,16 @@ func (coc *ControlObjectiveCreate) SetNillableID(s *string) *ControlObjectiveCre
 		coc.SetID(*s)
 	}
 	return coc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (coc *ControlObjectiveCreate) SetCreatedBy(u *User) *ControlObjectiveCreate {
+	return coc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (coc *ControlObjectiveCreate) SetUpdatedBy(u *User) *ControlObjectiveCreate {
+	return coc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -618,21 +629,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		_spec.SetField(controlobjective.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := coc.mutation.CreatedBy(); ok {
-		_spec.SetField(controlobjective.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := coc.mutation.UpdatedBy(); ok {
-		_spec.SetField(controlobjective.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := coc.mutation.DeletedAt(); ok {
 		_spec.SetField(controlobjective.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := coc.mutation.DeletedBy(); ok {
-		_spec.SetField(controlobjective.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := coc.mutation.DeletedByID(); ok {
+		_spec.SetField(controlobjective.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := coc.mutation.MappingID(); ok {
 		_spec.SetField(controlobjective.FieldMappingID, field.TypeString, value)
@@ -685,6 +688,42 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 	if value, ok := coc.mutation.Details(); ok {
 		_spec.SetField(controlobjective.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if nodes := coc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlobjective.CreatedByTable,
+			Columns: []string{controlobjective.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := coc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlobjective.UpdatedByTable,
+			Columns: []string{controlobjective.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := coc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

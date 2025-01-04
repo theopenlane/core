@@ -99,7 +99,7 @@ func (File) Edges() []ent.Edge {
 // Mixin of the File
 func (File) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

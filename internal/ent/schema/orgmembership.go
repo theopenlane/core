@@ -76,7 +76,7 @@ func (OrgMembership) Indexes() []ent.Index {
 // Mixin of the OrgMembership
 func (OrgMembership) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 	}

@@ -29,12 +29,14 @@ func (SoftDeleteMixin) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("deleted_at").
 			Optional().
+			Immutable().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entoas.Annotation{ReadOnly: true},
 			),
-		field.String("deleted_by").
+		field.String("deleted_by_id").
 			Optional().
+			Immutable().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entoas.Annotation{ReadOnly: true},
@@ -63,7 +65,7 @@ func (d SoftDeleteMixin) SoftDeleteHook(next ent.Mutator) ent.Mutator {
 		SetOp(ent.Op)
 		Client() *generated.Client
 		SetDeletedAt(time.Time)
-		SetDeletedBy(string)
+		SetDeletedByID(string)
 		WhereP(...func(*sql.Selector))
 	}
 
@@ -89,7 +91,7 @@ func (d SoftDeleteMixin) SoftDeleteHook(next ent.Mutator) ent.Mutator {
 		ctx = entx.IsSoftDelete(ctx)
 
 		sd.SetDeletedAt(time.Now())
-		sd.SetDeletedBy(actor)
+		sd.SetDeletedByID(actor)
 
 		return sd.Client().Mutate(ctx, m)
 	})

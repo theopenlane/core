@@ -45,63 +45,23 @@ func (tsu *TFASettingUpdate) ClearUpdatedAt() *TFASettingUpdate {
 	return tsu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tsu *TFASettingUpdate) SetUpdatedBy(s string) *TFASettingUpdate {
-	tsu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tsu *TFASettingUpdate) SetUpdatedByID(s string) *TFASettingUpdate {
+	tsu.mutation.SetUpdatedByID(s)
 	return tsu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tsu *TFASettingUpdate) SetNillableUpdatedBy(s *string) *TFASettingUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tsu *TFASettingUpdate) SetNillableUpdatedByID(s *string) *TFASettingUpdate {
 	if s != nil {
-		tsu.SetUpdatedBy(*s)
+		tsu.SetUpdatedByID(*s)
 	}
 	return tsu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tsu *TFASettingUpdate) ClearUpdatedBy() *TFASettingUpdate {
-	tsu.mutation.ClearUpdatedBy()
-	return tsu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (tsu *TFASettingUpdate) SetDeletedAt(t time.Time) *TFASettingUpdate {
-	tsu.mutation.SetDeletedAt(t)
-	return tsu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tsu *TFASettingUpdate) SetNillableDeletedAt(t *time.Time) *TFASettingUpdate {
-	if t != nil {
-		tsu.SetDeletedAt(*t)
-	}
-	return tsu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (tsu *TFASettingUpdate) ClearDeletedAt() *TFASettingUpdate {
-	tsu.mutation.ClearDeletedAt()
-	return tsu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (tsu *TFASettingUpdate) SetDeletedBy(s string) *TFASettingUpdate {
-	tsu.mutation.SetDeletedBy(s)
-	return tsu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tsu *TFASettingUpdate) SetNillableDeletedBy(s *string) *TFASettingUpdate {
-	if s != nil {
-		tsu.SetDeletedBy(*s)
-	}
-	return tsu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tsu *TFASettingUpdate) ClearDeletedBy() *TFASettingUpdate {
-	tsu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tsu *TFASettingUpdate) ClearUpdatedByID() *TFASettingUpdate {
+	tsu.mutation.ClearUpdatedByID()
 	return tsu
 }
 
@@ -255,6 +215,11 @@ func (tsu *TFASettingUpdate) ClearTotpAllowed() *TFASettingUpdate {
 	return tsu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (tsu *TFASettingUpdate) SetUpdatedBy(u *User) *TFASettingUpdate {
+	return tsu.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the User entity.
 func (tsu *TFASettingUpdate) SetOwner(u *User) *TFASettingUpdate {
 	return tsu.SetOwnerID(u.ID)
@@ -263,6 +228,12 @@ func (tsu *TFASettingUpdate) SetOwner(u *User) *TFASettingUpdate {
 // Mutation returns the TFASettingMutation object of the builder.
 func (tsu *TFASettingUpdate) Mutation() *TFASettingMutation {
 	return tsu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (tsu *TFASettingUpdate) ClearUpdatedBy() *TFASettingUpdate {
+	tsu.mutation.ClearUpdatedBy()
+	return tsu
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
@@ -337,26 +308,11 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tsu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(tfasetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if tsu.mutation.CreatedByCleared() {
-		_spec.ClearField(tfasetting.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := tsu.mutation.UpdatedBy(); ok {
-		_spec.SetField(tfasetting.FieldUpdatedBy, field.TypeString, value)
-	}
-	if tsu.mutation.UpdatedByCleared() {
-		_spec.ClearField(tfasetting.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := tsu.mutation.DeletedAt(); ok {
-		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)
-	}
 	if tsu.mutation.DeletedAtCleared() {
 		_spec.ClearField(tfasetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tsu.mutation.DeletedBy(); ok {
-		_spec.SetField(tfasetting.FieldDeletedBy, field.TypeString, value)
-	}
-	if tsu.mutation.DeletedByCleared() {
-		_spec.ClearField(tfasetting.FieldDeletedBy, field.TypeString)
+	if tsu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tsu.mutation.Tags(); ok {
 		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)
@@ -406,6 +362,37 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tsu.mutation.TotpAllowedCleared() {
 		_spec.ClearField(tfasetting.FieldTotpAllowed, field.TypeBool)
+	}
+	if tsu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByTable,
+			Columns: []string{tfasetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsu.schemaConfig.TFASetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tsu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByTable,
+			Columns: []string{tfasetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsu.schemaConfig.TFASetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tsu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -474,63 +461,23 @@ func (tsuo *TFASettingUpdateOne) ClearUpdatedAt() *TFASettingUpdateOne {
 	return tsuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tsuo *TFASettingUpdateOne) SetUpdatedBy(s string) *TFASettingUpdateOne {
-	tsuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tsuo *TFASettingUpdateOne) SetUpdatedByID(s string) *TFASettingUpdateOne {
+	tsuo.mutation.SetUpdatedByID(s)
 	return tsuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tsuo *TFASettingUpdateOne) SetNillableUpdatedBy(s *string) *TFASettingUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tsuo *TFASettingUpdateOne) SetNillableUpdatedByID(s *string) *TFASettingUpdateOne {
 	if s != nil {
-		tsuo.SetUpdatedBy(*s)
+		tsuo.SetUpdatedByID(*s)
 	}
 	return tsuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tsuo *TFASettingUpdateOne) ClearUpdatedBy() *TFASettingUpdateOne {
-	tsuo.mutation.ClearUpdatedBy()
-	return tsuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (tsuo *TFASettingUpdateOne) SetDeletedAt(t time.Time) *TFASettingUpdateOne {
-	tsuo.mutation.SetDeletedAt(t)
-	return tsuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tsuo *TFASettingUpdateOne) SetNillableDeletedAt(t *time.Time) *TFASettingUpdateOne {
-	if t != nil {
-		tsuo.SetDeletedAt(*t)
-	}
-	return tsuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (tsuo *TFASettingUpdateOne) ClearDeletedAt() *TFASettingUpdateOne {
-	tsuo.mutation.ClearDeletedAt()
-	return tsuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (tsuo *TFASettingUpdateOne) SetDeletedBy(s string) *TFASettingUpdateOne {
-	tsuo.mutation.SetDeletedBy(s)
-	return tsuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tsuo *TFASettingUpdateOne) SetNillableDeletedBy(s *string) *TFASettingUpdateOne {
-	if s != nil {
-		tsuo.SetDeletedBy(*s)
-	}
-	return tsuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tsuo *TFASettingUpdateOne) ClearDeletedBy() *TFASettingUpdateOne {
-	tsuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tsuo *TFASettingUpdateOne) ClearUpdatedByID() *TFASettingUpdateOne {
+	tsuo.mutation.ClearUpdatedByID()
 	return tsuo
 }
 
@@ -684,6 +631,11 @@ func (tsuo *TFASettingUpdateOne) ClearTotpAllowed() *TFASettingUpdateOne {
 	return tsuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (tsuo *TFASettingUpdateOne) SetUpdatedBy(u *User) *TFASettingUpdateOne {
+	return tsuo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the User entity.
 func (tsuo *TFASettingUpdateOne) SetOwner(u *User) *TFASettingUpdateOne {
 	return tsuo.SetOwnerID(u.ID)
@@ -692,6 +644,12 @@ func (tsuo *TFASettingUpdateOne) SetOwner(u *User) *TFASettingUpdateOne {
 // Mutation returns the TFASettingMutation object of the builder.
 func (tsuo *TFASettingUpdateOne) Mutation() *TFASettingMutation {
 	return tsuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (tsuo *TFASettingUpdateOne) ClearUpdatedBy() *TFASettingUpdateOne {
+	tsuo.mutation.ClearUpdatedBy()
+	return tsuo
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
@@ -796,26 +754,11 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 	if tsuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(tfasetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if tsuo.mutation.CreatedByCleared() {
-		_spec.ClearField(tfasetting.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := tsuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(tfasetting.FieldUpdatedBy, field.TypeString, value)
-	}
-	if tsuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(tfasetting.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := tsuo.mutation.DeletedAt(); ok {
-		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)
-	}
 	if tsuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(tfasetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tsuo.mutation.DeletedBy(); ok {
-		_spec.SetField(tfasetting.FieldDeletedBy, field.TypeString, value)
-	}
-	if tsuo.mutation.DeletedByCleared() {
-		_spec.ClearField(tfasetting.FieldDeletedBy, field.TypeString)
+	if tsuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tsuo.mutation.Tags(); ok {
 		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)
@@ -865,6 +808,37 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 	}
 	if tsuo.mutation.TotpAllowedCleared() {
 		_spec.ClearField(tfasetting.FieldTotpAllowed, field.TypeBool)
+	}
+	if tsuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByTable,
+			Columns: []string{tfasetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsuo.schemaConfig.TFASetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tsuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByTable,
+			Columns: []string{tfasetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsuo.schemaConfig.TFASetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tsuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

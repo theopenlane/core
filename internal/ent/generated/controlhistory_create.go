@@ -55,6 +55,20 @@ func (chc *ControlHistoryCreate) SetOperation(ht history.OpType) *ControlHistory
 	return chc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (chc *ControlHistoryCreate) SetUpdatedBy(s string) *ControlHistoryCreate {
+	chc.mutation.SetUpdatedBy(s)
+	return chc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableUpdatedBy(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetUpdatedBy(*s)
+	}
+	return chc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (chc *ControlHistoryCreate) SetCreatedAt(t time.Time) *ControlHistoryCreate {
 	chc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (chc *ControlHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ControlHist
 	return chc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (chc *ControlHistoryCreate) SetCreatedBy(s string) *ControlHistoryCreate {
-	chc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (chc *ControlHistoryCreate) SetCreatedByID(s string) *ControlHistoryCreate {
+	chc.mutation.SetCreatedByID(s)
 	return chc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableCreatedBy(s *string) *ControlHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableCreatedByID(s *string) *ControlHistoryCreate {
 	if s != nil {
-		chc.SetCreatedBy(*s)
+		chc.SetCreatedByID(*s)
 	}
 	return chc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (chc *ControlHistoryCreate) SetUpdatedBy(s string) *ControlHistoryCreate {
-	chc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (chc *ControlHistoryCreate) SetUpdatedByID(s string) *ControlHistoryCreate {
+	chc.mutation.SetUpdatedByID(s)
 	return chc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableUpdatedBy(s *string) *ControlHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableUpdatedByID(s *string) *ControlHistoryCreate {
 	if s != nil {
-		chc.SetUpdatedBy(*s)
+		chc.SetUpdatedByID(*s)
 	}
 	return chc
 }
@@ -125,16 +139,16 @@ func (chc *ControlHistoryCreate) SetNillableDeletedAt(t *time.Time) *ControlHist
 	return chc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (chc *ControlHistoryCreate) SetDeletedBy(s string) *ControlHistoryCreate {
-	chc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (chc *ControlHistoryCreate) SetDeletedByID(s string) *ControlHistoryCreate {
+	chc.mutation.SetDeletedByID(s)
 	return chc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableDeletedBy(s *string) *ControlHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableDeletedByID(s *string) *ControlHistoryCreate {
 	if s != nil {
-		chc.SetDeletedBy(*s)
+		chc.SetDeletedByID(*s)
 	}
 	return chc
 }
@@ -480,6 +494,10 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 		_spec.SetField(controlhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := chc.mutation.UpdatedBy(); ok {
+		_spec.SetField(controlhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := chc.mutation.CreatedAt(); ok {
 		_spec.SetField(controlhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -488,21 +506,21 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 		_spec.SetField(controlhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := chc.mutation.CreatedBy(); ok {
-		_spec.SetField(controlhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := chc.mutation.CreatedByID(); ok {
+		_spec.SetField(controlhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := chc.mutation.UpdatedBy(); ok {
-		_spec.SetField(controlhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := chc.mutation.UpdatedByID(); ok {
+		_spec.SetField(controlhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := chc.mutation.DeletedAt(); ok {
 		_spec.SetField(controlhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := chc.mutation.DeletedBy(); ok {
-		_spec.SetField(controlhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := chc.mutation.DeletedByID(); ok {
+		_spec.SetField(controlhistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := chc.mutation.MappingID(); ok {
 		_spec.SetField(controlhistory.FieldMappingID, field.TypeString, value)

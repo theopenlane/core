@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -29,6 +30,8 @@ type TemplateQuery struct {
 	order              []template.OrderOption
 	inters             []Interceptor
 	predicates         []predicate.Template
+	withCreatedBy      *UserQuery
+	withUpdatedBy      *UserQuery
 	withOwner          *OrganizationQuery
 	withDocuments      *DocumentDataQuery
 	withFiles          *FileQuery
@@ -70,6 +73,56 @@ func (tq *TemplateQuery) Unique(unique bool) *TemplateQuery {
 func (tq *TemplateQuery) Order(o ...template.OrderOption) *TemplateQuery {
 	tq.order = append(tq.order, o...)
 	return tq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (tq *TemplateQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.CreatedByTable, template.CreatedByColumn),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Template
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (tq *TemplateQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.UpdatedByTable, template.UpdatedByColumn),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Template
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -339,6 +392,8 @@ func (tq *TemplateQuery) Clone() *TemplateQuery {
 		order:         append([]template.OrderOption{}, tq.order...),
 		inters:        append([]Interceptor{}, tq.inters...),
 		predicates:    append([]predicate.Template{}, tq.predicates...),
+		withCreatedBy: tq.withCreatedBy.Clone(),
+		withUpdatedBy: tq.withUpdatedBy.Clone(),
 		withOwner:     tq.withOwner.Clone(),
 		withDocuments: tq.withDocuments.Clone(),
 		withFiles:     tq.withFiles.Clone(),
@@ -347,6 +402,28 @@ func (tq *TemplateQuery) Clone() *TemplateQuery {
 		path:      tq.path,
 		modifiers: append([]func(*sql.Selector){}, tq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TemplateQuery) WithCreatedBy(opts ...func(*UserQuery)) *TemplateQuery {
+	query := (&UserClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withCreatedBy = query
+	return tq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TemplateQuery) WithUpdatedBy(opts ...func(*UserQuery)) *TemplateQuery {
+	query := (&UserClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withUpdatedBy = query
+	return tq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -466,7 +543,9 @@ func (tq *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	var (
 		nodes       = []*Template{}
 		_spec       = tq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
+			tq.withCreatedBy != nil,
+			tq.withUpdatedBy != nil,
 			tq.withOwner != nil,
 			tq.withDocuments != nil,
 			tq.withFiles != nil,
@@ -494,6 +573,18 @@ func (tq *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := tq.withCreatedBy; query != nil {
+		if err := tq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Template, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withUpdatedBy; query != nil {
+		if err := tq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Template, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := tq.withOwner; query != nil {
 		if err := tq.loadOwner(ctx, query, nodes, nil,
@@ -537,6 +628,64 @@ func (tq *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	return nodes, nil
 }
 
+func (tq *TemplateQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Template, init func(*Template), assign func(*Template, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Template)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tq *TemplateQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Template, init func(*Template), assign func(*Template, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Template)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (tq *TemplateQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Template, init func(*Template), assign func(*Template, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Template)
@@ -688,6 +837,12 @@ func (tq *TemplateQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != template.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if tq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(template.FieldCreatedByID)
+		}
+		if tq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(template.FieldUpdatedByID)
 		}
 		if tq.withOwner != nil {
 			_spec.Node.AddColumnOnce(template.FieldOwnerID)

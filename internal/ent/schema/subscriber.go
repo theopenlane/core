@@ -82,7 +82,7 @@ func (Subscriber) Fields() []ent.Field {
 // Mixin of the Subscriber
 func (Subscriber) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},

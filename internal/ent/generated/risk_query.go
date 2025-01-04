@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -32,6 +33,8 @@ type RiskQuery struct {
 	order                  []risk.OrderOption
 	inters                 []Interceptor
 	predicates             []predicate.Risk
+	withCreatedBy          *UserQuery
+	withUpdatedBy          *UserQuery
 	withOwner              *OrganizationQuery
 	withBlockedGroups      *GroupQuery
 	withEditors            *GroupQuery
@@ -84,6 +87,56 @@ func (rq *RiskQuery) Unique(unique bool) *RiskQuery {
 func (rq *RiskQuery) Order(o ...risk.OrderOption) *RiskQuery {
 	rq.order = append(rq.order, o...)
 	return rq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (rq *RiskQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.CreatedByTable, risk.CreatedByColumn),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (rq *RiskQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.UpdatedByTable, risk.UpdatedByColumn),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -478,6 +531,8 @@ func (rq *RiskQuery) Clone() *RiskQuery {
 		order:             append([]risk.OrderOption{}, rq.order...),
 		inters:            append([]Interceptor{}, rq.inters...),
 		predicates:        append([]predicate.Risk{}, rq.predicates...),
+		withCreatedBy:     rq.withCreatedBy.Clone(),
+		withUpdatedBy:     rq.withUpdatedBy.Clone(),
 		withOwner:         rq.withOwner.Clone(),
 		withBlockedGroups: rq.withBlockedGroups.Clone(),
 		withEditors:       rq.withEditors.Clone(),
@@ -491,6 +546,28 @@ func (rq *RiskQuery) Clone() *RiskQuery {
 		path:      rq.path,
 		modifiers: append([]func(*sql.Selector){}, rq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithCreatedBy(opts ...func(*UserQuery)) *RiskQuery {
+	query := (&UserClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withCreatedBy = query
+	return rq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithUpdatedBy(opts ...func(*UserQuery)) *RiskQuery {
+	query := (&UserClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withUpdatedBy = query
+	return rq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -666,7 +743,9 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [10]bool{
+			rq.withCreatedBy != nil,
+			rq.withUpdatedBy != nil,
 			rq.withOwner != nil,
 			rq.withBlockedGroups != nil,
 			rq.withEditors != nil,
@@ -702,6 +781,18 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := rq.withCreatedBy; query != nil {
+		if err := rq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Risk, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withUpdatedBy; query != nil {
+		if err := rq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Risk, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := rq.withOwner; query != nil {
 		if err := rq.loadOwner(ctx, query, nodes, nil,
@@ -815,6 +906,64 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 	return nodes, nil
 }
 
+func (rq *RiskQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (rq *RiskQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (rq *RiskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Risk)
@@ -1308,6 +1457,12 @@ func (rq *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != risk.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if rq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(risk.FieldCreatedByID)
+		}
+		if rq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(risk.FieldUpdatedByID)
 		}
 		if rq.withOwner != nil {
 			_spec.Node.AddColumnOnce(risk.FieldOwnerID)

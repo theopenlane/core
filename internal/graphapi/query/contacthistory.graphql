@@ -5,7 +5,7 @@ query GetAllContactHistories {
         address
         company
         createdAt
-        createdBy
+        createdByID
         email
         fullName
         historyTime
@@ -17,8 +17,9 @@ query GetAllContactHistories {
         status
         tags
         title
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -31,7 +32,7 @@ query GetContactHistories($where: ContactHistoryWhereInput) {
         address
         company
         createdAt
-        createdBy
+        createdByID
         email
         fullName
         historyTime
@@ -43,8 +44,9 @@ query GetContactHistories($where: ContactHistoryWhereInput) {
         status
         tags
         title
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

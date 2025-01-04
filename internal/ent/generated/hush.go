@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Hush is the model entity for the Hush schema.
@@ -21,16 +22,16 @@ type Hush struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name,omitempty"`
 	// a description of the hush value or purpose, such as github PAT
@@ -49,6 +50,10 @@ type Hush struct {
 
 // HushEdges holds the relations/edges for other nodes in the graph.
 type HushEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// the integration associated with the secret
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Organization holds the value of the organization edge.
@@ -57,19 +62,41 @@ type HushEdges struct {
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
 	namedIntegrations map[string][]*Integration
 	namedOrganization map[string][]*Organization
 	namedEvents       map[string][]*Event
 }
 
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e HushEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e HushEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
+}
+
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e HushEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[2] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -78,7 +105,7 @@ func (e HushEdges) IntegrationsOrErr() ([]*Integration, error) {
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e HushEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -87,7 +114,7 @@ func (e HushEdges) OrganizationOrErr() ([]*Organization, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e HushEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -98,7 +125,7 @@ func (*Hush) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case hush.FieldID, hush.FieldCreatedBy, hush.FieldUpdatedBy, hush.FieldMappingID, hush.FieldDeletedBy, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
+		case hush.FieldID, hush.FieldCreatedByID, hush.FieldUpdatedByID, hush.FieldMappingID, hush.FieldDeletedByID, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hush.FieldCreatedAt, hush.FieldUpdatedAt, hush.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -135,17 +162,17 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				h.UpdatedAt = value.Time
 			}
-		case hush.FieldCreatedBy:
+		case hush.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				h.CreatedBy = value.String
+				h.CreatedByID = value.String
 			}
-		case hush.FieldUpdatedBy:
+		case hush.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				h.UpdatedBy = value.String
+				h.UpdatedByID = value.String
 			}
 		case hush.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -159,11 +186,11 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				h.DeletedAt = value.Time
 			}
-		case hush.FieldDeletedBy:
+		case hush.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				h.DeletedBy = value.String
+				h.DeletedByID = value.String
 			}
 		case hush.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -206,6 +233,16 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (h *Hush) Value(name string) (ent.Value, error) {
 	return h.selectValues.Get(name)
+}
+
+// QueryCreatedBy queries the "created_by" edge of the Hush entity.
+func (h *Hush) QueryCreatedBy() *UserQuery {
+	return NewHushClient(h.config).QueryCreatedBy(h)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Hush entity.
+func (h *Hush) QueryUpdatedBy() *UserQuery {
+	return NewHushClient(h.config).QueryUpdatedBy(h)
 }
 
 // QueryIntegrations queries the "integrations" edge of the Hush entity.
@@ -252,11 +289,11 @@ func (h *Hush) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(h.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(h.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(h.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(h.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(h.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(h.MappingID)
@@ -264,8 +301,8 @@ func (h *Hush) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(h.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(h.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(h.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(h.Name)

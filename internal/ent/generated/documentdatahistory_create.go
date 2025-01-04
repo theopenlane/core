@@ -56,6 +56,20 @@ func (ddhc *DocumentDataHistoryCreate) SetOperation(ht history.OpType) *Document
 	return ddhc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (ddhc *DocumentDataHistoryCreate) SetUpdatedBy(s string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetUpdatedBy(s)
+	return ddhc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedBy(s *string) *DocumentDataHistoryCreate {
+	if s != nil {
+		ddhc.SetUpdatedBy(*s)
+	}
+	return ddhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (ddhc *DocumentDataHistoryCreate) SetCreatedAt(t time.Time) *DocumentDataHistoryCreate {
 	ddhc.mutation.SetCreatedAt(t)
@@ -84,30 +98,30 @@ func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Docum
 	return ddhc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ddhc *DocumentDataHistoryCreate) SetCreatedBy(s string) *DocumentDataHistoryCreate {
-	ddhc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ddhc *DocumentDataHistoryCreate) SetCreatedByID(s string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetCreatedByID(s)
 	return ddhc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ddhc *DocumentDataHistoryCreate) SetNillableCreatedBy(s *string) *DocumentDataHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableCreatedByID(s *string) *DocumentDataHistoryCreate {
 	if s != nil {
-		ddhc.SetCreatedBy(*s)
+		ddhc.SetCreatedByID(*s)
 	}
 	return ddhc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ddhc *DocumentDataHistoryCreate) SetUpdatedBy(s string) *DocumentDataHistoryCreate {
-	ddhc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ddhc *DocumentDataHistoryCreate) SetUpdatedByID(s string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetUpdatedByID(s)
 	return ddhc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedBy(s *string) *DocumentDataHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedByID(s *string) *DocumentDataHistoryCreate {
 	if s != nil {
-		ddhc.SetUpdatedBy(*s)
+		ddhc.SetUpdatedByID(*s)
 	}
 	return ddhc
 }
@@ -146,16 +160,16 @@ func (ddhc *DocumentDataHistoryCreate) SetNillableDeletedAt(t *time.Time) *Docum
 	return ddhc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ddhc *DocumentDataHistoryCreate) SetDeletedBy(s string) *DocumentDataHistoryCreate {
-	ddhc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ddhc *DocumentDataHistoryCreate) SetDeletedByID(s string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetDeletedByID(s)
 	return ddhc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ddhc *DocumentDataHistoryCreate) SetNillableDeletedBy(s *string) *DocumentDataHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableDeletedByID(s *string) *DocumentDataHistoryCreate {
 	if s != nil {
-		ddhc.SetDeletedBy(*s)
+		ddhc.SetDeletedByID(*s)
 	}
 	return ddhc
 }
@@ -349,6 +363,10 @@ func (ddhc *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlg
 		_spec.SetField(documentdatahistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := ddhc.mutation.UpdatedBy(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := ddhc.mutation.CreatedAt(); ok {
 		_spec.SetField(documentdatahistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -357,13 +375,13 @@ func (ddhc *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlg
 		_spec.SetField(documentdatahistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ddhc.mutation.CreatedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ddhc.mutation.CreatedByID(); ok {
+		_spec.SetField(documentdatahistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ddhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ddhc.mutation.UpdatedByID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ddhc.mutation.MappingID(); ok {
 		_spec.SetField(documentdatahistory.FieldMappingID, field.TypeString, value)
@@ -377,9 +395,9 @@ func (ddhc *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlg
 		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ddhc.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ddhc.mutation.DeletedByID(); ok {
+		_spec.SetField(documentdatahistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ddhc.mutation.OwnerID(); ok {
 		_spec.SetField(documentdatahistory.FieldOwnerID, field.TypeString, value)

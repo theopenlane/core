@@ -2,15 +2,27 @@ mutation CreateBulkCSVEntity($input: Upload!) {
   createBulkCSVEntity(input: $input) {
     entities {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       displayName
       status
       domains
       notes {
         text
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
       entityType {
         name
@@ -20,7 +32,7 @@ mutation CreateBulkCSVEntity($input: Upload!) {
       ownerID
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -29,15 +41,27 @@ mutation CreateBulkEntity($input: [CreateEntityInput!]) {
   createBulkEntity(input: $input) {
     entities {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       displayName
       status
       domains
       notes {
         text
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
       entityType {
         name
@@ -47,7 +71,7 @@ mutation CreateBulkEntity($input: [CreateEntityInput!]) {
       ownerID
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -56,15 +80,27 @@ mutation CreateEntity($input: CreateEntityInput!) {
   createEntity(input: $input) {
     entity {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       displayName
       status
       domains
       notes {
         text
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
       entityType {
         name
@@ -74,7 +110,7 @@ mutation CreateEntity($input: CreateEntityInput!) {
       ownerID
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -90,7 +126,7 @@ query GetAllEntities {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         displayName
         status
@@ -98,7 +134,7 @@ query GetAllEntities {
         notes {
           text
           updatedAt
-          updatedBy
+          updatedByID
         }
         entityType {
           name
@@ -107,8 +143,14 @@ query GetAllEntities {
         name
         ownerID
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
     }
   }
@@ -119,7 +161,7 @@ query GetEntities($where: EntityWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         displayName
         status
@@ -127,7 +169,7 @@ query GetEntities($where: EntityWhereInput) {
         notes {
           text
           updatedAt
-          updatedBy
+          updatedByID
         }
         entityType {
           name
@@ -136,8 +178,14 @@ query GetEntities($where: EntityWhereInput) {
         name
         ownerID
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
     }
   }
@@ -146,7 +194,7 @@ query GetEntities($where: EntityWhereInput) {
 query GetEntityByID($entityId: ID!) {
   entity(id: $entityId) {
     createdAt
-    createdBy
+    createdByID
     description
     displayName
     status
@@ -154,7 +202,7 @@ query GetEntityByID($entityId: ID!) {
     notes {
       text
       updatedAt
-      updatedBy
+      updatedByID
     }
     entityType {
       name
@@ -173,7 +221,7 @@ query GetEntityByID($entityId: ID!) {
     }
     tags
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -181,15 +229,27 @@ mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
   updateEntity(id: $updateEntityId, input: $input) {
     entity {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       displayName
       status
       domains
       notes {
         text
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
       entityType {
         name
@@ -199,7 +259,7 @@ mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
       ownerID
       tags
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }

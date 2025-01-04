@@ -72,7 +72,7 @@ func (ProgramMembership) Indexes() []ent.Index {
 // Mixin of the ProgramMembership
 func (ProgramMembership) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 	}

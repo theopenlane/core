@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Hush_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Hush_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Hush_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Hush_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Hush_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -87,6 +87,10 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Hush_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Hush_updatedBy(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
 			case "organization":
@@ -145,14 +149,14 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Hush_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Hush_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Hush_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Hush_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Hush_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -161,6 +165,10 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Hush_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Hush_updatedBy(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
 			case "organization":
@@ -263,14 +271,14 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Hush_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Hush_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Hush_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Hush_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Hush_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -279,6 +287,10 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Hush_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Hush_updatedBy(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
 			case "organization":

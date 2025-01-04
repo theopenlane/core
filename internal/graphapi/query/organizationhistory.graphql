@@ -4,7 +4,7 @@ query GetAllOrganizationHistories {
       node {
         avatarRemoteURL
         createdAt
-        createdBy
+        createdByID
         dedicatedDb
         description
         displayName
@@ -15,8 +15,9 @@ query GetAllOrganizationHistories {
         personalOrg
         ref
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -28,7 +29,7 @@ query GetOrganizationHistories($where: OrganizationHistoryWhereInput) {
       node {
         avatarRemoteURL
         createdAt
-        createdBy
+        createdByID
         dedicatedDb
         description
         displayName
@@ -39,8 +40,9 @@ query GetOrganizationHistories($where: OrganizationHistoryWhereInput) {
         personalOrg
         ref
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

@@ -22,13 +22,15 @@ import (
 // PasswordResetTokenQuery is the builder for querying PasswordResetToken entities.
 type PasswordResetTokenQuery struct {
 	config
-	ctx        *QueryContext
-	order      []passwordresettoken.OrderOption
-	inters     []Interceptor
-	predicates []predicate.PasswordResetToken
-	withOwner  *UserQuery
-	loadTotal  []func(context.Context, []*PasswordResetToken) error
-	modifiers  []func(*sql.Selector)
+	ctx           *QueryContext
+	order         []passwordresettoken.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.PasswordResetToken
+	withCreatedBy *UserQuery
+	withUpdatedBy *UserQuery
+	withOwner     *UserQuery
+	loadTotal     []func(context.Context, []*PasswordResetToken) error
+	modifiers     []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -63,6 +65,56 @@ func (prtq *PasswordResetTokenQuery) Unique(unique bool) *PasswordResetTokenQuer
 func (prtq *PasswordResetTokenQuery) Order(o ...passwordresettoken.OrderOption) *PasswordResetTokenQuery {
 	prtq.order = append(prtq.order, o...)
 	return prtq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (prtq *PasswordResetTokenQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: prtq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := prtq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := prtq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(passwordresettoken.Table, passwordresettoken.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passwordresettoken.CreatedByTable, passwordresettoken.CreatedByColumn),
+		)
+		schemaConfig := prtq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.PasswordResetToken
+		fromU = sqlgraph.SetNeighbors(prtq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (prtq *PasswordResetTokenQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: prtq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := prtq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := prtq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(passwordresettoken.Table, passwordresettoken.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passwordresettoken.UpdatedByTable, passwordresettoken.UpdatedByColumn),
+		)
+		schemaConfig := prtq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.PasswordResetToken
+		fromU = sqlgraph.SetNeighbors(prtq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -277,17 +329,41 @@ func (prtq *PasswordResetTokenQuery) Clone() *PasswordResetTokenQuery {
 		return nil
 	}
 	return &PasswordResetTokenQuery{
-		config:     prtq.config,
-		ctx:        prtq.ctx.Clone(),
-		order:      append([]passwordresettoken.OrderOption{}, prtq.order...),
-		inters:     append([]Interceptor{}, prtq.inters...),
-		predicates: append([]predicate.PasswordResetToken{}, prtq.predicates...),
-		withOwner:  prtq.withOwner.Clone(),
+		config:        prtq.config,
+		ctx:           prtq.ctx.Clone(),
+		order:         append([]passwordresettoken.OrderOption{}, prtq.order...),
+		inters:        append([]Interceptor{}, prtq.inters...),
+		predicates:    append([]predicate.PasswordResetToken{}, prtq.predicates...),
+		withCreatedBy: prtq.withCreatedBy.Clone(),
+		withUpdatedBy: prtq.withUpdatedBy.Clone(),
+		withOwner:     prtq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       prtq.sql.Clone(),
 		path:      prtq.path,
 		modifiers: append([]func(*sql.Selector){}, prtq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (prtq *PasswordResetTokenQuery) WithCreatedBy(opts ...func(*UserQuery)) *PasswordResetTokenQuery {
+	query := (&UserClient{config: prtq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	prtq.withCreatedBy = query
+	return prtq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (prtq *PasswordResetTokenQuery) WithUpdatedBy(opts ...func(*UserQuery)) *PasswordResetTokenQuery {
+	query := (&UserClient{config: prtq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	prtq.withUpdatedBy = query
+	return prtq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -385,7 +461,9 @@ func (prtq *PasswordResetTokenQuery) sqlAll(ctx context.Context, hooks ...queryH
 	var (
 		nodes       = []*PasswordResetToken{}
 		_spec       = prtq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
+			prtq.withCreatedBy != nil,
+			prtq.withUpdatedBy != nil,
 			prtq.withOwner != nil,
 		}
 	)
@@ -412,6 +490,18 @@ func (prtq *PasswordResetTokenQuery) sqlAll(ctx context.Context, hooks ...queryH
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := prtq.withCreatedBy; query != nil {
+		if err := prtq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *PasswordResetToken, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := prtq.withUpdatedBy; query != nil {
+		if err := prtq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *PasswordResetToken, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := prtq.withOwner; query != nil {
 		if err := prtq.loadOwner(ctx, query, nodes, nil,
 			func(n *PasswordResetToken, e *User) { n.Edges.Owner = e }); err != nil {
@@ -426,6 +516,64 @@ func (prtq *PasswordResetTokenQuery) sqlAll(ctx context.Context, hooks ...queryH
 	return nodes, nil
 }
 
+func (prtq *PasswordResetTokenQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*PasswordResetToken, init func(*PasswordResetToken), assign func(*PasswordResetToken, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*PasswordResetToken)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (prtq *PasswordResetTokenQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*PasswordResetToken, init func(*PasswordResetToken), assign func(*PasswordResetToken, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*PasswordResetToken)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (prtq *PasswordResetTokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*PasswordResetToken, init func(*PasswordResetToken), assign func(*PasswordResetToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*PasswordResetToken)
@@ -485,6 +633,12 @@ func (prtq *PasswordResetTokenQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != passwordresettoken.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if prtq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(passwordresettoken.FieldCreatedByID)
+		}
+		if prtq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(passwordresettoken.FieldUpdatedByID)
 		}
 		if prtq.withOwner != nil {
 			_spec.Node.AddColumnOnce(passwordresettoken.FieldOwnerID)

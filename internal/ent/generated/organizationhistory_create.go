@@ -55,6 +55,20 @@ func (ohc *OrganizationHistoryCreate) SetOperation(ht history.OpType) *Organizat
 	return ohc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (ohc *OrganizationHistoryCreate) SetUpdatedBy(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetUpdatedBy(s)
+	return ohc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableUpdatedBy(s *string) *OrganizationHistoryCreate {
+	if s != nil {
+		ohc.SetUpdatedBy(*s)
+	}
+	return ohc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (ohc *OrganizationHistoryCreate) SetCreatedAt(t time.Time) *OrganizationHistoryCreate {
 	ohc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (ohc *OrganizationHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Organi
 	return ohc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ohc *OrganizationHistoryCreate) SetCreatedBy(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ohc *OrganizationHistoryCreate) SetCreatedByID(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetCreatedByID(s)
 	return ohc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableCreatedBy(s *string) *OrganizationHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableCreatedByID(s *string) *OrganizationHistoryCreate {
 	if s != nil {
-		ohc.SetCreatedBy(*s)
+		ohc.SetCreatedByID(*s)
 	}
 	return ohc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ohc *OrganizationHistoryCreate) SetUpdatedBy(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ohc *OrganizationHistoryCreate) SetUpdatedByID(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetUpdatedByID(s)
 	return ohc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableUpdatedBy(s *string) *OrganizationHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableUpdatedByID(s *string) *OrganizationHistoryCreate {
 	if s != nil {
-		ohc.SetUpdatedBy(*s)
+		ohc.SetUpdatedByID(*s)
 	}
 	return ohc
 }
@@ -145,16 +159,16 @@ func (ohc *OrganizationHistoryCreate) SetNillableDeletedAt(t *time.Time) *Organi
 	return ohc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ohc *OrganizationHistoryCreate) SetDeletedBy(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ohc *OrganizationHistoryCreate) SetDeletedByID(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetDeletedByID(s)
 	return ohc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableDeletedBy(s *string) *OrganizationHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableDeletedByID(s *string) *OrganizationHistoryCreate {
 	if s != nil {
-		ohc.SetDeletedBy(*s)
+		ohc.SetDeletedByID(*s)
 	}
 	return ohc
 }
@@ -427,6 +441,10 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 		_spec.SetField(organizationhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := ohc.mutation.UpdatedBy(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := ohc.mutation.CreatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -435,13 +453,13 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ohc.mutation.CreatedBy(); ok {
-		_spec.SetField(organizationhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ohc.mutation.CreatedByID(); ok {
+		_spec.SetField(organizationhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ohc.mutation.UpdatedBy(); ok {
-		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ohc.mutation.UpdatedByID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ohc.mutation.MappingID(); ok {
 		_spec.SetField(organizationhistory.FieldMappingID, field.TypeString, value)
@@ -455,9 +473,9 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ohc.mutation.DeletedBy(); ok {
-		_spec.SetField(organizationhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ohc.mutation.DeletedByID(); ok {
+		_spec.SetField(organizationhistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ohc.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)

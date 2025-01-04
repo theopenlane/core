@@ -65,7 +65,7 @@ func (Integration) Annotations() []schema.Annotation {
 // Mixin of the Integration
 func (Integration) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},

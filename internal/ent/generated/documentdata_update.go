@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -49,23 +50,23 @@ func (ddu *DocumentDataUpdate) ClearUpdatedAt() *DocumentDataUpdate {
 	return ddu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ddu *DocumentDataUpdate) SetUpdatedBy(s string) *DocumentDataUpdate {
-	ddu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ddu *DocumentDataUpdate) SetUpdatedByID(s string) *DocumentDataUpdate {
+	ddu.mutation.SetUpdatedByID(s)
 	return ddu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableUpdatedBy(s *string) *DocumentDataUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ddu *DocumentDataUpdate) SetNillableUpdatedByID(s *string) *DocumentDataUpdate {
 	if s != nil {
-		ddu.SetUpdatedBy(*s)
+		ddu.SetUpdatedByID(*s)
 	}
 	return ddu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ddu *DocumentDataUpdate) ClearUpdatedBy() *DocumentDataUpdate {
-	ddu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ddu *DocumentDataUpdate) ClearUpdatedByID() *DocumentDataUpdate {
+	ddu.mutation.ClearUpdatedByID()
 	return ddu
 }
 
@@ -84,46 +85,6 @@ func (ddu *DocumentDataUpdate) AppendTags(s []string) *DocumentDataUpdate {
 // ClearTags clears the value of the "tags" field.
 func (ddu *DocumentDataUpdate) ClearTags() *DocumentDataUpdate {
 	ddu.mutation.ClearTags()
-	return ddu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ddu *DocumentDataUpdate) SetDeletedAt(t time.Time) *DocumentDataUpdate {
-	ddu.mutation.SetDeletedAt(t)
-	return ddu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableDeletedAt(t *time.Time) *DocumentDataUpdate {
-	if t != nil {
-		ddu.SetDeletedAt(*t)
-	}
-	return ddu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ddu *DocumentDataUpdate) ClearDeletedAt() *DocumentDataUpdate {
-	ddu.mutation.ClearDeletedAt()
-	return ddu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ddu *DocumentDataUpdate) SetDeletedBy(s string) *DocumentDataUpdate {
-	ddu.mutation.SetDeletedBy(s)
-	return ddu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableDeletedBy(s *string) *DocumentDataUpdate {
-	if s != nil {
-		ddu.SetDeletedBy(*s)
-	}
-	return ddu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ddu *DocumentDataUpdate) ClearDeletedBy() *DocumentDataUpdate {
-	ddu.mutation.ClearDeletedBy()
 	return ddu
 }
 
@@ -165,6 +126,11 @@ func (ddu *DocumentDataUpdate) SetNillableTemplateID(s *string) *DocumentDataUpd
 func (ddu *DocumentDataUpdate) SetData(co customtypes.JSONObject) *DocumentDataUpdate {
 	ddu.mutation.SetData(co)
 	return ddu
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (ddu *DocumentDataUpdate) SetUpdatedBy(u *User) *DocumentDataUpdate {
+	return ddu.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -210,6 +176,12 @@ func (ddu *DocumentDataUpdate) AddFiles(f ...*File) *DocumentDataUpdate {
 // Mutation returns the DocumentDataMutation object of the builder.
 func (ddu *DocumentDataUpdate) Mutation() *DocumentDataMutation {
 	return ddu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (ddu *DocumentDataUpdate) ClearUpdatedBy() *DocumentDataUpdate {
+	ddu.mutation.ClearUpdatedBy()
+	return ddu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -348,15 +320,6 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ddu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedAt, field.TypeTime)
 	}
-	if ddu.mutation.CreatedByCleared() {
-		_spec.ClearField(documentdata.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := ddu.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdata.FieldUpdatedBy, field.TypeString, value)
-	}
-	if ddu.mutation.UpdatedByCleared() {
-		_spec.ClearField(documentdata.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := ddu.mutation.Tags(); ok {
 		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
 	}
@@ -368,20 +331,45 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ddu.mutation.TagsCleared() {
 		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ddu.mutation.DeletedAt(); ok {
-		_spec.SetField(documentdata.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ddu.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdata.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ddu.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdata.FieldDeletedBy, field.TypeString, value)
-	}
-	if ddu.mutation.DeletedByCleared() {
-		_spec.ClearField(documentdata.FieldDeletedBy, field.TypeString)
+	if ddu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(documentdata.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ddu.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
+	}
+	if ddu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.UpdatedByTable,
+			Columns: []string{documentdata.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ddu.schemaConfig.DocumentData
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ddu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.UpdatedByTable,
+			Columns: []string{documentdata.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ddu.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ddu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -577,23 +565,23 @@ func (dduo *DocumentDataUpdateOne) ClearUpdatedAt() *DocumentDataUpdateOne {
 	return dduo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (dduo *DocumentDataUpdateOne) SetUpdatedBy(s string) *DocumentDataUpdateOne {
-	dduo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (dduo *DocumentDataUpdateOne) SetUpdatedByID(s string) *DocumentDataUpdateOne {
+	dduo.mutation.SetUpdatedByID(s)
 	return dduo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableUpdatedBy(s *string) *DocumentDataUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (dduo *DocumentDataUpdateOne) SetNillableUpdatedByID(s *string) *DocumentDataUpdateOne {
 	if s != nil {
-		dduo.SetUpdatedBy(*s)
+		dduo.SetUpdatedByID(*s)
 	}
 	return dduo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (dduo *DocumentDataUpdateOne) ClearUpdatedBy() *DocumentDataUpdateOne {
-	dduo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (dduo *DocumentDataUpdateOne) ClearUpdatedByID() *DocumentDataUpdateOne {
+	dduo.mutation.ClearUpdatedByID()
 	return dduo
 }
 
@@ -612,46 +600,6 @@ func (dduo *DocumentDataUpdateOne) AppendTags(s []string) *DocumentDataUpdateOne
 // ClearTags clears the value of the "tags" field.
 func (dduo *DocumentDataUpdateOne) ClearTags() *DocumentDataUpdateOne {
 	dduo.mutation.ClearTags()
-	return dduo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (dduo *DocumentDataUpdateOne) SetDeletedAt(t time.Time) *DocumentDataUpdateOne {
-	dduo.mutation.SetDeletedAt(t)
-	return dduo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableDeletedAt(t *time.Time) *DocumentDataUpdateOne {
-	if t != nil {
-		dduo.SetDeletedAt(*t)
-	}
-	return dduo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (dduo *DocumentDataUpdateOne) ClearDeletedAt() *DocumentDataUpdateOne {
-	dduo.mutation.ClearDeletedAt()
-	return dduo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (dduo *DocumentDataUpdateOne) SetDeletedBy(s string) *DocumentDataUpdateOne {
-	dduo.mutation.SetDeletedBy(s)
-	return dduo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableDeletedBy(s *string) *DocumentDataUpdateOne {
-	if s != nil {
-		dduo.SetDeletedBy(*s)
-	}
-	return dduo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (dduo *DocumentDataUpdateOne) ClearDeletedBy() *DocumentDataUpdateOne {
-	dduo.mutation.ClearDeletedBy()
 	return dduo
 }
 
@@ -693,6 +641,11 @@ func (dduo *DocumentDataUpdateOne) SetNillableTemplateID(s *string) *DocumentDat
 func (dduo *DocumentDataUpdateOne) SetData(co customtypes.JSONObject) *DocumentDataUpdateOne {
 	dduo.mutation.SetData(co)
 	return dduo
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (dduo *DocumentDataUpdateOne) SetUpdatedBy(u *User) *DocumentDataUpdateOne {
+	return dduo.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -738,6 +691,12 @@ func (dduo *DocumentDataUpdateOne) AddFiles(f ...*File) *DocumentDataUpdateOne {
 // Mutation returns the DocumentDataMutation object of the builder.
 func (dduo *DocumentDataUpdateOne) Mutation() *DocumentDataMutation {
 	return dduo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (dduo *DocumentDataUpdateOne) ClearUpdatedBy() *DocumentDataUpdateOne {
+	dduo.mutation.ClearUpdatedBy()
+	return dduo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -906,15 +865,6 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 	if dduo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedAt, field.TypeTime)
 	}
-	if dduo.mutation.CreatedByCleared() {
-		_spec.ClearField(documentdata.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := dduo.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdata.FieldUpdatedBy, field.TypeString, value)
-	}
-	if dduo.mutation.UpdatedByCleared() {
-		_spec.ClearField(documentdata.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := dduo.mutation.Tags(); ok {
 		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
 	}
@@ -926,20 +876,45 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 	if dduo.mutation.TagsCleared() {
 		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
 	}
-	if value, ok := dduo.mutation.DeletedAt(); ok {
-		_spec.SetField(documentdata.FieldDeletedAt, field.TypeTime, value)
-	}
 	if dduo.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdata.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := dduo.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdata.FieldDeletedBy, field.TypeString, value)
-	}
-	if dduo.mutation.DeletedByCleared() {
-		_spec.ClearField(documentdata.FieldDeletedBy, field.TypeString)
+	if dduo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(documentdata.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := dduo.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
+	}
+	if dduo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.UpdatedByTable,
+			Columns: []string{documentdata.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = dduo.schemaConfig.DocumentData
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := dduo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.UpdatedByTable,
+			Columns: []string{documentdata.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = dduo.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if dduo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

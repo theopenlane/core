@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -32,6 +33,8 @@ type EntityQuery struct {
 	order              []entity.OrderOption
 	inters             []Interceptor
 	predicates         []predicate.Entity
+	withCreatedBy      *UserQuery
+	withUpdatedBy      *UserQuery
 	withOwner          *OrganizationQuery
 	withContacts       *ContactQuery
 	withDocuments      *DocumentDataQuery
@@ -79,6 +82,56 @@ func (eq *EntityQuery) Unique(unique bool) *EntityQuery {
 func (eq *EntityQuery) Order(o ...entity.OrderOption) *EntityQuery {
 	eq.order = append(eq.order, o...)
 	return eq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (eq *EntityQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.CreatedByTable, entity.CreatedByColumn),
+		)
+		schemaConfig := eq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (eq *EntityQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.UpdatedByTable, entity.UpdatedByColumn),
+		)
+		schemaConfig := eq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -423,6 +476,8 @@ func (eq *EntityQuery) Clone() *EntityQuery {
 		order:          append([]entity.OrderOption{}, eq.order...),
 		inters:         append([]Interceptor{}, eq.inters...),
 		predicates:     append([]predicate.Entity{}, eq.predicates...),
+		withCreatedBy:  eq.withCreatedBy.Clone(),
+		withUpdatedBy:  eq.withUpdatedBy.Clone(),
 		withOwner:      eq.withOwner.Clone(),
 		withContacts:   eq.withContacts.Clone(),
 		withDocuments:  eq.withDocuments.Clone(),
@@ -434,6 +489,28 @@ func (eq *EntityQuery) Clone() *EntityQuery {
 		path:      eq.path,
 		modifiers: append([]func(*sql.Selector){}, eq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *EntityQuery) WithCreatedBy(opts ...func(*UserQuery)) *EntityQuery {
+	query := (&UserClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withCreatedBy = query
+	return eq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *EntityQuery) WithUpdatedBy(opts ...func(*UserQuery)) *EntityQuery {
+	query := (&UserClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withUpdatedBy = query
+	return eq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -587,7 +664,9 @@ func (eq *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = eq.withFKs
 		_spec       = eq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [8]bool{
+			eq.withCreatedBy != nil,
+			eq.withUpdatedBy != nil,
 			eq.withOwner != nil,
 			eq.withContacts != nil,
 			eq.withDocuments != nil,
@@ -621,6 +700,18 @@ func (eq *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := eq.withCreatedBy; query != nil {
+		if err := eq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Entity, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := eq.withUpdatedBy; query != nil {
+		if err := eq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Entity, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := eq.withOwner; query != nil {
 		if err := eq.loadOwner(ctx, query, nodes, nil,
@@ -698,6 +789,64 @@ func (eq *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 	return nodes, nil
 }
 
+func (eq *EntityQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (eq *EntityQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (eq *EntityQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Entity)
@@ -1003,6 +1152,12 @@ func (eq *EntityQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != entity.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if eq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(entity.FieldCreatedByID)
+		}
+		if eq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(entity.FieldUpdatedByID)
 		}
 		if eq.withOwner != nil {
 			_spec.Node.AddColumnOnce(entity.FieldOwnerID)

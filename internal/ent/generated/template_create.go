@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -53,30 +54,30 @@ func (tc *TemplateCreate) SetNillableUpdatedAt(t *time.Time) *TemplateCreate {
 	return tc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (tc *TemplateCreate) SetCreatedBy(s string) *TemplateCreate {
-	tc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (tc *TemplateCreate) SetCreatedByID(s string) *TemplateCreate {
+	tc.mutation.SetCreatedByID(s)
 	return tc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tc *TemplateCreate) SetNillableCreatedBy(s *string) *TemplateCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableCreatedByID(s *string) *TemplateCreate {
 	if s != nil {
-		tc.SetCreatedBy(*s)
+		tc.SetCreatedByID(*s)
 	}
 	return tc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tc *TemplateCreate) SetUpdatedBy(s string) *TemplateCreate {
-	tc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tc *TemplateCreate) SetUpdatedByID(s string) *TemplateCreate {
+	tc.mutation.SetUpdatedByID(s)
 	return tc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tc *TemplateCreate) SetNillableUpdatedBy(s *string) *TemplateCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableUpdatedByID(s *string) *TemplateCreate {
 	if s != nil {
-		tc.SetUpdatedBy(*s)
+		tc.SetUpdatedByID(*s)
 	}
 	return tc
 }
@@ -95,16 +96,16 @@ func (tc *TemplateCreate) SetNillableDeletedAt(t *time.Time) *TemplateCreate {
 	return tc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tc *TemplateCreate) SetDeletedBy(s string) *TemplateCreate {
-	tc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tc *TemplateCreate) SetDeletedByID(s string) *TemplateCreate {
+	tc.mutation.SetDeletedByID(s)
 	return tc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tc *TemplateCreate) SetNillableDeletedBy(s *string) *TemplateCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableDeletedByID(s *string) *TemplateCreate {
 	if s != nil {
-		tc.SetDeletedBy(*s)
+		tc.SetDeletedByID(*s)
 	}
 	return tc
 }
@@ -201,6 +202,16 @@ func (tc *TemplateCreate) SetNillableID(s *string) *TemplateCreate {
 		tc.SetID(*s)
 	}
 	return tc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (tc *TemplateCreate) SetCreatedBy(u *User) *TemplateCreate {
+	return tc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (tc *TemplateCreate) SetUpdatedBy(u *User) *TemplateCreate {
+	return tc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -387,21 +398,13 @@ func (tc *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 		_spec.SetField(template.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tc.mutation.CreatedBy(); ok {
-		_spec.SetField(template.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := tc.mutation.UpdatedBy(); ok {
-		_spec.SetField(template.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := tc.mutation.DeletedAt(); ok {
 		_spec.SetField(template.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tc.mutation.DeletedBy(); ok {
-		_spec.SetField(template.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := tc.mutation.DeletedByID(); ok {
+		_spec.SetField(template.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := tc.mutation.MappingID(); ok {
 		_spec.SetField(template.FieldMappingID, field.TypeString, value)
@@ -430,6 +433,42 @@ func (tc *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Uischema(); ok {
 		_spec.SetField(template.FieldUischema, field.TypeJSON, value)
 		_node.Uischema = value
+	}
+	if nodes := tc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.CreatedByTable,
+			Columns: []string{template.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.UpdatedByTable,
+			Columns: []string{template.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

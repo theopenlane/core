@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -49,63 +50,23 @@ func (tu *TemplateUpdate) ClearUpdatedAt() *TemplateUpdate {
 	return tu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tu *TemplateUpdate) SetUpdatedBy(s string) *TemplateUpdate {
-	tu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tu *TemplateUpdate) SetUpdatedByID(s string) *TemplateUpdate {
+	tu.mutation.SetUpdatedByID(s)
 	return tu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tu *TemplateUpdate) SetNillableUpdatedBy(s *string) *TemplateUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tu *TemplateUpdate) SetNillableUpdatedByID(s *string) *TemplateUpdate {
 	if s != nil {
-		tu.SetUpdatedBy(*s)
+		tu.SetUpdatedByID(*s)
 	}
 	return tu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tu *TemplateUpdate) ClearUpdatedBy() *TemplateUpdate {
-	tu.mutation.ClearUpdatedBy()
-	return tu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (tu *TemplateUpdate) SetDeletedAt(t time.Time) *TemplateUpdate {
-	tu.mutation.SetDeletedAt(t)
-	return tu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tu *TemplateUpdate) SetNillableDeletedAt(t *time.Time) *TemplateUpdate {
-	if t != nil {
-		tu.SetDeletedAt(*t)
-	}
-	return tu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (tu *TemplateUpdate) ClearDeletedAt() *TemplateUpdate {
-	tu.mutation.ClearDeletedAt()
-	return tu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (tu *TemplateUpdate) SetDeletedBy(s string) *TemplateUpdate {
-	tu.mutation.SetDeletedBy(s)
-	return tu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tu *TemplateUpdate) SetNillableDeletedBy(s *string) *TemplateUpdate {
-	if s != nil {
-		tu.SetDeletedBy(*s)
-	}
-	return tu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tu *TemplateUpdate) ClearDeletedBy() *TemplateUpdate {
-	tu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tu *TemplateUpdate) ClearUpdatedByID() *TemplateUpdate {
+	tu.mutation.ClearUpdatedByID()
 	return tu
 }
 
@@ -213,6 +174,11 @@ func (tu *TemplateUpdate) ClearUischema() *TemplateUpdate {
 	return tu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (tu *TemplateUpdate) SetUpdatedBy(u *User) *TemplateUpdate {
+	return tu.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (tu *TemplateUpdate) SetOwner(o *Organization) *TemplateUpdate {
 	return tu.SetOwnerID(o.ID)
@@ -251,6 +217,12 @@ func (tu *TemplateUpdate) AddFiles(f ...*File) *TemplateUpdate {
 // Mutation returns the TemplateMutation object of the builder.
 func (tu *TemplateUpdate) Mutation() *TemplateMutation {
 	return tu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (tu *TemplateUpdate) ClearUpdatedBy() *TemplateUpdate {
+	tu.mutation.ClearUpdatedBy()
+	return tu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -390,26 +362,11 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(template.FieldUpdatedAt, field.TypeTime)
 	}
-	if tu.mutation.CreatedByCleared() {
-		_spec.ClearField(template.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := tu.mutation.UpdatedBy(); ok {
-		_spec.SetField(template.FieldUpdatedBy, field.TypeString, value)
-	}
-	if tu.mutation.UpdatedByCleared() {
-		_spec.ClearField(template.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := tu.mutation.DeletedAt(); ok {
-		_spec.SetField(template.FieldDeletedAt, field.TypeTime, value)
-	}
 	if tu.mutation.DeletedAtCleared() {
 		_spec.ClearField(template.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tu.mutation.DeletedBy(); ok {
-		_spec.SetField(template.FieldDeletedBy, field.TypeString, value)
-	}
-	if tu.mutation.DeletedByCleared() {
-		_spec.ClearField(template.FieldDeletedBy, field.TypeString)
+	if tu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(template.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tu.mutation.Tags(); ok {
 		_spec.SetField(template.FieldTags, field.TypeJSON, value)
@@ -442,6 +399,37 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
+	}
+	if tu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.UpdatedByTable,
+			Columns: []string{template.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Template
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.UpdatedByTable,
+			Columns: []string{template.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -606,63 +594,23 @@ func (tuo *TemplateUpdateOne) ClearUpdatedAt() *TemplateUpdateOne {
 	return tuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tuo *TemplateUpdateOne) SetUpdatedBy(s string) *TemplateUpdateOne {
-	tuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tuo *TemplateUpdateOne) SetUpdatedByID(s string) *TemplateUpdateOne {
+	tuo.mutation.SetUpdatedByID(s)
 	return tuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tuo *TemplateUpdateOne) SetNillableUpdatedBy(s *string) *TemplateUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tuo *TemplateUpdateOne) SetNillableUpdatedByID(s *string) *TemplateUpdateOne {
 	if s != nil {
-		tuo.SetUpdatedBy(*s)
+		tuo.SetUpdatedByID(*s)
 	}
 	return tuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tuo *TemplateUpdateOne) ClearUpdatedBy() *TemplateUpdateOne {
-	tuo.mutation.ClearUpdatedBy()
-	return tuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (tuo *TemplateUpdateOne) SetDeletedAt(t time.Time) *TemplateUpdateOne {
-	tuo.mutation.SetDeletedAt(t)
-	return tuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tuo *TemplateUpdateOne) SetNillableDeletedAt(t *time.Time) *TemplateUpdateOne {
-	if t != nil {
-		tuo.SetDeletedAt(*t)
-	}
-	return tuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (tuo *TemplateUpdateOne) ClearDeletedAt() *TemplateUpdateOne {
-	tuo.mutation.ClearDeletedAt()
-	return tuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (tuo *TemplateUpdateOne) SetDeletedBy(s string) *TemplateUpdateOne {
-	tuo.mutation.SetDeletedBy(s)
-	return tuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tuo *TemplateUpdateOne) SetNillableDeletedBy(s *string) *TemplateUpdateOne {
-	if s != nil {
-		tuo.SetDeletedBy(*s)
-	}
-	return tuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tuo *TemplateUpdateOne) ClearDeletedBy() *TemplateUpdateOne {
-	tuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tuo *TemplateUpdateOne) ClearUpdatedByID() *TemplateUpdateOne {
+	tuo.mutation.ClearUpdatedByID()
 	return tuo
 }
 
@@ -770,6 +718,11 @@ func (tuo *TemplateUpdateOne) ClearUischema() *TemplateUpdateOne {
 	return tuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (tuo *TemplateUpdateOne) SetUpdatedBy(u *User) *TemplateUpdateOne {
+	return tuo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (tuo *TemplateUpdateOne) SetOwner(o *Organization) *TemplateUpdateOne {
 	return tuo.SetOwnerID(o.ID)
@@ -808,6 +761,12 @@ func (tuo *TemplateUpdateOne) AddFiles(f ...*File) *TemplateUpdateOne {
 // Mutation returns the TemplateMutation object of the builder.
 func (tuo *TemplateUpdateOne) Mutation() *TemplateMutation {
 	return tuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (tuo *TemplateUpdateOne) ClearUpdatedBy() *TemplateUpdateOne {
+	tuo.mutation.ClearUpdatedBy()
+	return tuo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -977,26 +936,11 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 	if tuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(template.FieldUpdatedAt, field.TypeTime)
 	}
-	if tuo.mutation.CreatedByCleared() {
-		_spec.ClearField(template.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := tuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(template.FieldUpdatedBy, field.TypeString, value)
-	}
-	if tuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(template.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := tuo.mutation.DeletedAt(); ok {
-		_spec.SetField(template.FieldDeletedAt, field.TypeTime, value)
-	}
 	if tuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(template.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tuo.mutation.DeletedBy(); ok {
-		_spec.SetField(template.FieldDeletedBy, field.TypeString, value)
-	}
-	if tuo.mutation.DeletedByCleared() {
-		_spec.ClearField(template.FieldDeletedBy, field.TypeString)
+	if tuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(template.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Tags(); ok {
 		_spec.SetField(template.FieldTags, field.TypeJSON, value)
@@ -1029,6 +973,37 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 	}
 	if tuo.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
+	}
+	if tuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.UpdatedByTable,
+			Columns: []string{template.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Template
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.UpdatedByTable,
+			Columns: []string{template.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

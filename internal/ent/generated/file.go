@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // File is the model entity for the File schema.
@@ -22,14 +23,14 @@ type File struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -70,6 +71,10 @@ type File struct {
 
 // FileEdges holds the relations/edges for other nodes in the graph.
 type FileEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// User holds the value of the user edge.
 	User []*User `json:"user,omitempty"`
 	// Organization holds the value of the organization edge.
@@ -94,9 +99,9 @@ type FileEdges struct {
 	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [13]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -111,10 +116,32 @@ type FileEdges struct {
 	namedProgram             map[string][]*Program
 }
 
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FileEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FileEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
+}
+
 // UserOrErr returns the User value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[2] {
 		return e.User, nil
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -123,7 +150,7 @@ func (e FileEdges) UserOrErr() ([]*User, error) {
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -132,7 +159,7 @@ func (e FileEdges) OrganizationOrErr() ([]*Organization, error) {
 // GroupOrErr returns the Group value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) GroupOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Group, nil
 	}
 	return nil, &NotLoadedError{edge: "group"}
@@ -141,7 +168,7 @@ func (e FileEdges) GroupOrErr() ([]*Group, error) {
 // ContactOrErr returns the Contact value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ContactOrErr() ([]*Contact, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Contact, nil
 	}
 	return nil, &NotLoadedError{edge: "contact"}
@@ -150,7 +177,7 @@ func (e FileEdges) ContactOrErr() ([]*Contact, error) {
 // EntityOrErr returns the Entity value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EntityOrErr() ([]*Entity, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Entity, nil
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -159,7 +186,7 @@ func (e FileEdges) EntityOrErr() ([]*Entity, error) {
 // UserSettingOrErr returns the UserSetting value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) UserSettingOrErr() ([]*UserSetting, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.UserSetting, nil
 	}
 	return nil, &NotLoadedError{edge: "user_setting"}
@@ -168,7 +195,7 @@ func (e FileEdges) UserSettingOrErr() ([]*UserSetting, error) {
 // OrganizationSettingOrErr returns the OrganizationSetting value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.OrganizationSetting, nil
 	}
 	return nil, &NotLoadedError{edge: "organization_setting"}
@@ -177,7 +204,7 @@ func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
 // TemplateOrErr returns the Template value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TemplateOrErr() ([]*Template, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Template, nil
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -186,7 +213,7 @@ func (e FileEdges) TemplateOrErr() ([]*Template, error) {
 // DocumentDataOrErr returns the DocumentData value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) DocumentDataOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.DocumentData, nil
 	}
 	return nil, &NotLoadedError{edge: "document_data"}
@@ -195,7 +222,7 @@ func (e FileEdges) DocumentDataOrErr() ([]*DocumentData, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -204,7 +231,7 @@ func (e FileEdges) EventsOrErr() ([]*Event, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -219,7 +246,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldMappingID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath:
+		case file.FieldID, file.FieldCreatedByID, file.FieldUpdatedByID, file.FieldDeletedByID, file.FieldMappingID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -256,17 +283,17 @@ func (f *File) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				f.UpdatedAt = value.Time
 			}
-		case file.FieldCreatedBy:
+		case file.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				f.CreatedBy = value.String
+				f.CreatedByID = value.String
 			}
-		case file.FieldUpdatedBy:
+		case file.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				f.UpdatedBy = value.String
+				f.UpdatedByID = value.String
 			}
 		case file.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -274,11 +301,11 @@ func (f *File) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				f.DeletedAt = value.Time
 			}
-		case file.FieldDeletedBy:
+		case file.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				f.DeletedBy = value.String
+				f.DeletedByID = value.String
 			}
 		case file.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -391,6 +418,16 @@ func (f *File) Value(name string) (ent.Value, error) {
 	return f.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the File entity.
+func (f *File) QueryCreatedBy() *UserQuery {
+	return NewFileClient(f.config).QueryCreatedBy(f)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the File entity.
+func (f *File) QueryUpdatedBy() *UserQuery {
+	return NewFileClient(f.config).QueryUpdatedBy(f)
+}
+
 // QueryUser queries the "user" edge of the File entity.
 func (f *File) QueryUser() *UserQuery {
 	return NewFileClient(f.config).QueryUser(f)
@@ -475,17 +512,17 @@ func (f *File) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(f.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(f.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(f.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(f.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(f.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(f.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(f.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(f.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(f.MappingID)

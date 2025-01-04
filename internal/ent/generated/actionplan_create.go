@@ -53,30 +53,30 @@ func (apc *ActionPlanCreate) SetNillableUpdatedAt(t *time.Time) *ActionPlanCreat
 	return apc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (apc *ActionPlanCreate) SetCreatedBy(s string) *ActionPlanCreate {
-	apc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (apc *ActionPlanCreate) SetCreatedByID(s string) *ActionPlanCreate {
+	apc.mutation.SetCreatedByID(s)
 	return apc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableCreatedBy(s *string) *ActionPlanCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableCreatedByID(s *string) *ActionPlanCreate {
 	if s != nil {
-		apc.SetCreatedBy(*s)
+		apc.SetCreatedByID(*s)
 	}
 	return apc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (apc *ActionPlanCreate) SetUpdatedBy(s string) *ActionPlanCreate {
-	apc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (apc *ActionPlanCreate) SetUpdatedByID(s string) *ActionPlanCreate {
+	apc.mutation.SetUpdatedByID(s)
 	return apc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableUpdatedBy(s *string) *ActionPlanCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableUpdatedByID(s *string) *ActionPlanCreate {
 	if s != nil {
-		apc.SetUpdatedBy(*s)
+		apc.SetUpdatedByID(*s)
 	}
 	return apc
 }
@@ -95,16 +95,16 @@ func (apc *ActionPlanCreate) SetNillableDeletedAt(t *time.Time) *ActionPlanCreat
 	return apc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (apc *ActionPlanCreate) SetDeletedBy(s string) *ActionPlanCreate {
-	apc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (apc *ActionPlanCreate) SetDeletedByID(s string) *ActionPlanCreate {
+	apc.mutation.SetDeletedByID(s)
 	return apc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableDeletedBy(s *string) *ActionPlanCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableDeletedByID(s *string) *ActionPlanCreate {
 	if s != nil {
-		apc.SetDeletedBy(*s)
+		apc.SetDeletedByID(*s)
 	}
 	return apc
 }
@@ -223,6 +223,16 @@ func (apc *ActionPlanCreate) SetNillableID(s *string) *ActionPlanCreate {
 		apc.SetID(*s)
 	}
 	return apc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (apc *ActionPlanCreate) SetCreatedBy(u *User) *ActionPlanCreate {
+	return apc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (apc *ActionPlanCreate) SetUpdatedBy(u *User) *ActionPlanCreate {
+	return apc.SetUpdatedByID(u.ID)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -424,21 +434,13 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := apc.mutation.CreatedBy(); ok {
-		_spec.SetField(actionplan.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := apc.mutation.UpdatedBy(); ok {
-		_spec.SetField(actionplan.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := apc.mutation.DeletedAt(); ok {
 		_spec.SetField(actionplan.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := apc.mutation.DeletedBy(); ok {
-		_spec.SetField(actionplan.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := apc.mutation.DeletedByID(); ok {
+		_spec.SetField(actionplan.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := apc.mutation.MappingID(); ok {
 		_spec.SetField(actionplan.FieldMappingID, field.TypeString, value)
@@ -475,6 +477,42 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := apc.mutation.Details(); ok {
 		_spec.SetField(actionplan.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if nodes := apc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.CreatedByTable,
+			Columns: []string{actionplan.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := apc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByTable,
+			Columns: []string{actionplan.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := apc.mutation.StandardIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

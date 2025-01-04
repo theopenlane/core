@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Entity is the model entity for the Entity schema.
@@ -24,16 +25,16 @@ type Entity struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -59,6 +60,10 @@ type Entity struct {
 
 // EntityEdges holds the relations/edges for other nodes in the graph.
 type EntityEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Contacts holds the value of the contacts edge.
@@ -73,9 +78,9 @@ type EntityEdges struct {
 	EntityType *EntityType `json:"entity_type,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [8]map[string]int
 
 	namedContacts  map[string][]*Contact
 	namedDocuments map[string][]*DocumentData
@@ -83,12 +88,34 @@ type EntityEdges struct {
 	namedFiles     map[string][]*File
 }
 
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntityEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntityEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EntityEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -97,7 +124,7 @@ func (e EntityEdges) OwnerOrErr() (*Organization, error) {
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -106,7 +133,7 @@ func (e EntityEdges) ContactsOrErr() ([]*Contact, error) {
 // DocumentsOrErr returns the Documents value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) DocumentsOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Documents, nil
 	}
 	return nil, &NotLoadedError{edge: "documents"}
@@ -115,7 +142,7 @@ func (e EntityEdges) DocumentsOrErr() ([]*DocumentData, error) {
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) NotesOrErr() ([]*Note, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Notes, nil
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -124,7 +151,7 @@ func (e EntityEdges) NotesOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -135,7 +162,7 @@ func (e EntityEdges) FilesOrErr() ([]*File, error) {
 func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	if e.EntityType != nil {
 		return e.EntityType, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: entitytype.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_type"}
@@ -148,7 +175,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entity.FieldTags, entity.FieldDomains:
 			values[i] = new([]byte)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldMappingID, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus:
+		case entity.FieldID, entity.FieldCreatedByID, entity.FieldUpdatedByID, entity.FieldMappingID, entity.FieldDeletedByID, entity.FieldOwnerID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -187,17 +214,17 @@ func (e *Entity) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.UpdatedAt = value.Time
 			}
-		case entity.FieldCreatedBy:
+		case entity.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				e.CreatedBy = value.String
+				e.CreatedByID = value.String
 			}
-		case entity.FieldUpdatedBy:
+		case entity.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				e.UpdatedBy = value.String
+				e.UpdatedByID = value.String
 			}
 		case entity.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -211,11 +238,11 @@ func (e *Entity) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.DeletedAt = value.Time
 			}
-		case entity.FieldDeletedBy:
+		case entity.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				e.DeletedBy = value.String
+				e.DeletedByID = value.String
 			}
 		case entity.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -289,6 +316,16 @@ func (e *Entity) Value(name string) (ent.Value, error) {
 	return e.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the Entity entity.
+func (e *Entity) QueryCreatedBy() *UserQuery {
+	return NewEntityClient(e.config).QueryCreatedBy(e)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Entity entity.
+func (e *Entity) QueryUpdatedBy() *UserQuery {
+	return NewEntityClient(e.config).QueryUpdatedBy(e)
+}
+
 // QueryOwner queries the "owner" edge of the Entity entity.
 func (e *Entity) QueryOwner() *OrganizationQuery {
 	return NewEntityClient(e.config).QueryOwner(e)
@@ -348,11 +385,11 @@ func (e *Entity) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(e.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(e.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(e.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(e.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(e.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(e.MappingID)
@@ -360,8 +397,8 @@ func (e *Entity) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(e.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(e.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(e.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", e.Tags))

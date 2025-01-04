@@ -71,16 +71,16 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Organization_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Organization_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Organization_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Organization_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -93,6 +93,10 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
 			case "controlObjectiveCreators":
@@ -223,16 +227,16 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Organization_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Organization_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Organization_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Organization_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -245,6 +249,10 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
 			case "controlObjectiveCreators":
@@ -419,16 +427,16 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Organization_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Organization_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Organization_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Organization_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -441,6 +449,10 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
 			case "controlObjectiveCreators":

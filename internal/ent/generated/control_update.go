@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -55,63 +56,23 @@ func (cu *ControlUpdate) ClearUpdatedAt() *ControlUpdate {
 	return cu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cu *ControlUpdate) SetUpdatedBy(s string) *ControlUpdate {
-	cu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cu *ControlUpdate) SetUpdatedByID(s string) *ControlUpdate {
+	cu.mutation.SetUpdatedByID(s)
 	return cu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableUpdatedBy(s *string) *ControlUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cu *ControlUpdate) SetNillableUpdatedByID(s *string) *ControlUpdate {
 	if s != nil {
-		cu.SetUpdatedBy(*s)
+		cu.SetUpdatedByID(*s)
 	}
 	return cu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cu *ControlUpdate) ClearUpdatedBy() *ControlUpdate {
-	cu.mutation.ClearUpdatedBy()
-	return cu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (cu *ControlUpdate) SetDeletedAt(t time.Time) *ControlUpdate {
-	cu.mutation.SetDeletedAt(t)
-	return cu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableDeletedAt(t *time.Time) *ControlUpdate {
-	if t != nil {
-		cu.SetDeletedAt(*t)
-	}
-	return cu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (cu *ControlUpdate) ClearDeletedAt() *ControlUpdate {
-	cu.mutation.ClearDeletedAt()
-	return cu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (cu *ControlUpdate) SetDeletedBy(s string) *ControlUpdate {
-	cu.mutation.SetDeletedBy(s)
-	return cu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableDeletedBy(s *string) *ControlUpdate {
-	if s != nil {
-		cu.SetDeletedBy(*s)
-	}
-	return cu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cu *ControlUpdate) ClearDeletedBy() *ControlUpdate {
-	cu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cu *ControlUpdate) ClearUpdatedByID() *ControlUpdate {
+	cu.mutation.ClearUpdatedByID()
 	return cu
 }
 
@@ -373,6 +334,11 @@ func (cu *ControlUpdate) ClearDetails() *ControlUpdate {
 	return cu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (cu *ControlUpdate) SetUpdatedBy(u *User) *ControlUpdate {
+	return cu.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cu *ControlUpdate) SetOwner(o *Organization) *ControlUpdate {
 	return cu.SetOwnerID(o.ID)
@@ -561,6 +527,12 @@ func (cu *ControlUpdate) AddPrograms(p ...*Program) *ControlUpdate {
 // Mutation returns the ControlMutation object of the builder.
 func (cu *ControlUpdate) Mutation() *ControlMutation {
 	return cu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (cu *ControlUpdate) ClearUpdatedBy() *ControlUpdate {
+	cu.mutation.ClearUpdatedBy()
+	return cu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -908,26 +880,11 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(control.FieldUpdatedAt, field.TypeTime)
 	}
-	if cu.mutation.CreatedByCleared() {
-		_spec.ClearField(control.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := cu.mutation.UpdatedBy(); ok {
-		_spec.SetField(control.FieldUpdatedBy, field.TypeString, value)
-	}
-	if cu.mutation.UpdatedByCleared() {
-		_spec.ClearField(control.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := cu.mutation.DeletedAt(); ok {
-		_spec.SetField(control.FieldDeletedAt, field.TypeTime, value)
-	}
 	if cu.mutation.DeletedAtCleared() {
 		_spec.ClearField(control.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cu.mutation.DeletedBy(); ok {
-		_spec.SetField(control.FieldDeletedBy, field.TypeString, value)
-	}
-	if cu.mutation.DeletedByCleared() {
-		_spec.ClearField(control.FieldDeletedBy, field.TypeString)
+	if cu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(control.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cu.mutation.Tags(); ok {
 		_spec.SetField(control.FieldTags, field.TypeJSON, value)
@@ -1008,6 +965,37 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.DetailsCleared() {
 		_spec.ClearField(control.FieldDetails, field.TypeJSON)
+	}
+	if cu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.UpdatedByTable,
+			Columns: []string{control.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.UpdatedByTable,
+			Columns: []string{control.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1652,63 +1640,23 @@ func (cuo *ControlUpdateOne) ClearUpdatedAt() *ControlUpdateOne {
 	return cuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cuo *ControlUpdateOne) SetUpdatedBy(s string) *ControlUpdateOne {
-	cuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cuo *ControlUpdateOne) SetUpdatedByID(s string) *ControlUpdateOne {
+	cuo.mutation.SetUpdatedByID(s)
 	return cuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableUpdatedBy(s *string) *ControlUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cuo *ControlUpdateOne) SetNillableUpdatedByID(s *string) *ControlUpdateOne {
 	if s != nil {
-		cuo.SetUpdatedBy(*s)
+		cuo.SetUpdatedByID(*s)
 	}
 	return cuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cuo *ControlUpdateOne) ClearUpdatedBy() *ControlUpdateOne {
-	cuo.mutation.ClearUpdatedBy()
-	return cuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (cuo *ControlUpdateOne) SetDeletedAt(t time.Time) *ControlUpdateOne {
-	cuo.mutation.SetDeletedAt(t)
-	return cuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableDeletedAt(t *time.Time) *ControlUpdateOne {
-	if t != nil {
-		cuo.SetDeletedAt(*t)
-	}
-	return cuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (cuo *ControlUpdateOne) ClearDeletedAt() *ControlUpdateOne {
-	cuo.mutation.ClearDeletedAt()
-	return cuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (cuo *ControlUpdateOne) SetDeletedBy(s string) *ControlUpdateOne {
-	cuo.mutation.SetDeletedBy(s)
-	return cuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableDeletedBy(s *string) *ControlUpdateOne {
-	if s != nil {
-		cuo.SetDeletedBy(*s)
-	}
-	return cuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cuo *ControlUpdateOne) ClearDeletedBy() *ControlUpdateOne {
-	cuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cuo *ControlUpdateOne) ClearUpdatedByID() *ControlUpdateOne {
+	cuo.mutation.ClearUpdatedByID()
 	return cuo
 }
 
@@ -1970,6 +1918,11 @@ func (cuo *ControlUpdateOne) ClearDetails() *ControlUpdateOne {
 	return cuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (cuo *ControlUpdateOne) SetUpdatedBy(u *User) *ControlUpdateOne {
+	return cuo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cuo *ControlUpdateOne) SetOwner(o *Organization) *ControlUpdateOne {
 	return cuo.SetOwnerID(o.ID)
@@ -2158,6 +2111,12 @@ func (cuo *ControlUpdateOne) AddPrograms(p ...*Program) *ControlUpdateOne {
 // Mutation returns the ControlMutation object of the builder.
 func (cuo *ControlUpdateOne) Mutation() *ControlMutation {
 	return cuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (cuo *ControlUpdateOne) ClearUpdatedBy() *ControlUpdateOne {
+	cuo.mutation.ClearUpdatedBy()
+	return cuo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -2535,26 +2494,11 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 	if cuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(control.FieldUpdatedAt, field.TypeTime)
 	}
-	if cuo.mutation.CreatedByCleared() {
-		_spec.ClearField(control.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := cuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(control.FieldUpdatedBy, field.TypeString, value)
-	}
-	if cuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(control.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := cuo.mutation.DeletedAt(); ok {
-		_spec.SetField(control.FieldDeletedAt, field.TypeTime, value)
-	}
 	if cuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(control.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cuo.mutation.DeletedBy(); ok {
-		_spec.SetField(control.FieldDeletedBy, field.TypeString, value)
-	}
-	if cuo.mutation.DeletedByCleared() {
-		_spec.ClearField(control.FieldDeletedBy, field.TypeString)
+	if cuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(control.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cuo.mutation.Tags(); ok {
 		_spec.SetField(control.FieldTags, field.TypeJSON, value)
@@ -2635,6 +2579,37 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 	}
 	if cuo.mutation.DetailsCleared() {
 		_spec.ClearField(control.FieldDetails, field.TypeJSON)
+	}
+	if cuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.UpdatedByTable,
+			Columns: []string{control.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.UpdatedByTable,
+			Columns: []string{control.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

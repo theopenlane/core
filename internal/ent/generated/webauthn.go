@@ -23,10 +23,10 @@ type Webauthn struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -61,13 +61,39 @@ type Webauthn struct {
 
 // WebauthnEdges holds the relations/edges for other nodes in the graph.
 type WebauthnEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [3]map[string]int
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WebauthnEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WebauthnEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -75,7 +101,7 @@ type WebauthnEdges struct {
 func (e WebauthnEdges) OwnerOrErr() (*User, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -92,7 +118,7 @@ func (*Webauthn) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case webauthn.FieldSignCount:
 			values[i] = new(sql.NullInt64)
-		case webauthn.FieldID, webauthn.FieldCreatedBy, webauthn.FieldUpdatedBy, webauthn.FieldMappingID, webauthn.FieldOwnerID, webauthn.FieldAttestationType:
+		case webauthn.FieldID, webauthn.FieldCreatedByID, webauthn.FieldUpdatedByID, webauthn.FieldMappingID, webauthn.FieldOwnerID, webauthn.FieldAttestationType:
 			values[i] = new(sql.NullString)
 		case webauthn.FieldCreatedAt, webauthn.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -129,17 +155,17 @@ func (w *Webauthn) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				w.UpdatedAt = value.Time
 			}
-		case webauthn.FieldCreatedBy:
+		case webauthn.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				w.CreatedBy = value.String
+				w.CreatedByID = value.String
 			}
-		case webauthn.FieldUpdatedBy:
+		case webauthn.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				w.UpdatedBy = value.String
+				w.UpdatedByID = value.String
 			}
 		case webauthn.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -236,6 +262,16 @@ func (w *Webauthn) Value(name string) (ent.Value, error) {
 	return w.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the Webauthn entity.
+func (w *Webauthn) QueryCreatedBy() *UserQuery {
+	return NewWebauthnClient(w.config).QueryCreatedBy(w)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Webauthn entity.
+func (w *Webauthn) QueryUpdatedBy() *UserQuery {
+	return NewWebauthnClient(w.config).QueryUpdatedBy(w)
+}
+
 // QueryOwner queries the "owner" edge of the Webauthn entity.
 func (w *Webauthn) QueryOwner() *UserQuery {
 	return NewWebauthnClient(w.config).QueryOwner(w)
@@ -270,11 +306,11 @@ func (w *Webauthn) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(w.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(w.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(w.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(w.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(w.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(w.MappingID)

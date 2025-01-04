@@ -54,6 +54,8 @@ type OrganizationQuery struct {
 	order                             []organization.OrderOption
 	inters                            []Interceptor
 	predicates                        []predicate.Organization
+	withCreatedBy                     *UserQuery
+	withUpdatedBy                     *UserQuery
 	withControlCreators               *GroupQuery
 	withControlObjectiveCreators      *GroupQuery
 	withGroupCreators                 *GroupQuery
@@ -166,6 +168,56 @@ func (oq *OrganizationQuery) Unique(unique bool) *OrganizationQuery {
 func (oq *OrganizationQuery) Order(o ...organization.OrderOption) *OrganizationQuery {
 	oq.order = append(oq.order, o...)
 	return oq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (oq *OrganizationQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organization.CreatedByTable, organization.CreatedByColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Organization
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (oq *OrganizationQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organization.UpdatedByTable, organization.UpdatedByColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Organization
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryControlCreators chains the current query on the "control_creators" edge.
@@ -1335,6 +1387,8 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		order:                        append([]organization.OrderOption{}, oq.order...),
 		inters:                       append([]Interceptor{}, oq.inters...),
 		predicates:                   append([]predicate.Organization{}, oq.predicates...),
+		withCreatedBy:                oq.withCreatedBy.Clone(),
+		withUpdatedBy:                oq.withUpdatedBy.Clone(),
 		withControlCreators:          oq.withControlCreators.Clone(),
 		withControlObjectiveCreators: oq.withControlObjectiveCreators.Clone(),
 		withGroupCreators:            oq.withGroupCreators.Clone(),
@@ -1379,6 +1433,28 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		path:      oq.path,
 		modifiers: append([]func(*sql.Selector){}, oq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithCreatedBy(opts ...func(*UserQuery)) *OrganizationQuery {
+	query := (&UserClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withCreatedBy = query
+	return oq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithUpdatedBy(opts ...func(*UserQuery)) *OrganizationQuery {
+	query := (&UserClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withUpdatedBy = query
+	return oq
 }
 
 // WithControlCreators tells the query-builder to eager-load the nodes that are connected to
@@ -1894,7 +1970,9 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [39]bool{
+		loadedTypes = [41]bool{
+			oq.withCreatedBy != nil,
+			oq.withUpdatedBy != nil,
 			oq.withControlCreators != nil,
 			oq.withControlObjectiveCreators != nil,
 			oq.withGroupCreators != nil,
@@ -1958,6 +2036,18 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := oq.withCreatedBy; query != nil {
+		if err := oq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Organization, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withUpdatedBy; query != nil {
+		if err := oq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Organization, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := oq.withControlCreators; query != nil {
 		if err := oq.loadControlCreators(ctx, query, nodes,
@@ -2509,6 +2599,64 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	return nodes, nil
 }
 
+func (oq *OrganizationQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Organization)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Organization)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadControlCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Organization)
@@ -4193,6 +4341,12 @@ func (oq *OrganizationQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != organization.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if oq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(organization.FieldCreatedByID)
+		}
+		if oq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(organization.FieldUpdatedByID)
 		}
 		if oq.withParent != nil {
 			_spec.Node.AddColumnOnce(organization.FieldParentOrganizationID)

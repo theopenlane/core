@@ -61,63 +61,23 @@ func (pu *ProgramUpdate) ClearUpdatedAt() *ProgramUpdate {
 	return pu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (pu *ProgramUpdate) SetUpdatedBy(s string) *ProgramUpdate {
-	pu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (pu *ProgramUpdate) SetUpdatedByID(s string) *ProgramUpdate {
+	pu.mutation.SetUpdatedByID(s)
 	return pu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableUpdatedBy(s *string) *ProgramUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableUpdatedByID(s *string) *ProgramUpdate {
 	if s != nil {
-		pu.SetUpdatedBy(*s)
+		pu.SetUpdatedByID(*s)
 	}
 	return pu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (pu *ProgramUpdate) ClearUpdatedBy() *ProgramUpdate {
-	pu.mutation.ClearUpdatedBy()
-	return pu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (pu *ProgramUpdate) SetDeletedAt(t time.Time) *ProgramUpdate {
-	pu.mutation.SetDeletedAt(t)
-	return pu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableDeletedAt(t *time.Time) *ProgramUpdate {
-	if t != nil {
-		pu.SetDeletedAt(*t)
-	}
-	return pu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (pu *ProgramUpdate) ClearDeletedAt() *ProgramUpdate {
-	pu.mutation.ClearDeletedAt()
-	return pu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pu *ProgramUpdate) SetDeletedBy(s string) *ProgramUpdate {
-	pu.mutation.SetDeletedBy(s)
-	return pu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableDeletedBy(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetDeletedBy(*s)
-	}
-	return pu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pu *ProgramUpdate) ClearDeletedBy() *ProgramUpdate {
-	pu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (pu *ProgramUpdate) ClearUpdatedByID() *ProgramUpdate {
+	pu.mutation.ClearUpdatedByID()
 	return pu
 }
 
@@ -287,6 +247,11 @@ func (pu *ProgramUpdate) SetNillableAuditorReadComments(b *bool) *ProgramUpdate 
 		pu.SetAuditorReadComments(*b)
 	}
 	return pu
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (pu *ProgramUpdate) SetUpdatedBy(u *User) *ProgramUpdate {
+	return pu.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -552,6 +517,12 @@ func (pu *ProgramUpdate) AddMembers(p ...*ProgramMembership) *ProgramUpdate {
 // Mutation returns the ProgramMutation object of the builder.
 func (pu *ProgramUpdate) Mutation() *ProgramMutation {
 	return pu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (pu *ProgramUpdate) ClearUpdatedBy() *ProgramUpdate {
+	pu.mutation.ClearUpdatedBy()
+	return pu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -1006,26 +977,11 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(program.FieldUpdatedAt, field.TypeTime)
 	}
-	if pu.mutation.CreatedByCleared() {
-		_spec.ClearField(program.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := pu.mutation.UpdatedBy(); ok {
-		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
-	}
-	if pu.mutation.UpdatedByCleared() {
-		_spec.ClearField(program.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := pu.mutation.DeletedAt(); ok {
-		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)
-	}
 	if pu.mutation.DeletedAtCleared() {
 		_spec.ClearField(program.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := pu.mutation.DeletedBy(); ok {
-		_spec.SetField(program.FieldDeletedBy, field.TypeString, value)
-	}
-	if pu.mutation.DeletedByCleared() {
-		_spec.ClearField(program.FieldDeletedBy, field.TypeString)
+	if pu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(program.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := pu.mutation.Tags(); ok {
 		_spec.SetField(program.FieldTags, field.TypeJSON, value)
@@ -1070,6 +1026,37 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
+	}
+	if pu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByTable,
+			Columns: []string{program.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByTable,
+			Columns: []string{program.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1975,63 +1962,23 @@ func (puo *ProgramUpdateOne) ClearUpdatedAt() *ProgramUpdateOne {
 	return puo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (puo *ProgramUpdateOne) SetUpdatedBy(s string) *ProgramUpdateOne {
-	puo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (puo *ProgramUpdateOne) SetUpdatedByID(s string) *ProgramUpdateOne {
+	puo.mutation.SetUpdatedByID(s)
 	return puo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableUpdatedBy(s *string) *ProgramUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableUpdatedByID(s *string) *ProgramUpdateOne {
 	if s != nil {
-		puo.SetUpdatedBy(*s)
+		puo.SetUpdatedByID(*s)
 	}
 	return puo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (puo *ProgramUpdateOne) ClearUpdatedBy() *ProgramUpdateOne {
-	puo.mutation.ClearUpdatedBy()
-	return puo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (puo *ProgramUpdateOne) SetDeletedAt(t time.Time) *ProgramUpdateOne {
-	puo.mutation.SetDeletedAt(t)
-	return puo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableDeletedAt(t *time.Time) *ProgramUpdateOne {
-	if t != nil {
-		puo.SetDeletedAt(*t)
-	}
-	return puo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (puo *ProgramUpdateOne) ClearDeletedAt() *ProgramUpdateOne {
-	puo.mutation.ClearDeletedAt()
-	return puo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (puo *ProgramUpdateOne) SetDeletedBy(s string) *ProgramUpdateOne {
-	puo.mutation.SetDeletedBy(s)
-	return puo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableDeletedBy(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetDeletedBy(*s)
-	}
-	return puo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (puo *ProgramUpdateOne) ClearDeletedBy() *ProgramUpdateOne {
-	puo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (puo *ProgramUpdateOne) ClearUpdatedByID() *ProgramUpdateOne {
+	puo.mutation.ClearUpdatedByID()
 	return puo
 }
 
@@ -2201,6 +2148,11 @@ func (puo *ProgramUpdateOne) SetNillableAuditorReadComments(b *bool) *ProgramUpd
 		puo.SetAuditorReadComments(*b)
 	}
 	return puo
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (puo *ProgramUpdateOne) SetUpdatedBy(u *User) *ProgramUpdateOne {
+	return puo.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -2466,6 +2418,12 @@ func (puo *ProgramUpdateOne) AddMembers(p ...*ProgramMembership) *ProgramUpdateO
 // Mutation returns the ProgramMutation object of the builder.
 func (puo *ProgramUpdateOne) Mutation() *ProgramMutation {
 	return puo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (puo *ProgramUpdateOne) ClearUpdatedBy() *ProgramUpdateOne {
+	puo.mutation.ClearUpdatedBy()
+	return puo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -2950,26 +2908,11 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	if puo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(program.FieldUpdatedAt, field.TypeTime)
 	}
-	if puo.mutation.CreatedByCleared() {
-		_spec.ClearField(program.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := puo.mutation.UpdatedBy(); ok {
-		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
-	}
-	if puo.mutation.UpdatedByCleared() {
-		_spec.ClearField(program.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := puo.mutation.DeletedAt(); ok {
-		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)
-	}
 	if puo.mutation.DeletedAtCleared() {
 		_spec.ClearField(program.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := puo.mutation.DeletedBy(); ok {
-		_spec.SetField(program.FieldDeletedBy, field.TypeString, value)
-	}
-	if puo.mutation.DeletedByCleared() {
-		_spec.ClearField(program.FieldDeletedBy, field.TypeString)
+	if puo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(program.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := puo.mutation.Tags(); ok {
 		_spec.SetField(program.FieldTags, field.TypeJSON, value)
@@ -3014,6 +2957,37 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	}
 	if value, ok := puo.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
+	}
+	if puo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByTable,
+			Columns: []string{program.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByTable,
+			Columns: []string{program.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

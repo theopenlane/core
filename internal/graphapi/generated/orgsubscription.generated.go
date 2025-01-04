@@ -71,16 +71,16 @@ func (ec *executionContext) fieldContext_OrgSubscriptionBulkCreatePayload_orgSub
 				return ec.fieldContext_OrgSubscription_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrgSubscription_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrgSubscription_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrgSubscription_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrgSubscription_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgSubscription_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgSubscription_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrgSubscription_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_OrgSubscription_ownerID(ctx, field)
 			case "stripeSubscriptionID":
@@ -99,6 +99,10 @@ func (ec *executionContext) fieldContext_OrgSubscriptionBulkCreatePayload_orgSub
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			}
@@ -153,16 +157,16 @@ func (ec *executionContext) fieldContext_OrgSubscriptionCreatePayload_orgSubscri
 				return ec.fieldContext_OrgSubscription_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrgSubscription_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrgSubscription_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrgSubscription_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrgSubscription_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgSubscription_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgSubscription_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrgSubscription_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_OrgSubscription_ownerID(ctx, field)
 			case "stripeSubscriptionID":
@@ -181,6 +185,10 @@ func (ec *executionContext) fieldContext_OrgSubscriptionCreatePayload_orgSubscri
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			}
@@ -279,16 +287,16 @@ func (ec *executionContext) fieldContext_OrgSubscriptionUpdatePayload_orgSubscri
 				return ec.fieldContext_OrgSubscription_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrgSubscription_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrgSubscription_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrgSubscription_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrgSubscription_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgSubscription_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgSubscription_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrgSubscription_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_OrgSubscription_ownerID(ctx, field)
 			case "stripeSubscriptionID":
@@ -307,6 +315,10 @@ func (ec *executionContext) fieldContext_OrgSubscriptionUpdatePayload_orgSubscri
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			}

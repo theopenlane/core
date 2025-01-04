@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Group_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Group_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Group_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Group_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Group_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Group_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Group_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Group_tags(ctx, field)
 			case "ownerID":
@@ -93,6 +93,10 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Group_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Group_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "controlCreators":
@@ -217,14 +221,14 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Group_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Group_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Group_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Group_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Group_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Group_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Group_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Group_tags(ctx, field)
 			case "ownerID":
@@ -239,6 +243,10 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Group_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Group_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "controlCreators":
@@ -407,14 +415,14 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Group_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Group_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Group_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Group_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Group_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Group_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Group_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Group_tags(ctx, field)
 			case "ownerID":
@@ -429,6 +437,10 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Group_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Group_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "controlCreators":

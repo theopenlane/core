@@ -66,7 +66,7 @@ func (GroupSetting) Annotations() []schema.Annotation {
 // Mixin of the GroupSetting
 func (GroupSetting) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},

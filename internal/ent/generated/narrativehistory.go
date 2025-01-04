@@ -25,18 +25,20 @@ type NarrativeHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -63,7 +65,7 @@ func (*NarrativeHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case narrativehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case narrativehistory.FieldID, narrativehistory.FieldRef, narrativehistory.FieldCreatedBy, narrativehistory.FieldUpdatedBy, narrativehistory.FieldDeletedBy, narrativehistory.FieldMappingID, narrativehistory.FieldOwnerID, narrativehistory.FieldName, narrativehistory.FieldDescription, narrativehistory.FieldSatisfies:
+		case narrativehistory.FieldID, narrativehistory.FieldRef, narrativehistory.FieldUpdatedBy, narrativehistory.FieldCreatedByID, narrativehistory.FieldUpdatedByID, narrativehistory.FieldDeletedByID, narrativehistory.FieldMappingID, narrativehistory.FieldOwnerID, narrativehistory.FieldName, narrativehistory.FieldDescription, narrativehistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case narrativehistory.FieldHistoryTime, narrativehistory.FieldCreatedAt, narrativehistory.FieldUpdatedAt, narrativehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -106,6 +108,13 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				nh.Operation = *value
 			}
+		case narrativehistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				nh.UpdatedBy = new(string)
+				*nh.UpdatedBy = value.String
+			}
 		case narrativehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -118,17 +127,17 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nh.UpdatedAt = value.Time
 			}
-		case narrativehistory.FieldCreatedBy:
+		case narrativehistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				nh.CreatedBy = value.String
+				nh.CreatedByID = value.String
 			}
-		case narrativehistory.FieldUpdatedBy:
+		case narrativehistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				nh.UpdatedBy = value.String
+				nh.UpdatedByID = value.String
 			}
 		case narrativehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -136,11 +145,11 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nh.DeletedAt = value.Time
 			}
-		case narrativehistory.FieldDeletedBy:
+		case narrativehistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				nh.DeletedBy = value.String
+				nh.DeletedByID = value.String
 			}
 		case narrativehistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -233,23 +242,28 @@ func (nh *NarrativeHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", nh.Operation))
 	builder.WriteString(", ")
+	if v := nh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(nh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(nh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(nh.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(nh.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(nh.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(nh.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(nh.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(nh.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(nh.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(nh.MappingID)

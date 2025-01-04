@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // OrgSubscription is the model entity for the OrgSubscription schema.
@@ -23,18 +24,18 @@ type OrgSubscription struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the stripe subscription id
@@ -61,13 +62,39 @@ type OrgSubscription struct {
 
 // OrgSubscriptionEdges holds the relations/edges for other nodes in the graph.
 type OrgSubscriptionEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [3]map[string]int
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrgSubscriptionEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrgSubscriptionEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -75,7 +102,7 @@ type OrgSubscriptionEdges struct {
 func (e OrgSubscriptionEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -90,7 +117,7 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case orgsubscription.FieldActive:
 			values[i] = new(sql.NullBool)
-		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldMappingID, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID:
+		case orgsubscription.FieldID, orgsubscription.FieldCreatedByID, orgsubscription.FieldUpdatedByID, orgsubscription.FieldMappingID, orgsubscription.FieldDeletedByID, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID:
 			values[i] = new(sql.NullString)
 		case orgsubscription.FieldCreatedAt, orgsubscription.FieldUpdatedAt, orgsubscription.FieldDeletedAt, orgsubscription.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
@@ -127,17 +154,17 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				os.UpdatedAt = value.Time
 			}
-		case orgsubscription.FieldCreatedBy:
+		case orgsubscription.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				os.CreatedBy = value.String
+				os.CreatedByID = value.String
 			}
-		case orgsubscription.FieldUpdatedBy:
+		case orgsubscription.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				os.UpdatedBy = value.String
+				os.UpdatedByID = value.String
 			}
 		case orgsubscription.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -159,11 +186,11 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				os.DeletedAt = value.Time
 			}
-		case orgsubscription.FieldDeletedBy:
+		case orgsubscription.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				os.DeletedBy = value.String
+				os.DeletedByID = value.String
 			}
 		case orgsubscription.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -235,6 +262,16 @@ func (os *OrgSubscription) Value(name string) (ent.Value, error) {
 	return os.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryCreatedBy() *UserQuery {
+	return NewOrgSubscriptionClient(os.config).QueryCreatedBy(os)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryUpdatedBy() *UserQuery {
+	return NewOrgSubscriptionClient(os.config).QueryUpdatedBy(os)
+}
+
 // QueryOwner queries the "owner" edge of the OrgSubscription entity.
 func (os *OrgSubscription) QueryOwner() *OrganizationQuery {
 	return NewOrgSubscriptionClient(os.config).QueryOwner(os)
@@ -269,11 +306,11 @@ func (os *OrgSubscription) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(os.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(os.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(os.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(os.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(os.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(os.MappingID)
@@ -284,8 +321,8 @@ func (os *OrgSubscription) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(os.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(os.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(os.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(os.OwnerID)

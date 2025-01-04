@@ -54,63 +54,23 @@ func (tu *TaskUpdate) ClearUpdatedAt() *TaskUpdate {
 	return tu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tu *TaskUpdate) SetUpdatedBy(s string) *TaskUpdate {
-	tu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tu *TaskUpdate) SetUpdatedByID(s string) *TaskUpdate {
+	tu.mutation.SetUpdatedByID(s)
 	return tu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableUpdatedBy(s *string) *TaskUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableUpdatedByID(s *string) *TaskUpdate {
 	if s != nil {
-		tu.SetUpdatedBy(*s)
+		tu.SetUpdatedByID(*s)
 	}
 	return tu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tu *TaskUpdate) ClearUpdatedBy() *TaskUpdate {
-	tu.mutation.ClearUpdatedBy()
-	return tu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (tu *TaskUpdate) SetDeletedAt(t time.Time) *TaskUpdate {
-	tu.mutation.SetDeletedAt(t)
-	return tu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableDeletedAt(t *time.Time) *TaskUpdate {
-	if t != nil {
-		tu.SetDeletedAt(*t)
-	}
-	return tu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (tu *TaskUpdate) ClearDeletedAt() *TaskUpdate {
-	tu.mutation.ClearDeletedAt()
-	return tu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (tu *TaskUpdate) SetDeletedBy(s string) *TaskUpdate {
-	tu.mutation.SetDeletedBy(s)
-	return tu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableDeletedBy(s *string) *TaskUpdate {
-	if s != nil {
-		tu.SetDeletedBy(*s)
-	}
-	return tu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tu *TaskUpdate) ClearDeletedBy() *TaskUpdate {
-	tu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tu *TaskUpdate) ClearUpdatedByID() *TaskUpdate {
+	tu.mutation.ClearUpdatedByID()
 	return tu
 }
 
@@ -230,6 +190,11 @@ func (tu *TaskUpdate) SetNillableCompleted(t *time.Time) *TaskUpdate {
 func (tu *TaskUpdate) ClearCompleted() *TaskUpdate {
 	tu.mutation.ClearCompleted()
 	return tu
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (tu *TaskUpdate) SetUpdatedBy(u *User) *TaskUpdate {
+	return tu.SetUpdatedByID(u.ID)
 }
 
 // SetAssignerID sets the "assigner" edge to the User entity by ID.
@@ -385,6 +350,12 @@ func (tu *TaskUpdate) AddProgram(p ...*Program) *TaskUpdate {
 // Mutation returns the TaskMutation object of the builder.
 func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (tu *TaskUpdate) ClearUpdatedBy() *TaskUpdate {
+	tu.mutation.ClearUpdatedBy()
+	return tu
 }
 
 // ClearAssigner clears the "assigner" edge to the User entity.
@@ -654,26 +625,11 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(task.FieldUpdatedAt, field.TypeTime)
 	}
-	if tu.mutation.CreatedByCleared() {
-		_spec.ClearField(task.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := tu.mutation.UpdatedBy(); ok {
-		_spec.SetField(task.FieldUpdatedBy, field.TypeString, value)
-	}
-	if tu.mutation.UpdatedByCleared() {
-		_spec.ClearField(task.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := tu.mutation.DeletedAt(); ok {
-		_spec.SetField(task.FieldDeletedAt, field.TypeTime, value)
-	}
 	if tu.mutation.DeletedAtCleared() {
 		_spec.ClearField(task.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tu.mutation.DeletedBy(); ok {
-		_spec.SetField(task.FieldDeletedBy, field.TypeString, value)
-	}
-	if tu.mutation.DeletedByCleared() {
-		_spec.ClearField(task.FieldDeletedBy, field.TypeString)
+	if tu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(task.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tu.mutation.Tags(); ok {
 		_spec.SetField(task.FieldTags, field.TypeJSON, value)
@@ -715,6 +671,37 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
+	}
+	if tu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByTable,
+			Columns: []string{task.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByTable,
+			Columns: []string{task.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tu.mutation.AssignerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1198,63 +1185,23 @@ func (tuo *TaskUpdateOne) ClearUpdatedAt() *TaskUpdateOne {
 	return tuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tuo *TaskUpdateOne) SetUpdatedBy(s string) *TaskUpdateOne {
-	tuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tuo *TaskUpdateOne) SetUpdatedByID(s string) *TaskUpdateOne {
+	tuo.mutation.SetUpdatedByID(s)
 	return tuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableUpdatedBy(s *string) *TaskUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableUpdatedByID(s *string) *TaskUpdateOne {
 	if s != nil {
-		tuo.SetUpdatedBy(*s)
+		tuo.SetUpdatedByID(*s)
 	}
 	return tuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tuo *TaskUpdateOne) ClearUpdatedBy() *TaskUpdateOne {
-	tuo.mutation.ClearUpdatedBy()
-	return tuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (tuo *TaskUpdateOne) SetDeletedAt(t time.Time) *TaskUpdateOne {
-	tuo.mutation.SetDeletedAt(t)
-	return tuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableDeletedAt(t *time.Time) *TaskUpdateOne {
-	if t != nil {
-		tuo.SetDeletedAt(*t)
-	}
-	return tuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (tuo *TaskUpdateOne) ClearDeletedAt() *TaskUpdateOne {
-	tuo.mutation.ClearDeletedAt()
-	return tuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (tuo *TaskUpdateOne) SetDeletedBy(s string) *TaskUpdateOne {
-	tuo.mutation.SetDeletedBy(s)
-	return tuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableDeletedBy(s *string) *TaskUpdateOne {
-	if s != nil {
-		tuo.SetDeletedBy(*s)
-	}
-	return tuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tuo *TaskUpdateOne) ClearDeletedBy() *TaskUpdateOne {
-	tuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tuo *TaskUpdateOne) ClearUpdatedByID() *TaskUpdateOne {
+	tuo.mutation.ClearUpdatedByID()
 	return tuo
 }
 
@@ -1374,6 +1321,11 @@ func (tuo *TaskUpdateOne) SetNillableCompleted(t *time.Time) *TaskUpdateOne {
 func (tuo *TaskUpdateOne) ClearCompleted() *TaskUpdateOne {
 	tuo.mutation.ClearCompleted()
 	return tuo
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (tuo *TaskUpdateOne) SetUpdatedBy(u *User) *TaskUpdateOne {
+	return tuo.SetUpdatedByID(u.ID)
 }
 
 // SetAssignerID sets the "assigner" edge to the User entity by ID.
@@ -1529,6 +1481,12 @@ func (tuo *TaskUpdateOne) AddProgram(p ...*Program) *TaskUpdateOne {
 // Mutation returns the TaskMutation object of the builder.
 func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
 	return tuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (tuo *TaskUpdateOne) ClearUpdatedBy() *TaskUpdateOne {
+	tuo.mutation.ClearUpdatedBy()
+	return tuo
 }
 
 // ClearAssigner clears the "assigner" edge to the User entity.
@@ -1828,26 +1786,11 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if tuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(task.FieldUpdatedAt, field.TypeTime)
 	}
-	if tuo.mutation.CreatedByCleared() {
-		_spec.ClearField(task.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := tuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(task.FieldUpdatedBy, field.TypeString, value)
-	}
-	if tuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(task.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := tuo.mutation.DeletedAt(); ok {
-		_spec.SetField(task.FieldDeletedAt, field.TypeTime, value)
-	}
 	if tuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(task.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tuo.mutation.DeletedBy(); ok {
-		_spec.SetField(task.FieldDeletedBy, field.TypeString, value)
-	}
-	if tuo.mutation.DeletedByCleared() {
-		_spec.ClearField(task.FieldDeletedBy, field.TypeString)
+	if tuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(task.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Tags(); ok {
 		_spec.SetField(task.FieldTags, field.TypeJSON, value)
@@ -1889,6 +1832,37 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	}
 	if tuo.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
+	}
+	if tuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByTable,
+			Columns: []string{task.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByTable,
+			Columns: []string{task.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tuo.mutation.AssignerCleared() {
 		edge := &sqlgraph.EdgeSpec{

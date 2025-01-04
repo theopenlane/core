@@ -54,7 +54,7 @@ func (Event) Annotations() []schema.Annotation {
 // Mixin of the Event
 func (Event) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 	}

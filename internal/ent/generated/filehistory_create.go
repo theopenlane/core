@@ -55,6 +55,20 @@ func (fhc *FileHistoryCreate) SetOperation(ht history.OpType) *FileHistoryCreate
 	return fhc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (fhc *FileHistoryCreate) SetUpdatedBy(s string) *FileHistoryCreate {
+	fhc.mutation.SetUpdatedBy(s)
+	return fhc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableUpdatedBy(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetUpdatedBy(*s)
+	}
+	return fhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (fhc *FileHistoryCreate) SetCreatedAt(t time.Time) *FileHistoryCreate {
 	fhc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (fhc *FileHistoryCreate) SetNillableUpdatedAt(t *time.Time) *FileHistoryCre
 	return fhc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (fhc *FileHistoryCreate) SetCreatedBy(s string) *FileHistoryCreate {
-	fhc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (fhc *FileHistoryCreate) SetCreatedByID(s string) *FileHistoryCreate {
+	fhc.mutation.SetCreatedByID(s)
 	return fhc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableCreatedBy(s *string) *FileHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableCreatedByID(s *string) *FileHistoryCreate {
 	if s != nil {
-		fhc.SetCreatedBy(*s)
+		fhc.SetCreatedByID(*s)
 	}
 	return fhc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fhc *FileHistoryCreate) SetUpdatedBy(s string) *FileHistoryCreate {
-	fhc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (fhc *FileHistoryCreate) SetUpdatedByID(s string) *FileHistoryCreate {
+	fhc.mutation.SetUpdatedByID(s)
 	return fhc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableUpdatedBy(s *string) *FileHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableUpdatedByID(s *string) *FileHistoryCreate {
 	if s != nil {
-		fhc.SetUpdatedBy(*s)
+		fhc.SetUpdatedByID(*s)
 	}
 	return fhc
 }
@@ -125,16 +139,16 @@ func (fhc *FileHistoryCreate) SetNillableDeletedAt(t *time.Time) *FileHistoryCre
 	return fhc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (fhc *FileHistoryCreate) SetDeletedBy(s string) *FileHistoryCreate {
-	fhc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (fhc *FileHistoryCreate) SetDeletedByID(s string) *FileHistoryCreate {
+	fhc.mutation.SetDeletedByID(s)
 	return fhc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableDeletedBy(s *string) *FileHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableDeletedByID(s *string) *FileHistoryCreate {
 	if s != nil {
-		fhc.SetDeletedBy(*s)
+		fhc.SetDeletedByID(*s)
 	}
 	return fhc
 }
@@ -489,6 +503,10 @@ func (fhc *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(filehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := fhc.mutation.UpdatedBy(); ok {
+		_spec.SetField(filehistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := fhc.mutation.CreatedAt(); ok {
 		_spec.SetField(filehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -497,21 +515,21 @@ func (fhc *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(filehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := fhc.mutation.CreatedBy(); ok {
-		_spec.SetField(filehistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := fhc.mutation.CreatedByID(); ok {
+		_spec.SetField(filehistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := fhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(filehistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := fhc.mutation.UpdatedByID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := fhc.mutation.DeletedAt(); ok {
 		_spec.SetField(filehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := fhc.mutation.DeletedBy(); ok {
-		_spec.SetField(filehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := fhc.mutation.DeletedByID(); ok {
+		_spec.SetField(filehistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := fhc.mutation.MappingID(); ok {
 		_spec.SetField(filehistory.FieldMappingID, field.TypeString, value)

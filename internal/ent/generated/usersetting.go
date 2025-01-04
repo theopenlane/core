@@ -25,18 +25,18 @@ type UserSetting struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID string `json:"user_id,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
@@ -64,6 +64,10 @@ type UserSetting struct {
 
 // UserSettingEdges holds the relations/edges for other nodes in the graph.
 type UserSettingEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
 	// organization to load on user login
@@ -72,11 +76,33 @@ type UserSettingEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
 	namedFiles map[string][]*File
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e UserSettingEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e UserSettingEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -84,7 +110,7 @@ type UserSettingEdges struct {
 func (e UserSettingEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -95,7 +121,7 @@ func (e UserSettingEdges) UserOrErr() (*User, error) {
 func (e UserSettingEdges) DefaultOrgOrErr() (*Organization, error) {
 	if e.DefaultOrg != nil {
 		return e.DefaultOrg, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "default_org"}
@@ -104,7 +130,7 @@ func (e UserSettingEdges) DefaultOrgOrErr() (*Organization, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserSettingEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -119,7 +145,7 @@ func (*UserSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case usersetting.FieldLocked, usersetting.FieldEmailConfirmed, usersetting.FieldIsWebauthnAllowed, usersetting.FieldIsTfaEnabled:
 			values[i] = new(sql.NullBool)
-		case usersetting.FieldID, usersetting.FieldCreatedBy, usersetting.FieldUpdatedBy, usersetting.FieldMappingID, usersetting.FieldDeletedBy, usersetting.FieldUserID, usersetting.FieldStatus, usersetting.FieldPhoneNumber:
+		case usersetting.FieldID, usersetting.FieldCreatedByID, usersetting.FieldUpdatedByID, usersetting.FieldMappingID, usersetting.FieldDeletedByID, usersetting.FieldUserID, usersetting.FieldStatus, usersetting.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case usersetting.FieldCreatedAt, usersetting.FieldUpdatedAt, usersetting.FieldDeletedAt, usersetting.FieldSilencedAt, usersetting.FieldSuspendedAt:
 			values[i] = new(sql.NullTime)
@@ -158,17 +184,17 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				us.UpdatedAt = value.Time
 			}
-		case usersetting.FieldCreatedBy:
+		case usersetting.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				us.CreatedBy = value.String
+				us.CreatedByID = value.String
 			}
-		case usersetting.FieldUpdatedBy:
+		case usersetting.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				us.UpdatedBy = value.String
+				us.UpdatedByID = value.String
 			}
 		case usersetting.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -190,11 +216,11 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				us.DeletedAt = value.Time
 			}
-		case usersetting.FieldDeletedBy:
+		case usersetting.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				us.DeletedBy = value.String
+				us.DeletedByID = value.String
 			}
 		case usersetting.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -273,6 +299,16 @@ func (us *UserSetting) Value(name string) (ent.Value, error) {
 	return us.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the UserSetting entity.
+func (us *UserSetting) QueryCreatedBy() *UserQuery {
+	return NewUserSettingClient(us.config).QueryCreatedBy(us)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the UserSetting entity.
+func (us *UserSetting) QueryUpdatedBy() *UserQuery {
+	return NewUserSettingClient(us.config).QueryUpdatedBy(us)
+}
+
 // QueryUser queries the "user" edge of the UserSetting entity.
 func (us *UserSetting) QueryUser() *UserQuery {
 	return NewUserSettingClient(us.config).QueryUser(us)
@@ -317,11 +353,11 @@ func (us *UserSetting) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(us.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(us.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(us.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(us.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(us.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(us.MappingID)
@@ -332,8 +368,8 @@ func (us *UserSetting) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(us.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(us.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(us.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(us.UserID)

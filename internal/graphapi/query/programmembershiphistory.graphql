@@ -5,15 +5,16 @@ query GetAllProgramMembershipHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         historyTime
         id
         operation
         programID
         ref
         role
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         userID
       }
     }
@@ -25,15 +26,16 @@ query GetProgramMembershipHistories($where: ProgramMembershipHistoryWhereInput) 
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         historyTime
         id
         operation
         programID
         ref
         role
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         userID
       }
     }

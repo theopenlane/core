@@ -4,7 +4,13 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
     procedures {
       background
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       details
       id
@@ -15,7 +21,13 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       version
     }
   }
@@ -26,7 +38,13 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
     procedures {
       background
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       details
       id
@@ -37,7 +55,13 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       version
     }
   }
@@ -48,7 +72,13 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
     procedure {
       background
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       details
       id
@@ -59,7 +89,13 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       version
       editors{
         id
@@ -85,7 +121,7 @@ query GetAllProcedures {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -95,8 +131,20 @@ query GetAllProcedures {
         satisfies
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
+        createdBy {
+          id
+          firstName
+          lastName
+          email
+        }
         version
         editors{
           id
@@ -114,7 +162,7 @@ query GetProcedureByID($procedureId: ID!) {
   procedure(id: $procedureId) {
     background
     createdAt
-    createdBy
+    createdByID
     description
     details
     id
@@ -125,7 +173,19 @@ query GetProcedureByID($procedureId: ID!) {
     status
     tags
     updatedAt
-    updatedBy
+    updatedByID
+    updatedBy {
+      id
+      firstName
+      lastName
+      email
+    }
+    createdBy {
+      id
+      firstName
+      lastName
+      email
+    }
     version
     editors{
       id
@@ -144,7 +204,7 @@ query GetProcedures($where: ProcedureWhereInput) {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -154,8 +214,20 @@ query GetProcedures($where: ProcedureWhereInput) {
         satisfies
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
+        createdBy {
+          id
+          firstName
+          lastName
+          email
+        }
         version
         editors{
           id
@@ -174,7 +246,13 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
     procedure {
       background
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       details
       id
@@ -185,7 +263,7 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       editors{
         id

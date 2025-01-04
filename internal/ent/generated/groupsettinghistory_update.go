@@ -45,23 +45,23 @@ func (gshu *GroupSettingHistoryUpdate) ClearUpdatedAt() *GroupSettingHistoryUpda
 	return gshu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gshu *GroupSettingHistoryUpdate) SetUpdatedBy(s string) *GroupSettingHistoryUpdate {
-	gshu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gshu *GroupSettingHistoryUpdate) SetUpdatedByID(s string) *GroupSettingHistoryUpdate {
+	gshu.mutation.SetUpdatedByID(s)
 	return gshu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gshu *GroupSettingHistoryUpdate) SetNillableUpdatedBy(s *string) *GroupSettingHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gshu *GroupSettingHistoryUpdate) SetNillableUpdatedByID(s *string) *GroupSettingHistoryUpdate {
 	if s != nil {
-		gshu.SetUpdatedBy(*s)
+		gshu.SetUpdatedByID(*s)
 	}
 	return gshu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gshu *GroupSettingHistoryUpdate) ClearUpdatedBy() *GroupSettingHistoryUpdate {
-	gshu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gshu *GroupSettingHistoryUpdate) ClearUpdatedByID() *GroupSettingHistoryUpdate {
+	gshu.mutation.ClearUpdatedByID()
 	return gshu
 }
 
@@ -80,46 +80,6 @@ func (gshu *GroupSettingHistoryUpdate) AppendTags(s []string) *GroupSettingHisto
 // ClearTags clears the value of the "tags" field.
 func (gshu *GroupSettingHistoryUpdate) ClearTags() *GroupSettingHistoryUpdate {
 	gshu.mutation.ClearTags()
-	return gshu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gshu *GroupSettingHistoryUpdate) SetDeletedAt(t time.Time) *GroupSettingHistoryUpdate {
-	gshu.mutation.SetDeletedAt(t)
-	return gshu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gshu *GroupSettingHistoryUpdate) SetNillableDeletedAt(t *time.Time) *GroupSettingHistoryUpdate {
-	if t != nil {
-		gshu.SetDeletedAt(*t)
-	}
-	return gshu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gshu *GroupSettingHistoryUpdate) ClearDeletedAt() *GroupSettingHistoryUpdate {
-	gshu.mutation.ClearDeletedAt()
-	return gshu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gshu *GroupSettingHistoryUpdate) SetDeletedBy(s string) *GroupSettingHistoryUpdate {
-	gshu.mutation.SetDeletedBy(s)
-	return gshu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gshu *GroupSettingHistoryUpdate) SetNillableDeletedBy(s *string) *GroupSettingHistoryUpdate {
-	if s != nil {
-		gshu.SetDeletedBy(*s)
-	}
-	return gshu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gshu *GroupSettingHistoryUpdate) ClearDeletedBy() *GroupSettingHistoryUpdate {
-	gshu.mutation.ClearDeletedBy()
 	return gshu
 }
 
@@ -294,6 +254,9 @@ func (gshu *GroupSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if gshu.mutation.RefCleared() {
 		_spec.ClearField(groupsettinghistory.FieldRef, field.TypeString)
 	}
+	if gshu.mutation.UpdatedByCleared() {
+		_spec.ClearField(groupsettinghistory.FieldUpdatedBy, field.TypeString)
+	}
 	if gshu.mutation.CreatedAtCleared() {
 		_spec.ClearField(groupsettinghistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -303,14 +266,14 @@ func (gshu *GroupSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if gshu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupsettinghistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if gshu.mutation.CreatedByCleared() {
-		_spec.ClearField(groupsettinghistory.FieldCreatedBy, field.TypeString)
+	if gshu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := gshu.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupsettinghistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := gshu.mutation.UpdatedByID(); ok {
+		_spec.SetField(groupsettinghistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if gshu.mutation.UpdatedByCleared() {
-		_spec.ClearField(groupsettinghistory.FieldUpdatedBy, field.TypeString)
+	if gshu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := gshu.mutation.Tags(); ok {
 		_spec.SetField(groupsettinghistory.FieldTags, field.TypeJSON, value)
@@ -323,17 +286,11 @@ func (gshu *GroupSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if gshu.mutation.TagsCleared() {
 		_spec.ClearField(groupsettinghistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := gshu.mutation.DeletedAt(); ok {
-		_spec.SetField(groupsettinghistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if gshu.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupsettinghistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gshu.mutation.DeletedBy(); ok {
-		_spec.SetField(groupsettinghistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if gshu.mutation.DeletedByCleared() {
-		_spec.ClearField(groupsettinghistory.FieldDeletedBy, field.TypeString)
+	if gshu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gshu.mutation.Visibility(); ok {
 		_spec.SetField(groupsettinghistory.FieldVisibility, field.TypeEnum, value)
@@ -395,23 +352,23 @@ func (gshuo *GroupSettingHistoryUpdateOne) ClearUpdatedAt() *GroupSettingHistory
 	return gshuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gshuo *GroupSettingHistoryUpdateOne) SetUpdatedBy(s string) *GroupSettingHistoryUpdateOne {
-	gshuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gshuo *GroupSettingHistoryUpdateOne) SetUpdatedByID(s string) *GroupSettingHistoryUpdateOne {
+	gshuo.mutation.SetUpdatedByID(s)
 	return gshuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gshuo *GroupSettingHistoryUpdateOne) SetNillableUpdatedBy(s *string) *GroupSettingHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gshuo *GroupSettingHistoryUpdateOne) SetNillableUpdatedByID(s *string) *GroupSettingHistoryUpdateOne {
 	if s != nil {
-		gshuo.SetUpdatedBy(*s)
+		gshuo.SetUpdatedByID(*s)
 	}
 	return gshuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gshuo *GroupSettingHistoryUpdateOne) ClearUpdatedBy() *GroupSettingHistoryUpdateOne {
-	gshuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gshuo *GroupSettingHistoryUpdateOne) ClearUpdatedByID() *GroupSettingHistoryUpdateOne {
+	gshuo.mutation.ClearUpdatedByID()
 	return gshuo
 }
 
@@ -430,46 +387,6 @@ func (gshuo *GroupSettingHistoryUpdateOne) AppendTags(s []string) *GroupSettingH
 // ClearTags clears the value of the "tags" field.
 func (gshuo *GroupSettingHistoryUpdateOne) ClearTags() *GroupSettingHistoryUpdateOne {
 	gshuo.mutation.ClearTags()
-	return gshuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gshuo *GroupSettingHistoryUpdateOne) SetDeletedAt(t time.Time) *GroupSettingHistoryUpdateOne {
-	gshuo.mutation.SetDeletedAt(t)
-	return gshuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gshuo *GroupSettingHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *GroupSettingHistoryUpdateOne {
-	if t != nil {
-		gshuo.SetDeletedAt(*t)
-	}
-	return gshuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gshuo *GroupSettingHistoryUpdateOne) ClearDeletedAt() *GroupSettingHistoryUpdateOne {
-	gshuo.mutation.ClearDeletedAt()
-	return gshuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gshuo *GroupSettingHistoryUpdateOne) SetDeletedBy(s string) *GroupSettingHistoryUpdateOne {
-	gshuo.mutation.SetDeletedBy(s)
-	return gshuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gshuo *GroupSettingHistoryUpdateOne) SetNillableDeletedBy(s *string) *GroupSettingHistoryUpdateOne {
-	if s != nil {
-		gshuo.SetDeletedBy(*s)
-	}
-	return gshuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gshuo *GroupSettingHistoryUpdateOne) ClearDeletedBy() *GroupSettingHistoryUpdateOne {
-	gshuo.mutation.ClearDeletedBy()
 	return gshuo
 }
 
@@ -674,6 +591,9 @@ func (gshuo *GroupSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if gshuo.mutation.RefCleared() {
 		_spec.ClearField(groupsettinghistory.FieldRef, field.TypeString)
 	}
+	if gshuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(groupsettinghistory.FieldUpdatedBy, field.TypeString)
+	}
 	if gshuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(groupsettinghistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -683,14 +603,14 @@ func (gshuo *GroupSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if gshuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupsettinghistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if gshuo.mutation.CreatedByCleared() {
-		_spec.ClearField(groupsettinghistory.FieldCreatedBy, field.TypeString)
+	if gshuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := gshuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupsettinghistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := gshuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(groupsettinghistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if gshuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(groupsettinghistory.FieldUpdatedBy, field.TypeString)
+	if gshuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := gshuo.mutation.Tags(); ok {
 		_spec.SetField(groupsettinghistory.FieldTags, field.TypeJSON, value)
@@ -703,17 +623,11 @@ func (gshuo *GroupSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if gshuo.mutation.TagsCleared() {
 		_spec.ClearField(groupsettinghistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := gshuo.mutation.DeletedAt(); ok {
-		_spec.SetField(groupsettinghistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if gshuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupsettinghistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gshuo.mutation.DeletedBy(); ok {
-		_spec.SetField(groupsettinghistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if gshuo.mutation.DeletedByCleared() {
-		_spec.ClearField(groupsettinghistory.FieldDeletedBy, field.TypeString)
+	if gshuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gshuo.mutation.Visibility(); ok {
 		_spec.SetField(groupsettinghistory.FieldVisibility, field.TypeEnum, value)

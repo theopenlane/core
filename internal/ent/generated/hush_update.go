@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -46,63 +47,23 @@ func (hu *HushUpdate) ClearUpdatedAt() *HushUpdate {
 	return hu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (hu *HushUpdate) SetUpdatedBy(s string) *HushUpdate {
-	hu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (hu *HushUpdate) SetUpdatedByID(s string) *HushUpdate {
+	hu.mutation.SetUpdatedByID(s)
 	return hu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (hu *HushUpdate) SetNillableUpdatedBy(s *string) *HushUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (hu *HushUpdate) SetNillableUpdatedByID(s *string) *HushUpdate {
 	if s != nil {
-		hu.SetUpdatedBy(*s)
+		hu.SetUpdatedByID(*s)
 	}
 	return hu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (hu *HushUpdate) ClearUpdatedBy() *HushUpdate {
-	hu.mutation.ClearUpdatedBy()
-	return hu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (hu *HushUpdate) SetDeletedAt(t time.Time) *HushUpdate {
-	hu.mutation.SetDeletedAt(t)
-	return hu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (hu *HushUpdate) SetNillableDeletedAt(t *time.Time) *HushUpdate {
-	if t != nil {
-		hu.SetDeletedAt(*t)
-	}
-	return hu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (hu *HushUpdate) ClearDeletedAt() *HushUpdate {
-	hu.mutation.ClearDeletedAt()
-	return hu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (hu *HushUpdate) SetDeletedBy(s string) *HushUpdate {
-	hu.mutation.SetDeletedBy(s)
-	return hu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (hu *HushUpdate) SetNillableDeletedBy(s *string) *HushUpdate {
-	if s != nil {
-		hu.SetDeletedBy(*s)
-	}
-	return hu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (hu *HushUpdate) ClearDeletedBy() *HushUpdate {
-	hu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (hu *HushUpdate) ClearUpdatedByID() *HushUpdate {
+	hu.mutation.ClearUpdatedByID()
 	return hu
 }
 
@@ -160,6 +121,11 @@ func (hu *HushUpdate) ClearKind() *HushUpdate {
 	return hu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (hu *HushUpdate) SetUpdatedBy(u *User) *HushUpdate {
+	return hu.SetUpdatedByID(u.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (hu *HushUpdate) AddIntegrationIDs(ids ...string) *HushUpdate {
 	hu.mutation.AddIntegrationIDs(ids...)
@@ -208,6 +174,12 @@ func (hu *HushUpdate) AddEvents(e ...*Event) *HushUpdate {
 // Mutation returns the HushMutation object of the builder.
 func (hu *HushUpdate) Mutation() *HushMutation {
 	return hu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (hu *HushUpdate) ClearUpdatedBy() *HushUpdate {
+	hu.mutation.ClearUpdatedBy()
+	return hu
 }
 
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
@@ -352,26 +324,11 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(hush.FieldUpdatedAt, field.TypeTime)
 	}
-	if hu.mutation.CreatedByCleared() {
-		_spec.ClearField(hush.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := hu.mutation.UpdatedBy(); ok {
-		_spec.SetField(hush.FieldUpdatedBy, field.TypeString, value)
-	}
-	if hu.mutation.UpdatedByCleared() {
-		_spec.ClearField(hush.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := hu.mutation.DeletedAt(); ok {
-		_spec.SetField(hush.FieldDeletedAt, field.TypeTime, value)
-	}
 	if hu.mutation.DeletedAtCleared() {
 		_spec.ClearField(hush.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := hu.mutation.DeletedBy(); ok {
-		_spec.SetField(hush.FieldDeletedBy, field.TypeString, value)
-	}
-	if hu.mutation.DeletedByCleared() {
-		_spec.ClearField(hush.FieldDeletedBy, field.TypeString)
+	if hu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(hush.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := hu.mutation.Name(); ok {
 		_spec.SetField(hush.FieldName, field.TypeString, value)
@@ -393,6 +350,37 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if hu.mutation.SecretValueCleared() {
 		_spec.ClearField(hush.FieldSecretValue, field.TypeString)
+	}
+	if hu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByTable,
+			Columns: []string{hush.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hu.schemaConfig.Hush
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByTable,
+			Columns: []string{hush.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hu.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if hu.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -574,63 +562,23 @@ func (huo *HushUpdateOne) ClearUpdatedAt() *HushUpdateOne {
 	return huo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (huo *HushUpdateOne) SetUpdatedBy(s string) *HushUpdateOne {
-	huo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (huo *HushUpdateOne) SetUpdatedByID(s string) *HushUpdateOne {
+	huo.mutation.SetUpdatedByID(s)
 	return huo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (huo *HushUpdateOne) SetNillableUpdatedBy(s *string) *HushUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (huo *HushUpdateOne) SetNillableUpdatedByID(s *string) *HushUpdateOne {
 	if s != nil {
-		huo.SetUpdatedBy(*s)
+		huo.SetUpdatedByID(*s)
 	}
 	return huo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (huo *HushUpdateOne) ClearUpdatedBy() *HushUpdateOne {
-	huo.mutation.ClearUpdatedBy()
-	return huo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (huo *HushUpdateOne) SetDeletedAt(t time.Time) *HushUpdateOne {
-	huo.mutation.SetDeletedAt(t)
-	return huo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (huo *HushUpdateOne) SetNillableDeletedAt(t *time.Time) *HushUpdateOne {
-	if t != nil {
-		huo.SetDeletedAt(*t)
-	}
-	return huo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (huo *HushUpdateOne) ClearDeletedAt() *HushUpdateOne {
-	huo.mutation.ClearDeletedAt()
-	return huo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (huo *HushUpdateOne) SetDeletedBy(s string) *HushUpdateOne {
-	huo.mutation.SetDeletedBy(s)
-	return huo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (huo *HushUpdateOne) SetNillableDeletedBy(s *string) *HushUpdateOne {
-	if s != nil {
-		huo.SetDeletedBy(*s)
-	}
-	return huo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (huo *HushUpdateOne) ClearDeletedBy() *HushUpdateOne {
-	huo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (huo *HushUpdateOne) ClearUpdatedByID() *HushUpdateOne {
+	huo.mutation.ClearUpdatedByID()
 	return huo
 }
 
@@ -688,6 +636,11 @@ func (huo *HushUpdateOne) ClearKind() *HushUpdateOne {
 	return huo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (huo *HushUpdateOne) SetUpdatedBy(u *User) *HushUpdateOne {
+	return huo.SetUpdatedByID(u.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (huo *HushUpdateOne) AddIntegrationIDs(ids ...string) *HushUpdateOne {
 	huo.mutation.AddIntegrationIDs(ids...)
@@ -736,6 +689,12 @@ func (huo *HushUpdateOne) AddEvents(e ...*Event) *HushUpdateOne {
 // Mutation returns the HushMutation object of the builder.
 func (huo *HushUpdateOne) Mutation() *HushMutation {
 	return huo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (huo *HushUpdateOne) ClearUpdatedBy() *HushUpdateOne {
+	huo.mutation.ClearUpdatedBy()
+	return huo
 }
 
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
@@ -910,26 +869,11 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 	if huo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(hush.FieldUpdatedAt, field.TypeTime)
 	}
-	if huo.mutation.CreatedByCleared() {
-		_spec.ClearField(hush.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := huo.mutation.UpdatedBy(); ok {
-		_spec.SetField(hush.FieldUpdatedBy, field.TypeString, value)
-	}
-	if huo.mutation.UpdatedByCleared() {
-		_spec.ClearField(hush.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := huo.mutation.DeletedAt(); ok {
-		_spec.SetField(hush.FieldDeletedAt, field.TypeTime, value)
-	}
 	if huo.mutation.DeletedAtCleared() {
 		_spec.ClearField(hush.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := huo.mutation.DeletedBy(); ok {
-		_spec.SetField(hush.FieldDeletedBy, field.TypeString, value)
-	}
-	if huo.mutation.DeletedByCleared() {
-		_spec.ClearField(hush.FieldDeletedBy, field.TypeString)
+	if huo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(hush.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := huo.mutation.Name(); ok {
 		_spec.SetField(hush.FieldName, field.TypeString, value)
@@ -951,6 +895,37 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 	}
 	if huo.mutation.SecretValueCleared() {
 		_spec.ClearField(hush.FieldSecretValue, field.TypeString)
+	}
+	if huo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByTable,
+			Columns: []string{hush.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = huo.schemaConfig.Hush
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByTable,
+			Columns: []string{hush.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = huo.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if huo.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{

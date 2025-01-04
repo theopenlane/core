@@ -44,63 +44,23 @@ func (shu *StandardHistoryUpdate) ClearUpdatedAt() *StandardHistoryUpdate {
 	return shu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (shu *StandardHistoryUpdate) SetUpdatedBy(s string) *StandardHistoryUpdate {
-	shu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (shu *StandardHistoryUpdate) SetUpdatedByID(s string) *StandardHistoryUpdate {
+	shu.mutation.SetUpdatedByID(s)
 	return shu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableUpdatedBy(s *string) *StandardHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (shu *StandardHistoryUpdate) SetNillableUpdatedByID(s *string) *StandardHistoryUpdate {
 	if s != nil {
-		shu.SetUpdatedBy(*s)
+		shu.SetUpdatedByID(*s)
 	}
 	return shu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (shu *StandardHistoryUpdate) ClearUpdatedBy() *StandardHistoryUpdate {
-	shu.mutation.ClearUpdatedBy()
-	return shu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (shu *StandardHistoryUpdate) SetDeletedAt(t time.Time) *StandardHistoryUpdate {
-	shu.mutation.SetDeletedAt(t)
-	return shu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableDeletedAt(t *time.Time) *StandardHistoryUpdate {
-	if t != nil {
-		shu.SetDeletedAt(*t)
-	}
-	return shu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (shu *StandardHistoryUpdate) ClearDeletedAt() *StandardHistoryUpdate {
-	shu.mutation.ClearDeletedAt()
-	return shu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (shu *StandardHistoryUpdate) SetDeletedBy(s string) *StandardHistoryUpdate {
-	shu.mutation.SetDeletedBy(s)
-	return shu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableDeletedBy(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetDeletedBy(*s)
-	}
-	return shu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (shu *StandardHistoryUpdate) ClearDeletedBy() *StandardHistoryUpdate {
-	shu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (shu *StandardHistoryUpdate) ClearUpdatedByID() *StandardHistoryUpdate {
+	shu.mutation.ClearUpdatedByID()
 	return shu
 }
 
@@ -367,6 +327,9 @@ func (shu *StandardHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if shu.mutation.RefCleared() {
 		_spec.ClearField(standardhistory.FieldRef, field.TypeString)
 	}
+	if shu.mutation.UpdatedByCleared() {
+		_spec.ClearField(standardhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if shu.mutation.CreatedAtCleared() {
 		_spec.ClearField(standardhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -376,26 +339,20 @@ func (shu *StandardHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if shu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standardhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shu.mutation.CreatedByCleared() {
-		_spec.ClearField(standardhistory.FieldCreatedBy, field.TypeString)
+	if shu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(standardhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := shu.mutation.UpdatedBy(); ok {
-		_spec.SetField(standardhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := shu.mutation.UpdatedByID(); ok {
+		_spec.SetField(standardhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if shu.mutation.UpdatedByCleared() {
-		_spec.ClearField(standardhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := shu.mutation.DeletedAt(); ok {
-		_spec.SetField(standardhistory.FieldDeletedAt, field.TypeTime, value)
+	if shu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(standardhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if shu.mutation.DeletedAtCleared() {
 		_spec.ClearField(standardhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shu.mutation.DeletedBy(); ok {
-		_spec.SetField(standardhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if shu.mutation.DeletedByCleared() {
-		_spec.ClearField(standardhistory.FieldDeletedBy, field.TypeString)
+	if shu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(standardhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := shu.mutation.Tags(); ok {
 		_spec.SetField(standardhistory.FieldTags, field.TypeJSON, value)
@@ -501,63 +458,23 @@ func (shuo *StandardHistoryUpdateOne) ClearUpdatedAt() *StandardHistoryUpdateOne
 	return shuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (shuo *StandardHistoryUpdateOne) SetUpdatedBy(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (shuo *StandardHistoryUpdateOne) SetUpdatedByID(s string) *StandardHistoryUpdateOne {
+	shuo.mutation.SetUpdatedByID(s)
 	return shuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableUpdatedBy(s *string) *StandardHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (shuo *StandardHistoryUpdateOne) SetNillableUpdatedByID(s *string) *StandardHistoryUpdateOne {
 	if s != nil {
-		shuo.SetUpdatedBy(*s)
+		shuo.SetUpdatedByID(*s)
 	}
 	return shuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (shuo *StandardHistoryUpdateOne) ClearUpdatedBy() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearUpdatedBy()
-	return shuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (shuo *StandardHistoryUpdateOne) SetDeletedAt(t time.Time) *StandardHistoryUpdateOne {
-	shuo.mutation.SetDeletedAt(t)
-	return shuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *StandardHistoryUpdateOne {
-	if t != nil {
-		shuo.SetDeletedAt(*t)
-	}
-	return shuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (shuo *StandardHistoryUpdateOne) ClearDeletedAt() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearDeletedAt()
-	return shuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (shuo *StandardHistoryUpdateOne) SetDeletedBy(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetDeletedBy(s)
-	return shuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableDeletedBy(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetDeletedBy(*s)
-	}
-	return shuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (shuo *StandardHistoryUpdateOne) ClearDeletedBy() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (shuo *StandardHistoryUpdateOne) ClearUpdatedByID() *StandardHistoryUpdateOne {
+	shuo.mutation.ClearUpdatedByID()
 	return shuo
 }
 
@@ -854,6 +771,9 @@ func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Stand
 	if shuo.mutation.RefCleared() {
 		_spec.ClearField(standardhistory.FieldRef, field.TypeString)
 	}
+	if shuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(standardhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if shuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(standardhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -863,26 +783,20 @@ func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Stand
 	if shuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standardhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shuo.mutation.CreatedByCleared() {
-		_spec.ClearField(standardhistory.FieldCreatedBy, field.TypeString)
+	if shuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(standardhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := shuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(standardhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := shuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(standardhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if shuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(standardhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := shuo.mutation.DeletedAt(); ok {
-		_spec.SetField(standardhistory.FieldDeletedAt, field.TypeTime, value)
+	if shuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(standardhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if shuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(standardhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.DeletedBy(); ok {
-		_spec.SetField(standardhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if shuo.mutation.DeletedByCleared() {
-		_spec.ClearField(standardhistory.FieldDeletedBy, field.TypeString)
+	if shuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(standardhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := shuo.mutation.Tags(); ok {
 		_spec.SetField(standardhistory.FieldTags, field.TypeJSON, value)

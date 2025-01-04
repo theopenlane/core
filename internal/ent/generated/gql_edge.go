@@ -8,10 +8,42 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+func (at *APIToken) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := at.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = at.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (at *APIToken) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := at.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = at.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (at *APIToken) Owner(ctx context.Context) (*Organization, error) {
 	result, err := at.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
 		result, err = at.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ap *ActionPlan) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := ap.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = ap.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ap *ActionPlan) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := ap.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = ap.QueryUpdatedBy().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -76,6 +108,22 @@ func (ap *ActionPlan) Program(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
+func (c *Contact) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := c.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = c.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (c *Contact) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := c.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = c.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (c *Contact) Owner(ctx context.Context) (*Organization, error) {
 	result, err := c.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -106,6 +154,22 @@ func (c *Contact) Files(ctx context.Context) (result []*File, err error) {
 		result, err = c.QueryFiles().All(ctx)
 	}
 	return result, err
+}
+
+func (c *Control) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := c.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = c.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (c *Control) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := c.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = c.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (c *Control) Owner(ctx context.Context) (*Organization, error) {
@@ -260,6 +324,22 @@ func (c *Control) Programs(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
+func (co *ControlObjective) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := co.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = co.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (co *ControlObjective) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := co.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = co.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (co *ControlObjective) Owner(ctx context.Context) (*Organization, error) {
 	result, err := co.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -412,6 +492,22 @@ func (co *ControlObjective) Programs(ctx context.Context) (result []*Program, er
 	return result, err
 }
 
+func (dd *DocumentData) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := dd.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = dd.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (dd *DocumentData) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := dd.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = dd.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (dd *DocumentData) Owner(ctx context.Context) (*Organization, error) {
 	result, err := dd.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -450,6 +546,22 @@ func (dd *DocumentData) Files(ctx context.Context) (result []*File, err error) {
 		result, err = dd.QueryFiles().All(ctx)
 	}
 	return result, err
+}
+
+func (e *Entity) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := e.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (e *Entity) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := e.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (e *Entity) Owner(ctx context.Context) (*Organization, error) {
@@ -516,6 +628,22 @@ func (e *Entity) EntityType(ctx context.Context) (*EntityType, error) {
 	return result, MaskNotFound(err)
 }
 
+func (et *EntityType) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := et.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = et.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (et *EntityType) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := et.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = et.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (et *EntityType) Owner(ctx context.Context) (*Organization, error) {
 	result, err := et.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -534,6 +662,22 @@ func (et *EntityType) Entities(ctx context.Context) (result []*Entity, err error
 		result, err = et.QueryEntities().All(ctx)
 	}
 	return result, err
+}
+
+func (e *Event) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := e.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (e *Event) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := e.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (e *Event) User(ctx context.Context) (result []*User, err error) {
@@ -668,6 +812,22 @@ func (e *Event) File(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
+func (f *File) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := f.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = f.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (f *File) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := f.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = f.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (f *File) User(ctx context.Context) (result []*User, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = f.NamedUser(graphql.GetFieldContext(ctx).Field.Alias)
@@ -798,6 +958,22 @@ func (f *File) Program(ctx context.Context) (result []*Program, err error) {
 		result, err = f.QueryProgram().All(ctx)
 	}
 	return result, err
+}
+
+func (gr *Group) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := gr.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = gr.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gr *Group) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := gr.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = gr.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (gr *Group) Owner(ctx context.Context) (*Organization, error) {
@@ -1224,6 +1400,22 @@ func (gr *Group) Members(ctx context.Context) (result []*GroupMembership, err er
 	return result, err
 }
 
+func (gm *GroupMembership) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := gm.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = gm.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gm *GroupMembership) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := gm.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = gm.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (gm *GroupMembership) Group(ctx context.Context) (*Group, error) {
 	result, err := gm.Edges.GroupOrErr()
 	if IsNotLoaded(err) {
@@ -1252,10 +1444,42 @@ func (gm *GroupMembership) Events(ctx context.Context) (result []*Event, err err
 	return result, err
 }
 
+func (gs *GroupSetting) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := gs.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = gs.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gs *GroupSetting) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := gs.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = gs.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (gs *GroupSetting) Group(ctx context.Context) (*Group, error) {
 	result, err := gs.Edges.GroupOrErr()
 	if IsNotLoaded(err) {
 		result, err = gs.QueryGroup().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Hush) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := h.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Hush) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := h.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryUpdatedBy().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1296,6 +1520,22 @@ func (h *Hush) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
+func (i *Integration) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := i.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = i.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (i *Integration) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := i.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = i.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (i *Integration) Owner(ctx context.Context) (*Organization, error) {
 	result, err := i.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -1326,6 +1566,22 @@ func (i *Integration) Events(ctx context.Context) (result []*Event, err error) {
 		result, err = i.QueryEvents().All(ctx)
 	}
 	return result, err
+}
+
+func (ip *InternalPolicy) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := ip.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = ip.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ip *InternalPolicy) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := ip.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = ip.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (ip *InternalPolicy) Owner(ctx context.Context) (*Organization, error) {
@@ -1432,6 +1688,22 @@ func (ip *InternalPolicy) Programs(ctx context.Context) (result []*Program, err 
 	return result, err
 }
 
+func (i *Invite) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := i.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = i.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (i *Invite) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := i.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = i.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (i *Invite) Owner(ctx context.Context) (*Organization, error) {
 	result, err := i.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -1450,6 +1722,22 @@ func (i *Invite) Events(ctx context.Context) (result []*Event, err error) {
 		result, err = i.QueryEvents().All(ctx)
 	}
 	return result, err
+}
+
+func (n *Narrative) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := n.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = n.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (n *Narrative) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := n.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = n.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (n *Narrative) Owner(ctx context.Context) (*Organization, error) {
@@ -1556,6 +1844,22 @@ func (n *Narrative) Programs(ctx context.Context) (result []*Program, err error)
 	return result, err
 }
 
+func (n *Note) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := n.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = n.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (n *Note) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := n.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = n.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (n *Note) Owner(ctx context.Context) (*Organization, error) {
 	result, err := n.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -1596,6 +1900,22 @@ func (n *Note) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
+func (om *OrgMembership) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := om.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = om.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (om *OrgMembership) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := om.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = om.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (om *OrgMembership) Organization(ctx context.Context) (*Organization, error) {
 	result, err := om.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {
@@ -1624,10 +1944,42 @@ func (om *OrgMembership) Events(ctx context.Context) (result []*Event, err error
 	return result, err
 }
 
+func (os *OrgSubscription) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := os.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (os *OrgSubscription) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := os.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (os *OrgSubscription) Owner(ctx context.Context) (*Organization, error) {
 	result, err := os.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
 		result, err = os.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (o *Organization) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := o.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = o.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (o *Organization) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := o.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = o.QueryUpdatedBy().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1756,7 +2108,7 @@ func (o *Organization) Children(
 		WithOrganizationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[10][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[12][alias]
 	if nodes, err := o.NamedChildren(alias); err == nil || hasTotalCount {
 		pager, err := newOrganizationPager(opts, last != nil)
 		if err != nil {
@@ -2101,6 +2453,22 @@ func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, er
 	return result, err
 }
 
+func (os *OrganizationSetting) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := os.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (os *OrganizationSetting) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := os.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (os *OrganizationSetting) Organization(ctx context.Context) (*Organization, error) {
 	result, err := os.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {
@@ -2119,6 +2487,22 @@ func (os *OrganizationSetting) Files(ctx context.Context) (result []*File, err e
 		result, err = os.QueryFiles().All(ctx)
 	}
 	return result, err
+}
+
+func (pat *PersonalAccessToken) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := pat.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = pat.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pat *PersonalAccessToken) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := pat.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = pat.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (pat *PersonalAccessToken) Owner(ctx context.Context) (*User, error) {
@@ -2151,6 +2535,22 @@ func (pat *PersonalAccessToken) Events(ctx context.Context) (result []*Event, er
 		result, err = pat.QueryEvents().All(ctx)
 	}
 	return result, err
+}
+
+func (pr *Procedure) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := pr.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Procedure) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := pr.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (pr *Procedure) Owner(ctx context.Context) (*Organization, error) {
@@ -2255,6 +2655,22 @@ func (pr *Procedure) Programs(ctx context.Context) (result []*Program, err error
 		result, err = pr.QueryPrograms().All(ctx)
 	}
 	return result, err
+}
+
+func (pr *Program) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := pr.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Program) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := pr.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (pr *Program) Owner(ctx context.Context) (*Organization, error) {
@@ -2469,6 +2885,22 @@ func (pr *Program) Members(ctx context.Context) (result []*ProgramMembership, er
 	return result, err
 }
 
+func (pm *ProgramMembership) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := pm.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = pm.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pm *ProgramMembership) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := pm.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = pm.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (pm *ProgramMembership) Program(ctx context.Context) (*Program, error) {
 	result, err := pm.Edges.ProgramOrErr()
 	if IsNotLoaded(err) {
@@ -2483,6 +2915,22 @@ func (pm *ProgramMembership) User(ctx context.Context) (*User, error) {
 		result, err = pm.QueryUser().Only(ctx)
 	}
 	return result, err
+}
+
+func (r *Risk) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := r.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = r.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (r *Risk) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := r.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = r.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (r *Risk) Owner(ctx context.Context) (*Organization, error) {
@@ -2577,6 +3025,22 @@ func (r *Risk) Programs(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
+func (s *Standard) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := s.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Standard) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := s.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (s *Standard) ControlObjectives(ctx context.Context) (result []*ControlObjective, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = s.NamedControlObjectives(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2635,6 +3099,22 @@ func (s *Standard) Programs(ctx context.Context) (result []*Program, err error) 
 		result, err = s.QueryPrograms().All(ctx)
 	}
 	return result, err
+}
+
+func (s *Subcontrol) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := s.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subcontrol) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := s.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (s *Subcontrol) Owner(ctx context.Context) (*Organization, error) {
@@ -2701,6 +3181,22 @@ func (s *Subcontrol) Programs(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
+func (s *Subscriber) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := s.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subscriber) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := s.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (s *Subscriber) Owner(ctx context.Context) (*Organization, error) {
 	result, err := s.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -2721,10 +3217,42 @@ func (s *Subscriber) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
+func (ts *TFASetting) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := ts.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = ts.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ts *TFASetting) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := ts.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = ts.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (ts *TFASetting) Owner(ctx context.Context) (*User, error) {
 	result, err := ts.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
 		result, err = ts.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (t *Task) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := t.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (t *Task) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := t.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryUpdatedBy().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -2839,6 +3367,22 @@ func (t *Task) Program(ctx context.Context) (result []*Program, err error) {
 		result, err = t.QueryProgram().All(ctx)
 	}
 	return result, err
+}
+
+func (t *Template) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := t.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (t *Template) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := t.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (t *Template) Owner(ctx context.Context) (*Organization, error) {
@@ -3055,6 +3599,22 @@ func (u *User) ProgramMemberships(ctx context.Context) (result []*ProgramMembers
 		result, err = u.QueryProgramMemberships().All(ctx)
 	}
 	return result, err
+}
+
+func (us *UserSetting) CreatedBy(ctx context.Context) (*User, error) {
+	result, err := us.Edges.CreatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = us.QueryCreatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (us *UserSetting) UpdatedBy(ctx context.Context) (*User, error) {
+	result, err := us.Edges.UpdatedByOrErr()
+	if IsNotLoaded(err) {
+		result, err = us.QueryUpdatedBy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (us *UserSetting) User(ctx context.Context) (*User, error) {

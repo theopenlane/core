@@ -4,7 +4,7 @@ query GetAllInternalPolicyHistories {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         historyTime
@@ -16,8 +16,9 @@ query GetAllInternalPolicyHistories {
         ref
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         version
       }
     }
@@ -30,7 +31,7 @@ query GetInternalPolicyHistories($where: InternalPolicyHistoryWhereInput) {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         historyTime
@@ -42,8 +43,9 @@ query GetInternalPolicyHistories($where: InternalPolicyHistoryWhereInput) {
         ref
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         version
       }
     }

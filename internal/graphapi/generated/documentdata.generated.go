@@ -71,22 +71,26 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 				return ec.fieldContext_DocumentData_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_DocumentData_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_DocumentData_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_DocumentData_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_DocumentData_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
 			case "templateID":
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_DocumentData_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":
@@ -147,22 +151,26 @@ func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(
 				return ec.fieldContext_DocumentData_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_DocumentData_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_DocumentData_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_DocumentData_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_DocumentData_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
 			case "templateID":
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_DocumentData_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":
@@ -267,22 +275,26 @@ func (ec *executionContext) fieldContext_DocumentDataUpdatePayload_documentData(
 				return ec.fieldContext_DocumentData_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_DocumentData_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_DocumentData_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_DocumentData_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_DocumentData_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
 			case "templateID":
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_DocumentData_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":

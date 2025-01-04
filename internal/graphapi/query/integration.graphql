@@ -86,9 +86,15 @@ query GetAllIntegrations {
           id
         }
         createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        createdByID
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
     }
   }
@@ -111,9 +117,9 @@ query GetIntegrationByID($integrationId: ID!) {
       id
     }
     createdAt
-    createdBy
+    createdByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -136,9 +142,15 @@ query GetIntegrations($where: IntegrationWhereInput) {
           id
         }
         createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        createdByID
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
     }
   }

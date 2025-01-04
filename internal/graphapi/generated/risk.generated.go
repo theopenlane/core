@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Risk_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Risk_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Risk_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Risk_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Risk_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
@@ -103,6 +103,10 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Risk_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Risk_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -171,14 +175,14 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Risk_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Risk_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Risk_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Risk_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Risk_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
@@ -203,6 +207,10 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Risk_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Risk_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -315,14 +323,14 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Risk_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Risk_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Risk_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Risk_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Risk_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
@@ -347,6 +355,10 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Risk_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Risk_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":

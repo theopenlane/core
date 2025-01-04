@@ -25,11 +25,17 @@ mutation CreateSubscriber($input: CreateSubscriberInput!) {
     subscriber {
       active
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       email
       id
       updatedAt
-      updatedBy
+      updatedByID
       verifiedEmail
     }
   }
@@ -87,12 +93,18 @@ mutation UpdateSubscriber($email: String!, $input: UpdateSubscriberInput!) {
     subscriber {
       active
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       email
       id
       phoneNumber
       updatedAt
-      updatedBy
+      updatedByID
       verifiedEmail
       verifiedPhone
     }

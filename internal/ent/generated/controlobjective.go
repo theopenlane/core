@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // ControlObjective is the model entity for the ControlObjective schema.
@@ -23,14 +24,14 @@ type ControlObjective struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -68,6 +69,10 @@ type ControlObjective struct {
 
 // ControlObjectiveEdges holds the relations/edges for other nodes in the graph.
 type ControlObjectiveEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -96,9 +101,9 @@ type ControlObjectiveEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [15]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -114,12 +119,34 @@ type ControlObjectiveEdges struct {
 	namedPrograms         map[string][]*Program
 }
 
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlObjectiveEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlObjectiveEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ControlObjectiveEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -128,7 +155,7 @@ func (e ControlObjectiveEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -137,7 +164,7 @@ func (e ControlObjectiveEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -146,7 +173,7 @@ func (e ControlObjectiveEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -155,7 +182,7 @@ func (e ControlObjectiveEdges) ViewersOrErr() ([]*Group, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -164,7 +191,7 @@ func (e ControlObjectiveEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -173,7 +200,7 @@ func (e ControlObjectiveEdges) ControlsOrErr() ([]*Control, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -182,7 +209,7 @@ func (e ControlObjectiveEdges) ProceduresOrErr() ([]*Procedure, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -191,7 +218,7 @@ func (e ControlObjectiveEdges) RisksOrErr() ([]*Risk, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -200,7 +227,7 @@ func (e ControlObjectiveEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // StandardOrErr returns the Standard value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) StandardOrErr() ([]*Standard, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Standard, nil
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -209,7 +236,7 @@ func (e ControlObjectiveEdges) StandardOrErr() ([]*Standard, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -218,7 +245,7 @@ func (e ControlObjectiveEdges) NarrativesOrErr() ([]*Narrative, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -227,7 +254,7 @@ func (e ControlObjectiveEdges) TasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlObjectiveEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -240,7 +267,7 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlobjective.FieldTags, controlobjective.FieldDetails:
 			values[i] = new([]byte)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldMappingID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks:
+		case controlobjective.FieldID, controlobjective.FieldCreatedByID, controlobjective.FieldUpdatedByID, controlobjective.FieldDeletedByID, controlobjective.FieldMappingID, controlobjective.FieldOwnerID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -279,17 +306,17 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.UpdatedAt = value.Time
 			}
-		case controlobjective.FieldCreatedBy:
+		case controlobjective.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				co.CreatedBy = value.String
+				co.CreatedByID = value.String
 			}
-		case controlobjective.FieldUpdatedBy:
+		case controlobjective.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				co.UpdatedBy = value.String
+				co.UpdatedByID = value.String
 			}
 		case controlobjective.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -297,11 +324,11 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.DeletedAt = value.Time
 			}
-		case controlobjective.FieldDeletedBy:
+		case controlobjective.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				co.DeletedBy = value.String
+				co.DeletedByID = value.String
 			}
 		case controlobjective.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -411,6 +438,16 @@ func (co *ControlObjective) Value(name string) (ent.Value, error) {
 	return co.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the ControlObjective entity.
+func (co *ControlObjective) QueryCreatedBy() *UserQuery {
+	return NewControlObjectiveClient(co.config).QueryCreatedBy(co)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the ControlObjective entity.
+func (co *ControlObjective) QueryUpdatedBy() *UserQuery {
+	return NewControlObjectiveClient(co.config).QueryUpdatedBy(co)
+}
+
 // QueryOwner queries the "owner" edge of the ControlObjective entity.
 func (co *ControlObjective) QueryOwner() *OrganizationQuery {
 	return NewControlObjectiveClient(co.config).QueryOwner(co)
@@ -505,17 +542,17 @@ func (co *ControlObjective) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(co.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(co.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(co.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(co.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(co.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(co.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(co.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(co.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(co.MappingID)

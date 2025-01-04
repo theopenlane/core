@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 				return ec.fieldContext_APIToken_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_APIToken_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_APIToken_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_APIToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_APIToken_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_APIToken_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_APIToken_tags(ctx, field)
 			case "ownerID":
@@ -95,6 +95,10 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_APIToken_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_APIToken_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -149,14 +153,14 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_APIToken_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_APIToken_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_APIToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_APIToken_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_APIToken_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_APIToken_tags(ctx, field)
 			case "ownerID":
@@ -173,6 +177,10 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_APIToken_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_APIToken_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -271,14 +279,14 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_APIToken_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_APIToken_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_APIToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_APIToken_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_APIToken_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_APIToken_tags(ctx, field)
 			case "ownerID":
@@ -295,6 +303,10 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_APIToken_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_APIToken_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}

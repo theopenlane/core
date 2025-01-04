@@ -6,7 +6,13 @@ mutation CreateBulkCSVControlObjective($input: Upload!) {
       controlNumber
       controlObjectiveType
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       details
       family
@@ -17,7 +23,7 @@ mutation CreateBulkCSVControlObjective($input: Upload!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -30,7 +36,13 @@ mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
       controlNumber
       controlObjectiveType
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       details
       family
@@ -41,7 +53,7 @@ mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -54,7 +66,13 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
       controlNumber
       controlObjectiveType
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       details
       family
@@ -65,7 +83,7 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       programs {
         id
@@ -101,7 +119,7 @@ query GetAllControlObjectives {
         controlNumber
         controlObjectiveType
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -111,8 +129,14 @@ query GetAllControlObjectives {
         source
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
         version
         programs {
           id
@@ -140,7 +164,7 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
     controlNumber
     controlObjectiveType
     createdAt
-    createdBy
+    createdByID
     description
     details
     family
@@ -151,7 +175,7 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
     status
     tags
     updatedAt
-    updatedBy
+    updatedByID
     version
     programs {
       id
@@ -180,7 +204,7 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
         controlNumber
         controlObjectiveType
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -190,8 +214,14 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
         source
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
         version
         programs {
           id
@@ -220,7 +250,13 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
       controlNumber
       controlObjectiveType
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       description
       details
       family
@@ -231,7 +267,7 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       programs {
         id

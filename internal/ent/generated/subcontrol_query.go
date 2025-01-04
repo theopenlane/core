@@ -32,6 +32,8 @@ type SubcontrolQuery struct {
 	order             []subcontrol.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.Subcontrol
+	withCreatedBy     *UserQuery
+	withUpdatedBy     *UserQuery
 	withOwner         *OrganizationQuery
 	withControls      *ControlQuery
 	withUser          *UserQuery
@@ -79,6 +81,56 @@ func (sq *SubcontrolQuery) Unique(unique bool) *SubcontrolQuery {
 func (sq *SubcontrolQuery) Order(o ...subcontrol.OrderOption) *SubcontrolQuery {
 	sq.order = append(sq.order, o...)
 	return sq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (sq *SubcontrolQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.CreatedByTable, subcontrol.CreatedByColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (sq *SubcontrolQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.UpdatedByTable, subcontrol.UpdatedByColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -418,22 +470,46 @@ func (sq *SubcontrolQuery) Clone() *SubcontrolQuery {
 		return nil
 	}
 	return &SubcontrolQuery{
-		config:       sq.config,
-		ctx:          sq.ctx.Clone(),
-		order:        append([]subcontrol.OrderOption{}, sq.order...),
-		inters:       append([]Interceptor{}, sq.inters...),
-		predicates:   append([]predicate.Subcontrol{}, sq.predicates...),
-		withOwner:    sq.withOwner.Clone(),
-		withControls: sq.withControls.Clone(),
-		withUser:     sq.withUser.Clone(),
-		withTasks:    sq.withTasks.Clone(),
-		withNotes:    sq.withNotes.Clone(),
-		withPrograms: sq.withPrograms.Clone(),
+		config:        sq.config,
+		ctx:           sq.ctx.Clone(),
+		order:         append([]subcontrol.OrderOption{}, sq.order...),
+		inters:        append([]Interceptor{}, sq.inters...),
+		predicates:    append([]predicate.Subcontrol{}, sq.predicates...),
+		withCreatedBy: sq.withCreatedBy.Clone(),
+		withUpdatedBy: sq.withUpdatedBy.Clone(),
+		withOwner:     sq.withOwner.Clone(),
+		withControls:  sq.withControls.Clone(),
+		withUser:      sq.withUser.Clone(),
+		withTasks:     sq.withTasks.Clone(),
+		withNotes:     sq.withNotes.Clone(),
+		withPrograms:  sq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
 		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithCreatedBy(opts ...func(*UserQuery)) *SubcontrolQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withCreatedBy = query
+	return sq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithUpdatedBy(opts ...func(*UserQuery)) *SubcontrolQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withUpdatedBy = query
+	return sq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -587,7 +663,9 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [8]bool{
+			sq.withCreatedBy != nil,
+			sq.withUpdatedBy != nil,
 			sq.withOwner != nil,
 			sq.withControls != nil,
 			sq.withUser != nil,
@@ -624,6 +702,18 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := sq.withCreatedBy; query != nil {
+		if err := sq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withUpdatedBy; query != nil {
+		if err := sq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := sq.withOwner; query != nil {
 		if err := sq.loadOwner(ctx, query, nodes, nil,
@@ -701,6 +791,64 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	return nodes, nil
 }
 
+func (sq *SubcontrolQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (sq *SubcontrolQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subcontrol)
@@ -1040,6 +1188,12 @@ func (sq *SubcontrolQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != subcontrol.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if sq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(subcontrol.FieldCreatedByID)
+		}
+		if sq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(subcontrol.FieldUpdatedByID)
 		}
 		if sq.withOwner != nil {
 			_spec.Node.AddColumnOnce(subcontrol.FieldOwnerID)

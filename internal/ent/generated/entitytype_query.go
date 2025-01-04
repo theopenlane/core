@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -28,6 +29,8 @@ type EntityTypeQuery struct {
 	order             []entitytype.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.EntityType
+	withCreatedBy     *UserQuery
+	withUpdatedBy     *UserQuery
 	withOwner         *OrganizationQuery
 	withEntities      *EntityQuery
 	loadTotal         []func(context.Context, []*EntityType) error
@@ -67,6 +70,56 @@ func (etq *EntityTypeQuery) Unique(unique bool) *EntityTypeQuery {
 func (etq *EntityTypeQuery) Order(o ...entitytype.OrderOption) *EntityTypeQuery {
 	etq.order = append(etq.order, o...)
 	return etq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (etq *EntityTypeQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: etq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := etq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := etq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entitytype.Table, entitytype.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.CreatedByTable, entitytype.CreatedByColumn),
+		)
+		schemaConfig := etq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.EntityType
+		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (etq *EntityTypeQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: etq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := etq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := etq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entitytype.Table, entitytype.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.UpdatedByTable, entitytype.UpdatedByColumn),
+		)
+		schemaConfig := etq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.EntityType
+		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -306,18 +359,42 @@ func (etq *EntityTypeQuery) Clone() *EntityTypeQuery {
 		return nil
 	}
 	return &EntityTypeQuery{
-		config:       etq.config,
-		ctx:          etq.ctx.Clone(),
-		order:        append([]entitytype.OrderOption{}, etq.order...),
-		inters:       append([]Interceptor{}, etq.inters...),
-		predicates:   append([]predicate.EntityType{}, etq.predicates...),
-		withOwner:    etq.withOwner.Clone(),
-		withEntities: etq.withEntities.Clone(),
+		config:        etq.config,
+		ctx:           etq.ctx.Clone(),
+		order:         append([]entitytype.OrderOption{}, etq.order...),
+		inters:        append([]Interceptor{}, etq.inters...),
+		predicates:    append([]predicate.EntityType{}, etq.predicates...),
+		withCreatedBy: etq.withCreatedBy.Clone(),
+		withUpdatedBy: etq.withUpdatedBy.Clone(),
+		withOwner:     etq.withOwner.Clone(),
+		withEntities:  etq.withEntities.Clone(),
 		// clone intermediate query.
 		sql:       etq.sql.Clone(),
 		path:      etq.path,
 		modifiers: append([]func(*sql.Selector){}, etq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (etq *EntityTypeQuery) WithCreatedBy(opts ...func(*UserQuery)) *EntityTypeQuery {
+	query := (&UserClient{config: etq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	etq.withCreatedBy = query
+	return etq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (etq *EntityTypeQuery) WithUpdatedBy(opts ...func(*UserQuery)) *EntityTypeQuery {
+	query := (&UserClient{config: etq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	etq.withUpdatedBy = query
+	return etq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -426,7 +503,9 @@ func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*EntityType{}
 		_spec       = etq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
+			etq.withCreatedBy != nil,
+			etq.withUpdatedBy != nil,
 			etq.withOwner != nil,
 			etq.withEntities != nil,
 		}
@@ -453,6 +532,18 @@ func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := etq.withCreatedBy; query != nil {
+		if err := etq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *EntityType, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := etq.withUpdatedBy; query != nil {
+		if err := etq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *EntityType, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := etq.withOwner; query != nil {
 		if err := etq.loadOwner(ctx, query, nodes, nil,
@@ -482,6 +573,64 @@ func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
+func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*EntityType)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (etq *EntityTypeQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*EntityType)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (etq *EntityTypeQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*EntityType)
@@ -572,6 +721,12 @@ func (etq *EntityTypeQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != entitytype.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if etq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(entitytype.FieldCreatedByID)
+		}
+		if etq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(entitytype.FieldUpdatedByID)
 		}
 		if etq.withOwner != nil {
 			_spec.Node.AddColumnOnce(entitytype.FieldOwnerID)

@@ -56,6 +56,20 @@ func (omhc *OrgMembershipHistoryCreate) SetOperation(ht history.OpType) *OrgMemb
 	return omhc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (omhc *OrgMembershipHistoryCreate) SetUpdatedBy(s string) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetUpdatedBy(s)
+	return omhc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *OrgMembershipHistoryCreate {
+	if s != nil {
+		omhc.SetUpdatedBy(*s)
+	}
+	return omhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (omhc *OrgMembershipHistoryCreate) SetCreatedAt(t time.Time) *OrgMembershipHistoryCreate {
 	omhc.mutation.SetCreatedAt(t)
@@ -84,30 +98,30 @@ func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *OrgM
 	return omhc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (omhc *OrgMembershipHistoryCreate) SetCreatedBy(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (omhc *OrgMembershipHistoryCreate) SetCreatedByID(s string) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetCreatedByID(s)
 	return omhc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableCreatedBy(s *string) *OrgMembershipHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (omhc *OrgMembershipHistoryCreate) SetNillableCreatedByID(s *string) *OrgMembershipHistoryCreate {
 	if s != nil {
-		omhc.SetCreatedBy(*s)
+		omhc.SetCreatedByID(*s)
 	}
 	return omhc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (omhc *OrgMembershipHistoryCreate) SetUpdatedBy(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (omhc *OrgMembershipHistoryCreate) SetUpdatedByID(s string) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetUpdatedByID(s)
 	return omhc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *OrgMembershipHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedByID(s *string) *OrgMembershipHistoryCreate {
 	if s != nil {
-		omhc.SetUpdatedBy(*s)
+		omhc.SetUpdatedByID(*s)
 	}
 	return omhc
 }
@@ -140,16 +154,16 @@ func (omhc *OrgMembershipHistoryCreate) SetNillableDeletedAt(t *time.Time) *OrgM
 	return omhc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (omhc *OrgMembershipHistoryCreate) SetDeletedBy(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (omhc *OrgMembershipHistoryCreate) SetDeletedByID(s string) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetDeletedByID(s)
 	return omhc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableDeletedBy(s *string) *OrgMembershipHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (omhc *OrgMembershipHistoryCreate) SetNillableDeletedByID(s *string) *OrgMembershipHistoryCreate {
 	if s != nil {
-		omhc.SetDeletedBy(*s)
+		omhc.SetDeletedByID(*s)
 	}
 	return omhc
 }
@@ -351,6 +365,10 @@ func (omhc *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sq
 		_spec.SetField(orgmembershiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := omhc.mutation.UpdatedBy(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := omhc.mutation.CreatedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -359,13 +377,13 @@ func (omhc *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sq
 		_spec.SetField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := omhc.mutation.CreatedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := omhc.mutation.CreatedByID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := omhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := omhc.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := omhc.mutation.MappingID(); ok {
 		_spec.SetField(orgmembershiphistory.FieldMappingID, field.TypeString, value)
@@ -375,9 +393,9 @@ func (omhc *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sq
 		_spec.SetField(orgmembershiphistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := omhc.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := omhc.mutation.DeletedByID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := omhc.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)

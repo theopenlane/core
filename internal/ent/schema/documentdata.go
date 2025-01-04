@@ -37,7 +37,7 @@ func (DocumentData) Fields() []ent.Field {
 // Mixin of the DocumentData
 func (DocumentData) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},

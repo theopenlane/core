@@ -7,7 +7,7 @@ query GetAllOrganizationSettingHistories {
         billingEmail
         billingPhone
         createdAt
-        createdBy
+        createdByID
         domains
         geoLocation
         historyTime
@@ -17,8 +17,9 @@ query GetAllOrganizationSettingHistories {
         ref
         tags
         taxIdentifier
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -33,7 +34,7 @@ query GetOrganizationSettingHistories($where: OrganizationSettingHistoryWhereInp
         billingEmail
         billingPhone
         createdAt
-        createdBy
+        createdByID
         domains
         geoLocation
         historyTime
@@ -43,8 +44,9 @@ query GetOrganizationSettingHistories($where: OrganizationSettingHistoryWhereInp
         ref
         tags
         taxIdentifier
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

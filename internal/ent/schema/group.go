@@ -86,7 +86,7 @@ func (Group) Edges() []ent.Edge {
 // Mixin of the Group
 func (Group) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

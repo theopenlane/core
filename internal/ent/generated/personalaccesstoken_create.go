@@ -51,30 +51,30 @@ func (patc *PersonalAccessTokenCreate) SetNillableUpdatedAt(t *time.Time) *Perso
 	return patc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (patc *PersonalAccessTokenCreate) SetCreatedBy(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (patc *PersonalAccessTokenCreate) SetCreatedByID(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetCreatedByID(s)
 	return patc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableCreatedBy(s *string) *PersonalAccessTokenCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableCreatedByID(s *string) *PersonalAccessTokenCreate {
 	if s != nil {
-		patc.SetCreatedBy(*s)
+		patc.SetCreatedByID(*s)
 	}
 	return patc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (patc *PersonalAccessTokenCreate) SetUpdatedBy(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (patc *PersonalAccessTokenCreate) SetUpdatedByID(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetUpdatedByID(s)
 	return patc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableUpdatedBy(s *string) *PersonalAccessTokenCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableUpdatedByID(s *string) *PersonalAccessTokenCreate {
 	if s != nil {
-		patc.SetUpdatedBy(*s)
+		patc.SetUpdatedByID(*s)
 	}
 	return patc
 }
@@ -93,16 +93,16 @@ func (patc *PersonalAccessTokenCreate) SetNillableDeletedAt(t *time.Time) *Perso
 	return patc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (patc *PersonalAccessTokenCreate) SetDeletedBy(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (patc *PersonalAccessTokenCreate) SetDeletedByID(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetDeletedByID(s)
 	return patc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableDeletedBy(s *string) *PersonalAccessTokenCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableDeletedByID(s *string) *PersonalAccessTokenCreate {
 	if s != nil {
-		patc.SetDeletedBy(*s)
+		patc.SetDeletedByID(*s)
 	}
 	return patc
 }
@@ -213,6 +213,16 @@ func (patc *PersonalAccessTokenCreate) SetNillableID(s *string) *PersonalAccessT
 		patc.SetID(*s)
 	}
 	return patc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (patc *PersonalAccessTokenCreate) SetCreatedBy(u *User) *PersonalAccessTokenCreate {
+	return patc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (patc *PersonalAccessTokenCreate) SetUpdatedBy(u *User) *PersonalAccessTokenCreate {
+	return patc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -395,21 +405,13 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 		_spec.SetField(personalaccesstoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := patc.mutation.CreatedBy(); ok {
-		_spec.SetField(personalaccesstoken.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := patc.mutation.UpdatedBy(); ok {
-		_spec.SetField(personalaccesstoken.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := patc.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := patc.mutation.DeletedBy(); ok {
-		_spec.SetField(personalaccesstoken.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := patc.mutation.DeletedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := patc.mutation.MappingID(); ok {
 		_spec.SetField(personalaccesstoken.FieldMappingID, field.TypeString, value)
@@ -442,6 +444,42 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 	if value, ok := patc.mutation.LastUsedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)
 		_node.LastUsedAt = &value
+	}
+	if nodes := patc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.CreatedByTable,
+			Columns: []string{personalaccesstoken.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = patc.schemaConfig.PersonalAccessToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := patc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.UpdatedByTable,
+			Columns: []string{personalaccesstoken.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = patc.schemaConfig.PersonalAccessToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := patc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

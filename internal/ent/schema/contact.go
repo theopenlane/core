@@ -73,7 +73,7 @@ func (Contact) Fields() []ent.Field {
 // Mixin of the Contact
 func (Contact) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},

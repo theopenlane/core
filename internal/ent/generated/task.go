@@ -24,16 +24,16 @@ type Task struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the title of the task
@@ -58,6 +58,10 @@ type Task struct {
 
 // TaskEdges holds the relations/edges for other nodes in the graph.
 type TaskEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Assigner holds the value of the assigner edge.
 	Assigner *User `json:"assigner,omitempty"`
 	// Assignee holds the value of the assignee edge.
@@ -80,9 +84,9 @@ type TaskEdges struct {
 	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [12]map[string]int
 
 	namedOrganization     map[string][]*Organization
 	namedGroup            map[string][]*Group
@@ -94,12 +98,34 @@ type TaskEdges struct {
 	namedProgram          map[string][]*Program
 }
 
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TaskEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TaskEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
+}
+
 // AssignerOrErr returns the Assigner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e TaskEdges) AssignerOrErr() (*User, error) {
 	if e.Assigner != nil {
 		return e.Assigner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigner"}
@@ -110,7 +136,7 @@ func (e TaskEdges) AssignerOrErr() (*User, error) {
 func (e TaskEdges) AssigneeOrErr() (*User, error) {
 	if e.Assignee != nil {
 		return e.Assignee, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assignee"}
@@ -119,7 +145,7 @@ func (e TaskEdges) AssigneeOrErr() (*User, error) {
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -128,7 +154,7 @@ func (e TaskEdges) OrganizationOrErr() ([]*Organization, error) {
 // GroupOrErr returns the Group value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) GroupOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Group, nil
 	}
 	return nil, &NotLoadedError{edge: "group"}
@@ -137,7 +163,7 @@ func (e TaskEdges) GroupOrErr() ([]*Group, error) {
 // InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.InternalPolicy, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy"}
@@ -146,7 +172,7 @@ func (e TaskEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
 // ProcedureOrErr returns the Procedure value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Procedure, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure"}
@@ -155,7 +181,7 @@ func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -164,7 +190,7 @@ func (e TaskEdges) ControlOrErr() ([]*Control, error) {
 // ControlObjectiveOrErr returns the ControlObjective value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.ControlObjective, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective"}
@@ -173,7 +199,7 @@ func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
 // SubcontrolOrErr returns the Subcontrol value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) SubcontrolOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Subcontrol, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrol"}
@@ -182,7 +208,7 @@ func (e TaskEdges) SubcontrolOrErr() ([]*Subcontrol, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -195,7 +221,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldTags, task.FieldDetails:
 			values[i] = new([]byte)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldMappingID, task.FieldDeletedBy, task.FieldTitle, task.FieldDescription, task.FieldStatus:
+		case task.FieldID, task.FieldCreatedByID, task.FieldUpdatedByID, task.FieldMappingID, task.FieldDeletedByID, task.FieldTitle, task.FieldDescription, task.FieldStatus:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt, task.FieldDue, task.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -236,17 +262,17 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.UpdatedAt = value.Time
 			}
-		case task.FieldCreatedBy:
+		case task.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				t.CreatedBy = value.String
+				t.CreatedByID = value.String
 			}
-		case task.FieldUpdatedBy:
+		case task.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				t.UpdatedBy = value.String
+				t.UpdatedByID = value.String
 			}
 		case task.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -260,11 +286,11 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.DeletedAt = value.Time
 			}
-		case task.FieldDeletedBy:
+		case task.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				t.DeletedBy = value.String
+				t.DeletedByID = value.String
 			}
 		case task.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -337,6 +363,16 @@ func (t *Task) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (t *Task) Value(name string) (ent.Value, error) {
 	return t.selectValues.Get(name)
+}
+
+// QueryCreatedBy queries the "created_by" edge of the Task entity.
+func (t *Task) QueryCreatedBy() *UserQuery {
+	return NewTaskClient(t.config).QueryCreatedBy(t)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Task entity.
+func (t *Task) QueryUpdatedBy() *UserQuery {
+	return NewTaskClient(t.config).QueryUpdatedBy(t)
 }
 
 // QueryAssigner queries the "assigner" edge of the Task entity.
@@ -418,11 +454,11 @@ func (t *Task) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(t.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(t.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(t.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(t.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(t.MappingID)
@@ -430,8 +466,8 @@ func (t *Task) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(t.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(t.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(t.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", t.Tags))

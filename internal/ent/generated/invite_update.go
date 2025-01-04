@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -46,63 +47,23 @@ func (iu *InviteUpdate) ClearUpdatedAt() *InviteUpdate {
 	return iu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iu *InviteUpdate) SetUpdatedBy(s string) *InviteUpdate {
-	iu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iu *InviteUpdate) SetUpdatedByID(s string) *InviteUpdate {
+	iu.mutation.SetUpdatedByID(s)
 	return iu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableUpdatedBy(s *string) *InviteUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iu *InviteUpdate) SetNillableUpdatedByID(s *string) *InviteUpdate {
 	if s != nil {
-		iu.SetUpdatedBy(*s)
+		iu.SetUpdatedByID(*s)
 	}
 	return iu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iu *InviteUpdate) ClearUpdatedBy() *InviteUpdate {
-	iu.mutation.ClearUpdatedBy()
-	return iu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (iu *InviteUpdate) SetDeletedAt(t time.Time) *InviteUpdate {
-	iu.mutation.SetDeletedAt(t)
-	return iu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableDeletedAt(t *time.Time) *InviteUpdate {
-	if t != nil {
-		iu.SetDeletedAt(*t)
-	}
-	return iu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (iu *InviteUpdate) ClearDeletedAt() *InviteUpdate {
-	iu.mutation.ClearDeletedAt()
-	return iu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (iu *InviteUpdate) SetDeletedBy(s string) *InviteUpdate {
-	iu.mutation.SetDeletedBy(s)
-	return iu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableDeletedBy(s *string) *InviteUpdate {
-	if s != nil {
-		iu.SetDeletedBy(*s)
-	}
-	return iu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iu *InviteUpdate) ClearDeletedBy() *InviteUpdate {
-	iu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iu *InviteUpdate) ClearUpdatedByID() *InviteUpdate {
+	iu.mutation.ClearUpdatedByID()
 	return iu
 }
 
@@ -215,6 +176,11 @@ func (iu *InviteUpdate) SetSecret(b []byte) *InviteUpdate {
 	return iu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (iu *InviteUpdate) SetUpdatedBy(u *User) *InviteUpdate {
+	return iu.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (iu *InviteUpdate) SetOwner(o *Organization) *InviteUpdate {
 	return iu.SetOwnerID(o.ID)
@@ -238,6 +204,12 @@ func (iu *InviteUpdate) AddEvents(e ...*Event) *InviteUpdate {
 // Mutation returns the InviteMutation object of the builder.
 func (iu *InviteUpdate) Mutation() *InviteMutation {
 	return iu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (iu *InviteUpdate) ClearUpdatedBy() *InviteUpdate {
+	iu.mutation.ClearUpdatedBy()
+	return iu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -366,26 +338,11 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if iu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(invite.FieldUpdatedAt, field.TypeTime)
 	}
-	if iu.mutation.CreatedByCleared() {
-		_spec.ClearField(invite.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := iu.mutation.UpdatedBy(); ok {
-		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
-	}
-	if iu.mutation.UpdatedByCleared() {
-		_spec.ClearField(invite.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := iu.mutation.DeletedAt(); ok {
-		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
-	}
 	if iu.mutation.DeletedAtCleared() {
 		_spec.ClearField(invite.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iu.mutation.DeletedBy(); ok {
-		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
-	}
-	if iu.mutation.DeletedByCleared() {
-		_spec.ClearField(invite.FieldDeletedBy, field.TypeString)
+	if iu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(invite.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iu.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
@@ -413,6 +370,37 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := iu.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
+	}
+	if iu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByTable,
+			Columns: []string{invite.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.Invite
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByTable,
+			Columns: []string{invite.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if iu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -529,63 +517,23 @@ func (iuo *InviteUpdateOne) ClearUpdatedAt() *InviteUpdateOne {
 	return iuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iuo *InviteUpdateOne) SetUpdatedBy(s string) *InviteUpdateOne {
-	iuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iuo *InviteUpdateOne) SetUpdatedByID(s string) *InviteUpdateOne {
+	iuo.mutation.SetUpdatedByID(s)
 	return iuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableUpdatedBy(s *string) *InviteUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iuo *InviteUpdateOne) SetNillableUpdatedByID(s *string) *InviteUpdateOne {
 	if s != nil {
-		iuo.SetUpdatedBy(*s)
+		iuo.SetUpdatedByID(*s)
 	}
 	return iuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iuo *InviteUpdateOne) ClearUpdatedBy() *InviteUpdateOne {
-	iuo.mutation.ClearUpdatedBy()
-	return iuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (iuo *InviteUpdateOne) SetDeletedAt(t time.Time) *InviteUpdateOne {
-	iuo.mutation.SetDeletedAt(t)
-	return iuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableDeletedAt(t *time.Time) *InviteUpdateOne {
-	if t != nil {
-		iuo.SetDeletedAt(*t)
-	}
-	return iuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (iuo *InviteUpdateOne) ClearDeletedAt() *InviteUpdateOne {
-	iuo.mutation.ClearDeletedAt()
-	return iuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (iuo *InviteUpdateOne) SetDeletedBy(s string) *InviteUpdateOne {
-	iuo.mutation.SetDeletedBy(s)
-	return iuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableDeletedBy(s *string) *InviteUpdateOne {
-	if s != nil {
-		iuo.SetDeletedBy(*s)
-	}
-	return iuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iuo *InviteUpdateOne) ClearDeletedBy() *InviteUpdateOne {
-	iuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iuo *InviteUpdateOne) ClearUpdatedByID() *InviteUpdateOne {
+	iuo.mutation.ClearUpdatedByID()
 	return iuo
 }
 
@@ -698,6 +646,11 @@ func (iuo *InviteUpdateOne) SetSecret(b []byte) *InviteUpdateOne {
 	return iuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (iuo *InviteUpdateOne) SetUpdatedBy(u *User) *InviteUpdateOne {
+	return iuo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (iuo *InviteUpdateOne) SetOwner(o *Organization) *InviteUpdateOne {
 	return iuo.SetOwnerID(o.ID)
@@ -721,6 +674,12 @@ func (iuo *InviteUpdateOne) AddEvents(e ...*Event) *InviteUpdateOne {
 // Mutation returns the InviteMutation object of the builder.
 func (iuo *InviteUpdateOne) Mutation() *InviteMutation {
 	return iuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (iuo *InviteUpdateOne) ClearUpdatedBy() *InviteUpdateOne {
+	iuo.mutation.ClearUpdatedBy()
+	return iuo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -879,26 +838,11 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	if iuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(invite.FieldUpdatedAt, field.TypeTime)
 	}
-	if iuo.mutation.CreatedByCleared() {
-		_spec.ClearField(invite.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := iuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
-	}
-	if iuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(invite.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := iuo.mutation.DeletedAt(); ok {
-		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
-	}
 	if iuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(invite.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.DeletedBy(); ok {
-		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
-	}
-	if iuo.mutation.DeletedByCleared() {
-		_spec.ClearField(invite.FieldDeletedBy, field.TypeString)
+	if iuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(invite.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iuo.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
@@ -926,6 +870,37 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	}
 	if value, ok := iuo.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
+	}
+	if iuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByTable,
+			Columns: []string{invite.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.Invite
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByTable,
+			Columns: []string{invite.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if iuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

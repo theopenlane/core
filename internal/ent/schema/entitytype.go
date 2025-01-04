@@ -42,7 +42,7 @@ func (EntityType) Fields() []ent.Field {
 // Mixin of the EntityType
 func (EntityType) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},

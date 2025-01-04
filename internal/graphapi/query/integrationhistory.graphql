@@ -3,7 +3,7 @@ query GetAllIntegrationHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         historyTime
         id
@@ -13,8 +13,9 @@ query GetAllIntegrationHistories {
         ownerID
         ref
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -25,7 +26,7 @@ query GetIntegrationHistories($where: IntegrationHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         historyTime
         id
@@ -35,8 +36,9 @@ query GetIntegrationHistories($where: IntegrationHistoryWhereInput) {
         ownerID
         ref
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

@@ -55,6 +55,20 @@ func (oshc *OrgSubscriptionHistoryCreate) SetOperation(ht history.OpType) *OrgSu
 	return oshc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetUpdatedBy(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetUpdatedBy(s)
+	return oshc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedBy(s *string) *OrgSubscriptionHistoryCreate {
+	if s != nil {
+		oshc.SetUpdatedBy(*s)
+	}
+	return oshc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (oshc *OrgSubscriptionHistoryCreate) SetCreatedAt(t time.Time) *OrgSubscriptionHistoryCreate {
 	oshc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Or
 	return oshc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetCreatedBy(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetCreatedByID(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetCreatedByID(s)
 	return oshc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableCreatedBy(s *string) *OrgSubscriptionHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableCreatedByID(s *string) *OrgSubscriptionHistoryCreate {
 	if s != nil {
-		oshc.SetCreatedBy(*s)
+		oshc.SetCreatedByID(*s)
 	}
 	return oshc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetUpdatedBy(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetUpdatedByID(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetUpdatedByID(s)
 	return oshc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedBy(s *string) *OrgSubscriptionHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedByID(s *string) *OrgSubscriptionHistoryCreate {
 	if s != nil {
-		oshc.SetUpdatedBy(*s)
+		oshc.SetUpdatedByID(*s)
 	}
 	return oshc
 }
@@ -145,16 +159,16 @@ func (oshc *OrgSubscriptionHistoryCreate) SetNillableDeletedAt(t *time.Time) *Or
 	return oshc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetDeletedBy(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetDeletedByID(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetDeletedByID(s)
 	return oshc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableDeletedBy(s *string) *OrgSubscriptionHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableDeletedByID(s *string) *OrgSubscriptionHistoryCreate {
 	if s != nil {
-		oshc.SetDeletedBy(*s)
+		oshc.SetDeletedByID(*s)
 	}
 	return oshc
 }
@@ -423,6 +437,10 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 		_spec.SetField(orgsubscriptionhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := oshc.mutation.UpdatedBy(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := oshc.mutation.CreatedAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -431,13 +449,13 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 		_spec.SetField(orgsubscriptionhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := oshc.mutation.CreatedBy(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := oshc.mutation.CreatedByID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := oshc.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := oshc.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := oshc.mutation.MappingID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldMappingID, field.TypeString, value)
@@ -451,9 +469,9 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 		_spec.SetField(orgsubscriptionhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := oshc.mutation.DeletedBy(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := oshc.mutation.DeletedByID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := oshc.mutation.OwnerID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldOwnerID, field.TypeString, value)

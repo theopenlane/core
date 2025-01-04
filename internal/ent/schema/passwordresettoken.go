@@ -60,7 +60,7 @@ func (PasswordResetToken) Edges() []ent.Edge {
 // Mixin of the PasswordResetToken
 func (PasswordResetToken) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		UserOwnedMixin{

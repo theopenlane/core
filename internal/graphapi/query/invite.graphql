@@ -77,9 +77,9 @@ query GetInviteByID($inviteId: ID!) {
       name
     }
     createdAt
-    createdBy
+    createdByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 

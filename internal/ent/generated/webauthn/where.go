@@ -77,14 +77,14 @@ func UpdatedAt(v time.Time) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
-func CreatedBy(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEQ(FieldCreatedBy, v))
+// CreatedByID applies equality check predicate on the "created_by_id" field. It's identical to CreatedByIDEQ.
+func CreatedByID(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldEQ(FieldCreatedByID, v))
 }
 
-// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEQ(FieldUpdatedBy, v))
+// UpdatedByID applies equality check predicate on the "updated_by_id" field. It's identical to UpdatedByIDEQ.
+func UpdatedByID(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
 // MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
@@ -242,154 +242,154 @@ func UpdatedAtNotNil() predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldNotNull(FieldUpdatedAt))
 }
 
-// CreatedByEQ applies the EQ predicate on the "created_by" field.
-func CreatedByEQ(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEQ(FieldCreatedBy, v))
+// CreatedByIDEQ applies the EQ predicate on the "created_by_id" field.
+func CreatedByIDEQ(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldEQ(FieldCreatedByID, v))
 }
 
-// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
-func CreatedByNEQ(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldNEQ(FieldCreatedBy, v))
+// CreatedByIDNEQ applies the NEQ predicate on the "created_by_id" field.
+func CreatedByIDNEQ(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldNEQ(FieldCreatedByID, v))
 }
 
-// CreatedByIn applies the In predicate on the "created_by" field.
-func CreatedByIn(vs ...string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldIn(FieldCreatedBy, vs...))
+// CreatedByIDIn applies the In predicate on the "created_by_id" field.
+func CreatedByIDIn(vs ...string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldIn(FieldCreatedByID, vs...))
 }
 
-// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
-func CreatedByNotIn(vs ...string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldNotIn(FieldCreatedBy, vs...))
+// CreatedByIDNotIn applies the NotIn predicate on the "created_by_id" field.
+func CreatedByIDNotIn(vs ...string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldNotIn(FieldCreatedByID, vs...))
 }
 
-// CreatedByGT applies the GT predicate on the "created_by" field.
-func CreatedByGT(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldGT(FieldCreatedBy, v))
+// CreatedByIDGT applies the GT predicate on the "created_by_id" field.
+func CreatedByIDGT(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldGT(FieldCreatedByID, v))
 }
 
-// CreatedByGTE applies the GTE predicate on the "created_by" field.
-func CreatedByGTE(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldGTE(FieldCreatedBy, v))
+// CreatedByIDGTE applies the GTE predicate on the "created_by_id" field.
+func CreatedByIDGTE(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldGTE(FieldCreatedByID, v))
 }
 
-// CreatedByLT applies the LT predicate on the "created_by" field.
-func CreatedByLT(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldLT(FieldCreatedBy, v))
+// CreatedByIDLT applies the LT predicate on the "created_by_id" field.
+func CreatedByIDLT(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldLT(FieldCreatedByID, v))
 }
 
-// CreatedByLTE applies the LTE predicate on the "created_by" field.
-func CreatedByLTE(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldLTE(FieldCreatedBy, v))
+// CreatedByIDLTE applies the LTE predicate on the "created_by_id" field.
+func CreatedByIDLTE(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldLTE(FieldCreatedByID, v))
 }
 
-// CreatedByContains applies the Contains predicate on the "created_by" field.
-func CreatedByContains(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldContains(FieldCreatedBy, v))
+// CreatedByIDContains applies the Contains predicate on the "created_by_id" field.
+func CreatedByIDContains(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldContains(FieldCreatedByID, v))
 }
 
-// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
-func CreatedByHasPrefix(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldHasPrefix(FieldCreatedBy, v))
+// CreatedByIDHasPrefix applies the HasPrefix predicate on the "created_by_id" field.
+func CreatedByIDHasPrefix(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldHasPrefix(FieldCreatedByID, v))
 }
 
-// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
-func CreatedByHasSuffix(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldHasSuffix(FieldCreatedBy, v))
+// CreatedByIDHasSuffix applies the HasSuffix predicate on the "created_by_id" field.
+func CreatedByIDHasSuffix(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldHasSuffix(FieldCreatedByID, v))
 }
 
-// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
-func CreatedByIsNil() predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldIsNull(FieldCreatedBy))
+// CreatedByIDIsNil applies the IsNil predicate on the "created_by_id" field.
+func CreatedByIDIsNil() predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldIsNull(FieldCreatedByID))
 }
 
-// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
-func CreatedByNotNil() predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldNotNull(FieldCreatedBy))
+// CreatedByIDNotNil applies the NotNil predicate on the "created_by_id" field.
+func CreatedByIDNotNil() predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldNotNull(FieldCreatedByID))
 }
 
-// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
-func CreatedByEqualFold(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEqualFold(FieldCreatedBy, v))
+// CreatedByIDEqualFold applies the EqualFold predicate on the "created_by_id" field.
+func CreatedByIDEqualFold(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldEqualFold(FieldCreatedByID, v))
 }
 
-// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
-func CreatedByContainsFold(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldContainsFold(FieldCreatedBy, v))
+// CreatedByIDContainsFold applies the ContainsFold predicate on the "created_by_id" field.
+func CreatedByIDContainsFold(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldContainsFold(FieldCreatedByID, v))
 }
 
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEQ(FieldUpdatedBy, v))
+// UpdatedByIDEQ applies the EQ predicate on the "updated_by_id" field.
+func UpdatedByIDEQ(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldNEQ(FieldUpdatedBy, v))
+// UpdatedByIDNEQ applies the NEQ predicate on the "updated_by_id" field.
+func UpdatedByIDNEQ(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldNEQ(FieldUpdatedByID, v))
 }
 
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldIn(FieldUpdatedBy, vs...))
+// UpdatedByIDIn applies the In predicate on the "updated_by_id" field.
+func UpdatedByIDIn(vs ...string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldIn(FieldUpdatedByID, vs...))
 }
 
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldNotIn(FieldUpdatedBy, vs...))
+// UpdatedByIDNotIn applies the NotIn predicate on the "updated_by_id" field.
+func UpdatedByIDNotIn(vs ...string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldNotIn(FieldUpdatedByID, vs...))
 }
 
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldGT(FieldUpdatedBy, v))
+// UpdatedByIDGT applies the GT predicate on the "updated_by_id" field.
+func UpdatedByIDGT(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldGT(FieldUpdatedByID, v))
 }
 
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldGTE(FieldUpdatedBy, v))
+// UpdatedByIDGTE applies the GTE predicate on the "updated_by_id" field.
+func UpdatedByIDGTE(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldGTE(FieldUpdatedByID, v))
 }
 
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldLT(FieldUpdatedBy, v))
+// UpdatedByIDLT applies the LT predicate on the "updated_by_id" field.
+func UpdatedByIDLT(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldLT(FieldUpdatedByID, v))
 }
 
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldLTE(FieldUpdatedBy, v))
+// UpdatedByIDLTE applies the LTE predicate on the "updated_by_id" field.
+func UpdatedByIDLTE(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldLTE(FieldUpdatedByID, v))
 }
 
-// UpdatedByContains applies the Contains predicate on the "updated_by" field.
-func UpdatedByContains(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldContains(FieldUpdatedBy, v))
+// UpdatedByIDContains applies the Contains predicate on the "updated_by_id" field.
+func UpdatedByIDContains(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldContains(FieldUpdatedByID, v))
 }
 
-// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
-func UpdatedByHasPrefix(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldHasPrefix(FieldUpdatedBy, v))
+// UpdatedByIDHasPrefix applies the HasPrefix predicate on the "updated_by_id" field.
+func UpdatedByIDHasPrefix(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldHasPrefix(FieldUpdatedByID, v))
 }
 
-// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
-func UpdatedByHasSuffix(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldHasSuffix(FieldUpdatedBy, v))
+// UpdatedByIDHasSuffix applies the HasSuffix predicate on the "updated_by_id" field.
+func UpdatedByIDHasSuffix(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldHasSuffix(FieldUpdatedByID, v))
 }
 
-// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldIsNull(FieldUpdatedBy))
+// UpdatedByIDIsNil applies the IsNil predicate on the "updated_by_id" field.
+func UpdatedByIDIsNil() predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldIsNull(FieldUpdatedByID))
 }
 
-// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldNotNull(FieldUpdatedBy))
+// UpdatedByIDNotNil applies the NotNil predicate on the "updated_by_id" field.
+func UpdatedByIDNotNil() predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldNotNull(FieldUpdatedByID))
 }
 
-// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
-func UpdatedByEqualFold(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldEqualFold(FieldUpdatedBy, v))
+// UpdatedByIDEqualFold applies the EqualFold predicate on the "updated_by_id" field.
+func UpdatedByIDEqualFold(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldEqualFold(FieldUpdatedByID, v))
 }
 
-// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
-func UpdatedByContainsFold(v string) predicate.Webauthn {
-	return predicate.Webauthn(sql.FieldContainsFold(FieldUpdatedBy, v))
+// UpdatedByIDContainsFold applies the ContainsFold predicate on the "updated_by_id" field.
+func UpdatedByIDContainsFold(v string) predicate.Webauthn {
+	return predicate.Webauthn(sql.FieldContainsFold(FieldUpdatedByID, v))
 }
 
 // MappingIDEQ applies the EQ predicate on the "mapping_id" field.
@@ -825,6 +825,64 @@ func UserVerifiedEQ(v bool) predicate.Webauthn {
 // UserVerifiedNEQ applies the NEQ predicate on the "user_verified" field.
 func UserVerifiedNEQ(v bool) predicate.Webauthn {
 	return predicate.Webauthn(sql.FieldNEQ(FieldUserVerified, v))
+}
+
+// HasCreatedBy applies the HasEdge predicate on the "created_by" edge.
+func HasCreatedBy() predicate.Webauthn {
+	return predicate.Webauthn(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, CreatedByTable, CreatedByColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Webauthn
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCreatedByWith applies the HasEdge predicate on the "created_by" edge with a given conditions (other predicates).
+func HasCreatedByWith(preds ...predicate.User) predicate.Webauthn {
+	return predicate.Webauthn(func(s *sql.Selector) {
+		step := newCreatedByStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Webauthn
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUpdatedBy applies the HasEdge predicate on the "updated_by" edge.
+func HasUpdatedBy() predicate.Webauthn {
+	return predicate.Webauthn(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByTable, UpdatedByColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Webauthn
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUpdatedByWith applies the HasEdge predicate on the "updated_by" edge with a given conditions (other predicates).
+func HasUpdatedByWith(preds ...predicate.User) predicate.Webauthn {
+	return predicate.Webauthn(func(s *sql.Selector) {
+		step := newUpdatedByStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Webauthn
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

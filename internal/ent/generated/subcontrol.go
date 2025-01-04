@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Subcontrol is the model entity for the Subcontrol schema.
@@ -24,14 +25,14 @@ type Subcontrol struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -80,6 +81,10 @@ type Subcontrol struct {
 
 // SubcontrolEdges holds the relations/edges for other nodes in the graph.
 type SubcontrolEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Controls holds the value of the controls edge.
@@ -94,9 +99,9 @@ type SubcontrolEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [8]map[string]int
 
 	namedControls map[string][]*Control
 	namedUser     map[string][]*User
@@ -104,12 +109,34 @@ type SubcontrolEdges struct {
 	namedPrograms map[string][]*Program
 }
 
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e SubcontrolEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -118,7 +145,7 @@ func (e SubcontrolEdges) OwnerOrErr() (*Organization, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -127,7 +154,7 @@ func (e SubcontrolEdges) ControlsOrErr() ([]*Control, error) {
 // UserOrErr returns the User value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.User, nil
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -136,7 +163,7 @@ func (e SubcontrolEdges) UserOrErr() ([]*User, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -147,7 +174,7 @@ func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
 func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
 	if e.Notes != nil {
 		return e.Notes, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: note.Label}
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -156,7 +183,7 @@ func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -169,7 +196,7 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subcontrol.FieldTags, subcontrol.FieldDetails:
 			values[i] = new([]byte)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldMappingID, subcontrol.FieldOwnerID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification:
+		case subcontrol.FieldID, subcontrol.FieldCreatedByID, subcontrol.FieldUpdatedByID, subcontrol.FieldDeletedByID, subcontrol.FieldMappingID, subcontrol.FieldOwnerID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification:
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt, subcontrol.FieldImplementationDate, subcontrol.FieldImplementationVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -210,17 +237,17 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.UpdatedAt = value.Time
 			}
-		case subcontrol.FieldCreatedBy:
+		case subcontrol.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				s.CreatedBy = value.String
+				s.CreatedByID = value.String
 			}
-		case subcontrol.FieldUpdatedBy:
+		case subcontrol.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				s.UpdatedBy = value.String
+				s.UpdatedByID = value.String
 			}
 		case subcontrol.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -228,11 +255,11 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.DeletedAt = value.Time
 			}
-		case subcontrol.FieldDeletedBy:
+		case subcontrol.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.String
+				s.DeletedByID = value.String
 			}
 		case subcontrol.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -379,6 +406,16 @@ func (s *Subcontrol) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryCreatedBy() *UserQuery {
+	return NewSubcontrolClient(s.config).QueryCreatedBy(s)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryUpdatedBy() *UserQuery {
+	return NewSubcontrolClient(s.config).QueryUpdatedBy(s)
+}
+
 // QueryOwner queries the "owner" edge of the Subcontrol entity.
 func (s *Subcontrol) QueryOwner() *OrganizationQuery {
 	return NewSubcontrolClient(s.config).QueryOwner(s)
@@ -438,17 +475,17 @@ func (s *Subcontrol) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(s.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(s.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(s.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(s.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(s.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(s.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(s.MappingID)

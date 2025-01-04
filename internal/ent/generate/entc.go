@@ -148,8 +148,8 @@ func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
 		history.WithAuthzPolicy(),
 		history.WithSchemaPath(schemaPath),
 		history.WithFirstRun(true),
+		history.WithUpdatedBy("updated_by_id", history.ValueTypeString),
 		history.WithAllowedRelation("audit_log_viewer"),
-		history.WithUpdatedByFromSchema(history.ValueTypeString, false),
 	)
 
 	if err := historyExt.GenerateSchemas(); err != nil {

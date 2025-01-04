@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -30,6 +31,8 @@ type StandardQuery struct {
 	order                      []standard.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.Standard
+	withCreatedBy              *UserQuery
+	withUpdatedBy              *UserQuery
 	withControlObjectives      *ControlObjectiveQuery
 	withControls               *ControlQuery
 	withProcedures             *ProcedureQuery
@@ -76,6 +79,56 @@ func (sq *StandardQuery) Unique(unique bool) *StandardQuery {
 func (sq *StandardQuery) Order(o ...standard.OrderOption) *StandardQuery {
 	sq.order = append(sq.order, o...)
 	return sq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (sq *StandardQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.CreatedByTable, standard.CreatedByColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Standard
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (sq *StandardQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.UpdatedByTable, standard.UpdatedByColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Standard
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryControlObjectives chains the current query on the "control_objectives" edge.
@@ -395,6 +448,8 @@ func (sq *StandardQuery) Clone() *StandardQuery {
 		order:                 append([]standard.OrderOption{}, sq.order...),
 		inters:                append([]Interceptor{}, sq.inters...),
 		predicates:            append([]predicate.Standard{}, sq.predicates...),
+		withCreatedBy:         sq.withCreatedBy.Clone(),
+		withUpdatedBy:         sq.withUpdatedBy.Clone(),
 		withControlObjectives: sq.withControlObjectives.Clone(),
 		withControls:          sq.withControls.Clone(),
 		withProcedures:        sq.withProcedures.Clone(),
@@ -405,6 +460,28 @@ func (sq *StandardQuery) Clone() *StandardQuery {
 		path:      sq.path,
 		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithCreatedBy(opts ...func(*UserQuery)) *StandardQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withCreatedBy = query
+	return sq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithUpdatedBy(opts ...func(*UserQuery)) *StandardQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withUpdatedBy = query
+	return sq
 }
 
 // WithControlObjectives tells the query-builder to eager-load the nodes that are connected to
@@ -540,7 +617,9 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	var (
 		nodes       = []*Standard{}
 		_spec       = sq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [7]bool{
+			sq.withCreatedBy != nil,
+			sq.withUpdatedBy != nil,
 			sq.withControlObjectives != nil,
 			sq.withControls != nil,
 			sq.withProcedures != nil,
@@ -570,6 +649,18 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := sq.withCreatedBy; query != nil {
+		if err := sq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Standard, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withUpdatedBy; query != nil {
+		if err := sq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Standard, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := sq.withControlObjectives; query != nil {
 		if err := sq.loadControlObjectives(ctx, query, nodes,
@@ -651,6 +742,64 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	return nodes, nil
 }
 
+func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Standard)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *StandardQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Standard)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (sq *StandardQuery) loadControlObjectives(ctx context.Context, query *ControlObjectiveQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *ControlObjective)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Standard)
@@ -960,6 +1109,12 @@ func (sq *StandardQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != standard.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if sq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(standard.FieldCreatedByID)
+		}
+		if sq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(standard.FieldUpdatedByID)
 		}
 	}
 	if ps := sq.predicates; len(ps) > 0 {

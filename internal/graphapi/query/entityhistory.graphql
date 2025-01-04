@@ -3,7 +3,7 @@ query GetAllEntityHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         displayName
         domains
@@ -16,8 +16,9 @@ query GetAllEntityHistories {
         ref
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -28,7 +29,7 @@ query GetEntityHistories($where: EntityHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         displayName
         domains
@@ -41,8 +42,9 @@ query GetEntityHistories($where: EntityHistoryWhereInput) {
         ref
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

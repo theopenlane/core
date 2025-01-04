@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Task_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Task_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Task_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Task_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "title":
@@ -93,6 +93,10 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_due(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Task_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Task_updatedBy(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -165,14 +169,14 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Task_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Task_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Task_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Task_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "title":
@@ -187,6 +191,10 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_due(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Task_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Task_updatedBy(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -303,14 +311,14 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Task_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Task_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Task_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Task_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "title":
@@ -325,6 +333,10 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_due(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Task_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Task_updatedBy(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":

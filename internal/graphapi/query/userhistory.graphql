@@ -7,7 +7,7 @@ query GetAllUserHistories {
         avatarRemoteURL
         avatarUpdatedAt
         createdAt
-        createdBy
+        createdByID
         displayName
         email
         firstName
@@ -20,8 +20,9 @@ query GetAllUserHistories {
         role
         sub
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -36,7 +37,7 @@ query GetUserHistories($where: UserHistoryWhereInput) {
         avatarRemoteURL
         avatarUpdatedAt
         createdAt
-        createdBy
+        createdByID
         displayName
         email
         firstName
@@ -49,8 +50,9 @@ query GetUserHistories($where: UserHistoryWhereInput) {
         role
         sub
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

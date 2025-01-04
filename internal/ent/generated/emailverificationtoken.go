@@ -22,16 +22,16 @@ type EmailVerificationToken struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// The user id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the verification token sent to the user via email which should only be provided to the /verify endpoint + handler
@@ -50,13 +50,39 @@ type EmailVerificationToken struct {
 
 // EmailVerificationTokenEdges holds the relations/edges for other nodes in the graph.
 type EmailVerificationTokenEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [3]map[string]int
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EmailVerificationTokenEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EmailVerificationTokenEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -64,7 +90,7 @@ type EmailVerificationTokenEdges struct {
 func (e EmailVerificationTokenEdges) OwnerOrErr() (*User, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -77,7 +103,7 @@ func (*EmailVerificationToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case emailverificationtoken.FieldSecret:
 			values[i] = new([]byte)
-		case emailverificationtoken.FieldID, emailverificationtoken.FieldCreatedBy, emailverificationtoken.FieldUpdatedBy, emailverificationtoken.FieldMappingID, emailverificationtoken.FieldDeletedBy, emailverificationtoken.FieldOwnerID, emailverificationtoken.FieldToken, emailverificationtoken.FieldEmail:
+		case emailverificationtoken.FieldID, emailverificationtoken.FieldCreatedByID, emailverificationtoken.FieldUpdatedByID, emailverificationtoken.FieldMappingID, emailverificationtoken.FieldDeletedByID, emailverificationtoken.FieldOwnerID, emailverificationtoken.FieldToken, emailverificationtoken.FieldEmail:
 			values[i] = new(sql.NullString)
 		case emailverificationtoken.FieldCreatedAt, emailverificationtoken.FieldUpdatedAt, emailverificationtoken.FieldDeletedAt, emailverificationtoken.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -114,17 +140,17 @@ func (evt *EmailVerificationToken) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				evt.UpdatedAt = value.Time
 			}
-		case emailverificationtoken.FieldCreatedBy:
+		case emailverificationtoken.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				evt.CreatedBy = value.String
+				evt.CreatedByID = value.String
 			}
-		case emailverificationtoken.FieldUpdatedBy:
+		case emailverificationtoken.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				evt.UpdatedBy = value.String
+				evt.UpdatedByID = value.String
 			}
 		case emailverificationtoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -138,11 +164,11 @@ func (evt *EmailVerificationToken) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				evt.DeletedAt = value.Time
 			}
-		case emailverificationtoken.FieldDeletedBy:
+		case emailverificationtoken.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				evt.DeletedBy = value.String
+				evt.DeletedByID = value.String
 			}
 		case emailverificationtoken.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -188,6 +214,16 @@ func (evt *EmailVerificationToken) Value(name string) (ent.Value, error) {
 	return evt.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the EmailVerificationToken entity.
+func (evt *EmailVerificationToken) QueryCreatedBy() *UserQuery {
+	return NewEmailVerificationTokenClient(evt.config).QueryCreatedBy(evt)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the EmailVerificationToken entity.
+func (evt *EmailVerificationToken) QueryUpdatedBy() *UserQuery {
+	return NewEmailVerificationTokenClient(evt.config).QueryUpdatedBy(evt)
+}
+
 // QueryOwner queries the "owner" edge of the EmailVerificationToken entity.
 func (evt *EmailVerificationToken) QueryOwner() *UserQuery {
 	return NewEmailVerificationTokenClient(evt.config).QueryOwner(evt)
@@ -222,11 +258,11 @@ func (evt *EmailVerificationToken) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(evt.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(evt.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(evt.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(evt.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(evt.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(evt.MappingID)
@@ -234,8 +270,8 @@ func (evt *EmailVerificationToken) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(evt.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(evt.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(evt.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(evt.OwnerID)

@@ -44,63 +44,23 @@ func (shu *SubcontrolHistoryUpdate) ClearUpdatedAt() *SubcontrolHistoryUpdate {
 	return shu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (shu *SubcontrolHistoryUpdate) SetUpdatedBy(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (shu *SubcontrolHistoryUpdate) SetUpdatedByID(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetUpdatedByID(s)
 	return shu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableUpdatedBy(s *string) *SubcontrolHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableUpdatedByID(s *string) *SubcontrolHistoryUpdate {
 	if s != nil {
-		shu.SetUpdatedBy(*s)
+		shu.SetUpdatedByID(*s)
 	}
 	return shu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (shu *SubcontrolHistoryUpdate) ClearUpdatedBy() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearUpdatedBy()
-	return shu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (shu *SubcontrolHistoryUpdate) SetDeletedAt(t time.Time) *SubcontrolHistoryUpdate {
-	shu.mutation.SetDeletedAt(t)
-	return shu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableDeletedAt(t *time.Time) *SubcontrolHistoryUpdate {
-	if t != nil {
-		shu.SetDeletedAt(*t)
-	}
-	return shu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (shu *SubcontrolHistoryUpdate) ClearDeletedAt() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearDeletedAt()
-	return shu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (shu *SubcontrolHistoryUpdate) SetDeletedBy(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetDeletedBy(s)
-	return shu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableDeletedBy(s *string) *SubcontrolHistoryUpdate {
-	if s != nil {
-		shu.SetDeletedBy(*s)
-	}
-	return shu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (shu *SubcontrolHistoryUpdate) ClearDeletedBy() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (shu *SubcontrolHistoryUpdate) ClearUpdatedByID() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearUpdatedByID()
 	return shu
 }
 
@@ -507,6 +467,9 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.RefCleared() {
 		_spec.ClearField(subcontrolhistory.FieldRef, field.TypeString)
 	}
+	if shu.mutation.UpdatedByCleared() {
+		_spec.ClearField(subcontrolhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if shu.mutation.CreatedAtCleared() {
 		_spec.ClearField(subcontrolhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -516,26 +479,20 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subcontrolhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shu.mutation.CreatedByCleared() {
-		_spec.ClearField(subcontrolhistory.FieldCreatedBy, field.TypeString)
+	if shu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := shu.mutation.UpdatedBy(); ok {
-		_spec.SetField(subcontrolhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := shu.mutation.UpdatedByID(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if shu.mutation.UpdatedByCleared() {
-		_spec.ClearField(subcontrolhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := shu.mutation.DeletedAt(); ok {
-		_spec.SetField(subcontrolhistory.FieldDeletedAt, field.TypeTime, value)
+	if shu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if shu.mutation.DeletedAtCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shu.mutation.DeletedBy(); ok {
-		_spec.SetField(subcontrolhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if shu.mutation.DeletedByCleared() {
-		_spec.ClearField(subcontrolhistory.FieldDeletedBy, field.TypeString)
+	if shu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := shu.mutation.Tags(); ok {
 		_spec.SetField(subcontrolhistory.FieldTags, field.TypeJSON, value)
@@ -680,63 +637,23 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearUpdatedAt() *SubcontrolHistoryUpdat
 	return shuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetUpdatedBy(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetUpdatedByID(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetUpdatedByID(s)
 	return shuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableUpdatedBy(s *string) *SubcontrolHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableUpdatedByID(s *string) *SubcontrolHistoryUpdateOne {
 	if s != nil {
-		shuo.SetUpdatedBy(*s)
+		shuo.SetUpdatedByID(*s)
 	}
 	return shuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearUpdatedBy() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearUpdatedBy()
-	return shuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetDeletedAt(t time.Time) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetDeletedAt(t)
-	return shuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *SubcontrolHistoryUpdateOne {
-	if t != nil {
-		shuo.SetDeletedAt(*t)
-	}
-	return shuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearDeletedAt() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearDeletedAt()
-	return shuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetDeletedBy(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetDeletedBy(s)
-	return shuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableDeletedBy(s *string) *SubcontrolHistoryUpdateOne {
-	if s != nil {
-		shuo.SetDeletedBy(*s)
-	}
-	return shuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearDeletedBy() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearUpdatedByID() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearUpdatedByID()
 	return shuo
 }
 
@@ -1173,6 +1090,9 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	if shuo.mutation.RefCleared() {
 		_spec.ClearField(subcontrolhistory.FieldRef, field.TypeString)
 	}
+	if shuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(subcontrolhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if shuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(subcontrolhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -1182,26 +1102,20 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	if shuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subcontrolhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shuo.mutation.CreatedByCleared() {
-		_spec.ClearField(subcontrolhistory.FieldCreatedBy, field.TypeString)
+	if shuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := shuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(subcontrolhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := shuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if shuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(subcontrolhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := shuo.mutation.DeletedAt(); ok {
-		_spec.SetField(subcontrolhistory.FieldDeletedAt, field.TypeTime, value)
+	if shuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if shuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.DeletedBy(); ok {
-		_spec.SetField(subcontrolhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if shuo.mutation.DeletedByCleared() {
-		_spec.ClearField(subcontrolhistory.FieldDeletedBy, field.TypeString)
+	if shuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := shuo.mutation.Tags(); ok {
 		_spec.SetField(subcontrolhistory.FieldTags, field.TypeJSON, value)

@@ -44,63 +44,23 @@ func (nhu *NarrativeHistoryUpdate) ClearUpdatedAt() *NarrativeHistoryUpdate {
 	return nhu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nhu *NarrativeHistoryUpdate) SetUpdatedBy(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nhu *NarrativeHistoryUpdate) SetUpdatedByID(s string) *NarrativeHistoryUpdate {
+	nhu.mutation.SetUpdatedByID(s)
 	return nhu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableUpdatedBy(s *string) *NarrativeHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nhu *NarrativeHistoryUpdate) SetNillableUpdatedByID(s *string) *NarrativeHistoryUpdate {
 	if s != nil {
-		nhu.SetUpdatedBy(*s)
+		nhu.SetUpdatedByID(*s)
 	}
 	return nhu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (nhu *NarrativeHistoryUpdate) ClearUpdatedBy() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearUpdatedBy()
-	return nhu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (nhu *NarrativeHistoryUpdate) SetDeletedAt(t time.Time) *NarrativeHistoryUpdate {
-	nhu.mutation.SetDeletedAt(t)
-	return nhu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableDeletedAt(t *time.Time) *NarrativeHistoryUpdate {
-	if t != nil {
-		nhu.SetDeletedAt(*t)
-	}
-	return nhu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (nhu *NarrativeHistoryUpdate) ClearDeletedAt() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearDeletedAt()
-	return nhu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (nhu *NarrativeHistoryUpdate) SetDeletedBy(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetDeletedBy(s)
-	return nhu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableDeletedBy(s *string) *NarrativeHistoryUpdate {
-	if s != nil {
-		nhu.SetDeletedBy(*s)
-	}
-	return nhu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (nhu *NarrativeHistoryUpdate) ClearDeletedBy() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (nhu *NarrativeHistoryUpdate) ClearUpdatedByID() *NarrativeHistoryUpdate {
+	nhu.mutation.ClearUpdatedByID()
 	return nhu
 }
 
@@ -267,6 +227,9 @@ func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if nhu.mutation.RefCleared() {
 		_spec.ClearField(narrativehistory.FieldRef, field.TypeString)
 	}
+	if nhu.mutation.UpdatedByCleared() {
+		_spec.ClearField(narrativehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if nhu.mutation.CreatedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -276,26 +239,20 @@ func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if nhu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if nhu.mutation.CreatedByCleared() {
-		_spec.ClearField(narrativehistory.FieldCreatedBy, field.TypeString)
+	if nhu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(narrativehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := nhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(narrativehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := nhu.mutation.UpdatedByID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if nhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(narrativehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := nhu.mutation.DeletedAt(); ok {
-		_spec.SetField(narrativehistory.FieldDeletedAt, field.TypeTime, value)
+	if nhu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(narrativehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if nhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nhu.mutation.DeletedBy(); ok {
-		_spec.SetField(narrativehistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if nhu.mutation.DeletedByCleared() {
-		_spec.ClearField(narrativehistory.FieldDeletedBy, field.TypeString)
+	if nhu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(narrativehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := nhu.mutation.Tags(); ok {
 		_spec.SetField(narrativehistory.FieldTags, field.TypeJSON, value)
@@ -368,63 +325,23 @@ func (nhuo *NarrativeHistoryUpdateOne) ClearUpdatedAt() *NarrativeHistoryUpdateO
 	return nhuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetUpdatedBy(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nhuo *NarrativeHistoryUpdateOne) SetUpdatedByID(s string) *NarrativeHistoryUpdateOne {
+	nhuo.mutation.SetUpdatedByID(s)
 	return nhuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableUpdatedBy(s *string) *NarrativeHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nhuo *NarrativeHistoryUpdateOne) SetNillableUpdatedByID(s *string) *NarrativeHistoryUpdateOne {
 	if s != nil {
-		nhuo.SetUpdatedBy(*s)
+		nhuo.SetUpdatedByID(*s)
 	}
 	return nhuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearUpdatedBy() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearUpdatedBy()
-	return nhuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetDeletedAt(t time.Time) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetDeletedAt(t)
-	return nhuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *NarrativeHistoryUpdateOne {
-	if t != nil {
-		nhuo.SetDeletedAt(*t)
-	}
-	return nhuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearDeletedAt() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearDeletedAt()
-	return nhuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetDeletedBy(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetDeletedBy(s)
-	return nhuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableDeletedBy(s *string) *NarrativeHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetDeletedBy(*s)
-	}
-	return nhuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearDeletedBy() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (nhuo *NarrativeHistoryUpdateOne) ClearUpdatedByID() *NarrativeHistoryUpdateOne {
+	nhuo.mutation.ClearUpdatedByID()
 	return nhuo
 }
 
@@ -621,6 +538,9 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 	if nhuo.mutation.RefCleared() {
 		_spec.ClearField(narrativehistory.FieldRef, field.TypeString)
 	}
+	if nhuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(narrativehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if nhuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -630,26 +550,20 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 	if nhuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if nhuo.mutation.CreatedByCleared() {
-		_spec.ClearField(narrativehistory.FieldCreatedBy, field.TypeString)
+	if nhuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(narrativehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(narrativehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := nhuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if nhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(narrativehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := nhuo.mutation.DeletedAt(); ok {
-		_spec.SetField(narrativehistory.FieldDeletedAt, field.TypeTime, value)
+	if nhuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(narrativehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if nhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(narrativehistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if nhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(narrativehistory.FieldDeletedBy, field.TypeString)
+	if nhuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(narrativehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := nhuo.mutation.Tags(); ok {
 		_spec.SetField(narrativehistory.FieldTags, field.TypeJSON, value)

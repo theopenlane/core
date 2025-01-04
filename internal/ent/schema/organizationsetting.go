@@ -99,7 +99,7 @@ func (OrganizationSetting) Interceptors() []ent.Interceptor {
 // Mixin of the OrganizationSetting
 func (OrganizationSetting) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},

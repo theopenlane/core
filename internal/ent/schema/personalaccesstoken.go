@@ -84,7 +84,7 @@ func (PersonalAccessToken) Indexes() []ent.Index {
 // Mixin of the PersonalAccessToken
 func (PersonalAccessToken) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

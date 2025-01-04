@@ -40,7 +40,7 @@ type User struct {
 // Mixin of the User
 func (User) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixinWithExcludedEdges(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // NoteCreate is the builder for creating a Note entity.
@@ -52,30 +53,30 @@ func (nc *NoteCreate) SetNillableUpdatedAt(t *time.Time) *NoteCreate {
 	return nc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (nc *NoteCreate) SetCreatedBy(s string) *NoteCreate {
-	nc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (nc *NoteCreate) SetCreatedByID(s string) *NoteCreate {
+	nc.mutation.SetCreatedByID(s)
 	return nc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableCreatedBy(s *string) *NoteCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (nc *NoteCreate) SetNillableCreatedByID(s *string) *NoteCreate {
 	if s != nil {
-		nc.SetCreatedBy(*s)
+		nc.SetCreatedByID(*s)
 	}
 	return nc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nc *NoteCreate) SetUpdatedBy(s string) *NoteCreate {
-	nc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nc *NoteCreate) SetUpdatedByID(s string) *NoteCreate {
+	nc.mutation.SetUpdatedByID(s)
 	return nc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableUpdatedBy(s *string) *NoteCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nc *NoteCreate) SetNillableUpdatedByID(s *string) *NoteCreate {
 	if s != nil {
-		nc.SetUpdatedBy(*s)
+		nc.SetUpdatedByID(*s)
 	}
 	return nc
 }
@@ -108,16 +109,16 @@ func (nc *NoteCreate) SetNillableDeletedAt(t *time.Time) *NoteCreate {
 	return nc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (nc *NoteCreate) SetDeletedBy(s string) *NoteCreate {
-	nc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (nc *NoteCreate) SetDeletedByID(s string) *NoteCreate {
+	nc.mutation.SetDeletedByID(s)
 	return nc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableDeletedBy(s *string) *NoteCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (nc *NoteCreate) SetNillableDeletedByID(s *string) *NoteCreate {
 	if s != nil {
-		nc.SetDeletedBy(*s)
+		nc.SetDeletedByID(*s)
 	}
 	return nc
 }
@@ -160,6 +161,16 @@ func (nc *NoteCreate) SetNillableID(s *string) *NoteCreate {
 		nc.SetID(*s)
 	}
 	return nc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (nc *NoteCreate) SetCreatedBy(u *User) *NoteCreate {
+	return nc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (nc *NoteCreate) SetUpdatedBy(u *User) *NoteCreate {
+	return nc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -350,14 +361,6 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		_spec.SetField(note.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := nc.mutation.CreatedBy(); ok {
-		_spec.SetField(note.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := nc.mutation.UpdatedBy(); ok {
-		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := nc.mutation.MappingID(); ok {
 		_spec.SetField(note.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -366,9 +369,9 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := nc.mutation.DeletedBy(); ok {
-		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := nc.mutation.DeletedByID(); ok {
+		_spec.SetField(note.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := nc.mutation.Tags(); ok {
 		_spec.SetField(note.FieldTags, field.TypeJSON, value)
@@ -377,6 +380,42 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 	if value, ok := nc.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 		_node.Text = value
+	}
+	if nodes := nc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   note.CreatedByTable,
+			Columns: []string{note.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   note.UpdatedByTable,
+			Columns: []string{note.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := nc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

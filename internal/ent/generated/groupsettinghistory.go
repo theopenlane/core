@@ -26,22 +26,24 @@ type GroupSettingHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility,omitempty"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
@@ -66,7 +68,7 @@ func (*GroupSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case groupsettinghistory.FieldSyncToSlack, groupsettinghistory.FieldSyncToGithub:
 			values[i] = new(sql.NullBool)
-		case groupsettinghistory.FieldID, groupsettinghistory.FieldRef, groupsettinghistory.FieldCreatedBy, groupsettinghistory.FieldUpdatedBy, groupsettinghistory.FieldMappingID, groupsettinghistory.FieldDeletedBy, groupsettinghistory.FieldVisibility, groupsettinghistory.FieldJoinPolicy, groupsettinghistory.FieldGroupID:
+		case groupsettinghistory.FieldID, groupsettinghistory.FieldRef, groupsettinghistory.FieldUpdatedBy, groupsettinghistory.FieldCreatedByID, groupsettinghistory.FieldUpdatedByID, groupsettinghistory.FieldMappingID, groupsettinghistory.FieldDeletedByID, groupsettinghistory.FieldVisibility, groupsettinghistory.FieldJoinPolicy, groupsettinghistory.FieldGroupID:
 			values[i] = new(sql.NullString)
 		case groupsettinghistory.FieldHistoryTime, groupsettinghistory.FieldCreatedAt, groupsettinghistory.FieldUpdatedAt, groupsettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -109,6 +111,13 @@ func (gsh *GroupSettingHistory) assignValues(columns []string, values []any) err
 			} else if value != nil {
 				gsh.Operation = *value
 			}
+		case groupsettinghistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				gsh.UpdatedBy = new(string)
+				*gsh.UpdatedBy = value.String
+			}
 		case groupsettinghistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -121,17 +130,17 @@ func (gsh *GroupSettingHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				gsh.UpdatedAt = value.Time
 			}
-		case groupsettinghistory.FieldCreatedBy:
+		case groupsettinghistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				gsh.CreatedBy = value.String
+				gsh.CreatedByID = value.String
 			}
-		case groupsettinghistory.FieldUpdatedBy:
+		case groupsettinghistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				gsh.UpdatedBy = value.String
+				gsh.UpdatedByID = value.String
 			}
 		case groupsettinghistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -153,11 +162,11 @@ func (gsh *GroupSettingHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				gsh.DeletedAt = value.Time
 			}
-		case groupsettinghistory.FieldDeletedBy:
+		case groupsettinghistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				gsh.DeletedBy = value.String
+				gsh.DeletedByID = value.String
 			}
 		case groupsettinghistory.FieldVisibility:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -234,17 +243,22 @@ func (gsh *GroupSettingHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", gsh.Operation))
 	builder.WriteString(", ")
+	if v := gsh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(gsh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(gsh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(gsh.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(gsh.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(gsh.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(gsh.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(gsh.MappingID)
@@ -255,8 +269,8 @@ func (gsh *GroupSettingHistory) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(gsh.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gsh.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(gsh.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
 	builder.WriteString(fmt.Sprintf("%v", gsh.Visibility))

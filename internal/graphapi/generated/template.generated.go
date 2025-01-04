@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Template_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Template_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Template_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Template_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Template_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Template_tags(ctx, field)
 			case "ownerID":
@@ -93,6 +93,10 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
 				return ec.fieldContext_Template_uischema(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Template_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Template_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
 			case "documents":
@@ -151,14 +155,14 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Template_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Template_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Template_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Template_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Template_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Template_tags(ctx, field)
 			case "ownerID":
@@ -173,6 +177,10 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
 				return ec.fieldContext_Template_uischema(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Template_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Template_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
 			case "documents":
@@ -275,14 +283,14 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Template_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Template_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Template_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Template_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Template_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Template_tags(ctx, field)
 			case "ownerID":
@@ -297,6 +305,10 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
 				return ec.fieldContext_Template_uischema(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Template_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Template_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
 			case "documents":

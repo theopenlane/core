@@ -39,8 +39,8 @@ mutation CreateOrganization($input: CreateOrganizationInput!) {
         id
         createdAt
         updatedAt
-        createdBy
-        updatedBy
+        createdByID
+        updatedByID
         domains
         billingContact
         billingEmail
@@ -112,8 +112,8 @@ query GetAllOrganizations {
           id
           createdAt
           updatedAt
-          createdBy
-          updatedBy
+          createdByID
+          updatedByID
           domains
           billingContact
           billingEmail
@@ -166,8 +166,8 @@ query GetOrganizationByID($organizationId: ID!) {
       id
       createdAt
       updatedAt
-      createdBy
-      updatedBy
+      createdByID
+      updatedByID
       domains
       billingContact
       billingEmail
@@ -179,9 +179,9 @@ query GetOrganizationByID($organizationId: ID!) {
       stripeID
     }
     createdAt
-    createdBy
+    createdByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -222,8 +222,8 @@ query GetOrganizations($where: OrganizationWhereInput) {
           id
           createdAt
           updatedAt
-          createdBy
-          updatedBy
+          createdByID
+          updatedByID
           domains
           billingContact
           billingEmail
@@ -259,8 +259,8 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
         id
         createdAt
         updatedAt
-        createdBy
-        updatedBy
+        createdByID
+        updatedByID
         domains
         billingContact
         billingEmail

@@ -4,7 +4,7 @@ query GetAllRiskHistories {
       node {
         businessCosts
         createdAt
-        createdBy
+        createdByID
         description
         details
         historyTime
@@ -19,8 +19,9 @@ query GetAllRiskHistories {
         satisfies
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -32,7 +33,7 @@ query GetRiskHistories($where: RiskHistoryWhereInput) {
       node {
         businessCosts
         createdAt
-        createdBy
+        createdByID
         description
         details
         historyTime
@@ -47,8 +48,9 @@ query GetRiskHistories($where: RiskHistoryWhereInput) {
         satisfies
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

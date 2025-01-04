@@ -33,7 +33,7 @@ func (Note) Fields() []ent.Field {
 // Mixin of the Note
 func (Note) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},

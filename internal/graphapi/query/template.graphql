@@ -48,14 +48,20 @@ query GetAllTemplates {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         id
         jsonconfig
         name
         uischema
         updatedAt
-        updatedBy
+        updatedByID
+        updatedBy {
+          id
+          firstName
+          lastName
+          email
+        }
         owner {
           id
         }
@@ -67,14 +73,14 @@ query GetAllTemplates {
 query GetTemplateByID($getTemplateId: ID!) {
   template(id: $getTemplateId) {
     createdAt
-    createdBy
+    createdByID
     description
     id
     jsonconfig
     name
     uischema
     updatedAt
-    updatedBy
+    updatedByID
     owner {
       id
     }
@@ -85,14 +91,20 @@ mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
   updateTemplate(id: $updateTemplateId, input: $input) {
     template {
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+        id
+        firstName
+        lastName
+        email
+      }
       description
       id
       jsonconfig
       name
       uischema
       updatedAt
-      updatedBy
+      updatedByID
       owner {
         id
       }

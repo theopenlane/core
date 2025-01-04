@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Subscriber is the model entity for the Subscriber schema.
@@ -23,18 +24,18 @@ type Subscriber struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// email address of the subscriber
@@ -61,17 +62,43 @@ type Subscriber struct {
 
 // SubscriberEdges holds the relations/edges for other nodes in the graph.
 type SubscriberEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [4]map[string]int
 
 	namedEvents map[string][]*Event
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubscriberEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubscriberEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -79,7 +106,7 @@ type SubscriberEdges struct {
 func (e SubscriberEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -88,7 +115,7 @@ func (e SubscriberEdges) OwnerOrErr() (*Organization, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubscriberEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -103,7 +130,7 @@ func (*Subscriber) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subscriber.FieldVerifiedEmail, subscriber.FieldVerifiedPhone, subscriber.FieldActive:
 			values[i] = new(sql.NullBool)
-		case subscriber.FieldID, subscriber.FieldCreatedBy, subscriber.FieldUpdatedBy, subscriber.FieldMappingID, subscriber.FieldDeletedBy, subscriber.FieldOwnerID, subscriber.FieldEmail, subscriber.FieldPhoneNumber, subscriber.FieldToken:
+		case subscriber.FieldID, subscriber.FieldCreatedByID, subscriber.FieldUpdatedByID, subscriber.FieldMappingID, subscriber.FieldDeletedByID, subscriber.FieldOwnerID, subscriber.FieldEmail, subscriber.FieldPhoneNumber, subscriber.FieldToken:
 			values[i] = new(sql.NullString)
 		case subscriber.FieldCreatedAt, subscriber.FieldUpdatedAt, subscriber.FieldDeletedAt, subscriber.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -140,17 +167,17 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.UpdatedAt = value.Time
 			}
-		case subscriber.FieldCreatedBy:
+		case subscriber.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				s.CreatedBy = value.String
+				s.CreatedByID = value.String
 			}
-		case subscriber.FieldUpdatedBy:
+		case subscriber.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				s.UpdatedBy = value.String
+				s.UpdatedByID = value.String
 			}
 		case subscriber.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -172,11 +199,11 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.DeletedAt = value.Time
 			}
-		case subscriber.FieldDeletedBy:
+		case subscriber.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.String
+				s.DeletedByID = value.String
 			}
 		case subscriber.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -246,6 +273,16 @@ func (s *Subscriber) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the Subscriber entity.
+func (s *Subscriber) QueryCreatedBy() *UserQuery {
+	return NewSubscriberClient(s.config).QueryCreatedBy(s)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Subscriber entity.
+func (s *Subscriber) QueryUpdatedBy() *UserQuery {
+	return NewSubscriberClient(s.config).QueryUpdatedBy(s)
+}
+
 // QueryOwner queries the "owner" edge of the Subscriber entity.
 func (s *Subscriber) QueryOwner() *OrganizationQuery {
 	return NewSubscriberClient(s.config).QueryOwner(s)
@@ -285,11 +322,11 @@ func (s *Subscriber) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(s.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(s.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(s.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(s.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(s.MappingID)
@@ -300,8 +337,8 @@ func (s *Subscriber) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(s.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(s.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(s.OwnerID)

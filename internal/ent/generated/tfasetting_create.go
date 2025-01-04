@@ -49,30 +49,30 @@ func (tsc *TFASettingCreate) SetNillableUpdatedAt(t *time.Time) *TFASettingCreat
 	return tsc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (tsc *TFASettingCreate) SetCreatedBy(s string) *TFASettingCreate {
-	tsc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (tsc *TFASettingCreate) SetCreatedByID(s string) *TFASettingCreate {
+	tsc.mutation.SetCreatedByID(s)
 	return tsc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableCreatedBy(s *string) *TFASettingCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (tsc *TFASettingCreate) SetNillableCreatedByID(s *string) *TFASettingCreate {
 	if s != nil {
-		tsc.SetCreatedBy(*s)
+		tsc.SetCreatedByID(*s)
 	}
 	return tsc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tsc *TFASettingCreate) SetUpdatedBy(s string) *TFASettingCreate {
-	tsc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tsc *TFASettingCreate) SetUpdatedByID(s string) *TFASettingCreate {
+	tsc.mutation.SetUpdatedByID(s)
 	return tsc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableUpdatedBy(s *string) *TFASettingCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tsc *TFASettingCreate) SetNillableUpdatedByID(s *string) *TFASettingCreate {
 	if s != nil {
-		tsc.SetUpdatedBy(*s)
+		tsc.SetUpdatedByID(*s)
 	}
 	return tsc
 }
@@ -105,16 +105,16 @@ func (tsc *TFASettingCreate) SetNillableDeletedAt(t *time.Time) *TFASettingCreat
 	return tsc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tsc *TFASettingCreate) SetDeletedBy(s string) *TFASettingCreate {
-	tsc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tsc *TFASettingCreate) SetDeletedByID(s string) *TFASettingCreate {
+	tsc.mutation.SetDeletedByID(s)
 	return tsc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableDeletedBy(s *string) *TFASettingCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tsc *TFASettingCreate) SetNillableDeletedByID(s *string) *TFASettingCreate {
 	if s != nil {
-		tsc.SetDeletedBy(*s)
+		tsc.SetDeletedByID(*s)
 	}
 	return tsc
 }
@@ -227,6 +227,16 @@ func (tsc *TFASettingCreate) SetNillableID(s *string) *TFASettingCreate {
 		tsc.SetID(*s)
 	}
 	return tsc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (tsc *TFASettingCreate) SetCreatedBy(u *User) *TFASettingCreate {
+	return tsc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (tsc *TFASettingCreate) SetUpdatedBy(u *User) *TFASettingCreate {
+	return tsc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -374,14 +384,6 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 		_spec.SetField(tfasetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tsc.mutation.CreatedBy(); ok {
-		_spec.SetField(tfasetting.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := tsc.mutation.UpdatedBy(); ok {
-		_spec.SetField(tfasetting.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := tsc.mutation.MappingID(); ok {
 		_spec.SetField(tfasetting.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -390,9 +392,9 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tsc.mutation.DeletedBy(); ok {
-		_spec.SetField(tfasetting.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := tsc.mutation.DeletedByID(); ok {
+		_spec.SetField(tfasetting.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := tsc.mutation.Tags(); ok {
 		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)
@@ -421,6 +423,42 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 	if value, ok := tsc.mutation.TotpAllowed(); ok {
 		_spec.SetField(tfasetting.FieldTotpAllowed, field.TypeBool, value)
 		_node.TotpAllowed = value
+	}
+	if nodes := tsc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.CreatedByTable,
+			Columns: []string{tfasetting.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsc.schemaConfig.TFASetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tsc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByTable,
+			Columns: []string{tfasetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsc.schemaConfig.TFASetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tsc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

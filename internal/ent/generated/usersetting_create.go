@@ -52,30 +52,30 @@ func (usc *UserSettingCreate) SetNillableUpdatedAt(t *time.Time) *UserSettingCre
 	return usc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (usc *UserSettingCreate) SetCreatedBy(s string) *UserSettingCreate {
-	usc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (usc *UserSettingCreate) SetCreatedByID(s string) *UserSettingCreate {
+	usc.mutation.SetCreatedByID(s)
 	return usc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (usc *UserSettingCreate) SetNillableCreatedBy(s *string) *UserSettingCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (usc *UserSettingCreate) SetNillableCreatedByID(s *string) *UserSettingCreate {
 	if s != nil {
-		usc.SetCreatedBy(*s)
+		usc.SetCreatedByID(*s)
 	}
 	return usc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (usc *UserSettingCreate) SetUpdatedBy(s string) *UserSettingCreate {
-	usc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (usc *UserSettingCreate) SetUpdatedByID(s string) *UserSettingCreate {
+	usc.mutation.SetUpdatedByID(s)
 	return usc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (usc *UserSettingCreate) SetNillableUpdatedBy(s *string) *UserSettingCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (usc *UserSettingCreate) SetNillableUpdatedByID(s *string) *UserSettingCreate {
 	if s != nil {
-		usc.SetUpdatedBy(*s)
+		usc.SetUpdatedByID(*s)
 	}
 	return usc
 }
@@ -114,16 +114,16 @@ func (usc *UserSettingCreate) SetNillableDeletedAt(t *time.Time) *UserSettingCre
 	return usc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (usc *UserSettingCreate) SetDeletedBy(s string) *UserSettingCreate {
-	usc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (usc *UserSettingCreate) SetDeletedByID(s string) *UserSettingCreate {
+	usc.mutation.SetDeletedByID(s)
 	return usc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (usc *UserSettingCreate) SetNillableDeletedBy(s *string) *UserSettingCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (usc *UserSettingCreate) SetNillableDeletedByID(s *string) *UserSettingCreate {
 	if s != nil {
-		usc.SetDeletedBy(*s)
+		usc.SetDeletedByID(*s)
 	}
 	return usc
 }
@@ -266,6 +266,16 @@ func (usc *UserSettingCreate) SetNillableID(s *string) *UserSettingCreate {
 		usc.SetID(*s)
 	}
 	return usc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (usc *UserSettingCreate) SetCreatedBy(u *User) *UserSettingCreate {
+	return usc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (usc *UserSettingCreate) SetUpdatedBy(u *User) *UserSettingCreate {
+	return usc.SetUpdatedByID(u.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
@@ -462,14 +472,6 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 		_spec.SetField(usersetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := usc.mutation.CreatedBy(); ok {
-		_spec.SetField(usersetting.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := usc.mutation.UpdatedBy(); ok {
-		_spec.SetField(usersetting.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := usc.mutation.MappingID(); ok {
 		_spec.SetField(usersetting.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -482,9 +484,9 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := usc.mutation.DeletedBy(); ok {
-		_spec.SetField(usersetting.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := usc.mutation.DeletedByID(); ok {
+		_spec.SetField(usersetting.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := usc.mutation.Locked(); ok {
 		_spec.SetField(usersetting.FieldLocked, field.TypeBool, value)
@@ -517,6 +519,42 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 	if value, ok := usc.mutation.PhoneNumber(); ok {
 		_spec.SetField(usersetting.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = &value
+	}
+	if nodes := usc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.CreatedByTable,
+			Columns: []string{usersetting.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usc.schemaConfig.UserSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := usc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.UpdatedByTable,
+			Columns: []string{usersetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usc.schemaConfig.UserSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := usc.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

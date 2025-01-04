@@ -45,63 +45,23 @@ func (rhu *RiskHistoryUpdate) ClearUpdatedAt() *RiskHistoryUpdate {
 	return rhu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (rhu *RiskHistoryUpdate) SetUpdatedBy(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (rhu *RiskHistoryUpdate) SetUpdatedByID(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetUpdatedByID(s)
 	return rhu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableUpdatedBy(s *string) *RiskHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableUpdatedByID(s *string) *RiskHistoryUpdate {
 	if s != nil {
-		rhu.SetUpdatedBy(*s)
+		rhu.SetUpdatedByID(*s)
 	}
 	return rhu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (rhu *RiskHistoryUpdate) ClearUpdatedBy() *RiskHistoryUpdate {
-	rhu.mutation.ClearUpdatedBy()
-	return rhu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (rhu *RiskHistoryUpdate) SetDeletedAt(t time.Time) *RiskHistoryUpdate {
-	rhu.mutation.SetDeletedAt(t)
-	return rhu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableDeletedAt(t *time.Time) *RiskHistoryUpdate {
-	if t != nil {
-		rhu.SetDeletedAt(*t)
-	}
-	return rhu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (rhu *RiskHistoryUpdate) ClearDeletedAt() *RiskHistoryUpdate {
-	rhu.mutation.ClearDeletedAt()
-	return rhu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (rhu *RiskHistoryUpdate) SetDeletedBy(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetDeletedBy(s)
-	return rhu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableDeletedBy(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetDeletedBy(*s)
-	}
-	return rhu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (rhu *RiskHistoryUpdate) ClearDeletedBy() *RiskHistoryUpdate {
-	rhu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (rhu *RiskHistoryUpdate) ClearUpdatedByID() *RiskHistoryUpdate {
+	rhu.mutation.ClearUpdatedByID()
 	return rhu
 }
 
@@ -406,6 +366,9 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if rhu.mutation.RefCleared() {
 		_spec.ClearField(riskhistory.FieldRef, field.TypeString)
 	}
+	if rhu.mutation.UpdatedByCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if rhu.mutation.CreatedAtCleared() {
 		_spec.ClearField(riskhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -415,26 +378,20 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if rhu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if rhu.mutation.CreatedByCleared() {
-		_spec.ClearField(riskhistory.FieldCreatedBy, field.TypeString)
+	if rhu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(riskhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := rhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(riskhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := rhu.mutation.UpdatedByID(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if rhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(riskhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := rhu.mutation.DeletedAt(); ok {
-		_spec.SetField(riskhistory.FieldDeletedAt, field.TypeTime, value)
+	if rhu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if rhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(riskhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := rhu.mutation.DeletedBy(); ok {
-		_spec.SetField(riskhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if rhu.mutation.DeletedByCleared() {
-		_spec.ClearField(riskhistory.FieldDeletedBy, field.TypeString)
+	if rhu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(riskhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := rhu.mutation.Tags(); ok {
 		_spec.SetField(riskhistory.FieldTags, field.TypeJSON, value)
@@ -543,63 +500,23 @@ func (rhuo *RiskHistoryUpdateOne) ClearUpdatedAt() *RiskHistoryUpdateOne {
 	return rhuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (rhuo *RiskHistoryUpdateOne) SetUpdatedBy(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (rhuo *RiskHistoryUpdateOne) SetUpdatedByID(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetUpdatedByID(s)
 	return rhuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableUpdatedBy(s *string) *RiskHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableUpdatedByID(s *string) *RiskHistoryUpdateOne {
 	if s != nil {
-		rhuo.SetUpdatedBy(*s)
+		rhuo.SetUpdatedByID(*s)
 	}
 	return rhuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (rhuo *RiskHistoryUpdateOne) ClearUpdatedBy() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearUpdatedBy()
-	return rhuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (rhuo *RiskHistoryUpdateOne) SetDeletedAt(t time.Time) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetDeletedAt(t)
-	return rhuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *RiskHistoryUpdateOne {
-	if t != nil {
-		rhuo.SetDeletedAt(*t)
-	}
-	return rhuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (rhuo *RiskHistoryUpdateOne) ClearDeletedAt() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearDeletedAt()
-	return rhuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (rhuo *RiskHistoryUpdateOne) SetDeletedBy(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetDeletedBy(s)
-	return rhuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableDeletedBy(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetDeletedBy(*s)
-	}
-	return rhuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (rhuo *RiskHistoryUpdateOne) ClearDeletedBy() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (rhuo *RiskHistoryUpdateOne) ClearUpdatedByID() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearUpdatedByID()
 	return rhuo
 }
 
@@ -934,6 +851,9 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	if rhuo.mutation.RefCleared() {
 		_spec.ClearField(riskhistory.FieldRef, field.TypeString)
 	}
+	if rhuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if rhuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(riskhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -943,26 +863,20 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	if rhuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if rhuo.mutation.CreatedByCleared() {
-		_spec.ClearField(riskhistory.FieldCreatedBy, field.TypeString)
+	if rhuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(riskhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(riskhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := rhuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if rhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(riskhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := rhuo.mutation.DeletedAt(); ok {
-		_spec.SetField(riskhistory.FieldDeletedAt, field.TypeTime, value)
+	if rhuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if rhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(riskhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := rhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(riskhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if rhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(riskhistory.FieldDeletedBy, field.TypeString)
+	if rhuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(riskhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := rhuo.mutation.Tags(); ok {
 		_spec.SetField(riskhistory.FieldTags, field.TypeJSON, value)

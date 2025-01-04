@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -48,63 +49,23 @@ func (nu *NoteUpdate) ClearUpdatedAt() *NoteUpdate {
 	return nu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nu *NoteUpdate) SetUpdatedBy(s string) *NoteUpdate {
-	nu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nu *NoteUpdate) SetUpdatedByID(s string) *NoteUpdate {
+	nu.mutation.SetUpdatedByID(s)
 	return nu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableUpdatedBy(s *string) *NoteUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nu *NoteUpdate) SetNillableUpdatedByID(s *string) *NoteUpdate {
 	if s != nil {
-		nu.SetUpdatedBy(*s)
+		nu.SetUpdatedByID(*s)
 	}
 	return nu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (nu *NoteUpdate) ClearUpdatedBy() *NoteUpdate {
-	nu.mutation.ClearUpdatedBy()
-	return nu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (nu *NoteUpdate) SetDeletedAt(t time.Time) *NoteUpdate {
-	nu.mutation.SetDeletedAt(t)
-	return nu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableDeletedAt(t *time.Time) *NoteUpdate {
-	if t != nil {
-		nu.SetDeletedAt(*t)
-	}
-	return nu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (nu *NoteUpdate) ClearDeletedAt() *NoteUpdate {
-	nu.mutation.ClearDeletedAt()
-	return nu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (nu *NoteUpdate) SetDeletedBy(s string) *NoteUpdate {
-	nu.mutation.SetDeletedBy(s)
-	return nu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableDeletedBy(s *string) *NoteUpdate {
-	if s != nil {
-		nu.SetDeletedBy(*s)
-	}
-	return nu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (nu *NoteUpdate) ClearDeletedBy() *NoteUpdate {
-	nu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (nu *NoteUpdate) ClearUpdatedByID() *NoteUpdate {
+	nu.mutation.ClearUpdatedByID()
 	return nu
 }
 
@@ -158,6 +119,11 @@ func (nu *NoteUpdate) SetNillableText(s *string) *NoteUpdate {
 		nu.SetText(*s)
 	}
 	return nu
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (nu *NoteUpdate) SetUpdatedBy(u *User) *NoteUpdate {
+	return nu.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -217,6 +183,12 @@ func (nu *NoteUpdate) AddProgram(p ...*Program) *NoteUpdate {
 // Mutation returns the NoteMutation object of the builder.
 func (nu *NoteUpdate) Mutation() *NoteMutation {
 	return nu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (nu *NoteUpdate) ClearUpdatedBy() *NoteUpdate {
+	nu.mutation.ClearUpdatedBy()
+	return nu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -357,26 +329,11 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(note.FieldUpdatedAt, field.TypeTime)
 	}
-	if nu.mutation.CreatedByCleared() {
-		_spec.ClearField(note.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := nu.mutation.UpdatedBy(); ok {
-		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
-	}
-	if nu.mutation.UpdatedByCleared() {
-		_spec.ClearField(note.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := nu.mutation.DeletedAt(); ok {
-		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
-	}
 	if nu.mutation.DeletedAtCleared() {
 		_spec.ClearField(note.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nu.mutation.DeletedBy(); ok {
-		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
-	}
-	if nu.mutation.DeletedByCleared() {
-		_spec.ClearField(note.FieldDeletedBy, field.TypeString)
+	if nu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(note.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := nu.mutation.Tags(); ok {
 		_spec.SetField(note.FieldTags, field.TypeJSON, value)
@@ -391,6 +348,37 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := nu.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
+	}
+	if nu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   note.UpdatedByTable,
+			Columns: []string{note.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   note.UpdatedByTable,
+			Columns: []string{note.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -586,63 +574,23 @@ func (nuo *NoteUpdateOne) ClearUpdatedAt() *NoteUpdateOne {
 	return nuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nuo *NoteUpdateOne) SetUpdatedBy(s string) *NoteUpdateOne {
-	nuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nuo *NoteUpdateOne) SetUpdatedByID(s string) *NoteUpdateOne {
+	nuo.mutation.SetUpdatedByID(s)
 	return nuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableUpdatedBy(s *string) *NoteUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nuo *NoteUpdateOne) SetNillableUpdatedByID(s *string) *NoteUpdateOne {
 	if s != nil {
-		nuo.SetUpdatedBy(*s)
+		nuo.SetUpdatedByID(*s)
 	}
 	return nuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (nuo *NoteUpdateOne) ClearUpdatedBy() *NoteUpdateOne {
-	nuo.mutation.ClearUpdatedBy()
-	return nuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (nuo *NoteUpdateOne) SetDeletedAt(t time.Time) *NoteUpdateOne {
-	nuo.mutation.SetDeletedAt(t)
-	return nuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableDeletedAt(t *time.Time) *NoteUpdateOne {
-	if t != nil {
-		nuo.SetDeletedAt(*t)
-	}
-	return nuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (nuo *NoteUpdateOne) ClearDeletedAt() *NoteUpdateOne {
-	nuo.mutation.ClearDeletedAt()
-	return nuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (nuo *NoteUpdateOne) SetDeletedBy(s string) *NoteUpdateOne {
-	nuo.mutation.SetDeletedBy(s)
-	return nuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableDeletedBy(s *string) *NoteUpdateOne {
-	if s != nil {
-		nuo.SetDeletedBy(*s)
-	}
-	return nuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (nuo *NoteUpdateOne) ClearDeletedBy() *NoteUpdateOne {
-	nuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (nuo *NoteUpdateOne) ClearUpdatedByID() *NoteUpdateOne {
+	nuo.mutation.ClearUpdatedByID()
 	return nuo
 }
 
@@ -696,6 +644,11 @@ func (nuo *NoteUpdateOne) SetNillableText(s *string) *NoteUpdateOne {
 		nuo.SetText(*s)
 	}
 	return nuo
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (nuo *NoteUpdateOne) SetUpdatedBy(u *User) *NoteUpdateOne {
+	return nuo.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -755,6 +708,12 @@ func (nuo *NoteUpdateOne) AddProgram(p ...*Program) *NoteUpdateOne {
 // Mutation returns the NoteMutation object of the builder.
 func (nuo *NoteUpdateOne) Mutation() *NoteMutation {
 	return nuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (nuo *NoteUpdateOne) ClearUpdatedBy() *NoteUpdateOne {
+	nuo.mutation.ClearUpdatedBy()
+	return nuo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -925,26 +884,11 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 	if nuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(note.FieldUpdatedAt, field.TypeTime)
 	}
-	if nuo.mutation.CreatedByCleared() {
-		_spec.ClearField(note.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := nuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
-	}
-	if nuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(note.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := nuo.mutation.DeletedAt(); ok {
-		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
-	}
 	if nuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(note.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nuo.mutation.DeletedBy(); ok {
-		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
-	}
-	if nuo.mutation.DeletedByCleared() {
-		_spec.ClearField(note.FieldDeletedBy, field.TypeString)
+	if nuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(note.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := nuo.mutation.Tags(); ok {
 		_spec.SetField(note.FieldTags, field.TypeJSON, value)
@@ -959,6 +903,37 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 	}
 	if value, ok := nuo.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
+	}
+	if nuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   note.UpdatedByTable,
+			Columns: []string{note.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   note.UpdatedByTable,
+			Columns: []string{note.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -14,10 +14,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -26,6 +24,8 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// APITokensTable holds the schema information for the "api_tokens" table.
@@ -34,6 +34,18 @@ var (
 		Columns:    APITokensColumns,
 		PrimaryKey: []*schema.Column{APITokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "api_tokens_users_created_by",
+				Columns:    []*schema.Column{APITokensColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "api_tokens_users_updated_by",
+				Columns:    []*schema.Column{APITokensColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "api_tokens_organizations_api_tokens",
 				Columns:    []*schema.Column{APITokensColumns[15]},
@@ -45,7 +57,7 @@ var (
 			{
 				Name:    "apitoken_token",
 				Unique:  false,
-				Columns: []*schema.Column{APITokensColumns[10]},
+				Columns: []*schema.Column{APITokensColumns[8]},
 			},
 		},
 	}
@@ -54,10 +66,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -67,12 +77,28 @@ var (
 		{Name: "priority", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// ActionPlansTable holds the schema information for the "action_plans" table.
 	ActionPlansTable = &schema.Table{
 		Name:       "action_plans",
 		Columns:    ActionPlansColumns,
 		PrimaryKey: []*schema.Column{ActionPlansColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "action_plans_users_created_by",
+				Columns:    []*schema.Column{ActionPlansColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_users_updated_by",
+				Columns:    []*schema.Column{ActionPlansColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// ActionPlanHistoryColumns holds the columns for the "action_plan_history" table.
 	ActionPlanHistoryColumns = []*schema.Column{
@@ -80,12 +106,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -114,11 +141,9 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "full_name", Type: field.TypeString, Size: 64},
 		{Name: "title", Type: field.TypeString, Nullable: true},
@@ -127,6 +152,8 @@ var (
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING"}, Default: "ACTIVE"},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ContactsTable holds the schema information for the "contacts" table.
@@ -135,6 +162,18 @@ var (
 		Columns:    ContactsColumns,
 		PrimaryKey: []*schema.Column{ContactsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "contacts_users_created_by",
+				Columns:    []*schema.Column{ContactsColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "contacts_users_updated_by",
+				Columns:    []*schema.Column{ContactsColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "contacts_organizations_contacts",
 				Columns:    []*schema.Column{ContactsColumns[16]},
@@ -149,13 +188,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "full_name", Type: field.TypeString, Size: 64},
@@ -184,10 +224,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -202,6 +240,8 @@ var (
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "control_objective_controls", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
@@ -212,6 +252,18 @@ var (
 		Columns:    ControlsColumns,
 		PrimaryKey: []*schema.Column{ControlsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "controls_users_created_by",
+				Columns:    []*schema.Column{ControlsColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_users_updated_by",
+				Columns:    []*schema.Column{ControlsColumns[20]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "controls_control_objectives_controls",
 				Columns:    []*schema.Column{ControlsColumns[21]},
@@ -238,12 +290,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
@@ -278,10 +331,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -296,6 +347,8 @@ var (
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_control_objectives", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
@@ -306,8 +359,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "control_objectives_controls_control_objectives",
-				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
+				Columns:    []*schema.Column{ControlObjectivesColumns[18]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_objectives_users_created_by",
+				Columns:    []*schema.Column{ControlObjectivesColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_objectives_users_updated_by",
+				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -324,12 +389,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
@@ -363,13 +429,13 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "data", Type: field.TypeJSON},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString},
 	}
@@ -379,6 +445,18 @@ var (
 		Columns:    DocumentDataColumns,
 		PrimaryKey: []*schema.Column{DocumentDataColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "document_data_users_created_by",
+				Columns:    []*schema.Column{DocumentDataColumns[8]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "document_data_users_updated_by",
+				Columns:    []*schema.Column{DocumentDataColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "document_data_organizations_document_data",
 				Columns:    []*schema.Column{DocumentDataColumns[10]},
@@ -399,14 +477,15 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString},
 		{Name: "data", Type: field.TypeJSON},
@@ -429,15 +508,15 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "token", Type: field.TypeString, Unique: true},
 		{Name: "ttl", Type: field.TypeTime},
 		{Name: "email", Type: field.TypeString},
 		{Name: "secret", Type: field.TypeBytes},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// EmailVerificationTokensTable holds the schema information for the "email_verification_tokens" table.
@@ -446,6 +525,18 @@ var (
 		Columns:    EmailVerificationTokensColumns,
 		PrimaryKey: []*schema.Column{EmailVerificationTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "email_verification_tokens_users_created_by",
+				Columns:    []*schema.Column{EmailVerificationTokensColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "email_verification_tokens_users_updated_by",
+				Columns:    []*schema.Column{EmailVerificationTokensColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "email_verification_tokens_users_email_verification_tokens",
 				Columns:    []*schema.Column{EmailVerificationTokensColumns[12]},
@@ -457,7 +548,7 @@ var (
 			{
 				Name:    "emailverificationtoken_token",
 				Unique:  true,
-				Columns: []*schema.Column{EmailVerificationTokensColumns[8]},
+				Columns: []*schema.Column{EmailVerificationTokensColumns[6]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -469,17 +560,17 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "display_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "status", Type: field.TypeString, Nullable: true, Default: "active"},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_entities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -490,6 +581,18 @@ var (
 		Columns:    EntitiesColumns,
 		PrimaryKey: []*schema.Column{EntitiesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "entities_users_created_by",
+				Columns:    []*schema.Column{EntitiesColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_users_updated_by",
+				Columns:    []*schema.Column{EntitiesColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "entities_entity_types_entity_type",
 				Columns:    []*schema.Column{EntitiesColumns[14]},
@@ -513,7 +616,7 @@ var (
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[9], EntitiesColumns[16]},
+				Columns: []*schema.Column{EntitiesColumns[7], EntitiesColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -526,13 +629,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString, Nullable: true, Size: 160},
@@ -560,13 +664,13 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 64},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EntityTypesTable holds the schema information for the "entity_types" table.
@@ -575,6 +679,18 @@ var (
 		Columns:    EntityTypesColumns,
 		PrimaryKey: []*schema.Column{EntityTypesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "entity_types_users_created_by",
+				Columns:    []*schema.Column{EntityTypesColumns[8]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entity_types_users_updated_by",
+				Columns:    []*schema.Column{EntityTypesColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "entity_types_organizations_entity_types",
 				Columns:    []*schema.Column{EntityTypesColumns[10]},
@@ -586,7 +702,7 @@ var (
 			{
 				Name:    "entitytype_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntityTypesColumns[9], EntityTypesColumns[10]},
+				Columns: []*schema.Column{EntityTypesColumns[7], EntityTypesColumns[10]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -599,13 +715,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 64},
@@ -628,20 +745,34 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "event_id", Type: field.TypeString, Nullable: true},
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
 		Name:       "events",
 		Columns:    EventsColumns,
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "events_users_created_by",
+				Columns:    []*schema.Column{EventsColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_users_updated_by",
+				Columns:    []*schema.Column{EventsColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// EventHistoryColumns holds the columns for the "event_history" table.
 	EventHistoryColumns = []*schema.Column{
@@ -649,10 +780,11 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "event_id", Type: field.TypeString, Nullable: true},
@@ -678,10 +810,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "provided_file_name", Type: field.TypeString},
@@ -698,12 +828,28 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
 	FilesTable = &schema.Table{
 		Name:       "files",
 		Columns:    FilesColumns,
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "files_users_created_by",
+				Columns:    []*schema.Column{FilesColumns[21]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_users_updated_by",
+				Columns:    []*schema.Column{FilesColumns[22]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// FileHistoryColumns holds the columns for the "file_history" table.
 	FileHistoryColumns = []*schema.Column{
@@ -711,12 +857,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "provided_file_name", Type: field.TypeString},
@@ -752,10 +899,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -763,6 +908,8 @@ var (
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// GroupsTable holds the schema information for the "groups" table.
@@ -771,6 +918,18 @@ var (
 		Columns:    GroupsColumns,
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "groups_users_created_by",
+				Columns:    []*schema.Column{GroupsColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_users_updated_by",
+				Columns:    []*schema.Column{GroupsColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "groups_organizations_groups",
 				Columns:    []*schema.Column{GroupsColumns[14]},
@@ -782,7 +941,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[14]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -795,12 +954,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -828,12 +988,12 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -843,6 +1003,18 @@ var (
 		Columns:    GroupMembershipsColumns,
 		PrimaryKey: []*schema.Column{GroupMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "group_memberships_users_created_by",
+				Columns:    []*schema.Column{GroupMembershipsColumns[7]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "group_memberships_users_updated_by",
+				Columns:    []*schema.Column{GroupMembershipsColumns[8]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "group_memberships_groups_group",
 				Columns:    []*schema.Column{GroupMembershipsColumns[9]},
@@ -873,13 +1045,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
@@ -902,17 +1075,17 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "visibility", Type: field.TypeEnum, Enums: []string{"PUBLIC", "PRIVATE"}, Default: "PUBLIC"},
 		{Name: "join_policy", Type: field.TypeEnum, Enums: []string{"OPEN", "INVITE_ONLY", "APPLICATION_ONLY", "INVITE_OR_APPLICATION"}, Default: "INVITE_OR_APPLICATION"},
 		{Name: "sync_to_slack", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "sync_to_github", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "group_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// GroupSettingsTable holds the schema information for the "group_settings" table.
 	GroupSettingsTable = &schema.Table{
@@ -922,8 +1095,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "group_settings_groups_setting",
-				Columns:    []*schema.Column{GroupSettingsColumns[13]},
+				Columns:    []*schema.Column{GroupSettingsColumns[11]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "group_settings_users_created_by",
+				Columns:    []*schema.Column{GroupSettingsColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "group_settings_users_updated_by",
+				Columns:    []*schema.Column{GroupSettingsColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -934,14 +1119,15 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "visibility", Type: field.TypeEnum, Enums: []string{"PUBLIC", "PRIVATE"}, Default: "PUBLIC"},
 		{Name: "join_policy", Type: field.TypeEnum, Enums: []string{"OPEN", "INVITE_ONLY", "APPLICATION_ONLY", "INVITE_OR_APPLICATION"}, Default: "INVITE_OR_APPLICATION"},
 		{Name: "sync_to_slack", Type: field.TypeBool, Nullable: true, Default: false},
@@ -966,22 +1152,36 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "secret_name", Type: field.TypeString, Nullable: true},
 		{Name: "secret_value", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// HushesTable holds the schema information for the "hushes" table.
 	HushesTable = &schema.Table{
 		Name:       "hushes",
 		Columns:    HushesColumns,
 		PrimaryKey: []*schema.Column{HushesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "hushes_users_created_by",
+				Columns:    []*schema.Column{HushesColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "hushes_users_updated_by",
+				Columns:    []*schema.Column{HushesColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// HushHistoryColumns holds the columns for the "hush_history" table.
 	HushHistoryColumns = []*schema.Column{
@@ -989,13 +1189,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
@@ -1020,16 +1221,16 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "group_integrations", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// IntegrationsTable holds the schema information for the "integrations" table.
@@ -1040,8 +1241,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[12]},
+				Columns:    []*schema.Column{IntegrationsColumns[10]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integrations_users_created_by",
+				Columns:    []*schema.Column{IntegrationsColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integrations_users_updated_by",
+				Columns:    []*schema.Column{IntegrationsColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1058,14 +1271,15 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -1089,10 +1303,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1103,6 +1315,8 @@ var (
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// InternalPoliciesTable holds the schema information for the "internal_policies" table.
@@ -1111,6 +1325,18 @@ var (
 		Columns:    InternalPoliciesColumns,
 		PrimaryKey: []*schema.Column{InternalPoliciesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policies_users_created_by",
+				Columns:    []*schema.Column{InternalPoliciesColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_users_updated_by",
+				Columns:    []*schema.Column{InternalPoliciesColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "internal_policies_organizations_internal_policies",
 				Columns:    []*schema.Column{InternalPoliciesColumns[17]},
@@ -1125,12 +1351,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -1161,11 +1388,9 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "token", Type: field.TypeString, Unique: true},
 		{Name: "expires", Type: field.TypeTime, Nullable: true},
 		{Name: "recipient", Type: field.TypeString},
@@ -1174,6 +1399,8 @@ var (
 		{Name: "send_attempts", Type: field.TypeInt, Default: 0},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "secret", Type: field.TypeBytes},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// InvitesTable holds the schema information for the "invites" table.
@@ -1182,6 +1409,18 @@ var (
 		Columns:    InvitesColumns,
 		PrimaryKey: []*schema.Column{InvitesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "invites_users_created_by",
+				Columns:    []*schema.Column{InvitesColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "invites_users_updated_by",
+				Columns:    []*schema.Column{InvitesColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "invites_organizations_invites",
 				Columns:    []*schema.Column{InvitesColumns[16]},
@@ -1193,7 +1432,7 @@ var (
 			{
 				Name:    "invite_recipient_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InvitesColumns[10], InvitesColumns[16]},
+				Columns: []*schema.Column{InvitesColumns[8], InvitesColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1205,16 +1444,16 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// NarrativesTable holds the schema information for the "narratives" table.
@@ -1223,6 +1462,18 @@ var (
 		Columns:    NarrativesColumns,
 		PrimaryKey: []*schema.Column{NarrativesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "narratives_users_created_by",
+				Columns:    []*schema.Column{NarrativesColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "narratives_users_updated_by",
+				Columns:    []*schema.Column{NarrativesColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "narratives_organizations_narratives",
 				Columns:    []*schema.Column{NarrativesColumns[13]},
@@ -1237,12 +1488,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
@@ -1269,14 +1521,14 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "text", Type: field.TypeString},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.
@@ -1287,8 +1539,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "notes_entities_notes",
-				Columns:    []*schema.Column{NotesColumns[10]},
+				Columns:    []*schema.Column{NotesColumns[8]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_users_created_by",
+				Columns:    []*schema.Column{NotesColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_users_updated_by",
+				Columns:    []*schema.Column{NotesColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1305,13 +1569,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "text", Type: field.TypeString},
@@ -1334,12 +1599,12 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -1349,6 +1614,18 @@ var (
 		Columns:    OrgMembershipsColumns,
 		PrimaryKey: []*schema.Column{OrgMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_memberships_users_created_by",
+				Columns:    []*schema.Column{OrgMembershipsColumns[7]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_memberships_users_updated_by",
+				Columns:    []*schema.Column{OrgMembershipsColumns[8]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "org_memberships_organizations_organization",
 				Columns:    []*schema.Column{OrgMembershipsColumns[9]},
@@ -1379,13 +1656,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
@@ -1408,12 +1686,10 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
 		{Name: "product_tier", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
@@ -1422,6 +1698,8 @@ var (
 		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrgSubscriptionsTable holds the schema information for the "org_subscriptions" table.
@@ -1430,6 +1708,18 @@ var (
 		Columns:    OrgSubscriptionsColumns,
 		PrimaryKey: []*schema.Column{OrgSubscriptionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_subscriptions_users_created_by",
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_subscriptions_users_updated_by",
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
 				Columns:    []*schema.Column{OrgSubscriptionsColumns[17]},
@@ -1444,14 +1734,15 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
 		{Name: "product_tier", Type: field.TypeString, Nullable: true},
@@ -1480,18 +1771,18 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 160},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationsTable holds the schema information for the "organizations" table.
@@ -1500,6 +1791,18 @@ var (
 		Columns:    OrganizationsColumns,
 		PrimaryKey: []*schema.Column{OrganizationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organizations_users_created_by",
+				Columns:    []*schema.Column{OrganizationsColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organizations_users_updated_by",
+				Columns:    []*schema.Column{OrganizationsColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "organizations_organizations_children",
 				Columns:    []*schema.Column{OrganizationsColumns[15]},
@@ -1511,7 +1814,7 @@ var (
 			{
 				Name:    "organization_name",
 				Unique:  true,
-				Columns: []*schema.Column{OrganizationsColumns[9]},
+				Columns: []*schema.Column{OrganizationsColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1524,14 +1827,15 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 160},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -1558,12 +1862,10 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "billing_contact", Type: field.TypeString, Nullable: true},
 		{Name: "billing_email", Type: field.TypeString, Nullable: true},
@@ -1573,6 +1875,8 @@ var (
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "stripe_id", Type: field.TypeString, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
 	OrganizationSettingsTable = &schema.Table{
@@ -1582,8 +1886,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organization_settings_users_created_by",
+				Columns:    []*schema.Column{OrganizationSettingsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organization_settings_users_updated_by",
+				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1594,14 +1910,15 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "billing_contact", Type: field.TypeString, Nullable: true},
 		{Name: "billing_email", Type: field.TypeString, Nullable: true},
@@ -1630,15 +1947,15 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "token", Type: field.TypeString, Unique: true},
 		{Name: "ttl", Type: field.TypeTime},
 		{Name: "email", Type: field.TypeString},
 		{Name: "secret", Type: field.TypeBytes},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// PasswordResetTokensTable holds the schema information for the "password_reset_tokens" table.
@@ -1647,6 +1964,18 @@ var (
 		Columns:    PasswordResetTokensColumns,
 		PrimaryKey: []*schema.Column{PasswordResetTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "password_reset_tokens_users_created_by",
+				Columns:    []*schema.Column{PasswordResetTokensColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "password_reset_tokens_users_updated_by",
+				Columns:    []*schema.Column{PasswordResetTokensColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "password_reset_tokens_users_password_reset_tokens",
 				Columns:    []*schema.Column{PasswordResetTokensColumns[12]},
@@ -1658,7 +1987,7 @@ var (
 			{
 				Name:    "passwordresettoken_token",
 				Unique:  true,
-				Columns: []*schema.Column{PasswordResetTokensColumns[8]},
+				Columns: []*schema.Column{PasswordResetTokensColumns[6]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1670,10 +1999,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1682,6 +2009,8 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// PersonalAccessTokensTable holds the schema information for the "personal_access_tokens" table.
@@ -1690,6 +2019,18 @@ var (
 		Columns:    PersonalAccessTokensColumns,
 		PrimaryKey: []*schema.Column{PersonalAccessTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "personal_access_tokens_users_created_by",
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "personal_access_tokens_users_updated_by",
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "personal_access_tokens_users_personal_access_tokens",
 				Columns:    []*schema.Column{PersonalAccessTokensColumns[15]},
@@ -1701,7 +2042,7 @@ var (
 			{
 				Name:    "personalaccesstoken_token",
 				Unique:  false,
-				Columns: []*schema.Column{PersonalAccessTokensColumns[10]},
+				Columns: []*schema.Column{PersonalAccessTokensColumns[8]},
 			},
 		},
 	}
@@ -1710,10 +2051,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1727,6 +2066,8 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "standard_procedures", Type: field.TypeString, Nullable: true},
 	}
 	// ProceduresTable holds the schema information for the "procedures" table.
@@ -1737,14 +2078,26 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "procedures_control_objectives_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[18]},
+				Columns:    []*schema.Column{ProceduresColumns[16]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_organizations_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[19]},
+				Columns:    []*schema.Column{ProceduresColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_users_created_by",
+				Columns:    []*schema.Column{ProceduresColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_users_updated_by",
+				Columns:    []*schema.Column{ProceduresColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1761,12 +2114,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -1798,11 +2152,9 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -1813,6 +2165,8 @@ var (
 		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
 		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramsTable holds the schema information for the "programs" table.
 	ProgramsTable = &schema.Table{
@@ -1822,8 +2176,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "programs_organizations_programs",
-				Columns:    []*schema.Column{ProgramsColumns[17]},
+				Columns:    []*schema.Column{ProgramsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "programs_users_created_by",
+				Columns:    []*schema.Column{ProgramsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "programs_users_updated_by",
+				Columns:    []*schema.Column{ProgramsColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1834,13 +2200,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1870,12 +2237,12 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -1885,6 +2252,18 @@ var (
 		Columns:    ProgramMembershipsColumns,
 		PrimaryKey: []*schema.Column{ProgramMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_memberships_users_created_by",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[7]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "program_memberships_users_updated_by",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[8]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "program_memberships_programs_program",
 				Columns:    []*schema.Column{ProgramMembershipsColumns[9]},
@@ -1915,13 +2294,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
@@ -1944,10 +2324,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -1962,6 +2340,8 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// RisksTable holds the schema information for the "risks" table.
 	RisksTable = &schema.Table{
@@ -1971,15 +2351,27 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "risks_control_objectives_risks",
-				Columns:    []*schema.Column{RisksColumns[19]},
+				Columns:    []*schema.Column{RisksColumns[17]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_organizations_risks",
-				Columns:    []*schema.Column{RisksColumns[20]},
+				Columns:    []*schema.Column{RisksColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "risks_users_created_by",
+				Columns:    []*schema.Column{RisksColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_users_updated_by",
+				Columns:    []*schema.Column{RisksColumns[20]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -1989,12 +2381,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
@@ -2027,10 +2420,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -2043,12 +2434,28 @@ var (
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// StandardsTable holds the schema information for the "standards" table.
 	StandardsTable = &schema.Table{
 		Name:       "standards",
 		Columns:    StandardsColumns,
 		PrimaryKey: []*schema.Column{StandardsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "standards_users_created_by",
+				Columns:    []*schema.Column{StandardsColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "standards_users_updated_by",
+				Columns:    []*schema.Column{StandardsColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// StandardHistoryColumns holds the columns for the "standard_history" table.
 	StandardHistoryColumns = []*schema.Column{
@@ -2056,12 +2463,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -2093,10 +2501,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -2118,6 +2524,8 @@ var (
 		{Name: "control_objective_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "note_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubcontrolsTable holds the schema information for the "subcontrols" table.
 	SubcontrolsTable = &schema.Table{
@@ -2127,21 +2535,33 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subcontrols_control_objectives_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[25]},
+				Columns:    []*schema.Column{SubcontrolsColumns[23]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_notes_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[26]},
+				Columns:    []*schema.Column{SubcontrolsColumns[24]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_organizations_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[27]},
+				Columns:    []*schema.Column{SubcontrolsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "subcontrols_users_created_by",
+				Columns:    []*schema.Column{SubcontrolsColumns[26]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_users_updated_by",
+				Columns:    []*schema.Column{SubcontrolsColumns[27]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -2151,12 +2571,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
@@ -2195,12 +2616,10 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "verified_email", Type: field.TypeBool, Default: false},
@@ -2210,6 +2629,8 @@ var (
 		{Name: "ttl", Type: field.TypeTime},
 		{Name: "secret", Type: field.TypeBytes},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubscribersTable holds the schema information for the "subscribers" table.
 	SubscribersTable = &schema.Table{
@@ -2219,8 +2640,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subscribers_organizations_subscribers",
-				Columns:    []*schema.Column{SubscribersColumns[17]},
+				Columns:    []*schema.Column{SubscribersColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subscribers_users_created_by",
+				Columns:    []*schema.Column{SubscribersColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subscribers_users_updated_by",
+				Columns:    []*schema.Column{SubscribersColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2228,7 +2661,7 @@ var (
 			{
 				Name:    "subscriber_email_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubscribersColumns[9], SubscribersColumns[17]},
+				Columns: []*schema.Column{SubscribersColumns[7], SubscribersColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2240,11 +2673,9 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "tfa_secret", Type: field.TypeString, Nullable: true},
 		{Name: "verified", Type: field.TypeBool, Default: false},
@@ -2252,6 +2683,8 @@ var (
 		{Name: "phone_otp_allowed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "email_otp_allowed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "totp_allowed", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// TfaSettingsTable holds the schema information for the "tfa_settings" table.
@@ -2260,6 +2693,18 @@ var (
 		Columns:    TfaSettingsColumns,
 		PrimaryKey: []*schema.Column{TfaSettingsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tfa_settings_users_created_by",
+				Columns:    []*schema.Column{TfaSettingsColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tfa_settings_users_updated_by",
+				Columns:    []*schema.Column{TfaSettingsColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "tfa_settings_users_tfa_settings",
 				Columns:    []*schema.Column{TfaSettingsColumns[15]},
@@ -2283,11 +2728,9 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -2295,6 +2738,8 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_assigner_tasks", Type: field.TypeString},
 		{Name: "user_assignee_tasks", Type: field.TypeString, Nullable: true},
 	}
@@ -2304,6 +2749,18 @@ var (
 		Columns:    TasksColumns,
 		PrimaryKey: []*schema.Column{TasksColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tasks_users_created_by",
+				Columns:    []*schema.Column{TasksColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_users_updated_by",
+				Columns:    []*schema.Column{TasksColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "tasks_users_assigner_tasks",
 				Columns:    []*schema.Column{TasksColumns[15]},
@@ -2324,13 +2781,14 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -2357,10 +2815,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
@@ -2369,6 +2825,8 @@ var (
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// TemplatesTable holds the schema information for the "templates" table.
 	TemplatesTable = &schema.Table{
@@ -2378,8 +2836,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "templates_organizations_templates",
-				Columns:    []*schema.Column{TemplatesColumns[14]},
+				Columns:    []*schema.Column{TemplatesColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "templates_users_created_by",
+				Columns:    []*schema.Column{TemplatesColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "templates_users_updated_by",
+				Columns:    []*schema.Column{TemplatesColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2387,7 +2857,7 @@ var (
 			{
 				Name:    "template_name_owner_id_template_type",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[9], TemplatesColumns[14], TemplatesColumns[10]},
+				Columns: []*schema.Column{TemplatesColumns[7], TemplatesColumns[12], TemplatesColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2400,12 +2870,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -2433,10 +2904,10 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "email", Type: field.TypeString},
@@ -2488,12 +2959,13 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "email", Type: field.TypeString},
@@ -2528,12 +3000,10 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "locked", Type: field.TypeBool, Default: false},
 		{Name: "silenced_at", Type: field.TypeTime, Nullable: true},
 		{Name: "suspended_at", Type: field.TypeTime, Nullable: true},
@@ -2543,6 +3013,8 @@ var (
 		{Name: "is_tfa_enabled", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_setting_default_org", Type: field.TypeString, Nullable: true},
 	}
 	// UserSettingsTable holds the schema information for the "user_settings" table.
@@ -2553,6 +3025,18 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "user_settings_users_setting",
+				Columns:    []*schema.Column{UserSettingsColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "user_settings_users_created_by",
+				Columns:    []*schema.Column{UserSettingsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "user_settings_users_updated_by",
 				Columns:    []*schema.Column{UserSettingsColumns[17]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -2571,14 +3055,15 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},
 		{Name: "locked", Type: field.TypeBool, Default: false},
 		{Name: "silenced_at", Type: field.TypeTime, Nullable: true},
@@ -2607,8 +3092,6 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "credential_id", Type: field.TypeBytes, Unique: true, Nullable: true},
@@ -2622,6 +3105,8 @@ var (
 		{Name: "user_present", Type: field.TypeBool, Default: false},
 		{Name: "user_verified", Type: field.TypeBool, Default: false},
 		{Name: "owner_id", Type: field.TypeString},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 	}
 	// WebauthnsTable holds the schema information for the "webauthns" table.
 	WebauthnsTable = &schema.Table{
@@ -2631,9 +3116,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "webauthns_users_webauthn",
-				Columns:    []*schema.Column{WebauthnsColumns[17]},
+				Columns:    []*schema.Column{WebauthnsColumns[15]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "webauthns_users_created_by",
+				Columns:    []*schema.Column{WebauthnsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "webauthns_users_updated_by",
+				Columns:    []*schema.Column{WebauthnsColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -5027,138 +5524,210 @@ var (
 )
 
 func init() {
-	APITokensTable.ForeignKeys[0].RefTable = OrganizationsTable
+	APITokensTable.ForeignKeys[0].RefTable = UsersTable
+	APITokensTable.ForeignKeys[1].RefTable = UsersTable
+	APITokensTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ActionPlansTable.ForeignKeys[0].RefTable = UsersTable
+	ActionPlansTable.ForeignKeys[1].RefTable = UsersTable
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
-	ContactsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ContactsTable.ForeignKeys[0].RefTable = UsersTable
+	ContactsTable.ForeignKeys[1].RefTable = UsersTable
+	ContactsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ContactHistoryTable.Annotation = &entsql.Annotation{
 		Table: "contact_history",
 	}
-	ControlsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
-	ControlsTable.ForeignKeys[1].RefTable = InternalPoliciesTable
-	ControlsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[0].RefTable = UsersTable
+	ControlsTable.ForeignKeys[1].RefTable = UsersTable
+	ControlsTable.ForeignKeys[2].RefTable = ControlObjectivesTable
+	ControlsTable.ForeignKeys[3].RefTable = InternalPoliciesTable
+	ControlsTable.ForeignKeys[4].RefTable = OrganizationsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
 	ControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable
-	ControlObjectivesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	ControlObjectivesTable.ForeignKeys[1].RefTable = UsersTable
+	ControlObjectivesTable.ForeignKeys[2].RefTable = UsersTable
+	ControlObjectivesTable.ForeignKeys[3].RefTable = OrganizationsTable
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
 	}
-	DocumentDataTable.ForeignKeys[0].RefTable = OrganizationsTable
-	DocumentDataTable.ForeignKeys[1].RefTable = TemplatesTable
+	DocumentDataTable.ForeignKeys[0].RefTable = UsersTable
+	DocumentDataTable.ForeignKeys[1].RefTable = UsersTable
+	DocumentDataTable.ForeignKeys[2].RefTable = OrganizationsTable
+	DocumentDataTable.ForeignKeys[3].RefTable = TemplatesTable
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
 		Table: "document_data_history",
 	}
 	EmailVerificationTokensTable.ForeignKeys[0].RefTable = UsersTable
-	EntitiesTable.ForeignKeys[0].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[1].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	EmailVerificationTokensTable.ForeignKeys[1].RefTable = UsersTable
+	EmailVerificationTokensTable.ForeignKeys[2].RefTable = UsersTable
+	EntitiesTable.ForeignKeys[0].RefTable = UsersTable
+	EntitiesTable.ForeignKeys[1].RefTable = UsersTable
+	EntitiesTable.ForeignKeys[2].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[3].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[4].RefTable = OrganizationsTable
 	EntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_history",
 	}
-	EntityTypesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	EntityTypesTable.ForeignKeys[0].RefTable = UsersTable
+	EntityTypesTable.ForeignKeys[1].RefTable = UsersTable
+	EntityTypesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
+	EventsTable.ForeignKeys[0].RefTable = UsersTable
+	EventsTable.ForeignKeys[1].RefTable = UsersTable
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}
+	FilesTable.ForeignKeys[0].RefTable = UsersTable
+	FilesTable.ForeignKeys[1].RefTable = UsersTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
-	GroupsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[0].RefTable = UsersTable
+	GroupsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
-	GroupMembershipsTable.ForeignKeys[0].RefTable = GroupsTable
+	GroupMembershipsTable.ForeignKeys[0].RefTable = UsersTable
 	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupMembershipsTable.ForeignKeys[2].RefTable = GroupsTable
+	GroupMembershipsTable.ForeignKeys[3].RefTable = UsersTable
 	GroupMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_membership_history",
 	}
 	GroupSettingsTable.ForeignKeys[0].RefTable = GroupsTable
+	GroupSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupSettingsTable.ForeignKeys[2].RefTable = UsersTable
 	GroupSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_setting_history",
 	}
+	HushesTable.ForeignKeys[0].RefTable = UsersTable
+	HushesTable.ForeignKeys[1].RefTable = UsersTable
 	HushHistoryTable.Annotation = &entsql.Annotation{
 		Table: "hush_history",
 	}
 	IntegrationsTable.ForeignKeys[0].RefTable = GroupsTable
-	IntegrationsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	IntegrationsTable.ForeignKeys[1].RefTable = UsersTable
+	IntegrationsTable.ForeignKeys[2].RefTable = UsersTable
+	IntegrationsTable.ForeignKeys[3].RefTable = OrganizationsTable
 	IntegrationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "integration_history",
 	}
-	InternalPoliciesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	InternalPoliciesTable.ForeignKeys[0].RefTable = UsersTable
+	InternalPoliciesTable.ForeignKeys[1].RefTable = UsersTable
+	InternalPoliciesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
 		Table: "internal_policy_history",
 	}
-	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	NarrativesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	InvitesTable.ForeignKeys[0].RefTable = UsersTable
+	InvitesTable.ForeignKeys[1].RefTable = UsersTable
+	InvitesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	NarrativesTable.ForeignKeys[0].RefTable = UsersTable
+	NarrativesTable.ForeignKeys[1].RefTable = UsersTable
+	NarrativesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	NarrativeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "narrative_history",
 	}
 	NotesTable.ForeignKeys[0].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[1].RefTable = UsersTable
+	NotesTable.ForeignKeys[2].RefTable = UsersTable
+	NotesTable.ForeignKeys[3].RefTable = OrganizationsTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
-	OrgMembershipsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrgMembershipsTable.ForeignKeys[0].RefTable = UsersTable
 	OrgMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	OrgMembershipsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	OrgMembershipsTable.ForeignKeys[3].RefTable = UsersTable
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
 	}
-	OrgSubscriptionsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrgSubscriptionsTable.ForeignKeys[0].RefTable = UsersTable
+	OrgSubscriptionsTable.ForeignKeys[1].RefTable = UsersTable
+	OrgSubscriptionsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	OrgSubscriptionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_subscription_history",
 	}
-	OrganizationsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationsTable.ForeignKeys[0].RefTable = UsersTable
+	OrganizationsTable.ForeignKeys[1].RefTable = UsersTable
+	OrganizationsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_history",
 	}
 	OrganizationSettingsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	OrganizationSettingsTable.ForeignKeys[2].RefTable = UsersTable
 	OrganizationSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_setting_history",
 	}
 	PasswordResetTokensTable.ForeignKeys[0].RefTable = UsersTable
+	PasswordResetTokensTable.ForeignKeys[1].RefTable = UsersTable
+	PasswordResetTokensTable.ForeignKeys[2].RefTable = UsersTable
 	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable
+	PersonalAccessTokensTable.ForeignKeys[1].RefTable = UsersTable
+	PersonalAccessTokensTable.ForeignKeys[2].RefTable = UsersTable
 	ProceduresTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ProceduresTable.ForeignKeys[1].RefTable = OrganizationsTable
-	ProceduresTable.ForeignKeys[2].RefTable = StandardsTable
+	ProceduresTable.ForeignKeys[2].RefTable = UsersTable
+	ProceduresTable.ForeignKeys[3].RefTable = UsersTable
+	ProceduresTable.ForeignKeys[4].RefTable = StandardsTable
 	ProcedureHistoryTable.Annotation = &entsql.Annotation{
 		Table: "procedure_history",
 	}
 	ProgramsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ProgramsTable.ForeignKeys[1].RefTable = UsersTable
+	ProgramsTable.ForeignKeys[2].RefTable = UsersTable
 	ProgramHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_history",
 	}
-	ProgramMembershipsTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramMembershipsTable.ForeignKeys[0].RefTable = UsersTable
 	ProgramMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	ProgramMembershipsTable.ForeignKeys[2].RefTable = ProgramsTable
+	ProgramMembershipsTable.ForeignKeys[3].RefTable = UsersTable
 	ProgramMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_membership_history",
 	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RisksTable.ForeignKeys[1].RefTable = OrganizationsTable
+	RisksTable.ForeignKeys[2].RefTable = UsersTable
+	RisksTable.ForeignKeys[3].RefTable = UsersTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
+	StandardsTable.ForeignKeys[0].RefTable = UsersTable
+	StandardsTable.ForeignKeys[1].RefTable = UsersTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	SubcontrolsTable.ForeignKeys[1].RefTable = NotesTable
 	SubcontrolsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	SubcontrolsTable.ForeignKeys[3].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[4].RefTable = UsersTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
+	SubscribersTable.ForeignKeys[1].RefTable = UsersTable
+	SubscribersTable.ForeignKeys[2].RefTable = UsersTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
+	TfaSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	TfaSettingsTable.ForeignKeys[2].RefTable = UsersTable
 	TasksTable.ForeignKeys[0].RefTable = UsersTable
 	TasksTable.ForeignKeys[1].RefTable = UsersTable
+	TasksTable.ForeignKeys[2].RefTable = UsersTable
+	TasksTable.ForeignKeys[3].RefTable = UsersTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	TemplatesTable.ForeignKeys[1].RefTable = UsersTable
+	TemplatesTable.ForeignKeys[2].RefTable = UsersTable
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
@@ -5167,11 +5736,15 @@ func init() {
 		Table: "user_history",
 	}
 	UserSettingsTable.ForeignKeys[0].RefTable = UsersTable
-	UserSettingsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	UserSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	UserSettingsTable.ForeignKeys[2].RefTable = UsersTable
+	UserSettingsTable.ForeignKeys[3].RefTable = OrganizationsTable
 	UserSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_setting_history",
 	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
+	WebauthnsTable.ForeignKeys[1].RefTable = UsersTable
+	WebauthnsTable.ForeignKeys[2].RefTable = UsersTable
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
 	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ControlBlockedGroupsTable.ForeignKeys[0].RefTable = ControlsTable

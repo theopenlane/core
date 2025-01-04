@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_User_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_User_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_User_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_User_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_User_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_User_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_User_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_User_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_User_tags(ctx, field)
 			case "email":
@@ -189,14 +189,14 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_User_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_User_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_User_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_User_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_User_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_User_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_User_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_User_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_User_tags(ctx, field)
 			case "email":
@@ -351,14 +351,14 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_User_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_User_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_User_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_User_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_User_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_User_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_User_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_User_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_User_tags(ctx, field)
 			case "email":

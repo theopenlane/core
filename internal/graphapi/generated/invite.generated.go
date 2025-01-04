@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Invite_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Invite_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Invite_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Invite_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Invite_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Invite_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Invite_ownerID(ctx, field)
 			case "expires":
@@ -93,6 +93,10 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Invite_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Invite_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -149,14 +153,14 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Invite_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Invite_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Invite_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Invite_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Invite_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Invite_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Invite_ownerID(ctx, field)
 			case "expires":
@@ -171,6 +175,10 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Invite_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Invite_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -271,14 +279,14 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Invite_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Invite_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Invite_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Invite_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Invite_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Invite_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Invite_ownerID(ctx, field)
 			case "expires":
@@ -293,6 +301,10 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Invite_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Invite_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":

@@ -8,7 +8,7 @@ query GetAllProgramHistories {
         auditorReady
         auditorWriteComments
         createdAt
-        createdBy
+        createdByID
         description
         endDate
         historyTime
@@ -20,8 +20,9 @@ query GetAllProgramHistories {
         startDate
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -35,7 +36,7 @@ query GetProgramHistories($where: ProgramHistoryWhereInput) {
         auditorReady
         auditorWriteComments
         createdAt
-        createdBy
+        createdByID
         description
         endDate
         historyTime
@@ -47,8 +48,9 @@ query GetProgramHistories($where: ProgramHistoryWhereInput) {
         startDate
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

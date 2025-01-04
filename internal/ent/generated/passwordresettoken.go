@@ -22,16 +22,16 @@ type PasswordResetToken struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// The user id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the reset token sent to the user via email which should only be provided to the /forgot-password endpoint + handler
@@ -50,13 +50,39 @@ type PasswordResetToken struct {
 
 // PasswordResetTokenEdges holds the relations/edges for other nodes in the graph.
 type PasswordResetTokenEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [3]map[string]int
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PasswordResetTokenEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PasswordResetTokenEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -64,7 +90,7 @@ type PasswordResetTokenEdges struct {
 func (e PasswordResetTokenEdges) OwnerOrErr() (*User, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -77,7 +103,7 @@ func (*PasswordResetToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case passwordresettoken.FieldSecret:
 			values[i] = new([]byte)
-		case passwordresettoken.FieldID, passwordresettoken.FieldCreatedBy, passwordresettoken.FieldUpdatedBy, passwordresettoken.FieldMappingID, passwordresettoken.FieldDeletedBy, passwordresettoken.FieldOwnerID, passwordresettoken.FieldToken, passwordresettoken.FieldEmail:
+		case passwordresettoken.FieldID, passwordresettoken.FieldCreatedByID, passwordresettoken.FieldUpdatedByID, passwordresettoken.FieldMappingID, passwordresettoken.FieldDeletedByID, passwordresettoken.FieldOwnerID, passwordresettoken.FieldToken, passwordresettoken.FieldEmail:
 			values[i] = new(sql.NullString)
 		case passwordresettoken.FieldCreatedAt, passwordresettoken.FieldUpdatedAt, passwordresettoken.FieldDeletedAt, passwordresettoken.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -114,17 +140,17 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				prt.UpdatedAt = value.Time
 			}
-		case passwordresettoken.FieldCreatedBy:
+		case passwordresettoken.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				prt.CreatedBy = value.String
+				prt.CreatedByID = value.String
 			}
-		case passwordresettoken.FieldUpdatedBy:
+		case passwordresettoken.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				prt.UpdatedBy = value.String
+				prt.UpdatedByID = value.String
 			}
 		case passwordresettoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -138,11 +164,11 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				prt.DeletedAt = value.Time
 			}
-		case passwordresettoken.FieldDeletedBy:
+		case passwordresettoken.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				prt.DeletedBy = value.String
+				prt.DeletedByID = value.String
 			}
 		case passwordresettoken.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -188,6 +214,16 @@ func (prt *PasswordResetToken) Value(name string) (ent.Value, error) {
 	return prt.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the PasswordResetToken entity.
+func (prt *PasswordResetToken) QueryCreatedBy() *UserQuery {
+	return NewPasswordResetTokenClient(prt.config).QueryCreatedBy(prt)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the PasswordResetToken entity.
+func (prt *PasswordResetToken) QueryUpdatedBy() *UserQuery {
+	return NewPasswordResetTokenClient(prt.config).QueryUpdatedBy(prt)
+}
+
 // QueryOwner queries the "owner" edge of the PasswordResetToken entity.
 func (prt *PasswordResetToken) QueryOwner() *UserQuery {
 	return NewPasswordResetTokenClient(prt.config).QueryOwner(prt)
@@ -222,11 +258,11 @@ func (prt *PasswordResetToken) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(prt.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(prt.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(prt.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(prt.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(prt.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(prt.MappingID)
@@ -234,8 +270,8 @@ func (prt *PasswordResetToken) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(prt.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(prt.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(prt.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(prt.OwnerID)

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // IntegrationCreate is the builder for creating a Integration entity.
@@ -51,30 +52,30 @@ func (ic *IntegrationCreate) SetNillableUpdatedAt(t *time.Time) *IntegrationCrea
 	return ic
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ic *IntegrationCreate) SetCreatedBy(s string) *IntegrationCreate {
-	ic.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ic *IntegrationCreate) SetCreatedByID(s string) *IntegrationCreate {
+	ic.mutation.SetCreatedByID(s)
 	return ic
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableCreatedBy(s *string) *IntegrationCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ic *IntegrationCreate) SetNillableCreatedByID(s *string) *IntegrationCreate {
 	if s != nil {
-		ic.SetCreatedBy(*s)
+		ic.SetCreatedByID(*s)
 	}
 	return ic
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ic *IntegrationCreate) SetUpdatedBy(s string) *IntegrationCreate {
-	ic.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ic *IntegrationCreate) SetUpdatedByID(s string) *IntegrationCreate {
+	ic.mutation.SetUpdatedByID(s)
 	return ic
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableUpdatedBy(s *string) *IntegrationCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ic *IntegrationCreate) SetNillableUpdatedByID(s *string) *IntegrationCreate {
 	if s != nil {
-		ic.SetUpdatedBy(*s)
+		ic.SetUpdatedByID(*s)
 	}
 	return ic
 }
@@ -113,16 +114,16 @@ func (ic *IntegrationCreate) SetNillableDeletedAt(t *time.Time) *IntegrationCrea
 	return ic
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ic *IntegrationCreate) SetDeletedBy(s string) *IntegrationCreate {
-	ic.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ic *IntegrationCreate) SetDeletedByID(s string) *IntegrationCreate {
+	ic.mutation.SetDeletedByID(s)
 	return ic
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableDeletedBy(s *string) *IntegrationCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ic *IntegrationCreate) SetNillableDeletedByID(s *string) *IntegrationCreate {
 	if s != nil {
-		ic.SetDeletedBy(*s)
+		ic.SetDeletedByID(*s)
 	}
 	return ic
 }
@@ -187,6 +188,16 @@ func (ic *IntegrationCreate) SetNillableID(s *string) *IntegrationCreate {
 		ic.SetID(*s)
 	}
 	return ic
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (ic *IntegrationCreate) SetCreatedBy(u *User) *IntegrationCreate {
+	return ic.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (ic *IntegrationCreate) SetUpdatedBy(u *User) *IntegrationCreate {
+	return ic.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -358,14 +369,6 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 		_spec.SetField(integration.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ic.mutation.CreatedBy(); ok {
-		_spec.SetField(integration.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := ic.mutation.UpdatedBy(); ok {
-		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := ic.mutation.MappingID(); ok {
 		_spec.SetField(integration.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -378,9 +381,9 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 		_spec.SetField(integration.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ic.mutation.DeletedBy(); ok {
-		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ic.mutation.DeletedByID(); ok {
+		_spec.SetField(integration.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ic.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
@@ -393,6 +396,42 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := ic.mutation.Kind(); ok {
 		_spec.SetField(integration.FieldKind, field.TypeString, value)
 		_node.Kind = value
+	}
+	if nodes := ic.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.CreatedByTable,
+			Columns: []string{integration.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ic.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ic.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.UpdatedByTable,
+			Columns: []string{integration.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ic.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ic.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

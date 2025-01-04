@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // InternalPolicyCreate is the builder for creating a InternalPolicy entity.
@@ -56,30 +57,30 @@ func (ipc *InternalPolicyCreate) SetNillableUpdatedAt(t *time.Time) *InternalPol
 	return ipc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ipc *InternalPolicyCreate) SetCreatedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ipc *InternalPolicyCreate) SetCreatedByID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetCreatedByID(s)
 	return ipc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableCreatedBy(s *string) *InternalPolicyCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableCreatedByID(s *string) *InternalPolicyCreate {
 	if s != nil {
-		ipc.SetCreatedBy(*s)
+		ipc.SetCreatedByID(*s)
 	}
 	return ipc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ipc *InternalPolicyCreate) SetUpdatedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ipc *InternalPolicyCreate) SetUpdatedByID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetUpdatedByID(s)
 	return ipc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableUpdatedBy(s *string) *InternalPolicyCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableUpdatedByID(s *string) *InternalPolicyCreate {
 	if s != nil {
-		ipc.SetUpdatedBy(*s)
+		ipc.SetUpdatedByID(*s)
 	}
 	return ipc
 }
@@ -98,16 +99,16 @@ func (ipc *InternalPolicyCreate) SetNillableDeletedAt(t *time.Time) *InternalPol
 	return ipc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ipc *InternalPolicyCreate) SetDeletedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ipc *InternalPolicyCreate) SetDeletedByID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetDeletedByID(s)
 	return ipc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableDeletedBy(s *string) *InternalPolicyCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableDeletedByID(s *string) *InternalPolicyCreate {
 	if s != nil {
-		ipc.SetDeletedBy(*s)
+		ipc.SetDeletedByID(*s)
 	}
 	return ipc
 }
@@ -254,6 +255,16 @@ func (ipc *InternalPolicyCreate) SetNillableID(s *string) *InternalPolicyCreate 
 		ipc.SetID(*s)
 	}
 	return ipc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (ipc *InternalPolicyCreate) SetCreatedBy(u *User) *InternalPolicyCreate {
+	return ipc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (ipc *InternalPolicyCreate) SetUpdatedBy(u *User) *InternalPolicyCreate {
+	return ipc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -515,21 +526,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ipc.mutation.CreatedBy(); ok {
-		_spec.SetField(internalpolicy.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := ipc.mutation.UpdatedBy(); ok {
-		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := ipc.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ipc.mutation.DeletedBy(); ok {
-		_spec.SetField(internalpolicy.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ipc.mutation.DeletedByID(); ok {
+		_spec.SetField(internalpolicy.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ipc.mutation.MappingID(); ok {
 		_spec.SetField(internalpolicy.FieldMappingID, field.TypeString, value)
@@ -570,6 +573,42 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 	if value, ok := ipc.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if nodes := ipc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.CreatedByTable,
+			Columns: []string{internalpolicy.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByTable,
+			Columns: []string{internalpolicy.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ipc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

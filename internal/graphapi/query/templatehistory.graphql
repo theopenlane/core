@@ -3,7 +3,7 @@ query GetAllTemplateHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         historyTime
         id
@@ -16,7 +16,7 @@ query GetAllTemplateHistories {
         templateType
         uischema
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -27,7 +27,7 @@ query GetTemplateHistories($where: TemplateHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         historyTime
         id
@@ -40,7 +40,7 @@ query GetTemplateHistories($where: TemplateHistoryWhereInput) {
         templateType
         uischema
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

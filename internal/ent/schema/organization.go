@@ -207,7 +207,7 @@ func (Organization) Annotations() []schema.Annotation {
 // Mixin of the Organization
 func (Organization) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},

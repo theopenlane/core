@@ -26,20 +26,22 @@ type ContactHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -70,7 +72,7 @@ func (*ContactHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case contacthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldCreatedBy, contacthistory.FieldUpdatedBy, contacthistory.FieldMappingID, contacthistory.FieldDeletedBy, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus:
+		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldUpdatedBy, contacthistory.FieldCreatedByID, contacthistory.FieldUpdatedByID, contacthistory.FieldMappingID, contacthistory.FieldDeletedByID, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case contacthistory.FieldHistoryTime, contacthistory.FieldCreatedAt, contacthistory.FieldUpdatedAt, contacthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -113,6 +115,13 @@ func (ch *ContactHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				ch.Operation = *value
 			}
+		case contacthistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				ch.UpdatedBy = new(string)
+				*ch.UpdatedBy = value.String
+			}
 		case contacthistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -125,17 +134,17 @@ func (ch *ContactHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.UpdatedAt = value.Time
 			}
-		case contacthistory.FieldCreatedBy:
+		case contacthistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				ch.CreatedBy = value.String
+				ch.CreatedByID = value.String
 			}
-		case contacthistory.FieldUpdatedBy:
+		case contacthistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				ch.UpdatedBy = value.String
+				ch.UpdatedByID = value.String
 			}
 		case contacthistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -149,11 +158,11 @@ func (ch *ContactHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.DeletedAt = value.Time
 			}
-		case contacthistory.FieldDeletedBy:
+		case contacthistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				ch.DeletedBy = value.String
+				ch.DeletedByID = value.String
 			}
 		case contacthistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -256,17 +265,22 @@ func (ch *ContactHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Operation))
 	builder.WriteString(", ")
+	if v := ch.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(ch.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(ch.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(ch.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(ch.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(ch.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(ch.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ch.MappingID)
@@ -274,8 +288,8 @@ func (ch *ContactHistory) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ch.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ch.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(ch.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Tags))

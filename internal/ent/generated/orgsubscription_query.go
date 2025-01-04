@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -21,13 +22,15 @@ import (
 // OrgSubscriptionQuery is the builder for querying OrgSubscription entities.
 type OrgSubscriptionQuery struct {
 	config
-	ctx        *QueryContext
-	order      []orgsubscription.OrderOption
-	inters     []Interceptor
-	predicates []predicate.OrgSubscription
-	withOwner  *OrganizationQuery
-	loadTotal  []func(context.Context, []*OrgSubscription) error
-	modifiers  []func(*sql.Selector)
+	ctx           *QueryContext
+	order         []orgsubscription.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.OrgSubscription
+	withCreatedBy *UserQuery
+	withUpdatedBy *UserQuery
+	withOwner     *OrganizationQuery
+	loadTotal     []func(context.Context, []*OrgSubscription) error
+	modifiers     []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -62,6 +65,56 @@ func (osq *OrgSubscriptionQuery) Unique(unique bool) *OrgSubscriptionQuery {
 func (osq *OrgSubscriptionQuery) Order(o ...orgsubscription.OrderOption) *OrgSubscriptionQuery {
 	osq.order = append(osq.order, o...)
 	return osq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (osq *OrgSubscriptionQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.CreatedByTable, orgsubscription.CreatedByColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (osq *OrgSubscriptionQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.UpdatedByTable, orgsubscription.UpdatedByColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -276,17 +329,41 @@ func (osq *OrgSubscriptionQuery) Clone() *OrgSubscriptionQuery {
 		return nil
 	}
 	return &OrgSubscriptionQuery{
-		config:     osq.config,
-		ctx:        osq.ctx.Clone(),
-		order:      append([]orgsubscription.OrderOption{}, osq.order...),
-		inters:     append([]Interceptor{}, osq.inters...),
-		predicates: append([]predicate.OrgSubscription{}, osq.predicates...),
-		withOwner:  osq.withOwner.Clone(),
+		config:        osq.config,
+		ctx:           osq.ctx.Clone(),
+		order:         append([]orgsubscription.OrderOption{}, osq.order...),
+		inters:        append([]Interceptor{}, osq.inters...),
+		predicates:    append([]predicate.OrgSubscription{}, osq.predicates...),
+		withCreatedBy: osq.withCreatedBy.Clone(),
+		withUpdatedBy: osq.withUpdatedBy.Clone(),
+		withOwner:     osq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       osq.sql.Clone(),
 		path:      osq.path,
 		modifiers: append([]func(*sql.Selector){}, osq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithCreatedBy(opts ...func(*UserQuery)) *OrgSubscriptionQuery {
+	query := (&UserClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withCreatedBy = query
+	return osq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithUpdatedBy(opts ...func(*UserQuery)) *OrgSubscriptionQuery {
+	query := (&UserClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withUpdatedBy = query
+	return osq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -378,7 +455,9 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*OrgSubscription{}
 		_spec       = osq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
+			osq.withCreatedBy != nil,
+			osq.withUpdatedBy != nil,
 			osq.withOwner != nil,
 		}
 	)
@@ -405,6 +484,18 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := osq.withCreatedBy; query != nil {
+		if err := osq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *OrgSubscription, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := osq.withUpdatedBy; query != nil {
+		if err := osq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *OrgSubscription, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := osq.withOwner; query != nil {
 		if err := osq.loadOwner(ctx, query, nodes, nil,
 			func(n *OrgSubscription, e *Organization) { n.Edges.Owner = e }); err != nil {
@@ -419,6 +510,64 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	return nodes, nil
 }
 
+func (osq *OrgSubscriptionQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*OrgSubscription)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (osq *OrgSubscriptionQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*OrgSubscription)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (osq *OrgSubscriptionQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgSubscription)
@@ -478,6 +627,12 @@ func (osq *OrgSubscriptionQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != orgsubscription.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if osq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(orgsubscription.FieldCreatedByID)
+		}
+		if osq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(orgsubscription.FieldUpdatedByID)
 		}
 		if osq.withOwner != nil {
 			_spec.Node.AddColumnOnce(orgsubscription.FieldOwnerID)

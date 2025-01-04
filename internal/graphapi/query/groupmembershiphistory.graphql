@@ -3,15 +3,16 @@ query GetAllGroupMembershipHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         groupID
         historyTime
         id
         operation
         ref
         role
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         userID
       }
     }
@@ -23,15 +24,16 @@ query GetGroupMembershipHistories($where: GroupMembershipHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         groupID
         historyTime
         id
         operation
         ref
         role
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         userID
       }
     }

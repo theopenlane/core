@@ -77,14 +77,14 @@ func UpdatedAt(v time.Time) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
-func CreatedBy(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEQ(FieldCreatedBy, v))
+// CreatedByID applies equality check predicate on the "created_by_id" field. It's identical to CreatedByIDEQ.
+func CreatedByID(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldCreatedByID, v))
 }
 
-// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEQ(FieldUpdatedBy, v))
+// UpdatedByID applies equality check predicate on the "updated_by_id" field. It's identical to UpdatedByIDEQ.
+func UpdatedByID(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
@@ -92,9 +92,9 @@ func DeletedAt(v time.Time) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldDeletedAt, v))
 }
 
-// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
-func DeletedBy(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEQ(FieldDeletedBy, v))
+// DeletedByID applies equality check predicate on the "deleted_by_id" field. It's identical to DeletedByIDEQ.
+func DeletedByID(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldDeletedByID, v))
 }
 
 // MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
@@ -282,154 +282,154 @@ func UpdatedAtNotNil() predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldNotNull(FieldUpdatedAt))
 }
 
-// CreatedByEQ applies the EQ predicate on the "created_by" field.
-func CreatedByEQ(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEQ(FieldCreatedBy, v))
+// CreatedByIDEQ applies the EQ predicate on the "created_by_id" field.
+func CreatedByIDEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldCreatedByID, v))
 }
 
-// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
-func CreatedByNEQ(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNEQ(FieldCreatedBy, v))
+// CreatedByIDNEQ applies the NEQ predicate on the "created_by_id" field.
+func CreatedByIDNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldCreatedByID, v))
 }
 
-// CreatedByIn applies the In predicate on the "created_by" field.
-func CreatedByIn(vs ...string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldIn(FieldCreatedBy, vs...))
+// CreatedByIDIn applies the In predicate on the "created_by_id" field.
+func CreatedByIDIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldCreatedByID, vs...))
 }
 
-// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
-func CreatedByNotIn(vs ...string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNotIn(FieldCreatedBy, vs...))
+// CreatedByIDNotIn applies the NotIn predicate on the "created_by_id" field.
+func CreatedByIDNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldCreatedByID, vs...))
 }
 
-// CreatedByGT applies the GT predicate on the "created_by" field.
-func CreatedByGT(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldGT(FieldCreatedBy, v))
+// CreatedByIDGT applies the GT predicate on the "created_by_id" field.
+func CreatedByIDGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldCreatedByID, v))
 }
 
-// CreatedByGTE applies the GTE predicate on the "created_by" field.
-func CreatedByGTE(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldGTE(FieldCreatedBy, v))
+// CreatedByIDGTE applies the GTE predicate on the "created_by_id" field.
+func CreatedByIDGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldCreatedByID, v))
 }
 
-// CreatedByLT applies the LT predicate on the "created_by" field.
-func CreatedByLT(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldLT(FieldCreatedBy, v))
+// CreatedByIDLT applies the LT predicate on the "created_by_id" field.
+func CreatedByIDLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldCreatedByID, v))
 }
 
-// CreatedByLTE applies the LTE predicate on the "created_by" field.
-func CreatedByLTE(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldLTE(FieldCreatedBy, v))
+// CreatedByIDLTE applies the LTE predicate on the "created_by_id" field.
+func CreatedByIDLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldCreatedByID, v))
 }
 
-// CreatedByContains applies the Contains predicate on the "created_by" field.
-func CreatedByContains(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldContains(FieldCreatedBy, v))
+// CreatedByIDContains applies the Contains predicate on the "created_by_id" field.
+func CreatedByIDContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldCreatedByID, v))
 }
 
-// CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
-func CreatedByHasPrefix(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldHasPrefix(FieldCreatedBy, v))
+// CreatedByIDHasPrefix applies the HasPrefix predicate on the "created_by_id" field.
+func CreatedByIDHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldCreatedByID, v))
 }
 
-// CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
-func CreatedByHasSuffix(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldHasSuffix(FieldCreatedBy, v))
+// CreatedByIDHasSuffix applies the HasSuffix predicate on the "created_by_id" field.
+func CreatedByIDHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldCreatedByID, v))
 }
 
-// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
-func CreatedByIsNil() predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldIsNull(FieldCreatedBy))
+// CreatedByIDIsNil applies the IsNil predicate on the "created_by_id" field.
+func CreatedByIDIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldCreatedByID))
 }
 
-// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
-func CreatedByNotNil() predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNotNull(FieldCreatedBy))
+// CreatedByIDNotNil applies the NotNil predicate on the "created_by_id" field.
+func CreatedByIDNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldCreatedByID))
 }
 
-// CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
-func CreatedByEqualFold(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEqualFold(FieldCreatedBy, v))
+// CreatedByIDEqualFold applies the EqualFold predicate on the "created_by_id" field.
+func CreatedByIDEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldCreatedByID, v))
 }
 
-// CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
-func CreatedByContainsFold(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldContainsFold(FieldCreatedBy, v))
+// CreatedByIDContainsFold applies the ContainsFold predicate on the "created_by_id" field.
+func CreatedByIDContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldCreatedByID, v))
 }
 
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEQ(FieldUpdatedBy, v))
+// UpdatedByIDEQ applies the EQ predicate on the "updated_by_id" field.
+func UpdatedByIDEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNEQ(FieldUpdatedBy, v))
+// UpdatedByIDNEQ applies the NEQ predicate on the "updated_by_id" field.
+func UpdatedByIDNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldUpdatedByID, v))
 }
 
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldIn(FieldUpdatedBy, vs...))
+// UpdatedByIDIn applies the In predicate on the "updated_by_id" field.
+func UpdatedByIDIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldUpdatedByID, vs...))
 }
 
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNotIn(FieldUpdatedBy, vs...))
+// UpdatedByIDNotIn applies the NotIn predicate on the "updated_by_id" field.
+func UpdatedByIDNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldUpdatedByID, vs...))
 }
 
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldGT(FieldUpdatedBy, v))
+// UpdatedByIDGT applies the GT predicate on the "updated_by_id" field.
+func UpdatedByIDGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldUpdatedByID, v))
 }
 
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldGTE(FieldUpdatedBy, v))
+// UpdatedByIDGTE applies the GTE predicate on the "updated_by_id" field.
+func UpdatedByIDGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldUpdatedByID, v))
 }
 
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldLT(FieldUpdatedBy, v))
+// UpdatedByIDLT applies the LT predicate on the "updated_by_id" field.
+func UpdatedByIDLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldUpdatedByID, v))
 }
 
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldLTE(FieldUpdatedBy, v))
+// UpdatedByIDLTE applies the LTE predicate on the "updated_by_id" field.
+func UpdatedByIDLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldUpdatedByID, v))
 }
 
-// UpdatedByContains applies the Contains predicate on the "updated_by" field.
-func UpdatedByContains(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldContains(FieldUpdatedBy, v))
+// UpdatedByIDContains applies the Contains predicate on the "updated_by_id" field.
+func UpdatedByIDContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldUpdatedByID, v))
 }
 
-// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
-func UpdatedByHasPrefix(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldHasPrefix(FieldUpdatedBy, v))
+// UpdatedByIDHasPrefix applies the HasPrefix predicate on the "updated_by_id" field.
+func UpdatedByIDHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldUpdatedByID, v))
 }
 
-// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
-func UpdatedByHasSuffix(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldHasSuffix(FieldUpdatedBy, v))
+// UpdatedByIDHasSuffix applies the HasSuffix predicate on the "updated_by_id" field.
+func UpdatedByIDHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldUpdatedByID, v))
 }
 
-// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldIsNull(FieldUpdatedBy))
+// UpdatedByIDIsNil applies the IsNil predicate on the "updated_by_id" field.
+func UpdatedByIDIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldUpdatedByID))
 }
 
-// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNotNull(FieldUpdatedBy))
+// UpdatedByIDNotNil applies the NotNil predicate on the "updated_by_id" field.
+func UpdatedByIDNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldUpdatedByID))
 }
 
-// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
-func UpdatedByEqualFold(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEqualFold(FieldUpdatedBy, v))
+// UpdatedByIDEqualFold applies the EqualFold predicate on the "updated_by_id" field.
+func UpdatedByIDEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldUpdatedByID, v))
 }
 
-// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
-func UpdatedByContainsFold(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldContainsFold(FieldUpdatedBy, v))
+// UpdatedByIDContainsFold applies the ContainsFold predicate on the "updated_by_id" field.
+func UpdatedByIDContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldUpdatedByID, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
@@ -482,79 +482,79 @@ func DeletedAtNotNil() predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldNotNull(FieldDeletedAt))
 }
 
-// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
-func DeletedByEQ(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEQ(FieldDeletedBy, v))
+// DeletedByIDEQ applies the EQ predicate on the "deleted_by_id" field.
+func DeletedByIDEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldDeletedByID, v))
 }
 
-// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
-func DeletedByNEQ(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNEQ(FieldDeletedBy, v))
+// DeletedByIDNEQ applies the NEQ predicate on the "deleted_by_id" field.
+func DeletedByIDNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldDeletedByID, v))
 }
 
-// DeletedByIn applies the In predicate on the "deleted_by" field.
-func DeletedByIn(vs ...string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldIn(FieldDeletedBy, vs...))
+// DeletedByIDIn applies the In predicate on the "deleted_by_id" field.
+func DeletedByIDIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldDeletedByID, vs...))
 }
 
-// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
-func DeletedByNotIn(vs ...string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNotIn(FieldDeletedBy, vs...))
+// DeletedByIDNotIn applies the NotIn predicate on the "deleted_by_id" field.
+func DeletedByIDNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldDeletedByID, vs...))
 }
 
-// DeletedByGT applies the GT predicate on the "deleted_by" field.
-func DeletedByGT(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldGT(FieldDeletedBy, v))
+// DeletedByIDGT applies the GT predicate on the "deleted_by_id" field.
+func DeletedByIDGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldDeletedByID, v))
 }
 
-// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
-func DeletedByGTE(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldGTE(FieldDeletedBy, v))
+// DeletedByIDGTE applies the GTE predicate on the "deleted_by_id" field.
+func DeletedByIDGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldDeletedByID, v))
 }
 
-// DeletedByLT applies the LT predicate on the "deleted_by" field.
-func DeletedByLT(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldLT(FieldDeletedBy, v))
+// DeletedByIDLT applies the LT predicate on the "deleted_by_id" field.
+func DeletedByIDLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldDeletedByID, v))
 }
 
-// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
-func DeletedByLTE(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldLTE(FieldDeletedBy, v))
+// DeletedByIDLTE applies the LTE predicate on the "deleted_by_id" field.
+func DeletedByIDLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldDeletedByID, v))
 }
 
-// DeletedByContains applies the Contains predicate on the "deleted_by" field.
-func DeletedByContains(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldContains(FieldDeletedBy, v))
+// DeletedByIDContains applies the Contains predicate on the "deleted_by_id" field.
+func DeletedByIDContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldDeletedByID, v))
 }
 
-// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
-func DeletedByHasPrefix(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldHasPrefix(FieldDeletedBy, v))
+// DeletedByIDHasPrefix applies the HasPrefix predicate on the "deleted_by_id" field.
+func DeletedByIDHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldDeletedByID, v))
 }
 
-// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
-func DeletedByHasSuffix(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldHasSuffix(FieldDeletedBy, v))
+// DeletedByIDHasSuffix applies the HasSuffix predicate on the "deleted_by_id" field.
+func DeletedByIDHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldDeletedByID, v))
 }
 
-// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
-func DeletedByIsNil() predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldIsNull(FieldDeletedBy))
+// DeletedByIDIsNil applies the IsNil predicate on the "deleted_by_id" field.
+func DeletedByIDIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldDeletedByID))
 }
 
-// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
-func DeletedByNotNil() predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNotNull(FieldDeletedBy))
+// DeletedByIDNotNil applies the NotNil predicate on the "deleted_by_id" field.
+func DeletedByIDNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldDeletedByID))
 }
 
-// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
-func DeletedByEqualFold(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldEqualFold(FieldDeletedBy, v))
+// DeletedByIDEqualFold applies the EqualFold predicate on the "deleted_by_id" field.
+func DeletedByIDEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldDeletedByID, v))
 }
 
-// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
-func DeletedByContainsFold(v string) predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldContainsFold(FieldDeletedBy, v))
+// DeletedByIDContainsFold applies the ContainsFold predicate on the "deleted_by_id" field.
+func DeletedByIDContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldDeletedByID, v))
 }
 
 // MappingIDEQ applies the EQ predicate on the "mapping_id" field.
@@ -1770,6 +1770,64 @@ func DetailsIsNil() predicate.Subcontrol {
 // DetailsNotNil applies the NotNil predicate on the "details" field.
 func DetailsNotNil() predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldNotNull(FieldDetails))
+}
+
+// HasCreatedBy applies the HasEdge predicate on the "created_by" edge.
+func HasCreatedBy() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, CreatedByTable, CreatedByColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCreatedByWith applies the HasEdge predicate on the "created_by" edge with a given conditions (other predicates).
+func HasCreatedByWith(preds ...predicate.User) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newCreatedByStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUpdatedBy applies the HasEdge predicate on the "updated_by" edge.
+func HasUpdatedBy() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByTable, UpdatedByColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUpdatedByWith applies the HasEdge predicate on the "updated_by" edge with a given conditions (other predicates).
+func HasUpdatedByWith(preds ...predicate.User) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newUpdatedByStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

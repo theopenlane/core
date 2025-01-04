@@ -80,7 +80,7 @@ func (Procedure) Edges() []ent.Edge {
 // Mixin of the Procedure
 func (Procedure) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

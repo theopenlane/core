@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Note is the model entity for the Note schema.
@@ -24,16 +25,16 @@ type Note struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -49,6 +50,10 @@ type Note struct {
 
 // NoteEdges holds the relations/edges for other nodes in the graph.
 type NoteEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Entity holds the value of the entity edge.
@@ -59,12 +64,34 @@ type NoteEdges struct {
 	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [6]map[string]int
 
 	namedSubcontrols map[string][]*Subcontrol
 	namedProgram     map[string][]*Program
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -72,7 +99,7 @@ type NoteEdges struct {
 func (e NoteEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -83,7 +110,7 @@ func (e NoteEdges) OwnerOrErr() (*Organization, error) {
 func (e NoteEdges) EntityOrErr() (*Entity, error) {
 	if e.Entity != nil {
 		return e.Entity, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -92,7 +119,7 @@ func (e NoteEdges) EntityOrErr() (*Entity, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -101,7 +128,7 @@ func (e NoteEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -114,7 +141,7 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case note.FieldTags:
 			values[i] = new([]byte)
-		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldMappingID, note.FieldDeletedBy, note.FieldOwnerID, note.FieldText:
+		case note.FieldID, note.FieldCreatedByID, note.FieldUpdatedByID, note.FieldMappingID, note.FieldDeletedByID, note.FieldOwnerID, note.FieldText:
 			values[i] = new(sql.NullString)
 		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -153,17 +180,17 @@ func (n *Note) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.UpdatedAt = value.Time
 			}
-		case note.FieldCreatedBy:
+		case note.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				n.CreatedBy = value.String
+				n.CreatedByID = value.String
 			}
-		case note.FieldUpdatedBy:
+		case note.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				n.UpdatedBy = value.String
+				n.UpdatedByID = value.String
 			}
 		case note.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -177,11 +204,11 @@ func (n *Note) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.DeletedAt = value.Time
 			}
-		case note.FieldDeletedBy:
+		case note.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				n.DeletedBy = value.String
+				n.DeletedByID = value.String
 			}
 		case note.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -221,6 +248,16 @@ func (n *Note) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (n *Note) Value(name string) (ent.Value, error) {
 	return n.selectValues.Get(name)
+}
+
+// QueryCreatedBy queries the "created_by" edge of the Note entity.
+func (n *Note) QueryCreatedBy() *UserQuery {
+	return NewNoteClient(n.config).QueryCreatedBy(n)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the Note entity.
+func (n *Note) QueryUpdatedBy() *UserQuery {
+	return NewNoteClient(n.config).QueryUpdatedBy(n)
 }
 
 // QueryOwner queries the "owner" edge of the Note entity.
@@ -272,11 +309,11 @@ func (n *Note) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(n.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(n.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(n.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(n.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(n.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(n.MappingID)
@@ -284,8 +321,8 @@ func (n *Note) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(n.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(n.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(n.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", n.Tags))

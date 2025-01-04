@@ -7,14 +7,20 @@ query GetAllOrganizationSettings {
         billingEmail
         billingPhone
         createdAt
-        createdBy
+        createdByID
         domains
         geoLocation
         id
         tags
         taxIdentifier
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
         organization {
           id
           name
@@ -32,14 +38,14 @@ query GetOrganizationSettingByID($organizationSettingId: ID!) {
     billingEmail
     billingPhone
     createdAt
-    createdBy
+    createdByID
     domains
     geoLocation
     id
     tags
     taxIdentifier
     updatedAt
-    updatedBy
+    updatedByID
     organization {
       id
       name
@@ -57,14 +63,20 @@ query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
         billingEmail
         billingPhone
         createdAt
-        createdBy
+        createdByID
         domains
         geoLocation
         id
         tags
         taxIdentifier
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
         organization {
           id
           name
@@ -83,14 +95,20 @@ mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: Up
       billingEmail
       billingPhone
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       domains
       geoLocation
       id
       tags
       taxIdentifier
       updatedAt
-      updatedBy
+      updatedByID
       organization {
         id
         name

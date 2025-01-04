@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -45,23 +46,23 @@ func (osu *OrgSubscriptionUpdate) ClearUpdatedAt() *OrgSubscriptionUpdate {
 	return osu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (osu *OrgSubscriptionUpdate) SetUpdatedBy(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (osu *OrgSubscriptionUpdate) SetUpdatedByID(s string) *OrgSubscriptionUpdate {
+	osu.mutation.SetUpdatedByID(s)
 	return osu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableUpdatedBy(s *string) *OrgSubscriptionUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (osu *OrgSubscriptionUpdate) SetNillableUpdatedByID(s *string) *OrgSubscriptionUpdate {
 	if s != nil {
-		osu.SetUpdatedBy(*s)
+		osu.SetUpdatedByID(*s)
 	}
 	return osu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (osu *OrgSubscriptionUpdate) ClearUpdatedBy() *OrgSubscriptionUpdate {
-	osu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (osu *OrgSubscriptionUpdate) ClearUpdatedByID() *OrgSubscriptionUpdate {
+	osu.mutation.ClearUpdatedByID()
 	return osu
 }
 
@@ -80,46 +81,6 @@ func (osu *OrgSubscriptionUpdate) AppendTags(s []string) *OrgSubscriptionUpdate 
 // ClearTags clears the value of the "tags" field.
 func (osu *OrgSubscriptionUpdate) ClearTags() *OrgSubscriptionUpdate {
 	osu.mutation.ClearTags()
-	return osu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (osu *OrgSubscriptionUpdate) SetDeletedAt(t time.Time) *OrgSubscriptionUpdate {
-	osu.mutation.SetDeletedAt(t)
-	return osu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableDeletedAt(t *time.Time) *OrgSubscriptionUpdate {
-	if t != nil {
-		osu.SetDeletedAt(*t)
-	}
-	return osu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (osu *OrgSubscriptionUpdate) ClearDeletedAt() *OrgSubscriptionUpdate {
-	osu.mutation.ClearDeletedAt()
-	return osu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (osu *OrgSubscriptionUpdate) SetDeletedBy(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetDeletedBy(s)
-	return osu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableDeletedBy(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetDeletedBy(*s)
-	}
-	return osu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (osu *OrgSubscriptionUpdate) ClearDeletedBy() *OrgSubscriptionUpdate {
-	osu.mutation.ClearDeletedBy()
 	return osu
 }
 
@@ -295,6 +256,11 @@ func (osu *OrgSubscriptionUpdate) ClearFeatures() *OrgSubscriptionUpdate {
 	return osu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (osu *OrgSubscriptionUpdate) SetUpdatedBy(u *User) *OrgSubscriptionUpdate {
+	return osu.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (osu *OrgSubscriptionUpdate) SetOwner(o *Organization) *OrgSubscriptionUpdate {
 	return osu.SetOwnerID(o.ID)
@@ -303,6 +269,12 @@ func (osu *OrgSubscriptionUpdate) SetOwner(o *Organization) *OrgSubscriptionUpda
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
 	return osu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (osu *OrgSubscriptionUpdate) ClearUpdatedBy() *OrgSubscriptionUpdate {
+	osu.mutation.ClearUpdatedBy()
+	return osu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -390,15 +362,6 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	if osu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedAt, field.TypeTime)
 	}
-	if osu.mutation.CreatedByCleared() {
-		_spec.ClearField(orgsubscription.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := osu.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
-	}
-	if osu.mutation.UpdatedByCleared() {
-		_spec.ClearField(orgsubscription.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := osu.mutation.Tags(); ok {
 		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
 	}
@@ -410,17 +373,11 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	if osu.mutation.TagsCleared() {
 		_spec.ClearField(orgsubscription.FieldTags, field.TypeJSON)
 	}
-	if value, ok := osu.mutation.DeletedAt(); ok {
-		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
-	}
 	if osu.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := osu.mutation.DeletedBy(); ok {
-		_spec.SetField(orgsubscription.FieldDeletedBy, field.TypeString, value)
-	}
-	if osu.mutation.DeletedByCleared() {
-		_spec.ClearField(orgsubscription.FieldDeletedBy, field.TypeString)
+	if osu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(orgsubscription.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := osu.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)
@@ -471,6 +428,37 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if osu.mutation.FeaturesCleared() {
 		_spec.ClearField(orgsubscription.FieldFeatures, field.TypeJSON)
+	}
+	if osu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.UpdatedByTable,
+			Columns: []string{orgsubscription.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgSubscription
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.UpdatedByTable,
+			Columns: []string{orgsubscription.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if osu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -539,23 +527,23 @@ func (osuo *OrgSubscriptionUpdateOne) ClearUpdatedAt() *OrgSubscriptionUpdateOne
 	return osuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (osuo *OrgSubscriptionUpdateOne) SetUpdatedBy(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (osuo *OrgSubscriptionUpdateOne) SetUpdatedByID(s string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.SetUpdatedByID(s)
 	return osuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableUpdatedBy(s *string) *OrgSubscriptionUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (osuo *OrgSubscriptionUpdateOne) SetNillableUpdatedByID(s *string) *OrgSubscriptionUpdateOne {
 	if s != nil {
-		osuo.SetUpdatedBy(*s)
+		osuo.SetUpdatedByID(*s)
 	}
 	return osuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearUpdatedBy() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (osuo *OrgSubscriptionUpdateOne) ClearUpdatedByID() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearUpdatedByID()
 	return osuo
 }
 
@@ -574,46 +562,6 @@ func (osuo *OrgSubscriptionUpdateOne) AppendTags(s []string) *OrgSubscriptionUpd
 // ClearTags clears the value of the "tags" field.
 func (osuo *OrgSubscriptionUpdateOne) ClearTags() *OrgSubscriptionUpdateOne {
 	osuo.mutation.ClearTags()
-	return osuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (osuo *OrgSubscriptionUpdateOne) SetDeletedAt(t time.Time) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetDeletedAt(t)
-	return osuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableDeletedAt(t *time.Time) *OrgSubscriptionUpdateOne {
-	if t != nil {
-		osuo.SetDeletedAt(*t)
-	}
-	return osuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearDeletedAt() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearDeletedAt()
-	return osuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (osuo *OrgSubscriptionUpdateOne) SetDeletedBy(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetDeletedBy(s)
-	return osuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableDeletedBy(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetDeletedBy(*s)
-	}
-	return osuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearDeletedBy() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearDeletedBy()
 	return osuo
 }
 
@@ -789,6 +737,11 @@ func (osuo *OrgSubscriptionUpdateOne) ClearFeatures() *OrgSubscriptionUpdateOne 
 	return osuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (osuo *OrgSubscriptionUpdateOne) SetUpdatedBy(u *User) *OrgSubscriptionUpdateOne {
+	return osuo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (osuo *OrgSubscriptionUpdateOne) SetOwner(o *Organization) *OrgSubscriptionUpdateOne {
 	return osuo.SetOwnerID(o.ID)
@@ -797,6 +750,12 @@ func (osuo *OrgSubscriptionUpdateOne) SetOwner(o *Organization) *OrgSubscription
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
 	return osuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (osuo *OrgSubscriptionUpdateOne) ClearUpdatedBy() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearUpdatedBy()
+	return osuo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -914,15 +873,6 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	if osuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedAt, field.TypeTime)
 	}
-	if osuo.mutation.CreatedByCleared() {
-		_spec.ClearField(orgsubscription.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := osuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
-	}
-	if osuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(orgsubscription.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := osuo.mutation.Tags(); ok {
 		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
 	}
@@ -934,17 +884,11 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	if osuo.mutation.TagsCleared() {
 		_spec.ClearField(orgsubscription.FieldTags, field.TypeJSON)
 	}
-	if value, ok := osuo.mutation.DeletedAt(); ok {
-		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
-	}
 	if osuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := osuo.mutation.DeletedBy(); ok {
-		_spec.SetField(orgsubscription.FieldDeletedBy, field.TypeString, value)
-	}
-	if osuo.mutation.DeletedByCleared() {
-		_spec.ClearField(orgsubscription.FieldDeletedBy, field.TypeString)
+	if osuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(orgsubscription.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := osuo.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)
@@ -995,6 +939,37 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	}
 	if osuo.mutation.FeaturesCleared() {
 		_spec.ClearField(orgsubscription.FieldFeatures, field.TypeJSON)
+	}
+	if osuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.UpdatedByTable,
+			Columns: []string{orgsubscription.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgSubscription
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.UpdatedByTable,
+			Columns: []string{orgsubscription.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if osuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

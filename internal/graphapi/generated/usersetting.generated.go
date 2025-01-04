@@ -70,16 +70,16 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 				return ec.fieldContext_UserSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_UserSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_UserSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_UserSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_UserSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_UserSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_UserSetting_deletedByID(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
 			case "locked":
@@ -96,6 +96,10 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
 			case "isTfaEnabled":
 				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_UserSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
 			case "user":
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":
@@ -154,16 +158,16 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_UserSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_UserSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_UserSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_UserSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_UserSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_UserSetting_deletedByID(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
 			case "locked":
@@ -180,6 +184,10 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
 			case "isTfaEnabled":
 				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_UserSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
 			case "user":
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":
@@ -238,16 +246,16 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_UserSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_UserSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_UserSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_UserSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_UserSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_UserSetting_deletedByID(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
 			case "locked":
@@ -264,6 +272,10 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
 			case "isTfaEnabled":
 				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_UserSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
 			case "user":
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":

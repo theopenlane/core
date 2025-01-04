@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -37,6 +38,8 @@ type ControlObjectiveQuery struct {
 	order                     []controlobjective.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.ControlObjective
+	withCreatedBy             *UserQuery
+	withUpdatedBy             *UserQuery
 	withOwner                 *OrganizationQuery
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
@@ -99,6 +102,56 @@ func (coq *ControlObjectiveQuery) Unique(unique bool) *ControlObjectiveQuery {
 func (coq *ControlObjectiveQuery) Order(o ...controlobjective.OrderOption) *ControlObjectiveQuery {
 	coq.order = append(coq.order, o...)
 	return coq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (coq *ControlObjectiveQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: coq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := coq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := coq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.CreatedByTable, controlobjective.CreatedByColumn),
+		)
+		schemaConfig := coq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ControlObjective
+		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (coq *ControlObjectiveQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: coq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := coq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := coq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.UpdatedByTable, controlobjective.UpdatedByColumn),
+		)
+		schemaConfig := coq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ControlObjective
+		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -618,6 +671,8 @@ func (coq *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
 		order:                append([]controlobjective.OrderOption{}, coq.order...),
 		inters:               append([]Interceptor{}, coq.inters...),
 		predicates:           append([]predicate.ControlObjective{}, coq.predicates...),
+		withCreatedBy:        coq.withCreatedBy.Clone(),
+		withUpdatedBy:        coq.withUpdatedBy.Clone(),
 		withOwner:            coq.withOwner.Clone(),
 		withBlockedGroups:    coq.withBlockedGroups.Clone(),
 		withEditors:          coq.withEditors.Clone(),
@@ -636,6 +691,28 @@ func (coq *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
 		path:      coq.path,
 		modifiers: append([]func(*sql.Selector){}, coq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithCreatedBy(opts ...func(*UserQuery)) *ControlObjectiveQuery {
+	query := (&UserClient{config: coq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	coq.withCreatedBy = query
+	return coq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ControlObjectiveQuery {
+	query := (&UserClient{config: coq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	coq.withUpdatedBy = query
+	return coq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -866,7 +943,9 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		nodes       = []*ControlObjective{}
 		withFKs     = coq.withFKs
 		_spec       = coq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [15]bool{
+			coq.withCreatedBy != nil,
+			coq.withUpdatedBy != nil,
 			coq.withOwner != nil,
 			coq.withBlockedGroups != nil,
 			coq.withEditors != nil,
@@ -907,6 +986,18 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := coq.withCreatedBy; query != nil {
+		if err := coq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *ControlObjective, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := coq.withUpdatedBy; query != nil {
+		if err := coq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *ControlObjective, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := coq.withOwner; query != nil {
 		if err := coq.loadOwner(ctx, query, nodes, nil,
@@ -1092,6 +1183,64 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	return nodes, nil
 }
 
+func (coq *ControlObjectiveQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlObjective)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (coq *ControlObjectiveQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlObjective)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (coq *ControlObjectiveQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ControlObjective)
@@ -1771,6 +1920,12 @@ func (coq *ControlObjectiveQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != controlobjective.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if coq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(controlobjective.FieldCreatedByID)
+		}
+		if coq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(controlobjective.FieldUpdatedByID)
 		}
 		if coq.withOwner != nil {
 			_spec.Node.AddColumnOnce(controlobjective.FieldOwnerID)

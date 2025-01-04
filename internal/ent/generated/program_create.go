@@ -65,30 +65,30 @@ func (pc *ProgramCreate) SetNillableUpdatedAt(t *time.Time) *ProgramCreate {
 	return pc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (pc *ProgramCreate) SetCreatedBy(s string) *ProgramCreate {
-	pc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (pc *ProgramCreate) SetCreatedByID(s string) *ProgramCreate {
+	pc.mutation.SetCreatedByID(s)
 	return pc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableCreatedBy(s *string) *ProgramCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableCreatedByID(s *string) *ProgramCreate {
 	if s != nil {
-		pc.SetCreatedBy(*s)
+		pc.SetCreatedByID(*s)
 	}
 	return pc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (pc *ProgramCreate) SetUpdatedBy(s string) *ProgramCreate {
-	pc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (pc *ProgramCreate) SetUpdatedByID(s string) *ProgramCreate {
+	pc.mutation.SetUpdatedByID(s)
 	return pc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableUpdatedBy(s *string) *ProgramCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableUpdatedByID(s *string) *ProgramCreate {
 	if s != nil {
-		pc.SetUpdatedBy(*s)
+		pc.SetUpdatedByID(*s)
 	}
 	return pc
 }
@@ -121,16 +121,16 @@ func (pc *ProgramCreate) SetNillableDeletedAt(t *time.Time) *ProgramCreate {
 	return pc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (pc *ProgramCreate) SetDeletedBy(s string) *ProgramCreate {
-	pc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (pc *ProgramCreate) SetDeletedByID(s string) *ProgramCreate {
+	pc.mutation.SetDeletedByID(s)
 	return pc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableDeletedBy(s *string) *ProgramCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableDeletedByID(s *string) *ProgramCreate {
 	if s != nil {
-		pc.SetDeletedBy(*s)
+		pc.SetDeletedByID(*s)
 	}
 	return pc
 }
@@ -271,6 +271,16 @@ func (pc *ProgramCreate) SetNillableID(s *string) *ProgramCreate {
 		pc.SetID(*s)
 	}
 	return pc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (pc *ProgramCreate) SetCreatedBy(u *User) *ProgramCreate {
+	return pc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (pc *ProgramCreate) SetUpdatedBy(u *User) *ProgramCreate {
+	return pc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -700,14 +710,6 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		_spec.SetField(program.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pc.mutation.CreatedBy(); ok {
-		_spec.SetField(program.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := pc.mutation.UpdatedBy(); ok {
-		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := pc.mutation.MappingID(); ok {
 		_spec.SetField(program.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -716,9 +718,9 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := pc.mutation.DeletedBy(); ok {
-		_spec.SetField(program.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := pc.mutation.DeletedByID(); ok {
+		_spec.SetField(program.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := pc.mutation.Tags(); ok {
 		_spec.SetField(program.FieldTags, field.TypeJSON, value)
@@ -755,6 +757,42 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
+	}
+	if nodes := pc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.CreatedByTable,
+			Columns: []string{program.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByTable,
+			Columns: []string{program.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -45,63 +46,23 @@ func (omu *OrgMembershipUpdate) ClearUpdatedAt() *OrgMembershipUpdate {
 	return omu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (omu *OrgMembershipUpdate) SetUpdatedBy(s string) *OrgMembershipUpdate {
-	omu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (omu *OrgMembershipUpdate) SetUpdatedByID(s string) *OrgMembershipUpdate {
+	omu.mutation.SetUpdatedByID(s)
 	return omu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omu *OrgMembershipUpdate) SetNillableUpdatedBy(s *string) *OrgMembershipUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (omu *OrgMembershipUpdate) SetNillableUpdatedByID(s *string) *OrgMembershipUpdate {
 	if s != nil {
-		omu.SetUpdatedBy(*s)
+		omu.SetUpdatedByID(*s)
 	}
 	return omu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (omu *OrgMembershipUpdate) ClearUpdatedBy() *OrgMembershipUpdate {
-	omu.mutation.ClearUpdatedBy()
-	return omu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (omu *OrgMembershipUpdate) SetDeletedAt(t time.Time) *OrgMembershipUpdate {
-	omu.mutation.SetDeletedAt(t)
-	return omu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (omu *OrgMembershipUpdate) SetNillableDeletedAt(t *time.Time) *OrgMembershipUpdate {
-	if t != nil {
-		omu.SetDeletedAt(*t)
-	}
-	return omu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (omu *OrgMembershipUpdate) ClearDeletedAt() *OrgMembershipUpdate {
-	omu.mutation.ClearDeletedAt()
-	return omu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (omu *OrgMembershipUpdate) SetDeletedBy(s string) *OrgMembershipUpdate {
-	omu.mutation.SetDeletedBy(s)
-	return omu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omu *OrgMembershipUpdate) SetNillableDeletedBy(s *string) *OrgMembershipUpdate {
-	if s != nil {
-		omu.SetDeletedBy(*s)
-	}
-	return omu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (omu *OrgMembershipUpdate) ClearDeletedBy() *OrgMembershipUpdate {
-	omu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (omu *OrgMembershipUpdate) ClearUpdatedByID() *OrgMembershipUpdate {
+	omu.mutation.ClearUpdatedByID()
 	return omu
 }
 
@@ -117,6 +78,11 @@ func (omu *OrgMembershipUpdate) SetNillableRole(e *enums.Role) *OrgMembershipUpd
 		omu.SetRole(*e)
 	}
 	return omu
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (omu *OrgMembershipUpdate) SetUpdatedBy(u *User) *OrgMembershipUpdate {
+	return omu.SetUpdatedByID(u.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -137,6 +103,12 @@ func (omu *OrgMembershipUpdate) AddEvents(e ...*Event) *OrgMembershipUpdate {
 // Mutation returns the OrgMembershipMutation object of the builder.
 func (omu *OrgMembershipUpdate) Mutation() *OrgMembershipMutation {
 	return omu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (omu *OrgMembershipUpdate) ClearUpdatedBy() *OrgMembershipUpdate {
+	omu.mutation.ClearUpdatedBy()
+	return omu
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -245,29 +217,45 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if omu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if omu.mutation.CreatedByCleared() {
-		_spec.ClearField(orgmembership.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := omu.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgmembership.FieldUpdatedBy, field.TypeString, value)
-	}
-	if omu.mutation.UpdatedByCleared() {
-		_spec.ClearField(orgmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := omu.mutation.DeletedAt(); ok {
-		_spec.SetField(orgmembership.FieldDeletedAt, field.TypeTime, value)
-	}
 	if omu.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgmembership.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := omu.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if omu.mutation.DeletedByCleared() {
-		_spec.ClearField(orgmembership.FieldDeletedBy, field.TypeString)
+	if omu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(orgmembership.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := omu.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
+	}
+	if omu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgmembership.UpdatedByTable,
+			Columns: []string{orgmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = omu.schemaConfig.OrgMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := omu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgmembership.UpdatedByTable,
+			Columns: []string{orgmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = omu.schemaConfig.OrgMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if omu.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -353,63 +341,23 @@ func (omuo *OrgMembershipUpdateOne) ClearUpdatedAt() *OrgMembershipUpdateOne {
 	return omuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (omuo *OrgMembershipUpdateOne) SetUpdatedBy(s string) *OrgMembershipUpdateOne {
-	omuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (omuo *OrgMembershipUpdateOne) SetUpdatedByID(s string) *OrgMembershipUpdateOne {
+	omuo.mutation.SetUpdatedByID(s)
 	return omuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omuo *OrgMembershipUpdateOne) SetNillableUpdatedBy(s *string) *OrgMembershipUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (omuo *OrgMembershipUpdateOne) SetNillableUpdatedByID(s *string) *OrgMembershipUpdateOne {
 	if s != nil {
-		omuo.SetUpdatedBy(*s)
+		omuo.SetUpdatedByID(*s)
 	}
 	return omuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (omuo *OrgMembershipUpdateOne) ClearUpdatedBy() *OrgMembershipUpdateOne {
-	omuo.mutation.ClearUpdatedBy()
-	return omuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (omuo *OrgMembershipUpdateOne) SetDeletedAt(t time.Time) *OrgMembershipUpdateOne {
-	omuo.mutation.SetDeletedAt(t)
-	return omuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (omuo *OrgMembershipUpdateOne) SetNillableDeletedAt(t *time.Time) *OrgMembershipUpdateOne {
-	if t != nil {
-		omuo.SetDeletedAt(*t)
-	}
-	return omuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (omuo *OrgMembershipUpdateOne) ClearDeletedAt() *OrgMembershipUpdateOne {
-	omuo.mutation.ClearDeletedAt()
-	return omuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (omuo *OrgMembershipUpdateOne) SetDeletedBy(s string) *OrgMembershipUpdateOne {
-	omuo.mutation.SetDeletedBy(s)
-	return omuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omuo *OrgMembershipUpdateOne) SetNillableDeletedBy(s *string) *OrgMembershipUpdateOne {
-	if s != nil {
-		omuo.SetDeletedBy(*s)
-	}
-	return omuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (omuo *OrgMembershipUpdateOne) ClearDeletedBy() *OrgMembershipUpdateOne {
-	omuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (omuo *OrgMembershipUpdateOne) ClearUpdatedByID() *OrgMembershipUpdateOne {
+	omuo.mutation.ClearUpdatedByID()
 	return omuo
 }
 
@@ -425,6 +373,11 @@ func (omuo *OrgMembershipUpdateOne) SetNillableRole(e *enums.Role) *OrgMembershi
 		omuo.SetRole(*e)
 	}
 	return omuo
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (omuo *OrgMembershipUpdateOne) SetUpdatedBy(u *User) *OrgMembershipUpdateOne {
+	return omuo.SetUpdatedByID(u.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -445,6 +398,12 @@ func (omuo *OrgMembershipUpdateOne) AddEvents(e ...*Event) *OrgMembershipUpdateO
 // Mutation returns the OrgMembershipMutation object of the builder.
 func (omuo *OrgMembershipUpdateOne) Mutation() *OrgMembershipMutation {
 	return omuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (omuo *OrgMembershipUpdateOne) ClearUpdatedBy() *OrgMembershipUpdateOne {
+	omuo.mutation.ClearUpdatedBy()
+	return omuo
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -583,29 +542,45 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 	if omuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if omuo.mutation.CreatedByCleared() {
-		_spec.ClearField(orgmembership.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := omuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgmembership.FieldUpdatedBy, field.TypeString, value)
-	}
-	if omuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(orgmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := omuo.mutation.DeletedAt(); ok {
-		_spec.SetField(orgmembership.FieldDeletedAt, field.TypeTime, value)
-	}
 	if omuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgmembership.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := omuo.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if omuo.mutation.DeletedByCleared() {
-		_spec.ClearField(orgmembership.FieldDeletedBy, field.TypeString)
+	if omuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(orgmembership.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := omuo.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
+	}
+	if omuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgmembership.UpdatedByTable,
+			Columns: []string{orgmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = omuo.schemaConfig.OrgMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := omuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgmembership.UpdatedByTable,
+			Columns: []string{orgmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = omuo.schemaConfig.OrgMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if omuo.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{

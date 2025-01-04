@@ -44,63 +44,23 @@ func (aphu *ActionPlanHistoryUpdate) ClearUpdatedAt() *ActionPlanHistoryUpdate {
 	return aphu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (aphu *ActionPlanHistoryUpdate) SetUpdatedBy(s string) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (aphu *ActionPlanHistoryUpdate) SetUpdatedByID(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetUpdatedByID(s)
 	return aphu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillableUpdatedBy(s *string) *ActionPlanHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableUpdatedByID(s *string) *ActionPlanHistoryUpdate {
 	if s != nil {
-		aphu.SetUpdatedBy(*s)
+		aphu.SetUpdatedByID(*s)
 	}
 	return aphu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (aphu *ActionPlanHistoryUpdate) ClearUpdatedBy() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearUpdatedBy()
-	return aphu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (aphu *ActionPlanHistoryUpdate) SetDeletedAt(t time.Time) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetDeletedAt(t)
-	return aphu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ActionPlanHistoryUpdate {
-	if t != nil {
-		aphu.SetDeletedAt(*t)
-	}
-	return aphu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (aphu *ActionPlanHistoryUpdate) ClearDeletedAt() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearDeletedAt()
-	return aphu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (aphu *ActionPlanHistoryUpdate) SetDeletedBy(s string) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetDeletedBy(s)
-	return aphu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillableDeletedBy(s *string) *ActionPlanHistoryUpdate {
-	if s != nil {
-		aphu.SetDeletedBy(*s)
-	}
-	return aphu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (aphu *ActionPlanHistoryUpdate) ClearDeletedBy() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (aphu *ActionPlanHistoryUpdate) ClearUpdatedByID() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearUpdatedByID()
 	return aphu
 }
 
@@ -307,6 +267,9 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if aphu.mutation.RefCleared() {
 		_spec.ClearField(actionplanhistory.FieldRef, field.TypeString)
 	}
+	if aphu.mutation.UpdatedByCleared() {
+		_spec.ClearField(actionplanhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if aphu.mutation.CreatedAtCleared() {
 		_spec.ClearField(actionplanhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -316,26 +279,20 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if aphu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(actionplanhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if aphu.mutation.CreatedByCleared() {
-		_spec.ClearField(actionplanhistory.FieldCreatedBy, field.TypeString)
+	if aphu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := aphu.mutation.UpdatedBy(); ok {
-		_spec.SetField(actionplanhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := aphu.mutation.UpdatedByID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if aphu.mutation.UpdatedByCleared() {
-		_spec.ClearField(actionplanhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := aphu.mutation.DeletedAt(); ok {
-		_spec.SetField(actionplanhistory.FieldDeletedAt, field.TypeTime, value)
+	if aphu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if aphu.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplanhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := aphu.mutation.DeletedBy(); ok {
-		_spec.SetField(actionplanhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if aphu.mutation.DeletedByCleared() {
-		_spec.ClearField(actionplanhistory.FieldDeletedBy, field.TypeString)
+	if aphu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := aphu.mutation.Tags(); ok {
 		_spec.SetField(actionplanhistory.FieldTags, field.TypeJSON, value)
@@ -423,63 +380,23 @@ func (aphuo *ActionPlanHistoryUpdateOne) ClearUpdatedAt() *ActionPlanHistoryUpda
 	return aphuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetUpdatedBy(s string) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetUpdatedByID(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetUpdatedByID(s)
 	return aphuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ActionPlanHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableUpdatedByID(s *string) *ActionPlanHistoryUpdateOne {
 	if s != nil {
-		aphuo.SetUpdatedBy(*s)
+		aphuo.SetUpdatedByID(*s)
 	}
 	return aphuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearUpdatedBy() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearUpdatedBy()
-	return aphuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetDeletedAt(t time.Time) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetDeletedAt(t)
-	return aphuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ActionPlanHistoryUpdateOne {
-	if t != nil {
-		aphuo.SetDeletedAt(*t)
-	}
-	return aphuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearDeletedAt() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearDeletedAt()
-	return aphuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetDeletedBy(s string) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetDeletedBy(s)
-	return aphuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillableDeletedBy(s *string) *ActionPlanHistoryUpdateOne {
-	if s != nil {
-		aphuo.SetDeletedBy(*s)
-	}
-	return aphuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearDeletedBy() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearUpdatedByID() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearUpdatedByID()
 	return aphuo
 }
 
@@ -716,6 +633,9 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	if aphuo.mutation.RefCleared() {
 		_spec.ClearField(actionplanhistory.FieldRef, field.TypeString)
 	}
+	if aphuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(actionplanhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if aphuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(actionplanhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -725,26 +645,20 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	if aphuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(actionplanhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if aphuo.mutation.CreatedByCleared() {
-		_spec.ClearField(actionplanhistory.FieldCreatedBy, field.TypeString)
+	if aphuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := aphuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(actionplanhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := aphuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if aphuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(actionplanhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := aphuo.mutation.DeletedAt(); ok {
-		_spec.SetField(actionplanhistory.FieldDeletedAt, field.TypeTime, value)
+	if aphuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if aphuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplanhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := aphuo.mutation.DeletedBy(); ok {
-		_spec.SetField(actionplanhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if aphuo.mutation.DeletedByCleared() {
-		_spec.ClearField(actionplanhistory.FieldDeletedBy, field.TypeString)
+	if aphuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := aphuo.mutation.Tags(); ok {
 		_spec.SetField(actionplanhistory.FieldTags, field.TypeJSON, value)

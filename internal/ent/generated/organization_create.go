@@ -76,30 +76,30 @@ func (oc *OrganizationCreate) SetNillableUpdatedAt(t *time.Time) *OrganizationCr
 	return oc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (oc *OrganizationCreate) SetCreatedBy(s string) *OrganizationCreate {
-	oc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (oc *OrganizationCreate) SetCreatedByID(s string) *OrganizationCreate {
+	oc.mutation.SetCreatedByID(s)
 	return oc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableCreatedBy(s *string) *OrganizationCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableCreatedByID(s *string) *OrganizationCreate {
 	if s != nil {
-		oc.SetCreatedBy(*s)
+		oc.SetCreatedByID(*s)
 	}
 	return oc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (oc *OrganizationCreate) SetUpdatedBy(s string) *OrganizationCreate {
-	oc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (oc *OrganizationCreate) SetUpdatedByID(s string) *OrganizationCreate {
+	oc.mutation.SetUpdatedByID(s)
 	return oc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableUpdatedBy(s *string) *OrganizationCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableUpdatedByID(s *string) *OrganizationCreate {
 	if s != nil {
-		oc.SetUpdatedBy(*s)
+		oc.SetUpdatedByID(*s)
 	}
 	return oc
 }
@@ -138,16 +138,16 @@ func (oc *OrganizationCreate) SetNillableDeletedAt(t *time.Time) *OrganizationCr
 	return oc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (oc *OrganizationCreate) SetDeletedBy(s string) *OrganizationCreate {
-	oc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (oc *OrganizationCreate) SetDeletedByID(s string) *OrganizationCreate {
+	oc.mutation.SetDeletedByID(s)
 	return oc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableDeletedBy(s *string) *OrganizationCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableDeletedByID(s *string) *OrganizationCreate {
 	if s != nil {
-		oc.SetDeletedBy(*s)
+		oc.SetDeletedByID(*s)
 	}
 	return oc
 }
@@ -254,6 +254,16 @@ func (oc *OrganizationCreate) SetNillableID(s *string) *OrganizationCreate {
 		oc.SetID(*s)
 	}
 	return oc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (oc *OrganizationCreate) SetCreatedBy(u *User) *OrganizationCreate {
+	return oc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (oc *OrganizationCreate) SetUpdatedBy(u *User) *OrganizationCreate {
+	return oc.SetUpdatedByID(u.ID)
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
@@ -1006,14 +1016,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := oc.mutation.CreatedBy(); ok {
-		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := oc.mutation.UpdatedBy(); ok {
-		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := oc.mutation.MappingID(); ok {
 		_spec.SetField(organization.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -1026,9 +1028,9 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := oc.mutation.DeletedBy(); ok {
-		_spec.SetField(organization.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := oc.mutation.DeletedByID(); ok {
+		_spec.SetField(organization.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := oc.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)
@@ -1053,6 +1055,42 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := oc.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 		_node.DedicatedDb = value
+	}
+	if nodes := oc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.CreatedByTable,
+			Columns: []string{organization.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Organization
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.UpdatedByTable,
+			Columns: []string{organization.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Organization
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := oc.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

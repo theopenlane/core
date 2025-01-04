@@ -100,7 +100,7 @@ func (Subcontrol) Edges() []ent.Edge {
 // Mixin of the Subcontrol
 func (Subcontrol) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

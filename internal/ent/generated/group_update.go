@@ -59,63 +59,23 @@ func (gu *GroupUpdate) ClearUpdatedAt() *GroupUpdate {
 	return gu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gu *GroupUpdate) SetUpdatedBy(s string) *GroupUpdate {
-	gu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gu *GroupUpdate) SetUpdatedByID(s string) *GroupUpdate {
+	gu.mutation.SetUpdatedByID(s)
 	return gu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gu *GroupUpdate) SetNillableUpdatedBy(s *string) *GroupUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gu *GroupUpdate) SetNillableUpdatedByID(s *string) *GroupUpdate {
 	if s != nil {
-		gu.SetUpdatedBy(*s)
+		gu.SetUpdatedByID(*s)
 	}
 	return gu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gu *GroupUpdate) ClearUpdatedBy() *GroupUpdate {
-	gu.mutation.ClearUpdatedBy()
-	return gu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gu *GroupUpdate) SetDeletedAt(t time.Time) *GroupUpdate {
-	gu.mutation.SetDeletedAt(t)
-	return gu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gu *GroupUpdate) SetNillableDeletedAt(t *time.Time) *GroupUpdate {
-	if t != nil {
-		gu.SetDeletedAt(*t)
-	}
-	return gu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gu *GroupUpdate) ClearDeletedAt() *GroupUpdate {
-	gu.mutation.ClearDeletedAt()
-	return gu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gu *GroupUpdate) SetDeletedBy(s string) *GroupUpdate {
-	gu.mutation.SetDeletedBy(s)
-	return gu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gu *GroupUpdate) SetNillableDeletedBy(s *string) *GroupUpdate {
-	if s != nil {
-		gu.SetDeletedBy(*s)
-	}
-	return gu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gu *GroupUpdate) ClearDeletedBy() *GroupUpdate {
-	gu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gu *GroupUpdate) ClearUpdatedByID() *GroupUpdate {
+	gu.mutation.ClearUpdatedByID()
 	return gu
 }
 
@@ -243,6 +203,11 @@ func (gu *GroupUpdate) SetNillableDisplayName(s *string) *GroupUpdate {
 		gu.SetDisplayName(*s)
 	}
 	return gu
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (gu *GroupUpdate) SetUpdatedBy(u *User) *GroupUpdate {
+	return gu.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -774,6 +739,12 @@ func (gu *GroupUpdate) AddMembers(g ...*GroupMembership) *GroupUpdate {
 // Mutation returns the GroupMutation object of the builder.
 func (gu *GroupUpdate) Mutation() *GroupMutation {
 	return gu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (gu *GroupUpdate) ClearUpdatedBy() *GroupUpdate {
+	gu.mutation.ClearUpdatedBy()
+	return gu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -1594,26 +1565,11 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if gu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(group.FieldUpdatedAt, field.TypeTime)
 	}
-	if gu.mutation.CreatedByCleared() {
-		_spec.ClearField(group.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := gu.mutation.UpdatedBy(); ok {
-		_spec.SetField(group.FieldUpdatedBy, field.TypeString, value)
-	}
-	if gu.mutation.UpdatedByCleared() {
-		_spec.ClearField(group.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := gu.mutation.DeletedAt(); ok {
-		_spec.SetField(group.FieldDeletedAt, field.TypeTime, value)
-	}
 	if gu.mutation.DeletedAtCleared() {
 		_spec.ClearField(group.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gu.mutation.DeletedBy(); ok {
-		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
-	}
-	if gu.mutation.DeletedByCleared() {
-		_spec.ClearField(group.FieldDeletedBy, field.TypeString)
+	if gu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(group.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gu.mutation.Tags(); ok {
 		_spec.SetField(group.FieldTags, field.TypeJSON, value)
@@ -1649,6 +1605,37 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := gu.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
+	}
+	if gu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByTable,
+			Columns: []string{group.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByTable,
+			Columns: []string{group.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if gu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3401,63 +3388,23 @@ func (guo *GroupUpdateOne) ClearUpdatedAt() *GroupUpdateOne {
 	return guo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (guo *GroupUpdateOne) SetUpdatedBy(s string) *GroupUpdateOne {
-	guo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (guo *GroupUpdateOne) SetUpdatedByID(s string) *GroupUpdateOne {
+	guo.mutation.SetUpdatedByID(s)
 	return guo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (guo *GroupUpdateOne) SetNillableUpdatedBy(s *string) *GroupUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (guo *GroupUpdateOne) SetNillableUpdatedByID(s *string) *GroupUpdateOne {
 	if s != nil {
-		guo.SetUpdatedBy(*s)
+		guo.SetUpdatedByID(*s)
 	}
 	return guo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (guo *GroupUpdateOne) ClearUpdatedBy() *GroupUpdateOne {
-	guo.mutation.ClearUpdatedBy()
-	return guo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (guo *GroupUpdateOne) SetDeletedAt(t time.Time) *GroupUpdateOne {
-	guo.mutation.SetDeletedAt(t)
-	return guo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (guo *GroupUpdateOne) SetNillableDeletedAt(t *time.Time) *GroupUpdateOne {
-	if t != nil {
-		guo.SetDeletedAt(*t)
-	}
-	return guo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (guo *GroupUpdateOne) ClearDeletedAt() *GroupUpdateOne {
-	guo.mutation.ClearDeletedAt()
-	return guo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (guo *GroupUpdateOne) SetDeletedBy(s string) *GroupUpdateOne {
-	guo.mutation.SetDeletedBy(s)
-	return guo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (guo *GroupUpdateOne) SetNillableDeletedBy(s *string) *GroupUpdateOne {
-	if s != nil {
-		guo.SetDeletedBy(*s)
-	}
-	return guo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (guo *GroupUpdateOne) ClearDeletedBy() *GroupUpdateOne {
-	guo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (guo *GroupUpdateOne) ClearUpdatedByID() *GroupUpdateOne {
+	guo.mutation.ClearUpdatedByID()
 	return guo
 }
 
@@ -3585,6 +3532,11 @@ func (guo *GroupUpdateOne) SetNillableDisplayName(s *string) *GroupUpdateOne {
 		guo.SetDisplayName(*s)
 	}
 	return guo
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (guo *GroupUpdateOne) SetUpdatedBy(u *User) *GroupUpdateOne {
+	return guo.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -4116,6 +4068,12 @@ func (guo *GroupUpdateOne) AddMembers(g ...*GroupMembership) *GroupUpdateOne {
 // Mutation returns the GroupMutation object of the builder.
 func (guo *GroupUpdateOne) Mutation() *GroupMutation {
 	return guo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (guo *GroupUpdateOne) ClearUpdatedBy() *GroupUpdateOne {
+	guo.mutation.ClearUpdatedBy()
+	return guo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -4966,26 +4924,11 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 	if guo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(group.FieldUpdatedAt, field.TypeTime)
 	}
-	if guo.mutation.CreatedByCleared() {
-		_spec.ClearField(group.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := guo.mutation.UpdatedBy(); ok {
-		_spec.SetField(group.FieldUpdatedBy, field.TypeString, value)
-	}
-	if guo.mutation.UpdatedByCleared() {
-		_spec.ClearField(group.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := guo.mutation.DeletedAt(); ok {
-		_spec.SetField(group.FieldDeletedAt, field.TypeTime, value)
-	}
 	if guo.mutation.DeletedAtCleared() {
 		_spec.ClearField(group.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := guo.mutation.DeletedBy(); ok {
-		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
-	}
-	if guo.mutation.DeletedByCleared() {
-		_spec.ClearField(group.FieldDeletedBy, field.TypeString)
+	if guo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(group.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := guo.mutation.Tags(); ok {
 		_spec.SetField(group.FieldTags, field.TypeJSON, value)
@@ -5021,6 +4964,37 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 	}
 	if value, ok := guo.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
+	}
+	if guo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByTable,
+			Columns: []string{group.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByTable,
+			Columns: []string{group.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if guo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

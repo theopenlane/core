@@ -48,23 +48,23 @@ func (usu *UserSettingUpdate) ClearUpdatedAt() *UserSettingUpdate {
 	return usu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (usu *UserSettingUpdate) SetUpdatedBy(s string) *UserSettingUpdate {
-	usu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (usu *UserSettingUpdate) SetUpdatedByID(s string) *UserSettingUpdate {
+	usu.mutation.SetUpdatedByID(s)
 	return usu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableUpdatedBy(s *string) *UserSettingUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (usu *UserSettingUpdate) SetNillableUpdatedByID(s *string) *UserSettingUpdate {
 	if s != nil {
-		usu.SetUpdatedBy(*s)
+		usu.SetUpdatedByID(*s)
 	}
 	return usu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (usu *UserSettingUpdate) ClearUpdatedBy() *UserSettingUpdate {
-	usu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (usu *UserSettingUpdate) ClearUpdatedByID() *UserSettingUpdate {
+	usu.mutation.ClearUpdatedByID()
 	return usu
 }
 
@@ -83,46 +83,6 @@ func (usu *UserSettingUpdate) AppendTags(s []string) *UserSettingUpdate {
 // ClearTags clears the value of the "tags" field.
 func (usu *UserSettingUpdate) ClearTags() *UserSettingUpdate {
 	usu.mutation.ClearTags()
-	return usu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (usu *UserSettingUpdate) SetDeletedAt(t time.Time) *UserSettingUpdate {
-	usu.mutation.SetDeletedAt(t)
-	return usu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableDeletedAt(t *time.Time) *UserSettingUpdate {
-	if t != nil {
-		usu.SetDeletedAt(*t)
-	}
-	return usu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (usu *UserSettingUpdate) ClearDeletedAt() *UserSettingUpdate {
-	usu.mutation.ClearDeletedAt()
-	return usu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (usu *UserSettingUpdate) SetDeletedBy(s string) *UserSettingUpdate {
-	usu.mutation.SetDeletedBy(s)
-	return usu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableDeletedBy(s *string) *UserSettingUpdate {
-	if s != nil {
-		usu.SetDeletedBy(*s)
-	}
-	return usu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (usu *UserSettingUpdate) ClearDeletedBy() *UserSettingUpdate {
-	usu.mutation.ClearDeletedBy()
 	return usu
 }
 
@@ -288,6 +248,11 @@ func (usu *UserSettingUpdate) ClearPhoneNumber() *UserSettingUpdate {
 	return usu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (usu *UserSettingUpdate) SetUpdatedBy(u *User) *UserSettingUpdate {
+	return usu.SetUpdatedByID(u.ID)
+}
+
 // SetUser sets the "user" edge to the User entity.
 func (usu *UserSettingUpdate) SetUser(u *User) *UserSettingUpdate {
 	return usu.SetUserID(u.ID)
@@ -330,6 +295,12 @@ func (usu *UserSettingUpdate) AddFiles(f ...*File) *UserSettingUpdate {
 // Mutation returns the UserSettingMutation object of the builder.
 func (usu *UserSettingUpdate) Mutation() *UserSettingMutation {
 	return usu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (usu *UserSettingUpdate) ClearUpdatedBy() *UserSettingUpdate {
+	usu.mutation.ClearUpdatedBy()
+	return usu
 }
 
 // ClearUser clears the "user" edge to the User entity.
@@ -444,15 +415,6 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if usu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(usersetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if usu.mutation.CreatedByCleared() {
-		_spec.ClearField(usersetting.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := usu.mutation.UpdatedBy(); ok {
-		_spec.SetField(usersetting.FieldUpdatedBy, field.TypeString, value)
-	}
-	if usu.mutation.UpdatedByCleared() {
-		_spec.ClearField(usersetting.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := usu.mutation.Tags(); ok {
 		_spec.SetField(usersetting.FieldTags, field.TypeJSON, value)
 	}
@@ -464,17 +426,11 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if usu.mutation.TagsCleared() {
 		_spec.ClearField(usersetting.FieldTags, field.TypeJSON)
 	}
-	if value, ok := usu.mutation.DeletedAt(); ok {
-		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)
-	}
 	if usu.mutation.DeletedAtCleared() {
 		_spec.ClearField(usersetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := usu.mutation.DeletedBy(); ok {
-		_spec.SetField(usersetting.FieldDeletedBy, field.TypeString, value)
-	}
-	if usu.mutation.DeletedByCleared() {
-		_spec.ClearField(usersetting.FieldDeletedBy, field.TypeString)
+	if usu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(usersetting.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := usu.mutation.Locked(); ok {
 		_spec.SetField(usersetting.FieldLocked, field.TypeBool, value)
@@ -514,6 +470,37 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if usu.mutation.PhoneNumberCleared() {
 		_spec.ClearField(usersetting.FieldPhoneNumber, field.TypeString)
+	}
+	if usu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.UpdatedByTable,
+			Columns: []string{usersetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usu.schemaConfig.UserSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := usu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.UpdatedByTable,
+			Columns: []string{usersetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usu.schemaConfig.UserSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if usu.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -661,23 +648,23 @@ func (usuo *UserSettingUpdateOne) ClearUpdatedAt() *UserSettingUpdateOne {
 	return usuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (usuo *UserSettingUpdateOne) SetUpdatedBy(s string) *UserSettingUpdateOne {
-	usuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (usuo *UserSettingUpdateOne) SetUpdatedByID(s string) *UserSettingUpdateOne {
+	usuo.mutation.SetUpdatedByID(s)
 	return usuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableUpdatedBy(s *string) *UserSettingUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (usuo *UserSettingUpdateOne) SetNillableUpdatedByID(s *string) *UserSettingUpdateOne {
 	if s != nil {
-		usuo.SetUpdatedBy(*s)
+		usuo.SetUpdatedByID(*s)
 	}
 	return usuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (usuo *UserSettingUpdateOne) ClearUpdatedBy() *UserSettingUpdateOne {
-	usuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (usuo *UserSettingUpdateOne) ClearUpdatedByID() *UserSettingUpdateOne {
+	usuo.mutation.ClearUpdatedByID()
 	return usuo
 }
 
@@ -696,46 +683,6 @@ func (usuo *UserSettingUpdateOne) AppendTags(s []string) *UserSettingUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (usuo *UserSettingUpdateOne) ClearTags() *UserSettingUpdateOne {
 	usuo.mutation.ClearTags()
-	return usuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (usuo *UserSettingUpdateOne) SetDeletedAt(t time.Time) *UserSettingUpdateOne {
-	usuo.mutation.SetDeletedAt(t)
-	return usuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableDeletedAt(t *time.Time) *UserSettingUpdateOne {
-	if t != nil {
-		usuo.SetDeletedAt(*t)
-	}
-	return usuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (usuo *UserSettingUpdateOne) ClearDeletedAt() *UserSettingUpdateOne {
-	usuo.mutation.ClearDeletedAt()
-	return usuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (usuo *UserSettingUpdateOne) SetDeletedBy(s string) *UserSettingUpdateOne {
-	usuo.mutation.SetDeletedBy(s)
-	return usuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableDeletedBy(s *string) *UserSettingUpdateOne {
-	if s != nil {
-		usuo.SetDeletedBy(*s)
-	}
-	return usuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (usuo *UserSettingUpdateOne) ClearDeletedBy() *UserSettingUpdateOne {
-	usuo.mutation.ClearDeletedBy()
 	return usuo
 }
 
@@ -901,6 +848,11 @@ func (usuo *UserSettingUpdateOne) ClearPhoneNumber() *UserSettingUpdateOne {
 	return usuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (usuo *UserSettingUpdateOne) SetUpdatedBy(u *User) *UserSettingUpdateOne {
+	return usuo.SetUpdatedByID(u.ID)
+}
+
 // SetUser sets the "user" edge to the User entity.
 func (usuo *UserSettingUpdateOne) SetUser(u *User) *UserSettingUpdateOne {
 	return usuo.SetUserID(u.ID)
@@ -943,6 +895,12 @@ func (usuo *UserSettingUpdateOne) AddFiles(f ...*File) *UserSettingUpdateOne {
 // Mutation returns the UserSettingMutation object of the builder.
 func (usuo *UserSettingUpdateOne) Mutation() *UserSettingMutation {
 	return usuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (usuo *UserSettingUpdateOne) ClearUpdatedBy() *UserSettingUpdateOne {
+	usuo.mutation.ClearUpdatedBy()
+	return usuo
 }
 
 // ClearUser clears the "user" edge to the User entity.
@@ -1087,15 +1045,6 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 	if usuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(usersetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if usuo.mutation.CreatedByCleared() {
-		_spec.ClearField(usersetting.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := usuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(usersetting.FieldUpdatedBy, field.TypeString, value)
-	}
-	if usuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(usersetting.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := usuo.mutation.Tags(); ok {
 		_spec.SetField(usersetting.FieldTags, field.TypeJSON, value)
 	}
@@ -1107,17 +1056,11 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 	if usuo.mutation.TagsCleared() {
 		_spec.ClearField(usersetting.FieldTags, field.TypeJSON)
 	}
-	if value, ok := usuo.mutation.DeletedAt(); ok {
-		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)
-	}
 	if usuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(usersetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := usuo.mutation.DeletedBy(); ok {
-		_spec.SetField(usersetting.FieldDeletedBy, field.TypeString, value)
-	}
-	if usuo.mutation.DeletedByCleared() {
-		_spec.ClearField(usersetting.FieldDeletedBy, field.TypeString)
+	if usuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(usersetting.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := usuo.mutation.Locked(); ok {
 		_spec.SetField(usersetting.FieldLocked, field.TypeBool, value)
@@ -1157,6 +1100,37 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 	}
 	if usuo.mutation.PhoneNumberCleared() {
 		_spec.ClearField(usersetting.FieldPhoneNumber, field.TypeString)
+	}
+	if usuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.UpdatedByTable,
+			Columns: []string{usersetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usuo.schemaConfig.UserSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := usuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.UpdatedByTable,
+			Columns: []string{usersetting.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usuo.schemaConfig.UserSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if usuo.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{

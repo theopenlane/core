@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -28,6 +29,8 @@ type SubscriberQuery struct {
 	order           []subscriber.OrderOption
 	inters          []Interceptor
 	predicates      []predicate.Subscriber
+	withCreatedBy   *UserQuery
+	withUpdatedBy   *UserQuery
 	withOwner       *OrganizationQuery
 	withEvents      *EventQuery
 	loadTotal       []func(context.Context, []*Subscriber) error
@@ -67,6 +70,56 @@ func (sq *SubscriberQuery) Unique(unique bool) *SubscriberQuery {
 func (sq *SubscriberQuery) Order(o ...subscriber.OrderOption) *SubscriberQuery {
 	sq.order = append(sq.order, o...)
 	return sq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (sq *SubscriberQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subscriber.CreatedByTable, subscriber.CreatedByColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (sq *SubscriberQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subscriber.UpdatedByTable, subscriber.UpdatedByColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -306,18 +359,42 @@ func (sq *SubscriberQuery) Clone() *SubscriberQuery {
 		return nil
 	}
 	return &SubscriberQuery{
-		config:     sq.config,
-		ctx:        sq.ctx.Clone(),
-		order:      append([]subscriber.OrderOption{}, sq.order...),
-		inters:     append([]Interceptor{}, sq.inters...),
-		predicates: append([]predicate.Subscriber{}, sq.predicates...),
-		withOwner:  sq.withOwner.Clone(),
-		withEvents: sq.withEvents.Clone(),
+		config:        sq.config,
+		ctx:           sq.ctx.Clone(),
+		order:         append([]subscriber.OrderOption{}, sq.order...),
+		inters:        append([]Interceptor{}, sq.inters...),
+		predicates:    append([]predicate.Subscriber{}, sq.predicates...),
+		withCreatedBy: sq.withCreatedBy.Clone(),
+		withUpdatedBy: sq.withUpdatedBy.Clone(),
+		withOwner:     sq.withOwner.Clone(),
+		withEvents:    sq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
 		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubscriberQuery) WithCreatedBy(opts ...func(*UserQuery)) *SubscriberQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withCreatedBy = query
+	return sq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubscriberQuery) WithUpdatedBy(opts ...func(*UserQuery)) *SubscriberQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withUpdatedBy = query
+	return sq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -426,7 +503,9 @@ func (sq *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	var (
 		nodes       = []*Subscriber{}
 		_spec       = sq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
+			sq.withCreatedBy != nil,
+			sq.withUpdatedBy != nil,
 			sq.withOwner != nil,
 			sq.withEvents != nil,
 		}
@@ -453,6 +532,18 @@ func (sq *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := sq.withCreatedBy; query != nil {
+		if err := sq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Subscriber, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withUpdatedBy; query != nil {
+		if err := sq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Subscriber, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := sq.withOwner; query != nil {
 		if err := sq.loadOwner(ctx, query, nodes, nil,
@@ -482,6 +573,64 @@ func (sq *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	return nodes, nil
 }
 
+func (sq *SubscriberQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Subscriber, init func(*Subscriber), assign func(*Subscriber, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subscriber)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *SubscriberQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Subscriber, init func(*Subscriber), assign func(*Subscriber, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subscriber)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (sq *SubscriberQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Subscriber, init func(*Subscriber), assign func(*Subscriber, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subscriber)
@@ -603,6 +752,12 @@ func (sq *SubscriberQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != subscriber.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if sq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(subscriber.FieldCreatedByID)
+		}
+		if sq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(subscriber.FieldUpdatedByID)
 		}
 		if sq.withOwner != nil {
 			_spec.Node.AddColumnOnce(subscriber.FieldOwnerID)

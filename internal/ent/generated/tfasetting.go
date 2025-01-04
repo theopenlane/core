@@ -23,16 +23,16 @@ type TFASetting struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The user id that owns the object
@@ -57,13 +57,39 @@ type TFASetting struct {
 
 // TFASettingEdges holds the relations/edges for other nodes in the graph.
 type TFASettingEdges struct {
+	// CreatedBy holds the value of the created_by edge.
+	CreatedBy *User `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the updated_by edge.
+	UpdatedBy *User `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [3]map[string]int
+}
+
+// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TFASettingEdges) CreatedByOrErr() (*User, error) {
+	if e.CreatedBy != nil {
+		return e.CreatedBy, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by"}
+}
+
+// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TFASettingEdges) UpdatedByOrErr() (*User, error) {
+	if e.UpdatedBy != nil {
+		return e.UpdatedBy, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -71,7 +97,7 @@ type TFASettingEdges struct {
 func (e TFASettingEdges) OwnerOrErr() (*User, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -86,7 +112,7 @@ func (*TFASetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case tfasetting.FieldVerified, tfasetting.FieldPhoneOtpAllowed, tfasetting.FieldEmailOtpAllowed, tfasetting.FieldTotpAllowed:
 			values[i] = new(sql.NullBool)
-		case tfasetting.FieldID, tfasetting.FieldCreatedBy, tfasetting.FieldUpdatedBy, tfasetting.FieldMappingID, tfasetting.FieldDeletedBy, tfasetting.FieldOwnerID, tfasetting.FieldTfaSecret:
+		case tfasetting.FieldID, tfasetting.FieldCreatedByID, tfasetting.FieldUpdatedByID, tfasetting.FieldMappingID, tfasetting.FieldDeletedByID, tfasetting.FieldOwnerID, tfasetting.FieldTfaSecret:
 			values[i] = new(sql.NullString)
 		case tfasetting.FieldCreatedAt, tfasetting.FieldUpdatedAt, tfasetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -123,17 +149,17 @@ func (ts *TFASetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ts.UpdatedAt = value.Time
 			}
-		case tfasetting.FieldCreatedBy:
+		case tfasetting.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				ts.CreatedBy = value.String
+				ts.CreatedByID = value.String
 			}
-		case tfasetting.FieldUpdatedBy:
+		case tfasetting.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				ts.UpdatedBy = value.String
+				ts.UpdatedByID = value.String
 			}
 		case tfasetting.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -147,11 +173,11 @@ func (ts *TFASetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ts.DeletedAt = value.Time
 			}
-		case tfasetting.FieldDeletedBy:
+		case tfasetting.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				ts.DeletedBy = value.String
+				ts.DeletedByID = value.String
 			}
 		case tfasetting.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -219,6 +245,16 @@ func (ts *TFASetting) Value(name string) (ent.Value, error) {
 	return ts.selectValues.Get(name)
 }
 
+// QueryCreatedBy queries the "created_by" edge of the TFASetting entity.
+func (ts *TFASetting) QueryCreatedBy() *UserQuery {
+	return NewTFASettingClient(ts.config).QueryCreatedBy(ts)
+}
+
+// QueryUpdatedBy queries the "updated_by" edge of the TFASetting entity.
+func (ts *TFASetting) QueryUpdatedBy() *UserQuery {
+	return NewTFASettingClient(ts.config).QueryUpdatedBy(ts)
+}
+
 // QueryOwner queries the "owner" edge of the TFASetting entity.
 func (ts *TFASetting) QueryOwner() *UserQuery {
 	return NewTFASettingClient(ts.config).QueryOwner(ts)
@@ -253,11 +289,11 @@ func (ts *TFASetting) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(ts.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(ts.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(ts.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(ts.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(ts.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ts.MappingID)
@@ -265,8 +301,8 @@ func (ts *TFASetting) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ts.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ts.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(ts.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ts.Tags))

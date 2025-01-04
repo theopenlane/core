@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -52,63 +53,23 @@ func (ipu *InternalPolicyUpdate) ClearUpdatedAt() *InternalPolicyUpdate {
 	return ipu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ipu *InternalPolicyUpdate) SetUpdatedBy(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ipu *InternalPolicyUpdate) SetUpdatedByID(s string) *InternalPolicyUpdate {
+	ipu.mutation.SetUpdatedByID(s)
 	return ipu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableUpdatedBy(s *string) *InternalPolicyUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableUpdatedByID(s *string) *InternalPolicyUpdate {
 	if s != nil {
-		ipu.SetUpdatedBy(*s)
+		ipu.SetUpdatedByID(*s)
 	}
 	return ipu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ipu *InternalPolicyUpdate) ClearUpdatedBy() *InternalPolicyUpdate {
-	ipu.mutation.ClearUpdatedBy()
-	return ipu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ipu *InternalPolicyUpdate) SetDeletedAt(t time.Time) *InternalPolicyUpdate {
-	ipu.mutation.SetDeletedAt(t)
-	return ipu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableDeletedAt(t *time.Time) *InternalPolicyUpdate {
-	if t != nil {
-		ipu.SetDeletedAt(*t)
-	}
-	return ipu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ipu *InternalPolicyUpdate) ClearDeletedAt() *InternalPolicyUpdate {
-	ipu.mutation.ClearDeletedAt()
-	return ipu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ipu *InternalPolicyUpdate) SetDeletedBy(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetDeletedBy(s)
-	return ipu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableDeletedBy(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetDeletedBy(*s)
-	}
-	return ipu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ipu *InternalPolicyUpdate) ClearDeletedBy() *InternalPolicyUpdate {
-	ipu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ipu *InternalPolicyUpdate) ClearUpdatedByID() *InternalPolicyUpdate {
+	ipu.mutation.ClearUpdatedByID()
 	return ipu
 }
 
@@ -296,6 +257,11 @@ func (ipu *InternalPolicyUpdate) ClearDetails() *InternalPolicyUpdate {
 	return ipu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (ipu *InternalPolicyUpdate) SetUpdatedBy(u *User) *InternalPolicyUpdate {
+	return ipu.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ipu *InternalPolicyUpdate) SetOwner(o *Organization) *InternalPolicyUpdate {
 	return ipu.SetOwnerID(o.ID)
@@ -424,6 +390,12 @@ func (ipu *InternalPolicyUpdate) AddPrograms(p ...*Program) *InternalPolicyUpdat
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return ipu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (ipu *InternalPolicyUpdate) ClearUpdatedBy() *InternalPolicyUpdate {
+	ipu.mutation.ClearUpdatedBy()
+	return ipu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -684,26 +656,11 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if ipu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedAt, field.TypeTime)
 	}
-	if ipu.mutation.CreatedByCleared() {
-		_spec.ClearField(internalpolicy.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := ipu.mutation.UpdatedBy(); ok {
-		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
-	}
-	if ipu.mutation.UpdatedByCleared() {
-		_spec.ClearField(internalpolicy.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := ipu.mutation.DeletedAt(); ok {
-		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ipu.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ipu.mutation.DeletedBy(); ok {
-		_spec.SetField(internalpolicy.FieldDeletedBy, field.TypeString, value)
-	}
-	if ipu.mutation.DeletedByCleared() {
-		_spec.ClearField(internalpolicy.FieldDeletedBy, field.TypeString)
+	if ipu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(internalpolicy.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ipu.mutation.Tags(); ok {
 		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
@@ -760,6 +717,37 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeJSON)
+	}
+	if ipu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByTable,
+			Columns: []string{internalpolicy.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByTable,
+			Columns: []string{internalpolicy.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ipu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1212,63 +1200,23 @@ func (ipuo *InternalPolicyUpdateOne) ClearUpdatedAt() *InternalPolicyUpdateOne {
 	return ipuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ipuo *InternalPolicyUpdateOne) SetUpdatedBy(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ipuo *InternalPolicyUpdateOne) SetUpdatedByID(s string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetUpdatedByID(s)
 	return ipuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableUpdatedBy(s *string) *InternalPolicyUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableUpdatedByID(s *string) *InternalPolicyUpdateOne {
 	if s != nil {
-		ipuo.SetUpdatedBy(*s)
+		ipuo.SetUpdatedByID(*s)
 	}
 	return ipuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ipuo *InternalPolicyUpdateOne) ClearUpdatedBy() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearUpdatedBy()
-	return ipuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ipuo *InternalPolicyUpdateOne) SetDeletedAt(t time.Time) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDeletedAt(t)
-	return ipuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableDeletedAt(t *time.Time) *InternalPolicyUpdateOne {
-	if t != nil {
-		ipuo.SetDeletedAt(*t)
-	}
-	return ipuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDeletedAt() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDeletedAt()
-	return ipuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ipuo *InternalPolicyUpdateOne) SetDeletedBy(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDeletedBy(s)
-	return ipuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableDeletedBy(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetDeletedBy(*s)
-	}
-	return ipuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDeletedBy() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ipuo *InternalPolicyUpdateOne) ClearUpdatedByID() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearUpdatedByID()
 	return ipuo
 }
 
@@ -1456,6 +1404,11 @@ func (ipuo *InternalPolicyUpdateOne) ClearDetails() *InternalPolicyUpdateOne {
 	return ipuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (ipuo *InternalPolicyUpdateOne) SetUpdatedBy(u *User) *InternalPolicyUpdateOne {
+	return ipuo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ipuo *InternalPolicyUpdateOne) SetOwner(o *Organization) *InternalPolicyUpdateOne {
 	return ipuo.SetOwnerID(o.ID)
@@ -1584,6 +1537,12 @@ func (ipuo *InternalPolicyUpdateOne) AddPrograms(p ...*Program) *InternalPolicyU
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return ipuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (ipuo *InternalPolicyUpdateOne) ClearUpdatedBy() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearUpdatedBy()
+	return ipuo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -1874,26 +1833,11 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	if ipuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedAt, field.TypeTime)
 	}
-	if ipuo.mutation.CreatedByCleared() {
-		_spec.ClearField(internalpolicy.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := ipuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
-	}
-	if ipuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(internalpolicy.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := ipuo.mutation.DeletedAt(); ok {
-		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ipuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ipuo.mutation.DeletedBy(); ok {
-		_spec.SetField(internalpolicy.FieldDeletedBy, field.TypeString, value)
-	}
-	if ipuo.mutation.DeletedByCleared() {
-		_spec.ClearField(internalpolicy.FieldDeletedBy, field.TypeString)
+	if ipuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(internalpolicy.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ipuo.mutation.Tags(); ok {
 		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
@@ -1950,6 +1894,37 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeJSON)
+	}
+	if ipuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByTable,
+			Columns: []string{internalpolicy.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByTable,
+			Columns: []string{internalpolicy.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ipuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

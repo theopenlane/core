@@ -3,7 +3,7 @@ query GetAllGroupSettingHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         groupID
         historyTime
         id
@@ -13,8 +13,9 @@ query GetAllGroupSettingHistories {
         syncToGithub
         syncToSlack
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         visibility
       }
     }
@@ -26,7 +27,7 @@ query GetGroupSettingHistories($where: GroupSettingHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         groupID
         historyTime
         id
@@ -36,8 +37,9 @@ query GetGroupSettingHistories($where: GroupSettingHistoryWhereInput) {
         syncToGithub
         syncToSlack
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         visibility
       }
     }

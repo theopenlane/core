@@ -51,7 +51,7 @@ func (OrgSubscription) Fields() []ent.Field {
 // Mixin of the OrgSubscription
 func (OrgSubscription) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},

@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Entity_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Entity_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Entity_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Entity_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Entity_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
@@ -95,6 +95,10 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_entityTypeID(ctx, field)
 			case "status":
 				return ec.fieldContext_Entity_status(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Entity_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Entity_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "contacts":
@@ -159,14 +163,14 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Entity_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Entity_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Entity_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Entity_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Entity_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
@@ -183,6 +187,10 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_entityTypeID(ctx, field)
 			case "status":
 				return ec.fieldContext_Entity_status(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Entity_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Entity_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "contacts":
@@ -291,14 +299,14 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Entity_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Entity_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Entity_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Entity_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Entity_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
@@ -315,6 +323,10 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_entityTypeID(ctx, field)
 			case "status":
 				return ec.fieldContext_Entity_status(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Entity_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Entity_updatedBy(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "contacts":

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -45,63 +46,23 @@ func (gmu *GroupMembershipUpdate) ClearUpdatedAt() *GroupMembershipUpdate {
 	return gmu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gmu *GroupMembershipUpdate) SetUpdatedBy(s string) *GroupMembershipUpdate {
-	gmu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gmu *GroupMembershipUpdate) SetUpdatedByID(s string) *GroupMembershipUpdate {
+	gmu.mutation.SetUpdatedByID(s)
 	return gmu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmu *GroupMembershipUpdate) SetNillableUpdatedBy(s *string) *GroupMembershipUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gmu *GroupMembershipUpdate) SetNillableUpdatedByID(s *string) *GroupMembershipUpdate {
 	if s != nil {
-		gmu.SetUpdatedBy(*s)
+		gmu.SetUpdatedByID(*s)
 	}
 	return gmu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gmu *GroupMembershipUpdate) ClearUpdatedBy() *GroupMembershipUpdate {
-	gmu.mutation.ClearUpdatedBy()
-	return gmu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gmu *GroupMembershipUpdate) SetDeletedAt(t time.Time) *GroupMembershipUpdate {
-	gmu.mutation.SetDeletedAt(t)
-	return gmu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gmu *GroupMembershipUpdate) SetNillableDeletedAt(t *time.Time) *GroupMembershipUpdate {
-	if t != nil {
-		gmu.SetDeletedAt(*t)
-	}
-	return gmu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gmu *GroupMembershipUpdate) ClearDeletedAt() *GroupMembershipUpdate {
-	gmu.mutation.ClearDeletedAt()
-	return gmu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gmu *GroupMembershipUpdate) SetDeletedBy(s string) *GroupMembershipUpdate {
-	gmu.mutation.SetDeletedBy(s)
-	return gmu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmu *GroupMembershipUpdate) SetNillableDeletedBy(s *string) *GroupMembershipUpdate {
-	if s != nil {
-		gmu.SetDeletedBy(*s)
-	}
-	return gmu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gmu *GroupMembershipUpdate) ClearDeletedBy() *GroupMembershipUpdate {
-	gmu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gmu *GroupMembershipUpdate) ClearUpdatedByID() *GroupMembershipUpdate {
+	gmu.mutation.ClearUpdatedByID()
 	return gmu
 }
 
@@ -117,6 +78,11 @@ func (gmu *GroupMembershipUpdate) SetNillableRole(e *enums.Role) *GroupMembershi
 		gmu.SetRole(*e)
 	}
 	return gmu
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (gmu *GroupMembershipUpdate) SetUpdatedBy(u *User) *GroupMembershipUpdate {
+	return gmu.SetUpdatedByID(u.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -137,6 +103,12 @@ func (gmu *GroupMembershipUpdate) AddEvents(e ...*Event) *GroupMembershipUpdate 
 // Mutation returns the GroupMembershipMutation object of the builder.
 func (gmu *GroupMembershipUpdate) Mutation() *GroupMembershipMutation {
 	return gmu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (gmu *GroupMembershipUpdate) ClearUpdatedBy() *GroupMembershipUpdate {
+	gmu.mutation.ClearUpdatedBy()
+	return gmu
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -245,29 +217,45 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 	if gmu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if gmu.mutation.CreatedByCleared() {
-		_spec.ClearField(groupmembership.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := gmu.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupmembership.FieldUpdatedBy, field.TypeString, value)
-	}
-	if gmu.mutation.UpdatedByCleared() {
-		_spec.ClearField(groupmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := gmu.mutation.DeletedAt(); ok {
-		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
-	}
 	if gmu.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupmembership.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gmu.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if gmu.mutation.DeletedByCleared() {
-		_spec.ClearField(groupmembership.FieldDeletedBy, field.TypeString)
+	if gmu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gmu.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)
+	}
+	if gmu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByTable,
+			Columns: []string{groupmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmu.schemaConfig.GroupMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gmu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByTable,
+			Columns: []string{groupmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmu.schemaConfig.GroupMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if gmu.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -353,63 +341,23 @@ func (gmuo *GroupMembershipUpdateOne) ClearUpdatedAt() *GroupMembershipUpdateOne
 	return gmuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gmuo *GroupMembershipUpdateOne) SetUpdatedBy(s string) *GroupMembershipUpdateOne {
-	gmuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gmuo *GroupMembershipUpdateOne) SetUpdatedByID(s string) *GroupMembershipUpdateOne {
+	gmuo.mutation.SetUpdatedByID(s)
 	return gmuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmuo *GroupMembershipUpdateOne) SetNillableUpdatedBy(s *string) *GroupMembershipUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gmuo *GroupMembershipUpdateOne) SetNillableUpdatedByID(s *string) *GroupMembershipUpdateOne {
 	if s != nil {
-		gmuo.SetUpdatedBy(*s)
+		gmuo.SetUpdatedByID(*s)
 	}
 	return gmuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gmuo *GroupMembershipUpdateOne) ClearUpdatedBy() *GroupMembershipUpdateOne {
-	gmuo.mutation.ClearUpdatedBy()
-	return gmuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gmuo *GroupMembershipUpdateOne) SetDeletedAt(t time.Time) *GroupMembershipUpdateOne {
-	gmuo.mutation.SetDeletedAt(t)
-	return gmuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gmuo *GroupMembershipUpdateOne) SetNillableDeletedAt(t *time.Time) *GroupMembershipUpdateOne {
-	if t != nil {
-		gmuo.SetDeletedAt(*t)
-	}
-	return gmuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gmuo *GroupMembershipUpdateOne) ClearDeletedAt() *GroupMembershipUpdateOne {
-	gmuo.mutation.ClearDeletedAt()
-	return gmuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gmuo *GroupMembershipUpdateOne) SetDeletedBy(s string) *GroupMembershipUpdateOne {
-	gmuo.mutation.SetDeletedBy(s)
-	return gmuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmuo *GroupMembershipUpdateOne) SetNillableDeletedBy(s *string) *GroupMembershipUpdateOne {
-	if s != nil {
-		gmuo.SetDeletedBy(*s)
-	}
-	return gmuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gmuo *GroupMembershipUpdateOne) ClearDeletedBy() *GroupMembershipUpdateOne {
-	gmuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gmuo *GroupMembershipUpdateOne) ClearUpdatedByID() *GroupMembershipUpdateOne {
+	gmuo.mutation.ClearUpdatedByID()
 	return gmuo
 }
 
@@ -425,6 +373,11 @@ func (gmuo *GroupMembershipUpdateOne) SetNillableRole(e *enums.Role) *GroupMembe
 		gmuo.SetRole(*e)
 	}
 	return gmuo
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (gmuo *GroupMembershipUpdateOne) SetUpdatedBy(u *User) *GroupMembershipUpdateOne {
+	return gmuo.SetUpdatedByID(u.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -445,6 +398,12 @@ func (gmuo *GroupMembershipUpdateOne) AddEvents(e ...*Event) *GroupMembershipUpd
 // Mutation returns the GroupMembershipMutation object of the builder.
 func (gmuo *GroupMembershipUpdateOne) Mutation() *GroupMembershipMutation {
 	return gmuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (gmuo *GroupMembershipUpdateOne) ClearUpdatedBy() *GroupMembershipUpdateOne {
+	gmuo.mutation.ClearUpdatedBy()
+	return gmuo
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -583,29 +542,45 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 	if gmuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if gmuo.mutation.CreatedByCleared() {
-		_spec.ClearField(groupmembership.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := gmuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupmembership.FieldUpdatedBy, field.TypeString, value)
-	}
-	if gmuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(groupmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := gmuo.mutation.DeletedAt(); ok {
-		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
-	}
 	if gmuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupmembership.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gmuo.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if gmuo.mutation.DeletedByCleared() {
-		_spec.ClearField(groupmembership.FieldDeletedBy, field.TypeString)
+	if gmuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gmuo.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)
+	}
+	if gmuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByTable,
+			Columns: []string{groupmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmuo.schemaConfig.GroupMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gmuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByTable,
+			Columns: []string{groupmembership.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmuo.schemaConfig.GroupMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if gmuo.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{

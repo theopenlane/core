@@ -75,7 +75,7 @@ func (InternalPolicy) Edges() []ent.Edge {
 // Mixin of the InternalPolicy
 func (InternalPolicy) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

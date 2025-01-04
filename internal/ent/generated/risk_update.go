@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -51,63 +52,23 @@ func (ru *RiskUpdate) ClearUpdatedAt() *RiskUpdate {
 	return ru
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ru *RiskUpdate) SetUpdatedBy(s string) *RiskUpdate {
-	ru.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ru *RiskUpdate) SetUpdatedByID(s string) *RiskUpdate {
+	ru.mutation.SetUpdatedByID(s)
 	return ru
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableUpdatedBy(s *string) *RiskUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableUpdatedByID(s *string) *RiskUpdate {
 	if s != nil {
-		ru.SetUpdatedBy(*s)
+		ru.SetUpdatedByID(*s)
 	}
 	return ru
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ru *RiskUpdate) ClearUpdatedBy() *RiskUpdate {
-	ru.mutation.ClearUpdatedBy()
-	return ru
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ru *RiskUpdate) SetDeletedAt(t time.Time) *RiskUpdate {
-	ru.mutation.SetDeletedAt(t)
-	return ru
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableDeletedAt(t *time.Time) *RiskUpdate {
-	if t != nil {
-		ru.SetDeletedAt(*t)
-	}
-	return ru
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ru *RiskUpdate) ClearDeletedAt() *RiskUpdate {
-	ru.mutation.ClearDeletedAt()
-	return ru
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ru *RiskUpdate) SetDeletedBy(s string) *RiskUpdate {
-	ru.mutation.SetDeletedBy(s)
-	return ru
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableDeletedBy(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetDeletedBy(*s)
-	}
-	return ru
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ru *RiskUpdate) ClearDeletedBy() *RiskUpdate {
-	ru.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ru *RiskUpdate) ClearUpdatedByID() *RiskUpdate {
+	ru.mutation.ClearUpdatedByID()
 	return ru
 }
 
@@ -329,6 +290,11 @@ func (ru *RiskUpdate) ClearDetails() *RiskUpdate {
 	return ru
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (ru *RiskUpdate) SetUpdatedBy(u *User) *RiskUpdate {
+	return ru.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ru *RiskUpdate) SetOwner(o *Organization) *RiskUpdate {
 	return ru.SetOwnerID(o.ID)
@@ -442,6 +408,12 @@ func (ru *RiskUpdate) AddPrograms(p ...*Program) *RiskUpdate {
 // Mutation returns the RiskMutation object of the builder.
 func (ru *RiskUpdate) Mutation() *RiskMutation {
 	return ru.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (ru *RiskUpdate) ClearUpdatedBy() *RiskUpdate {
+	ru.mutation.ClearUpdatedBy()
+	return ru
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -694,26 +666,11 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.UpdatedAtCleared() {
 		_spec.ClearField(risk.FieldUpdatedAt, field.TypeTime)
 	}
-	if ru.mutation.CreatedByCleared() {
-		_spec.ClearField(risk.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := ru.mutation.UpdatedBy(); ok {
-		_spec.SetField(risk.FieldUpdatedBy, field.TypeString, value)
-	}
-	if ru.mutation.UpdatedByCleared() {
-		_spec.ClearField(risk.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := ru.mutation.DeletedAt(); ok {
-		_spec.SetField(risk.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ru.mutation.DeletedAtCleared() {
 		_spec.ClearField(risk.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ru.mutation.DeletedBy(); ok {
-		_spec.SetField(risk.FieldDeletedBy, field.TypeString, value)
-	}
-	if ru.mutation.DeletedByCleared() {
-		_spec.ClearField(risk.FieldDeletedBy, field.TypeString)
+	if ru.mutation.DeletedByIDCleared() {
+		_spec.ClearField(risk.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ru.mutation.Tags(); ok {
 		_spec.SetField(risk.FieldTags, field.TypeJSON, value)
@@ -782,6 +739,37 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeJSON)
+	}
+	if ru.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByTable,
+			Columns: []string{risk.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByTable,
+			Columns: []string{risk.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ru.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1186,63 +1174,23 @@ func (ruo *RiskUpdateOne) ClearUpdatedAt() *RiskUpdateOne {
 	return ruo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ruo *RiskUpdateOne) SetUpdatedBy(s string) *RiskUpdateOne {
-	ruo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ruo *RiskUpdateOne) SetUpdatedByID(s string) *RiskUpdateOne {
+	ruo.mutation.SetUpdatedByID(s)
 	return ruo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableUpdatedBy(s *string) *RiskUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableUpdatedByID(s *string) *RiskUpdateOne {
 	if s != nil {
-		ruo.SetUpdatedBy(*s)
+		ruo.SetUpdatedByID(*s)
 	}
 	return ruo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ruo *RiskUpdateOne) ClearUpdatedBy() *RiskUpdateOne {
-	ruo.mutation.ClearUpdatedBy()
-	return ruo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ruo *RiskUpdateOne) SetDeletedAt(t time.Time) *RiskUpdateOne {
-	ruo.mutation.SetDeletedAt(t)
-	return ruo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableDeletedAt(t *time.Time) *RiskUpdateOne {
-	if t != nil {
-		ruo.SetDeletedAt(*t)
-	}
-	return ruo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ruo *RiskUpdateOne) ClearDeletedAt() *RiskUpdateOne {
-	ruo.mutation.ClearDeletedAt()
-	return ruo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ruo *RiskUpdateOne) SetDeletedBy(s string) *RiskUpdateOne {
-	ruo.mutation.SetDeletedBy(s)
-	return ruo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableDeletedBy(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetDeletedBy(*s)
-	}
-	return ruo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ruo *RiskUpdateOne) ClearDeletedBy() *RiskUpdateOne {
-	ruo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ruo *RiskUpdateOne) ClearUpdatedByID() *RiskUpdateOne {
+	ruo.mutation.ClearUpdatedByID()
 	return ruo
 }
 
@@ -1464,6 +1412,11 @@ func (ruo *RiskUpdateOne) ClearDetails() *RiskUpdateOne {
 	return ruo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (ruo *RiskUpdateOne) SetUpdatedBy(u *User) *RiskUpdateOne {
+	return ruo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ruo *RiskUpdateOne) SetOwner(o *Organization) *RiskUpdateOne {
 	return ruo.SetOwnerID(o.ID)
@@ -1577,6 +1530,12 @@ func (ruo *RiskUpdateOne) AddPrograms(p ...*Program) *RiskUpdateOne {
 // Mutation returns the RiskMutation object of the builder.
 func (ruo *RiskUpdateOne) Mutation() *RiskMutation {
 	return ruo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (ruo *RiskUpdateOne) ClearUpdatedBy() *RiskUpdateOne {
+	ruo.mutation.ClearUpdatedBy()
+	return ruo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -1859,26 +1818,11 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	if ruo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(risk.FieldUpdatedAt, field.TypeTime)
 	}
-	if ruo.mutation.CreatedByCleared() {
-		_spec.ClearField(risk.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := ruo.mutation.UpdatedBy(); ok {
-		_spec.SetField(risk.FieldUpdatedBy, field.TypeString, value)
-	}
-	if ruo.mutation.UpdatedByCleared() {
-		_spec.ClearField(risk.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := ruo.mutation.DeletedAt(); ok {
-		_spec.SetField(risk.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ruo.mutation.DeletedAtCleared() {
 		_spec.ClearField(risk.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ruo.mutation.DeletedBy(); ok {
-		_spec.SetField(risk.FieldDeletedBy, field.TypeString, value)
-	}
-	if ruo.mutation.DeletedByCleared() {
-		_spec.ClearField(risk.FieldDeletedBy, field.TypeString)
+	if ruo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(risk.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ruo.mutation.Tags(); ok {
 		_spec.SetField(risk.FieldTags, field.TypeJSON, value)
@@ -1947,6 +1891,37 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	}
 	if ruo.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeJSON)
+	}
+	if ruo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByTable,
+			Columns: []string{risk.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByTable,
+			Columns: []string{risk.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ruo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

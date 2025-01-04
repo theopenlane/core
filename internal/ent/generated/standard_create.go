@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // StandardCreate is the builder for creating a Standard entity.
@@ -53,30 +54,30 @@ func (sc *StandardCreate) SetNillableUpdatedAt(t *time.Time) *StandardCreate {
 	return sc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (sc *StandardCreate) SetCreatedBy(s string) *StandardCreate {
-	sc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (sc *StandardCreate) SetCreatedByID(s string) *StandardCreate {
+	sc.mutation.SetCreatedByID(s)
 	return sc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableCreatedBy(s *string) *StandardCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableCreatedByID(s *string) *StandardCreate {
 	if s != nil {
-		sc.SetCreatedBy(*s)
+		sc.SetCreatedByID(*s)
 	}
 	return sc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (sc *StandardCreate) SetUpdatedBy(s string) *StandardCreate {
-	sc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (sc *StandardCreate) SetUpdatedByID(s string) *StandardCreate {
+	sc.mutation.SetUpdatedByID(s)
 	return sc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableUpdatedBy(s *string) *StandardCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableUpdatedByID(s *string) *StandardCreate {
 	if s != nil {
-		sc.SetUpdatedBy(*s)
+		sc.SetUpdatedByID(*s)
 	}
 	return sc
 }
@@ -95,16 +96,16 @@ func (sc *StandardCreate) SetNillableDeletedAt(t *time.Time) *StandardCreate {
 	return sc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (sc *StandardCreate) SetDeletedBy(s string) *StandardCreate {
-	sc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (sc *StandardCreate) SetDeletedByID(s string) *StandardCreate {
+	sc.mutation.SetDeletedByID(s)
 	return sc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableDeletedBy(s *string) *StandardCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (sc *StandardCreate) SetNillableDeletedByID(s *string) *StandardCreate {
 	if s != nil {
-		sc.SetDeletedBy(*s)
+		sc.SetDeletedByID(*s)
 	}
 	return sc
 }
@@ -265,6 +266,16 @@ func (sc *StandardCreate) SetNillableID(s *string) *StandardCreate {
 		sc.SetID(*s)
 	}
 	return sc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (sc *StandardCreate) SetCreatedBy(u *User) *StandardCreate {
+	return sc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (sc *StandardCreate) SetUpdatedBy(u *User) *StandardCreate {
+	return sc.SetUpdatedByID(u.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -471,21 +482,13 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.CreatedBy(); ok {
-		_spec.SetField(standard.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := sc.mutation.UpdatedBy(); ok {
-		_spec.SetField(standard.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := sc.mutation.DeletedAt(); ok {
 		_spec.SetField(standard.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.DeletedBy(); ok {
-		_spec.SetField(standard.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := sc.mutation.DeletedByID(); ok {
+		_spec.SetField(standard.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := sc.mutation.MappingID(); ok {
 		_spec.SetField(standard.FieldMappingID, field.TypeString, value)
@@ -534,6 +537,42 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Details(); ok {
 		_spec.SetField(standard.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if nodes := sc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.CreatedByTable,
+			Columns: []string{standard.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.UpdatedByTable,
+			Columns: []string{standard.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := sc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

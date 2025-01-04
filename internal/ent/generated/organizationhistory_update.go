@@ -44,23 +44,23 @@ func (ohu *OrganizationHistoryUpdate) ClearUpdatedAt() *OrganizationHistoryUpdat
 	return ohu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ohu *OrganizationHistoryUpdate) SetUpdatedBy(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ohu *OrganizationHistoryUpdate) SetUpdatedByID(s string) *OrganizationHistoryUpdate {
+	ohu.mutation.SetUpdatedByID(s)
 	return ohu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableUpdatedBy(s *string) *OrganizationHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ohu *OrganizationHistoryUpdate) SetNillableUpdatedByID(s *string) *OrganizationHistoryUpdate {
 	if s != nil {
-		ohu.SetUpdatedBy(*s)
+		ohu.SetUpdatedByID(*s)
 	}
 	return ohu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ohu *OrganizationHistoryUpdate) ClearUpdatedBy() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ohu *OrganizationHistoryUpdate) ClearUpdatedByID() *OrganizationHistoryUpdate {
+	ohu.mutation.ClearUpdatedByID()
 	return ohu
 }
 
@@ -79,46 +79,6 @@ func (ohu *OrganizationHistoryUpdate) AppendTags(s []string) *OrganizationHistor
 // ClearTags clears the value of the "tags" field.
 func (ohu *OrganizationHistoryUpdate) ClearTags() *OrganizationHistoryUpdate {
 	ohu.mutation.ClearTags()
-	return ohu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ohu *OrganizationHistoryUpdate) SetDeletedAt(t time.Time) *OrganizationHistoryUpdate {
-	ohu.mutation.SetDeletedAt(t)
-	return ohu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableDeletedAt(t *time.Time) *OrganizationHistoryUpdate {
-	if t != nil {
-		ohu.SetDeletedAt(*t)
-	}
-	return ohu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ohu *OrganizationHistoryUpdate) ClearDeletedAt() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearDeletedAt()
-	return ohu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ohu *OrganizationHistoryUpdate) SetDeletedBy(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetDeletedBy(s)
-	return ohu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableDeletedBy(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetDeletedBy(*s)
-	}
-	return ohu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ohu *OrganizationHistoryUpdate) ClearDeletedBy() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearDeletedBy()
 	return ohu
 }
 
@@ -269,6 +229,9 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	if ohu.mutation.RefCleared() {
 		_spec.ClearField(organizationhistory.FieldRef, field.TypeString)
 	}
+	if ohu.mutation.UpdatedByCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if ohu.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -278,14 +241,14 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	if ohu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ohu.mutation.CreatedByCleared() {
-		_spec.ClearField(organizationhistory.FieldCreatedBy, field.TypeString)
+	if ohu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(organizationhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ohu.mutation.UpdatedBy(); ok {
-		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ohu.mutation.UpdatedByID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ohu.mutation.UpdatedByCleared() {
-		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeString)
+	if ohu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ohu.mutation.Tags(); ok {
 		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)
@@ -298,17 +261,11 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	if ohu.mutation.TagsCleared() {
 		_spec.ClearField(organizationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ohu.mutation.DeletedAt(); ok {
-		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ohu.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ohu.mutation.DeletedBy(); ok {
-		_spec.SetField(organizationhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if ohu.mutation.DeletedByCleared() {
-		_spec.ClearField(organizationhistory.FieldDeletedBy, field.TypeString)
+	if ohu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(organizationhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ohu.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
@@ -373,23 +330,23 @@ func (ohuo *OrganizationHistoryUpdateOne) ClearUpdatedAt() *OrganizationHistoryU
 	return ohuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetUpdatedBy(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ohuo *OrganizationHistoryUpdateOne) SetUpdatedByID(s string) *OrganizationHistoryUpdateOne {
+	ohuo.mutation.SetUpdatedByID(s)
 	return ohuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ohuo *OrganizationHistoryUpdateOne) SetNillableUpdatedByID(s *string) *OrganizationHistoryUpdateOne {
 	if s != nil {
-		ohuo.SetUpdatedBy(*s)
+		ohuo.SetUpdatedByID(*s)
 	}
 	return ohuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearUpdatedBy() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ohuo *OrganizationHistoryUpdateOne) ClearUpdatedByID() *OrganizationHistoryUpdateOne {
+	ohuo.mutation.ClearUpdatedByID()
 	return ohuo
 }
 
@@ -408,46 +365,6 @@ func (ohuo *OrganizationHistoryUpdateOne) AppendTags(s []string) *OrganizationHi
 // ClearTags clears the value of the "tags" field.
 func (ohuo *OrganizationHistoryUpdateOne) ClearTags() *OrganizationHistoryUpdateOne {
 	ohuo.mutation.ClearTags()
-	return ohuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetDeletedAt(t time.Time) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetDeletedAt(t)
-	return ohuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *OrganizationHistoryUpdateOne {
-	if t != nil {
-		ohuo.SetDeletedAt(*t)
-	}
-	return ohuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearDeletedAt() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearDeletedAt()
-	return ohuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetDeletedBy(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetDeletedBy(s)
-	return ohuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableDeletedBy(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetDeletedBy(*s)
-	}
-	return ohuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearDeletedBy() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearDeletedBy()
 	return ohuo
 }
 
@@ -628,6 +545,9 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 	if ohuo.mutation.RefCleared() {
 		_spec.ClearField(organizationhistory.FieldRef, field.TypeString)
 	}
+	if ohuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if ohuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -637,14 +557,14 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 	if ohuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ohuo.mutation.CreatedByCleared() {
-		_spec.ClearField(organizationhistory.FieldCreatedBy, field.TypeString)
+	if ohuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(organizationhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ohuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ohuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ohuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeString)
+	if ohuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ohuo.mutation.Tags(); ok {
 		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)
@@ -657,17 +577,11 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 	if ohuo.mutation.TagsCleared() {
 		_spec.ClearField(organizationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ohuo.mutation.DeletedAt(); ok {
-		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if ohuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ohuo.mutation.DeletedBy(); ok {
-		_spec.SetField(organizationhistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if ohuo.mutation.DeletedByCleared() {
-		_spec.ClearField(organizationhistory.FieldDeletedBy, field.TypeString)
+	if ohuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(organizationhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ohuo.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)

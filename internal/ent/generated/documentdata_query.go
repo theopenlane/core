@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -30,6 +31,8 @@ type DocumentDataQuery struct {
 	order           []documentdata.OrderOption
 	inters          []Interceptor
 	predicates      []predicate.DocumentData
+	withCreatedBy   *UserQuery
+	withUpdatedBy   *UserQuery
 	withOwner       *OrganizationQuery
 	withTemplate    *TemplateQuery
 	withEntity      *EntityQuery
@@ -72,6 +75,56 @@ func (ddq *DocumentDataQuery) Unique(unique bool) *DocumentDataQuery {
 func (ddq *DocumentDataQuery) Order(o ...documentdata.OrderOption) *DocumentDataQuery {
 	ddq.order = append(ddq.order, o...)
 	return ddq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (ddq *DocumentDataQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: ddq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ddq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ddq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.CreatedByTable, documentdata.CreatedByColumn),
+		)
+		schemaConfig := ddq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (ddq *DocumentDataQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: ddq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ddq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ddq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.UpdatedByTable, documentdata.UpdatedByColumn),
+		)
+		schemaConfig := ddq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -361,20 +414,44 @@ func (ddq *DocumentDataQuery) Clone() *DocumentDataQuery {
 		return nil
 	}
 	return &DocumentDataQuery{
-		config:       ddq.config,
-		ctx:          ddq.ctx.Clone(),
-		order:        append([]documentdata.OrderOption{}, ddq.order...),
-		inters:       append([]Interceptor{}, ddq.inters...),
-		predicates:   append([]predicate.DocumentData{}, ddq.predicates...),
-		withOwner:    ddq.withOwner.Clone(),
-		withTemplate: ddq.withTemplate.Clone(),
-		withEntity:   ddq.withEntity.Clone(),
-		withFiles:    ddq.withFiles.Clone(),
+		config:        ddq.config,
+		ctx:           ddq.ctx.Clone(),
+		order:         append([]documentdata.OrderOption{}, ddq.order...),
+		inters:        append([]Interceptor{}, ddq.inters...),
+		predicates:    append([]predicate.DocumentData{}, ddq.predicates...),
+		withCreatedBy: ddq.withCreatedBy.Clone(),
+		withUpdatedBy: ddq.withUpdatedBy.Clone(),
+		withOwner:     ddq.withOwner.Clone(),
+		withTemplate:  ddq.withTemplate.Clone(),
+		withEntity:    ddq.withEntity.Clone(),
+		withFiles:     ddq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       ddq.sql.Clone(),
 		path:      ddq.path,
 		modifiers: append([]func(*sql.Selector){}, ddq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (ddq *DocumentDataQuery) WithCreatedBy(opts ...func(*UserQuery)) *DocumentDataQuery {
+	query := (&UserClient{config: ddq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ddq.withCreatedBy = query
+	return ddq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (ddq *DocumentDataQuery) WithUpdatedBy(opts ...func(*UserQuery)) *DocumentDataQuery {
+	query := (&UserClient{config: ddq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ddq.withUpdatedBy = query
+	return ddq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -505,7 +582,9 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*DocumentData{}
 		_spec       = ddq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
+			ddq.withCreatedBy != nil,
+			ddq.withUpdatedBy != nil,
 			ddq.withOwner != nil,
 			ddq.withTemplate != nil,
 			ddq.withEntity != nil,
@@ -534,6 +613,18 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := ddq.withCreatedBy; query != nil {
+		if err := ddq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *DocumentData, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ddq.withUpdatedBy; query != nil {
+		if err := ddq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *DocumentData, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := ddq.withOwner; query != nil {
 		if err := ddq.loadOwner(ctx, query, nodes, nil,
@@ -583,6 +674,64 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
+func (ddq *DocumentDataQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DocumentData)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (ddq *DocumentDataQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DocumentData)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (ddq *DocumentDataQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*DocumentData)
@@ -795,6 +944,12 @@ func (ddq *DocumentDataQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != documentdata.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if ddq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(documentdata.FieldCreatedByID)
+		}
+		if ddq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(documentdata.FieldUpdatedByID)
 		}
 		if ddq.withOwner != nil {
 			_spec.Node.AddColumnOnce(documentdata.FieldOwnerID)

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -30,6 +31,8 @@ type NoteQuery struct {
 	order                []note.OrderOption
 	inters               []Interceptor
 	predicates           []predicate.Note
+	withCreatedBy        *UserQuery
+	withUpdatedBy        *UserQuery
 	withOwner            *OrganizationQuery
 	withEntity           *EntityQuery
 	withSubcontrols      *SubcontrolQuery
@@ -73,6 +76,56 @@ func (nq *NoteQuery) Unique(unique bool) *NoteQuery {
 func (nq *NoteQuery) Order(o ...note.OrderOption) *NoteQuery {
 	nq.order = append(nq.order, o...)
 	return nq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (nq *NoteQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.CreatedByTable, note.CreatedByColumn),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (nq *NoteQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.UpdatedByTable, note.UpdatedByColumn),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -367,6 +420,8 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 		order:           append([]note.OrderOption{}, nq.order...),
 		inters:          append([]Interceptor{}, nq.inters...),
 		predicates:      append([]predicate.Note{}, nq.predicates...),
+		withCreatedBy:   nq.withCreatedBy.Clone(),
+		withUpdatedBy:   nq.withUpdatedBy.Clone(),
 		withOwner:       nq.withOwner.Clone(),
 		withEntity:      nq.withEntity.Clone(),
 		withSubcontrols: nq.withSubcontrols.Clone(),
@@ -376,6 +431,28 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 		path:      nq.path,
 		modifiers: append([]func(*sql.Selector){}, nq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithCreatedBy(opts ...func(*UserQuery)) *NoteQuery {
+	query := (&UserClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withCreatedBy = query
+	return nq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithUpdatedBy(opts ...func(*UserQuery)) *NoteQuery {
+	query := (&UserClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withUpdatedBy = query
+	return nq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -507,7 +584,9 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = nq.withFKs
 		_spec       = nq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
+			nq.withCreatedBy != nil,
+			nq.withUpdatedBy != nil,
 			nq.withOwner != nil,
 			nq.withEntity != nil,
 			nq.withSubcontrols != nil,
@@ -542,6 +621,18 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := nq.withCreatedBy; query != nil {
+		if err := nq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Note, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withUpdatedBy; query != nil {
+		if err := nq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Note, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := nq.withOwner; query != nil {
 		if err := nq.loadOwner(ctx, query, nodes, nil,
@@ -591,6 +682,64 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	return nodes, nil
 }
 
+func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Note, init func(*Note), assign func(*Note, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (nq *NoteQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Note, init func(*Note), assign func(*Note, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (nq *NoteQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Note, init func(*Note), assign func(*Note, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
@@ -775,6 +924,12 @@ func (nq *NoteQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != note.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if nq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(note.FieldCreatedByID)
+		}
+		if nq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(note.FieldUpdatedByID)
 		}
 		if nq.withOwner != nil {
 			_spec.Node.AddColumnOnce(note.FieldOwnerID)

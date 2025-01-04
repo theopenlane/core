@@ -49,63 +49,23 @@ func (apu *ActionPlanUpdate) ClearUpdatedAt() *ActionPlanUpdate {
 	return apu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (apu *ActionPlanUpdate) SetUpdatedBy(s string) *ActionPlanUpdate {
-	apu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (apu *ActionPlanUpdate) SetUpdatedByID(s string) *ActionPlanUpdate {
+	apu.mutation.SetUpdatedByID(s)
 	return apu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableUpdatedBy(s *string) *ActionPlanUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (apu *ActionPlanUpdate) SetNillableUpdatedByID(s *string) *ActionPlanUpdate {
 	if s != nil {
-		apu.SetUpdatedBy(*s)
+		apu.SetUpdatedByID(*s)
 	}
 	return apu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (apu *ActionPlanUpdate) ClearUpdatedBy() *ActionPlanUpdate {
-	apu.mutation.ClearUpdatedBy()
-	return apu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (apu *ActionPlanUpdate) SetDeletedAt(t time.Time) *ActionPlanUpdate {
-	apu.mutation.SetDeletedAt(t)
-	return apu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDeletedAt(t *time.Time) *ActionPlanUpdate {
-	if t != nil {
-		apu.SetDeletedAt(*t)
-	}
-	return apu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (apu *ActionPlanUpdate) ClearDeletedAt() *ActionPlanUpdate {
-	apu.mutation.ClearDeletedAt()
-	return apu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (apu *ActionPlanUpdate) SetDeletedBy(s string) *ActionPlanUpdate {
-	apu.mutation.SetDeletedBy(s)
-	return apu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDeletedBy(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetDeletedBy(*s)
-	}
-	return apu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (apu *ActionPlanUpdate) ClearDeletedBy() *ActionPlanUpdate {
-	apu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (apu *ActionPlanUpdate) ClearUpdatedByID() *ActionPlanUpdate {
+	apu.mutation.ClearUpdatedByID()
 	return apu
 }
 
@@ -253,6 +213,11 @@ func (apu *ActionPlanUpdate) ClearDetails() *ActionPlanUpdate {
 	return apu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (apu *ActionPlanUpdate) SetUpdatedBy(u *User) *ActionPlanUpdate {
+	return apu.SetUpdatedByID(u.ID)
+}
+
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
 func (apu *ActionPlanUpdate) AddStandardIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.AddStandardIDs(ids...)
@@ -331,6 +296,12 @@ func (apu *ActionPlanUpdate) AddProgram(p ...*Program) *ActionPlanUpdate {
 // Mutation returns the ActionPlanMutation object of the builder.
 func (apu *ActionPlanUpdate) Mutation() *ActionPlanMutation {
 	return apu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (apu *ActionPlanUpdate) ClearUpdatedBy() *ActionPlanUpdate {
+	apu.mutation.ClearUpdatedBy()
+	return apu
 }
 
 // ClearStandard clears all "standard" edges to the Standard entity.
@@ -504,26 +475,11 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if apu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(actionplan.FieldUpdatedAt, field.TypeTime)
 	}
-	if apu.mutation.CreatedByCleared() {
-		_spec.ClearField(actionplan.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := apu.mutation.UpdatedBy(); ok {
-		_spec.SetField(actionplan.FieldUpdatedBy, field.TypeString, value)
-	}
-	if apu.mutation.UpdatedByCleared() {
-		_spec.ClearField(actionplan.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := apu.mutation.DeletedAt(); ok {
-		_spec.SetField(actionplan.FieldDeletedAt, field.TypeTime, value)
-	}
 	if apu.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplan.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := apu.mutation.DeletedBy(); ok {
-		_spec.SetField(actionplan.FieldDeletedBy, field.TypeString, value)
-	}
-	if apu.mutation.DeletedByCleared() {
-		_spec.ClearField(actionplan.FieldDeletedBy, field.TypeString)
+	if apu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(actionplan.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := apu.mutation.Tags(); ok {
 		_spec.SetField(actionplan.FieldTags, field.TypeJSON, value)
@@ -574,6 +530,37 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if apu.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeJSON)
+	}
+	if apu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByTable,
+			Columns: []string{actionplan.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ActionPlan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByTable,
+			Columns: []string{actionplan.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if apu.mutation.StandardCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -851,63 +838,23 @@ func (apuo *ActionPlanUpdateOne) ClearUpdatedAt() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (apuo *ActionPlanUpdateOne) SetUpdatedBy(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (apuo *ActionPlanUpdateOne) SetUpdatedByID(s string) *ActionPlanUpdateOne {
+	apuo.mutation.SetUpdatedByID(s)
 	return apuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableUpdatedBy(s *string) *ActionPlanUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (apuo *ActionPlanUpdateOne) SetNillableUpdatedByID(s *string) *ActionPlanUpdateOne {
 	if s != nil {
-		apuo.SetUpdatedBy(*s)
+		apuo.SetUpdatedByID(*s)
 	}
 	return apuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (apuo *ActionPlanUpdateOne) ClearUpdatedBy() *ActionPlanUpdateOne {
-	apuo.mutation.ClearUpdatedBy()
-	return apuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (apuo *ActionPlanUpdateOne) SetDeletedAt(t time.Time) *ActionPlanUpdateOne {
-	apuo.mutation.SetDeletedAt(t)
-	return apuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDeletedAt(t *time.Time) *ActionPlanUpdateOne {
-	if t != nil {
-		apuo.SetDeletedAt(*t)
-	}
-	return apuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (apuo *ActionPlanUpdateOne) ClearDeletedAt() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDeletedAt()
-	return apuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (apuo *ActionPlanUpdateOne) SetDeletedBy(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDeletedBy(s)
-	return apuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDeletedBy(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetDeletedBy(*s)
-	}
-	return apuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (apuo *ActionPlanUpdateOne) ClearDeletedBy() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (apuo *ActionPlanUpdateOne) ClearUpdatedByID() *ActionPlanUpdateOne {
+	apuo.mutation.ClearUpdatedByID()
 	return apuo
 }
 
@@ -1055,6 +1002,11 @@ func (apuo *ActionPlanUpdateOne) ClearDetails() *ActionPlanUpdateOne {
 	return apuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (apuo *ActionPlanUpdateOne) SetUpdatedBy(u *User) *ActionPlanUpdateOne {
+	return apuo.SetUpdatedByID(u.ID)
+}
+
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
 func (apuo *ActionPlanUpdateOne) AddStandardIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.AddStandardIDs(ids...)
@@ -1133,6 +1085,12 @@ func (apuo *ActionPlanUpdateOne) AddProgram(p ...*Program) *ActionPlanUpdateOne 
 // Mutation returns the ActionPlanMutation object of the builder.
 func (apuo *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
 	return apuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (apuo *ActionPlanUpdateOne) ClearUpdatedBy() *ActionPlanUpdateOne {
+	apuo.mutation.ClearUpdatedBy()
+	return apuo
 }
 
 // ClearStandard clears all "standard" edges to the Standard entity.
@@ -1336,26 +1294,11 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	if apuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(actionplan.FieldUpdatedAt, field.TypeTime)
 	}
-	if apuo.mutation.CreatedByCleared() {
-		_spec.ClearField(actionplan.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := apuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(actionplan.FieldUpdatedBy, field.TypeString, value)
-	}
-	if apuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(actionplan.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := apuo.mutation.DeletedAt(); ok {
-		_spec.SetField(actionplan.FieldDeletedAt, field.TypeTime, value)
-	}
 	if apuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplan.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := apuo.mutation.DeletedBy(); ok {
-		_spec.SetField(actionplan.FieldDeletedBy, field.TypeString, value)
-	}
-	if apuo.mutation.DeletedByCleared() {
-		_spec.ClearField(actionplan.FieldDeletedBy, field.TypeString)
+	if apuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(actionplan.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := apuo.mutation.Tags(); ok {
 		_spec.SetField(actionplan.FieldTags, field.TypeJSON, value)
@@ -1406,6 +1349,37 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	}
 	if apuo.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeJSON)
+	}
+	if apuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByTable,
+			Columns: []string{actionplan.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ActionPlan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByTable,
+			Columns: []string{actionplan.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if apuo.mutation.StandardCleared() {
 		edge := &sqlgraph.EdgeSpec{

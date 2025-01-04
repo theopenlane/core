@@ -71,16 +71,16 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrganizationSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrganizationSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrganizationSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrganizationSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrganizationSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrganizationSetting_deletedByID(ctx, field)
 			case "domains":
 				return ec.fieldContext_OrganizationSetting_domains(ctx, field)
 			case "billingContact":
@@ -99,6 +99,10 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "stripeID":
 				return ec.fieldContext_OrganizationSetting_stripeID(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -155,16 +159,16 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrganizationSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrganizationSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrganizationSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrganizationSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrganizationSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrganizationSetting_deletedByID(ctx, field)
 			case "domains":
 				return ec.fieldContext_OrganizationSetting_domains(ctx, field)
 			case "billingContact":
@@ -183,6 +187,10 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "stripeID":
 				return ec.fieldContext_OrganizationSetting_stripeID(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -283,16 +291,16 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrganizationSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrganizationSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrganizationSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrganizationSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrganizationSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrganizationSetting_deletedByID(ctx, field)
 			case "domains":
 				return ec.fieldContext_OrganizationSetting_domains(ctx, field)
 			case "billingContact":
@@ -311,6 +319,10 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "stripeID":
 				return ec.fieldContext_OrganizationSetting_stripeID(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

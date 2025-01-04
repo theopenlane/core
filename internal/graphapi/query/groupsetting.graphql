@@ -13,9 +13,15 @@ query GetAllGroupSettings {
           name
         }
         createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        createdByID
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
     }
   }
@@ -34,9 +40,9 @@ query GetGroupSettingByID($groupSettingId: ID!) {
       name
     }
     createdAt
-    createdBy
+    createdByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -55,9 +61,15 @@ query GetGroupSettings($where: GroupSettingWhereInput!) {
           name
         }
         createdAt
-        createdBy
-        updatedAt
-        updatedBy
+        createdByID
+      updatedAt
+      updatedByID
+      updatedBy {
+          id
+          firstName
+          lastName
+          email
+      }
       }
     }
   }
@@ -77,9 +89,15 @@ mutation UpdateGroupSetting($updateGroupSettingId: ID!, $input: UpdateGroupSetti
         name
       }
       createdAt
-      createdBy
+      createdByID
+      createdBy {
+          id
+          firstName
+          lastName
+          email
+      }
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }

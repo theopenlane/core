@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -28,6 +29,8 @@ type HushQuery struct {
 	order                 []hush.OrderOption
 	inters                []Interceptor
 	predicates            []predicate.Hush
+	withCreatedBy         *UserQuery
+	withUpdatedBy         *UserQuery
 	withIntegrations      *IntegrationQuery
 	withOrganization      *OrganizationQuery
 	withEvents            *EventQuery
@@ -70,6 +73,56 @@ func (hq *HushQuery) Unique(unique bool) *HushQuery {
 func (hq *HushQuery) Order(o ...hush.OrderOption) *HushQuery {
 	hq.order = append(hq.order, o...)
 	return hq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (hq *HushQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: hq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := hq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := hq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.CreatedByTable, hush.CreatedByColumn),
+		)
+		schemaConfig := hq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Hush
+		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (hq *HushQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: hq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := hq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := hq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.UpdatedByTable, hush.UpdatedByColumn),
+		)
+		schemaConfig := hq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Hush
+		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryIntegrations chains the current query on the "integrations" edge.
@@ -339,6 +392,8 @@ func (hq *HushQuery) Clone() *HushQuery {
 		order:            append([]hush.OrderOption{}, hq.order...),
 		inters:           append([]Interceptor{}, hq.inters...),
 		predicates:       append([]predicate.Hush{}, hq.predicates...),
+		withCreatedBy:    hq.withCreatedBy.Clone(),
+		withUpdatedBy:    hq.withUpdatedBy.Clone(),
 		withIntegrations: hq.withIntegrations.Clone(),
 		withOrganization: hq.withOrganization.Clone(),
 		withEvents:       hq.withEvents.Clone(),
@@ -347,6 +402,28 @@ func (hq *HushQuery) Clone() *HushQuery {
 		path:      hq.path,
 		modifiers: append([]func(*sql.Selector){}, hq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (hq *HushQuery) WithCreatedBy(opts ...func(*UserQuery)) *HushQuery {
+	query := (&UserClient{config: hq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	hq.withCreatedBy = query
+	return hq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (hq *HushQuery) WithUpdatedBy(opts ...func(*UserQuery)) *HushQuery {
+	query := (&UserClient{config: hq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	hq.withUpdatedBy = query
+	return hq
 }
 
 // WithIntegrations tells the query-builder to eager-load the nodes that are connected to
@@ -460,7 +537,9 @@ func (hq *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 	var (
 		nodes       = []*Hush{}
 		_spec       = hq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
+			hq.withCreatedBy != nil,
+			hq.withUpdatedBy != nil,
 			hq.withIntegrations != nil,
 			hq.withOrganization != nil,
 			hq.withEvents != nil,
@@ -488,6 +567,18 @@ func (hq *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := hq.withCreatedBy; query != nil {
+		if err := hq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Hush, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := hq.withUpdatedBy; query != nil {
+		if err := hq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Hush, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := hq.withIntegrations; query != nil {
 		if err := hq.loadIntegrations(ctx, query, nodes,
@@ -539,6 +630,64 @@ func (hq *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 	return nodes, nil
 }
 
+func (hq *HushQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Hush)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (hq *HushQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Hush)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (hq *HushQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *Integration)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Hush)
@@ -755,6 +904,12 @@ func (hq *HushQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != hush.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if hq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(hush.FieldCreatedByID)
+		}
+		if hq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(hush.FieldUpdatedByID)
 		}
 	}
 	if ps := hq.predicates; len(ps) > 0 {

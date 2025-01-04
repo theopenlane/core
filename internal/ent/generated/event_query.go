@@ -36,6 +36,8 @@ type EventQuery struct {
 	order                        []event.OrderOption
 	inters                       []Interceptor
 	predicates                   []predicate.Event
+	withCreatedBy                *UserQuery
+	withUpdatedBy                *UserQuery
 	withUser                     *UserQuery
 	withGroup                    *GroupQuery
 	withIntegration              *IntegrationQuery
@@ -94,6 +96,56 @@ func (eq *EventQuery) Unique(unique bool) *EventQuery {
 func (eq *EventQuery) Order(o ...event.OrderOption) *EventQuery {
 	eq.order = append(eq.order, o...)
 	return eq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (eq *EventQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, event.CreatedByTable, event.CreatedByColumn),
+		)
+		schemaConfig := eq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Event
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (eq *EventQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, event.UpdatedByTable, event.UpdatedByColumn),
+		)
+		schemaConfig := eq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Event
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryUser chains the current query on the "user" edge.
@@ -563,6 +615,8 @@ func (eq *EventQuery) Clone() *EventQuery {
 		order:                   append([]event.OrderOption{}, eq.order...),
 		inters:                  append([]Interceptor{}, eq.inters...),
 		predicates:              append([]predicate.Event{}, eq.predicates...),
+		withCreatedBy:           eq.withCreatedBy.Clone(),
+		withUpdatedBy:           eq.withUpdatedBy.Clone(),
 		withUser:                eq.withUser.Clone(),
 		withGroup:               eq.withGroup.Clone(),
 		withIntegration:         eq.withIntegration.Clone(),
@@ -579,6 +633,28 @@ func (eq *EventQuery) Clone() *EventQuery {
 		path:      eq.path,
 		modifiers: append([]func(*sql.Selector){}, eq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *EventQuery) WithCreatedBy(opts ...func(*UserQuery)) *EventQuery {
+	query := (&UserClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withCreatedBy = query
+	return eq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *EventQuery) WithUpdatedBy(opts ...func(*UserQuery)) *EventQuery {
+	query := (&UserClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withUpdatedBy = query
+	return eq
 }
 
 // WithUser tells the query-builder to eager-load the nodes that are connected to
@@ -780,7 +856,9 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 	var (
 		nodes       = []*Event{}
 		_spec       = eq.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [13]bool{
+			eq.withCreatedBy != nil,
+			eq.withUpdatedBy != nil,
 			eq.withUser != nil,
 			eq.withGroup != nil,
 			eq.withIntegration != nil,
@@ -816,6 +894,18 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := eq.withCreatedBy; query != nil {
+		if err := eq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Event, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := eq.withUpdatedBy; query != nil {
+		if err := eq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Event, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := eq.withUser; query != nil {
 		if err := eq.loadUser(ctx, query, nodes,
@@ -981,6 +1071,64 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 	return nodes, nil
 }
 
+func (eq *EventQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Event, init func(*Event), assign func(*Event, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Event)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (eq *EventQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Event, init func(*Event), assign func(*Event, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Event)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (eq *EventQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Event, init func(*Event), assign func(*Event, *User)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
@@ -1693,6 +1841,12 @@ func (eq *EventQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != event.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if eq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(event.FieldCreatedByID)
+		}
+		if eq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(event.FieldUpdatedByID)
 		}
 	}
 	if ps := eq.predicates; len(ps) > 0 {

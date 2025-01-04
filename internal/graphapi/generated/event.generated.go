@@ -71,10 +71,10 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 				return ec.fieldContext_Event_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Event_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Event_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Event_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Event_tags(ctx, field)
 			case "eventID":
@@ -85,6 +85,10 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Event_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Event_updatedBy(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
@@ -159,10 +163,10 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Event_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Event_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Event_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Event_tags(ctx, field)
 			case "eventID":
@@ -173,6 +177,10 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Event_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Event_updatedBy(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
@@ -291,10 +299,10 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Event_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Event_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Event_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Event_tags(ctx, field)
 			case "eventID":
@@ -305,6 +313,10 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Event_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Event_updatedBy(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":

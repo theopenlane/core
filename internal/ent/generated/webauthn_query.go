@@ -21,13 +21,15 @@ import (
 // WebauthnQuery is the builder for querying Webauthn entities.
 type WebauthnQuery struct {
 	config
-	ctx        *QueryContext
-	order      []webauthn.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Webauthn
-	withOwner  *UserQuery
-	loadTotal  []func(context.Context, []*Webauthn) error
-	modifiers  []func(*sql.Selector)
+	ctx           *QueryContext
+	order         []webauthn.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.Webauthn
+	withCreatedBy *UserQuery
+	withUpdatedBy *UserQuery
+	withOwner     *UserQuery
+	loadTotal     []func(context.Context, []*Webauthn) error
+	modifiers     []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -62,6 +64,56 @@ func (wq *WebauthnQuery) Unique(unique bool) *WebauthnQuery {
 func (wq *WebauthnQuery) Order(o ...webauthn.OrderOption) *WebauthnQuery {
 	wq.order = append(wq.order, o...)
 	return wq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (wq *WebauthnQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: wq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := wq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := wq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webauthn.Table, webauthn.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.CreatedByTable, webauthn.CreatedByColumn),
+		)
+		schemaConfig := wq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Webauthn
+		fromU = sqlgraph.SetNeighbors(wq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (wq *WebauthnQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: wq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := wq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := wq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webauthn.Table, webauthn.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.UpdatedByTable, webauthn.UpdatedByColumn),
+		)
+		schemaConfig := wq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Webauthn
+		fromU = sqlgraph.SetNeighbors(wq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -276,17 +328,41 @@ func (wq *WebauthnQuery) Clone() *WebauthnQuery {
 		return nil
 	}
 	return &WebauthnQuery{
-		config:     wq.config,
-		ctx:        wq.ctx.Clone(),
-		order:      append([]webauthn.OrderOption{}, wq.order...),
-		inters:     append([]Interceptor{}, wq.inters...),
-		predicates: append([]predicate.Webauthn{}, wq.predicates...),
-		withOwner:  wq.withOwner.Clone(),
+		config:        wq.config,
+		ctx:           wq.ctx.Clone(),
+		order:         append([]webauthn.OrderOption{}, wq.order...),
+		inters:        append([]Interceptor{}, wq.inters...),
+		predicates:    append([]predicate.Webauthn{}, wq.predicates...),
+		withCreatedBy: wq.withCreatedBy.Clone(),
+		withUpdatedBy: wq.withUpdatedBy.Clone(),
+		withOwner:     wq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       wq.sql.Clone(),
 		path:      wq.path,
 		modifiers: append([]func(*sql.Selector){}, wq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (wq *WebauthnQuery) WithCreatedBy(opts ...func(*UserQuery)) *WebauthnQuery {
+	query := (&UserClient{config: wq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	wq.withCreatedBy = query
+	return wq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (wq *WebauthnQuery) WithUpdatedBy(opts ...func(*UserQuery)) *WebauthnQuery {
+	query := (&UserClient{config: wq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	wq.withUpdatedBy = query
+	return wq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -378,7 +454,9 @@ func (wq *WebauthnQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Web
 	var (
 		nodes       = []*Webauthn{}
 		_spec       = wq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
+			wq.withCreatedBy != nil,
+			wq.withUpdatedBy != nil,
 			wq.withOwner != nil,
 		}
 	)
@@ -405,6 +483,18 @@ func (wq *WebauthnQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Web
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := wq.withCreatedBy; query != nil {
+		if err := wq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Webauthn, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := wq.withUpdatedBy; query != nil {
+		if err := wq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Webauthn, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := wq.withOwner; query != nil {
 		if err := wq.loadOwner(ctx, query, nodes, nil,
 			func(n *Webauthn, e *User) { n.Edges.Owner = e }); err != nil {
@@ -419,6 +509,64 @@ func (wq *WebauthnQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Web
 	return nodes, nil
 }
 
+func (wq *WebauthnQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Webauthn, init func(*Webauthn), assign func(*Webauthn, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Webauthn)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (wq *WebauthnQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Webauthn, init func(*Webauthn), assign func(*Webauthn, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Webauthn)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (wq *WebauthnQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*Webauthn, init func(*Webauthn), assign func(*Webauthn, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Webauthn)
@@ -478,6 +626,12 @@ func (wq *WebauthnQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != webauthn.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if wq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(webauthn.FieldCreatedByID)
+		}
+		if wq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(webauthn.FieldUpdatedByID)
 		}
 		if wq.withOwner != nil {
 			_spec.Node.AddColumnOnce(webauthn.FieldOwnerID)

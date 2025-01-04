@@ -18,13 +18,13 @@ type SearchResult interface {
 }
 
 type APIToken struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -38,6 +38,8 @@ type APIToken struct {
 	Description *string       `json:"description,omitempty"`
 	Scopes      []string      `json:"scopes,omitempty"`
 	LastUsedAt  *time.Time    `json:"lastUsedAt,omitempty"`
+	CreatedBy   *User         `json:"createdBy,omitempty"`
+	UpdatedBy   *User         `json:"updatedBy,omitempty"`
 	Owner       *Organization `json:"owner,omitempty"`
 }
 
@@ -130,38 +132,38 @@ type APITokenWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -173,22 +175,22 @@ type APITokenWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -241,19 +243,25 @@ type APITokenWhereInput struct {
 	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
 	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
 	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 }
 
 type ActionPlan struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the action plan
@@ -269,12 +277,14 @@ type ActionPlan struct {
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
 	// json data including details of the action plan
-	Details  map[string]any `json:"details,omitempty"`
-	Standard []*Standard    `json:"standard,omitempty"`
-	Risk     []*Risk        `json:"risk,omitempty"`
-	Control  []*Control     `json:"control,omitempty"`
-	User     []*User        `json:"user,omitempty"`
-	Program  []*Program     `json:"program,omitempty"`
+	Details   map[string]any `json:"details,omitempty"`
+	CreatedBy *User          `json:"createdBy,omitempty"`
+	UpdatedBy *User          `json:"updatedBy,omitempty"`
+	Standard  []*Standard    `json:"standard,omitempty"`
+	Risk      []*Risk        `json:"risk,omitempty"`
+	Control   []*Control     `json:"control,omitempty"`
+	User      []*User        `json:"user,omitempty"`
+	Program   []*Program     `json:"program,omitempty"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -320,12 +330,13 @@ type ActionPlanHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the action plan
@@ -411,6 +422,22 @@ type ActionPlanHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -433,38 +460,38 @@ type ActionPlanHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -476,22 +503,22 @@ type ActionPlanHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -634,38 +661,38 @@ type ActionPlanWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -677,22 +704,22 @@ type ActionPlanWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -782,6 +809,12 @@ type ActionPlanWhereInput struct {
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
 	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// standard edge predicates
 	HasStandard     *bool                 `json:"hasStandard,omitempty"`
 	HasStandardWith []*StandardWhereInput `json:"hasStandardWith,omitempty"`
@@ -838,13 +871,13 @@ type AuditLogWhereInput struct {
 }
 
 type Contact struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -862,10 +895,12 @@ type Contact struct {
 	// the address of the contact
 	Address *string `json:"address,omitempty"`
 	// status of the contact
-	Status   enums.UserStatus `json:"status"`
-	Owner    *Organization    `json:"owner,omitempty"`
-	Entities []*Entity        `json:"entities,omitempty"`
-	Files    []*File          `json:"files,omitempty"`
+	Status    enums.UserStatus `json:"status"`
+	CreatedBy *User            `json:"createdBy,omitempty"`
+	UpdatedBy *User            `json:"updatedBy,omitempty"`
+	Owner     *Organization    `json:"owner,omitempty"`
+	Entities  []*Entity        `json:"entities,omitempty"`
+	Files     []*File          `json:"files,omitempty"`
 }
 
 func (Contact) IsNode() {}
@@ -911,12 +946,13 @@ type ContactHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -1004,6 +1040,22 @@ type ContactHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -1026,38 +1078,38 @@ type ContactHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -1069,22 +1121,22 @@ type ContactHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -1253,38 +1305,38 @@ type ContactWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -1296,22 +1348,22 @@ type ContactWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -1427,6 +1479,12 @@ type ContactWhereInput struct {
 	StatusNeq   *enums.UserStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.UserStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.UserStatus `json:"statusNotIn,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -1439,13 +1497,13 @@ type ContactWhereInput struct {
 }
 
 type Control struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -1473,8 +1531,10 @@ type Control struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner"`
+	Details   map[string]any `json:"details,omitempty"`
+	CreatedBy *User          `json:"createdBy,omitempty"`
+	UpdatedBy *User          `json:"updatedBy,omitempty"`
+	Owner     *Organization  `json:"owner"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -1535,12 +1595,13 @@ type ControlHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -1638,6 +1699,22 @@ type ControlHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -1660,38 +1737,38 @@ type ControlHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -1703,22 +1780,22 @@ type ControlHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -1910,13 +1987,13 @@ type ControlHistoryWhereInput struct {
 }
 
 type ControlObjective struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -1942,8 +2019,10 @@ type ControlObjective struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control objective
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner"`
+	Details   map[string]any `json:"details,omitempty"`
+	CreatedBy *User          `json:"createdBy,omitempty"`
+	UpdatedBy *User          `json:"updatedBy,omitempty"`
+	Owner     *Organization  `json:"owner"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -2004,12 +2083,13 @@ type ControlObjectiveHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -2105,6 +2185,22 @@ type ControlObjectiveHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -2127,38 +2223,38 @@ type ControlObjectiveHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -2170,22 +2266,22 @@ type ControlObjectiveHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -2411,38 +2507,38 @@ type ControlObjectiveWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -2454,22 +2550,22 @@ type ControlObjectiveWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -2642,6 +2738,12 @@ type ControlObjectiveWhereInput struct {
 	MappedFrameworksNotNil       *bool    `json:"mappedFrameworksNotNil,omitempty"`
 	MappedFrameworksEqualFold    *string  `json:"mappedFrameworksEqualFold,omitempty"`
 	MappedFrameworksContainsFold *string  `json:"mappedFrameworksContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -2734,38 +2836,38 @@ type ControlWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -2777,22 +2879,22 @@ type ControlWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -2981,6 +3083,12 @@ type ControlWhereInput struct {
 	MappedFrameworksNotNil       *bool    `json:"mappedFrameworksNotNil,omitempty"`
 	MappedFrameworksEqualFold    *string  `json:"mappedFrameworksEqualFold,omitempty"`
 	MappedFrameworksContainsFold *string  `json:"mappedFrameworksContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -3035,6 +3143,8 @@ type CreateAPITokenInput struct {
 	Description *string    `json:"description,omitempty"`
 	Scopes      []string   `json:"scopes,omitempty"`
 	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	OwnerID     *string    `json:"ownerID,omitempty"`
 }
 
@@ -3057,6 +3167,8 @@ type CreateActionPlanInput struct {
 	Source *string `json:"source,omitempty"`
 	// json data including details of the action plan
 	Details     map[string]any `json:"details,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	StandardIDs []string       `json:"standardIDs,omitempty"`
 	RiskIDs     []string       `json:"riskIDs,omitempty"`
 	ControlIDs  []string       `json:"controlIDs,omitempty"`
@@ -3082,10 +3194,12 @@ type CreateContactInput struct {
 	// the address of the contact
 	Address *string `json:"address,omitempty"`
 	// status of the contact
-	Status    *enums.UserStatus `json:"status,omitempty"`
-	OwnerID   *string           `json:"ownerID,omitempty"`
-	EntityIDs []string          `json:"entityIDs,omitempty"`
-	FileIDs   []string          `json:"fileIDs,omitempty"`
+	Status      *enums.UserStatus `json:"status,omitempty"`
+	CreatedByID *string           `json:"createdByID,omitempty"`
+	UpdatedByID *string           `json:"updatedByID,omitempty"`
+	OwnerID     *string           `json:"ownerID,omitempty"`
+	EntityIDs   []string          `json:"entityIDs,omitempty"`
+	FileIDs     []string          `json:"fileIDs,omitempty"`
 }
 
 // CreateControlInput is used for create Control object.
@@ -3117,6 +3231,8 @@ type CreateControlInput struct {
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control
 	Details             map[string]any `json:"details,omitempty"`
+	CreatedByID         *string        `json:"createdByID,omitempty"`
+	UpdatedByID         *string        `json:"updatedByID,omitempty"`
 	OwnerID             string         `json:"ownerID"`
 	BlockedGroupIDs     []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs           []string       `json:"editorIDs,omitempty"`
@@ -3159,6 +3275,8 @@ type CreateControlObjectiveInput struct {
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control objective
 	Details           map[string]any `json:"details,omitempty"`
+	CreatedByID       *string        `json:"createdByID,omitempty"`
+	UpdatedByID       *string        `json:"updatedByID,omitempty"`
 	OwnerID           string         `json:"ownerID"`
 	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs         []string       `json:"editorIDs,omitempty"`
@@ -3185,11 +3303,13 @@ type CreateDocumentDataInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the json data of the document
-	Data       json.RawMessage `json:"data"`
-	OwnerID    *string         `json:"ownerID,omitempty"`
-	TemplateID string          `json:"templateID"`
-	EntityIDs  []string        `json:"entityIDs,omitempty"`
-	FileIDs    []string        `json:"fileIDs,omitempty"`
+	Data        json.RawMessage `json:"data"`
+	CreatedByID *string         `json:"createdByID,omitempty"`
+	UpdatedByID *string         `json:"updatedByID,omitempty"`
+	OwnerID     *string         `json:"ownerID,omitempty"`
+	TemplateID  string          `json:"templateID"`
+	EntityIDs   []string        `json:"entityIDs,omitempty"`
+	FileIDs     []string        `json:"fileIDs,omitempty"`
 }
 
 // CreateEntityInput is used for create Entity object.
@@ -3207,6 +3327,8 @@ type CreateEntityInput struct {
 	Domains []string `json:"domains,omitempty"`
 	// status of the entity
 	Status       *string          `json:"status,omitempty"`
+	CreatedByID  *string          `json:"createdByID,omitempty"`
+	UpdatedByID  *string          `json:"updatedByID,omitempty"`
 	OwnerID      *string          `json:"ownerID,omitempty"`
 	ContactIDs   []string         `json:"contactIDs,omitempty"`
 	DocumentIDs  []string         `json:"documentIDs,omitempty"`
@@ -3222,9 +3344,11 @@ type CreateEntityTypeInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the entity
-	Name      string   `json:"name"`
-	OwnerID   *string  `json:"ownerID,omitempty"`
-	EntityIDs []string `json:"entityIDs,omitempty"`
+	Name        string   `json:"name"`
+	CreatedByID *string  `json:"createdByID,omitempty"`
+	UpdatedByID *string  `json:"updatedByID,omitempty"`
+	OwnerID     *string  `json:"ownerID,omitempty"`
+	EntityIDs   []string `json:"entityIDs,omitempty"`
 }
 
 // CreateEventInput is used for create Event object.
@@ -3236,6 +3360,8 @@ type CreateEventInput struct {
 	CorrelationID          *string        `json:"correlationID,omitempty"`
 	EventType              string         `json:"eventType"`
 	Metadata               map[string]any `json:"metadata,omitempty"`
+	CreatedByID            *string        `json:"createdByID,omitempty"`
+	UpdatedByID            *string        `json:"updatedByID,omitempty"`
 	UserIDs                []string       `json:"userIDs,omitempty"`
 	GroupIDs               []string       `json:"groupIDs,omitempty"`
 	IntegrationIDs         []string       `json:"integrationIDs,omitempty"`
@@ -3277,6 +3403,8 @@ type CreateFileInput struct {
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	StoragePath            *string  `json:"storagePath,omitempty"`
+	CreatedByID            *string  `json:"createdByID,omitempty"`
+	UpdatedByID            *string  `json:"updatedByID,omitempty"`
 	UserIDs                []string `json:"userIDs,omitempty"`
 	OrganizationIDs        []string `json:"organizationIDs,omitempty"`
 	GroupIDs               []string `json:"groupIDs,omitempty"`
@@ -3315,6 +3443,8 @@ type CreateGroupInput struct {
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName                     *string                  `json:"displayName,omitempty"`
+	CreatedByID                     *string                  `json:"createdByID,omitempty"`
+	UpdatedByID                     *string                  `json:"updatedByID,omitempty"`
 	OwnerID                         *string                  `json:"ownerID,omitempty"`
 	ControlCreatorIDs               []string                 `json:"controlCreatorIDs,omitempty"`
 	ControlObjectiveCreatorIDs      []string                 `json:"controlObjectiveCreatorIDs,omitempty"`
@@ -3356,10 +3486,12 @@ type CreateGroupInput struct {
 // CreateGroupMembershipInput is used for create GroupMembership object.
 // Input was generated by ent.
 type CreateGroupMembershipInput struct {
-	Role     *enums.Role `json:"role,omitempty"`
-	GroupID  string      `json:"groupID"`
-	UserID   string      `json:"userID"`
-	EventIDs []string    `json:"eventIDs,omitempty"`
+	Role        *enums.Role `json:"role,omitempty"`
+	CreatedByID *string     `json:"createdByID,omitempty"`
+	UpdatedByID *string     `json:"updatedByID,omitempty"`
+	GroupID     string      `json:"groupID"`
+	UserID      string      `json:"userID"`
+	EventIDs    []string    `json:"eventIDs,omitempty"`
 }
 
 // CreateGroupSettingInput is used for create GroupSetting object.
@@ -3375,6 +3507,8 @@ type CreateGroupSettingInput struct {
 	SyncToSlack *bool `json:"syncToSlack,omitempty"`
 	// whether to sync group members to github groups
 	SyncToGithub *bool   `json:"syncToGithub,omitempty"`
+	CreatedByID  *string `json:"createdByID,omitempty"`
+	UpdatedByID  *string `json:"updatedByID,omitempty"`
 	GroupID      *string `json:"groupID,omitempty"`
 }
 
@@ -3391,6 +3525,8 @@ type CreateHushInput struct {
 	SecretName *string `json:"secretName,omitempty"`
 	// the secret value
 	SecretValue     *string  `json:"secretValue,omitempty"`
+	CreatedByID     *string  `json:"createdByID,omitempty"`
+	UpdatedByID     *string  `json:"updatedByID,omitempty"`
 	IntegrationIDs  []string `json:"integrationIDs,omitempty"`
 	OrganizationIDs []string `json:"organizationIDs,omitempty"`
 	EventIDs        []string `json:"eventIDs,omitempty"`
@@ -3406,6 +3542,8 @@ type CreateIntegrationInput struct {
 	// a description of the integration
 	Description *string  `json:"description,omitempty"`
 	Kind        *string  `json:"kind,omitempty"`
+	CreatedByID *string  `json:"createdByID,omitempty"`
+	UpdatedByID *string  `json:"updatedByID,omitempty"`
 	OwnerID     *string  `json:"ownerID,omitempty"`
 	SecretIDs   []string `json:"secretIDs,omitempty"`
 	EventIDs    []string `json:"eventIDs,omitempty"`
@@ -3432,6 +3570,8 @@ type CreateInternalPolicyInput struct {
 	Background *string `json:"background,omitempty"`
 	// json data for the policy document
 	Details             map[string]any `json:"details,omitempty"`
+	CreatedByID         *string        `json:"createdByID,omitempty"`
+	UpdatedByID         *string        `json:"updatedByID,omitempty"`
 	OwnerID             *string        `json:"ownerID,omitempty"`
 	BlockedGroupIDs     []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs           []string       `json:"editorIDs,omitempty"`
@@ -3457,6 +3597,8 @@ type CreateInviteInput struct {
 	SendAttempts *int64 `json:"sendAttempts,omitempty"`
 	// the user who initiated the invitation
 	RequestorID *string  `json:"requestorID,omitempty"`
+	CreatedByID *string  `json:"createdByID,omitempty"`
+	UpdatedByID *string  `json:"updatedByID,omitempty"`
 	OwnerID     *string  `json:"ownerID,omitempty"`
 	EventIDs    []string `json:"eventIDs,omitempty"`
 }
@@ -3479,6 +3621,8 @@ type CreateNarrativeInput struct {
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the narrative document
 	Details             map[string]any `json:"details,omitempty"`
+	CreatedByID         *string        `json:"createdByID,omitempty"`
+	UpdatedByID         *string        `json:"updatedByID,omitempty"`
 	OwnerID             string         `json:"ownerID"`
 	BlockedGroupIDs     []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs           []string       `json:"editorIDs,omitempty"`
@@ -3497,6 +3641,8 @@ type CreateNoteInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the text of the note
 	Text          string   `json:"text"`
+	CreatedByID   *string  `json:"createdByID,omitempty"`
+	UpdatedByID   *string  `json:"updatedByID,omitempty"`
 	OwnerID       *string  `json:"ownerID,omitempty"`
 	EntityID      *string  `json:"entityID,omitempty"`
 	SubcontrolIDs []string `json:"subcontrolIDs,omitempty"`
@@ -3507,6 +3653,8 @@ type CreateNoteInput struct {
 // Input was generated by ent.
 type CreateOrgMembershipInput struct {
 	Role           *enums.Role `json:"role,omitempty"`
+	CreatedByID    *string     `json:"createdByID,omitempty"`
+	UpdatedByID    *string     `json:"updatedByID,omitempty"`
 	OrganizationID string      `json:"organizationID"`
 	UserID         string      `json:"userID"`
 	EventIDs       []string    `json:"eventIDs,omitempty"`
@@ -3532,8 +3680,10 @@ type CreateOrgSubscriptionInput struct {
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// the features associated with the subscription
-	Features []string `json:"features,omitempty"`
-	OwnerID  *string  `json:"ownerID,omitempty"`
+	Features    []string `json:"features,omitempty"`
+	CreatedByID *string  `json:"createdByID,omitempty"`
+	UpdatedByID *string  `json:"updatedByID,omitempty"`
+	OwnerID     *string  `json:"ownerID,omitempty"`
 }
 
 // CreateOrganizationInput is used for create Organization object.
@@ -3553,6 +3703,8 @@ type CreateOrganizationInput struct {
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb                *bool                           `json:"dedicatedDb,omitempty"`
+	CreatedByID                *string                         `json:"createdByID,omitempty"`
+	UpdatedByID                *string                         `json:"updatedByID,omitempty"`
 	ControlCreatorIDs          []string                        `json:"controlCreatorIDs,omitempty"`
 	ControlObjectiveCreatorIDs []string                        `json:"controlObjectiveCreatorIDs,omitempty"`
 	GroupCreatorIDs            []string                        `json:"groupCreatorIDs,omitempty"`
@@ -3614,6 +3766,8 @@ type CreateOrganizationSettingInput struct {
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// the ID of the stripe customer associated with the organization
 	StripeID       *string  `json:"stripeID,omitempty"`
+	CreatedByID    *string  `json:"createdByID,omitempty"`
+	UpdatedByID    *string  `json:"updatedByID,omitempty"`
 	OrganizationID *string  `json:"organizationID,omitempty"`
 	FileIDs        []string `json:"fileIDs,omitempty"`
 }
@@ -3631,6 +3785,8 @@ type CreatePersonalAccessTokenInput struct {
 	Description     *string    `json:"description,omitempty"`
 	Scopes          []string   `json:"scopes,omitempty"`
 	LastUsedAt      *time.Time `json:"lastUsedAt,omitempty"`
+	CreatedByID     *string    `json:"createdByID,omitempty"`
+	UpdatedByID     *string    `json:"updatedByID,omitempty"`
 	OwnerID         string     `json:"ownerID"`
 	OrganizationIDs []string   `json:"organizationIDs,omitempty"`
 	EventIDs        []string   `json:"eventIDs,omitempty"`
@@ -3659,6 +3815,8 @@ type CreateProcedureInput struct {
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the procedure document
 	Details           map[string]any `json:"details,omitempty"`
+	CreatedByID       *string        `json:"createdByID,omitempty"`
+	UpdatedByID       *string        `json:"updatedByID,omitempty"`
 	OwnerID           *string        `json:"ownerID,omitempty"`
 	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs         []string       `json:"editorIDs,omitempty"`
@@ -3691,6 +3849,8 @@ type CreateProgramInput struct {
 	AuditorWriteComments *bool `json:"auditorWriteComments,omitempty"`
 	// can the auditor read comments
 	AuditorReadComments *bool    `json:"auditorReadComments,omitempty"`
+	CreatedByID         *string  `json:"createdByID,omitempty"`
+	UpdatedByID         *string  `json:"updatedByID,omitempty"`
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs           []string `json:"editorIDs,omitempty"`
@@ -3713,9 +3873,11 @@ type CreateProgramInput struct {
 // CreateProgramMembershipInput is used for create ProgramMembership object.
 // Input was generated by ent.
 type CreateProgramMembershipInput struct {
-	Role      *enums.Role `json:"role,omitempty"`
-	ProgramID string      `json:"programID"`
-	UserID    string      `json:"userID"`
+	Role        *enums.Role `json:"role,omitempty"`
+	CreatedByID *string     `json:"createdByID,omitempty"`
+	UpdatedByID *string     `json:"updatedByID,omitempty"`
+	ProgramID   string      `json:"programID"`
+	UserID      string      `json:"userID"`
 }
 
 type CreateProgramWithMembersInput struct {
@@ -3748,6 +3910,8 @@ type CreateRiskInput struct {
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the risk document
 	Details         map[string]any `json:"details,omitempty"`
+	CreatedByID     *string        `json:"createdByID,omitempty"`
+	UpdatedByID     *string        `json:"updatedByID,omitempty"`
 	OwnerID         string         `json:"ownerID"`
 	BlockedGroupIDs []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs       []string       `json:"editorIDs,omitempty"`
@@ -3783,6 +3947,8 @@ type CreateStandardInput struct {
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data with details of the standard
 	Details             map[string]any `json:"details,omitempty"`
+	CreatedByID         *string        `json:"createdByID,omitempty"`
+	UpdatedByID         *string        `json:"updatedByID,omitempty"`
 	ControlObjectiveIDs []string       `json:"controlObjectiveIDs,omitempty"`
 	ControlIDs          []string       `json:"controlIDs,omitempty"`
 	ProcedureIDs        []string       `json:"procedureIDs,omitempty"`
@@ -3826,13 +3992,15 @@ type CreateSubcontrolInput struct {
 	// date the subcontrol implementation was verified
 	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
 	// json data details of the subcontrol
-	Details    map[string]any `json:"details,omitempty"`
-	OwnerID    string         `json:"ownerID"`
-	ControlIDs []string       `json:"controlIDs"`
-	UserIDs    []string       `json:"userIDs,omitempty"`
-	TaskIDs    []string       `json:"taskIDs,omitempty"`
-	NotesID    *string        `json:"notesID,omitempty"`
-	ProgramIDs []string       `json:"programIDs,omitempty"`
+	Details     map[string]any `json:"details,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
+	OwnerID     string         `json:"ownerID"`
+	ControlIDs  []string       `json:"controlIDs"`
+	UserIDs     []string       `json:"userIDs,omitempty"`
+	TaskIDs     []string       `json:"taskIDs,omitempty"`
+	NotesID     *string        `json:"notesID,omitempty"`
+	ProgramIDs  []string       `json:"programIDs,omitempty"`
 }
 
 // CreateSubscriberInput is used for create Subscriber object.
@@ -3844,6 +4012,8 @@ type CreateSubscriberInput struct {
 	Email string `json:"email"`
 	// phone number of the subscriber
 	PhoneNumber *string  `json:"phoneNumber,omitempty"`
+	CreatedByID *string  `json:"createdByID,omitempty"`
+	UpdatedByID *string  `json:"updatedByID,omitempty"`
 	OwnerID     *string  `json:"ownerID,omitempty"`
 	EventIDs    []string `json:"eventIDs,omitempty"`
 }
@@ -3855,6 +4025,8 @@ type CreateTFASettingInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
 	TotpAllowed *bool   `json:"totpAllowed,omitempty"`
+	CreatedByID *string `json:"createdByID,omitempty"`
+	UpdatedByID *string `json:"updatedByID,omitempty"`
 	OwnerID     *string `json:"ownerID,omitempty"`
 }
 
@@ -3875,6 +4047,8 @@ type CreateTaskInput struct {
 	Due *time.Time `json:"due,omitempty"`
 	// the completion date of the task
 	Completed           *time.Time `json:"completed,omitempty"`
+	CreatedByID         *string    `json:"createdByID,omitempty"`
+	UpdatedByID         *string    `json:"updatedByID,omitempty"`
 	AssignerID          string     `json:"assignerID"`
 	AssigneeID          *string    `json:"assigneeID,omitempty"`
 	OrganizationIDs     []string   `json:"organizationIDs,omitempty"`
@@ -3902,6 +4076,8 @@ type CreateTemplateInput struct {
 	Jsonconfig json.RawMessage `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
 	Uischema    json.RawMessage `json:"uischema,omitempty"`
+	CreatedByID *string         `json:"createdByID,omitempty"`
+	UpdatedByID *string         `json:"updatedByID,omitempty"`
 	OwnerID     *string         `json:"ownerID,omitempty"`
 	DocumentIDs []string        `json:"documentIDs,omitempty"`
 	FileIDs     []string        `json:"fileIDs,omitempty"`
@@ -3970,31 +4146,35 @@ type CreateUserSettingInput struct {
 	IsWebauthnAllowed *bool `json:"isWebauthnAllowed,omitempty"`
 	// whether the user has two factor authentication enabled
 	IsTfaEnabled *bool    `json:"isTfaEnabled,omitempty"`
+	CreatedByID  *string  `json:"createdByID,omitempty"`
+	UpdatedByID  *string  `json:"updatedByID,omitempty"`
 	UserID       *string  `json:"userID,omitempty"`
 	DefaultOrgID *string  `json:"defaultOrgID,omitempty"`
 	FileIDs      []string `json:"fileIDs,omitempty"`
 }
 
 type DocumentData struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
 	TemplateID string `json:"templateID"`
 	// the json data of the document
-	Data     json.RawMessage `json:"data"`
-	Owner    *Organization   `json:"owner,omitempty"`
-	Template *Template       `json:"template"`
-	Entity   []*Entity       `json:"entity,omitempty"`
-	Files    []*File         `json:"files,omitempty"`
+	Data      json.RawMessage `json:"data"`
+	CreatedBy *User           `json:"createdBy,omitempty"`
+	UpdatedBy *User           `json:"updatedBy,omitempty"`
+	Owner     *Organization   `json:"owner,omitempty"`
+	Template  *Template       `json:"template"`
+	Entity    []*Entity       `json:"entity,omitempty"`
+	Files     []*File         `json:"files,omitempty"`
 }
 
 func (DocumentData) IsNode() {}
@@ -4040,14 +4220,15 @@ type DocumentDataHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
@@ -4123,6 +4304,22 @@ type DocumentDataHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -4145,38 +4342,38 @@ type DocumentDataHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -4188,22 +4385,22 @@ type DocumentDataHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -4287,38 +4484,38 @@ type DocumentDataWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -4330,22 +4527,22 @@ type DocumentDataWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -4376,6 +4573,12 @@ type DocumentDataWhereInput struct {
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -4391,13 +4594,13 @@ type DocumentDataWhereInput struct {
 }
 
 type Entity struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -4414,6 +4617,8 @@ type Entity struct {
 	EntityTypeID *string `json:"entityTypeID,omitempty"`
 	// status of the entity
 	Status     *string         `json:"status,omitempty"`
+	CreatedBy  *User           `json:"createdBy,omitempty"`
+	UpdatedBy  *User           `json:"updatedBy,omitempty"`
 	Owner      *Organization   `json:"owner,omitempty"`
 	Contacts   []*Contact      `json:"contacts,omitempty"`
 	Documents  []*DocumentData `json:"documents,omitempty"`
@@ -4465,12 +4670,13 @@ type EntityHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -4564,6 +4770,22 @@ type EntityHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -4586,38 +4808,38 @@ type EntityHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -4629,22 +4851,22 @@ type EntityHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -4742,21 +4964,23 @@ type EntitySearchResult struct {
 func (EntitySearchResult) IsSearchResult() {}
 
 type EntityType struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
-	Name     string        `json:"name"`
-	Owner    *Organization `json:"owner,omitempty"`
-	Entities []*Entity     `json:"entities,omitempty"`
+	Name      string        `json:"name"`
+	CreatedBy *User         `json:"createdBy,omitempty"`
+	UpdatedBy *User         `json:"updatedBy,omitempty"`
+	Owner     *Organization `json:"owner,omitempty"`
+	Entities  []*Entity     `json:"entities,omitempty"`
 }
 
 func (EntityType) IsNode() {}
@@ -4802,12 +5026,13 @@ type EntityTypeHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -4891,6 +5116,22 @@ type EntityTypeHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -4913,38 +5154,38 @@ type EntityTypeHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -4956,22 +5197,22 @@ type EntityTypeHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -5063,38 +5304,38 @@ type EntityTypeWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -5106,22 +5347,22 @@ type EntityTypeWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -5152,6 +5393,12 @@ type EntityTypeWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -5205,38 +5452,38 @@ type EntityWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -5248,22 +5495,22 @@ type EntityWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -5344,6 +5591,12 @@ type EntityWhereInput struct {
 	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
 	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
 	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -5365,17 +5618,19 @@ type EntityWhereInput struct {
 }
 
 type Event struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
 	Tags                []string               `json:"tags,omitempty"`
 	EventID             *string                `json:"eventID,omitempty"`
 	CorrelationID       *string                `json:"correlationID,omitempty"`
 	EventType           string                 `json:"eventType"`
 	Metadata            map[string]any         `json:"metadata,omitempty"`
+	CreatedBy           *User                  `json:"createdBy,omitempty"`
+	UpdatedBy           *User                  `json:"updatedBy,omitempty"`
 	User                []*User                `json:"user,omitempty"`
 	Group               []*Group               `json:"group,omitempty"`
 	Integration         []*Integration         `json:"integration,omitempty"`
@@ -5432,10 +5687,11 @@ type EventHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	// tags associated with the object
 	Tags          []string       `json:"tags,omitempty"`
 	EventID       *string        `json:"eventID,omitempty"`
@@ -5511,6 +5767,22 @@ type EventHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -5533,38 +5805,38 @@ type EventHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// event_id field predicates
 	EventID             *string  `json:"eventID,omitempty"`
 	EventIdneq          *string  `json:"eventIDNEQ,omitempty"`
@@ -5664,38 +5936,38 @@ type EventWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// event_id field predicates
 	EventID             *string  `json:"eventID,omitempty"`
 	EventIdneq          *string  `json:"eventIDNEQ,omitempty"`
@@ -5742,6 +6014,12 @@ type EventWhereInput struct {
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
@@ -5778,13 +6056,13 @@ type EventWhereInput struct {
 }
 
 type File struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the file provided in the payload key without the extension
@@ -5812,6 +6090,8 @@ type File struct {
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	StoragePath         *string                `json:"storagePath,omitempty"`
+	CreatedBy           *User                  `json:"createdBy,omitempty"`
+	UpdatedBy           *User                  `json:"updatedBy,omitempty"`
 	User                []*User                `json:"user,omitempty"`
 	Organization        []*Organization        `json:"organization,omitempty"`
 	Group               []*Group               `json:"group,omitempty"`
@@ -5856,12 +6136,13 @@ type FileHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the file provided in the payload key without the extension
@@ -5958,6 +6239,22 @@ type FileHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -5980,38 +6277,38 @@ type FileHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -6023,22 +6320,22 @@ type FileHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// provided_file_name field predicates
 	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
 	ProvidedFileNameNeq          *string  `json:"providedFileNameNEQ,omitempty"`
@@ -6278,38 +6575,38 @@ type FileWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -6321,22 +6618,22 @@ type FileWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// provided_file_name field predicates
 	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
 	ProvidedFileNameNeq          *string  `json:"providedFileNameNEQ,omitempty"`
@@ -6529,6 +6826,12 @@ type FileWhereInput struct {
 	StoragePathNotNil       *bool    `json:"storagePathNotNil,omitempty"`
 	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
@@ -6565,13 +6868,13 @@ type FileWhereInput struct {
 }
 
 type Group struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -6586,6 +6889,8 @@ type Group struct {
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName                   string              `json:"displayName"`
+	CreatedBy                     *User               `json:"createdBy,omitempty"`
+	UpdatedBy                     *User               `json:"updatedBy,omitempty"`
 	Owner                         *Organization       `json:"owner,omitempty"`
 	ControlCreators               []*Organization     `json:"controlCreators,omitempty"`
 	ControlObjectiveCreators      []*Organization     `json:"controlObjectiveCreators,omitempty"`
@@ -6667,12 +6972,13 @@ type GroupHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -6764,6 +7070,22 @@ type GroupHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -6786,38 +7108,38 @@ type GroupHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -6829,22 +7151,22 @@ type GroupHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -6892,19 +7214,21 @@ type GroupHistoryWhereInput struct {
 }
 
 type GroupMembership struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
-	Role      enums.Role `json:"role"`
-	GroupID   string     `json:"groupID"`
-	UserID    string     `json:"userID"`
-	Group     *Group     `json:"group"`
-	User      *User      `json:"user"`
-	Events    []*Event   `json:"events,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
+	Role        enums.Role `json:"role"`
+	GroupID     string     `json:"groupID"`
+	UserID      string     `json:"userID"`
+	CreatedBy   *User      `json:"createdBy,omitempty"`
+	UpdatedBy   *User      `json:"updatedBy,omitempty"`
+	Group       *Group     `json:"group"`
+	User        *User      `json:"user"`
+	Events      []*Event   `json:"events,omitempty"`
 }
 
 func (GroupMembership) IsNode() {}
@@ -6950,12 +7274,13 @@ type GroupMembershipHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	Role        enums.Role     `json:"role"`
 	GroupID     string         `json:"groupID"`
 	UserID      string         `json:"userID"`
@@ -7028,6 +7353,22 @@ type GroupMembershipHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -7050,38 +7391,38 @@ type GroupMembershipHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -7093,22 +7434,22 @@ type GroupMembershipHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// role field predicates
 	Role      *enums.Role  `json:"role,omitempty"`
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
@@ -7189,38 +7530,6 @@ type GroupMembershipWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -7232,22 +7541,22 @@ type GroupMembershipWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// role field predicates
 	Role      *enums.Role  `json:"role,omitempty"`
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
@@ -7272,15 +7581,15 @@ type GroupSearchResult struct {
 func (GroupSearchResult) IsSearchResult() {}
 
 type GroupSetting struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
@@ -7290,8 +7599,10 @@ type GroupSetting struct {
 	// whether to sync group members to github groups
 	SyncToGithub *bool `json:"syncToGithub,omitempty"`
 	// the group id associated with the settings
-	GroupID *string `json:"groupID,omitempty"`
-	Group   *Group  `json:"group,omitempty"`
+	GroupID   *string `json:"groupID,omitempty"`
+	CreatedBy *User   `json:"createdBy,omitempty"`
+	UpdatedBy *User   `json:"updatedBy,omitempty"`
+	Group     *Group  `json:"group,omitempty"`
 }
 
 func (GroupSetting) IsNode() {}
@@ -7337,14 +7648,15 @@ type GroupSettingHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
@@ -7424,6 +7736,22 @@ type GroupSettingHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -7446,38 +7774,38 @@ type GroupSettingHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -7489,22 +7817,22 @@ type GroupSettingHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// visibility field predicates
 	Visibility      *enums.Visibility  `json:"visibility,omitempty"`
 	VisibilityNeq   *enums.Visibility  `json:"visibilityNEQ,omitempty"`
@@ -7594,38 +7922,38 @@ type GroupSettingWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -7637,22 +7965,22 @@ type GroupSettingWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// visibility field predicates
 	Visibility      *enums.Visibility  `json:"visibility,omitempty"`
 	VisibilityNeq   *enums.Visibility  `json:"visibilityNEQ,omitempty"`
@@ -7689,6 +8017,12 @@ type GroupSettingWhereInput struct {
 	GroupIDNotNil       *bool    `json:"groupIDNotNil,omitempty"`
 	GroupIDEqualFold    *string  `json:"groupIDEqualFold,omitempty"`
 	GroupIDContainsFold *string  `json:"groupIDContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// group edge predicates
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
 	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
@@ -7739,38 +8073,38 @@ type GroupWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -7782,22 +8116,22 @@ type GroupWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -7842,6 +8176,12 @@ type GroupWhereInput struct {
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -7953,13 +8293,13 @@ type GroupWhereInput struct {
 }
 
 type Hush struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
@@ -7968,6 +8308,8 @@ type Hush struct {
 	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
 	SecretName *string `json:"secretName,omitempty"`
+	CreatedBy  *User   `json:"createdBy,omitempty"`
+	UpdatedBy  *User   `json:"updatedBy,omitempty"`
 	// the integration associated with the secret
 	Integrations []*Integration  `json:"integrations,omitempty"`
 	Organization []*Organization `json:"organization,omitempty"`
@@ -8017,12 +8359,13 @@ type HushHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
@@ -8108,6 +8451,22 @@ type HushHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -8130,38 +8489,38 @@ type HushHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -8173,22 +8532,22 @@ type HushHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -8290,38 +8649,38 @@ type HushWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -8333,22 +8692,22 @@ type HushWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -8395,6 +8754,12 @@ type HushWhereInput struct {
 	SecretNameNotNil       *bool    `json:"secretNameNotNil,omitempty"`
 	SecretNameEqualFold    *string  `json:"secretNameEqualFold,omitempty"`
 	SecretNameContainsFold *string  `json:"secretNameContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
@@ -8407,15 +8772,15 @@ type HushWhereInput struct {
 }
 
 type Integration struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the integration - must be unique within the organization
@@ -8423,6 +8788,8 @@ type Integration struct {
 	// a description of the integration
 	Description *string       `json:"description,omitempty"`
 	Kind        *string       `json:"kind,omitempty"`
+	CreatedBy   *User         `json:"createdBy,omitempty"`
+	UpdatedBy   *User         `json:"updatedBy,omitempty"`
 	Owner       *Organization `json:"owner,omitempty"`
 	// the secrets associated with the integration
 	Secrets []*Hush  `json:"secrets,omitempty"`
@@ -8472,14 +8839,15 @@ type IntegrationHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the integration - must be unique within the organization
@@ -8564,6 +8932,22 @@ type IntegrationHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -8586,38 +8970,38 @@ type IntegrationHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -8629,22 +9013,22 @@ type IntegrationHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -8752,38 +9136,38 @@ type IntegrationWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -8795,22 +9179,22 @@ type IntegrationWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -8857,6 +9241,12 @@ type IntegrationWhereInput struct {
 	KindNotNil       *bool    `json:"kindNotNil,omitempty"`
 	KindEqualFold    *string  `json:"kindEqualFold,omitempty"`
 	KindContainsFold *string  `json:"kindContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -8869,13 +9259,13 @@ type IntegrationWhereInput struct {
 }
 
 type InternalPolicy struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -8895,8 +9285,10 @@ type InternalPolicy struct {
 	// background of the policy
 	Background *string `json:"background,omitempty"`
 	// json data for the policy document
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner,omitempty"`
+	Details   map[string]any `json:"details,omitempty"`
+	CreatedBy *User          `json:"createdBy,omitempty"`
+	UpdatedBy *User          `json:"updatedBy,omitempty"`
+	Owner     *Organization  `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -8952,12 +9344,13 @@ type InternalPolicyHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -9047,6 +9440,22 @@ type InternalPolicyHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -9069,38 +9478,38 @@ type InternalPolicyHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -9112,22 +9521,22 @@ type InternalPolicyHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -9307,38 +9716,38 @@ type InternalPolicyWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -9350,22 +9759,22 @@ type InternalPolicyWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -9492,6 +9901,12 @@ type InternalPolicyWhereInput struct {
 	BackgroundNotNil       *bool    `json:"backgroundNotNil,omitempty"`
 	BackgroundEqualFold    *string  `json:"backgroundEqualFold,omitempty"`
 	BackgroundContainsFold *string  `json:"backgroundContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -9522,13 +9937,13 @@ type InternalPolicyWhereInput struct {
 }
 
 type Invite struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the expiration date of the invitation token which defaults to 14 days in the future from creation
@@ -9542,6 +9957,8 @@ type Invite struct {
 	SendAttempts int64 `json:"sendAttempts"`
 	// the user who initiated the invitation
 	RequestorID *string       `json:"requestorID,omitempty"`
+	CreatedBy   *User         `json:"createdBy,omitempty"`
+	UpdatedBy   *User         `json:"updatedBy,omitempty"`
 	Owner       *Organization `json:"owner,omitempty"`
 	Events      []*Event      `json:"events,omitempty"`
 }
@@ -9629,38 +10046,38 @@ type InviteWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -9672,22 +10089,22 @@ type InviteWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -9764,6 +10181,12 @@ type InviteWhereInput struct {
 	RequestorIDNotNil       *bool    `json:"requestorIDNotNil,omitempty"`
 	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
 	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -9776,13 +10199,13 @@ type Mutation struct {
 }
 
 type Narrative struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -9794,8 +10217,10 @@ type Narrative struct {
 	// which controls are satisfied by the narrative
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the narrative document
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner"`
+	Details   map[string]any `json:"details,omitempty"`
+	CreatedBy *User          `json:"createdBy,omitempty"`
+	UpdatedBy *User          `json:"updatedBy,omitempty"`
+	Owner     *Organization  `json:"owner"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -9852,12 +10277,13 @@ type NarrativeHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -9939,6 +10365,22 @@ type NarrativeHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -9961,38 +10403,38 @@ type NarrativeHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -10004,22 +10446,22 @@ type NarrativeHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10133,38 +10575,38 @@ type NarrativeWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -10176,22 +10618,22 @@ type NarrativeWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10252,6 +10694,12 @@ type NarrativeWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -10282,19 +10730,21 @@ type NarrativeWhereInput struct {
 }
 
 type Note struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
 	Text        string        `json:"text"`
+	CreatedBy   *User         `json:"createdBy,omitempty"`
+	UpdatedBy   *User         `json:"updatedBy,omitempty"`
 	Owner       *Organization `json:"owner,omitempty"`
 	Entity      *Entity       `json:"entity,omitempty"`
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
@@ -10326,12 +10776,13 @@ type NoteHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -10407,6 +10858,22 @@ type NoteHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -10429,38 +10896,38 @@ type NoteHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -10472,22 +10939,22 @@ type NoteHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10559,38 +11026,38 @@ type NoteWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -10602,22 +11069,22 @@ type NoteWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10648,6 +11115,12 @@ type NoteWhereInput struct {
 	TextHasSuffix    *string  `json:"textHasSuffix,omitempty"`
 	TextEqualFold    *string  `json:"textEqualFold,omitempty"`
 	TextContainsFold *string  `json:"textContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -10666,13 +11139,15 @@ type OrgMembership struct {
 	ID             string        `json:"id"`
 	CreatedAt      *time.Time    `json:"createdAt,omitempty"`
 	UpdatedAt      *time.Time    `json:"updatedAt,omitempty"`
-	CreatedBy      *string       `json:"createdBy,omitempty"`
-	UpdatedBy      *string       `json:"updatedBy,omitempty"`
+	CreatedByID    *string       `json:"createdByID,omitempty"`
+	UpdatedByID    *string       `json:"updatedByID,omitempty"`
 	DeletedAt      *time.Time    `json:"deletedAt,omitempty"`
-	DeletedBy      *string       `json:"deletedBy,omitempty"`
+	DeletedByID    *string       `json:"deletedByID,omitempty"`
 	Role           enums.Role    `json:"role"`
 	OrganizationID string        `json:"organizationID"`
 	UserID         string        `json:"userID"`
+	CreatedBy      *User         `json:"createdBy,omitempty"`
+	UpdatedBy      *User         `json:"updatedBy,omitempty"`
 	Organization   *Organization `json:"organization"`
 	User           *User         `json:"user"`
 	Events         []*Event      `json:"events,omitempty"`
@@ -10721,12 +11196,13 @@ type OrgMembershipHistory struct {
 	HistoryTime    time.Time      `json:"historyTime"`
 	Ref            *string        `json:"ref,omitempty"`
 	Operation      history.OpType `json:"operation"`
+	UpdatedBy      *string        `json:"updatedBy,omitempty"`
 	CreatedAt      *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt      *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy      *string        `json:"createdBy,omitempty"`
-	UpdatedBy      *string        `json:"updatedBy,omitempty"`
+	CreatedByID    *string        `json:"createdByID,omitempty"`
+	UpdatedByID    *string        `json:"updatedByID,omitempty"`
 	DeletedAt      *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy      *string        `json:"deletedBy,omitempty"`
+	DeletedByID    *string        `json:"deletedByID,omitempty"`
 	Role           enums.Role     `json:"role"`
 	OrganizationID string         `json:"organizationID"`
 	UserID         string         `json:"userID"`
@@ -10799,6 +11275,22 @@ type OrgMembershipHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -10821,38 +11313,38 @@ type OrgMembershipHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -10864,22 +11356,22 @@ type OrgMembershipHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// role field predicates
 	Role      *enums.Role  `json:"role,omitempty"`
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
@@ -10960,38 +11452,6 @@ type OrgMembershipWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -11003,22 +11463,22 @@ type OrgMembershipWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// role field predicates
 	Role           *enums.Role  `json:"role,omitempty"`
 	RoleNeq        *enums.Role  `json:"roleNEQ,omitempty"`
@@ -11029,15 +11489,15 @@ type OrgMembershipWhereInput struct {
 }
 
 type OrgSubscription struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
@@ -11055,8 +11515,10 @@ type OrgSubscription struct {
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// the features associated with the subscription
-	Features []string      `json:"features,omitempty"`
-	Owner    *Organization `json:"owner,omitempty"`
+	Features  []string      `json:"features,omitempty"`
+	CreatedBy *User         `json:"createdBy,omitempty"`
+	UpdatedBy *User         `json:"updatedBy,omitempty"`
+	Owner     *Organization `json:"owner,omitempty"`
 }
 
 func (OrgSubscription) IsNode() {}
@@ -11102,14 +11564,15 @@ type OrgSubscriptionHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
@@ -11197,6 +11660,22 @@ type OrgSubscriptionHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -11219,38 +11698,38 @@ type OrgSubscriptionHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -11262,22 +11741,22 @@ type OrgSubscriptionHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -11441,38 +11920,38 @@ type OrgSubscriptionWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -11484,22 +11963,22 @@ type OrgSubscriptionWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -11610,21 +12089,27 @@ type OrgSubscriptionWhereInput struct {
 	ExpiresAtLte    *time.Time   `json:"expiresAtLTE,omitempty"`
 	ExpiresAtIsNil  *bool        `json:"expiresAtIsNil,omitempty"`
 	ExpiresAtNotNil *bool        `json:"expiresAtNotNil,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 }
 
 type Organization struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the name of the organization
 	Name string `json:"name"`
 	// The organization's displayed 'friendly' name
@@ -11636,7 +12121,9 @@ type Organization struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// Whether the organization has a dedicated database
-	DedicatedDb bool `json:"dedicatedDb"`
+	DedicatedDb bool  `json:"dedicatedDb"`
+	CreatedBy   *User `json:"createdBy,omitempty"`
+	UpdatedBy   *User `json:"updatedBy,omitempty"`
 	// groups that are allowed to create controls
 	ControlCreators []*Group `json:"controlCreators,omitempty"`
 	// groups that are allowed to create control_objectives
@@ -11730,14 +12217,15 @@ type OrganizationHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the name of the organization
 	Name string `json:"name"`
 	// The organization's displayed 'friendly' name
@@ -11827,6 +12315,22 @@ type OrganizationHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -11849,38 +12353,38 @@ type OrganizationHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -11892,22 +12396,22 @@ type OrganizationHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// display_name field predicates
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
@@ -11976,15 +12480,15 @@ type OrganizationSearchResult struct {
 func (OrganizationSearchResult) IsSearchResult() {}
 
 type OrganizationSetting struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// domains associated with the organization
 	Domains []string `json:"domains,omitempty"`
 	// Name of the person to contact for billing
@@ -12003,6 +12507,8 @@ type OrganizationSetting struct {
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// the ID of the stripe customer associated with the organization
 	StripeID     *string       `json:"stripeID,omitempty"`
+	CreatedBy    *User         `json:"createdBy,omitempty"`
+	UpdatedBy    *User         `json:"updatedBy,omitempty"`
 	Organization *Organization `json:"organization,omitempty"`
 	Files        []*File       `json:"files,omitempty"`
 }
@@ -12050,14 +12556,15 @@ type OrganizationSettingHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// domains associated with the organization
 	Domains []string `json:"domains,omitempty"`
 	// Name of the person to contact for billing
@@ -12145,6 +12652,22 @@ type OrganizationSettingHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -12167,38 +12690,38 @@ type OrganizationSettingHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -12210,22 +12733,22 @@ type OrganizationSettingHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// billing_contact field predicates
 	BillingContact             *string  `json:"billingContact,omitempty"`
 	BillingContactNeq          *string  `json:"billingContactNEQ,omitempty"`
@@ -12398,38 +12921,38 @@ type OrganizationSettingWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -12441,22 +12964,22 @@ type OrganizationSettingWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// billing_contact field predicates
 	BillingContact             *string  `json:"billingContact,omitempty"`
 	BillingContactNeq          *string  `json:"billingContactNEQ,omitempty"`
@@ -12576,6 +13099,12 @@ type OrganizationSettingWhereInput struct {
 	StripeIDNotNil       *bool    `json:"stripeIDNotNil,omitempty"`
 	StripeIDEqualFold    *string  `json:"stripeIDEqualFold,omitempty"`
 	StripeIDContainsFold *string  `json:"stripeIDContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -12629,38 +13158,38 @@ type OrganizationWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -12672,22 +13201,22 @@ type OrganizationWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// display_name field predicates
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
@@ -12739,6 +13268,12 @@ type OrganizationWhereInput struct {
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
 	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// control_creators edge predicates
 	HasControlCreators     *bool              `json:"hasControlCreators,omitempty"`
 	HasControlCreatorsWith []*GroupWhereInput `json:"hasControlCreatorsWith,omitempty"`
@@ -12872,13 +13407,13 @@ type PageInfo struct {
 }
 
 type PersonalAccessToken struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name associated with the token
@@ -12890,6 +13425,8 @@ type PersonalAccessToken struct {
 	Description *string    `json:"description,omitempty"`
 	Scopes      []string   `json:"scopes,omitempty"`
 	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	CreatedBy   *User      `json:"createdBy,omitempty"`
+	UpdatedBy   *User      `json:"updatedBy,omitempty"`
 	Owner       *User      `json:"owner"`
 	// the organization(s) the token is associated with
 	Organizations []*Organization `json:"organizations,omitempty"`
@@ -12985,38 +13522,38 @@ type PersonalAccessTokenWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -13028,22 +13565,22 @@ type PersonalAccessTokenWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -13080,6 +13617,12 @@ type PersonalAccessTokenWhereInput struct {
 	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
 	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
 	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
 	HasOwnerWith []*UserWhereInput `json:"hasOwnerWith,omitempty"`
@@ -13092,13 +13635,13 @@ type PersonalAccessTokenWhereInput struct {
 }
 
 type Procedure struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -13120,8 +13663,10 @@ type Procedure struct {
 	// which controls are satisfied by the procedure
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the procedure document
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner,omitempty"`
+	Details   map[string]any `json:"details,omitempty"`
+	CreatedBy *User          `json:"createdBy,omitempty"`
+	UpdatedBy *User          `json:"updatedBy,omitempty"`
+	Owner     *Organization  `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -13177,12 +13722,13 @@ type ProcedureHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -13274,6 +13820,22 @@ type ProcedureHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -13296,38 +13858,38 @@ type ProcedureHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -13339,22 +13901,22 @@ type ProcedureHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -13550,38 +14112,38 @@ type ProcedureWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -13593,22 +14155,22 @@ type ProcedureWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -13751,6 +14313,12 @@ type ProcedureWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -13781,13 +14349,13 @@ type ProcedureWhereInput struct {
 }
 
 type Program struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -13808,6 +14376,8 @@ type Program struct {
 	AuditorWriteComments bool `json:"auditorWriteComments"`
 	// can the auditor read comments
 	AuditorReadComments bool          `json:"auditorReadComments"`
+	CreatedBy           *User         `json:"createdBy,omitempty"`
+	UpdatedBy           *User         `json:"updatedBy,omitempty"`
 	Owner               *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
@@ -13875,12 +14445,13 @@ type ProgramHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -13970,6 +14541,22 @@ type ProgramHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -13992,38 +14579,38 @@ type ProgramHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -14035,22 +14622,22 @@ type ProgramHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -14136,18 +14723,20 @@ type ProgramHistoryWhereInput struct {
 }
 
 type ProgramMembership struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
-	Role      enums.Role `json:"role"`
-	ProgramID string     `json:"programID"`
-	UserID    string     `json:"userID"`
-	Program   *Program   `json:"program"`
-	User      *User      `json:"user"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
+	Role        enums.Role `json:"role"`
+	ProgramID   string     `json:"programID"`
+	UserID      string     `json:"userID"`
+	CreatedBy   *User      `json:"createdBy,omitempty"`
+	UpdatedBy   *User      `json:"updatedBy,omitempty"`
+	Program     *Program   `json:"program"`
+	User        *User      `json:"user"`
 }
 
 func (ProgramMembership) IsNode() {}
@@ -14193,12 +14782,13 @@ type ProgramMembershipHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	Role        enums.Role     `json:"role"`
 	ProgramID   string         `json:"programID"`
 	UserID      string         `json:"userID"`
@@ -14271,6 +14861,22 @@ type ProgramMembershipHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -14293,38 +14899,38 @@ type ProgramMembershipHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -14336,22 +14942,22 @@ type ProgramMembershipHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// role field predicates
 	Role      *enums.Role  `json:"role,omitempty"`
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
@@ -14432,38 +15038,6 @@ type ProgramMembershipWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -14475,22 +15049,22 @@ type ProgramMembershipWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// role field predicates
 	Role      *enums.Role  `json:"role,omitempty"`
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
@@ -14551,38 +15125,38 @@ type ProgramWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -14594,22 +15168,22 @@ type ProgramWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -14692,6 +15266,12 @@ type ProgramWhereInput struct {
 	// auditor_read_comments field predicates
 	AuditorReadComments    *bool `json:"auditorReadComments,omitempty"`
 	AuditorReadCommentsNeq *bool `json:"auditorReadCommentsNEQ,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -14752,13 +15332,13 @@ type Query struct {
 }
 
 type Risk struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -14782,8 +15362,10 @@ type Risk struct {
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the risk document
-	Details map[string]any `json:"details,omitempty"`
-	Owner   *Organization  `json:"owner"`
+	Details   map[string]any `json:"details,omitempty"`
+	CreatedBy *User          `json:"createdBy,omitempty"`
+	UpdatedBy *User          `json:"updatedBy,omitempty"`
+	Owner     *Organization  `json:"owner"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -14839,12 +15421,13 @@ type RiskHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -14938,6 +15521,22 @@ type RiskHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -14960,38 +15559,38 @@ type RiskHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -15003,22 +15602,22 @@ type RiskHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -15210,38 +15809,38 @@ type RiskWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -15253,22 +15852,22 @@ type RiskWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -15407,6 +16006,12 @@ type RiskWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -15443,13 +16048,13 @@ type SearchResultConnection struct {
 }
 
 type Standard struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
@@ -15472,6 +16077,8 @@ type Standard struct {
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data with details of the standard
 	Details           map[string]any      `json:"details,omitempty"`
+	CreatedBy         *User               `json:"createdBy,omitempty"`
+	UpdatedBy         *User               `json:"updatedBy,omitempty"`
 	ControlObjectives []*ControlObjective `json:"controlObjectives,omitempty"`
 	Controls          []*Control          `json:"controls,omitempty"`
 	Procedures        []*Procedure        `json:"procedures,omitempty"`
@@ -15522,12 +16129,13 @@ type StandardHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc.
@@ -15619,6 +16227,22 @@ type StandardHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -15641,38 +16265,38 @@ type StandardHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -15684,22 +16308,22 @@ type StandardHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -15895,38 +16519,38 @@ type StandardWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -15938,22 +16562,22 @@ type StandardWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -16096,6 +16720,12 @@ type StandardWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// control_objectives edge predicates
 	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
 	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
@@ -16114,13 +16744,13 @@ type StandardWhereInput struct {
 }
 
 type Subcontrol struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -16156,13 +16786,15 @@ type Subcontrol struct {
 	// date the subcontrol implementation was verified
 	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
 	// json data details of the subcontrol
-	Details  map[string]any `json:"details,omitempty"`
-	Owner    *Organization  `json:"owner"`
-	Controls []*Control     `json:"controls"`
-	User     []*User        `json:"user,omitempty"`
-	Tasks    []*Task        `json:"tasks,omitempty"`
-	Notes    *Note          `json:"notes,omitempty"`
-	Programs []*Program     `json:"programs,omitempty"`
+	Details   map[string]any `json:"details,omitempty"`
+	CreatedBy *User          `json:"createdBy,omitempty"`
+	UpdatedBy *User          `json:"updatedBy,omitempty"`
+	Owner     *Organization  `json:"owner"`
+	Controls  []*Control     `json:"controls"`
+	User      []*User        `json:"user,omitempty"`
+	Tasks     []*Task        `json:"tasks,omitempty"`
+	Notes     *Note          `json:"notes,omitempty"`
+	Programs  []*Program     `json:"programs,omitempty"`
 }
 
 func (Subcontrol) IsNode() {}
@@ -16208,12 +16840,13 @@ type SubcontrolHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -16319,6 +16952,22 @@ type SubcontrolHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -16341,38 +16990,38 @@ type SubcontrolHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -16384,22 +17033,22 @@ type SubcontrolHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -16695,38 +17344,38 @@ type SubcontrolWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -16738,22 +17387,22 @@ type SubcontrolWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -16996,6 +17645,12 @@ type SubcontrolWhereInput struct {
 	ImplementationVerificationDateLte    *time.Time   `json:"implementationVerificationDateLTE,omitempty"`
 	ImplementationVerificationDateIsNil  *bool        `json:"implementationVerificationDateIsNil,omitempty"`
 	ImplementationVerificationDateNotNil *bool        `json:"implementationVerificationDateNotNil,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -17017,15 +17672,15 @@ type SubcontrolWhereInput struct {
 }
 
 type Subscriber struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// email address of the subscriber
@@ -17037,9 +17692,11 @@ type Subscriber struct {
 	// indicates if the phone number has been verified
 	VerifiedPhone bool `json:"verifiedPhone"`
 	// indicates if the subscriber is active or not, active users will have at least one verified contact method
-	Active bool          `json:"active"`
-	Owner  *Organization `json:"owner,omitempty"`
-	Events []*Event      `json:"events,omitempty"`
+	Active    bool          `json:"active"`
+	CreatedBy *User         `json:"createdBy,omitempty"`
+	UpdatedBy *User         `json:"updatedBy,omitempty"`
+	Owner     *Organization `json:"owner,omitempty"`
+	Events    []*Event      `json:"events,omitempty"`
 }
 
 func (Subscriber) IsNode() {}
@@ -17131,38 +17788,38 @@ type SubscriberWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -17174,22 +17831,22 @@ type SubscriberWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -17245,6 +17902,12 @@ type SubscriberWhereInput struct {
 	// active field predicates
 	Active    *bool `json:"active,omitempty"`
 	ActiveNeq *bool `json:"activeNEQ,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -17254,13 +17917,13 @@ type SubscriberWhereInput struct {
 }
 
 type TFASetting struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// TFA secret for the user
@@ -17271,6 +17934,8 @@ type TFASetting struct {
 	RecoveryCodes []string `json:"recoveryCodes,omitempty"`
 	// specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
 	TotpAllowed *bool `json:"totpAllowed,omitempty"`
+	CreatedBy   *User `json:"createdBy,omitempty"`
+	UpdatedBy   *User `json:"updatedBy,omitempty"`
 	Owner       *User `json:"owner,omitempty"`
 }
 
@@ -17351,38 +18016,38 @@ type TFASettingWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -17394,22 +18059,22 @@ type TFASettingWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// tfa_secret field predicates
 	TfaSecret             *string  `json:"tfaSecret,omitempty"`
 	TfaSecretNeq          *string  `json:"tfaSecretNEQ,omitempty"`
@@ -17434,19 +18099,25 @@ type TFASettingWhereInput struct {
 	TotpAllowedNeq    *bool `json:"totpAllowedNEQ,omitempty"`
 	TotpAllowedIsNil  *bool `json:"totpAllowedIsNil,omitempty"`
 	TotpAllowedNotNil *bool `json:"totpAllowedNotNil,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
 	HasOwnerWith []*UserWhereInput `json:"hasOwnerWith,omitempty"`
 }
 
 type Task struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the title of the task
@@ -17461,6 +18132,8 @@ type Task struct {
 	Due *time.Time `json:"due,omitempty"`
 	// the completion date of the task
 	Completed        *time.Time          `json:"completed,omitempty"`
+	CreatedBy        *User               `json:"createdBy,omitempty"`
+	UpdatedBy        *User               `json:"updatedBy,omitempty"`
 	Assigner         *User               `json:"assigner"`
 	Assignee         *User               `json:"assignee,omitempty"`
 	Organization     []*Organization     `json:"organization,omitempty"`
@@ -17516,12 +18189,13 @@ type TaskHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the title of the task
@@ -17605,6 +18279,22 @@ type TaskHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -17627,38 +18317,38 @@ type TaskHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -17670,22 +18360,22 @@ type TaskHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -17796,38 +18486,38 @@ type TaskWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -17839,22 +18529,22 @@ type TaskWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -17912,6 +18602,12 @@ type TaskWhereInput struct {
 	CompletedLte    *time.Time   `json:"completedLTE,omitempty"`
 	CompletedIsNil  *bool        `json:"completedIsNil,omitempty"`
 	CompletedNotNil *bool        `json:"completedNotNil,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// assigner edge predicates
 	HasAssigner     *bool             `json:"hasAssigner,omitempty"`
 	HasAssignerWith []*UserWhereInput `json:"hasAssignerWith,omitempty"`
@@ -17945,13 +18641,13 @@ type TaskWhereInput struct {
 }
 
 type Template struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -17966,6 +18662,8 @@ type Template struct {
 	Jsonconfig json.RawMessage `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
 	Uischema  json.RawMessage `json:"uischema,omitempty"`
+	CreatedBy *User           `json:"createdBy,omitempty"`
+	UpdatedBy *User           `json:"updatedBy,omitempty"`
 	Owner     *Organization   `json:"owner,omitempty"`
 	Documents []*DocumentData `json:"documents,omitempty"`
 	Files     []*File         `json:"files,omitempty"`
@@ -18014,12 +18712,13 @@ type TemplateHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -18111,6 +18810,22 @@ type TemplateHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -18133,38 +18848,38 @@ type TemplateHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -18176,22 +18891,22 @@ type TemplateHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -18304,38 +19019,38 @@ type TemplateWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -18347,22 +19062,22 @@ type TemplateWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -18414,6 +19129,12 @@ type TemplateWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -18442,6 +19163,8 @@ type UpdateAPITokenInput struct {
 	ClearScopes      *bool      `json:"clearScopes,omitempty"`
 	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
 	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
+	UpdatedByID      *string    `json:"updatedByID,omitempty"`
+	ClearUpdatedBy   *bool      `json:"clearUpdatedBy,omitempty"`
 	OwnerID          *string    `json:"ownerID,omitempty"`
 	ClearOwner       *bool      `json:"clearOwner,omitempty"`
 }
@@ -18473,6 +19196,8 @@ type UpdateActionPlanInput struct {
 	// json data including details of the action plan
 	Details           map[string]any `json:"details,omitempty"`
 	ClearDetails      *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID       *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy    *bool          `json:"clearUpdatedBy,omitempty"`
 	AddStandardIDs    []string       `json:"addStandardIDs,omitempty"`
 	RemoveStandardIDs []string       `json:"removeStandardIDs,omitempty"`
 	ClearStandard     *bool          `json:"clearStandard,omitempty"`
@@ -18516,6 +19241,8 @@ type UpdateContactInput struct {
 	ClearAddress *bool   `json:"clearAddress,omitempty"`
 	// status of the contact
 	Status          *enums.UserStatus `json:"status,omitempty"`
+	UpdatedByID     *string           `json:"updatedByID,omitempty"`
+	ClearUpdatedBy  *bool             `json:"clearUpdatedBy,omitempty"`
 	OwnerID         *string           `json:"ownerID,omitempty"`
 	ClearOwner      *bool             `json:"clearOwner,omitempty"`
 	AddEntityIDs    []string          `json:"addEntityIDs,omitempty"`
@@ -18568,6 +19295,8 @@ type UpdateControlInput struct {
 	// json data including details of the control
 	Details                   map[string]any `json:"details,omitempty"`
 	ClearDetails              *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID               *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy            *bool          `json:"clearUpdatedBy,omitempty"`
 	OwnerID                   *string        `json:"ownerID,omitempty"`
 	AddBlockedGroupIDs        []string       `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs     []string       `json:"removeBlockedGroupIDs,omitempty"`
@@ -18646,6 +19375,8 @@ type UpdateControlObjectiveInput struct {
 	// json data including details of the control objective
 	Details                 map[string]any `json:"details,omitempty"`
 	ClearDetails            *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID             *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy          *bool          `json:"clearUpdatedBy,omitempty"`
 	OwnerID                 *string        `json:"ownerID,omitempty"`
 	AddBlockedGroupIDs      []string       `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs   []string       `json:"removeBlockedGroupIDs,omitempty"`
@@ -18694,6 +19425,8 @@ type UpdateDocumentDataInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the json data of the document
 	Data            json.RawMessage `json:"data,omitempty"`
+	UpdatedByID     *string         `json:"updatedByID,omitempty"`
+	ClearUpdatedBy  *bool           `json:"clearUpdatedBy,omitempty"`
 	OwnerID         *string         `json:"ownerID,omitempty"`
 	ClearOwner      *bool           `json:"clearOwner,omitempty"`
 	TemplateID      *string         `json:"templateID,omitempty"`
@@ -18728,6 +19461,8 @@ type UpdateEntityInput struct {
 	// status of the entity
 	Status            *string          `json:"status,omitempty"`
 	ClearStatus       *bool            `json:"clearStatus,omitempty"`
+	UpdatedByID       *string          `json:"updatedByID,omitempty"`
+	ClearUpdatedBy    *bool            `json:"clearUpdatedBy,omitempty"`
 	OwnerID           *string          `json:"ownerID,omitempty"`
 	ClearOwner        *bool            `json:"clearOwner,omitempty"`
 	AddContactIDs     []string         `json:"addContactIDs,omitempty"`
@@ -18756,6 +19491,8 @@ type UpdateEntityTypeInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the entity
 	Name            *string  `json:"name,omitempty"`
+	UpdatedByID     *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy  *bool    `json:"clearUpdatedBy,omitempty"`
 	OwnerID         *string  `json:"ownerID,omitempty"`
 	ClearOwner      *bool    `json:"clearOwner,omitempty"`
 	AddEntityIDs    []string `json:"addEntityIDs,omitempty"`
@@ -18777,6 +19514,8 @@ type UpdateEventInput struct {
 	EventType                    *string        `json:"eventType,omitempty"`
 	Metadata                     map[string]any `json:"metadata,omitempty"`
 	ClearMetadata                *bool          `json:"clearMetadata,omitempty"`
+	UpdatedByID                  *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy               *bool          `json:"clearUpdatedBy,omitempty"`
 	AddUserIDs                   []string       `json:"addUserIDs,omitempty"`
 	RemoveUserIDs                []string       `json:"removeUserIDs,omitempty"`
 	ClearUser                    *bool          `json:"clearUser,omitempty"`
@@ -18848,6 +19587,8 @@ type UpdateFileInput struct {
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	StoragePath                  *string  `json:"storagePath,omitempty"`
 	ClearStoragePath             *bool    `json:"clearStoragePath,omitempty"`
+	UpdatedByID                  *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy               *bool    `json:"clearUpdatedBy,omitempty"`
 	AddUserIDs                   []string `json:"addUserIDs,omitempty"`
 	RemoveUserIDs                []string `json:"removeUserIDs,omitempty"`
 	ClearUser                    *bool    `json:"clearUser,omitempty"`
@@ -18903,6 +19644,8 @@ type UpdateGroupInput struct {
 	ClearLogoURL *bool   `json:"clearLogoURL,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName                           *string                       `json:"displayName,omitempty"`
+	UpdatedByID                           *string                       `json:"updatedByID,omitempty"`
+	ClearUpdatedBy                        *bool                         `json:"clearUpdatedBy,omitempty"`
 	OwnerID                               *string                       `json:"ownerID,omitempty"`
 	ClearOwner                            *bool                         `json:"clearOwner,omitempty"`
 	AddControlCreatorIDs                  []string                      `json:"addControlCreatorIDs,omitempty"`
@@ -19013,6 +19756,8 @@ type UpdateGroupInput struct {
 // Input was generated by ent.
 type UpdateGroupMembershipInput struct {
 	Role           *enums.Role `json:"role,omitempty"`
+	UpdatedByID    *string     `json:"updatedByID,omitempty"`
+	ClearUpdatedBy *bool       `json:"clearUpdatedBy,omitempty"`
 	AddEventIDs    []string    `json:"addEventIDs,omitempty"`
 	RemoveEventIDs []string    `json:"removeEventIDs,omitempty"`
 	ClearEvents    *bool       `json:"clearEvents,omitempty"`
@@ -19035,6 +19780,8 @@ type UpdateGroupSettingInput struct {
 	// whether to sync group members to github groups
 	SyncToGithub      *bool   `json:"syncToGithub,omitempty"`
 	ClearSyncToGithub *bool   `json:"clearSyncToGithub,omitempty"`
+	UpdatedByID       *string `json:"updatedByID,omitempty"`
+	ClearUpdatedBy    *bool   `json:"clearUpdatedBy,omitempty"`
 	GroupID           *string `json:"groupID,omitempty"`
 	ClearGroup        *bool   `json:"clearGroup,omitempty"`
 }
@@ -19050,6 +19797,8 @@ type UpdateHushInput struct {
 	// the kind of secret, such as sshkey, certificate, api token, etc.
 	Kind                  *string  `json:"kind,omitempty"`
 	ClearKind             *bool    `json:"clearKind,omitempty"`
+	UpdatedByID           *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy        *bool    `json:"clearUpdatedBy,omitempty"`
 	AddIntegrationIDs     []string `json:"addIntegrationIDs,omitempty"`
 	RemoveIntegrationIDs  []string `json:"removeIntegrationIDs,omitempty"`
 	ClearIntegrations     *bool    `json:"clearIntegrations,omitempty"`
@@ -19075,6 +19824,8 @@ type UpdateIntegrationInput struct {
 	ClearDescription *bool    `json:"clearDescription,omitempty"`
 	Kind             *string  `json:"kind,omitempty"`
 	ClearKind        *bool    `json:"clearKind,omitempty"`
+	UpdatedByID      *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy   *bool    `json:"clearUpdatedBy,omitempty"`
 	OwnerID          *string  `json:"ownerID,omitempty"`
 	ClearOwner       *bool    `json:"clearOwner,omitempty"`
 	AddSecretIDs     []string `json:"addSecretIDs,omitempty"`
@@ -19115,6 +19866,8 @@ type UpdateInternalPolicyInput struct {
 	// json data for the policy document
 	Details                   map[string]any `json:"details,omitempty"`
 	ClearDetails              *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID               *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy            *bool          `json:"clearUpdatedBy,omitempty"`
 	OwnerID                   *string        `json:"ownerID,omitempty"`
 	ClearOwner                *bool          `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs        []string       `json:"addBlockedGroupIDs,omitempty"`
@@ -19154,6 +19907,8 @@ type UpdateInviteInput struct {
 	Role   *enums.Role         `json:"role,omitempty"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts   *int64   `json:"sendAttempts,omitempty"`
+	UpdatedByID    *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy *bool    `json:"clearUpdatedBy,omitempty"`
 	OwnerID        *string  `json:"ownerID,omitempty"`
 	ClearOwner     *bool    `json:"clearOwner,omitempty"`
 	AddEventIDs    []string `json:"addEventIDs,omitempty"`
@@ -19179,6 +19934,8 @@ type UpdateNarrativeInput struct {
 	// json data for the narrative document
 	Details                   map[string]any `json:"details,omitempty"`
 	ClearDetails              *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID               *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy            *bool          `json:"clearUpdatedBy,omitempty"`
 	OwnerID                   *string        `json:"ownerID,omitempty"`
 	AddBlockedGroupIDs        []string       `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs     []string       `json:"removeBlockedGroupIDs,omitempty"`
@@ -19215,6 +19972,8 @@ type UpdateNoteInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the text of the note
 	Text                *string  `json:"text,omitempty"`
+	UpdatedByID         *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy      *bool    `json:"clearUpdatedBy,omitempty"`
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	ClearOwner          *bool    `json:"clearOwner,omitempty"`
 	EntityID            *string  `json:"entityID,omitempty"`
@@ -19231,6 +19990,8 @@ type UpdateNoteInput struct {
 // Input was generated by ent.
 type UpdateOrgMembershipInput struct {
 	Role           *enums.Role `json:"role,omitempty"`
+	UpdatedByID    *string     `json:"updatedByID,omitempty"`
+	ClearUpdatedBy *bool       `json:"clearUpdatedBy,omitempty"`
 	AddEventIDs    []string    `json:"addEventIDs,omitempty"`
 	RemoveEventIDs []string    `json:"removeEventIDs,omitempty"`
 	ClearEvents    *bool       `json:"clearEvents,omitempty"`
@@ -19267,6 +20028,8 @@ type UpdateOrgSubscriptionInput struct {
 	Features       []string `json:"features,omitempty"`
 	AppendFeatures []string `json:"appendFeatures,omitempty"`
 	ClearFeatures  *bool    `json:"clearFeatures,omitempty"`
+	UpdatedByID    *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy *bool    `json:"clearUpdatedBy,omitempty"`
 	OwnerID        *string  `json:"ownerID,omitempty"`
 	ClearOwner     *bool    `json:"clearOwner,omitempty"`
 }
@@ -19288,6 +20051,8 @@ type UpdateOrganizationInput struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL                  *string                         `json:"avatarRemoteURL,omitempty"`
 	ClearAvatarRemoteURL             *bool                           `json:"clearAvatarRemoteURL,omitempty"`
+	UpdatedByID                      *string                         `json:"updatedByID,omitempty"`
+	ClearUpdatedBy                   *bool                           `json:"clearUpdatedBy,omitempty"`
 	AddControlCreatorIDs             []string                        `json:"addControlCreatorIDs,omitempty"`
 	RemoveControlCreatorIDs          []string                        `json:"removeControlCreatorIDs,omitempty"`
 	ClearControlCreators             *bool                           `json:"clearControlCreators,omitempty"`
@@ -19431,6 +20196,8 @@ type UpdateOrganizationSettingInput struct {
 	// the ID of the stripe customer associated with the organization
 	StripeID          *string  `json:"stripeID,omitempty"`
 	ClearStripeID     *bool    `json:"clearStripeID,omitempty"`
+	UpdatedByID       *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy    *bool    `json:"clearUpdatedBy,omitempty"`
 	OrganizationID    *string  `json:"organizationID,omitempty"`
 	ClearOrganization *bool    `json:"clearOrganization,omitempty"`
 	AddFileIDs        []string `json:"addFileIDs,omitempty"`
@@ -19455,6 +20222,8 @@ type UpdatePersonalAccessTokenInput struct {
 	ClearScopes           *bool      `json:"clearScopes,omitempty"`
 	LastUsedAt            *time.Time `json:"lastUsedAt,omitempty"`
 	ClearLastUsedAt       *bool      `json:"clearLastUsedAt,omitempty"`
+	UpdatedByID           *string    `json:"updatedByID,omitempty"`
+	ClearUpdatedBy        *bool      `json:"clearUpdatedBy,omitempty"`
 	AddOrganizationIDs    []string   `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs []string   `json:"removeOrganizationIDs,omitempty"`
 	ClearOrganizations    *bool      `json:"clearOrganizations,omitempty"`
@@ -19496,6 +20265,8 @@ type UpdateProcedureInput struct {
 	// json data for the procedure document
 	Details                 map[string]any `json:"details,omitempty"`
 	ClearDetails            *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID             *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy          *bool          `json:"clearUpdatedBy,omitempty"`
 	OwnerID                 *string        `json:"ownerID,omitempty"`
 	ClearOwner              *bool          `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs      []string       `json:"addBlockedGroupIDs,omitempty"`
@@ -19550,6 +20321,8 @@ type UpdateProgramInput struct {
 	AuditorWriteComments *bool `json:"auditorWriteComments,omitempty"`
 	// can the auditor read comments
 	AuditorReadComments       *bool                           `json:"auditorReadComments,omitempty"`
+	UpdatedByID               *string                         `json:"updatedByID,omitempty"`
+	ClearUpdatedBy            *bool                           `json:"clearUpdatedBy,omitempty"`
 	OwnerID                   *string                         `json:"ownerID,omitempty"`
 	ClearOwner                *bool                           `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs        []string                        `json:"addBlockedGroupIDs,omitempty"`
@@ -19606,7 +20379,9 @@ type UpdateProgramInput struct {
 // UpdateProgramMembershipInput is used for update ProgramMembership object.
 // Input was generated by ent.
 type UpdateProgramMembershipInput struct {
-	Role *enums.Role `json:"role,omitempty"`
+	Role           *enums.Role `json:"role,omitempty"`
+	UpdatedByID    *string     `json:"updatedByID,omitempty"`
+	ClearUpdatedBy *bool       `json:"clearUpdatedBy,omitempty"`
 }
 
 // UpdateRiskInput is used for update Risk object.
@@ -19645,6 +20420,8 @@ type UpdateRiskInput struct {
 	// json data for the risk document
 	Details               map[string]any `json:"details,omitempty"`
 	ClearDetails          *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID           *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy        *bool          `json:"clearUpdatedBy,omitempty"`
 	OwnerID               *string        `json:"ownerID,omitempty"`
 	AddBlockedGroupIDs    []string       `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs []string       `json:"removeBlockedGroupIDs,omitempty"`
@@ -19705,6 +20482,8 @@ type UpdateStandardInput struct {
 	// json data with details of the standard
 	Details                   map[string]any `json:"details,omitempty"`
 	ClearDetails              *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID               *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy            *bool          `json:"clearUpdatedBy,omitempty"`
 	AddControlObjectiveIDs    []string       `json:"addControlObjectiveIDs,omitempty"`
 	RemoveControlObjectiveIDs []string       `json:"removeControlObjectiveIDs,omitempty"`
 	ClearControlObjectives    *bool          `json:"clearControlObjectives,omitempty"`
@@ -19776,6 +20555,8 @@ type UpdateSubcontrolInput struct {
 	// json data details of the subcontrol
 	Details          map[string]any `json:"details,omitempty"`
 	ClearDetails     *bool          `json:"clearDetails,omitempty"`
+	UpdatedByID      *string        `json:"updatedByID,omitempty"`
+	ClearUpdatedBy   *bool          `json:"clearUpdatedBy,omitempty"`
 	OwnerID          *string        `json:"ownerID,omitempty"`
 	AddControlIDs    []string       `json:"addControlIDs,omitempty"`
 	RemoveControlIDs []string       `json:"removeControlIDs,omitempty"`
@@ -19804,6 +20585,8 @@ type UpdateSubscriberInput struct {
 	// phone number of the subscriber
 	PhoneNumber      *string  `json:"phoneNumber,omitempty"`
 	ClearPhoneNumber *bool    `json:"clearPhoneNumber,omitempty"`
+	UpdatedByID      *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy   *bool    `json:"clearUpdatedBy,omitempty"`
 	OwnerID          *string  `json:"ownerID,omitempty"`
 	ClearOwner       *bool    `json:"clearOwner,omitempty"`
 	AddEventIDs      []string `json:"addEventIDs,omitempty"`
@@ -19821,8 +20604,10 @@ type UpdateTFASettingInput struct {
 	// specifies if the TFA device has been verified
 	Verified *bool `json:"verified,omitempty"`
 	// specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
-	TotpAllowed      *bool `json:"totpAllowed,omitempty"`
-	ClearTotpAllowed *bool `json:"clearTotpAllowed,omitempty"`
+	TotpAllowed      *bool   `json:"totpAllowed,omitempty"`
+	ClearTotpAllowed *bool   `json:"clearTotpAllowed,omitempty"`
+	UpdatedByID      *string `json:"updatedByID,omitempty"`
+	ClearUpdatedBy   *bool   `json:"clearUpdatedBy,omitempty"`
 	// Whether to regenerate backup codes
 	RegenBackupCodes *bool `json:"regenBackupCodes,omitempty"`
 }
@@ -19850,6 +20635,8 @@ type UpdateTaskInput struct {
 	// the completion date of the task
 	Completed                 *time.Time `json:"completed,omitempty"`
 	ClearCompleted            *bool      `json:"clearCompleted,omitempty"`
+	UpdatedByID               *string    `json:"updatedByID,omitempty"`
+	ClearUpdatedBy            *bool      `json:"clearUpdatedBy,omitempty"`
 	AssignerID                *string    `json:"assignerID,omitempty"`
 	AssigneeID                *string    `json:"assigneeID,omitempty"`
 	ClearAssignee             *bool      `json:"clearAssignee,omitempty"`
@@ -19898,6 +20685,8 @@ type UpdateTemplateInput struct {
 	// the uischema for the template to render in the UI
 	Uischema          json.RawMessage `json:"uischema,omitempty"`
 	ClearUischema     *bool           `json:"clearUischema,omitempty"`
+	UpdatedByID       *string         `json:"updatedByID,omitempty"`
+	ClearUpdatedBy    *bool           `json:"clearUpdatedBy,omitempty"`
 	OwnerID           *string         `json:"ownerID,omitempty"`
 	ClearOwner        *bool           `json:"clearOwner,omitempty"`
 	AddDocumentIDs    []string        `json:"addDocumentIDs,omitempty"`
@@ -20017,6 +20806,8 @@ type UpdateUserSettingInput struct {
 	// whether the user has two factor authentication enabled
 	IsTfaEnabled      *bool    `json:"isTfaEnabled,omitempty"`
 	ClearIsTfaEnabled *bool    `json:"clearIsTfaEnabled,omitempty"`
+	UpdatedByID       *string  `json:"updatedByID,omitempty"`
+	ClearUpdatedBy    *bool    `json:"clearUpdatedBy,omitempty"`
 	UserID            *string  `json:"userID,omitempty"`
 	ClearUser         *bool    `json:"clearUser,omitempty"`
 	DefaultOrgID      *string  `json:"defaultOrgID,omitempty"`
@@ -20027,13 +20818,13 @@ type UpdateUserSettingInput struct {
 }
 
 type User struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags      []string `json:"tags,omitempty"`
 	Email     string   `json:"email"`
@@ -20118,12 +20909,13 @@ type UserHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
-	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	DeletedByID *string        `json:"deletedByID,omitempty"`
 	// tags associated with the object
 	Tags      []string `json:"tags,omitempty"`
 	Email     string   `json:"email"`
@@ -20224,6 +21016,22 @@ type UserHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -20246,38 +21054,38 @@ type UserHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -20289,22 +21097,22 @@ type UserHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// email field predicates
 	Email             *string  `json:"email,omitempty"`
 	EmailNeq          *string  `json:"emailNEQ,omitempty"`
@@ -20480,16 +21288,16 @@ type UserSearchResult struct {
 func (UserSearchResult) IsSearchResult() {}
 
 type UserSetting struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	ID          string     `json:"id"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	CreatedByID *string    `json:"createdByID,omitempty"`
+	UpdatedByID *string    `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
-	UserID    *string    `json:"userID,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
+	UserID      *string    `json:"userID,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked"`
 	// The time notifications regarding the user were silenced
@@ -20504,6 +21312,8 @@ type UserSetting struct {
 	IsWebauthnAllowed *bool `json:"isWebauthnAllowed,omitempty"`
 	// whether the user has two factor authentication enabled
 	IsTfaEnabled *bool `json:"isTfaEnabled,omitempty"`
+	CreatedBy    *User `json:"createdBy,omitempty"`
+	UpdatedBy    *User `json:"updatedBy,omitempty"`
 	User         *User `json:"user,omitempty"`
 	// organization to load on user login
 	DefaultOrg *Organization `json:"defaultOrg,omitempty"`
@@ -20547,15 +21357,16 @@ type UserSettingHistory struct {
 	HistoryTime time.Time      `json:"historyTime"`
 	Ref         *string        `json:"ref,omitempty"`
 	Operation   history.OpType `json:"operation"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	CreatedByID *string        `json:"createdByID,omitempty"`
+	UpdatedByID *string        `json:"updatedByID,omitempty"`
 	// tags associated with the object
-	Tags      []string   `json:"tags,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	DeletedBy *string    `json:"deletedBy,omitempty"`
-	UserID    *string    `json:"userID,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
+	DeletedAt   *time.Time `json:"deletedAt,omitempty"`
+	DeletedByID *string    `json:"deletedByID,omitempty"`
+	UserID      *string    `json:"userID,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
 	Locked bool `json:"locked"`
 	// The time notifications regarding the user were silenced
@@ -20639,6 +21450,22 @@ type UserSettingHistoryWhereInput struct {
 	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
 	OperationIn    []history.OpType `json:"operationIn,omitempty"`
 	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -20661,38 +21488,38 @@ type UserSettingHistoryWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -20704,22 +21531,22 @@ type UserSettingHistoryWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// user_id field predicates
 	UserID             *string  `json:"userID,omitempty"`
 	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
@@ -20832,38 +21659,38 @@ type UserSettingWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -20875,22 +21702,22 @@ type UserSettingWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// user_id field predicates
 	UserID             *string  `json:"userID,omitempty"`
 	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
@@ -20950,6 +21777,12 @@ type UserSettingWhereInput struct {
 	IsTfaEnabledNeq    *bool `json:"isTfaEnabledNEQ,omitempty"`
 	IsTfaEnabledIsNil  *bool `json:"isTfaEnabledIsNil,omitempty"`
 	IsTfaEnabledNotNil *bool `json:"isTfaEnabledNotNil,omitempty"`
+	// created_by edge predicates
+	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	// updated_by edge predicates
+	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
@@ -21006,38 +21839,38 @@ type UserWhereInput struct {
 	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
 	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// created_by_id field predicates
+	CreatedByID             *string  `json:"createdByID,omitempty"`
+	CreatedByIdneq          *string  `json:"createdByIDNEQ,omitempty"`
+	CreatedByIDIn           []string `json:"createdByIDIn,omitempty"`
+	CreatedByIDNotIn        []string `json:"createdByIDNotIn,omitempty"`
+	CreatedByIdgt           *string  `json:"createdByIDGT,omitempty"`
+	CreatedByIdgte          *string  `json:"createdByIDGTE,omitempty"`
+	CreatedByIdlt           *string  `json:"createdByIDLT,omitempty"`
+	CreatedByIdlte          *string  `json:"createdByIDLTE,omitempty"`
+	CreatedByIDContains     *string  `json:"createdByIDContains,omitempty"`
+	CreatedByIDHasPrefix    *string  `json:"createdByIDHasPrefix,omitempty"`
+	CreatedByIDHasSuffix    *string  `json:"createdByIDHasSuffix,omitempty"`
+	CreatedByIDIsNil        *bool    `json:"createdByIDIsNil,omitempty"`
+	CreatedByIDNotNil       *bool    `json:"createdByIDNotNil,omitempty"`
+	CreatedByIDEqualFold    *string  `json:"createdByIDEqualFold,omitempty"`
+	CreatedByIDContainsFold *string  `json:"createdByIDContainsFold,omitempty"`
+	// updated_by_id field predicates
+	UpdatedByID             *string  `json:"updatedByID,omitempty"`
+	UpdatedByIdneq          *string  `json:"updatedByIDNEQ,omitempty"`
+	UpdatedByIDIn           []string `json:"updatedByIDIn,omitempty"`
+	UpdatedByIDNotIn        []string `json:"updatedByIDNotIn,omitempty"`
+	UpdatedByIdgt           *string  `json:"updatedByIDGT,omitempty"`
+	UpdatedByIdgte          *string  `json:"updatedByIDGTE,omitempty"`
+	UpdatedByIdlt           *string  `json:"updatedByIDLT,omitempty"`
+	UpdatedByIdlte          *string  `json:"updatedByIDLTE,omitempty"`
+	UpdatedByIDContains     *string  `json:"updatedByIDContains,omitempty"`
+	UpdatedByIDHasPrefix    *string  `json:"updatedByIDHasPrefix,omitempty"`
+	UpdatedByIDHasSuffix    *string  `json:"updatedByIDHasSuffix,omitempty"`
+	UpdatedByIDIsNil        *bool    `json:"updatedByIDIsNil,omitempty"`
+	UpdatedByIDNotNil       *bool    `json:"updatedByIDNotNil,omitempty"`
+	UpdatedByIDEqualFold    *string  `json:"updatedByIDEqualFold,omitempty"`
+	UpdatedByIDContainsFold *string  `json:"updatedByIDContainsFold,omitempty"`
 	// deleted_at field predicates
 	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
 	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
@@ -21049,22 +21882,22 @@ type UserWhereInput struct {
 	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
 	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
 	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
-	// deleted_by field predicates
-	DeletedBy             *string  `json:"deletedBy,omitempty"`
-	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
-	DeletedByIn           []string `json:"deletedByIn,omitempty"`
-	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
-	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
-	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
-	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
-	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
-	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
-	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
-	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
-	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
-	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
-	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
-	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// deleted_by_id field predicates
+	DeletedByID             *string  `json:"deletedByID,omitempty"`
+	DeletedByIdneq          *string  `json:"deletedByIDNEQ,omitempty"`
+	DeletedByIDIn           []string `json:"deletedByIDIn,omitempty"`
+	DeletedByIDNotIn        []string `json:"deletedByIDNotIn,omitempty"`
+	DeletedByIdgt           *string  `json:"deletedByIDGT,omitempty"`
+	DeletedByIdgte          *string  `json:"deletedByIDGTE,omitempty"`
+	DeletedByIdlt           *string  `json:"deletedByIDLT,omitempty"`
+	DeletedByIdlte          *string  `json:"deletedByIDLTE,omitempty"`
+	DeletedByIDContains     *string  `json:"deletedByIDContains,omitempty"`
+	DeletedByIDHasPrefix    *string  `json:"deletedByIDHasPrefix,omitempty"`
+	DeletedByIDHasSuffix    *string  `json:"deletedByIDHasSuffix,omitempty"`
+	DeletedByIDIsNil        *bool    `json:"deletedByIDIsNil,omitempty"`
+	DeletedByIDNotNil       *bool    `json:"deletedByIDNotNil,omitempty"`
+	DeletedByIDEqualFold    *string  `json:"deletedByIDEqualFold,omitempty"`
+	DeletedByIDContainsFold *string  `json:"deletedByIDContainsFold,omitempty"`
 	// email field predicates
 	Email             *string  `json:"email,omitempty"`
 	EmailNeq          *string  `json:"emailNEQ,omitempty"`

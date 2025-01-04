@@ -55,6 +55,20 @@ func (aphc *ActionPlanHistoryCreate) SetOperation(ht history.OpType) *ActionPlan
 	return aphc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (aphc *ActionPlanHistoryCreate) SetUpdatedBy(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetUpdatedBy(s)
+	return aphc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableUpdatedBy(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetUpdatedBy(*s)
+	}
+	return aphc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (aphc *ActionPlanHistoryCreate) SetCreatedAt(t time.Time) *ActionPlanHistoryCreate {
 	aphc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (aphc *ActionPlanHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ActionP
 	return aphc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (aphc *ActionPlanHistoryCreate) SetCreatedBy(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (aphc *ActionPlanHistoryCreate) SetCreatedByID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetCreatedByID(s)
 	return aphc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableCreatedBy(s *string) *ActionPlanHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableCreatedByID(s *string) *ActionPlanHistoryCreate {
 	if s != nil {
-		aphc.SetCreatedBy(*s)
+		aphc.SetCreatedByID(*s)
 	}
 	return aphc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (aphc *ActionPlanHistoryCreate) SetUpdatedBy(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (aphc *ActionPlanHistoryCreate) SetUpdatedByID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetUpdatedByID(s)
 	return aphc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableUpdatedBy(s *string) *ActionPlanHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableUpdatedByID(s *string) *ActionPlanHistoryCreate {
 	if s != nil {
-		aphc.SetUpdatedBy(*s)
+		aphc.SetUpdatedByID(*s)
 	}
 	return aphc
 }
@@ -125,16 +139,16 @@ func (aphc *ActionPlanHistoryCreate) SetNillableDeletedAt(t *time.Time) *ActionP
 	return aphc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (aphc *ActionPlanHistoryCreate) SetDeletedBy(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (aphc *ActionPlanHistoryCreate) SetDeletedByID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetDeletedByID(s)
 	return aphc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableDeletedBy(s *string) *ActionPlanHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableDeletedByID(s *string) *ActionPlanHistoryCreate {
 	if s != nil {
-		aphc.SetDeletedBy(*s)
+		aphc.SetDeletedByID(*s)
 	}
 	return aphc
 }
@@ -383,6 +397,10 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 		_spec.SetField(actionplanhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := aphc.mutation.UpdatedBy(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := aphc.mutation.CreatedAt(); ok {
 		_spec.SetField(actionplanhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -391,21 +409,21 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 		_spec.SetField(actionplanhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := aphc.mutation.CreatedBy(); ok {
-		_spec.SetField(actionplanhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := aphc.mutation.CreatedByID(); ok {
+		_spec.SetField(actionplanhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := aphc.mutation.UpdatedBy(); ok {
-		_spec.SetField(actionplanhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := aphc.mutation.UpdatedByID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := aphc.mutation.DeletedAt(); ok {
 		_spec.SetField(actionplanhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := aphc.mutation.DeletedBy(); ok {
-		_spec.SetField(actionplanhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := aphc.mutation.DeletedByID(); ok {
+		_spec.SetField(actionplanhistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := aphc.mutation.MappingID(); ok {
 		_spec.SetField(actionplanhistory.FieldMappingID, field.TypeString, value)

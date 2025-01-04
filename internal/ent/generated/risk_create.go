@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -55,30 +56,30 @@ func (rc *RiskCreate) SetNillableUpdatedAt(t *time.Time) *RiskCreate {
 	return rc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (rc *RiskCreate) SetCreatedBy(s string) *RiskCreate {
-	rc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (rc *RiskCreate) SetCreatedByID(s string) *RiskCreate {
+	rc.mutation.SetCreatedByID(s)
 	return rc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableCreatedBy(s *string) *RiskCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableCreatedByID(s *string) *RiskCreate {
 	if s != nil {
-		rc.SetCreatedBy(*s)
+		rc.SetCreatedByID(*s)
 	}
 	return rc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (rc *RiskCreate) SetUpdatedBy(s string) *RiskCreate {
-	rc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (rc *RiskCreate) SetUpdatedByID(s string) *RiskCreate {
+	rc.mutation.SetUpdatedByID(s)
 	return rc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableUpdatedBy(s *string) *RiskCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableUpdatedByID(s *string) *RiskCreate {
 	if s != nil {
-		rc.SetUpdatedBy(*s)
+		rc.SetUpdatedByID(*s)
 	}
 	return rc
 }
@@ -97,16 +98,16 @@ func (rc *RiskCreate) SetNillableDeletedAt(t *time.Time) *RiskCreate {
 	return rc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (rc *RiskCreate) SetDeletedBy(s string) *RiskCreate {
-	rc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (rc *RiskCreate) SetDeletedByID(s string) *RiskCreate {
+	rc.mutation.SetDeletedByID(s)
 	return rc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableDeletedBy(s *string) *RiskCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableDeletedByID(s *string) *RiskCreate {
 	if s != nil {
-		rc.SetDeletedBy(*s)
+		rc.SetDeletedByID(*s)
 	}
 	return rc
 }
@@ -273,6 +274,16 @@ func (rc *RiskCreate) SetNillableID(s *string) *RiskCreate {
 		rc.SetID(*s)
 	}
 	return rc
+}
+
+// SetCreatedBy sets the "created_by" edge to the User entity.
+func (rc *RiskCreate) SetCreatedBy(u *User) *RiskCreate {
+	return rc.SetCreatedByID(u.ID)
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (rc *RiskCreate) SetUpdatedBy(u *User) *RiskCreate {
+	return rc.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -543,21 +554,13 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := rc.mutation.CreatedBy(); ok {
-		_spec.SetField(risk.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := rc.mutation.UpdatedBy(); ok {
-		_spec.SetField(risk.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
-	}
 	if value, ok := rc.mutation.DeletedAt(); ok {
 		_spec.SetField(risk.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := rc.mutation.DeletedBy(); ok {
-		_spec.SetField(risk.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := rc.mutation.DeletedByID(); ok {
+		_spec.SetField(risk.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := rc.mutation.MappingID(); ok {
 		_spec.SetField(risk.FieldMappingID, field.TypeString, value)
@@ -606,6 +609,42 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 	if value, ok := rc.mutation.Details(); ok {
 		_spec.SetField(risk.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if nodes := rc.mutation.CreatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.CreatedByTable,
+			Columns: []string{risk.CreatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByTable,
+			Columns: []string{risk.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

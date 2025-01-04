@@ -55,6 +55,20 @@ func (ehc *EventHistoryCreate) SetOperation(ht history.OpType) *EventHistoryCrea
 	return ehc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (ehc *EventHistoryCreate) SetUpdatedBy(s string) *EventHistoryCreate {
+	ehc.mutation.SetUpdatedBy(s)
+	return ehc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ehc *EventHistoryCreate) SetNillableUpdatedBy(s *string) *EventHistoryCreate {
+	if s != nil {
+		ehc.SetUpdatedBy(*s)
+	}
+	return ehc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (ehc *EventHistoryCreate) SetCreatedAt(t time.Time) *EventHistoryCreate {
 	ehc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (ehc *EventHistoryCreate) SetNillableUpdatedAt(t *time.Time) *EventHistoryC
 	return ehc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ehc *EventHistoryCreate) SetCreatedBy(s string) *EventHistoryCreate {
-	ehc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ehc *EventHistoryCreate) SetCreatedByID(s string) *EventHistoryCreate {
+	ehc.mutation.SetCreatedByID(s)
 	return ehc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableCreatedBy(s *string) *EventHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ehc *EventHistoryCreate) SetNillableCreatedByID(s *string) *EventHistoryCreate {
 	if s != nil {
-		ehc.SetCreatedBy(*s)
+		ehc.SetCreatedByID(*s)
 	}
 	return ehc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ehc *EventHistoryCreate) SetUpdatedBy(s string) *EventHistoryCreate {
-	ehc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ehc *EventHistoryCreate) SetUpdatedByID(s string) *EventHistoryCreate {
+	ehc.mutation.SetUpdatedByID(s)
 	return ehc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ehc *EventHistoryCreate) SetNillableUpdatedBy(s *string) *EventHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ehc *EventHistoryCreate) SetNillableUpdatedByID(s *string) *EventHistoryCreate {
 	if s != nil {
-		ehc.SetUpdatedBy(*s)
+		ehc.SetUpdatedByID(*s)
 	}
 	return ehc
 }
@@ -313,6 +327,10 @@ func (ehc *EventHistoryCreate) createSpec() (*EventHistory, *sqlgraph.CreateSpec
 		_spec.SetField(eventhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := ehc.mutation.UpdatedBy(); ok {
+		_spec.SetField(eventhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := ehc.mutation.CreatedAt(); ok {
 		_spec.SetField(eventhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -321,13 +339,13 @@ func (ehc *EventHistoryCreate) createSpec() (*EventHistory, *sqlgraph.CreateSpec
 		_spec.SetField(eventhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ehc.mutation.CreatedBy(); ok {
-		_spec.SetField(eventhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ehc.mutation.CreatedByID(); ok {
+		_spec.SetField(eventhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ehc.mutation.UpdatedBy(); ok {
-		_spec.SetField(eventhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ehc.mutation.UpdatedByID(); ok {
+		_spec.SetField(eventhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ehc.mutation.MappingID(); ok {
 		_spec.SetField(eventhistory.FieldMappingID, field.TypeString, value)

@@ -4,7 +4,7 @@ query GetAllEventHistories {
       node {
         correlationID
         createdAt
-        createdBy
+        createdByID
         eventID
         eventType
         historyTime
@@ -13,8 +13,9 @@ query GetAllEventHistories {
         operation
         ref
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -26,7 +27,7 @@ query GetEventHistories($where: EventHistoryWhereInput) {
       node {
         correlationID
         createdAt
-        createdBy
+        createdByID
         eventID
         eventType
         historyTime
@@ -35,8 +36,9 @@ query GetEventHistories($where: EventHistoryWhereInput) {
         operation
         ref
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

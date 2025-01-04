@@ -5,7 +5,7 @@ query GetAllActionPlanHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         details
         dueDate
@@ -18,8 +18,9 @@ query GetAllActionPlanHistories {
         source
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }
@@ -30,7 +31,7 @@ query GetActionPlanHistories($where: ActionPlanHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         details
         dueDate
@@ -43,8 +44,9 @@ query GetActionPlanHistories($where: ActionPlanHistoryWhereInput) {
         source
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
       }
     }
   }

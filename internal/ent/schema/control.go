@@ -92,7 +92,7 @@ func (Control) Edges() []ent.Edge {
 // Mixin of the Control
 func (Control) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

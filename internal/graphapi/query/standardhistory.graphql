@@ -6,7 +6,7 @@ query GetAllStandardHistories {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -20,8 +20,9 @@ query GetAllStandardHistories {
         standardType
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         version
       }
     }
@@ -34,7 +35,7 @@ query GetStandardHistories($where: StandardHistoryWhereInput) {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -48,8 +49,9 @@ query GetStandardHistories($where: StandardHistoryWhereInput) {
         standardType
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         version
       }
     }

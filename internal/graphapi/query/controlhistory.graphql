@@ -8,7 +8,7 @@ query GetAllControlHistories {
         controlNumber
         controlType
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -22,8 +22,9 @@ query GetAllControlHistories {
         source
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         version
       }
     }
@@ -38,7 +39,7 @@ query GetControlHistories($where: ControlHistoryWhereInput) {
         controlNumber
         controlType
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -52,8 +53,9 @@ query GetControlHistories($where: ControlHistoryWhereInput) {
         source
         status
         tags
-        updatedAt
-        updatedBy
+      updatedAt
+      updatedByID
+
         version
       }
     }

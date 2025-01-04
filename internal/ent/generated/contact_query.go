@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -29,6 +30,8 @@ type ContactQuery struct {
 	order             []contact.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.Contact
+	withCreatedBy     *UserQuery
+	withUpdatedBy     *UserQuery
 	withOwner         *OrganizationQuery
 	withEntities      *EntityQuery
 	withFiles         *FileQuery
@@ -70,6 +73,56 @@ func (cq *ContactQuery) Unique(unique bool) *ContactQuery {
 func (cq *ContactQuery) Order(o ...contact.OrderOption) *ContactQuery {
 	cq.order = append(cq.order, o...)
 	return cq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (cq *ContactQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, contact.CreatedByTable, contact.CreatedByColumn),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Contact
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (cq *ContactQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, contact.UpdatedByTable, contact.UpdatedByColumn),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Contact
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -334,19 +387,43 @@ func (cq *ContactQuery) Clone() *ContactQuery {
 		return nil
 	}
 	return &ContactQuery{
-		config:       cq.config,
-		ctx:          cq.ctx.Clone(),
-		order:        append([]contact.OrderOption{}, cq.order...),
-		inters:       append([]Interceptor{}, cq.inters...),
-		predicates:   append([]predicate.Contact{}, cq.predicates...),
-		withOwner:    cq.withOwner.Clone(),
-		withEntities: cq.withEntities.Clone(),
-		withFiles:    cq.withFiles.Clone(),
+		config:        cq.config,
+		ctx:           cq.ctx.Clone(),
+		order:         append([]contact.OrderOption{}, cq.order...),
+		inters:        append([]Interceptor{}, cq.inters...),
+		predicates:    append([]predicate.Contact{}, cq.predicates...),
+		withCreatedBy: cq.withCreatedBy.Clone(),
+		withUpdatedBy: cq.withUpdatedBy.Clone(),
+		withOwner:     cq.withOwner.Clone(),
+		withEntities:  cq.withEntities.Clone(),
+		withFiles:     cq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       cq.sql.Clone(),
 		path:      cq.path,
 		modifiers: append([]func(*sql.Selector){}, cq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ContactQuery) WithCreatedBy(opts ...func(*UserQuery)) *ContactQuery {
+	query := (&UserClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withCreatedBy = query
+	return cq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ContactQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ContactQuery {
+	query := (&UserClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withUpdatedBy = query
+	return cq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -466,7 +543,9 @@ func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	var (
 		nodes       = []*Contact{}
 		_spec       = cq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
+			cq.withCreatedBy != nil,
+			cq.withUpdatedBy != nil,
 			cq.withOwner != nil,
 			cq.withEntities != nil,
 			cq.withFiles != nil,
@@ -494,6 +573,18 @@ func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := cq.withCreatedBy; query != nil {
+		if err := cq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *Contact, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withUpdatedBy; query != nil {
+		if err := cq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *Contact, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := cq.withOwner; query != nil {
 		if err := cq.loadOwner(ctx, query, nodes, nil,
@@ -537,6 +628,64 @@ func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	return nodes, nil
 }
 
+func (cq *ContactQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Contact)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (cq *ContactQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Contact)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (cq *ContactQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Contact)
@@ -720,6 +869,12 @@ func (cq *ContactQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != contact.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if cq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(contact.FieldCreatedByID)
+		}
+		if cq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(contact.FieldUpdatedByID)
 		}
 		if cq.withOwner != nil {
 			_spec.Node.AddColumnOnce(contact.FieldOwnerID)

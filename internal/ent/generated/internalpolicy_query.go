@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -34,6 +35,8 @@ type InternalPolicyQuery struct {
 	order                      []internalpolicy.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.InternalPolicy
+	withCreatedBy              *UserQuery
+	withUpdatedBy              *UserQuery
 	withOwner                  *OrganizationQuery
 	withBlockedGroups          *GroupQuery
 	withEditors                *GroupQuery
@@ -87,6 +90,56 @@ func (ipq *InternalPolicyQuery) Unique(unique bool) *InternalPolicyQuery {
 func (ipq *InternalPolicyQuery) Order(o ...internalpolicy.OrderOption) *InternalPolicyQuery {
 	ipq.order = append(ipq.order, o...)
 	return ipq
+}
+
+// QueryCreatedBy chains the current query on the "created_by" edge.
+func (ipq *InternalPolicyQuery) QueryCreatedBy() *UserQuery {
+	query := (&UserClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.CreatedByTable, internalpolicy.CreatedByColumn),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedBy chains the current query on the "updated_by" edge.
+func (ipq *InternalPolicyQuery) QueryUpdatedBy() *UserQuery {
+	query := (&UserClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.UpdatedByTable, internalpolicy.UpdatedByColumn),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -506,6 +559,8 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		order:                 append([]internalpolicy.OrderOption{}, ipq.order...),
 		inters:                append([]Interceptor{}, ipq.inters...),
 		predicates:            append([]predicate.InternalPolicy{}, ipq.predicates...),
+		withCreatedBy:         ipq.withCreatedBy.Clone(),
+		withUpdatedBy:         ipq.withUpdatedBy.Clone(),
 		withOwner:             ipq.withOwner.Clone(),
 		withBlockedGroups:     ipq.withBlockedGroups.Clone(),
 		withEditors:           ipq.withEditors.Clone(),
@@ -520,6 +575,28 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		path:      ipq.path,
 		modifiers: append([]func(*sql.Selector){}, ipq.modifiers...),
 	}
+}
+
+// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithCreatedBy(opts ...func(*UserQuery)) *InternalPolicyQuery {
+	query := (&UserClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withCreatedBy = query
+	return ipq
+}
+
+// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithUpdatedBy(opts ...func(*UserQuery)) *InternalPolicyQuery {
+	query := (&UserClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withUpdatedBy = query
+	return ipq
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -705,7 +782,9 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	var (
 		nodes       = []*InternalPolicy{}
 		_spec       = ipq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [11]bool{
+			ipq.withCreatedBy != nil,
+			ipq.withUpdatedBy != nil,
 			ipq.withOwner != nil,
 			ipq.withBlockedGroups != nil,
 			ipq.withEditors != nil,
@@ -739,6 +818,18 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := ipq.withCreatedBy; query != nil {
+		if err := ipq.loadCreatedBy(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ipq.withUpdatedBy; query != nil {
+		if err := ipq.loadUpdatedBy(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := ipq.withOwner; query != nil {
 		if err := ipq.loadOwner(ctx, query, nodes, nil,
@@ -868,6 +959,64 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	return nodes, nil
 }
 
+func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*InternalPolicy)
+	for i := range nodes {
+		fk := nodes[i].CreatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*InternalPolicy)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (ipq *InternalPolicyQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*InternalPolicy)
@@ -1392,6 +1541,12 @@ func (ipq *InternalPolicyQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != internalpolicy.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if ipq.withCreatedBy != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldCreatedByID)
+		}
+		if ipq.withUpdatedBy != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldUpdatedByID)
 		}
 		if ipq.withOwner != nil {
 			_spec.Node.AddColumnOnce(internalpolicy.FieldOwnerID)

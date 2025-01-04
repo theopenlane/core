@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -47,23 +48,23 @@ func (iu *IntegrationUpdate) ClearUpdatedAt() *IntegrationUpdate {
 	return iu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iu *IntegrationUpdate) SetUpdatedBy(s string) *IntegrationUpdate {
-	iu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iu *IntegrationUpdate) SetUpdatedByID(s string) *IntegrationUpdate {
+	iu.mutation.SetUpdatedByID(s)
 	return iu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableUpdatedBy(s *string) *IntegrationUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iu *IntegrationUpdate) SetNillableUpdatedByID(s *string) *IntegrationUpdate {
 	if s != nil {
-		iu.SetUpdatedBy(*s)
+		iu.SetUpdatedByID(*s)
 	}
 	return iu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iu *IntegrationUpdate) ClearUpdatedBy() *IntegrationUpdate {
-	iu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iu *IntegrationUpdate) ClearUpdatedByID() *IntegrationUpdate {
+	iu.mutation.ClearUpdatedByID()
 	return iu
 }
 
@@ -82,46 +83,6 @@ func (iu *IntegrationUpdate) AppendTags(s []string) *IntegrationUpdate {
 // ClearTags clears the value of the "tags" field.
 func (iu *IntegrationUpdate) ClearTags() *IntegrationUpdate {
 	iu.mutation.ClearTags()
-	return iu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (iu *IntegrationUpdate) SetDeletedAt(t time.Time) *IntegrationUpdate {
-	iu.mutation.SetDeletedAt(t)
-	return iu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableDeletedAt(t *time.Time) *IntegrationUpdate {
-	if t != nil {
-		iu.SetDeletedAt(*t)
-	}
-	return iu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (iu *IntegrationUpdate) ClearDeletedAt() *IntegrationUpdate {
-	iu.mutation.ClearDeletedAt()
-	return iu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (iu *IntegrationUpdate) SetDeletedBy(s string) *IntegrationUpdate {
-	iu.mutation.SetDeletedBy(s)
-	return iu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableDeletedBy(s *string) *IntegrationUpdate {
-	if s != nil {
-		iu.SetDeletedBy(*s)
-	}
-	return iu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iu *IntegrationUpdate) ClearDeletedBy() *IntegrationUpdate {
-	iu.mutation.ClearDeletedBy()
 	return iu
 }
 
@@ -199,6 +160,11 @@ func (iu *IntegrationUpdate) ClearKind() *IntegrationUpdate {
 	return iu
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (iu *IntegrationUpdate) SetUpdatedBy(u *User) *IntegrationUpdate {
+	return iu.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (iu *IntegrationUpdate) SetOwner(o *Organization) *IntegrationUpdate {
 	return iu.SetOwnerID(o.ID)
@@ -237,6 +203,12 @@ func (iu *IntegrationUpdate) AddEvents(e ...*Event) *IntegrationUpdate {
 // Mutation returns the IntegrationMutation object of the builder.
 func (iu *IntegrationUpdate) Mutation() *IntegrationMutation {
 	return iu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (iu *IntegrationUpdate) ClearUpdatedBy() *IntegrationUpdate {
+	iu.mutation.ClearUpdatedBy()
+	return iu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -371,15 +343,6 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if iu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integration.FieldUpdatedAt, field.TypeTime)
 	}
-	if iu.mutation.CreatedByCleared() {
-		_spec.ClearField(integration.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := iu.mutation.UpdatedBy(); ok {
-		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
-	}
-	if iu.mutation.UpdatedByCleared() {
-		_spec.ClearField(integration.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := iu.mutation.Tags(); ok {
 		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
 	}
@@ -391,17 +354,11 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if iu.mutation.TagsCleared() {
 		_spec.ClearField(integration.FieldTags, field.TypeJSON)
 	}
-	if value, ok := iu.mutation.DeletedAt(); ok {
-		_spec.SetField(integration.FieldDeletedAt, field.TypeTime, value)
-	}
 	if iu.mutation.DeletedAtCleared() {
 		_spec.ClearField(integration.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iu.mutation.DeletedBy(); ok {
-		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
-	}
-	if iu.mutation.DeletedByCleared() {
-		_spec.ClearField(integration.FieldDeletedBy, field.TypeString)
+	if iu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(integration.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iu.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
@@ -417,6 +374,37 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if iu.mutation.KindCleared() {
 		_spec.ClearField(integration.FieldKind, field.TypeString)
+	}
+	if iu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.UpdatedByTable,
+			Columns: []string{integration.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.UpdatedByTable,
+			Columns: []string{integration.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if iu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -581,23 +569,23 @@ func (iuo *IntegrationUpdateOne) ClearUpdatedAt() *IntegrationUpdateOne {
 	return iuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iuo *IntegrationUpdateOne) SetUpdatedBy(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iuo *IntegrationUpdateOne) SetUpdatedByID(s string) *IntegrationUpdateOne {
+	iuo.mutation.SetUpdatedByID(s)
 	return iuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableUpdatedBy(s *string) *IntegrationUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iuo *IntegrationUpdateOne) SetNillableUpdatedByID(s *string) *IntegrationUpdateOne {
 	if s != nil {
-		iuo.SetUpdatedBy(*s)
+		iuo.SetUpdatedByID(*s)
 	}
 	return iuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iuo *IntegrationUpdateOne) ClearUpdatedBy() *IntegrationUpdateOne {
-	iuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iuo *IntegrationUpdateOne) ClearUpdatedByID() *IntegrationUpdateOne {
+	iuo.mutation.ClearUpdatedByID()
 	return iuo
 }
 
@@ -616,46 +604,6 @@ func (iuo *IntegrationUpdateOne) AppendTags(s []string) *IntegrationUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (iuo *IntegrationUpdateOne) ClearTags() *IntegrationUpdateOne {
 	iuo.mutation.ClearTags()
-	return iuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (iuo *IntegrationUpdateOne) SetDeletedAt(t time.Time) *IntegrationUpdateOne {
-	iuo.mutation.SetDeletedAt(t)
-	return iuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableDeletedAt(t *time.Time) *IntegrationUpdateOne {
-	if t != nil {
-		iuo.SetDeletedAt(*t)
-	}
-	return iuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (iuo *IntegrationUpdateOne) ClearDeletedAt() *IntegrationUpdateOne {
-	iuo.mutation.ClearDeletedAt()
-	return iuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (iuo *IntegrationUpdateOne) SetDeletedBy(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetDeletedBy(s)
-	return iuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableDeletedBy(s *string) *IntegrationUpdateOne {
-	if s != nil {
-		iuo.SetDeletedBy(*s)
-	}
-	return iuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iuo *IntegrationUpdateOne) ClearDeletedBy() *IntegrationUpdateOne {
-	iuo.mutation.ClearDeletedBy()
 	return iuo
 }
 
@@ -733,6 +681,11 @@ func (iuo *IntegrationUpdateOne) ClearKind() *IntegrationUpdateOne {
 	return iuo
 }
 
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (iuo *IntegrationUpdateOne) SetUpdatedBy(u *User) *IntegrationUpdateOne {
+	return iuo.SetUpdatedByID(u.ID)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (iuo *IntegrationUpdateOne) SetOwner(o *Organization) *IntegrationUpdateOne {
 	return iuo.SetOwnerID(o.ID)
@@ -771,6 +724,12 @@ func (iuo *IntegrationUpdateOne) AddEvents(e ...*Event) *IntegrationUpdateOne {
 // Mutation returns the IntegrationMutation object of the builder.
 func (iuo *IntegrationUpdateOne) Mutation() *IntegrationMutation {
 	return iuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (iuo *IntegrationUpdateOne) ClearUpdatedBy() *IntegrationUpdateOne {
+	iuo.mutation.ClearUpdatedBy()
+	return iuo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -935,15 +894,6 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 	if iuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integration.FieldUpdatedAt, field.TypeTime)
 	}
-	if iuo.mutation.CreatedByCleared() {
-		_spec.ClearField(integration.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := iuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
-	}
-	if iuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(integration.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := iuo.mutation.Tags(); ok {
 		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
 	}
@@ -955,17 +905,11 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 	if iuo.mutation.TagsCleared() {
 		_spec.ClearField(integration.FieldTags, field.TypeJSON)
 	}
-	if value, ok := iuo.mutation.DeletedAt(); ok {
-		_spec.SetField(integration.FieldDeletedAt, field.TypeTime, value)
-	}
 	if iuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(integration.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.DeletedBy(); ok {
-		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
-	}
-	if iuo.mutation.DeletedByCleared() {
-		_spec.ClearField(integration.FieldDeletedBy, field.TypeString)
+	if iuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(integration.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iuo.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
@@ -981,6 +925,37 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 	}
 	if iuo.mutation.KindCleared() {
 		_spec.ClearField(integration.FieldKind, field.TypeString)
+	}
+	if iuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.UpdatedByTable,
+			Columns: []string{integration.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integration.UpdatedByTable,
+			Columns: []string{integration.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if iuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

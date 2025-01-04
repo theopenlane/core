@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -51,63 +52,23 @@ func (nu *NarrativeUpdate) ClearUpdatedAt() *NarrativeUpdate {
 	return nu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nu *NarrativeUpdate) SetUpdatedBy(s string) *NarrativeUpdate {
-	nu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nu *NarrativeUpdate) SetUpdatedByID(s string) *NarrativeUpdate {
+	nu.mutation.SetUpdatedByID(s)
 	return nu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableUpdatedBy(s *string) *NarrativeUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nu *NarrativeUpdate) SetNillableUpdatedByID(s *string) *NarrativeUpdate {
 	if s != nil {
-		nu.SetUpdatedBy(*s)
+		nu.SetUpdatedByID(*s)
 	}
 	return nu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (nu *NarrativeUpdate) ClearUpdatedBy() *NarrativeUpdate {
-	nu.mutation.ClearUpdatedBy()
-	return nu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (nu *NarrativeUpdate) SetDeletedAt(t time.Time) *NarrativeUpdate {
-	nu.mutation.SetDeletedAt(t)
-	return nu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableDeletedAt(t *time.Time) *NarrativeUpdate {
-	if t != nil {
-		nu.SetDeletedAt(*t)
-	}
-	return nu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (nu *NarrativeUpdate) ClearDeletedAt() *NarrativeUpdate {
-	nu.mutation.ClearDeletedAt()
-	return nu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (nu *NarrativeUpdate) SetDeletedBy(s string) *NarrativeUpdate {
-	nu.mutation.SetDeletedBy(s)
-	return nu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableDeletedBy(s *string) *NarrativeUpdate {
-	if s != nil {
-		nu.SetDeletedBy(*s)
-	}
-	return nu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (nu *NarrativeUpdate) ClearDeletedBy() *NarrativeUpdate {
-	nu.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (nu *NarrativeUpdate) ClearUpdatedByID() *NarrativeUpdate {
+	nu.mutation.ClearUpdatedByID()
 	return nu
 }
 
@@ -207,6 +168,11 @@ func (nu *NarrativeUpdate) SetDetails(m map[string]interface{}) *NarrativeUpdate
 func (nu *NarrativeUpdate) ClearDetails() *NarrativeUpdate {
 	nu.mutation.ClearDetails()
 	return nu
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (nu *NarrativeUpdate) SetUpdatedBy(u *User) *NarrativeUpdate {
+	return nu.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -337,6 +303,12 @@ func (nu *NarrativeUpdate) AddPrograms(p ...*Program) *NarrativeUpdate {
 // Mutation returns the NarrativeMutation object of the builder.
 func (nu *NarrativeUpdate) Mutation() *NarrativeMutation {
 	return nu.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (nu *NarrativeUpdate) ClearUpdatedBy() *NarrativeUpdate {
+	nu.mutation.ClearUpdatedBy()
+	return nu
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -600,26 +572,11 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrative.FieldUpdatedAt, field.TypeTime)
 	}
-	if nu.mutation.CreatedByCleared() {
-		_spec.ClearField(narrative.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := nu.mutation.UpdatedBy(); ok {
-		_spec.SetField(narrative.FieldUpdatedBy, field.TypeString, value)
-	}
-	if nu.mutation.UpdatedByCleared() {
-		_spec.ClearField(narrative.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := nu.mutation.DeletedAt(); ok {
-		_spec.SetField(narrative.FieldDeletedAt, field.TypeTime, value)
-	}
 	if nu.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrative.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nu.mutation.DeletedBy(); ok {
-		_spec.SetField(narrative.FieldDeletedBy, field.TypeString, value)
-	}
-	if nu.mutation.DeletedByCleared() {
-		_spec.ClearField(narrative.FieldDeletedBy, field.TypeString)
+	if nu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(narrative.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := nu.mutation.Tags(); ok {
 		_spec.SetField(narrative.FieldTags, field.TypeJSON, value)
@@ -652,6 +609,37 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nu.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
+	}
+	if nu.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByTable,
+			Columns: []string{narrative.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Narrative
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByTable,
+			Columns: []string{narrative.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1104,63 +1092,23 @@ func (nuo *NarrativeUpdateOne) ClearUpdatedAt() *NarrativeUpdateOne {
 	return nuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nuo *NarrativeUpdateOne) SetUpdatedBy(s string) *NarrativeUpdateOne {
-	nuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nuo *NarrativeUpdateOne) SetUpdatedByID(s string) *NarrativeUpdateOne {
+	nuo.mutation.SetUpdatedByID(s)
 	return nuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableUpdatedBy(s *string) *NarrativeUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nuo *NarrativeUpdateOne) SetNillableUpdatedByID(s *string) *NarrativeUpdateOne {
 	if s != nil {
-		nuo.SetUpdatedBy(*s)
+		nuo.SetUpdatedByID(*s)
 	}
 	return nuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (nuo *NarrativeUpdateOne) ClearUpdatedBy() *NarrativeUpdateOne {
-	nuo.mutation.ClearUpdatedBy()
-	return nuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (nuo *NarrativeUpdateOne) SetDeletedAt(t time.Time) *NarrativeUpdateOne {
-	nuo.mutation.SetDeletedAt(t)
-	return nuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableDeletedAt(t *time.Time) *NarrativeUpdateOne {
-	if t != nil {
-		nuo.SetDeletedAt(*t)
-	}
-	return nuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (nuo *NarrativeUpdateOne) ClearDeletedAt() *NarrativeUpdateOne {
-	nuo.mutation.ClearDeletedAt()
-	return nuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (nuo *NarrativeUpdateOne) SetDeletedBy(s string) *NarrativeUpdateOne {
-	nuo.mutation.SetDeletedBy(s)
-	return nuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableDeletedBy(s *string) *NarrativeUpdateOne {
-	if s != nil {
-		nuo.SetDeletedBy(*s)
-	}
-	return nuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (nuo *NarrativeUpdateOne) ClearDeletedBy() *NarrativeUpdateOne {
-	nuo.mutation.ClearDeletedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (nuo *NarrativeUpdateOne) ClearUpdatedByID() *NarrativeUpdateOne {
+	nuo.mutation.ClearUpdatedByID()
 	return nuo
 }
 
@@ -1260,6 +1208,11 @@ func (nuo *NarrativeUpdateOne) SetDetails(m map[string]interface{}) *NarrativeUp
 func (nuo *NarrativeUpdateOne) ClearDetails() *NarrativeUpdateOne {
 	nuo.mutation.ClearDetails()
 	return nuo
+}
+
+// SetUpdatedBy sets the "updated_by" edge to the User entity.
+func (nuo *NarrativeUpdateOne) SetUpdatedBy(u *User) *NarrativeUpdateOne {
+	return nuo.SetUpdatedByID(u.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1390,6 +1343,12 @@ func (nuo *NarrativeUpdateOne) AddPrograms(p ...*Program) *NarrativeUpdateOne {
 // Mutation returns the NarrativeMutation object of the builder.
 func (nuo *NarrativeUpdateOne) Mutation() *NarrativeMutation {
 	return nuo.mutation
+}
+
+// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+func (nuo *NarrativeUpdateOne) ClearUpdatedBy() *NarrativeUpdateOne {
+	nuo.mutation.ClearUpdatedBy()
+	return nuo
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -1683,26 +1642,11 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 	if nuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrative.FieldUpdatedAt, field.TypeTime)
 	}
-	if nuo.mutation.CreatedByCleared() {
-		_spec.ClearField(narrative.FieldCreatedBy, field.TypeString)
-	}
-	if value, ok := nuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(narrative.FieldUpdatedBy, field.TypeString, value)
-	}
-	if nuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(narrative.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := nuo.mutation.DeletedAt(); ok {
-		_spec.SetField(narrative.FieldDeletedAt, field.TypeTime, value)
-	}
 	if nuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrative.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nuo.mutation.DeletedBy(); ok {
-		_spec.SetField(narrative.FieldDeletedBy, field.TypeString, value)
-	}
-	if nuo.mutation.DeletedByCleared() {
-		_spec.ClearField(narrative.FieldDeletedBy, field.TypeString)
+	if nuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(narrative.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := nuo.mutation.Tags(); ok {
 		_spec.SetField(narrative.FieldTags, field.TypeJSON, value)
@@ -1735,6 +1679,37 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 	}
 	if nuo.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
+	}
+	if nuo.mutation.UpdatedByCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByTable,
+			Columns: []string{narrative.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Narrative
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByTable,
+			Columns: []string{narrative.UpdatedByColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -84,7 +84,7 @@ func (Risk) Edges() []ent.Edge {
 // Mixin of the Risk
 func (Risk) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},

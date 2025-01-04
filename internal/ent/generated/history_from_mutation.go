@@ -33,6 +33,8 @@ func EntOpToHistoryOp(op ent.Op) history.OpType {
 func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -44,6 +46,9 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -53,20 +58,20 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -117,6 +122,8 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -134,6 +141,9 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -147,16 +157,16 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedAt(actionplan.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(actionplan.CreatedBy)
+			create = create.SetCreatedByID(actionplan.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(actionplan.UpdatedBy)
+			create = create.SetUpdatedByID(actionplan.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -165,10 +175,10 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDeletedAt(actionplan.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(actionplan.DeletedBy)
+			create = create.SetDeletedByID(actionplan.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -240,6 +250,8 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -252,6 +264,9 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 		}
 
 		create := client.ActionPlanHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -259,10 +274,10 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetRef(id).
 			SetCreatedAt(actionplan.CreatedAt).
 			SetUpdatedAt(actionplan.UpdatedAt).
-			SetCreatedBy(actionplan.CreatedBy).
-			SetUpdatedBy(actionplan.UpdatedBy).
+			SetCreatedByID(actionplan.CreatedByID).
+			SetUpdatedByID(actionplan.UpdatedByID).
 			SetDeletedAt(actionplan.DeletedAt).
-			SetDeletedBy(actionplan.DeletedBy).
+			SetDeletedByID(actionplan.DeletedByID).
 			SetMappingID(actionplan.MappingID).
 			SetTags(actionplan.Tags).
 			SetName(actionplan.Name).
@@ -284,6 +299,8 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -295,6 +312,9 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -304,12 +324,12 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -320,8 +340,8 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -372,6 +392,8 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -389,6 +411,9 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -402,16 +427,16 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(contact.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(contact.CreatedBy)
+			create = create.SetCreatedByID(contact.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(contact.UpdatedBy)
+			create = create.SetUpdatedByID(contact.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -426,10 +451,10 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(contact.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(contact.DeletedBy)
+			create = create.SetDeletedByID(contact.DeletedByID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -501,6 +526,8 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -513,6 +540,9 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.ContactHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -520,11 +550,11 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(contact.CreatedAt).
 			SetUpdatedAt(contact.UpdatedAt).
-			SetCreatedBy(contact.CreatedBy).
-			SetUpdatedBy(contact.UpdatedBy).
+			SetCreatedByID(contact.CreatedByID).
+			SetUpdatedByID(contact.UpdatedByID).
 			SetMappingID(contact.MappingID).
 			SetDeletedAt(contact.DeletedAt).
-			SetDeletedBy(contact.DeletedBy).
+			SetDeletedByID(contact.DeletedByID).
 			SetTags(contact.Tags).
 			SetOwnerID(contact.OwnerID).
 			SetFullName(contact.FullName).
@@ -546,6 +576,8 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -557,6 +589,9 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -566,20 +601,20 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -654,6 +689,8 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -671,6 +708,9 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -684,16 +724,16 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(control.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(control.CreatedBy)
+			create = create.SetCreatedByID(control.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(control.UpdatedBy)
+			create = create.SetUpdatedByID(control.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -702,10 +742,10 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(control.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(control.DeletedBy)
+			create = create.SetDeletedByID(control.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -813,6 +853,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -825,6 +867,9 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.ControlHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -832,10 +877,10 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(control.CreatedAt).
 			SetUpdatedAt(control.UpdatedAt).
-			SetCreatedBy(control.CreatedBy).
-			SetUpdatedBy(control.UpdatedBy).
+			SetCreatedByID(control.CreatedByID).
+			SetUpdatedByID(control.UpdatedByID).
 			SetDeletedAt(control.DeletedAt).
-			SetDeletedBy(control.DeletedBy).
+			SetDeletedByID(control.DeletedByID).
 			SetMappingID(control.MappingID).
 			SetTags(control.Tags).
 			SetOwnerID(control.OwnerID).
@@ -863,6 +908,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -874,6 +921,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -883,20 +933,20 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -967,6 +1017,8 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -984,6 +1036,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -997,16 +1052,16 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetUpdatedAt(controlobjective.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(controlobjective.CreatedBy)
+			create = create.SetCreatedByID(controlobjective.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(controlobjective.UpdatedBy)
+			create = create.SetUpdatedByID(controlobjective.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -1015,10 +1070,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDeletedAt(controlobjective.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(controlobjective.DeletedBy)
+			create = create.SetDeletedByID(controlobjective.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -1120,6 +1175,8 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1132,6 +1189,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 		}
 
 		create := client.ControlObjectiveHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1139,10 +1199,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetRef(id).
 			SetCreatedAt(controlobjective.CreatedAt).
 			SetUpdatedAt(controlobjective.UpdatedAt).
-			SetCreatedBy(controlobjective.CreatedBy).
-			SetUpdatedBy(controlobjective.UpdatedBy).
+			SetCreatedByID(controlobjective.CreatedByID).
+			SetUpdatedByID(controlobjective.UpdatedByID).
 			SetDeletedAt(controlobjective.DeletedAt).
-			SetDeletedBy(controlobjective.DeletedBy).
+			SetDeletedByID(controlobjective.DeletedByID).
 			SetMappingID(controlobjective.MappingID).
 			SetTags(controlobjective.Tags).
 			SetOwnerID(controlobjective.OwnerID).
@@ -1169,6 +1229,8 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -1180,6 +1242,9 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -1189,12 +1254,12 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -1209,8 +1274,8 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -1237,6 +1302,8 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1254,6 +1321,9 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -1267,16 +1337,16 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedAt(documentdata.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(documentdata.CreatedBy)
+			create = create.SetCreatedByID(documentdata.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(documentdata.UpdatedBy)
+			create = create.SetUpdatedByID(documentdata.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -1297,10 +1367,10 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDeletedAt(documentdata.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(documentdata.DeletedBy)
+			create = create.SetDeletedByID(documentdata.DeletedByID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -1336,6 +1406,8 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1348,6 +1420,9 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 		}
 
 		create := client.DocumentDataHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1355,12 +1430,12 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetRef(id).
 			SetCreatedAt(documentdata.CreatedAt).
 			SetUpdatedAt(documentdata.UpdatedAt).
-			SetCreatedBy(documentdata.CreatedBy).
-			SetUpdatedBy(documentdata.UpdatedBy).
+			SetCreatedByID(documentdata.CreatedByID).
+			SetUpdatedByID(documentdata.UpdatedByID).
 			SetMappingID(documentdata.MappingID).
 			SetTags(documentdata.Tags).
 			SetDeletedAt(documentdata.DeletedAt).
-			SetDeletedBy(documentdata.DeletedBy).
+			SetDeletedByID(documentdata.DeletedByID).
 			SetOwnerID(documentdata.OwnerID).
 			SetTemplateID(documentdata.TemplateID).
 			SetData(documentdata.Data).
@@ -1376,6 +1451,8 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -1387,6 +1464,9 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -1396,12 +1476,12 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -1412,8 +1492,8 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -1460,6 +1540,8 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1477,6 +1559,9 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -1490,16 +1575,16 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(entity.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(entity.CreatedBy)
+			create = create.SetCreatedByID(entity.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(entity.UpdatedBy)
+			create = create.SetUpdatedByID(entity.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -1514,10 +1599,10 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(entity.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(entity.DeletedBy)
+			create = create.SetDeletedByID(entity.DeletedByID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -1583,6 +1668,8 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1595,6 +1682,9 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.EntityHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1602,11 +1692,11 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(entity.CreatedAt).
 			SetUpdatedAt(entity.UpdatedAt).
-			SetCreatedBy(entity.CreatedBy).
-			SetUpdatedBy(entity.UpdatedBy).
+			SetCreatedByID(entity.CreatedByID).
+			SetUpdatedByID(entity.UpdatedByID).
 			SetMappingID(entity.MappingID).
 			SetDeletedAt(entity.DeletedAt).
-			SetDeletedBy(entity.DeletedBy).
+			SetDeletedByID(entity.DeletedByID).
 			SetTags(entity.Tags).
 			SetOwnerID(entity.OwnerID).
 			SetName(entity.Name).
@@ -1627,6 +1717,8 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -1638,6 +1730,9 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -1647,12 +1742,12 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -1663,8 +1758,8 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -1691,6 +1786,8 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1708,6 +1805,9 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -1721,16 +1821,16 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedAt(entitytype.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(entitytype.CreatedBy)
+			create = create.SetCreatedByID(entitytype.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(entitytype.UpdatedBy)
+			create = create.SetUpdatedByID(entitytype.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -1745,10 +1845,10 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDeletedAt(entitytype.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(entitytype.DeletedBy)
+			create = create.SetDeletedByID(entitytype.DeletedByID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -1784,6 +1884,8 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1796,6 +1898,9 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 		}
 
 		create := client.EntityTypeHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1803,11 +1908,11 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetRef(id).
 			SetCreatedAt(entitytype.CreatedAt).
 			SetUpdatedAt(entitytype.UpdatedAt).
-			SetCreatedBy(entitytype.CreatedBy).
-			SetUpdatedBy(entitytype.UpdatedBy).
+			SetCreatedByID(entitytype.CreatedByID).
+			SetUpdatedByID(entitytype.UpdatedByID).
 			SetMappingID(entitytype.MappingID).
 			SetDeletedAt(entitytype.DeletedAt).
-			SetDeletedBy(entitytype.DeletedBy).
+			SetDeletedByID(entitytype.DeletedByID).
 			SetTags(entitytype.Tags).
 			SetOwnerID(entitytype.OwnerID).
 			SetName(entitytype.Name).
@@ -1823,6 +1928,8 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 func (m *EventMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -1834,6 +1941,9 @@ func (m *EventMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -1843,12 +1953,12 @@ func (m *EventMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -1887,6 +1997,8 @@ func (m *EventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1904,6 +2016,9 @@ func (m *EventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -1917,16 +2032,16 @@ func (m *EventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(event.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(event.CreatedBy)
+			create = create.SetCreatedByID(event.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(event.UpdatedBy)
+			create = create.SetUpdatedByID(event.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -1980,6 +2095,8 @@ func (m *EventMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -1992,6 +2109,9 @@ func (m *EventMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.EventHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1999,8 +2119,8 @@ func (m *EventMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(event.CreatedAt).
 			SetUpdatedAt(event.UpdatedAt).
-			SetCreatedBy(event.CreatedBy).
-			SetUpdatedBy(event.UpdatedBy).
+			SetCreatedByID(event.CreatedByID).
+			SetUpdatedByID(event.UpdatedByID).
 			SetMappingID(event.MappingID).
 			SetTags(event.Tags).
 			SetEventID(event.EventID).
@@ -2019,6 +2139,8 @@ func (m *EventMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -2030,6 +2152,9 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -2039,20 +2164,20 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -2131,6 +2256,8 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -2148,6 +2275,9 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -2161,16 +2291,16 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(file.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(file.CreatedBy)
+			create = create.SetCreatedByID(file.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(file.UpdatedBy)
+			create = create.SetUpdatedByID(file.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -2179,10 +2309,10 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(file.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(file.DeletedBy)
+			create = create.SetDeletedByID(file.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -2296,6 +2426,8 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -2308,6 +2440,9 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.FileHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2315,10 +2450,10 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(file.CreatedAt).
 			SetUpdatedAt(file.UpdatedAt).
-			SetCreatedBy(file.CreatedBy).
-			SetUpdatedBy(file.UpdatedBy).
+			SetCreatedByID(file.CreatedByID).
+			SetUpdatedByID(file.UpdatedByID).
 			SetDeletedAt(file.DeletedAt).
-			SetDeletedBy(file.DeletedBy).
+			SetDeletedByID(file.DeletedByID).
 			SetMappingID(file.MappingID).
 			SetTags(file.Tags).
 			SetProvidedFileName(file.ProvidedFileName).
@@ -2347,6 +2482,8 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -2358,6 +2495,9 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -2367,20 +2507,20 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -2427,6 +2567,8 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -2444,6 +2586,9 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -2457,16 +2602,16 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(group.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(group.CreatedBy)
+			create = create.SetCreatedByID(group.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(group.UpdatedBy)
+			create = create.SetUpdatedByID(group.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -2475,10 +2620,10 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(group.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(group.DeletedBy)
+			create = create.SetDeletedByID(group.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -2544,6 +2689,8 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -2556,6 +2703,9 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.GroupHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2563,10 +2713,10 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(group.CreatedAt).
 			SetUpdatedAt(group.UpdatedAt).
-			SetCreatedBy(group.CreatedBy).
-			SetUpdatedBy(group.UpdatedBy).
+			SetCreatedByID(group.CreatedByID).
+			SetUpdatedByID(group.UpdatedByID).
 			SetDeletedAt(group.DeletedAt).
-			SetDeletedBy(group.DeletedBy).
+			SetDeletedByID(group.DeletedByID).
 			SetMappingID(group.MappingID).
 			SetTags(group.Tags).
 			SetOwnerID(group.OwnerID).
@@ -2587,6 +2737,8 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -2598,6 +2750,9 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -2607,12 +2762,12 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -2623,8 +2778,8 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if role, exists := m.Role(); exists {
@@ -2651,6 +2806,8 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -2668,6 +2825,9 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -2681,16 +2841,16 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedAt(groupmembership.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(groupmembership.CreatedBy)
+			create = create.SetCreatedByID(groupmembership.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(groupmembership.UpdatedBy)
+			create = create.SetUpdatedByID(groupmembership.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -2705,10 +2865,10 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetDeletedAt(groupmembership.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(groupmembership.DeletedBy)
+			create = create.SetDeletedByID(groupmembership.DeletedByID)
 		}
 
 		if role, exists := m.Role(); exists {
@@ -2744,6 +2904,8 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -2756,6 +2918,9 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 		}
 
 		create := client.GroupMembershipHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2763,11 +2928,11 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetRef(id).
 			SetCreatedAt(groupmembership.CreatedAt).
 			SetUpdatedAt(groupmembership.UpdatedAt).
-			SetCreatedBy(groupmembership.CreatedBy).
-			SetUpdatedBy(groupmembership.UpdatedBy).
+			SetCreatedByID(groupmembership.CreatedByID).
+			SetUpdatedByID(groupmembership.UpdatedByID).
 			SetMappingID(groupmembership.MappingID).
 			SetDeletedAt(groupmembership.DeletedAt).
-			SetDeletedBy(groupmembership.DeletedBy).
+			SetDeletedByID(groupmembership.DeletedByID).
 			SetRole(groupmembership.Role).
 			SetGroupID(groupmembership.GroupID).
 			SetUserID(groupmembership.UserID).
@@ -2783,6 +2948,8 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -2794,6 +2961,9 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -2803,12 +2973,12 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -2823,8 +2993,8 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if visibility, exists := m.Visibility(); exists {
@@ -2859,6 +3029,8 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -2876,6 +3048,9 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -2889,16 +3064,16 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedAt(groupsetting.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(groupsetting.CreatedBy)
+			create = create.SetCreatedByID(groupsetting.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(groupsetting.UpdatedBy)
+			create = create.SetUpdatedByID(groupsetting.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -2919,10 +3094,10 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDeletedAt(groupsetting.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(groupsetting.DeletedBy)
+			create = create.SetDeletedByID(groupsetting.DeletedByID)
 		}
 
 		if visibility, exists := m.Visibility(); exists {
@@ -2970,6 +3145,8 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -2982,6 +3159,9 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 		}
 
 		create := client.GroupSettingHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2989,12 +3169,12 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetRef(id).
 			SetCreatedAt(groupsetting.CreatedAt).
 			SetUpdatedAt(groupsetting.UpdatedAt).
-			SetCreatedBy(groupsetting.CreatedBy).
-			SetUpdatedBy(groupsetting.UpdatedBy).
+			SetCreatedByID(groupsetting.CreatedByID).
+			SetUpdatedByID(groupsetting.UpdatedByID).
 			SetMappingID(groupsetting.MappingID).
 			SetTags(groupsetting.Tags).
 			SetDeletedAt(groupsetting.DeletedAt).
-			SetDeletedBy(groupsetting.DeletedBy).
+			SetDeletedByID(groupsetting.DeletedByID).
 			SetVisibility(groupsetting.Visibility).
 			SetJoinPolicy(groupsetting.JoinPolicy).
 			SetSyncToSlack(groupsetting.SyncToSlack).
@@ -3012,6 +3192,8 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -3023,6 +3205,9 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -3032,12 +3217,12 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -3048,8 +3233,8 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -3084,6 +3269,8 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -3101,6 +3288,9 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -3114,16 +3304,16 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(hush.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(hush.CreatedBy)
+			create = create.SetCreatedByID(hush.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(hush.UpdatedBy)
+			create = create.SetUpdatedByID(hush.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -3138,10 +3328,10 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(hush.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(hush.DeletedBy)
+			create = create.SetDeletedByID(hush.DeletedByID)
 		}
 
 		if name, exists := m.Name(); exists {
@@ -3189,6 +3379,8 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -3201,6 +3393,9 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.HushHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3208,11 +3403,11 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(hush.CreatedAt).
 			SetUpdatedAt(hush.UpdatedAt).
-			SetCreatedBy(hush.CreatedBy).
-			SetUpdatedBy(hush.UpdatedBy).
+			SetCreatedByID(hush.CreatedByID).
+			SetUpdatedByID(hush.UpdatedByID).
 			SetMappingID(hush.MappingID).
 			SetDeletedAt(hush.DeletedAt).
-			SetDeletedBy(hush.DeletedBy).
+			SetDeletedByID(hush.DeletedByID).
 			SetName(hush.Name).
 			SetDescription(hush.Description).
 			SetKind(hush.Kind).
@@ -3230,6 +3425,8 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -3241,6 +3438,9 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -3250,12 +3450,12 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -3270,8 +3470,8 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -3302,6 +3502,8 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -3319,6 +3521,9 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -3332,16 +3537,16 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedAt(integration.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(integration.CreatedBy)
+			create = create.SetCreatedByID(integration.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(integration.UpdatedBy)
+			create = create.SetUpdatedByID(integration.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -3362,10 +3567,10 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetDeletedAt(integration.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(integration.DeletedBy)
+			create = create.SetDeletedByID(integration.DeletedByID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -3407,6 +3612,8 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -3419,6 +3626,9 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 		}
 
 		create := client.IntegrationHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3426,12 +3636,12 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetRef(id).
 			SetCreatedAt(integration.CreatedAt).
 			SetUpdatedAt(integration.UpdatedAt).
-			SetCreatedBy(integration.CreatedBy).
-			SetUpdatedBy(integration.UpdatedBy).
+			SetCreatedByID(integration.CreatedByID).
+			SetUpdatedByID(integration.UpdatedByID).
 			SetMappingID(integration.MappingID).
 			SetTags(integration.Tags).
 			SetDeletedAt(integration.DeletedAt).
-			SetDeletedBy(integration.DeletedBy).
+			SetDeletedByID(integration.DeletedByID).
 			SetOwnerID(integration.OwnerID).
 			SetName(integration.Name).
 			SetDescription(integration.Description).
@@ -3448,6 +3658,8 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -3459,6 +3671,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -3468,20 +3683,20 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -3540,6 +3755,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -3557,6 +3774,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -3570,16 +3790,16 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedAt(internalpolicy.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(internalpolicy.CreatedBy)
+			create = create.SetCreatedByID(internalpolicy.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(internalpolicy.UpdatedBy)
+			create = create.SetUpdatedByID(internalpolicy.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -3588,10 +3808,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDeletedAt(internalpolicy.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(internalpolicy.DeletedBy)
+			create = create.SetDeletedByID(internalpolicy.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -3675,6 +3895,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -3687,6 +3909,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 		}
 
 		create := client.InternalPolicyHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3694,10 +3919,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetRef(id).
 			SetCreatedAt(internalpolicy.CreatedAt).
 			SetUpdatedAt(internalpolicy.UpdatedAt).
-			SetCreatedBy(internalpolicy.CreatedBy).
-			SetUpdatedBy(internalpolicy.UpdatedBy).
+			SetCreatedByID(internalpolicy.CreatedByID).
+			SetUpdatedByID(internalpolicy.UpdatedByID).
 			SetDeletedAt(internalpolicy.DeletedAt).
-			SetDeletedBy(internalpolicy.DeletedBy).
+			SetDeletedByID(internalpolicy.DeletedByID).
 			SetMappingID(internalpolicy.MappingID).
 			SetTags(internalpolicy.Tags).
 			SetOwnerID(internalpolicy.OwnerID).
@@ -3721,6 +3946,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -3732,6 +3959,9 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -3741,20 +3971,20 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -3797,6 +4027,8 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -3814,6 +4046,9 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -3827,16 +4062,16 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(narrative.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(narrative.CreatedBy)
+			create = create.SetCreatedByID(narrative.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(narrative.UpdatedBy)
+			create = create.SetUpdatedByID(narrative.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -3845,10 +4080,10 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(narrative.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(narrative.DeletedBy)
+			create = create.SetDeletedByID(narrative.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -3908,6 +4143,8 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -3920,6 +4157,9 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.NarrativeHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3927,10 +4167,10 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(narrative.CreatedAt).
 			SetUpdatedAt(narrative.UpdatedAt).
-			SetCreatedBy(narrative.CreatedBy).
-			SetUpdatedBy(narrative.UpdatedBy).
+			SetCreatedByID(narrative.CreatedByID).
+			SetUpdatedByID(narrative.UpdatedByID).
 			SetDeletedAt(narrative.DeletedAt).
-			SetDeletedBy(narrative.DeletedBy).
+			SetDeletedByID(narrative.DeletedByID).
 			SetMappingID(narrative.MappingID).
 			SetTags(narrative.Tags).
 			SetOwnerID(narrative.OwnerID).
@@ -3950,6 +4190,8 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -3961,6 +4203,9 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -3970,12 +4215,12 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -3986,8 +4231,8 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -4014,6 +4259,8 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4031,6 +4278,9 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -4044,16 +4294,16 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(note.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(note.CreatedBy)
+			create = create.SetCreatedByID(note.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(note.UpdatedBy)
+			create = create.SetUpdatedByID(note.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -4068,10 +4318,10 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(note.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(note.DeletedBy)
+			create = create.SetDeletedByID(note.DeletedByID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -4107,6 +4357,8 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4119,6 +4371,9 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.NoteHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4126,11 +4381,11 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(note.CreatedAt).
 			SetUpdatedAt(note.UpdatedAt).
-			SetCreatedBy(note.CreatedBy).
-			SetUpdatedBy(note.UpdatedBy).
+			SetCreatedByID(note.CreatedByID).
+			SetUpdatedByID(note.UpdatedByID).
 			SetMappingID(note.MappingID).
 			SetDeletedAt(note.DeletedAt).
-			SetDeletedBy(note.DeletedBy).
+			SetDeletedByID(note.DeletedByID).
 			SetTags(note.Tags).
 			SetOwnerID(note.OwnerID).
 			SetText(note.Text).
@@ -4146,6 +4401,8 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -4157,6 +4414,9 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -4166,12 +4426,12 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -4182,8 +4442,8 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if role, exists := m.Role(); exists {
@@ -4210,6 +4470,8 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4227,6 +4489,9 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -4240,16 +4505,16 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedAt(orgmembership.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(orgmembership.CreatedBy)
+			create = create.SetCreatedByID(orgmembership.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(orgmembership.UpdatedBy)
+			create = create.SetUpdatedByID(orgmembership.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -4264,10 +4529,10 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetDeletedAt(orgmembership.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(orgmembership.DeletedBy)
+			create = create.SetDeletedByID(orgmembership.DeletedByID)
 		}
 
 		if role, exists := m.Role(); exists {
@@ -4303,6 +4568,8 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4315,6 +4582,9 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 		}
 
 		create := client.OrgMembershipHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4322,11 +4592,11 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetRef(id).
 			SetCreatedAt(orgmembership.CreatedAt).
 			SetUpdatedAt(orgmembership.UpdatedAt).
-			SetCreatedBy(orgmembership.CreatedBy).
-			SetUpdatedBy(orgmembership.UpdatedBy).
+			SetCreatedByID(orgmembership.CreatedByID).
+			SetUpdatedByID(orgmembership.UpdatedByID).
 			SetMappingID(orgmembership.MappingID).
 			SetDeletedAt(orgmembership.DeletedAt).
-			SetDeletedBy(orgmembership.DeletedBy).
+			SetDeletedByID(orgmembership.DeletedByID).
 			SetRole(orgmembership.Role).
 			SetOrganizationID(orgmembership.OrganizationID).
 			SetUserID(orgmembership.UserID).
@@ -4342,6 +4612,8 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -4353,6 +4625,9 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -4362,12 +4637,12 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -4382,8 +4657,8 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -4434,6 +4709,8 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4451,6 +4728,9 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -4464,16 +4744,16 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedAt(orgsubscription.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(orgsubscription.CreatedBy)
+			create = create.SetCreatedByID(orgsubscription.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(orgsubscription.UpdatedBy)
+			create = create.SetUpdatedByID(orgsubscription.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -4494,10 +4774,10 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetDeletedAt(orgsubscription.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(orgsubscription.DeletedBy)
+			create = create.SetDeletedByID(orgsubscription.DeletedByID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -4569,6 +4849,8 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4581,6 +4863,9 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 		}
 
 		create := client.OrgSubscriptionHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4588,12 +4873,12 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetRef(id).
 			SetCreatedAt(orgsubscription.CreatedAt).
 			SetUpdatedAt(orgsubscription.UpdatedAt).
-			SetCreatedBy(orgsubscription.CreatedBy).
-			SetUpdatedBy(orgsubscription.UpdatedBy).
+			SetCreatedByID(orgsubscription.CreatedByID).
+			SetUpdatedByID(orgsubscription.UpdatedByID).
 			SetMappingID(orgsubscription.MappingID).
 			SetTags(orgsubscription.Tags).
 			SetDeletedAt(orgsubscription.DeletedAt).
-			SetDeletedBy(orgsubscription.DeletedBy).
+			SetDeletedByID(orgsubscription.DeletedByID).
 			SetOwnerID(orgsubscription.OwnerID).
 			SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID).
 			SetProductTier(orgsubscription.ProductTier).
@@ -4615,6 +4900,8 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -4626,6 +4913,9 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -4635,12 +4925,12 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -4655,8 +4945,8 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -4699,6 +4989,8 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4716,6 +5008,9 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -4729,16 +5024,16 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedAt(organization.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(organization.CreatedBy)
+			create = create.SetCreatedByID(organization.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(organization.UpdatedBy)
+			create = create.SetUpdatedByID(organization.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -4759,10 +5054,10 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDeletedAt(organization.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(organization.DeletedBy)
+			create = create.SetDeletedByID(organization.DeletedByID)
 		}
 
 		if name, exists := m.Name(); exists {
@@ -4822,6 +5117,8 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4834,6 +5131,9 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 		}
 
 		create := client.OrganizationHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4841,12 +5141,12 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetRef(id).
 			SetCreatedAt(organization.CreatedAt).
 			SetUpdatedAt(organization.UpdatedAt).
-			SetCreatedBy(organization.CreatedBy).
-			SetUpdatedBy(organization.UpdatedBy).
+			SetCreatedByID(organization.CreatedByID).
+			SetUpdatedByID(organization.UpdatedByID).
 			SetMappingID(organization.MappingID).
 			SetTags(organization.Tags).
 			SetDeletedAt(organization.DeletedAt).
-			SetDeletedBy(organization.DeletedBy).
+			SetDeletedByID(organization.DeletedByID).
 			SetName(organization.Name).
 			SetDisplayName(organization.DisplayName).
 			SetDescription(organization.Description).
@@ -4866,6 +5166,8 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -4877,6 +5179,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -4886,12 +5191,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -4906,8 +5211,8 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if domains, exists := m.Domains(); exists {
@@ -4958,6 +5263,8 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -4975,6 +5282,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -4988,16 +5298,16 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetUpdatedAt(organizationsetting.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(organizationsetting.CreatedBy)
+			create = create.SetCreatedByID(organizationsetting.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(organizationsetting.UpdatedBy)
+			create = create.SetUpdatedByID(organizationsetting.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -5018,10 +5328,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetDeletedAt(organizationsetting.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(organizationsetting.DeletedBy)
+			create = create.SetDeletedByID(organizationsetting.DeletedByID)
 		}
 
 		if domains, exists := m.Domains(); exists {
@@ -5093,6 +5403,8 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -5105,6 +5417,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 		}
 
 		create := client.OrganizationSettingHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5112,12 +5427,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetRef(id).
 			SetCreatedAt(organizationsetting.CreatedAt).
 			SetUpdatedAt(organizationsetting.UpdatedAt).
-			SetCreatedBy(organizationsetting.CreatedBy).
-			SetUpdatedBy(organizationsetting.UpdatedBy).
+			SetCreatedByID(organizationsetting.CreatedByID).
+			SetUpdatedByID(organizationsetting.UpdatedByID).
 			SetMappingID(organizationsetting.MappingID).
 			SetTags(organizationsetting.Tags).
 			SetDeletedAt(organizationsetting.DeletedAt).
-			SetDeletedBy(organizationsetting.DeletedBy).
+			SetDeletedByID(organizationsetting.DeletedByID).
 			SetDomains(organizationsetting.Domains).
 			SetBillingContact(organizationsetting.BillingContact).
 			SetBillingEmail(organizationsetting.BillingEmail).
@@ -5139,6 +5454,8 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -5150,6 +5467,9 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -5159,20 +5479,20 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -5235,6 +5555,8 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -5252,6 +5574,9 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -5265,16 +5590,16 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(procedure.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(procedure.CreatedBy)
+			create = create.SetCreatedByID(procedure.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(procedure.UpdatedBy)
+			create = create.SetUpdatedByID(procedure.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -5283,10 +5608,10 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(procedure.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(procedure.DeletedBy)
+			create = create.SetDeletedByID(procedure.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -5376,6 +5701,8 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -5388,6 +5715,9 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.ProcedureHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5395,10 +5725,10 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(procedure.CreatedAt).
 			SetUpdatedAt(procedure.UpdatedAt).
-			SetCreatedBy(procedure.CreatedBy).
-			SetUpdatedBy(procedure.UpdatedBy).
+			SetCreatedByID(procedure.CreatedByID).
+			SetUpdatedByID(procedure.UpdatedByID).
 			SetDeletedAt(procedure.DeletedAt).
-			SetDeletedBy(procedure.DeletedBy).
+			SetDeletedByID(procedure.DeletedByID).
 			SetMappingID(procedure.MappingID).
 			SetTags(procedure.Tags).
 			SetOwnerID(procedure.OwnerID).
@@ -5423,6 +5753,8 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -5434,6 +5766,9 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -5443,12 +5778,12 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -5459,8 +5794,8 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -5515,6 +5850,8 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -5532,6 +5869,9 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -5545,16 +5885,16 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(program.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(program.CreatedBy)
+			create = create.SetCreatedByID(program.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(program.UpdatedBy)
+			create = create.SetUpdatedByID(program.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -5569,10 +5909,10 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(program.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(program.DeletedBy)
+			create = create.SetDeletedByID(program.DeletedByID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -5650,6 +5990,8 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -5662,6 +6004,9 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.ProgramHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5669,11 +6014,11 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(program.CreatedAt).
 			SetUpdatedAt(program.UpdatedAt).
-			SetCreatedBy(program.CreatedBy).
-			SetUpdatedBy(program.UpdatedBy).
+			SetCreatedByID(program.CreatedByID).
+			SetUpdatedByID(program.UpdatedByID).
 			SetMappingID(program.MappingID).
 			SetDeletedAt(program.DeletedAt).
-			SetDeletedBy(program.DeletedBy).
+			SetDeletedByID(program.DeletedByID).
 			SetTags(program.Tags).
 			SetOwnerID(program.OwnerID).
 			SetName(program.Name).
@@ -5696,6 +6041,8 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -5707,6 +6054,9 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -5716,12 +6066,12 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -5732,8 +6082,8 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if role, exists := m.Role(); exists {
@@ -5760,6 +6110,8 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -5777,6 +6129,9 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -5790,16 +6145,16 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetUpdatedAt(programmembership.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(programmembership.CreatedBy)
+			create = create.SetCreatedByID(programmembership.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(programmembership.UpdatedBy)
+			create = create.SetUpdatedByID(programmembership.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -5814,10 +6169,10 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetDeletedAt(programmembership.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(programmembership.DeletedBy)
+			create = create.SetDeletedByID(programmembership.DeletedByID)
 		}
 
 		if role, exists := m.Role(); exists {
@@ -5853,6 +6208,8 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -5865,6 +6222,9 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 		}
 
 		create := client.ProgramMembershipHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5872,11 +6232,11 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetRef(id).
 			SetCreatedAt(programmembership.CreatedAt).
 			SetUpdatedAt(programmembership.UpdatedAt).
-			SetCreatedBy(programmembership.CreatedBy).
-			SetUpdatedBy(programmembership.UpdatedBy).
+			SetCreatedByID(programmembership.CreatedByID).
+			SetUpdatedByID(programmembership.UpdatedByID).
 			SetMappingID(programmembership.MappingID).
 			SetDeletedAt(programmembership.DeletedAt).
-			SetDeletedBy(programmembership.DeletedBy).
+			SetDeletedByID(programmembership.DeletedByID).
 			SetRole(programmembership.Role).
 			SetProgramID(programmembership.ProgramID).
 			SetUserID(programmembership.UserID).
@@ -5892,6 +6252,8 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -5903,6 +6265,9 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -5912,20 +6277,20 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -5992,6 +6357,8 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -6009,6 +6376,9 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -6022,16 +6392,16 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(risk.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(risk.CreatedBy)
+			create = create.SetCreatedByID(risk.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(risk.UpdatedBy)
+			create = create.SetUpdatedByID(risk.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -6040,10 +6410,10 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(risk.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(risk.DeletedBy)
+			create = create.SetDeletedByID(risk.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -6139,6 +6509,8 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -6151,6 +6523,9 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.RiskHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6158,10 +6533,10 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(risk.CreatedAt).
 			SetUpdatedAt(risk.UpdatedAt).
-			SetCreatedBy(risk.CreatedBy).
-			SetUpdatedBy(risk.UpdatedBy).
+			SetCreatedByID(risk.CreatedByID).
+			SetUpdatedByID(risk.UpdatedByID).
 			SetDeletedAt(risk.DeletedAt).
-			SetDeletedBy(risk.DeletedBy).
+			SetDeletedByID(risk.DeletedByID).
 			SetMappingID(risk.MappingID).
 			SetTags(risk.Tags).
 			SetOwnerID(risk.OwnerID).
@@ -6187,6 +6562,8 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -6198,6 +6575,9 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -6207,20 +6587,20 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -6283,6 +6663,8 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -6300,6 +6682,9 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -6313,16 +6698,16 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(standard.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(standard.CreatedBy)
+			create = create.SetCreatedByID(standard.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(standard.UpdatedBy)
+			create = create.SetUpdatedByID(standard.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -6331,10 +6716,10 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(standard.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(standard.DeletedBy)
+			create = create.SetDeletedByID(standard.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -6424,6 +6809,8 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -6436,6 +6823,9 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.StandardHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6443,10 +6833,10 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(standard.CreatedAt).
 			SetUpdatedAt(standard.UpdatedAt).
-			SetCreatedBy(standard.CreatedBy).
-			SetUpdatedBy(standard.UpdatedBy).
+			SetCreatedByID(standard.CreatedByID).
+			SetUpdatedByID(standard.UpdatedByID).
 			SetDeletedAt(standard.DeletedAt).
-			SetDeletedBy(standard.DeletedBy).
+			SetDeletedByID(standard.DeletedByID).
 			SetMappingID(standard.MappingID).
 			SetTags(standard.Tags).
 			SetName(standard.Name).
@@ -6471,6 +6861,8 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -6482,6 +6874,9 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -6491,20 +6886,20 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -6595,6 +6990,8 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -6612,6 +7009,9 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -6625,16 +7025,16 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedAt(subcontrol.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(subcontrol.CreatedBy)
+			create = create.SetCreatedByID(subcontrol.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(subcontrol.UpdatedBy)
+			create = create.SetUpdatedByID(subcontrol.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -6643,10 +7043,10 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDeletedAt(subcontrol.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(subcontrol.DeletedBy)
+			create = create.SetDeletedByID(subcontrol.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -6778,6 +7178,8 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -6790,6 +7192,9 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 		}
 
 		create := client.SubcontrolHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6797,10 +7202,10 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetRef(id).
 			SetCreatedAt(subcontrol.CreatedAt).
 			SetUpdatedAt(subcontrol.UpdatedAt).
-			SetCreatedBy(subcontrol.CreatedBy).
-			SetUpdatedBy(subcontrol.UpdatedBy).
+			SetCreatedByID(subcontrol.CreatedByID).
+			SetUpdatedByID(subcontrol.UpdatedByID).
 			SetDeletedAt(subcontrol.DeletedAt).
-			SetDeletedBy(subcontrol.DeletedBy).
+			SetDeletedByID(subcontrol.DeletedByID).
 			SetMappingID(subcontrol.MappingID).
 			SetTags(subcontrol.Tags).
 			SetOwnerID(subcontrol.OwnerID).
@@ -6832,6 +7237,8 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -6843,6 +7250,9 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -6852,12 +7262,12 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -6868,8 +7278,8 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if tags, exists := m.Tags(); exists {
@@ -6912,6 +7322,8 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -6929,6 +7341,9 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -6942,16 +7357,16 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(task.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(task.CreatedBy)
+			create = create.SetCreatedByID(task.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(task.UpdatedBy)
+			create = create.SetUpdatedByID(task.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -6966,10 +7381,10 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(task.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(task.DeletedBy)
+			create = create.SetDeletedByID(task.DeletedByID)
 		}
 
 		if tags, exists := m.Tags(); exists {
@@ -7029,6 +7444,8 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -7041,6 +7458,9 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.TaskHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7048,11 +7468,11 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(task.CreatedAt).
 			SetUpdatedAt(task.UpdatedAt).
-			SetCreatedBy(task.CreatedBy).
-			SetUpdatedBy(task.UpdatedBy).
+			SetCreatedByID(task.CreatedByID).
+			SetUpdatedByID(task.UpdatedByID).
 			SetMappingID(task.MappingID).
 			SetDeletedAt(task.DeletedAt).
-			SetDeletedBy(task.DeletedBy).
+			SetDeletedByID(task.DeletedByID).
 			SetTags(task.Tags).
 			SetTitle(task.Title).
 			SetDescription(task.Description).
@@ -7072,6 +7492,8 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -7083,6 +7505,9 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -7092,20 +7517,20 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -7152,6 +7577,8 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -7169,6 +7596,9 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -7182,16 +7612,16 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(template.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(template.CreatedBy)
+			create = create.SetCreatedByID(template.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(template.UpdatedBy)
+			create = create.SetUpdatedByID(template.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -7200,10 +7630,10 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(template.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(template.DeletedBy)
+			create = create.SetDeletedByID(template.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -7269,6 +7699,8 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -7281,6 +7713,9 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.TemplateHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7288,10 +7723,10 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(template.CreatedAt).
 			SetUpdatedAt(template.UpdatedAt).
-			SetCreatedBy(template.CreatedBy).
-			SetUpdatedBy(template.UpdatedBy).
+			SetCreatedByID(template.CreatedByID).
+			SetUpdatedByID(template.UpdatedByID).
 			SetDeletedAt(template.DeletedAt).
-			SetDeletedBy(template.DeletedBy).
+			SetDeletedByID(template.DeletedByID).
 			SetMappingID(template.MappingID).
 			SetTags(template.Tags).
 			SetOwnerID(template.OwnerID).
@@ -7312,6 +7747,8 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -7323,6 +7760,9 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -7332,20 +7772,20 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -7420,6 +7860,8 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -7437,6 +7879,9 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -7450,16 +7895,16 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(user.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(user.CreatedBy)
+			create = create.SetCreatedByID(user.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(user.UpdatedBy)
+			create = create.SetUpdatedByID(user.UpdatedByID)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -7468,10 +7913,10 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDeletedAt(user.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(user.DeletedBy)
+			create = create.SetDeletedByID(user.DeletedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -7579,6 +8024,8 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -7591,6 +8038,9 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		}
 
 		create := client.UserHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7598,10 +8048,10 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(user.CreatedAt).
 			SetUpdatedAt(user.UpdatedAt).
-			SetCreatedBy(user.CreatedBy).
-			SetUpdatedBy(user.UpdatedBy).
+			SetCreatedByID(user.CreatedByID).
+			SetUpdatedByID(user.UpdatedByID).
 			SetDeletedAt(user.DeletedAt).
-			SetDeletedBy(user.DeletedBy).
+			SetDeletedByID(user.DeletedByID).
 			SetMappingID(user.MappingID).
 			SetTags(user.Tags).
 			SetEmail(user.Email).
@@ -7629,6 +8079,8 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	id, ok := m.ID()
 	if !ok {
 		return idNotFoundError
@@ -7640,6 +8092,9 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	if updatedBy != "" {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -7649,12 +8104,12 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
+	if createdByID, exists := m.CreatedByID(); exists {
+		create = create.SetCreatedByID(createdByID)
 	}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
+	if updatedByID, exists := m.UpdatedByID(); exists {
+		create = create.SetUpdatedByID(updatedByID)
 	}
 
 	if mappingID, exists := m.MappingID(); exists {
@@ -7669,8 +8124,8 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetDeletedAt(deletedAt)
 	}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
+	if deletedByID, exists := m.DeletedByID(); exists {
+		create = create.SetDeletedByID(deletedByID)
 	}
 
 	if userID, exists := m.UserID(); exists {
@@ -7721,6 +8176,8 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -7738,6 +8195,9 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		if createdAt, exists := m.CreatedAt(); exists {
 			create = create.SetCreatedAt(createdAt)
@@ -7751,16 +8211,16 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedAt(usersetting.UpdatedAt)
 		}
 
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
+		if createdByID, exists := m.CreatedByID(); exists {
+			create = create.SetCreatedByID(createdByID)
 		} else {
-			create = create.SetCreatedBy(usersetting.CreatedBy)
+			create = create.SetCreatedByID(usersetting.CreatedByID)
 		}
 
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
+		if updatedByID, exists := m.UpdatedByID(); exists {
+			create = create.SetUpdatedByID(updatedByID)
 		} else {
-			create = create.SetUpdatedBy(usersetting.UpdatedBy)
+			create = create.SetUpdatedByID(usersetting.UpdatedByID)
 		}
 
 		if mappingID, exists := m.MappingID(); exists {
@@ -7781,10 +8241,10 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetDeletedAt(usersetting.DeletedAt)
 		}
 
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
+		if deletedByID, exists := m.DeletedByID(); exists {
+			create = create.SetDeletedByID(deletedByID)
 		} else {
-			create = create.SetDeletedBy(usersetting.DeletedBy)
+			create = create.SetDeletedByID(usersetting.DeletedByID)
 		}
 
 		if userID, exists := m.UserID(); exists {
@@ -7856,6 +8316,8 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 	}
 	client := m.Client()
 
+	updatedBy, _ := ctx.Value("updated_by_id").(string)
+
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return fmt.Errorf("getting ids: %w", err)
@@ -7868,6 +8330,9 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 		}
 
 		create := client.UserSettingHistory.Create()
+		if updatedBy != "" {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7875,12 +8340,12 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetRef(id).
 			SetCreatedAt(usersetting.CreatedAt).
 			SetUpdatedAt(usersetting.UpdatedAt).
-			SetCreatedBy(usersetting.CreatedBy).
-			SetUpdatedBy(usersetting.UpdatedBy).
+			SetCreatedByID(usersetting.CreatedByID).
+			SetUpdatedByID(usersetting.UpdatedByID).
 			SetMappingID(usersetting.MappingID).
 			SetTags(usersetting.Tags).
 			SetDeletedAt(usersetting.DeletedAt).
-			SetDeletedBy(usersetting.DeletedBy).
+			SetDeletedByID(usersetting.DeletedByID).
 			SetUserID(usersetting.UserID).
 			SetLocked(usersetting.Locked).
 			SetNillableSilencedAt(usersetting.SilencedAt).
