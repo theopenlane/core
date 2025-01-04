@@ -20,7 +20,7 @@ func NewAuditMixin() AuditMixin {
 	return AuditMixin{}
 }
 
-// NewAuditMixin creates a new AuditMixin
+// NewAuditMixinWithExcludedEdges creates a new AuditMixin with the edges excluded
 func NewAuditMixinWithExcludedEdges() AuditMixin {
 	return AuditMixin{
 		ExcludeEdge: true,
