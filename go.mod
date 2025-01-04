@@ -9,7 +9,7 @@ require (
 	dario.cat/mergo v1.0.1
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.1
-	github.com/99designs/gqlgen v0.17.61
+	github.com/99designs/gqlgen v0.17.62
 	github.com/99designs/keyring v1.2.2
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.30.2
@@ -63,7 +63,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/theopenlane/beacon v0.1.1
 	github.com/theopenlane/echo-prometheus v0.1.0
-	github.com/theopenlane/echox v0.2.0
+	github.com/theopenlane/echox v0.2.1
 	github.com/theopenlane/emailtemplates v0.1.2
 	github.com/theopenlane/entx v0.3.1
 	github.com/theopenlane/gqlgen-plugins v0.4.2
@@ -485,7 +485,7 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20241209162323-e6fa225c2576 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241209162323-e6fa225c2576 // indirect
 	google.golang.org/grpc v1.68.1 // indirect
-	google.golang.org/protobuf v1.35.2 // indirect
+	google.golang.org/protobuf v1.36.1 // indirect
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1
