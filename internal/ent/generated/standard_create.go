@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // StandardCreate is the builder for creating a Standard entity.
@@ -268,14 +268,14 @@ func (sc *StandardCreate) SetNillableID(s *string) *StandardCreate {
 	return sc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (sc *StandardCreate) SetCreatedBy(u *User) *StandardCreate {
-	return sc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (sc *StandardCreate) SetCreatedBy(c *ChangeActor) *StandardCreate {
+	return sc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (sc *StandardCreate) SetUpdatedBy(u *User) *StandardCreate {
-	return sc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (sc *StandardCreate) SetUpdatedBy(c *ChangeActor) *StandardCreate {
+	return sc.SetUpdatedByID(c.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -546,7 +546,7 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 			Columns: []string{standard.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Standard
@@ -564,7 +564,7 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 			Columns: []string{standard.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Standard

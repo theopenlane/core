@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // HushCreate is the builder for creating a Hush entity.
@@ -198,14 +198,14 @@ func (hc *HushCreate) SetNillableID(s *string) *HushCreate {
 	return hc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (hc *HushCreate) SetCreatedBy(u *User) *HushCreate {
-	return hc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (hc *HushCreate) SetCreatedBy(c *ChangeActor) *HushCreate {
+	return hc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (hc *HushCreate) SetUpdatedBy(u *User) *HushCreate {
-	return hc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (hc *HushCreate) SetUpdatedBy(c *ChangeActor) *HushCreate {
+	return hc.SetUpdatedByID(c.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -418,7 +418,7 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 			Columns: []string{hush.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = hc.schemaConfig.Hush
@@ -436,7 +436,7 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 			Columns: []string{hush.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = hc.schemaConfig.Hush

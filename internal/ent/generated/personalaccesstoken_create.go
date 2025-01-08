@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
@@ -215,14 +216,14 @@ func (patc *PersonalAccessTokenCreate) SetNillableID(s *string) *PersonalAccessT
 	return patc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (patc *PersonalAccessTokenCreate) SetCreatedBy(u *User) *PersonalAccessTokenCreate {
-	return patc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (patc *PersonalAccessTokenCreate) SetCreatedBy(c *ChangeActor) *PersonalAccessTokenCreate {
+	return patc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (patc *PersonalAccessTokenCreate) SetUpdatedBy(u *User) *PersonalAccessTokenCreate {
-	return patc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (patc *PersonalAccessTokenCreate) SetUpdatedBy(c *ChangeActor) *PersonalAccessTokenCreate {
+	return patc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -453,7 +454,7 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 			Columns: []string{personalaccesstoken.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patc.schemaConfig.PersonalAccessToken
@@ -471,7 +472,7 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 			Columns: []string{personalaccesstoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patc.schemaConfig.PersonalAccessToken

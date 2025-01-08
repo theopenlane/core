@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -99,6 +100,7 @@ const (
 	TypeAPIToken                   = "APIToken"
 	TypeActionPlan                 = "ActionPlan"
 	TypeActionPlanHistory          = "ActionPlanHistory"
+	TypeChangeActor                = "ChangeActor"
 	TypeContact                    = "Contact"
 	TypeContactHistory             = "ContactHistory"
 	TypeControl                    = "Control"
@@ -1032,13 +1034,13 @@ func (m *APITokenMutation) ResetLastUsedAt() {
 	delete(m.clearedFields, apitoken.FieldLastUsedAt)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *APITokenMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[apitoken.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *APITokenMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -1059,13 +1061,13 @@ func (m *APITokenMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *APITokenMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[apitoken.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *APITokenMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -2541,13 +2543,13 @@ func (m *ActionPlanMutation) ResetDetails() {
 	delete(m.clearedFields, actionplan.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *ActionPlanMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[actionplan.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *ActionPlanMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -2568,13 +2570,13 @@ func (m *ActionPlanMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *ActionPlanMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[actionplan.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *ActionPlanMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -5148,6 +5150,392 @@ func (m *ActionPlanHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown ActionPlanHistory edge %s", name)
 }
 
+// ChangeActorMutation represents an operation that mutates the ChangeActor nodes in the graph.
+type ChangeActorMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	name          *string
+	actor_type    *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ChangeActor, error)
+	predicates    []predicate.ChangeActor
+}
+
+var _ ent.Mutation = (*ChangeActorMutation)(nil)
+
+// changeactorOption allows management of the mutation configuration using functional options.
+type changeactorOption func(*ChangeActorMutation)
+
+// newChangeActorMutation creates new mutation for the ChangeActor entity.
+func newChangeActorMutation(c config, op Op, opts ...changeactorOption) *ChangeActorMutation {
+	m := &ChangeActorMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeChangeActor,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withChangeActorID sets the ID field of the mutation.
+func withChangeActorID(id string) changeactorOption {
+	return func(m *ChangeActorMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ChangeActor
+		)
+		m.oldValue = func(ctx context.Context) (*ChangeActor, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ChangeActor.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withChangeActor sets the old ChangeActor of the mutation.
+func withChangeActor(node *ChangeActor) changeactorOption {
+	return func(m *ChangeActorMutation) {
+		m.oldValue = func(context.Context) (*ChangeActor, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ChangeActorMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ChangeActorMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ChangeActor entities.
+func (m *ChangeActorMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ChangeActorMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ChangeActorMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ChangeActor.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *ChangeActorMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ChangeActorMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ChangeActor entity.
+// If the ChangeActor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChangeActorMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ChangeActorMutation) ResetName() {
+	m.name = nil
+}
+
+// SetActorType sets the "actor_type" field.
+func (m *ChangeActorMutation) SetActorType(s string) {
+	m.actor_type = &s
+}
+
+// ActorType returns the value of the "actor_type" field in the mutation.
+func (m *ChangeActorMutation) ActorType() (r string, exists bool) {
+	v := m.actor_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldActorType returns the old "actor_type" field's value of the ChangeActor entity.
+// If the ChangeActor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChangeActorMutation) OldActorType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldActorType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldActorType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldActorType: %w", err)
+	}
+	return oldValue.ActorType, nil
+}
+
+// ResetActorType resets all changes to the "actor_type" field.
+func (m *ChangeActorMutation) ResetActorType() {
+	m.actor_type = nil
+}
+
+// Where appends a list predicates to the ChangeActorMutation builder.
+func (m *ChangeActorMutation) Where(ps ...predicate.ChangeActor) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ChangeActorMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ChangeActorMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ChangeActor, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ChangeActorMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ChangeActorMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ChangeActor).
+func (m *ChangeActorMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ChangeActorMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.name != nil {
+		fields = append(fields, changeactor.FieldName)
+	}
+	if m.actor_type != nil {
+		fields = append(fields, changeactor.FieldActorType)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ChangeActorMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case changeactor.FieldName:
+		return m.Name()
+	case changeactor.FieldActorType:
+		return m.ActorType()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ChangeActorMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case changeactor.FieldName:
+		return m.OldName(ctx)
+	case changeactor.FieldActorType:
+		return m.OldActorType(ctx)
+	}
+	return nil, fmt.Errorf("unknown ChangeActor field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ChangeActorMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case changeactor.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case changeactor.FieldActorType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetActorType(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ChangeActor field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ChangeActorMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ChangeActorMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ChangeActorMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ChangeActor numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ChangeActorMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ChangeActorMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ChangeActorMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ChangeActor nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ChangeActorMutation) ResetField(name string) error {
+	switch name {
+	case changeactor.FieldName:
+		m.ResetName()
+		return nil
+	case changeactor.FieldActorType:
+		m.ResetActorType()
+		return nil
+	}
+	return fmt.Errorf("unknown ChangeActor field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ChangeActorMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ChangeActorMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ChangeActorMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ChangeActorMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ChangeActorMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ChangeActorMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ChangeActorMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ChangeActor unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ChangeActorMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ChangeActor edge %s", name)
+}
+
 // ContactMutation represents an operation that mutates the Contact nodes in the graph.
 type ContactMutation struct {
 	config
@@ -6051,13 +6439,13 @@ func (m *ContactMutation) ResetStatus() {
 	m.status = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *ContactMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[contact.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *ContactMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -6078,13 +6466,13 @@ func (m *ContactMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *ContactMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[contact.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *ContactMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -9717,13 +10105,13 @@ func (m *ControlMutation) ResetDetails() {
 	delete(m.clearedFields, control.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *ControlMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[control.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *ControlMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -9744,13 +10132,13 @@ func (m *ControlMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *ControlMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[control.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *ControlMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -14613,13 +15001,13 @@ func (m *ControlObjectiveMutation) ResetDetails() {
 	delete(m.clearedFields, controlobjective.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *ControlObjectiveMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[controlobjective.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *ControlObjectiveMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -14640,13 +15028,13 @@ func (m *ControlObjectiveMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *ControlObjectiveMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[controlobjective.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *ControlObjectiveMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -18934,13 +19322,13 @@ func (m *DocumentDataMutation) ResetData() {
 	m.data = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *DocumentDataMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[documentdata.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *DocumentDataMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -18961,13 +19349,13 @@ func (m *DocumentDataMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *DocumentDataMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[documentdata.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *DocumentDataMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -21623,13 +22011,13 @@ func (m *EmailVerificationTokenMutation) ResetSecret() {
 	m.secret = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *EmailVerificationTokenMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[emailverificationtoken.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *EmailVerificationTokenMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -21650,13 +22038,13 @@ func (m *EmailVerificationTokenMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *EmailVerificationTokenMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[emailverificationtoken.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *EmailVerificationTokenMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -23074,13 +23462,13 @@ func (m *EntityMutation) ResetStatus() {
 	delete(m.clearedFields, entity.FieldStatus)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *EntityMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[entity.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *EntityMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -23101,13 +23489,13 @@ func (m *EntityMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *EntityMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[entity.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *EntityMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -26346,13 +26734,13 @@ func (m *EntityTypeMutation) ResetName() {
 	m.name = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *EntityTypeMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[entitytype.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *EntityTypeMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -26373,13 +26761,13 @@ func (m *EntityTypeMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *EntityTypeMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[entitytype.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *EntityTypeMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -28840,13 +29228,13 @@ func (m *EventMutation) ResetMetadata() {
 	delete(m.clearedFields, event.FieldMetadata)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *EventMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[event.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *EventMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -28867,13 +29255,13 @@ func (m *EventMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *EventMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[event.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *EventMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -32707,13 +33095,13 @@ func (m *FileMutation) ResetFileContents() {
 	delete(m.clearedFields, file.FieldFileContents)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *FileMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[file.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *FileMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -32734,13 +33122,13 @@ func (m *FileMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *FileMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[file.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *FileMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -37415,13 +37803,13 @@ func (m *GroupMutation) ResetDisplayName() {
 	m.display_name = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *GroupMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[group.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *GroupMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -37442,13 +37830,13 @@ func (m *GroupMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *GroupMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[group.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *GroupMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -42894,13 +43282,13 @@ func (m *GroupMembershipMutation) ResetUserID() {
 	m.user = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *GroupMembershipMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[groupmembership.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *GroupMembershipMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -42921,13 +43309,13 @@ func (m *GroupMembershipMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *GroupMembershipMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[groupmembership.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *GroupMembershipMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -45471,13 +45859,13 @@ func (m *GroupSettingMutation) ResetGroupID() {
 	delete(m.clearedFields, groupsetting.FieldGroupID)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *GroupSettingMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[groupsetting.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *GroupSettingMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -45498,13 +45886,13 @@ func (m *GroupSettingMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *GroupSettingMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[groupsetting.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *GroupSettingMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -48205,13 +48593,13 @@ func (m *HushMutation) ResetSecretValue() {
 	delete(m.clearedFields, hush.FieldSecretValue)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *HushMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[hush.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *HushMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -48232,13 +48620,13 @@ func (m *HushMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *HushMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[hush.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *HushMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -51063,13 +51451,13 @@ func (m *IntegrationMutation) ResetKind() {
 	delete(m.clearedFields, integration.FieldKind)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *IntegrationMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[integration.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *IntegrationMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -51090,13 +51478,13 @@ func (m *IntegrationMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *IntegrationMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[integration.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *IntegrationMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -54171,13 +54559,13 @@ func (m *InternalPolicyMutation) ResetDetails() {
 	delete(m.clearedFields, internalpolicy.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *InternalPolicyMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[internalpolicy.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *InternalPolicyMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -54198,13 +54586,13 @@ func (m *InternalPolicyMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *InternalPolicyMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[internalpolicy.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *InternalPolicyMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -58107,13 +58495,13 @@ func (m *InviteMutation) ResetSecret() {
 	m.secret = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *InviteMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[invite.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *InviteMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -58134,13 +58522,13 @@ func (m *InviteMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *InviteMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[invite.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *InviteMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -59609,13 +59997,13 @@ func (m *NarrativeMutation) ResetDetails() {
 	delete(m.clearedFields, narrative.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *NarrativeMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[narrative.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *NarrativeMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -59636,13 +60024,13 @@ func (m *NarrativeMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *NarrativeMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[narrative.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *NarrativeMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -62902,13 +63290,13 @@ func (m *NoteMutation) ResetText() {
 	m.text = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *NoteMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[note.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *NoteMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -62929,13 +63317,13 @@ func (m *NoteMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *NoteMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[note.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *NoteMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -65462,13 +65850,13 @@ func (m *OrgMembershipMutation) ResetUserID() {
 	m.user = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *OrgMembershipMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[orgmembership.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *OrgMembershipMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -65489,13 +65877,13 @@ func (m *OrgMembershipMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *OrgMembershipMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[orgmembership.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *OrgMembershipMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -68269,13 +68657,13 @@ func (m *OrgSubscriptionMutation) ResetFeatures() {
 	delete(m.clearedFields, orgsubscription.FieldFeatures)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *OrgSubscriptionMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[orgsubscription.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *OrgSubscriptionMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -68296,13 +68684,13 @@ func (m *OrgSubscriptionMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *OrgSubscriptionMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[orgsubscription.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *OrgSubscriptionMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -71675,13 +72063,13 @@ func (m *OrganizationMutation) ResetDedicatedDb() {
 	m.dedicated_db = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *OrganizationMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[organization.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *OrganizationMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -71702,13 +72090,13 @@ func (m *OrganizationMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *OrganizationMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[organization.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *OrganizationMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -77900,13 +78288,13 @@ func (m *OrganizationSettingMutation) ResetStripeID() {
 	delete(m.clearedFields, organizationsetting.FieldStripeID)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *OrganizationSettingMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[organizationsetting.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *OrganizationSettingMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -77927,13 +78315,13 @@ func (m *OrganizationSettingMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *OrganizationSettingMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[organizationsetting.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *OrganizationSettingMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -81107,13 +81495,13 @@ func (m *PasswordResetTokenMutation) ResetSecret() {
 	m.secret = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *PasswordResetTokenMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[passwordresettoken.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *PasswordResetTokenMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -81134,13 +81522,13 @@ func (m *PasswordResetTokenMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *PasswordResetTokenMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[passwordresettoken.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *PasswordResetTokenMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -82512,13 +82900,13 @@ func (m *PersonalAccessTokenMutation) ResetLastUsedAt() {
 	delete(m.clearedFields, personalaccesstoken.FieldLastUsedAt)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *PersonalAccessTokenMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[personalaccesstoken.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *PersonalAccessTokenMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -82539,13 +82927,13 @@ func (m *PersonalAccessTokenMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *PersonalAccessTokenMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[personalaccesstoken.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *PersonalAccessTokenMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -84337,13 +84725,13 @@ func (m *ProcedureMutation) ResetDetails() {
 	delete(m.clearedFields, procedure.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *ProcedureMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[procedure.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *ProcedureMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -84364,13 +84752,13 @@ func (m *ProcedureMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *ProcedureMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[procedure.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *ProcedureMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -88476,13 +88864,13 @@ func (m *ProgramMutation) ResetAuditorReadComments() {
 	m.auditor_read_comments = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *ProgramMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[program.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *ProgramMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -88503,13 +88891,13 @@ func (m *ProgramMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *ProgramMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[program.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *ProgramMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -92748,13 +93136,13 @@ func (m *ProgramMembershipMutation) ResetUserID() {
 	m.user = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *ProgramMembershipMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[programmembership.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *ProgramMembershipMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -92775,13 +93163,13 @@ func (m *ProgramMembershipMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *ProgramMembershipMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[programmembership.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *ProgramMembershipMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -95564,13 +95952,13 @@ func (m *RiskMutation) ResetDetails() {
 	delete(m.clearedFields, risk.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *RiskMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[risk.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *RiskMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -95591,13 +95979,13 @@ func (m *RiskMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *RiskMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[risk.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *RiskMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -99759,13 +100147,13 @@ func (m *StandardMutation) ResetDetails() {
 	delete(m.clearedFields, standard.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *StandardMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[standard.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *StandardMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -99786,13 +100174,13 @@ func (m *StandardMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *StandardMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[standard.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *StandardMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -104015,13 +104403,13 @@ func (m *SubcontrolMutation) ResetDetails() {
 	delete(m.clearedFields, subcontrol.FieldDetails)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *SubcontrolMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[subcontrol.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *SubcontrolMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -104042,13 +104430,13 @@ func (m *SubcontrolMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *SubcontrolMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[subcontrol.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *SubcontrolMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -108464,13 +108852,13 @@ func (m *SubscriberMutation) ResetSecret() {
 	m.secret = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *SubscriberMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[subscriber.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *SubscriberMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -108491,13 +108879,13 @@ func (m *SubscriberMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *SubscriberMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[subscriber.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *SubscriberMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -110074,13 +110462,13 @@ func (m *TFASettingMutation) ResetTotpAllowed() {
 	delete(m.clearedFields, tfasetting.FieldTotpAllowed)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *TFASettingMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[tfasetting.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *TFASettingMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -110101,13 +110489,13 @@ func (m *TFASettingMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *TFASettingMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[tfasetting.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *TFASettingMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -111539,13 +111927,13 @@ func (m *TaskMutation) ResetCompleted() {
 	delete(m.clearedFields, task.FieldCompleted)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *TaskMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[task.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *TaskMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -111566,13 +111954,13 @@ func (m *TaskMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *TaskMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[task.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *TaskMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -115169,13 +115557,13 @@ func (m *TemplateMutation) ResetUischema() {
 	delete(m.clearedFields, template.FieldUischema)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *TemplateMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[template.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *TemplateMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -115196,13 +115584,13 @@ func (m *TemplateMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *TemplateMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[template.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *TemplateMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -123677,13 +124065,13 @@ func (m *UserSettingMutation) ResetPhoneNumber() {
 	delete(m.clearedFields, usersetting.FieldPhoneNumber)
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *UserSettingMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[usersetting.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *UserSettingMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -123704,13 +124092,13 @@ func (m *UserSettingMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *UserSettingMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[usersetting.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *UserSettingMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }
@@ -127114,13 +127502,13 @@ func (m *WebauthnMutation) ResetUserVerified() {
 	m.user_verified = nil
 }
 
-// ClearCreatedBy clears the "created_by" edge to the User entity.
+// ClearCreatedBy clears the "created_by" edge to the ChangeActor entity.
 func (m *WebauthnMutation) ClearCreatedBy() {
 	m.clearedcreated_by = true
 	m.clearedFields[webauthn.FieldCreatedByID] = struct{}{}
 }
 
-// CreatedByCleared reports if the "created_by" edge to the User entity was cleared.
+// CreatedByCleared reports if the "created_by" edge to the ChangeActor entity was cleared.
 func (m *WebauthnMutation) CreatedByCleared() bool {
 	return m.CreatedByIDCleared() || m.clearedcreated_by
 }
@@ -127141,13 +127529,13 @@ func (m *WebauthnMutation) ResetCreatedBy() {
 	m.clearedcreated_by = false
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (m *WebauthnMutation) ClearUpdatedBy() {
 	m.clearedupdated_by = true
 	m.clearedFields[webauthn.FieldUpdatedByID] = struct{}{}
 }
 
-// UpdatedByCleared reports if the "updated_by" edge to the User entity was cleared.
+// UpdatedByCleared reports if the "updated_by" edge to the ChangeActor entity was cleared.
 func (m *WebauthnMutation) UpdatedByCleared() bool {
 	return m.UpdatedByIDCleared() || m.clearedupdated_by
 }

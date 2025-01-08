@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -64,9 +64,9 @@ type OrganizationSetting struct {
 // OrganizationSettingEdges holds the relations/edges for other nodes in the graph.
 type OrganizationSettingEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Organization holds the value of the organization edge.
 	Organization *Organization `json:"organization,omitempty"`
 	// Files holds the value of the files edge.
@@ -82,22 +82,22 @@ type OrganizationSettingEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrganizationSettingEdges) CreatedByOrErr() (*User, error) {
+func (e OrganizationSettingEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrganizationSettingEdges) UpdatedByOrErr() (*User, error) {
+func (e OrganizationSettingEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -274,12 +274,12 @@ func (os *OrganizationSetting) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the OrganizationSetting entity.
-func (os *OrganizationSetting) QueryCreatedBy() *UserQuery {
+func (os *OrganizationSetting) QueryCreatedBy() *ChangeActorQuery {
 	return NewOrganizationSettingClient(os.config).QueryCreatedBy(os)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the OrganizationSetting entity.
-func (os *OrganizationSetting) QueryUpdatedBy() *UserQuery {
+func (os *OrganizationSetting) QueryUpdatedBy() *ChangeActorQuery {
 	return NewOrganizationSettingClient(os.config).QueryUpdatedBy(os)
 }
 

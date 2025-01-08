@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -238,14 +238,14 @@ func (ic *InviteCreate) SetNillableID(s *string) *InviteCreate {
 	return ic
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (ic *InviteCreate) SetCreatedBy(u *User) *InviteCreate {
-	return ic.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (ic *InviteCreate) SetCreatedBy(c *ChangeActor) *InviteCreate {
+	return ic.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ic *InviteCreate) SetUpdatedBy(u *User) *InviteCreate {
-	return ic.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ic *InviteCreate) SetUpdatedBy(c *ChangeActor) *InviteCreate {
+	return ic.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -509,7 +509,7 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 			Columns: []string{invite.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ic.schemaConfig.Invite
@@ -527,7 +527,7 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 			Columns: []string{invite.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ic.schemaConfig.Invite

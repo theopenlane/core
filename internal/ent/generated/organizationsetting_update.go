@@ -12,11 +12,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -264,9 +264,9 @@ func (osu *OrganizationSettingUpdate) ClearStripeID() *OrganizationSettingUpdate
 	return osu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (osu *OrganizationSettingUpdate) SetUpdatedBy(u *User) *OrganizationSettingUpdate {
-	return osu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (osu *OrganizationSettingUpdate) SetUpdatedBy(c *ChangeActor) *OrganizationSettingUpdate {
+	return osu.SetUpdatedByID(c.ID)
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
@@ -294,7 +294,7 @@ func (osu *OrganizationSettingUpdate) Mutation() *OrganizationSettingMutation {
 	return osu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (osu *OrganizationSettingUpdate) ClearUpdatedBy() *OrganizationSettingUpdate {
 	osu.mutation.ClearUpdatedBy()
 	return osu
@@ -499,7 +499,7 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 			Columns: []string{organizationsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrganizationSetting
@@ -513,7 +513,7 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 			Columns: []string{organizationsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrganizationSetting
@@ -853,9 +853,9 @@ func (osuo *OrganizationSettingUpdateOne) ClearStripeID() *OrganizationSettingUp
 	return osuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (osuo *OrganizationSettingUpdateOne) SetUpdatedBy(u *User) *OrganizationSettingUpdateOne {
-	return osuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (osuo *OrganizationSettingUpdateOne) SetUpdatedBy(c *ChangeActor) *OrganizationSettingUpdateOne {
+	return osuo.SetUpdatedByID(c.ID)
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
@@ -883,7 +883,7 @@ func (osuo *OrganizationSettingUpdateOne) Mutation() *OrganizationSettingMutatio
 	return osuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (osuo *OrganizationSettingUpdateOne) ClearUpdatedBy() *OrganizationSettingUpdateOne {
 	osuo.mutation.ClearUpdatedBy()
 	return osuo
@@ -1118,7 +1118,7 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 			Columns: []string{organizationsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrganizationSetting
@@ -1132,7 +1132,7 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 			Columns: []string{organizationsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrganizationSetting

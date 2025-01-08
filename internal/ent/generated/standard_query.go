@@ -13,13 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -31,8 +31,8 @@ type StandardQuery struct {
 	order                      []standard.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.Standard
-	withCreatedBy              *UserQuery
-	withUpdatedBy              *UserQuery
+	withCreatedBy              *ChangeActorQuery
+	withUpdatedBy              *ChangeActorQuery
 	withControlObjectives      *ControlObjectiveQuery
 	withControls               *ControlQuery
 	withProcedures             *ProcedureQuery
@@ -82,8 +82,8 @@ func (sq *StandardQuery) Order(o ...standard.OrderOption) *StandardQuery {
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (sq *StandardQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: sq.config}).Query()
+func (sq *StandardQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -94,11 +94,11 @@ func (sq *StandardQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, standard.CreatedByTable, standard.CreatedByColumn),
 		)
 		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Standard
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -107,8 +107,8 @@ func (sq *StandardQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (sq *StandardQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: sq.config}).Query()
+func (sq *StandardQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -119,11 +119,11 @@ func (sq *StandardQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, standard.UpdatedByTable, standard.UpdatedByColumn),
 		)
 		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Standard
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -464,8 +464,8 @@ func (sq *StandardQuery) Clone() *StandardQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithCreatedBy(opts ...func(*UserQuery)) *StandardQuery {
-	query := (&UserClient{config: sq.config}).Query()
+func (sq *StandardQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *StandardQuery {
+	query := (&ChangeActorClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -475,8 +475,8 @@ func (sq *StandardQuery) WithCreatedBy(opts ...func(*UserQuery)) *StandardQuery 
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithUpdatedBy(opts ...func(*UserQuery)) *StandardQuery {
-	query := (&UserClient{config: sq.config}).Query()
+func (sq *StandardQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *StandardQuery {
+	query := (&ChangeActorClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -652,13 +652,13 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	}
 	if query := sq.withCreatedBy; query != nil {
 		if err := sq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Standard, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *Standard, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := sq.withUpdatedBy; query != nil {
 		if err := sq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Standard, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *Standard, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -742,7 +742,7 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	return nodes, nil
 }
 
-func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *User)) error {
+func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Standard)
 	for i := range nodes {
@@ -755,7 +755,7 @@ func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *UserQuery, no
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -771,7 +771,7 @@ func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *UserQuery, no
 	}
 	return nil
 }
-func (sq *StandardQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *User)) error {
+func (sq *StandardQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Standard)
 	for i := range nodes {
@@ -784,7 +784,7 @@ func (sq *StandardQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, no
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

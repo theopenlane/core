@@ -6,9 +6,8 @@ mutation CreateBulkCSVProgramMembership($input: Upload!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       id
       programID
@@ -27,9 +26,8 @@ mutation CreateBulkProgramMembership($input: [CreateProgramMembershipInput!]) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       id
       programID
@@ -48,9 +46,8 @@ mutation CreateProgramMembership($input: CreateProgramMembershipInput!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       id
       programID
@@ -81,9 +78,8 @@ query GetAllProgramMemberships {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         userID
       }
@@ -116,9 +112,8 @@ query GetProgramMemberships($where: ProgramMembershipWhereInput) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         userID
       }
@@ -132,9 +127,8 @@ mutation UpdateProgramMembership($updateProgramMembershipId: ID!, $input: Update
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       id
       programID

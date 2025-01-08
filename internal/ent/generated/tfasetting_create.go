@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -229,14 +230,14 @@ func (tsc *TFASettingCreate) SetNillableID(s *string) *TFASettingCreate {
 	return tsc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (tsc *TFASettingCreate) SetCreatedBy(u *User) *TFASettingCreate {
-	return tsc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (tsc *TFASettingCreate) SetCreatedBy(c *ChangeActor) *TFASettingCreate {
+	return tsc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (tsc *TFASettingCreate) SetUpdatedBy(u *User) *TFASettingCreate {
-	return tsc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (tsc *TFASettingCreate) SetUpdatedBy(c *ChangeActor) *TFASettingCreate {
+	return tsc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -432,7 +433,7 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 			Columns: []string{tfasetting.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsc.schemaConfig.TFASetting
@@ -450,7 +451,7 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 			Columns: []string{tfasetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsc.schemaConfig.TFASetting

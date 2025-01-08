@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -192,9 +193,9 @@ func (tu *TaskUpdate) ClearCompleted() *TaskUpdate {
 	return tu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (tu *TaskUpdate) SetUpdatedBy(u *User) *TaskUpdate {
-	return tu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (tu *TaskUpdate) SetUpdatedBy(c *ChangeActor) *TaskUpdate {
+	return tu.SetUpdatedByID(c.ID)
 }
 
 // SetAssignerID sets the "assigner" edge to the User entity by ID.
@@ -352,7 +353,7 @@ func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (tu *TaskUpdate) ClearUpdatedBy() *TaskUpdate {
 	tu.mutation.ClearUpdatedBy()
 	return tu
@@ -680,7 +681,7 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{task.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tu.schemaConfig.Task
@@ -694,7 +695,7 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{task.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tu.schemaConfig.Task
@@ -1323,9 +1324,9 @@ func (tuo *TaskUpdateOne) ClearCompleted() *TaskUpdateOne {
 	return tuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (tuo *TaskUpdateOne) SetUpdatedBy(u *User) *TaskUpdateOne {
-	return tuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (tuo *TaskUpdateOne) SetUpdatedBy(c *ChangeActor) *TaskUpdateOne {
+	return tuo.SetUpdatedByID(c.ID)
 }
 
 // SetAssignerID sets the "assigner" edge to the User entity by ID.
@@ -1483,7 +1484,7 @@ func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
 	return tuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (tuo *TaskUpdateOne) ClearUpdatedBy() *TaskUpdateOne {
 	tuo.mutation.ClearUpdatedBy()
 	return tuo
@@ -1841,7 +1842,7 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			Columns: []string{task.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tuo.schemaConfig.Task
@@ -1855,7 +1856,7 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			Columns: []string{task.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tuo.schemaConfig.Task

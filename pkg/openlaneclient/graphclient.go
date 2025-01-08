@@ -340,23 +340,16 @@ func NewClient(cli clientv2.HttpClient, baseURL string, options *clientv2.Option
 }
 
 type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy) GetID() string {
 	if t == nil {
@@ -364,11 +357,11 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy) 
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
@@ -485,23 +478,16 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan) GetActionPlans() []*Cr
 }
 
 type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy) GetEmail() string {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy) GetID() string {
 	if t == nil {
@@ -509,11 +495,11 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy) GetID(
 	}
 	return t.ID
 }
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy) GetLastName() *string {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
@@ -630,23 +616,16 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan) GetActionPlans() []*CreateBu
 }
 
 type CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy) GetEmail() string {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy) GetID() string {
 	if t == nil {
@@ -654,11 +633,11 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy) GetLastName() *string {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateActionPlan_CreateActionPlan_ActionPlan struct {
@@ -786,23 +765,16 @@ func (t *DeleteActionPlan_DeleteActionPlan) GetDeletedID() string {
 }
 
 type GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -810,11 +782,11 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllActionPlans_ActionPlans_Edges_Node struct {
@@ -1037,23 +1009,16 @@ func (t *GetActionPlanByID_ActionPlan) GetUpdatedByID() *string {
 }
 
 type GetActionPlans_ActionPlans_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetActionPlans_ActionPlans_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -1061,11 +1026,11 @@ func (t *GetActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetActionPlans_ActionPlans_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetActionPlans_ActionPlans_Edges_Node struct {
@@ -1193,23 +1158,16 @@ func (t *GetActionPlans_ActionPlans) GetEdges() []*GetActionPlans_ActionPlans_Ed
 }
 
 type UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy) GetEmail() string {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy) GetID() string {
 	if t == nil {
@@ -1217,11 +1175,11 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy) GetLastName() *string {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
@@ -4609,23 +4567,16 @@ func (t *DeleteAPIToken_DeleteAPIToken) GetDeletedID() string {
 }
 
 type CreateBulkContact_CreateBulkContact_Contacts_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkContact_CreateBulkContact_Contacts_CreatedBy) GetEmail() string {
+func (t *CreateBulkContact_CreateBulkContact_Contacts_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkContact_CreateBulkContact_Contacts_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkContact_CreateBulkContact_Contacts_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkContact_CreateBulkContact_Contacts_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkContact_CreateBulkContact_Contacts_CreatedBy) GetID() string {
 	if t == nil {
@@ -4633,11 +4584,11 @@ func (t *CreateBulkContact_CreateBulkContact_Contacts_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *CreateBulkContact_CreateBulkContact_Contacts_CreatedBy) GetLastName() *string {
+func (t *CreateBulkContact_CreateBulkContact_Contacts_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkContact_CreateBulkContact_Contacts_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkContact_CreateBulkContact_Contacts struct {
@@ -4761,23 +4712,16 @@ func (t *CreateBulkContact_CreateBulkContact) GetContacts() []*CreateBulkContact
 }
 
 type CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy) GetID() string {
 	if t == nil {
@@ -4785,11 +4729,11 @@ func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVContact_CreateBulkCSVContact_Contacts struct {
@@ -4913,23 +4857,16 @@ func (t *CreateBulkCSVContact_CreateBulkCSVContact) GetContacts() []*CreateBulkC
 }
 
 type CreateContact_CreateContact_Contact_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateContact_CreateContact_Contact_CreatedBy) GetEmail() string {
+func (t *CreateContact_CreateContact_Contact_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateContact_CreateContact_Contact_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateContact_CreateContact_Contact_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateContact_CreateContact_Contact_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateContact_CreateContact_Contact_CreatedBy) GetID() string {
 	if t == nil {
@@ -4937,11 +4874,11 @@ func (t *CreateContact_CreateContact_Contact_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateContact_CreateContact_Contact_CreatedBy) GetLastName() *string {
+func (t *CreateContact_CreateContact_Contact_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateContact_CreateContact_Contact_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateContact_CreateContact_Contact struct {
@@ -5076,23 +5013,16 @@ func (t *DeleteContact_DeleteContact) GetDeletedID() string {
 }
 
 type GetAllContacts_Contacts_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllContacts_Contacts_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllContacts_Contacts_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllContacts_Contacts_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllContacts_Contacts_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllContacts_Contacts_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllContacts_Contacts_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -5100,11 +5030,11 @@ func (t *GetAllContacts_Contacts_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllContacts_Contacts_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllContacts_Contacts_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllContacts_Contacts_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllContacts_Contacts_Edges_Node struct {
@@ -5341,23 +5271,16 @@ func (t *GetContactByID_Contact) GetUpdatedByID() *string {
 }
 
 type GetContacts_Contacts_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetContacts_Contacts_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetContacts_Contacts_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetContacts_Contacts_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetContacts_Contacts_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetContacts_Contacts_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetContacts_Contacts_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -5365,11 +5288,11 @@ func (t *GetContacts_Contacts_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetContacts_Contacts_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetContacts_Contacts_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetContacts_Contacts_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetContacts_Contacts_Edges_Node struct {
@@ -5504,23 +5427,16 @@ func (t *GetContacts_Contacts) GetEdges() []*GetContacts_Contacts_Edges {
 }
 
 type UpdateContact_UpdateContact_Contact_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateContact_UpdateContact_Contact_CreatedBy) GetEmail() string {
+func (t *UpdateContact_UpdateContact_Contact_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateContact_UpdateContact_Contact_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateContact_UpdateContact_Contact_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateContact_UpdateContact_Contact_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateContact_UpdateContact_Contact_CreatedBy) GetID() string {
 	if t == nil {
@@ -5528,11 +5444,11 @@ func (t *UpdateContact_UpdateContact_Contact_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateContact_UpdateContact_Contact_CreatedBy) GetLastName() *string {
+func (t *UpdateContact_UpdateContact_Contact_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateContact_UpdateContact_Contact_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateContact_UpdateContact_Contact struct {
@@ -5946,23 +5862,16 @@ func (t *GetContactHistories_ContactHistories) GetEdges() []*GetContactHistories
 }
 
 type CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy) GetID() string {
 	if t == nil {
@@ -5970,11 +5879,11 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
@@ -6126,23 +6035,16 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl) GetControls() []*CreateBulkC
 }
 
 type CreateBulkControl_CreateBulkControl_Controls_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkControl_CreateBulkControl_Controls_CreatedBy) GetEmail() string {
+func (t *CreateBulkControl_CreateBulkControl_Controls_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkControl_CreateBulkControl_Controls_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkControl_CreateBulkControl_Controls_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls_CreatedBy) GetID() string {
 	if t == nil {
@@ -6150,11 +6052,11 @@ func (t *CreateBulkControl_CreateBulkControl_Controls_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *CreateBulkControl_CreateBulkControl_Controls_CreatedBy) GetLastName() *string {
+func (t *CreateBulkControl_CreateBulkControl_Controls_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkControl_CreateBulkControl_Controls struct {
@@ -6306,23 +6208,16 @@ func (t *CreateBulkControl_CreateBulkControl) GetControls() []*CreateBulkControl
 }
 
 type CreateControl_CreateControl_Control_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateControl_CreateControl_Control_CreatedBy) GetEmail() string {
+func (t *CreateControl_CreateControl_Control_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateControl_CreateControl_Control_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateControl_CreateControl_Control_CreatedBy) GetID() string {
 	if t == nil {
@@ -6330,11 +6225,11 @@ func (t *CreateControl_CreateControl_Control_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateControl_CreateControl_Control_CreatedBy) GetLastName() *string {
+func (t *CreateControl_CreateControl_Control_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateControl_CreateControl_Control_Subcontrols struct {
@@ -6622,23 +6517,16 @@ func (t *DeleteControl_DeleteControl) GetDeletedID() string {
 }
 
 type GetAllControls_Controls_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllControls_Controls_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllControls_Controls_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllControls_Controls_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllControls_Controls_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -6646,11 +6534,11 @@ func (t *GetAllControls_Controls_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllControls_Controls_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllControls_Controls_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllControls_Controls_Edges_Node_Subcontrols struct {
@@ -7193,23 +7081,16 @@ func (t *GetControlByID_Control) GetViewers() []*GetControlByID_Control_Viewers 
 }
 
 type GetControls_Controls_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetControls_Controls_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetControls_Controls_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetControls_Controls_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetControls_Controls_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -7217,11 +7098,11 @@ func (t *GetControls_Controls_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetControls_Controls_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetControls_Controls_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetControls_Controls_Edges_Node_Subcontrols struct {
@@ -7509,23 +7390,16 @@ func (t *GetControls_Controls) GetEdges() []*GetControls_Controls_Edges {
 }
 
 type UpdateControl_UpdateControl_Control_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateControl_UpdateControl_Control_CreatedBy) GetEmail() string {
+func (t *UpdateControl_UpdateControl_Control_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateControl_UpdateControl_Control_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateControl_UpdateControl_Control_CreatedBy) GetID() string {
 	if t == nil {
@@ -7533,11 +7407,11 @@ func (t *UpdateControl_UpdateControl_Control_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateControl_UpdateControl_Control_CreatedBy) GetLastName() *string {
+func (t *UpdateControl_UpdateControl_Control_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateControl_UpdateControl_Control_Subcontrols struct {
@@ -8160,23 +8034,16 @@ func (t *GetControlHistories_ControlHistories) GetEdges() []*GetControlHistories
 }
 
 type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy) GetID() string {
 	if t == nil {
@@ -8184,11 +8051,11 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives struct {
@@ -8333,23 +8200,16 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective) GetControl
 }
 
 type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy) GetEmail() string {
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy) GetID() string {
 	if t == nil {
@@ -8357,11 +8217,11 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 	}
 	return t.ID
 }
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy) GetLastName() *string {
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives struct {
@@ -8506,23 +8366,16 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective) GetControlObject
 }
 
 type CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy) GetEmail() string {
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy) GetID() string {
 	if t == nil {
@@ -8530,11 +8383,11 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective_CreatedB
 	}
 	return t.ID
 }
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy) GetLastName() *string {
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateControlObjective_CreateControlObjective_ControlObjective_Programs struct {
@@ -8790,23 +8643,16 @@ func (t *DeleteControlObjective_DeleteControlObjective) GetDeletedID() string {
 }
 
 type GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -8814,11 +8660,11 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetID()
 	}
 	return t.ID
 }
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllControlObjectives_ControlObjectives_Edges_Node_Programs struct {
@@ -9297,23 +9143,16 @@ func (t *GetControlObjectiveByID_ControlObjective) GetViewers() []*GetControlObj
 }
 
 type GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -9321,11 +9160,11 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetID() st
 	}
 	return t.ID
 }
-func (t *GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetControlObjectives_ControlObjectives_Edges_Node_Programs struct {
@@ -9581,23 +9420,16 @@ func (t *GetControlObjectives_ControlObjectives) GetEdges() []*GetControlObjecti
 }
 
 type UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy) GetEmail() string {
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy) GetID() string {
 	if t == nil {
@@ -9605,11 +9437,11 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedB
 	}
 	return t.ID
 }
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy) GetLastName() *string {
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateControlObjective_UpdateControlObjective_ControlObjective_Programs struct {
@@ -10186,23 +10018,16 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 }
 
 type CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy) GetEmail() string {
+func (t *CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy) GetID() string {
 	if t == nil {
@@ -10210,11 +10035,11 @@ func (t *CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy) GetLastName() *string {
+func (t *CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateDocumentData_CreateDocumentData_DocumentData_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateDocumentData_CreateDocumentData_DocumentData struct {
@@ -10353,23 +10178,16 @@ func (t *GetDocumentDataByID_DocumentData) GetUpdatedByID() *string {
 }
 
 type UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy) GetEmail() string {
+func (t *UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy) GetID() string {
 	if t == nil {
@@ -10377,11 +10195,11 @@ func (t *UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy) GetLastName() *string {
+func (t *UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateDocumentData_UpdateDocumentData_DocumentData_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateDocumentData_UpdateDocumentData_DocumentData struct {
@@ -10676,23 +10494,16 @@ func (t *GetDocumentDataHistories_DocumentDataHistories) GetEdges() []*GetDocume
 }
 
 type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy) GetID() string {
 	if t == nil {
@@ -10700,31 +10511,24 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy) GetID() str
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy) GetEmail() string {
+func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy) GetID() string {
 	if t == nil {
@@ -10732,11 +10536,11 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy) GetID
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy) GetLastName() *string {
+func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes struct {
@@ -10903,23 +10707,16 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity) GetEntities() []*CreateBulkCSV
 }
 
 type CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy) GetEmail() string {
+func (t *CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy) GetID() string {
 	if t == nil {
@@ -10927,31 +10724,24 @@ func (t *CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy) GetLastName() *string {
+func (t *CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkEntity_CreateBulkEntity_Entities_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy) GetEmail() string {
+func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy) GetID() string {
 	if t == nil {
@@ -10959,11 +10749,11 @@ func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy) GetID() str
 	}
 	return t.ID
 }
-func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy) GetLastName() *string {
+func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkEntity_CreateBulkEntity_Entities_Notes_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkEntity_CreateBulkEntity_Entities_Notes struct {
@@ -11130,23 +10920,16 @@ func (t *CreateBulkEntity_CreateBulkEntity) GetEntities() []*CreateBulkEntity_Cr
 }
 
 type CreateEntity_CreateEntity_Entity_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateEntity_CreateEntity_Entity_CreatedBy) GetEmail() string {
+func (t *CreateEntity_CreateEntity_Entity_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateEntity_CreateEntity_Entity_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateEntity_CreateEntity_Entity_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateEntity_CreateEntity_Entity_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateEntity_CreateEntity_Entity_CreatedBy) GetID() string {
 	if t == nil {
@@ -11154,31 +10937,24 @@ func (t *CreateEntity_CreateEntity_Entity_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateEntity_CreateEntity_Entity_CreatedBy) GetLastName() *string {
+func (t *CreateEntity_CreateEntity_Entity_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateEntity_CreateEntity_Entity_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateEntity_CreateEntity_Entity_Notes_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateEntity_CreateEntity_Entity_Notes_UpdatedBy) GetEmail() string {
+func (t *CreateEntity_CreateEntity_Entity_Notes_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateEntity_CreateEntity_Entity_Notes_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateEntity_CreateEntity_Entity_Notes_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateEntity_CreateEntity_Entity_Notes_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateEntity_CreateEntity_Entity_Notes_UpdatedBy) GetID() string {
 	if t == nil {
@@ -11186,11 +10962,11 @@ func (t *CreateEntity_CreateEntity_Entity_Notes_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateEntity_CreateEntity_Entity_Notes_UpdatedBy) GetLastName() *string {
+func (t *CreateEntity_CreateEntity_Entity_Notes_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateEntity_CreateEntity_Entity_Notes_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateEntity_CreateEntity_Entity_Notes struct {
@@ -11404,23 +11180,16 @@ func (t *GetAllEntities_Entities_Edges_Node_EntityType) GetName() string {
 }
 
 type GetAllEntities_Entities_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllEntities_Entities_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllEntities_Entities_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllEntities_Entities_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllEntities_Entities_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllEntities_Entities_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllEntities_Entities_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -11428,11 +11197,11 @@ func (t *GetAllEntities_Entities_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllEntities_Entities_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllEntities_Entities_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllEntities_Entities_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllEntities_Entities_Edges_Node struct {
@@ -11603,23 +11372,16 @@ func (t *GetEntities_Entities_Edges_Node_EntityType) GetName() string {
 }
 
 type GetEntities_Entities_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetEntities_Entities_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetEntities_Entities_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetEntities_Entities_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetEntities_Entities_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetEntities_Entities_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetEntities_Entities_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -11627,11 +11389,11 @@ func (t *GetEntities_Entities_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetEntities_Entities_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetEntities_Entities_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetEntities_Entities_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetEntities_Entities_Edges_Node struct {
@@ -11964,23 +11726,16 @@ func (t *GetEntityByID_Entity) GetUpdatedByID() *string {
 }
 
 type UpdateEntity_UpdateEntity_Entity_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateEntity_UpdateEntity_Entity_CreatedBy) GetEmail() string {
+func (t *UpdateEntity_UpdateEntity_Entity_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateEntity_UpdateEntity_Entity_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateEntity_UpdateEntity_Entity_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateEntity_UpdateEntity_Entity_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateEntity_UpdateEntity_Entity_CreatedBy) GetID() string {
 	if t == nil {
@@ -11988,31 +11743,24 @@ func (t *UpdateEntity_UpdateEntity_Entity_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateEntity_UpdateEntity_Entity_CreatedBy) GetLastName() *string {
+func (t *UpdateEntity_UpdateEntity_Entity_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateEntity_UpdateEntity_Entity_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy) GetEmail() string {
+func (t *UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy) GetID() string {
 	if t == nil {
@@ -12020,11 +11768,11 @@ func (t *UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy) GetLastName() *string {
+func (t *UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateEntity_UpdateEntity_Entity_Notes_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateEntity_UpdateEntity_Entity_Notes struct {
@@ -12467,23 +12215,16 @@ func (t *GetEntityHistories_EntityHistories) GetEdges() []*GetEntityHistories_En
 }
 
 type CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy) GetID() string {
 	if t == nil {
@@ -12491,11 +12232,11 @@ func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy) 
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVEntityType_CreateBulkCSVEntityType_EntityTypes struct {
@@ -12577,23 +12318,16 @@ func (t *CreateBulkCSVEntityType_CreateBulkCSVEntityType) GetEntityTypes() []*Cr
 }
 
 type CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy) GetEmail() string {
+func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy) GetID() string {
 	if t == nil {
@@ -12601,11 +12335,11 @@ func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy) GetID(
 	}
 	return t.ID
 }
-func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy) GetLastName() *string {
+func (t *CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkEntityType_CreateBulkEntityType_EntityTypes_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkEntityType_CreateBulkEntityType_EntityTypes struct {
@@ -12687,23 +12421,16 @@ func (t *CreateBulkEntityType_CreateBulkEntityType) GetEntityTypes() []*CreateBu
 }
 
 type CreateEntityType_CreateEntityType_EntityType_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateEntityType_CreateEntityType_EntityType_CreatedBy) GetEmail() string {
+func (t *CreateEntityType_CreateEntityType_EntityType_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateEntityType_CreateEntityType_EntityType_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateEntityType_CreateEntityType_EntityType_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateEntityType_CreateEntityType_EntityType_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateEntityType_CreateEntityType_EntityType_CreatedBy) GetID() string {
 	if t == nil {
@@ -12711,11 +12438,11 @@ func (t *CreateEntityType_CreateEntityType_EntityType_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *CreateEntityType_CreateEntityType_EntityType_CreatedBy) GetLastName() *string {
+func (t *CreateEntityType_CreateEntityType_EntityType_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateEntityType_CreateEntityType_EntityType_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateEntityType_CreateEntityType_EntityType struct {
@@ -12808,23 +12535,16 @@ func (t *DeleteEntityType_DeleteEntityType) GetDeletedID() string {
 }
 
 type GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -12832,11 +12552,11 @@ func (t *GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllEntityTypes_EntityTypes_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllEntityTypes_EntityTypes_Edges_Node struct {
@@ -12989,23 +12709,16 @@ func (t *GetEntityTypeByID_EntityType) GetUpdatedByID() *string {
 }
 
 type GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -13013,11 +12726,11 @@ func (t *GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetEntityTypes_EntityTypes_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetEntityTypes_EntityTypes_Edges_Node struct {
@@ -13110,23 +12823,16 @@ func (t *GetEntityTypes_EntityTypes) GetEdges() []*GetEntityTypes_EntityTypes_Ed
 }
 
 type UpdateEntityType_UpdateEntityType_EntityType_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateEntityType_UpdateEntityType_EntityType_CreatedBy) GetEmail() string {
+func (t *UpdateEntityType_UpdateEntityType_EntityType_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateEntityType_UpdateEntityType_EntityType_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateEntityType_UpdateEntityType_EntityType_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateEntityType_UpdateEntityType_EntityType_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateEntityType_UpdateEntityType_EntityType_CreatedBy) GetID() string {
 	if t == nil {
@@ -13134,11 +12840,11 @@ func (t *UpdateEntityType_UpdateEntityType_EntityType_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *UpdateEntityType_UpdateEntityType_EntityType_CreatedBy) GetLastName() *string {
+func (t *UpdateEntityType_UpdateEntityType_EntityType_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateEntityType_UpdateEntityType_EntityType_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateEntityType_UpdateEntityType_EntityType struct {
@@ -15099,23 +14805,16 @@ func (t *DeleteFile_DeleteFile) GetDeletedID() string {
 }
 
 type GetAllFiles_Files_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllFiles_Files_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllFiles_Files_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllFiles_Files_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllFiles_Files_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -15123,11 +14822,11 @@ func (t *GetAllFiles_Files_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllFiles_Files_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllFiles_Files_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllFiles_Files_Edges_Node struct {
@@ -15434,23 +15133,16 @@ func (t *GetFileByID_File) GetURI() *string {
 }
 
 type GetFiles_Files_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetFiles_Files_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetFiles_Files_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetFiles_Files_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetFiles_Files_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetFiles_Files_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -15458,11 +15150,11 @@ func (t *GetFiles_Files_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetFiles_Files_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetFiles_Files_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetFiles_Files_Edges_Node struct {
@@ -16721,23 +16413,16 @@ func (t *GetAllGroups_Groups_Edges_Node_Members) GetUser() *GetAllGroups_Groups_
 }
 
 type GetAllGroups_Groups_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllGroups_Groups_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllGroups_Groups_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllGroups_Groups_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllGroups_Groups_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllGroups_Groups_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllGroups_Groups_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -16745,11 +16430,11 @@ func (t *GetAllGroups_Groups_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllGroups_Groups_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllGroups_Groups_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllGroups_Groups_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllGroups_Groups_Edges_Node struct {
@@ -16895,23 +16580,16 @@ func (t *GetGroupByID_Group_Owner) GetID() string {
 }
 
 type GetGroupByID_Group_Setting_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetGroupByID_Group_Setting_CreatedBy) GetEmail() string {
+func (t *GetGroupByID_Group_Setting_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetGroupByID_Group_Setting_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *GetGroupByID_Group_Setting_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetGroupByID_Group_Setting_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetGroupByID_Group_Setting_CreatedBy) GetID() string {
 	if t == nil {
@@ -16919,11 +16597,11 @@ func (t *GetGroupByID_Group_Setting_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetGroupByID_Group_Setting_CreatedBy) GetLastName() *string {
+func (t *GetGroupByID_Group_Setting_CreatedBy) GetName() string {
 	if t == nil {
 		t = &GetGroupByID_Group_Setting_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetGroupByID_Group_Setting struct {
@@ -17295,23 +16973,16 @@ func (t *GetGroups_Groups_Edges_Node_Members) GetUser() *GetGroups_Groups_Edges_
 }
 
 type GetGroups_Groups_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetGroups_Groups_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetGroups_Groups_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetGroups_Groups_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetGroups_Groups_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetGroups_Groups_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -17319,11 +16990,11 @@ func (t *GetGroups_Groups_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetGroups_Groups_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetGroups_Groups_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetGroups_Groups_Edges_Node struct {
@@ -17469,23 +17140,16 @@ func (t *UpdateGroup_UpdateGroup_Group_Owner) GetID() string {
 }
 
 type UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy) GetEmail() string {
+func (t *UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy) GetID() string {
 	if t == nil {
@@ -17493,11 +17157,11 @@ func (t *UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy) GetLastName() *string {
+func (t *UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateGroup_UpdateGroup_Group_Setting_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateGroup_UpdateGroup_Group_Setting struct {
@@ -18788,23 +18452,16 @@ func (t *GetAllGroupSettings_GroupSettings_Edges_Node_Group) GetName() string {
 }
 
 type GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -18812,11 +18469,11 @@ func (t *GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllGroupSettings_GroupSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllGroupSettings_GroupSettings_Edges_Node struct {
@@ -19047,23 +18704,16 @@ func (t *GetGroupSettings_GroupSettings_Edges_Node_Group) GetName() string {
 }
 
 type GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -19071,11 +18721,11 @@ func (t *GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetGroupSettings_GroupSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetGroupSettings_GroupSettings_Edges_Node struct {
@@ -19207,23 +18857,16 @@ func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_Group) GetName() str
 }
 
 type UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy) GetEmail() string {
+func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy) GetID() string {
 	if t == nil {
@@ -19231,11 +18874,11 @@ func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy) GetLastName() *string {
+func (t *UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateGroupSetting_UpdateGroupSetting_GroupSetting_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateGroupSetting_UpdateGroupSetting_GroupSetting struct {
@@ -20985,23 +20628,16 @@ func (t *GetAllIntegrations_Integrations_Edges_Node_Events) GetID() string {
 }
 
 type GetAllIntegrations_Integrations_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllIntegrations_Integrations_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllIntegrations_Integrations_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllIntegrations_Integrations_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllIntegrations_Integrations_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllIntegrations_Integrations_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -21009,11 +20645,11 @@ func (t *GetAllIntegrations_Integrations_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllIntegrations_Integrations_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllIntegrations_Integrations_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllIntegrations_Integrations_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllIntegrations_Integrations_Edges_Node struct {
@@ -21288,23 +20924,16 @@ func (t *GetIntegrations_Integrations_Edges_Node_Events) GetID() string {
 }
 
 type GetIntegrations_Integrations_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetIntegrations_Integrations_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetIntegrations_Integrations_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetIntegrations_Integrations_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetIntegrations_Integrations_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetIntegrations_Integrations_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -21312,11 +20941,11 @@ func (t *GetIntegrations_Integrations_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetIntegrations_Integrations_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetIntegrations_Integrations_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetIntegrations_Integrations_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetIntegrations_Integrations_Edges_Node struct {
@@ -21775,23 +21404,16 @@ func (t *GetIntegrationHistories_IntegrationHistories) GetEdges() []*GetIntegrat
 }
 
 type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy) GetID() string {
 	if t == nil {
@@ -21799,11 +21421,11 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies struct {
@@ -21927,23 +21549,16 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy) GetInternalPol
 }
 
 type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy) GetEmail() string {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy) GetID() string {
 	if t == nil {
@@ -21951,11 +21566,11 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_Crea
 	}
 	return t.ID
 }
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy) GetLastName() *string {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
@@ -22079,23 +21694,16 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy) GetInternalPolicies(
 }
 
 type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy) GetEmail() string {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy) GetID() string {
 	if t == nil {
@@ -22103,11 +21711,11 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy) Get
 	}
 	return t.ID
 }
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy) GetLastName() *string {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors struct {
@@ -22292,23 +21900,16 @@ func (t *DeleteInternalPolicy_DeleteInternalPolicy) GetDeletedID() string {
 }
 
 type GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -22316,11 +21917,11 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors struct {
@@ -22505,23 +22106,16 @@ func (t *GetAllInternalPolicies_InternalPolicies) GetEdges() []*GetAllInternalPo
 }
 
 type GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -22529,11 +22123,11 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetID() stri
 	}
 	return t.ID
 }
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetInternalPolicies_InternalPolicies_Edges_Node_Editors struct {
@@ -22870,23 +22464,16 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetVersion() *string {
 }
 
 type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy) GetEmail() string {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy) GetID() string {
 	if t == nil {
@@ -22894,11 +22481,11 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy) Get
 	}
 	return t.ID
 }
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy) GetLastName() *string {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors struct {
@@ -23840,23 +23427,16 @@ func (t *InvitesByOrgID_Invites) GetEdges() []*InvitesByOrgID_Invites_Edges {
 }
 
 type CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy) GetID() string {
 	if t == nil {
@@ -23864,11 +23444,11 @@ func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy) Get
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives struct {
@@ -23964,23 +23544,16 @@ func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative) GetNarratives() []*Creat
 }
 
 type CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy) GetEmail() string {
+func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy) GetID() string {
 	if t == nil {
@@ -23988,11 +23561,11 @@ func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy) GetLastName() *string {
+func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkNarrative_CreateBulkNarrative_Narratives struct {
@@ -24088,23 +23661,16 @@ func (t *CreateBulkNarrative_CreateBulkNarrative) GetNarratives() []*CreateBulkN
 }
 
 type CreateNarrative_CreateNarrative_Narrative_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateNarrative_CreateNarrative_Narrative_CreatedBy) GetEmail() string {
+func (t *CreateNarrative_CreateNarrative_Narrative_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateNarrative_CreateNarrative_Narrative_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateNarrative_CreateNarrative_Narrative_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateNarrative_CreateNarrative_Narrative_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateNarrative_CreateNarrative_Narrative_CreatedBy) GetID() string {
 	if t == nil {
@@ -24112,11 +23678,11 @@ func (t *CreateNarrative_CreateNarrative_Narrative_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateNarrative_CreateNarrative_Narrative_CreatedBy) GetLastName() *string {
+func (t *CreateNarrative_CreateNarrative_Narrative_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateNarrative_CreateNarrative_Narrative_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateNarrative_CreateNarrative_Narrative_Programs struct {
@@ -24323,23 +23889,16 @@ func (t *DeleteNarrative_DeleteNarrative) GetDeletedID() string {
 }
 
 type GetAllNarratives_Narratives_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllNarratives_Narratives_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllNarratives_Narratives_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllNarratives_Narratives_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllNarratives_Narratives_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllNarratives_Narratives_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllNarratives_Narratives_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -24347,11 +23906,11 @@ func (t *GetAllNarratives_Narratives_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllNarratives_Narratives_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllNarratives_Narratives_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllNarratives_Narratives_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllNarratives_Narratives_Edges_Node_Programs struct {
@@ -24732,23 +24291,16 @@ func (t *GetNarrativeByID_Narrative) GetViewers() []*GetNarrativeByID_Narrative_
 }
 
 type GetNarratives_Narratives_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetNarratives_Narratives_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetNarratives_Narratives_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetNarratives_Narratives_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetNarratives_Narratives_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetNarratives_Narratives_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetNarratives_Narratives_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -24756,11 +24308,11 @@ func (t *GetNarratives_Narratives_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetNarratives_Narratives_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetNarratives_Narratives_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetNarratives_Narratives_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetNarratives_Narratives_Edges_Node_Programs struct {
@@ -24967,23 +24519,16 @@ func (t *GetNarratives_Narratives) GetEdges() []*GetNarratives_Narratives_Edges 
 }
 
 type UpdateNarrative_UpdateNarrative_Narrative_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateNarrative_UpdateNarrative_Narrative_CreatedBy) GetEmail() string {
+func (t *UpdateNarrative_UpdateNarrative_Narrative_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateNarrative_UpdateNarrative_Narrative_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateNarrative_UpdateNarrative_Narrative_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateNarrative_UpdateNarrative_Narrative_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateNarrative_UpdateNarrative_Narrative_CreatedBy) GetID() string {
 	if t == nil {
@@ -24991,11 +24536,11 @@ func (t *UpdateNarrative_UpdateNarrative_Narrative_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateNarrative_UpdateNarrative_Narrative_CreatedBy) GetLastName() *string {
+func (t *UpdateNarrative_UpdateNarrative_Narrative_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateNarrative_UpdateNarrative_Narrative_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateNarrative_UpdateNarrative_Narrative_Programs struct {
@@ -27476,23 +27021,16 @@ func (t *GetOrganizationHistories_OrganizationHistories) GetEdges() []*GetOrgani
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -27500,11 +27038,11 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) G
 	}
 	return t.ID
 }
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization struct {
@@ -27791,23 +27329,16 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetUpdatedByID() *strin
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -27815,11 +27346,11 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetI
 	}
 	return t.ID
 }
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization struct {
@@ -27979,23 +27510,16 @@ func (t *GetOrganizationSettings_OrganizationSettings) GetEdges() []*GetOrganiza
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy) GetEmail() string {
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy) GetID() string {
 	if t == nil {
@@ -28003,11 +27527,11 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 	}
 	return t.ID
 }
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy) GetLastName() *string {
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization struct {
@@ -28935,23 +28459,16 @@ func (t *GetOrgMembershipHistories_OrgMembershipHistories) GetEdges() []*GetOrgM
 }
 
 type CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy) GetID() string {
 	if t == nil {
@@ -28959,11 +28476,11 @@ func (t *CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscripti
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription_OrgSubscriptions struct {
@@ -29094,23 +28611,16 @@ func (t *CreateBulkCSVOrgSubscription_CreateBulkCSVOrgSubscription) GetOrgSubscr
 }
 
 type CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy) GetEmail() string {
+func (t *CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy) GetID() string {
 	if t == nil {
@@ -29118,11 +28628,11 @@ func (t *CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_Cr
 	}
 	return t.ID
 }
-func (t *CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy) GetLastName() *string {
+func (t *CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkOrgSubscription_CreateBulkOrgSubscription_OrgSubscriptions struct {
@@ -29253,23 +28763,16 @@ func (t *CreateBulkOrgSubscription_CreateBulkOrgSubscription) GetOrgSubscription
 }
 
 type CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy) GetEmail() string {
+func (t *CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy) GetID() string {
 	if t == nil {
@@ -29277,11 +28780,11 @@ func (t *CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy) 
 	}
 	return t.ID
 }
-func (t *CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy) GetLastName() *string {
+func (t *CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateOrgSubscription_CreateOrgSubscription_OrgSubscription_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateOrgSubscription_CreateOrgSubscription_OrgSubscription struct {
@@ -29423,23 +28926,16 @@ func (t *DeleteOrgSubscription_DeleteOrgSubscription) GetDeletedID() string {
 }
 
 type GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -29447,11 +28943,11 @@ func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
@@ -29702,23 +29198,16 @@ func (t *GetOrgSubscriptionByID_OrgSubscription) GetUpdatedByID() *string {
 }
 
 type GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -29726,11 +29215,11 @@ func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetID() stri
 	}
 	return t.ID
 }
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
@@ -29872,23 +29361,16 @@ func (t *GetOrgSubscriptions_OrgSubscriptions) GetEdges() []*GetOrgSubscriptions
 }
 
 type UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy) GetEmail() string {
+func (t *UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy) GetID() string {
 	if t == nil {
@@ -29896,11 +29378,11 @@ func (t *UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy) 
 	}
 	return t.ID
 }
-func (t *UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy) GetLastName() *string {
+func (t *UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateOrgSubscription_UpdateOrgSubscription_OrgSubscription struct {
@@ -30673,23 +30155,16 @@ func (t *DeletePersonalAccessToken_DeletePersonalAccessToken) GetDeletedID() str
 }
 
 type GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -30697,11 +30172,11 @@ func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy) G
 	}
 	return t.ID
 }
-func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllPersonalAccessTokens_PersonalAccessTokens_Edges_Node_Organizations struct {
@@ -31039,23 +30514,16 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken) GetPersonalAccessT
 }
 
 type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy) GetID() string {
 	if t == nil {
@@ -31063,31 +30531,24 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy) Get
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy) GetEmail() string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy) GetID() string {
 	if t == nil {
@@ -31095,11 +30556,11 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy) Get
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy) GetLastName() *string {
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures struct {
@@ -31237,23 +30698,16 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure) GetProcedures() []*Creat
 }
 
 type CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy) GetEmail() string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy) GetID() string {
 	if t == nil {
@@ -31261,31 +30715,24 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy) GetLastName() *string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy) GetEmail() string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy) GetID() string {
 	if t == nil {
@@ -31293,11 +30740,11 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy) GetLastName() *string {
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkProcedure_CreateBulkProcedure_Procedures struct {
@@ -31435,23 +30882,16 @@ func (t *CreateBulkProcedure_CreateBulkProcedure) GetProcedures() []*CreateBulkP
 }
 
 type CreateProcedure_CreateProcedure_Procedure_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateProcedure_CreateProcedure_Procedure_CreatedBy) GetEmail() string {
+func (t *CreateProcedure_CreateProcedure_Procedure_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateProcedure_CreateProcedure_Procedure_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateProcedure_CreateProcedure_Procedure_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateProcedure_CreateProcedure_Procedure_CreatedBy) GetID() string {
 	if t == nil {
@@ -31459,31 +30899,24 @@ func (t *CreateProcedure_CreateProcedure_Procedure_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateProcedure_CreateProcedure_Procedure_CreatedBy) GetLastName() *string {
+func (t *CreateProcedure_CreateProcedure_Procedure_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateProcedure_CreateProcedure_Procedure_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateProcedure_CreateProcedure_Procedure_UpdatedBy) GetEmail() string {
+func (t *CreateProcedure_CreateProcedure_Procedure_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateProcedure_CreateProcedure_Procedure_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateProcedure_CreateProcedure_Procedure_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateProcedure_CreateProcedure_Procedure_UpdatedBy) GetID() string {
 	if t == nil {
@@ -31491,11 +30924,11 @@ func (t *CreateProcedure_CreateProcedure_Procedure_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateProcedure_CreateProcedure_Procedure_UpdatedBy) GetLastName() *string {
+func (t *CreateProcedure_CreateProcedure_Procedure_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateProcedure_CreateProcedure_Procedure_Editors struct {
@@ -31694,23 +31127,16 @@ func (t *DeleteProcedure_DeleteProcedure) GetDeletedID() string {
 }
 
 type GetAllProcedures_Procedures_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllProcedures_Procedures_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllProcedures_Procedures_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllProcedures_Procedures_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllProcedures_Procedures_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllProcedures_Procedures_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -31718,31 +31144,24 @@ func (t *GetAllProcedures_Procedures_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllProcedures_Procedures_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllProcedures_Procedures_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllProcedures_Procedures_Edges_Node_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllProcedures_Procedures_Edges_Node_CreatedBy) GetEmail() string {
+func (t *GetAllProcedures_Procedures_Edges_Node_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllProcedures_Procedures_Edges_Node_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllProcedures_Procedures_Edges_Node_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllProcedures_Procedures_Edges_Node_CreatedBy) GetID() string {
 	if t == nil {
@@ -31750,11 +31169,11 @@ func (t *GetAllProcedures_Procedures_Edges_Node_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllProcedures_Procedures_Edges_Node_CreatedBy) GetLastName() *string {
+func (t *GetAllProcedures_Procedures_Edges_Node_CreatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllProcedures_Procedures_Edges_Node_Editors struct {
@@ -31953,23 +31372,16 @@ func (t *GetAllProcedures_Procedures) GetEdges() []*GetAllProcedures_Procedures_
 }
 
 type GetProcedureByID_Procedure_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetProcedureByID_Procedure_UpdatedBy) GetEmail() string {
+func (t *GetProcedureByID_Procedure_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetProcedureByID_Procedure_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetProcedureByID_Procedure_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetProcedureByID_Procedure_UpdatedBy) GetID() string {
 	if t == nil {
@@ -31977,31 +31389,24 @@ func (t *GetProcedureByID_Procedure_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetProcedureByID_Procedure_UpdatedBy) GetLastName() *string {
+func (t *GetProcedureByID_Procedure_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetProcedureByID_Procedure_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetProcedureByID_Procedure_CreatedBy) GetEmail() string {
+func (t *GetProcedureByID_Procedure_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *GetProcedureByID_Procedure_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetProcedureByID_Procedure_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetProcedureByID_Procedure_CreatedBy) GetID() string {
 	if t == nil {
@@ -32009,11 +31414,11 @@ func (t *GetProcedureByID_Procedure_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetProcedureByID_Procedure_CreatedBy) GetLastName() *string {
+func (t *GetProcedureByID_Procedure_CreatedBy) GetName() string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetProcedureByID_Procedure_Editors struct {
@@ -32190,23 +31595,16 @@ func (t *GetProcedureByID_Procedure) GetVersion() *string {
 }
 
 type GetProcedures_Procedures_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetProcedures_Procedures_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetProcedures_Procedures_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetProcedures_Procedures_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetProcedures_Procedures_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetProcedures_Procedures_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -32214,31 +31612,24 @@ func (t *GetProcedures_Procedures_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetProcedures_Procedures_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetProcedures_Procedures_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetProcedures_Procedures_Edges_Node_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetProcedures_Procedures_Edges_Node_CreatedBy) GetEmail() string {
+func (t *GetProcedures_Procedures_Edges_Node_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *GetProcedures_Procedures_Edges_Node_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetProcedures_Procedures_Edges_Node_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetProcedures_Procedures_Edges_Node_CreatedBy) GetID() string {
 	if t == nil {
@@ -32246,11 +31637,11 @@ func (t *GetProcedures_Procedures_Edges_Node_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetProcedures_Procedures_Edges_Node_CreatedBy) GetLastName() *string {
+func (t *GetProcedures_Procedures_Edges_Node_CreatedBy) GetName() string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetProcedures_Procedures_Edges_Node_Editors struct {
@@ -32449,23 +31840,16 @@ func (t *GetProcedures_Procedures) GetEdges() []*GetProcedures_Procedures_Edges 
 }
 
 type UpdateProcedure_UpdateProcedure_Procedure_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateProcedure_UpdateProcedure_Procedure_CreatedBy) GetEmail() string {
+func (t *UpdateProcedure_UpdateProcedure_Procedure_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateProcedure_UpdateProcedure_Procedure_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateProcedure_UpdateProcedure_Procedure_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateProcedure_UpdateProcedure_Procedure_CreatedBy) GetID() string {
 	if t == nil {
@@ -32473,11 +31857,11 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateProcedure_UpdateProcedure_Procedure_CreatedBy) GetLastName() *string {
+func (t *UpdateProcedure_UpdateProcedure_Procedure_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateProcedure_UpdateProcedure_Procedure_Editors struct {
@@ -32962,23 +32346,16 @@ func (t *GetProcedureHistories_ProcedureHistories) GetEdges() []*GetProcedureHis
 }
 
 type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy) GetID() string {
 	if t == nil {
@@ -32986,11 +32363,11 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy) GetID() s
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
@@ -33121,23 +32498,16 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram) GetPrograms() []*CreateBulkC
 }
 
 type CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy) GetEmail() string {
+func (t *CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy) GetID() string {
 	if t == nil {
@@ -33145,11 +32515,11 @@ func (t *CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy) GetLastName() *string {
+func (t *CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkProgram_CreateBulkProgram_Programs_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkProgram_CreateBulkProgram_Programs struct {
@@ -33531,23 +32901,16 @@ func (t *CreateFullProgram_CreateFullProgram) GetProgram() *CreateFullProgram_Cr
 }
 
 type CreateProgram_CreateProgram_Program_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateProgram_CreateProgram_Program_CreatedBy) GetEmail() string {
+func (t *CreateProgram_CreateProgram_Program_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateProgram_CreateProgram_Program_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateProgram_CreateProgram_Program_CreatedBy) GetID() string {
 	if t == nil {
@@ -33555,31 +32918,24 @@ func (t *CreateProgram_CreateProgram_Program_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateProgram_CreateProgram_Program_CreatedBy) GetLastName() *string {
+func (t *CreateProgram_CreateProgram_Program_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateProgram_CreateProgram_Program_Procedures_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateProgram_CreateProgram_Program_Procedures_UpdatedBy) GetEmail() string {
+func (t *CreateProgram_CreateProgram_Program_Procedures_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_Procedures_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateProgram_CreateProgram_Program_Procedures_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_Procedures_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateProgram_CreateProgram_Program_Procedures_UpdatedBy) GetID() string {
 	if t == nil {
@@ -33587,11 +32943,11 @@ func (t *CreateProgram_CreateProgram_Program_Procedures_UpdatedBy) GetID() strin
 	}
 	return t.ID
 }
-func (t *CreateProgram_CreateProgram_Program_Procedures_UpdatedBy) GetLastName() *string {
+func (t *CreateProgram_CreateProgram_Program_Procedures_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_Procedures_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateProgram_CreateProgram_Program_Procedures struct {
@@ -33711,23 +33067,16 @@ func (t *CreateProgram_CreateProgram_Program_Procedures) GetVersion() *string {
 }
 
 type CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy) GetEmail() string {
+func (t *CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy) GetID() string {
 	if t == nil {
@@ -33735,11 +33084,11 @@ func (t *CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy) GetID()
 	}
 	return t.ID
 }
-func (t *CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy) GetLastName() *string {
+func (t *CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program_InternalPolicies_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateProgram_CreateProgram_Program_InternalPolicies struct {
@@ -34158,23 +33507,16 @@ func (t *DeleteProgram_DeleteProgram) GetDeletedID() string {
 }
 
 type GetAllPrograms_Programs_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllPrograms_Programs_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllPrograms_Programs_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllPrograms_Programs_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllPrograms_Programs_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllPrograms_Programs_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -34182,11 +33524,11 @@ func (t *GetAllPrograms_Programs_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllPrograms_Programs_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllPrograms_Programs_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllPrograms_Programs_Edges_Node_Procedures struct {
@@ -34628,23 +33970,16 @@ func (t *GetAllPrograms_Programs) GetEdges() []*GetAllPrograms_Programs_Edges {
 }
 
 type GetProgramByID_Program_Procedures_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetProgramByID_Program_Procedures_CreatedBy) GetEmail() string {
+func (t *GetProgramByID_Program_Procedures_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetProgramByID_Program_Procedures_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *GetProgramByID_Program_Procedures_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetProgramByID_Program_Procedures_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetProgramByID_Program_Procedures_CreatedBy) GetID() string {
 	if t == nil {
@@ -34652,11 +33987,11 @@ func (t *GetProgramByID_Program_Procedures_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetProgramByID_Program_Procedures_CreatedBy) GetLastName() *string {
+func (t *GetProgramByID_Program_Procedures_CreatedBy) GetName() string {
 	if t == nil {
 		t = &GetProgramByID_Program_Procedures_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetProgramByID_Program_Procedures struct {
@@ -34776,23 +34111,16 @@ func (t *GetProgramByID_Program_Procedures) GetVersion() *string {
 }
 
 type GetProgramByID_Program_InternalPolicies_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetProgramByID_Program_InternalPolicies_CreatedBy) GetEmail() string {
+func (t *GetProgramByID_Program_InternalPolicies_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetProgramByID_Program_InternalPolicies_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *GetProgramByID_Program_InternalPolicies_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetProgramByID_Program_InternalPolicies_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetProgramByID_Program_InternalPolicies_CreatedBy) GetID() string {
 	if t == nil {
@@ -34800,11 +34128,11 @@ func (t *GetProgramByID_Program_InternalPolicies_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetProgramByID_Program_InternalPolicies_CreatedBy) GetLastName() *string {
+func (t *GetProgramByID_Program_InternalPolicies_CreatedBy) GetName() string {
 	if t == nil {
 		t = &GetProgramByID_Program_InternalPolicies_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetProgramByID_Program_InternalPolicies struct {
@@ -35115,23 +34443,16 @@ func (t *GetProgramByID_Program) GetViewers() []*GetProgramByID_Program_Viewers 
 }
 
 type GetPrograms_Programs_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetPrograms_Programs_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetPrograms_Programs_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetPrograms_Programs_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetPrograms_Programs_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetPrograms_Programs_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -35139,11 +34460,11 @@ func (t *GetPrograms_Programs_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetPrograms_Programs_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetPrograms_Programs_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetPrograms_Programs_Edges_Node_Procedures struct {
@@ -35585,23 +34906,16 @@ func (t *GetPrograms_Programs) GetEdges() []*GetPrograms_Programs_Edges {
 }
 
 type UpdateProgram_UpdateProgram_Program_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateProgram_UpdateProgram_Program_CreatedBy) GetEmail() string {
+func (t *UpdateProgram_UpdateProgram_Program_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateProgram_UpdateProgram_Program_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateProgram_UpdateProgram_Program_CreatedBy) GetID() string {
 	if t == nil {
@@ -35609,31 +34923,24 @@ func (t *UpdateProgram_UpdateProgram_Program_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateProgram_UpdateProgram_Program_CreatedBy) GetLastName() *string {
+func (t *UpdateProgram_UpdateProgram_Program_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy) GetEmail() string {
+func (t *UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy) GetID() string {
 	if t == nil {
@@ -35641,11 +34948,11 @@ func (t *UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy) GetID() strin
 	}
 	return t.ID
 }
-func (t *UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy) GetLastName() *string {
+func (t *UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_Procedures_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateProgram_UpdateProgram_Program_Procedures struct {
@@ -35765,23 +35072,16 @@ func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetVersion() *string {
 }
 
 type UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy) GetEmail() string {
+func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy) GetID() string {
 	if t == nil {
@@ -35789,11 +35089,11 @@ func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy) GetID()
 	}
 	return t.ID
 }
-func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy) GetLastName() *string {
+func (t *UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program_InternalPolicies_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateProgram_UpdateProgram_Program_InternalPolicies struct {
@@ -37018,23 +36318,16 @@ func (t *GetProgramHistories_ProgramHistories) GetEdges() []*GetProgramHistories
 }
 
 type CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy) GetID() string {
 	if t == nil {
@@ -37042,11 +36335,11 @@ func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMe
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships struct {
@@ -37128,23 +36421,16 @@ func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership) GetProgr
 }
 
 type CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy) GetEmail() string {
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy) GetID() string {
 	if t == nil {
@@ -37152,11 +36438,11 @@ func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMembersh
 	}
 	return t.ID
 }
-func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy) GetLastName() *string {
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships struct {
@@ -37238,23 +36524,16 @@ func (t *CreateBulkProgramMembership_CreateBulkProgramMembership) GetProgramMemb
 }
 
 type CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy) GetEmail() string {
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy) GetID() string {
 	if t == nil {
@@ -37262,11 +36541,11 @@ func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership_Creat
 	}
 	return t.ID
 }
-func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy) GetLastName() *string {
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateProgramMembership_CreateProgramMembership_ProgramMembership struct {
@@ -37359,23 +36638,16 @@ func (t *DeleteProgramMembership_DeleteProgramMembership) GetDeletedID() string 
 }
 
 type GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -37383,11 +36655,11 @@ func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetID
 	}
 	return t.ID
 }
-func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllProgramMemberships_ProgramMemberships_Edges_Node struct {
@@ -37540,23 +36812,16 @@ func (t *GetProgramMembershipByID_ProgramMembership) GetUserID() string {
 }
 
 type GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -37564,11 +36829,11 @@ func (t *GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetID() 
 	}
 	return t.ID
 }
-func (t *GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetProgramMemberships_ProgramMemberships_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetProgramMemberships_ProgramMemberships_Edges_Node struct {
@@ -37661,23 +36926,16 @@ func (t *GetProgramMemberships_ProgramMemberships) GetEdges() []*GetProgramMembe
 }
 
 type UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy) GetEmail() string {
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy) GetID() string {
 	if t == nil {
@@ -37685,11 +36943,11 @@ func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_Creat
 	}
 	return t.ID
 }
-func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy) GetLastName() *string {
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateProgramMembership_UpdateProgramMembership_ProgramMembership struct {
@@ -37977,23 +37235,16 @@ func (t *GetProgramMembershipHistories_ProgramMembershipHistories) GetEdges() []
 }
 
 type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy) GetID() string {
 	if t == nil {
@@ -38001,11 +37252,11 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
@@ -38143,23 +37394,16 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk) GetRisks() []*CreateBulkCSVRisk_Cr
 }
 
 type CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy) GetEmail() string {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy) GetID() string {
 	if t == nil {
@@ -38167,11 +37411,11 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy) GetLastName() *string {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkRisk_CreateBulkRisk_Risks struct {
@@ -38309,23 +37553,16 @@ func (t *CreateBulkRisk_CreateBulkRisk) GetRisks() []*CreateBulkRisk_CreateBulkR
 }
 
 type CreateRisk_CreateRisk_Risk_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateRisk_CreateRisk_Risk_CreatedBy) GetEmail() string {
+func (t *CreateRisk_CreateRisk_Risk_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateRisk_CreateRisk_Risk_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateRisk_CreateRisk_Risk_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateRisk_CreateRisk_Risk_CreatedBy) GetID() string {
 	if t == nil {
@@ -38333,11 +37570,11 @@ func (t *CreateRisk_CreateRisk_Risk_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateRisk_CreateRisk_Risk_CreatedBy) GetLastName() *string {
+func (t *CreateRisk_CreateRisk_Risk_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateRisk_CreateRisk_Risk_Programs struct {
@@ -38586,23 +37823,16 @@ func (t *DeleteRisk_DeleteRisk) GetDeletedID() string {
 }
 
 type GetAllRisks_Risks_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllRisks_Risks_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllRisks_Risks_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllRisks_Risks_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllRisks_Risks_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllRisks_Risks_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -38610,11 +37840,11 @@ func (t *GetAllRisks_Risks_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllRisks_Risks_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllRisks_Risks_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllRisks_Risks_Edges_Node_Programs struct {
@@ -39079,23 +38309,16 @@ func (t *GetRiskByID_Risk) GetViewers() []*GetRiskByID_Risk_Viewers {
 }
 
 type GetRisks_Risks_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetRisks_Risks_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetRisks_Risks_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetRisks_Risks_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetRisks_Risks_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetRisks_Risks_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -39103,11 +38326,11 @@ func (t *GetRisks_Risks_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetRisks_Risks_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetRisks_Risks_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetRisks_Risks_Edges_Node_Programs struct {
@@ -39356,23 +38579,16 @@ func (t *GetRisks_Risks) GetEdges() []*GetRisks_Risks_Edges {
 }
 
 type UpdateRisk_UpdateRisk_Risk_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateRisk_UpdateRisk_Risk_CreatedBy) GetEmail() string {
+func (t *UpdateRisk_UpdateRisk_Risk_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateRisk_UpdateRisk_Risk_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateRisk_UpdateRisk_Risk_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateRisk_UpdateRisk_Risk_CreatedBy) GetID() string {
 	if t == nil {
@@ -39380,11 +38596,11 @@ func (t *UpdateRisk_UpdateRisk_Risk_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateRisk_UpdateRisk_Risk_CreatedBy) GetLastName() *string {
+func (t *UpdateRisk_UpdateRisk_Risk_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateRisk_UpdateRisk_Risk_Programs struct {
@@ -41273,23 +40489,16 @@ func (t *GlobalSearch_Search) GetNodes() []*GlobalSearch_Search_Nodes {
 }
 
 type CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy) GetID() string {
 	if t == nil {
@@ -41297,11 +40506,11 @@ func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy) GetID(
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVStandard_CreateBulkCSVStandard_Standards struct {
@@ -41439,23 +40648,16 @@ func (t *CreateBulkCSVStandard_CreateBulkCSVStandard) GetStandards() []*CreateBu
 }
 
 type CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy) GetEmail() string {
+func (t *CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy) GetID() string {
 	if t == nil {
@@ -41463,11 +40665,11 @@ func (t *CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy) GetID() stri
 	}
 	return t.ID
 }
-func (t *CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy) GetLastName() *string {
+func (t *CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkStandard_CreateBulkStandard_Standards_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkStandard_CreateBulkStandard_Standards struct {
@@ -41605,23 +40807,16 @@ func (t *CreateBulkStandard_CreateBulkStandard) GetStandards() []*CreateBulkStan
 }
 
 type CreateStandard_CreateStandard_Standard_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateStandard_CreateStandard_Standard_CreatedBy) GetEmail() string {
+func (t *CreateStandard_CreateStandard_Standard_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateStandard_CreateStandard_Standard_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateStandard_CreateStandard_Standard_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateStandard_CreateStandard_Standard_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateStandard_CreateStandard_Standard_CreatedBy) GetID() string {
 	if t == nil {
@@ -41629,11 +40824,11 @@ func (t *CreateStandard_CreateStandard_Standard_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateStandard_CreateStandard_Standard_CreatedBy) GetLastName() *string {
+func (t *CreateStandard_CreateStandard_Standard_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateStandard_CreateStandard_Standard_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateStandard_CreateStandard_Standard struct {
@@ -41782,23 +40977,16 @@ func (t *DeleteStandard_DeleteStandard) GetDeletedID() string {
 }
 
 type GetAllStandards_Standards_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllStandards_Standards_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllStandards_Standards_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllStandards_Standards_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllStandards_Standards_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllStandards_Standards_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllStandards_Standards_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -41806,11 +40994,11 @@ func (t *GetAllStandards_Standards_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllStandards_Standards_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllStandards_Standards_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllStandards_Standards_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllStandards_Standards_Edges_Node struct {
@@ -42075,23 +41263,16 @@ func (t *GetStandardByID_Standard) GetVersion() *string {
 }
 
 type GetStandards_Standards_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetStandards_Standards_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetStandards_Standards_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetStandards_Standards_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetStandards_Standards_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetStandards_Standards_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetStandards_Standards_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -42099,11 +41280,11 @@ func (t *GetStandards_Standards_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetStandards_Standards_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetStandards_Standards_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetStandards_Standards_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetStandards_Standards_Edges_Node struct {
@@ -42252,23 +41433,16 @@ func (t *GetStandards_Standards) GetEdges() []*GetStandards_Standards_Edges {
 }
 
 type UpdateStandard_UpdateStandard_Standard_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateStandard_UpdateStandard_Standard_CreatedBy) GetEmail() string {
+func (t *UpdateStandard_UpdateStandard_Standard_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateStandard_UpdateStandard_Standard_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateStandard_UpdateStandard_Standard_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateStandard_UpdateStandard_Standard_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateStandard_UpdateStandard_Standard_CreatedBy) GetID() string {
 	if t == nil {
@@ -42276,11 +41450,11 @@ func (t *UpdateStandard_UpdateStandard_Standard_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateStandard_UpdateStandard_Standard_CreatedBy) GetLastName() *string {
+func (t *UpdateStandard_UpdateStandard_Standard_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateStandard_UpdateStandard_Standard_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateStandard_UpdateStandard_Standard struct {
@@ -42736,23 +41910,16 @@ func (t *GetStandardHistories_StandardHistories) GetEdges() []*GetStandardHistor
 }
 
 type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy) GetID() string {
 	if t == nil {
@@ -42760,11 +41927,11 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy) 
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
@@ -42944,23 +42111,16 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol) GetSubcontrols() []*Cr
 }
 
 type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy) GetEmail() string {
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy) GetID() string {
 	if t == nil {
@@ -42968,11 +42128,11 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy) GetID(
 	}
 	return t.ID
 }
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy) GetLastName() *string {
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
@@ -43152,23 +42312,16 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol) GetSubcontrols() []*CreateBu
 }
 
 type CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy) GetEmail() string {
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy) GetID() string {
 	if t == nil {
@@ -43176,11 +42329,11 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy) GetLastName() *string {
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateSubcontrol_CreateSubcontrol_Subcontrol_Controls struct {
@@ -43396,23 +42549,16 @@ func (t *DeleteSubcontrol_DeleteSubcontrol) GetDeletedID() string {
 }
 
 type GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -43420,11 +42566,11 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllSubcontrols_Subcontrols_Edges_Node_Controls struct {
@@ -43823,23 +42969,16 @@ func (t *GetSubcontrolByID_Subcontrol) GetVersion() *string {
 }
 
 type GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -43847,11 +42986,11 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetSubcontrols_Subcontrols_Edges_Node_Controls struct {
@@ -44067,23 +43206,16 @@ func (t *GetSubcontrols_Subcontrols) GetEdges() []*GetSubcontrols_Subcontrols_Ed
 }
 
 type UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy) GetEmail() string {
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy) GetID() string {
 	if t == nil {
@@ -44091,11 +43223,11 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy) GetLastName() *string {
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Controls struct {
@@ -44788,23 +43920,16 @@ func (t *CreateBulkSubscriber_CreateBulkSubscriber) GetSubscribers() []*CreateBu
 }
 
 type CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy) GetEmail() string {
+func (t *CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy) GetID() string {
 	if t == nil {
@@ -44812,11 +43937,11 @@ func (t *CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy) GetLastName() *string {
+func (t *CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateSubscriber_CreateSubscriber_Subscriber_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateSubscriber_CreateSubscriber_Subscriber struct {
@@ -45070,23 +44195,16 @@ func (t *GetSubscribers_Subscribers) GetEdges() []*GetSubscribers_Subscribers_Ed
 }
 
 type UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy) GetEmail() string {
+func (t *UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy) GetID() string {
 	if t == nil {
@@ -45094,11 +44212,11 @@ func (t *UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy) GetID() string 
 	}
 	return t.ID
 }
-func (t *UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy) GetLastName() *string {
+func (t *UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateSubscriber_UpdateSubscriber_Subscriber_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateSubscriber_UpdateSubscriber_Subscriber struct {
@@ -45244,23 +44362,16 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner) GetLastName() *stri
 }
 
 type CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy) GetEmail() string {
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy) GetID() string {
 	if t == nil {
@@ -45268,11 +44379,11 @@ func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy) GetLastName() *string {
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkCSVTask_CreateBulkCSVTask_Tasks struct {
@@ -45446,23 +44557,16 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks_Assigner) GetLastName() *string {
 }
 
 type CreateBulkTask_CreateBulkTask_Tasks_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateBulkTask_CreateBulkTask_Tasks_CreatedBy) GetEmail() string {
+func (t *CreateBulkTask_CreateBulkTask_Tasks_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateBulkTask_CreateBulkTask_Tasks_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateBulkTask_CreateBulkTask_Tasks_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateBulkTask_CreateBulkTask_Tasks_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateBulkTask_CreateBulkTask_Tasks_CreatedBy) GetID() string {
 	if t == nil {
@@ -45470,11 +44574,11 @@ func (t *CreateBulkTask_CreateBulkTask_Tasks_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateBulkTask_CreateBulkTask_Tasks_CreatedBy) GetLastName() *string {
+func (t *CreateBulkTask_CreateBulkTask_Tasks_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateBulkTask_CreateBulkTask_Tasks_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateBulkTask_CreateBulkTask_Tasks struct {
@@ -45648,23 +44752,16 @@ func (t *CreateTask_CreateTask_Task_Assigner) GetLastName() *string {
 }
 
 type CreateTask_CreateTask_Task_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateTask_CreateTask_Task_CreatedBy) GetEmail() string {
+func (t *CreateTask_CreateTask_Task_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateTask_CreateTask_Task_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateTask_CreateTask_Task_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateTask_CreateTask_Task_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateTask_CreateTask_Task_CreatedBy) GetID() string {
 	if t == nil {
@@ -45672,11 +44769,11 @@ func (t *CreateTask_CreateTask_Task_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateTask_CreateTask_Task_CreatedBy) GetLastName() *string {
+func (t *CreateTask_CreateTask_Task_CreatedBy) GetName() string {
 	if t == nil {
 		t = &CreateTask_CreateTask_Task_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateTask_CreateTask_Task struct {
@@ -45879,23 +44976,16 @@ func (t *GetAllTasks_Tasks_Edges_Node_Organization) GetName() string {
 }
 
 type GetAllTasks_Tasks_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllTasks_Tasks_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllTasks_Tasks_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllTasks_Tasks_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllTasks_Tasks_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllTasks_Tasks_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -45903,11 +44993,11 @@ func (t *GetAllTasks_Tasks_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllTasks_Tasks_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllTasks_Tasks_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllTasks_Tasks_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllTasks_Tasks_Edges_Node struct {
@@ -46276,23 +45366,16 @@ func (t *GetTasks_Tasks_Edges_Node_Assigner) GetLastName() *string {
 }
 
 type GetTasks_Tasks_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetTasks_Tasks_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetTasks_Tasks_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetTasks_Tasks_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetTasks_Tasks_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetTasks_Tasks_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetTasks_Tasks_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -46300,11 +45383,11 @@ func (t *GetTasks_Tasks_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetTasks_Tasks_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetTasks_Tasks_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetTasks_Tasks_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetTasks_Tasks_Edges_Node struct {
@@ -46489,23 +45572,16 @@ func (t *UpdateTask_UpdateTask_Task_Assigner) GetLastName() *string {
 }
 
 type UpdateTask_UpdateTask_Task_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateTask_UpdateTask_Task_CreatedBy) GetEmail() string {
+func (t *UpdateTask_UpdateTask_Task_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateTask_UpdateTask_Task_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateTask_UpdateTask_Task_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateTask_UpdateTask_Task_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateTask_UpdateTask_Task_CreatedBy) GetID() string {
 	if t == nil {
@@ -46513,11 +45589,11 @@ func (t *UpdateTask_UpdateTask_Task_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateTask_UpdateTask_Task_CreatedBy) GetLastName() *string {
+func (t *UpdateTask_UpdateTask_Task_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateTask_UpdateTask_Task_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateTask_UpdateTask_Task struct {
@@ -47107,23 +46183,16 @@ func (t *CreateTemplate_CreateTemplate) GetTemplate() *CreateTemplate_CreateTemp
 }
 
 type GetAllTemplates_Templates_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllTemplates_Templates_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllTemplates_Templates_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllTemplates_Templates_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllTemplates_Templates_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllTemplates_Templates_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllTemplates_Templates_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -47131,11 +46200,11 @@ func (t *GetAllTemplates_Templates_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllTemplates_Templates_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllTemplates_Templates_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllTemplates_Templates_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllTemplates_Templates_Edges_Node_Owner struct {
@@ -47338,23 +46407,16 @@ func (t *GetTemplateByID_Template) GetUpdatedByID() *string {
 }
 
 type UpdateTemplate_UpdateTemplate_Template_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateTemplate_UpdateTemplate_Template_CreatedBy) GetEmail() string {
+func (t *UpdateTemplate_UpdateTemplate_Template_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateTemplate_UpdateTemplate_Template_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateTemplate_UpdateTemplate_Template_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateTemplate_UpdateTemplate_Template_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateTemplate_UpdateTemplate_Template_CreatedBy) GetID() string {
 	if t == nil {
@@ -47362,11 +46424,11 @@ func (t *UpdateTemplate_UpdateTemplate_Template_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateTemplate_UpdateTemplate_Template_CreatedBy) GetLastName() *string {
+func (t *UpdateTemplate_UpdateTemplate_Template_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateTemplate_UpdateTemplate_Template_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateTemplate_UpdateTemplate_Template_Owner struct {
@@ -47994,23 +47056,16 @@ func (t *CreateUser_CreateUser_User_Setting_DefaultOrg) GetPersonalOrg() *bool {
 }
 
 type CreateUser_CreateUser_User_Setting_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *CreateUser_CreateUser_User_Setting_UpdatedBy) GetEmail() string {
+func (t *CreateUser_CreateUser_User_Setting_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &CreateUser_CreateUser_User_Setting_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *CreateUser_CreateUser_User_Setting_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &CreateUser_CreateUser_User_Setting_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *CreateUser_CreateUser_User_Setting_UpdatedBy) GetID() string {
 	if t == nil {
@@ -48018,11 +47073,11 @@ func (t *CreateUser_CreateUser_User_Setting_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateUser_CreateUser_User_Setting_UpdatedBy) GetLastName() *string {
+func (t *CreateUser_CreateUser_User_Setting_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &CreateUser_CreateUser_User_Setting_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type CreateUser_CreateUser_User_Setting struct {
@@ -48514,23 +47569,16 @@ func (t *GetUserByID_User_Setting_DefaultOrg) GetPersonalOrg() *bool {
 }
 
 type GetUserByID_User_Setting_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetUserByID_User_Setting_CreatedBy) GetEmail() string {
+func (t *GetUserByID_User_Setting_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetUserByID_User_Setting_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *GetUserByID_User_Setting_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetUserByID_User_Setting_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetUserByID_User_Setting_CreatedBy) GetID() string {
 	if t == nil {
@@ -48538,11 +47586,11 @@ func (t *GetUserByID_User_Setting_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetUserByID_User_Setting_CreatedBy) GetLastName() *string {
+func (t *GetUserByID_User_Setting_CreatedBy) GetName() string {
 	if t == nil {
 		t = &GetUserByID_User_Setting_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetUserByID_User_Setting struct {
@@ -48839,23 +47887,16 @@ func (t *GetUserByIDWithOrgs_User_Setting_DefaultOrg) GetPersonalOrg() *bool {
 }
 
 type GetUserByIDWithOrgs_User_Setting_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetUserByIDWithOrgs_User_Setting_CreatedBy) GetEmail() string {
+func (t *GetUserByIDWithOrgs_User_Setting_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetUserByIDWithOrgs_User_Setting_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *GetUserByIDWithOrgs_User_Setting_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetUserByIDWithOrgs_User_Setting_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetUserByIDWithOrgs_User_Setting_CreatedBy) GetID() string {
 	if t == nil {
@@ -48863,11 +47904,11 @@ func (t *GetUserByIDWithOrgs_User_Setting_CreatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetUserByIDWithOrgs_User_Setting_CreatedBy) GetLastName() *string {
+func (t *GetUserByIDWithOrgs_User_Setting_CreatedBy) GetName() string {
 	if t == nil {
 		t = &GetUserByIDWithOrgs_User_Setting_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetUserByIDWithOrgs_User_Setting struct {
@@ -49730,23 +48771,16 @@ func (t *GetAllUserSettings_UserSettings_Edges_Node_DefaultOrg) GetPersonalOrg()
 }
 
 type GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -49754,11 +48788,11 @@ func (t *GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetAllUserSettings_UserSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetAllUserSettings_UserSettings_Edges_Node struct {
@@ -50045,23 +49079,16 @@ func (t *GetUserSettings_UserSettings_Edges_Node_DefaultOrg) GetPersonalOrg() *b
 }
 
 type GetUserSettings_UserSettings_Edges_Node_UpdatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetUserSettings_UserSettings_Edges_Node_UpdatedBy) GetEmail() string {
+func (t *GetUserSettings_UserSettings_Edges_Node_UpdatedBy) GetActorType() string {
 	if t == nil {
 		t = &GetUserSettings_UserSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.Email
-}
-func (t *GetUserSettings_UserSettings_Edges_Node_UpdatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &GetUserSettings_UserSettings_Edges_Node_UpdatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *GetUserSettings_UserSettings_Edges_Node_UpdatedBy) GetID() string {
 	if t == nil {
@@ -50069,11 +49096,11 @@ func (t *GetUserSettings_UserSettings_Edges_Node_UpdatedBy) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetUserSettings_UserSettings_Edges_Node_UpdatedBy) GetLastName() *string {
+func (t *GetUserSettings_UserSettings_Edges_Node_UpdatedBy) GetName() string {
 	if t == nil {
 		t = &GetUserSettings_UserSettings_Edges_Node_UpdatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type GetUserSettings_UserSettings_Edges_Node struct {
@@ -50233,23 +49260,16 @@ func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg) GetPersonal
 }
 
 type UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy struct {
-	Email     string  "json:\"email\" graphql:\"email\""
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+	ActorType string "json:\"actorType\" graphql:\"actorType\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
 }
 
-func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy) GetEmail() string {
+func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy) GetActorType() string {
 	if t == nil {
 		t = &UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy{}
 	}
-	return t.Email
-}
-func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy) GetFirstName() *string {
-	if t == nil {
-		t = &UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy{}
-	}
-	return t.FirstName
+	return t.ActorType
 }
 func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy) GetID() string {
 	if t == nil {
@@ -50257,11 +49277,11 @@ func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy) GetID() stri
 	}
 	return t.ID
 }
-func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy) GetLastName() *string {
+func (t *UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy) GetName() string {
 	if t == nil {
 		t = &UpdateUserSetting_UpdateUserSetting_UserSetting_CreatedBy{}
 	}
-	return t.LastName
+	return t.Name
 }
 
 type UpdateUserSetting_UpdateUserSetting_UserSetting struct {
@@ -54146,9 +53166,8 @@ const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($inpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -54190,9 +53209,8 @@ const CreateBulkActionPlanDocument = `mutation CreateBulkActionPlan ($input: [Cr
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -54234,9 +53252,8 @@ const CreateActionPlanDocument = `mutation CreateActionPlan ($input: CreateActio
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -54314,9 +53331,8 @@ const GetAllActionPlansDocument = `query GetAllActionPlans {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -54394,9 +53410,8 @@ const GetActionPlansDocument = `query GetActionPlans ($where: ActionPlanWhereInp
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -54428,9 +53443,8 @@ const UpdateActionPlanDocument = `mutation UpdateActionPlan ($updateActionPlanId
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -55150,9 +54164,8 @@ const CreateBulkContactDocument = `mutation CreateBulkContact ($input: [CreateCo
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			email
 			fullName
@@ -55195,9 +54208,8 @@ const CreateBulkCSVContactDocument = `mutation CreateBulkCSVContact ($input: Upl
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			email
 			fullName
@@ -55240,9 +54252,8 @@ const CreateContactDocument = `mutation CreateContact ($input: CreateContactInpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			email
 			fullName
@@ -55320,9 +54331,8 @@ const GetAllContactsDocument = `query GetAllContacts {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -55402,9 +54412,8 @@ const GetContactsDocument = `query GetContacts ($where: ContactWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -55438,9 +54447,8 @@ const UpdateContactDocument = `mutation UpdateContact ($updateContactId: ID!, $i
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			email
 			fullName
@@ -55571,9 +54579,8 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -55620,9 +54627,8 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -55669,9 +54675,8 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -55775,9 +54780,8 @@ const GetAllControlsDocument = `query GetAllControls {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				subcontrols {
@@ -55905,9 +54909,8 @@ const GetControlsDocument = `query GetControls ($where: ControlWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				subcontrols {
@@ -55963,9 +54966,8 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -56127,9 +55129,8 @@ const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObje
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -56175,9 +55176,8 @@ const CreateBulkControlObjectiveDocument = `mutation CreateBulkControlObjective 
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -56223,9 +55223,8 @@ const CreateControlObjectiveDocument = `mutation CreateControlObjective ($input:
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -56323,9 +55322,8 @@ const GetAllControlObjectivesDocument = `query GetAllControlObjectives {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				programs {
@@ -56443,9 +55441,8 @@ const GetControlObjectivesDocument = `query GetControlObjectives ($where: Contro
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				programs {
@@ -56497,9 +55494,8 @@ const UpdateControlObjectiveDocument = `mutation UpdateControlObjective ($update
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -56654,9 +55650,8 @@ const CreateDocumentDataDocument = `mutation CreateDocumentData ($input: CreateD
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			updatedAt
 			updatedByID
@@ -56746,9 +55741,8 @@ const UpdateDocumentDataDocument = `mutation UpdateDocumentData ($updateDocument
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			updatedAt
 			updatedByID
@@ -56858,9 +55852,8 @@ const CreateBulkCSVEntityDocument = `mutation CreateBulkCSVEntity ($input: Uploa
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			displayName
@@ -56872,9 +55865,8 @@ const CreateBulkCSVEntityDocument = `mutation CreateBulkCSVEntity ($input: Uploa
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 			entityType {
@@ -56915,9 +55907,8 @@ const CreateBulkEntityDocument = `mutation CreateBulkEntity ($input: [CreateEnti
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			displayName
@@ -56929,9 +55920,8 @@ const CreateBulkEntityDocument = `mutation CreateBulkEntity ($input: [CreateEnti
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 			entityType {
@@ -56972,9 +55962,8 @@ const CreateEntityDocument = `mutation CreateEntity ($input: CreateEntityInput!)
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			displayName
@@ -56986,9 +55975,8 @@ const CreateEntityDocument = `mutation CreateEntity ($input: CreateEntityInput!)
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 			entityType {
@@ -57072,9 +56060,8 @@ const GetAllEntitiesDocument = `query GetAllEntities {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -57123,9 +56110,8 @@ const GetEntitiesDocument = `query GetEntities ($where: EntityWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -57209,9 +56195,8 @@ const UpdateEntityDocument = `mutation UpdateEntity ($updateEntityId: ID!, $inpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			displayName
@@ -57223,9 +56208,8 @@ const UpdateEntityDocument = `mutation UpdateEntity ($updateEntityId: ID!, $inpu
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 			entityType {
@@ -57351,9 +56335,8 @@ const CreateBulkCSVEntityTypeDocument = `mutation CreateBulkCSVEntityType ($inpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			name
@@ -57390,9 +56373,8 @@ const CreateBulkEntityTypeDocument = `mutation CreateBulkEntityType ($input: [Cr
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			name
@@ -57429,9 +56411,8 @@ const CreateEntityTypeDocument = `mutation CreateEntityType ($input: CreateEntit
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			name
@@ -57499,9 +56480,8 @@ const GetAllEntityTypesDocument = `query GetAllEntityTypes {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -57569,9 +56549,8 @@ const GetEntityTypesDocument = `query GetEntityTypes ($where: EntityTypeWhereInp
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -57603,9 +56582,8 @@ const UpdateEntityTypeDocument = `mutation UpdateEntityType ($updateEntityTypeId
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			name
@@ -58245,9 +57223,8 @@ const GetAllFilesDocument = `query GetAllFiles {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				uri
 			}
@@ -58337,9 +57314,8 @@ const GetFilesDocument = `query GetFiles ($where: FileWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				uri
 			}
@@ -58682,9 +57658,8 @@ const GetAllGroupsDocument = `query GetAllGroups {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -58724,9 +57699,8 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			joinPolicy
@@ -58812,9 +57786,8 @@ const GetGroupsDocument = `query GetGroups ($where: GroupWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -58864,9 +57837,8 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				visibility
 			}
@@ -59305,9 +58277,8 @@ const GetAllGroupSettingsDocument = `query GetAllGroupSettings {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -59387,9 +58358,8 @@ const GetGroupSettingsDocument = `query GetGroupSettings ($where: GroupSettingWh
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -59431,9 +58401,8 @@ const UpdateGroupSettingDocument = `mutation UpdateGroupSetting ($updateGroupSet
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			updatedAt
 			updatedByID
@@ -60067,9 +59036,8 @@ const GetAllIntegrationsDocument = `query GetAllIntegrations {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -60157,9 +59125,8 @@ const GetIntegrationsDocument = `query GetIntegrations ($where: IntegrationWhere
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -60310,9 +59277,8 @@ const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolic
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -60355,9 +59321,8 @@ const CreateBulkInternalPolicyDocument = `mutation CreateBulkInternalPolicy ($in
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -60400,9 +59365,8 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -60488,9 +59452,8 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				editors {
@@ -60541,9 +59504,8 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: Internal
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				editors {
@@ -60630,9 +59592,8 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -60997,9 +59958,8 @@ const CreateBulkCSVNarrativeDocument = `mutation CreateBulkCSVNarrative ($input:
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -61038,9 +59998,8 @@ const CreateBulkNarrativeDocument = `mutation CreateBulkNarrative ($input: [Crea
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -61079,9 +60038,8 @@ const CreateNarrativeDocument = `mutation CreateNarrative ($input: CreateNarrati
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -61169,9 +60127,8 @@ const GetAllNarrativesDocument = `query GetAllNarratives {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				programs {
 					id
@@ -61275,9 +60232,8 @@ const GetNarrativesDocument = `query GetNarratives ($where: NarrativeWhereInput)
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				programs {
 					id
@@ -61325,9 +60281,8 @@ const UpdateNarrativeDocument = `mutation UpdateNarrative ($updateNarrativeId: I
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -62049,9 +61004,8 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				organization {
 					id
@@ -62139,9 +61093,8 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				organization {
 					id
@@ -62182,9 +61135,8 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			domains
 			geoLocation
@@ -62568,9 +61520,8 @@ const CreateBulkCSVOrgSubscriptionDocument = `mutation CreateBulkCSVOrgSubscript
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			expiresAt
 			features
@@ -62614,9 +61565,8 @@ const CreateBulkOrgSubscriptionDocument = `mutation CreateBulkOrgSubscription ($
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			expiresAt
 			features
@@ -62660,9 +61610,8 @@ const CreateOrgSubscriptionDocument = `mutation CreateOrgSubscription ($input: C
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			expiresAt
 			features
@@ -62743,9 +61692,8 @@ const GetAllOrgSubscriptionsDocument = `query GetAllOrgSubscriptions {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -62827,9 +61775,8 @@ const GetOrgSubscriptionsDocument = `query GetOrgSubscriptions ($where: OrgSubsc
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -62862,9 +61809,8 @@ const UpdateOrgSubscriptionDocument = `mutation UpdateOrgSubscription ($updateOr
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			expiresAt
 			features
@@ -63145,9 +62091,8 @@ const GetAllPersonalAccessTokensDocument = `query GetAllPersonalAccessTokens {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				organizations {
 					id
@@ -63260,9 +62205,8 @@ const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input:
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -63277,9 +62221,8 @@ const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input:
 			updatedByID
 			updatedBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			version
 		}
@@ -63312,9 +62255,8 @@ const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [Crea
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -63329,9 +62271,8 @@ const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [Crea
 			updatedByID
 			updatedBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			version
 		}
@@ -63364,9 +62305,8 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -63381,9 +62321,8 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			updatedByID
 			updatedBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			version
 			editors {
@@ -63460,15 +62399,13 @@ const GetAllProceduresDocument = `query GetAllProcedures {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				createdBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				editors {
@@ -63518,15 +62455,13 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 		updatedByID
 		updatedBy {
 			id
-			firstName
-			lastName
-			email
+			name
+			actorType
 		}
 		createdBy {
 			id
-			firstName
-			lastName
-			email
+			name
+			actorType
 		}
 		version
 		editors {
@@ -63578,15 +62513,13 @@ const GetProceduresDocument = `query GetProcedures ($where: ProcedureWhereInput)
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				createdBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				editors {
@@ -63628,9 +62561,8 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -63773,9 +62705,8 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			endDate
@@ -63819,9 +62750,8 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			endDate
@@ -63950,9 +62880,8 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			endDate
@@ -63981,9 +62910,8 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 			}
@@ -64003,9 +62931,8 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 			}
@@ -64123,9 +63050,8 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				procedures {
 					background
@@ -64216,9 +63142,8 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -64239,9 +63164,8 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -64309,9 +63233,8 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				procedures {
 					background
@@ -64391,9 +63314,8 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			endDate
@@ -64422,9 +63344,8 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 			}
@@ -64444,9 +63365,8 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 			}
@@ -64807,9 +63727,8 @@ const CreateBulkCSVProgramMembershipDocument = `mutation CreateBulkCSVProgramMem
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			programID
@@ -64846,9 +63765,8 @@ const CreateBulkProgramMembershipDocument = `mutation CreateBulkProgramMembershi
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			programID
@@ -64885,9 +63803,8 @@ const CreateProgramMembershipDocument = `mutation CreateProgramMembership ($inpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			programID
@@ -64954,9 +63871,8 @@ const GetAllProgramMembershipsDocument = `query GetAllProgramMemberships {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				userID
 			}
@@ -65024,9 +63940,8 @@ const GetProgramMembershipsDocument = `query GetProgramMemberships ($where: Prog
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				userID
 			}
@@ -65059,9 +63974,8 @@ const UpdateProgramMembershipDocument = `mutation UpdateProgramMembership ($upda
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			id
 			programID
@@ -65174,9 +64088,8 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -65221,9 +64134,8 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -65268,9 +64180,8 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -65369,9 +64280,8 @@ const GetAllRisksDocument = `query GetAllRisks {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				programs {
 					id
@@ -65487,9 +64397,8 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				programs {
 					id
@@ -65538,9 +64447,8 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -65931,9 +64839,8 @@ const CreateBulkCSVStandardDocument = `mutation CreateBulkCSVStandard ($input: U
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -65978,9 +64885,8 @@ const CreateBulkStandardDocument = `mutation CreateBulkStandard ($input: [Create
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -66025,9 +64931,8 @@ const CreateStandardDocument = `mutation CreateStandard ($input: CreateStandardI
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -66109,9 +65014,8 @@ const GetAllStandardsDocument = `query GetAllStandards {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 			}
@@ -66195,9 +65099,8 @@ const GetStandardsDocument = `query GetStandards ($where: StandardWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 			}
@@ -66231,9 +65134,8 @@ const UpdateStandardDocument = `mutation UpdateStandard ($updateStandardId: ID!,
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -66369,9 +65271,8 @@ const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($inpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -66422,9 +65323,8 @@ const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [Cr
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -66475,9 +65375,8 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -66575,9 +65474,8 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				controls {
@@ -66681,9 +65579,8 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($where: SubcontrolWhereInp
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				version
 				controls {
@@ -66721,9 +65618,8 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -66939,9 +65835,8 @@ const CreateSubscriberDocument = `mutation CreateSubscriber ($input: CreateSubsc
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			email
 			id
@@ -67093,9 +65988,8 @@ const UpdateSubscriberDocument = `mutation UpdateSubscriber ($email: String!, $i
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			email
 			id
@@ -67145,9 +66039,8 @@ const CreateBulkCSVTaskDocument = `mutation CreateBulkCSVTask ($input: Upload!) 
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -67198,9 +66091,8 @@ const CreateBulkTaskDocument = `mutation CreateBulkTask ($input: [CreateTaskInpu
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -67251,9 +66143,8 @@ const CreateTaskDocument = `mutation CreateTask ($input: CreateTaskInput!) {
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -67342,9 +66233,8 @@ const GetAllTasksDocument = `query GetAllTasks {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -67444,9 +66334,8 @@ const GetTasksDocument = `query GetTasks ($where: TaskWhereInput) {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -67489,9 +66378,8 @@ const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: Upd
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			details
@@ -67721,9 +66609,8 @@ const GetAllTemplatesDocument = `query GetAllTemplates {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 				owner {
 					id
@@ -67791,9 +66678,8 @@ const UpdateTemplateDocument = `mutation UpdateTemplate ($updateTemplateId: ID!,
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			description
 			id
@@ -68067,9 +66953,8 @@ const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avat
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -68201,9 +67086,8 @@ const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			emailConfirmed
 			locked
@@ -68272,9 +67156,8 @@ const GetUserByIDWithOrgsDocument = `query GetUserByIDWithOrgs ($userId: ID!) {
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			emailConfirmed
 			locked
@@ -68495,9 +67378,8 @@ const GetAllUserSettingsDocument = `query GetAllUserSettings {
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -68585,9 +67467,8 @@ const GetUserSettingsDocument = `query GetUserSettings ($where: UserSettingWhere
 				updatedByID
 				updatedBy {
 					id
-					firstName
-					lastName
-					email
+					name
+					actorType
 				}
 			}
 		}
@@ -68631,9 +67512,8 @@ const UpdateUserSettingDocument = `mutation UpdateUserSetting ($updateUserSettin
 			createdByID
 			createdBy {
 				id
-				firstName
-				lastName
-				email
+				name
+				actorType
 			}
 			deletedAt
 			deletedByID

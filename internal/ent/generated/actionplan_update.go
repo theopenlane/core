@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -213,9 +214,9 @@ func (apu *ActionPlanUpdate) ClearDetails() *ActionPlanUpdate {
 	return apu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (apu *ActionPlanUpdate) SetUpdatedBy(u *User) *ActionPlanUpdate {
-	return apu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (apu *ActionPlanUpdate) SetUpdatedBy(c *ChangeActor) *ActionPlanUpdate {
+	return apu.SetUpdatedByID(c.ID)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -298,7 +299,7 @@ func (apu *ActionPlanUpdate) Mutation() *ActionPlanMutation {
 	return apu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (apu *ActionPlanUpdate) ClearUpdatedBy() *ActionPlanUpdate {
 	apu.mutation.ClearUpdatedBy()
 	return apu
@@ -539,7 +540,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{actionplan.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apu.schemaConfig.ActionPlan
@@ -553,7 +554,7 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{actionplan.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apu.schemaConfig.ActionPlan
@@ -1002,9 +1003,9 @@ func (apuo *ActionPlanUpdateOne) ClearDetails() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (apuo *ActionPlanUpdateOne) SetUpdatedBy(u *User) *ActionPlanUpdateOne {
-	return apuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (apuo *ActionPlanUpdateOne) SetUpdatedBy(c *ChangeActor) *ActionPlanUpdateOne {
+	return apuo.SetUpdatedByID(c.ID)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -1087,7 +1088,7 @@ func (apuo *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
 	return apuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (apuo *ActionPlanUpdateOne) ClearUpdatedBy() *ActionPlanUpdateOne {
 	apuo.mutation.ClearUpdatedBy()
 	return apuo
@@ -1358,7 +1359,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 			Columns: []string{actionplan.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apuo.schemaConfig.ActionPlan
@@ -1372,7 +1373,7 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 			Columns: []string{actionplan.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apuo.schemaConfig.ActionPlan

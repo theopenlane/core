@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Integration is the model entity for the Integration schema.
@@ -54,9 +54,9 @@ type Integration struct {
 // IntegrationEdges holds the relations/edges for other nodes in the graph.
 type IntegrationEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// the secrets associated with the integration
@@ -75,22 +75,22 @@ type IntegrationEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e IntegrationEdges) CreatedByOrErr() (*User, error) {
+func (e IntegrationEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e IntegrationEdges) UpdatedByOrErr() (*User, error) {
+func (e IntegrationEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -253,12 +253,12 @@ func (i *Integration) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the Integration entity.
-func (i *Integration) QueryCreatedBy() *UserQuery {
+func (i *Integration) QueryCreatedBy() *ChangeActorQuery {
 	return NewIntegrationClient(i.config).QueryCreatedBy(i)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the Integration entity.
-func (i *Integration) QueryUpdatedBy() *UserQuery {
+func (i *Integration) QueryUpdatedBy() *ChangeActorQuery {
 	return NewIntegrationClient(i.config).QueryUpdatedBy(i)
 }
 

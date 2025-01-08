@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
@@ -191,9 +192,9 @@ func (patu *PersonalAccessTokenUpdate) ClearLastUsedAt() *PersonalAccessTokenUpd
 	return patu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (patu *PersonalAccessTokenUpdate) SetUpdatedBy(u *User) *PersonalAccessTokenUpdate {
-	return patu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (patu *PersonalAccessTokenUpdate) SetUpdatedBy(c *ChangeActor) *PersonalAccessTokenUpdate {
+	return patu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -236,7 +237,7 @@ func (patu *PersonalAccessTokenUpdate) Mutation() *PersonalAccessTokenMutation {
 	return patu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (patu *PersonalAccessTokenUpdate) ClearUpdatedBy() *PersonalAccessTokenUpdate {
 	patu.mutation.ClearUpdatedBy()
 	return patu
@@ -429,7 +430,7 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 			Columns: []string{personalaccesstoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patu.schemaConfig.PersonalAccessToken
@@ -443,7 +444,7 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 			Columns: []string{personalaccesstoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patu.schemaConfig.PersonalAccessToken
@@ -759,9 +760,9 @@ func (patuo *PersonalAccessTokenUpdateOne) ClearLastUsedAt() *PersonalAccessToke
 	return patuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedBy(u *User) *PersonalAccessTokenUpdateOne {
-	return patuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedBy(c *ChangeActor) *PersonalAccessTokenUpdateOne {
+	return patuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -804,7 +805,7 @@ func (patuo *PersonalAccessTokenUpdateOne) Mutation() *PersonalAccessTokenMutati
 	return patuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedBy() *PersonalAccessTokenUpdateOne {
 	patuo.mutation.ClearUpdatedBy()
 	return patuo
@@ -1027,7 +1028,7 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 			Columns: []string{personalaccesstoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patuo.schemaConfig.PersonalAccessToken
@@ -1041,7 +1042,7 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 			Columns: []string{personalaccesstoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patuo.schemaConfig.PersonalAccessToken

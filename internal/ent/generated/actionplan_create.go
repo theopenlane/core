@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -225,14 +226,14 @@ func (apc *ActionPlanCreate) SetNillableID(s *string) *ActionPlanCreate {
 	return apc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (apc *ActionPlanCreate) SetCreatedBy(u *User) *ActionPlanCreate {
-	return apc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (apc *ActionPlanCreate) SetCreatedBy(c *ChangeActor) *ActionPlanCreate {
+	return apc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (apc *ActionPlanCreate) SetUpdatedBy(u *User) *ActionPlanCreate {
-	return apc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (apc *ActionPlanCreate) SetUpdatedBy(c *ChangeActor) *ActionPlanCreate {
+	return apc.SetUpdatedByID(c.ID)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -486,7 +487,7 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			Columns: []string{actionplan.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apc.schemaConfig.ActionPlan
@@ -504,7 +505,7 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			Columns: []string{actionplan.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apc.schemaConfig.ActionPlan

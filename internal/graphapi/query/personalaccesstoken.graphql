@@ -82,9 +82,8 @@ query GetAllPersonalAccessTokens {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         organizations {
           id

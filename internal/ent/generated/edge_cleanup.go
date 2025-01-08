@@ -63,6 +63,13 @@ func ActionPlanHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func ChangeActorEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup changeactor edge"))
+
+	return nil
+}
+
 func ContactEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge"))

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -249,9 +250,9 @@ func (pu *ProgramUpdate) SetNillableAuditorReadComments(b *bool) *ProgramUpdate 
 	return pu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (pu *ProgramUpdate) SetUpdatedBy(u *User) *ProgramUpdate {
-	return pu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (pu *ProgramUpdate) SetUpdatedBy(c *ChangeActor) *ProgramUpdate {
+	return pu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -519,7 +520,7 @@ func (pu *ProgramUpdate) Mutation() *ProgramMutation {
 	return pu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (pu *ProgramUpdate) ClearUpdatedBy() *ProgramUpdate {
 	pu.mutation.ClearUpdatedBy()
 	return pu
@@ -1035,7 +1036,7 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{program.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pu.schemaConfig.Program
@@ -1049,7 +1050,7 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{program.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pu.schemaConfig.Program
@@ -2150,9 +2151,9 @@ func (puo *ProgramUpdateOne) SetNillableAuditorReadComments(b *bool) *ProgramUpd
 	return puo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (puo *ProgramUpdateOne) SetUpdatedBy(u *User) *ProgramUpdateOne {
-	return puo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (puo *ProgramUpdateOne) SetUpdatedBy(c *ChangeActor) *ProgramUpdateOne {
+	return puo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -2420,7 +2421,7 @@ func (puo *ProgramUpdateOne) Mutation() *ProgramMutation {
 	return puo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (puo *ProgramUpdateOne) ClearUpdatedBy() *ProgramUpdateOne {
 	puo.mutation.ClearUpdatedBy()
 	return puo
@@ -2966,7 +2967,7 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 			Columns: []string{program.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = puo.schemaConfig.Program
@@ -2980,7 +2981,7 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 			Columns: []string{program.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = puo.schemaConfig.Program

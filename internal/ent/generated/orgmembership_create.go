@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -162,14 +163,14 @@ func (omc *OrgMembershipCreate) SetNillableID(s *string) *OrgMembershipCreate {
 	return omc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (omc *OrgMembershipCreate) SetCreatedBy(u *User) *OrgMembershipCreate {
-	return omc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (omc *OrgMembershipCreate) SetCreatedBy(c *ChangeActor) *OrgMembershipCreate {
+	return omc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (omc *OrgMembershipCreate) SetUpdatedBy(u *User) *OrgMembershipCreate {
-	return omc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (omc *OrgMembershipCreate) SetUpdatedBy(c *ChangeActor) *OrgMembershipCreate {
+	return omc.SetUpdatedByID(c.ID)
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
@@ -362,7 +363,7 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 			Columns: []string{orgmembership.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = omc.schemaConfig.OrgMembership
@@ -380,7 +381,7 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 			Columns: []string{orgmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = omc.schemaConfig.OrgMembership

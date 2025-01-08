@@ -6,9 +6,8 @@ mutation CreateBulkCSVNarrative($input: Upload!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       details
@@ -29,9 +28,8 @@ mutation CreateBulkNarrative($input: [CreateNarrativeInput!]) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       details
@@ -52,9 +50,8 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       details
@@ -106,9 +103,8 @@ query GetAllNarratives {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         programs {
           id
@@ -177,9 +173,8 @@ query GetNarratives($where: NarrativeWhereInput) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         programs {
           id
@@ -208,9 +203,8 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       details

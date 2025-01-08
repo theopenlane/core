@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -161,14 +162,14 @@ func (pmc *ProgramMembershipCreate) SetNillableID(s *string) *ProgramMembershipC
 	return pmc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (pmc *ProgramMembershipCreate) SetCreatedBy(u *User) *ProgramMembershipCreate {
-	return pmc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (pmc *ProgramMembershipCreate) SetCreatedBy(c *ChangeActor) *ProgramMembershipCreate {
+	return pmc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (pmc *ProgramMembershipCreate) SetUpdatedBy(u *User) *ProgramMembershipCreate {
-	return pmc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (pmc *ProgramMembershipCreate) SetUpdatedBy(c *ChangeActor) *ProgramMembershipCreate {
+	return pmc.SetUpdatedByID(c.ID)
 }
 
 // SetProgram sets the "program" edge to the Program entity.
@@ -346,7 +347,7 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 			Columns: []string{programmembership.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmc.schemaConfig.ProgramMembership
@@ -364,7 +365,7 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 			Columns: []string{programmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmc.schemaConfig.ProgramMembership

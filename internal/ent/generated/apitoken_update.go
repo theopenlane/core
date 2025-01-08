@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -196,9 +196,9 @@ func (atu *APITokenUpdate) ClearLastUsedAt() *APITokenUpdate {
 	return atu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (atu *APITokenUpdate) SetUpdatedBy(u *User) *APITokenUpdate {
-	return atu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (atu *APITokenUpdate) SetUpdatedBy(c *ChangeActor) *APITokenUpdate {
+	return atu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -211,7 +211,7 @@ func (atu *APITokenUpdate) Mutation() *APITokenMutation {
 	return atu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (atu *APITokenUpdate) ClearUpdatedBy() *APITokenUpdate {
 	atu.mutation.ClearUpdatedBy()
 	return atu
@@ -364,7 +364,7 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{apitoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atu.schemaConfig.APIToken
@@ -378,7 +378,7 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{apitoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atu.schemaConfig.APIToken
@@ -604,9 +604,9 @@ func (atuo *APITokenUpdateOne) ClearLastUsedAt() *APITokenUpdateOne {
 	return atuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (atuo *APITokenUpdateOne) SetUpdatedBy(u *User) *APITokenUpdateOne {
-	return atuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (atuo *APITokenUpdateOne) SetUpdatedBy(c *ChangeActor) *APITokenUpdateOne {
+	return atuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -619,7 +619,7 @@ func (atuo *APITokenUpdateOne) Mutation() *APITokenMutation {
 	return atuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (atuo *APITokenUpdateOne) ClearUpdatedBy() *APITokenUpdateOne {
 	atuo.mutation.ClearUpdatedBy()
 	return atuo
@@ -802,7 +802,7 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 			Columns: []string{apitoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atuo.schemaConfig.APIToken
@@ -816,7 +816,7 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 			Columns: []string{apitoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atuo.schemaConfig.APIToken

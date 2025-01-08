@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -163,14 +164,14 @@ func (evtc *EmailVerificationTokenCreate) SetNillableID(s *string) *EmailVerific
 	return evtc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (evtc *EmailVerificationTokenCreate) SetCreatedBy(u *User) *EmailVerificationTokenCreate {
-	return evtc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (evtc *EmailVerificationTokenCreate) SetCreatedBy(c *ChangeActor) *EmailVerificationTokenCreate {
+	return evtc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (evtc *EmailVerificationTokenCreate) SetUpdatedBy(u *User) *EmailVerificationTokenCreate {
-	return evtc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (evtc *EmailVerificationTokenCreate) SetUpdatedBy(c *ChangeActor) *EmailVerificationTokenCreate {
+	return evtc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -364,7 +365,7 @@ func (evtc *EmailVerificationTokenCreate) createSpec() (*EmailVerificationToken,
 			Columns: []string{emailverificationtoken.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtc.schemaConfig.EmailVerificationToken
@@ -382,7 +383,7 @@ func (evtc *EmailVerificationTokenCreate) createSpec() (*EmailVerificationToken,
 			Columns: []string{emailverificationtoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtc.schemaConfig.EmailVerificationToken

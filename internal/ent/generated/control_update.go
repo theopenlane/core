@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -25,7 +26,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -334,9 +334,9 @@ func (cu *ControlUpdate) ClearDetails() *ControlUpdate {
 	return cu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (cu *ControlUpdate) SetUpdatedBy(u *User) *ControlUpdate {
-	return cu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (cu *ControlUpdate) SetUpdatedBy(c *ChangeActor) *ControlUpdate {
+	return cu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -529,7 +529,7 @@ func (cu *ControlUpdate) Mutation() *ControlMutation {
 	return cu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (cu *ControlUpdate) ClearUpdatedBy() *ControlUpdate {
 	cu.mutation.ClearUpdatedBy()
 	return cu
@@ -974,7 +974,7 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{control.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cu.schemaConfig.Control
@@ -988,7 +988,7 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{control.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cu.schemaConfig.Control
@@ -1918,9 +1918,9 @@ func (cuo *ControlUpdateOne) ClearDetails() *ControlUpdateOne {
 	return cuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (cuo *ControlUpdateOne) SetUpdatedBy(u *User) *ControlUpdateOne {
-	return cuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (cuo *ControlUpdateOne) SetUpdatedBy(c *ChangeActor) *ControlUpdateOne {
+	return cuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -2113,7 +2113,7 @@ func (cuo *ControlUpdateOne) Mutation() *ControlMutation {
 	return cuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (cuo *ControlUpdateOne) ClearUpdatedBy() *ControlUpdateOne {
 	cuo.mutation.ClearUpdatedBy()
 	return cuo
@@ -2588,7 +2588,7 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			Columns: []string{control.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cuo.schemaConfig.Control
@@ -2602,7 +2602,7 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			Columns: []string{control.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cuo.schemaConfig.Control

@@ -13,13 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/customtypes"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -128,9 +128,9 @@ func (ddu *DocumentDataUpdate) SetData(co customtypes.JSONObject) *DocumentDataU
 	return ddu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ddu *DocumentDataUpdate) SetUpdatedBy(u *User) *DocumentDataUpdate {
-	return ddu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ddu *DocumentDataUpdate) SetUpdatedBy(c *ChangeActor) *DocumentDataUpdate {
+	return ddu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -178,7 +178,7 @@ func (ddu *DocumentDataUpdate) Mutation() *DocumentDataMutation {
 	return ddu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (ddu *DocumentDataUpdate) ClearUpdatedBy() *DocumentDataUpdate {
 	ddu.mutation.ClearUpdatedBy()
 	return ddu
@@ -348,7 +348,7 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{documentdata.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ddu.schemaConfig.DocumentData
@@ -362,7 +362,7 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{documentdata.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ddu.schemaConfig.DocumentData
@@ -643,9 +643,9 @@ func (dduo *DocumentDataUpdateOne) SetData(co customtypes.JSONObject) *DocumentD
 	return dduo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (dduo *DocumentDataUpdateOne) SetUpdatedBy(u *User) *DocumentDataUpdateOne {
-	return dduo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (dduo *DocumentDataUpdateOne) SetUpdatedBy(c *ChangeActor) *DocumentDataUpdateOne {
+	return dduo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -693,7 +693,7 @@ func (dduo *DocumentDataUpdateOne) Mutation() *DocumentDataMutation {
 	return dduo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (dduo *DocumentDataUpdateOne) ClearUpdatedBy() *DocumentDataUpdateOne {
 	dduo.mutation.ClearUpdatedBy()
 	return dduo
@@ -893,7 +893,7 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 			Columns: []string{documentdata.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = dduo.schemaConfig.DocumentData
@@ -907,7 +907,7 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 			Columns: []string{documentdata.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = dduo.schemaConfig.DocumentData

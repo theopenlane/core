@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // SubscriberCreate is the builder for creating a Subscriber entity.
@@ -235,14 +235,14 @@ func (sc *SubscriberCreate) SetNillableID(s *string) *SubscriberCreate {
 	return sc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (sc *SubscriberCreate) SetCreatedBy(u *User) *SubscriberCreate {
-	return sc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (sc *SubscriberCreate) SetCreatedBy(c *ChangeActor) *SubscriberCreate {
+	return sc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (sc *SubscriberCreate) SetUpdatedBy(u *User) *SubscriberCreate {
-	return sc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (sc *SubscriberCreate) SetUpdatedBy(c *ChangeActor) *SubscriberCreate {
+	return sc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -500,7 +500,7 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 			Columns: []string{subscriber.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Subscriber
@@ -518,7 +518,7 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 			Columns: []string{subscriber.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Subscriber

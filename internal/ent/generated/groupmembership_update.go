@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -80,9 +80,9 @@ func (gmu *GroupMembershipUpdate) SetNillableRole(e *enums.Role) *GroupMembershi
 	return gmu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (gmu *GroupMembershipUpdate) SetUpdatedBy(u *User) *GroupMembershipUpdate {
-	return gmu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (gmu *GroupMembershipUpdate) SetUpdatedBy(c *ChangeActor) *GroupMembershipUpdate {
+	return gmu.SetUpdatedByID(c.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -105,7 +105,7 @@ func (gmu *GroupMembershipUpdate) Mutation() *GroupMembershipMutation {
 	return gmu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (gmu *GroupMembershipUpdate) ClearUpdatedBy() *GroupMembershipUpdate {
 	gmu.mutation.ClearUpdatedBy()
 	return gmu
@@ -234,7 +234,7 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 			Columns: []string{groupmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmu.schemaConfig.GroupMembership
@@ -248,7 +248,7 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 			Columns: []string{groupmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmu.schemaConfig.GroupMembership
@@ -375,9 +375,9 @@ func (gmuo *GroupMembershipUpdateOne) SetNillableRole(e *enums.Role) *GroupMembe
 	return gmuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (gmuo *GroupMembershipUpdateOne) SetUpdatedBy(u *User) *GroupMembershipUpdateOne {
-	return gmuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (gmuo *GroupMembershipUpdateOne) SetUpdatedBy(c *ChangeActor) *GroupMembershipUpdateOne {
+	return gmuo.SetUpdatedByID(c.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -400,7 +400,7 @@ func (gmuo *GroupMembershipUpdateOne) Mutation() *GroupMembershipMutation {
 	return gmuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (gmuo *GroupMembershipUpdateOne) ClearUpdatedBy() *GroupMembershipUpdateOne {
 	gmuo.mutation.ClearUpdatedBy()
 	return gmuo
@@ -559,7 +559,7 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 			Columns: []string{groupmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmuo.schemaConfig.GroupMembership
@@ -573,7 +573,7 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 			Columns: []string{groupmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmuo.schemaConfig.GroupMembership

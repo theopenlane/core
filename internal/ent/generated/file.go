@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // File is the model entity for the File schema.
@@ -72,9 +72,9 @@ type File struct {
 // FileEdges holds the relations/edges for other nodes in the graph.
 type FileEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// User holds the value of the user edge.
 	User []*User `json:"user,omitempty"`
 	// Organization holds the value of the organization edge.
@@ -118,22 +118,22 @@ type FileEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e FileEdges) CreatedByOrErr() (*User, error) {
+func (e FileEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e FileEdges) UpdatedByOrErr() (*User, error) {
+func (e FileEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -419,12 +419,12 @@ func (f *File) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the File entity.
-func (f *File) QueryCreatedBy() *UserQuery {
+func (f *File) QueryCreatedBy() *ChangeActorQuery {
 	return NewFileClient(f.config).QueryCreatedBy(f)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the File entity.
-func (f *File) QueryUpdatedBy() *UserQuery {
+func (f *File) QueryUpdatedBy() *ChangeActorQuery {
 	return NewFileClient(f.config).QueryUpdatedBy(f)
 }
 

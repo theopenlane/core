@@ -13,13 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -31,8 +31,8 @@ type NoteQuery struct {
 	order                []note.OrderOption
 	inters               []Interceptor
 	predicates           []predicate.Note
-	withCreatedBy        *UserQuery
-	withUpdatedBy        *UserQuery
+	withCreatedBy        *ChangeActorQuery
+	withUpdatedBy        *ChangeActorQuery
 	withOwner            *OrganizationQuery
 	withEntity           *EntityQuery
 	withSubcontrols      *SubcontrolQuery
@@ -79,8 +79,8 @@ func (nq *NoteQuery) Order(o ...note.OrderOption) *NoteQuery {
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (nq *NoteQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: nq.config}).Query()
+func (nq *NoteQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -91,11 +91,11 @@ func (nq *NoteQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, note.CreatedByTable, note.CreatedByColumn),
 		)
 		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
@@ -104,8 +104,8 @@ func (nq *NoteQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (nq *NoteQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: nq.config}).Query()
+func (nq *NoteQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -116,11 +116,11 @@ func (nq *NoteQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, note.UpdatedByTable, note.UpdatedByColumn),
 		)
 		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
@@ -435,8 +435,8 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithCreatedBy(opts ...func(*UserQuery)) *NoteQuery {
-	query := (&UserClient{config: nq.config}).Query()
+func (nq *NoteQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *NoteQuery {
+	query := (&ChangeActorClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -446,8 +446,8 @@ func (nq *NoteQuery) WithCreatedBy(opts ...func(*UserQuery)) *NoteQuery {
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithUpdatedBy(opts ...func(*UserQuery)) *NoteQuery {
-	query := (&UserClient{config: nq.config}).Query()
+func (nq *NoteQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *NoteQuery {
+	query := (&ChangeActorClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -624,13 +624,13 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	}
 	if query := nq.withCreatedBy; query != nil {
 		if err := nq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Note, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *Note, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := nq.withUpdatedBy; query != nil {
 		if err := nq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Note, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *Note, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -682,7 +682,7 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	return nodes, nil
 }
 
-func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Note, init func(*Note), assign func(*Note, *User)) error {
+func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Note, init func(*Note), assign func(*Note, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
 	for i := range nodes {
@@ -695,7 +695,7 @@ func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes 
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -711,7 +711,7 @@ func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes 
 	}
 	return nil
 }
-func (nq *NoteQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Note, init func(*Note), assign func(*Note, *User)) error {
+func (nq *NoteQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Note, init func(*Note), assign func(*Note, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
 	for i := range nodes {
@@ -724,7 +724,7 @@ func (nq *NoteQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes 
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

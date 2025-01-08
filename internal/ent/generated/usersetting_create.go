@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -268,14 +269,14 @@ func (usc *UserSettingCreate) SetNillableID(s *string) *UserSettingCreate {
 	return usc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (usc *UserSettingCreate) SetCreatedBy(u *User) *UserSettingCreate {
-	return usc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (usc *UserSettingCreate) SetCreatedBy(c *ChangeActor) *UserSettingCreate {
+	return usc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (usc *UserSettingCreate) SetUpdatedBy(u *User) *UserSettingCreate {
-	return usc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (usc *UserSettingCreate) SetUpdatedBy(c *ChangeActor) *UserSettingCreate {
+	return usc.SetUpdatedByID(c.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
@@ -528,7 +529,7 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 			Columns: []string{usersetting.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = usc.schemaConfig.UserSetting
@@ -546,7 +547,7 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 			Columns: []string{usersetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = usc.schemaConfig.UserSetting

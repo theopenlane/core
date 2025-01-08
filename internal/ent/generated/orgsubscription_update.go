@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -256,9 +256,9 @@ func (osu *OrgSubscriptionUpdate) ClearFeatures() *OrgSubscriptionUpdate {
 	return osu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (osu *OrgSubscriptionUpdate) SetUpdatedBy(u *User) *OrgSubscriptionUpdate {
-	return osu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (osu *OrgSubscriptionUpdate) SetUpdatedBy(c *ChangeActor) *OrgSubscriptionUpdate {
+	return osu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -271,7 +271,7 @@ func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
 	return osu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (osu *OrgSubscriptionUpdate) ClearUpdatedBy() *OrgSubscriptionUpdate {
 	osu.mutation.ClearUpdatedBy()
 	return osu
@@ -437,7 +437,7 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 			Columns: []string{orgsubscription.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrgSubscription
@@ -451,7 +451,7 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 			Columns: []string{orgsubscription.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrgSubscription
@@ -737,9 +737,9 @@ func (osuo *OrgSubscriptionUpdateOne) ClearFeatures() *OrgSubscriptionUpdateOne 
 	return osuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (osuo *OrgSubscriptionUpdateOne) SetUpdatedBy(u *User) *OrgSubscriptionUpdateOne {
-	return osuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (osuo *OrgSubscriptionUpdateOne) SetUpdatedBy(c *ChangeActor) *OrgSubscriptionUpdateOne {
+	return osuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -752,7 +752,7 @@ func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
 	return osuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (osuo *OrgSubscriptionUpdateOne) ClearUpdatedBy() *OrgSubscriptionUpdateOne {
 	osuo.mutation.ClearUpdatedBy()
 	return osuo
@@ -948,7 +948,7 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 			Columns: []string{orgsubscription.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrgSubscription
@@ -962,7 +962,7 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 			Columns: []string{orgsubscription.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrgSubscription

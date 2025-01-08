@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -105,9 +106,9 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: at.config}).Query()
+				query = (&ChangeActorClient{config: at.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			at.withCreatedBy = query
@@ -120,9 +121,9 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: at.config}).Query()
+				query = (&ChangeActorClient{config: at.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			at.withUpdatedBy = query
@@ -282,9 +283,9 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: ap.config}).Query()
+				query = (&ChangeActorClient{config: ap.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			ap.withCreatedBy = query
@@ -297,9 +298,9 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: ap.config}).Query()
+				query = (&ChangeActorClient{config: ap.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			ap.withUpdatedBy = query
@@ -636,6 +637,78 @@ func newActionPlanHistoryPaginateArgs(rv map[string]any) *actionplanhistoryPagin
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (ca *ChangeActorQuery) CollectFields(ctx context.Context, satisfies ...string) (*ChangeActorQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return ca, nil
+	}
+	if err := ca.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return ca, nil
+}
+
+func (ca *ChangeActorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(changeactor.Columns))
+		selectedFields = []string{changeactor.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "name":
+			if _, ok := fieldSeen[changeactor.FieldName]; !ok {
+				selectedFields = append(selectedFields, changeactor.FieldName)
+				fieldSeen[changeactor.FieldName] = struct{}{}
+			}
+		case "actorType":
+			if _, ok := fieldSeen[changeactor.FieldActorType]; !ok {
+				selectedFields = append(selectedFields, changeactor.FieldActorType)
+				fieldSeen[changeactor.FieldActorType] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		ca.Select(selectedFields...)
+	}
+	return nil
+}
+
+type changeactorPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ChangeActorPaginateOption
+}
+
+func newChangeActorPaginateArgs(rv map[string]any) *changeactorPaginateArgs {
+	args := &changeactorPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ChangeActorWhereInput); ok {
+		args.opts = append(args.opts, WithChangeActorFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (c *ContactQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -661,9 +734,9 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: c.config}).Query()
+				query = (&ChangeActorClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			c.withCreatedBy = query
@@ -676,9 +749,9 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: c.config}).Query()
+				query = (&ChangeActorClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			c.withUpdatedBy = query
@@ -1026,9 +1099,9 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: c.config}).Query()
+				query = (&ChangeActorClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			c.withCreatedBy = query
@@ -1041,9 +1114,9 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: c.config}).Query()
+				query = (&ChangeActorClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			c.withUpdatedBy = query
@@ -1571,9 +1644,9 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: co.config}).Query()
+				query = (&ChangeActorClient{config: co.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			co.withCreatedBy = query
@@ -1586,9 +1659,9 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: co.config}).Query()
+				query = (&ChangeActorClient{config: co.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			co.withUpdatedBy = query
@@ -2106,9 +2179,9 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: dd.config}).Query()
+				query = (&ChangeActorClient{config: dd.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			dd.withCreatedBy = query
@@ -2121,9 +2194,9 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: dd.config}).Query()
+				query = (&ChangeActorClient{config: dd.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			dd.withUpdatedBy = query
@@ -2436,9 +2509,9 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: e.config}).Query()
+				query = (&ChangeActorClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			e.withCreatedBy = query
@@ -2451,9 +2524,9 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: e.config}).Query()
+				query = (&ChangeActorClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			e.withUpdatedBy = query
@@ -2876,9 +2949,9 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: et.config}).Query()
+				query = (&ChangeActorClient{config: et.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			et.withCreatedBy = query
@@ -2891,9 +2964,9 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: et.config}).Query()
+				query = (&ChangeActorClient{config: et.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			et.withUpdatedBy = query
@@ -3212,9 +3285,9 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: e.config}).Query()
+				query = (&ChangeActorClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			e.withCreatedBy = query
@@ -3227,9 +3300,9 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: e.config}).Query()
+				query = (&ChangeActorClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			e.withUpdatedBy = query
@@ -3619,9 +3692,9 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: f.config}).Query()
+				query = (&ChangeActorClient{config: f.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			f.withCreatedBy = query
@@ -3634,9 +3707,9 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: f.config}).Query()
+				query = (&ChangeActorClient{config: f.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			f.withUpdatedBy = query
@@ -4136,9 +4209,9 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: gr.config}).Query()
+				query = (&ChangeActorClient{config: gr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			gr.withCreatedBy = query
@@ -4151,9 +4224,9 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: gr.config}).Query()
+				query = (&ChangeActorClient{config: gr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			gr.withUpdatedBy = query
@@ -4952,9 +5025,9 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: gm.config}).Query()
+				query = (&ChangeActorClient{config: gm.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			gm.withCreatedBy = query
@@ -4967,9 +5040,9 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: gm.config}).Query()
+				query = (&ChangeActorClient{config: gm.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			gm.withUpdatedBy = query
@@ -5259,9 +5332,9 @@ func (gs *GroupSettingQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: gs.config}).Query()
+				query = (&ChangeActorClient{config: gs.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			gs.withCreatedBy = query
@@ -5274,9 +5347,9 @@ func (gs *GroupSettingQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: gs.config}).Query()
+				query = (&ChangeActorClient{config: gs.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			gs.withUpdatedBy = query
@@ -5568,9 +5641,9 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: h.config}).Query()
+				query = (&ChangeActorClient{config: h.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			h.withCreatedBy = query
@@ -5583,9 +5656,9 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: h.config}).Query()
+				query = (&ChangeActorClient{config: h.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			h.withUpdatedBy = query
@@ -5925,9 +5998,9 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: i.config}).Query()
+				query = (&ChangeActorClient{config: i.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			i.withCreatedBy = query
@@ -5940,9 +6013,9 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: i.config}).Query()
+				query = (&ChangeActorClient{config: i.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			i.withUpdatedBy = query
@@ -6294,9 +6367,9 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: ip.config}).Query()
+				query = (&ChangeActorClient{config: ip.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			ip.withCreatedBy = query
@@ -6309,9 +6382,9 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: ip.config}).Query()
+				query = (&ChangeActorClient{config: ip.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			ip.withUpdatedBy = query
@@ -6747,9 +6820,9 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: i.config}).Query()
+				query = (&ChangeActorClient{config: i.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			i.withCreatedBy = query
@@ -6762,9 +6835,9 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: i.config}).Query()
+				query = (&ChangeActorClient{config: i.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			i.withUpdatedBy = query
@@ -6932,9 +7005,9 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: n.config}).Query()
+				query = (&ChangeActorClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			n.withCreatedBy = query
@@ -6947,9 +7020,9 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: n.config}).Query()
+				query = (&ChangeActorClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			n.withUpdatedBy = query
@@ -7345,9 +7418,9 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: n.config}).Query()
+				query = (&ChangeActorClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			n.withCreatedBy = query
@@ -7360,9 +7433,9 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: n.config}).Query()
+				query = (&ChangeActorClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			n.withUpdatedBy = query
@@ -7661,9 +7734,9 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: om.config}).Query()
+				query = (&ChangeActorClient{config: om.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			om.withCreatedBy = query
@@ -7676,9 +7749,9 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: om.config}).Query()
+				query = (&ChangeActorClient{config: om.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			om.withUpdatedBy = query
@@ -7968,9 +8041,9 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: os.config}).Query()
+				query = (&ChangeActorClient{config: os.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			os.withCreatedBy = query
@@ -7983,9 +8056,9 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: os.config}).Query()
+				query = (&ChangeActorClient{config: os.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			os.withUpdatedBy = query
@@ -8317,9 +8390,9 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: o.config}).Query()
+				query = (&ChangeActorClient{config: o.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			o.withCreatedBy = query
@@ -8332,9 +8405,9 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: o.config}).Query()
+				query = (&ChangeActorClient{config: o.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			o.withUpdatedBy = query
@@ -9248,9 +9321,9 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: os.config}).Query()
+				query = (&ChangeActorClient{config: os.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			os.withCreatedBy = query
@@ -9263,9 +9336,9 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: os.config}).Query()
+				query = (&ChangeActorClient{config: os.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			os.withUpdatedBy = query
@@ -9610,9 +9683,9 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pat.config}).Query()
+				query = (&ChangeActorClient{config: pat.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			pat.withCreatedBy = query
@@ -9625,9 +9698,9 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pat.config}).Query()
+				query = (&ChangeActorClient{config: pat.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			pat.withUpdatedBy = query
@@ -9808,9 +9881,9 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pr.config}).Query()
+				query = (&ChangeActorClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			pr.withCreatedBy = query
@@ -9823,9 +9896,9 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pr.config}).Query()
+				query = (&ChangeActorClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			pr.withUpdatedBy = query
@@ -10271,9 +10344,9 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pr.config}).Query()
+				query = (&ChangeActorClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			pr.withCreatedBy = query
@@ -10286,9 +10359,9 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pr.config}).Query()
+				query = (&ChangeActorClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			pr.withUpdatedBy = query
@@ -10841,9 +10914,9 @@ func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pm.config}).Query()
+				query = (&ChangeActorClient{config: pm.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			pm.withCreatedBy = query
@@ -10856,9 +10929,9 @@ func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pm.config}).Query()
+				query = (&ChangeActorClient{config: pm.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			pm.withUpdatedBy = query
@@ -11135,9 +11208,9 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: r.config}).Query()
+				query = (&ChangeActorClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			r.withCreatedBy = query
@@ -11150,9 +11223,9 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: r.config}).Query()
+				query = (&ChangeActorClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			r.withUpdatedBy = query
@@ -11595,9 +11668,9 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
+				query = (&ChangeActorClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			s.withCreatedBy = query
@@ -11610,9 +11683,9 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
+				query = (&ChangeActorClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			s.withUpdatedBy = query
@@ -12004,9 +12077,9 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
+				query = (&ChangeActorClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			s.withCreatedBy = query
@@ -12019,9 +12092,9 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
+				query = (&ChangeActorClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			s.withUpdatedBy = query
@@ -12496,9 +12569,9 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
+				query = (&ChangeActorClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			s.withCreatedBy = query
@@ -12511,9 +12584,9 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: s.config}).Query()
+				query = (&ChangeActorClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			s.withUpdatedBy = query
@@ -12681,9 +12754,9 @@ func (ts *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: ts.config}).Query()
+				query = (&ChangeActorClient{config: ts.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			ts.withCreatedBy = query
@@ -12696,9 +12769,9 @@ func (ts *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: ts.config}).Query()
+				query = (&ChangeActorClient{config: ts.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			ts.withUpdatedBy = query
@@ -12843,9 +12916,9 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: t.config}).Query()
+				query = (&ChangeActorClient{config: t.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			t.withCreatedBy = query
@@ -12858,9 +12931,9 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: t.config}).Query()
+				query = (&ChangeActorClient{config: t.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			t.withUpdatedBy = query
@@ -13273,9 +13346,9 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: t.config}).Query()
+				query = (&ChangeActorClient{config: t.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			t.withCreatedBy = query
@@ -13288,9 +13361,9 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: t.config}).Query()
+				query = (&ChangeActorClient{config: t.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			t.withUpdatedBy = query
@@ -14248,9 +14321,9 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: us.config}).Query()
+				query = (&ChangeActorClient{config: us.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			us.withCreatedBy = query
@@ -14263,9 +14336,9 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: us.config}).Query()
+				query = (&ChangeActorClient{config: us.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
 				return err
 			}
 			us.withUpdatedBy = query

@@ -6,9 +6,8 @@ mutation CreateBulkCSVOrgSubscription($input: Upload!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       expiresAt
       features
@@ -34,9 +33,8 @@ mutation CreateBulkOrgSubscription($input: [CreateOrgSubscriptionInput!]) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       expiresAt
       features
@@ -62,9 +60,8 @@ mutation CreateOrgSubscription($input: CreateOrgSubscriptionInput!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       expiresAt
       features
@@ -109,9 +106,8 @@ query GetAllOrgSubscriptions {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
     }
@@ -159,9 +155,8 @@ query GetOrgSubscriptions($where: OrgSubscriptionWhereInput) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
     }
@@ -176,9 +171,8 @@ mutation UpdateOrgSubscription($updateOrgSubscriptionId: ID!, $input: UpdateOrgS
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       expiresAt
       features

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -22,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -34,8 +34,8 @@ type NarrativeQuery struct {
 	order                     []narrative.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.Narrative
-	withCreatedBy             *UserQuery
-	withUpdatedBy             *UserQuery
+	withCreatedBy             *ChangeActorQuery
+	withUpdatedBy             *ChangeActorQuery
 	withOwner                 *OrganizationQuery
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
@@ -92,8 +92,8 @@ func (nq *NarrativeQuery) Order(o ...narrative.OrderOption) *NarrativeQuery {
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (nq *NarrativeQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: nq.config}).Query()
+func (nq *NarrativeQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -104,11 +104,11 @@ func (nq *NarrativeQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, narrative.CreatedByTable, narrative.CreatedByColumn),
 		)
 		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Narrative
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
@@ -117,8 +117,8 @@ func (nq *NarrativeQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (nq *NarrativeQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: nq.config}).Query()
+func (nq *NarrativeQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -129,11 +129,11 @@ func (nq *NarrativeQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, narrative.UpdatedByTable, narrative.UpdatedByColumn),
 		)
 		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Narrative
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
@@ -578,8 +578,8 @@ func (nq *NarrativeQuery) Clone() *NarrativeQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithCreatedBy(opts ...func(*UserQuery)) *NarrativeQuery {
-	query := (&UserClient{config: nq.config}).Query()
+func (nq *NarrativeQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *NarrativeQuery {
+	query := (&ChangeActorClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -589,8 +589,8 @@ func (nq *NarrativeQuery) WithCreatedBy(opts ...func(*UserQuery)) *NarrativeQuer
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithUpdatedBy(opts ...func(*UserQuery)) *NarrativeQuery {
-	query := (&UserClient{config: nq.config}).Query()
+func (nq *NarrativeQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *NarrativeQuery {
+	query := (&ChangeActorClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -820,13 +820,13 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 	}
 	if query := nq.withCreatedBy; query != nil {
 		if err := nq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Narrative, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *Narrative, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := nq.withUpdatedBy; query != nil {
 		if err := nq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Narrative, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *Narrative, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -958,7 +958,7 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 	return nodes, nil
 }
 
-func (nq *NarrativeQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *User)) error {
+func (nq *NarrativeQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Narrative)
 	for i := range nodes {
@@ -971,7 +971,7 @@ func (nq *NarrativeQuery) loadCreatedBy(ctx context.Context, query *UserQuery, n
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -987,7 +987,7 @@ func (nq *NarrativeQuery) loadCreatedBy(ctx context.Context, query *UserQuery, n
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *User)) error {
+func (nq *NarrativeQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Narrative)
 	for i := range nodes {
@@ -1000,7 +1000,7 @@ func (nq *NarrativeQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, n
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

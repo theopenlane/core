@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -30,8 +31,8 @@ type ActionPlanQuery struct {
 	order             []actionplan.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.ActionPlan
-	withCreatedBy     *UserQuery
-	withUpdatedBy     *UserQuery
+	withCreatedBy     *ChangeActorQuery
+	withUpdatedBy     *ChangeActorQuery
 	withStandard      *StandardQuery
 	withRisk          *RiskQuery
 	withControl       *ControlQuery
@@ -81,8 +82,8 @@ func (apq *ActionPlanQuery) Order(o ...actionplan.OrderOption) *ActionPlanQuery 
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (apq *ActionPlanQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: apq.config}).Query()
+func (apq *ActionPlanQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: apq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := apq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -93,11 +94,11 @@ func (apq *ActionPlanQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.CreatedByTable, actionplan.CreatedByColumn),
 		)
 		schemaConfig := apq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
@@ -106,8 +107,8 @@ func (apq *ActionPlanQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (apq *ActionPlanQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: apq.config}).Query()
+func (apq *ActionPlanQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: apq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := apq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -118,11 +119,11 @@ func (apq *ActionPlanQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.UpdatedByTable, actionplan.UpdatedByColumn),
 		)
 		schemaConfig := apq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
@@ -463,8 +464,8 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithCreatedBy(opts ...func(*UserQuery)) *ActionPlanQuery {
-	query := (&UserClient{config: apq.config}).Query()
+func (apq *ActionPlanQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ActionPlanQuery {
+	query := (&ChangeActorClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -474,8 +475,8 @@ func (apq *ActionPlanQuery) WithCreatedBy(opts ...func(*UserQuery)) *ActionPlanQ
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ActionPlanQuery {
-	query := (&UserClient{config: apq.config}).Query()
+func (apq *ActionPlanQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ActionPlanQuery {
+	query := (&ChangeActorClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -651,13 +652,13 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	}
 	if query := apq.withCreatedBy; query != nil {
 		if err := apq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *ActionPlan, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *ActionPlan, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := apq.withUpdatedBy; query != nil {
 		if err := apq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *ActionPlan, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *ActionPlan, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -739,7 +740,7 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
+func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ActionPlan)
 	for i := range nodes {
@@ -752,7 +753,7 @@ func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *UserQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -768,7 +769,7 @@ func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *UserQuery,
 	}
 	return nil
 }
-func (apq *ActionPlanQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
+func (apq *ActionPlanQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ActionPlan)
 	for i := range nodes {
@@ -781,7 +782,7 @@ func (apq *ActionPlanQuery) loadUpdatedBy(ctx context.Context, query *UserQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

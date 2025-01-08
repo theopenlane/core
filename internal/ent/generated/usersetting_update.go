@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -248,9 +249,9 @@ func (usu *UserSettingUpdate) ClearPhoneNumber() *UserSettingUpdate {
 	return usu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (usu *UserSettingUpdate) SetUpdatedBy(u *User) *UserSettingUpdate {
-	return usu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (usu *UserSettingUpdate) SetUpdatedBy(c *ChangeActor) *UserSettingUpdate {
+	return usu.SetUpdatedByID(c.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
@@ -297,7 +298,7 @@ func (usu *UserSettingUpdate) Mutation() *UserSettingMutation {
 	return usu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (usu *UserSettingUpdate) ClearUpdatedBy() *UserSettingUpdate {
 	usu.mutation.ClearUpdatedBy()
 	return usu
@@ -479,7 +480,7 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{usersetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = usu.schemaConfig.UserSetting
@@ -493,7 +494,7 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{usersetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = usu.schemaConfig.UserSetting
@@ -848,9 +849,9 @@ func (usuo *UserSettingUpdateOne) ClearPhoneNumber() *UserSettingUpdateOne {
 	return usuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (usuo *UserSettingUpdateOne) SetUpdatedBy(u *User) *UserSettingUpdateOne {
-	return usuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (usuo *UserSettingUpdateOne) SetUpdatedBy(c *ChangeActor) *UserSettingUpdateOne {
+	return usuo.SetUpdatedByID(c.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
@@ -897,7 +898,7 @@ func (usuo *UserSettingUpdateOne) Mutation() *UserSettingMutation {
 	return usuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (usuo *UserSettingUpdateOne) ClearUpdatedBy() *UserSettingUpdateOne {
 	usuo.mutation.ClearUpdatedBy()
 	return usuo
@@ -1109,7 +1110,7 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 			Columns: []string{usersetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = usuo.schemaConfig.UserSetting
@@ -1123,7 +1124,7 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 			Columns: []string{usersetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = usuo.schemaConfig.UserSetting

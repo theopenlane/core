@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -22,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // ControlObjectiveCreate is the builder for creating a ControlObjective entity.
@@ -294,14 +294,14 @@ func (coc *ControlObjectiveCreate) SetNillableID(s *string) *ControlObjectiveCre
 	return coc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (coc *ControlObjectiveCreate) SetCreatedBy(u *User) *ControlObjectiveCreate {
-	return coc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (coc *ControlObjectiveCreate) SetCreatedBy(c *ChangeActor) *ControlObjectiveCreate {
+	return coc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (coc *ControlObjectiveCreate) SetUpdatedBy(u *User) *ControlObjectiveCreate {
-	return coc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (coc *ControlObjectiveCreate) SetUpdatedBy(c *ChangeActor) *ControlObjectiveCreate {
+	return coc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -697,7 +697,7 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 			Columns: []string{controlobjective.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = coc.schemaConfig.ControlObjective
@@ -715,7 +715,7 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 			Columns: []string{controlobjective.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = coc.schemaConfig.ControlObjective

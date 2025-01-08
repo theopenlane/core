@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -176,9 +176,9 @@ func (iu *InviteUpdate) SetSecret(b []byte) *InviteUpdate {
 	return iu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (iu *InviteUpdate) SetUpdatedBy(u *User) *InviteUpdate {
-	return iu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (iu *InviteUpdate) SetUpdatedBy(c *ChangeActor) *InviteUpdate {
+	return iu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -206,7 +206,7 @@ func (iu *InviteUpdate) Mutation() *InviteMutation {
 	return iu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (iu *InviteUpdate) ClearUpdatedBy() *InviteUpdate {
 	iu.mutation.ClearUpdatedBy()
 	return iu
@@ -379,7 +379,7 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{invite.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = iu.schemaConfig.Invite
@@ -393,7 +393,7 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{invite.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = iu.schemaConfig.Invite
@@ -646,9 +646,9 @@ func (iuo *InviteUpdateOne) SetSecret(b []byte) *InviteUpdateOne {
 	return iuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (iuo *InviteUpdateOne) SetUpdatedBy(u *User) *InviteUpdateOne {
-	return iuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (iuo *InviteUpdateOne) SetUpdatedBy(c *ChangeActor) *InviteUpdateOne {
+	return iuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -676,7 +676,7 @@ func (iuo *InviteUpdateOne) Mutation() *InviteMutation {
 	return iuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (iuo *InviteUpdateOne) ClearUpdatedBy() *InviteUpdateOne {
 	iuo.mutation.ClearUpdatedBy()
 	return iuo
@@ -879,7 +879,7 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 			Columns: []string{invite.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = iuo.schemaConfig.Invite
@@ -893,7 +893,7 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 			Columns: []string{invite.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = iuo.schemaConfig.Invite

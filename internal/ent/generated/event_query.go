@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -36,8 +37,8 @@ type EventQuery struct {
 	order                        []event.OrderOption
 	inters                       []Interceptor
 	predicates                   []predicate.Event
-	withCreatedBy                *UserQuery
-	withUpdatedBy                *UserQuery
+	withCreatedBy                *ChangeActorQuery
+	withUpdatedBy                *ChangeActorQuery
 	withUser                     *UserQuery
 	withGroup                    *GroupQuery
 	withIntegration              *IntegrationQuery
@@ -99,8 +100,8 @@ func (eq *EventQuery) Order(o ...event.OrderOption) *EventQuery {
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (eq *EventQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: eq.config}).Query()
+func (eq *EventQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: eq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := eq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -111,11 +112,11 @@ func (eq *EventQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, event.CreatedByTable, event.CreatedByColumn),
 		)
 		schemaConfig := eq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Event
 		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
 		return fromU, nil
@@ -124,8 +125,8 @@ func (eq *EventQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (eq *EventQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: eq.config}).Query()
+func (eq *EventQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: eq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := eq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -136,11 +137,11 @@ func (eq *EventQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, event.UpdatedByTable, event.UpdatedByColumn),
 		)
 		schemaConfig := eq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Event
 		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
 		return fromU, nil
@@ -637,8 +638,8 @@ func (eq *EventQuery) Clone() *EventQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithCreatedBy(opts ...func(*UserQuery)) *EventQuery {
-	query := (&UserClient{config: eq.config}).Query()
+func (eq *EventQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *EventQuery {
+	query := (&ChangeActorClient{config: eq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -648,8 +649,8 @@ func (eq *EventQuery) WithCreatedBy(opts ...func(*UserQuery)) *EventQuery {
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithUpdatedBy(opts ...func(*UserQuery)) *EventQuery {
-	query := (&UserClient{config: eq.config}).Query()
+func (eq *EventQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *EventQuery {
+	query := (&ChangeActorClient{config: eq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -897,13 +898,13 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 	}
 	if query := eq.withCreatedBy; query != nil {
 		if err := eq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Event, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *Event, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := eq.withUpdatedBy; query != nil {
 		if err := eq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Event, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *Event, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1071,7 +1072,7 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 	return nodes, nil
 }
 
-func (eq *EventQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Event, init func(*Event), assign func(*Event, *User)) error {
+func (eq *EventQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Event, init func(*Event), assign func(*Event, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Event)
 	for i := range nodes {
@@ -1084,7 +1085,7 @@ func (eq *EventQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1100,7 +1101,7 @@ func (eq *EventQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes
 	}
 	return nil
 }
-func (eq *EventQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Event, init func(*Event), assign func(*Event, *User)) error {
+func (eq *EventQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Event, init func(*Event), assign func(*Event, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Event)
 	for i := range nodes {
@@ -1113,7 +1114,7 @@ func (eq *EventQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

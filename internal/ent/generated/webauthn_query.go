@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -25,8 +26,8 @@ type WebauthnQuery struct {
 	order         []webauthn.OrderOption
 	inters        []Interceptor
 	predicates    []predicate.Webauthn
-	withCreatedBy *UserQuery
-	withUpdatedBy *UserQuery
+	withCreatedBy *ChangeActorQuery
+	withUpdatedBy *ChangeActorQuery
 	withOwner     *UserQuery
 	loadTotal     []func(context.Context, []*Webauthn) error
 	modifiers     []func(*sql.Selector)
@@ -67,8 +68,8 @@ func (wq *WebauthnQuery) Order(o ...webauthn.OrderOption) *WebauthnQuery {
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (wq *WebauthnQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: wq.config}).Query()
+func (wq *WebauthnQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: wq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := wq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -79,11 +80,11 @@ func (wq *WebauthnQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(webauthn.Table, webauthn.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.CreatedByTable, webauthn.CreatedByColumn),
 		)
 		schemaConfig := wq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Webauthn
 		fromU = sqlgraph.SetNeighbors(wq.driver.Dialect(), step)
 		return fromU, nil
@@ -92,8 +93,8 @@ func (wq *WebauthnQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (wq *WebauthnQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: wq.config}).Query()
+func (wq *WebauthnQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: wq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := wq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -104,11 +105,11 @@ func (wq *WebauthnQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(webauthn.Table, webauthn.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.UpdatedByTable, webauthn.UpdatedByColumn),
 		)
 		schemaConfig := wq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Webauthn
 		fromU = sqlgraph.SetNeighbors(wq.driver.Dialect(), step)
 		return fromU, nil
@@ -345,8 +346,8 @@ func (wq *WebauthnQuery) Clone() *WebauthnQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (wq *WebauthnQuery) WithCreatedBy(opts ...func(*UserQuery)) *WebauthnQuery {
-	query := (&UserClient{config: wq.config}).Query()
+func (wq *WebauthnQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *WebauthnQuery {
+	query := (&ChangeActorClient{config: wq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -356,8 +357,8 @@ func (wq *WebauthnQuery) WithCreatedBy(opts ...func(*UserQuery)) *WebauthnQuery 
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (wq *WebauthnQuery) WithUpdatedBy(opts ...func(*UserQuery)) *WebauthnQuery {
-	query := (&UserClient{config: wq.config}).Query()
+func (wq *WebauthnQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *WebauthnQuery {
+	query := (&ChangeActorClient{config: wq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -485,13 +486,13 @@ func (wq *WebauthnQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Web
 	}
 	if query := wq.withCreatedBy; query != nil {
 		if err := wq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Webauthn, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *Webauthn, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := wq.withUpdatedBy; query != nil {
 		if err := wq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Webauthn, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *Webauthn, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -509,7 +510,7 @@ func (wq *WebauthnQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Web
 	return nodes, nil
 }
 
-func (wq *WebauthnQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Webauthn, init func(*Webauthn), assign func(*Webauthn, *User)) error {
+func (wq *WebauthnQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Webauthn, init func(*Webauthn), assign func(*Webauthn, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Webauthn)
 	for i := range nodes {
@@ -522,7 +523,7 @@ func (wq *WebauthnQuery) loadCreatedBy(ctx context.Context, query *UserQuery, no
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -538,7 +539,7 @@ func (wq *WebauthnQuery) loadCreatedBy(ctx context.Context, query *UserQuery, no
 	}
 	return nil
 }
-func (wq *WebauthnQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Webauthn, init func(*Webauthn), assign func(*Webauthn, *User)) error {
+func (wq *WebauthnQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Webauthn, init func(*Webauthn), assign func(*Webauthn, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Webauthn)
 	for i := range nodes {
@@ -551,7 +552,7 @@ func (wq *WebauthnQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, no
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

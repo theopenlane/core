@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -159,9 +160,9 @@ func (eu *EventUpdate) ClearMetadata() *EventUpdate {
 	return eu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (eu *EventUpdate) SetUpdatedBy(u *User) *EventUpdate {
-	return eu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (eu *EventUpdate) SetUpdatedBy(c *ChangeActor) *EventUpdate {
+	return eu.SetUpdatedByID(c.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -334,7 +335,7 @@ func (eu *EventUpdate) Mutation() *EventMutation {
 	return eu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (eu *EventUpdate) ClearUpdatedBy() *EventUpdate {
 	eu.mutation.ClearUpdatedBy()
 	return eu
@@ -677,7 +678,7 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{event.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = eu.schemaConfig.Event
@@ -691,7 +692,7 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{event.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = eu.schemaConfig.Event
@@ -1368,9 +1369,9 @@ func (euo *EventUpdateOne) ClearMetadata() *EventUpdateOne {
 	return euo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (euo *EventUpdateOne) SetUpdatedBy(u *User) *EventUpdateOne {
-	return euo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (euo *EventUpdateOne) SetUpdatedBy(c *ChangeActor) *EventUpdateOne {
+	return euo.SetUpdatedByID(c.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -1543,7 +1544,7 @@ func (euo *EventUpdateOne) Mutation() *EventMutation {
 	return euo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (euo *EventUpdateOne) ClearUpdatedBy() *EventUpdateOne {
 	euo.mutation.ClearUpdatedBy()
 	return euo
@@ -1916,7 +1917,7 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 			Columns: []string{event.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = euo.schemaConfig.Event
@@ -1930,7 +1931,7 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 			Columns: []string{event.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = euo.schemaConfig.Event

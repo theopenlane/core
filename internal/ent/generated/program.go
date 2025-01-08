@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -64,9 +64,9 @@ type Program struct {
 // ProgramEdges holds the relations/edges for other nodes in the graph.
 type ProgramEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -130,22 +130,22 @@ type ProgramEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ProgramEdges) CreatedByOrErr() (*User, error) {
+func (e ProgramEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ProgramEdges) UpdatedByOrErr() (*User, error) {
+func (e ProgramEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -466,12 +466,12 @@ func (pr *Program) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the Program entity.
-func (pr *Program) QueryCreatedBy() *UserQuery {
+func (pr *Program) QueryCreatedBy() *ChangeActorQuery {
 	return NewProgramClient(pr.config).QueryCreatedBy(pr)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the Program entity.
-func (pr *Program) QueryUpdatedBy() *UserQuery {
+func (pr *Program) QueryUpdatedBy() *ChangeActorQuery {
 	return NewProgramClient(pr.config).QueryUpdatedBy(pr)
 }
 

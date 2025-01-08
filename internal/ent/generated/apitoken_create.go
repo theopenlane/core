@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // APITokenCreate is the builder for creating a APIToken entity.
@@ -222,14 +222,14 @@ func (atc *APITokenCreate) SetNillableID(s *string) *APITokenCreate {
 	return atc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (atc *APITokenCreate) SetCreatedBy(u *User) *APITokenCreate {
-	return atc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (atc *APITokenCreate) SetCreatedBy(c *ChangeActor) *APITokenCreate {
+	return atc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (atc *APITokenCreate) SetUpdatedBy(u *User) *APITokenCreate {
-	return atc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (atc *APITokenCreate) SetUpdatedBy(c *ChangeActor) *APITokenCreate {
+	return atc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -429,7 +429,7 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 			Columns: []string{apitoken.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atc.schemaConfig.APIToken
@@ -447,7 +447,7 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 			Columns: []string{apitoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atc.schemaConfig.APIToken

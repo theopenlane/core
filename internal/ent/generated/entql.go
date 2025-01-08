@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -83,7 +84,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 70)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 71)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -174,6 +175,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[3] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   changeactor.Table,
+			Columns: changeactor.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: changeactor.FieldID,
+			},
+		},
+		Type: "ChangeActor",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			changeactor.FieldName:      {Type: field.TypeString, Column: changeactor.FieldName},
+			changeactor.FieldActorType: {Type: field.TypeString, Column: changeactor.FieldActorType},
+		},
+	}
+	graph.Nodes[4] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   contact.Table,
 			Columns: contact.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -201,7 +217,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			contact.FieldStatus:      {Type: field.TypeEnum, Column: contact.FieldStatus},
 		},
 	}
-	graph.Nodes[4] = &sqlgraph.Node{
+	graph.Nodes[5] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   contacthistory.Table,
 			Columns: contacthistory.Columns,
@@ -234,7 +250,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			contacthistory.FieldStatus:      {Type: field.TypeEnum, Column: contacthistory.FieldStatus},
 		},
 	}
-	graph.Nodes[5] = &sqlgraph.Node{
+	graph.Nodes[6] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   control.Table,
 			Columns: control.Columns,
@@ -268,7 +284,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldDetails:          {Type: field.TypeJSON, Column: control.FieldDetails},
 		},
 	}
-	graph.Nodes[6] = &sqlgraph.Node{
+	graph.Nodes[7] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   controlhistory.Table,
 			Columns: controlhistory.Columns,
@@ -306,7 +322,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldDetails:          {Type: field.TypeJSON, Column: controlhistory.FieldDetails},
 		},
 	}
-	graph.Nodes[7] = &sqlgraph.Node{
+	graph.Nodes[8] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   controlobjective.Table,
 			Columns: controlobjective.Columns,
@@ -339,7 +355,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlobjective.FieldDetails:              {Type: field.TypeJSON, Column: controlobjective.FieldDetails},
 		},
 	}
-	graph.Nodes[8] = &sqlgraph.Node{
+	graph.Nodes[9] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   controlobjectivehistory.Table,
 			Columns: controlobjectivehistory.Columns,
@@ -376,7 +392,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlobjectivehistory.FieldDetails:              {Type: field.TypeJSON, Column: controlobjectivehistory.FieldDetails},
 		},
 	}
-	graph.Nodes[9] = &sqlgraph.Node{
+	graph.Nodes[10] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   documentdata.Table,
 			Columns: documentdata.Columns,
@@ -400,7 +416,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			documentdata.FieldData:        {Type: field.TypeJSON, Column: documentdata.FieldData},
 		},
 	}
-	graph.Nodes[10] = &sqlgraph.Node{
+	graph.Nodes[11] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   documentdatahistory.Table,
 			Columns: documentdatahistory.Columns,
@@ -428,7 +444,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			documentdatahistory.FieldData:        {Type: field.TypeJSON, Column: documentdatahistory.FieldData},
 		},
 	}
-	graph.Nodes[11] = &sqlgraph.Node{
+	graph.Nodes[12] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   emailverificationtoken.Table,
 			Columns: emailverificationtoken.Columns,
@@ -453,7 +469,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailverificationtoken.FieldSecret:      {Type: field.TypeBytes, Column: emailverificationtoken.FieldSecret},
 		},
 	}
-	graph.Nodes[12] = &sqlgraph.Node{
+	graph.Nodes[13] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entity.Table,
 			Columns: entity.Columns,
@@ -481,7 +497,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldStatus:       {Type: field.TypeString, Column: entity.FieldStatus},
 		},
 	}
-	graph.Nodes[13] = &sqlgraph.Node{
+	graph.Nodes[14] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entityhistory.Table,
 			Columns: entityhistory.Columns,
@@ -513,7 +529,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldStatus:       {Type: field.TypeString, Column: entityhistory.FieldStatus},
 		},
 	}
-	graph.Nodes[14] = &sqlgraph.Node{
+	graph.Nodes[15] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entitytype.Table,
 			Columns: entitytype.Columns,
@@ -536,7 +552,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entitytype.FieldName:        {Type: field.TypeString, Column: entitytype.FieldName},
 		},
 	}
-	graph.Nodes[15] = &sqlgraph.Node{
+	graph.Nodes[16] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entitytypehistory.Table,
 			Columns: entitytypehistory.Columns,
@@ -563,7 +579,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entitytypehistory.FieldName:        {Type: field.TypeString, Column: entitytypehistory.FieldName},
 		},
 	}
-	graph.Nodes[16] = &sqlgraph.Node{
+	graph.Nodes[17] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   event.Table,
 			Columns: event.Columns,
@@ -586,7 +602,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			event.FieldMetadata:      {Type: field.TypeJSON, Column: event.FieldMetadata},
 		},
 	}
-	graph.Nodes[17] = &sqlgraph.Node{
+	graph.Nodes[18] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   eventhistory.Table,
 			Columns: eventhistory.Columns,
@@ -613,7 +629,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			eventhistory.FieldMetadata:      {Type: field.TypeJSON, Column: eventhistory.FieldMetadata},
 		},
 	}
-	graph.Nodes[18] = &sqlgraph.Node{
+	graph.Nodes[19] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   file.Table,
 			Columns: file.Columns,
@@ -648,7 +664,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldFileContents:          {Type: field.TypeBytes, Column: file.FieldFileContents},
 		},
 	}
-	graph.Nodes[19] = &sqlgraph.Node{
+	graph.Nodes[20] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   filehistory.Table,
 			Columns: filehistory.Columns,
@@ -687,7 +703,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldFileContents:          {Type: field.TypeBytes, Column: filehistory.FieldFileContents},
 		},
 	}
-	graph.Nodes[20] = &sqlgraph.Node{
+	graph.Nodes[21] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   group.Table,
 			Columns: group.Columns,
@@ -714,7 +730,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldDisplayName:     {Type: field.TypeString, Column: group.FieldDisplayName},
 		},
 	}
-	graph.Nodes[21] = &sqlgraph.Node{
+	graph.Nodes[22] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   grouphistory.Table,
 			Columns: grouphistory.Columns,
@@ -745,7 +761,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldDisplayName:     {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
 		},
 	}
-	graph.Nodes[22] = &sqlgraph.Node{
+	graph.Nodes[23] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembership.Table,
 			Columns: groupmembership.Columns,
@@ -768,7 +784,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembership.FieldUserID:      {Type: field.TypeString, Column: groupmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[23] = &sqlgraph.Node{
+	graph.Nodes[24] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembershiphistory.Table,
 			Columns: groupmembershiphistory.Columns,
@@ -795,7 +811,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: groupmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[24] = &sqlgraph.Node{
+	graph.Nodes[25] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsetting.Table,
 			Columns: groupsetting.Columns,
@@ -821,7 +837,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsetting.FieldGroupID:      {Type: field.TypeString, Column: groupsetting.FieldGroupID},
 		},
 	}
-	graph.Nodes[25] = &sqlgraph.Node{
+	graph.Nodes[26] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsettinghistory.Table,
 			Columns: groupsettinghistory.Columns,
@@ -851,7 +867,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsettinghistory.FieldGroupID:      {Type: field.TypeString, Column: groupsettinghistory.FieldGroupID},
 		},
 	}
-	graph.Nodes[26] = &sqlgraph.Node{
+	graph.Nodes[27] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hush.Table,
 			Columns: hush.Columns,
@@ -876,7 +892,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hush.FieldSecretValue: {Type: field.TypeString, Column: hush.FieldSecretValue},
 		},
 	}
-	graph.Nodes[27] = &sqlgraph.Node{
+	graph.Nodes[28] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hushhistory.Table,
 			Columns: hushhistory.Columns,
@@ -905,7 +921,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hushhistory.FieldSecretValue: {Type: field.TypeString, Column: hushhistory.FieldSecretValue},
 		},
 	}
-	graph.Nodes[28] = &sqlgraph.Node{
+	graph.Nodes[29] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   integration.Table,
 			Columns: integration.Columns,
@@ -930,7 +946,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldKind:        {Type: field.TypeString, Column: integration.FieldKind},
 		},
 	}
-	graph.Nodes[29] = &sqlgraph.Node{
+	graph.Nodes[30] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   integrationhistory.Table,
 			Columns: integrationhistory.Columns,
@@ -959,7 +975,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldKind:        {Type: field.TypeString, Column: integrationhistory.FieldKind},
 		},
 	}
-	graph.Nodes[30] = &sqlgraph.Node{
+	graph.Nodes[31] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicy.Table,
 			Columns: internalpolicy.Columns,
@@ -989,7 +1005,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldDetails:         {Type: field.TypeJSON, Column: internalpolicy.FieldDetails},
 		},
 	}
-	graph.Nodes[31] = &sqlgraph.Node{
+	graph.Nodes[32] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicyhistory.Table,
 			Columns: internalpolicyhistory.Columns,
@@ -1023,7 +1039,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldDetails:         {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDetails},
 		},
 	}
-	graph.Nodes[32] = &sqlgraph.Node{
+	graph.Nodes[33] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   invite.Table,
 			Columns: invite.Columns,
@@ -1052,7 +1068,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			invite.FieldSecret:       {Type: field.TypeBytes, Column: invite.FieldSecret},
 		},
 	}
-	graph.Nodes[33] = &sqlgraph.Node{
+	graph.Nodes[34] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   narrative.Table,
 			Columns: narrative.Columns,
@@ -1078,7 +1094,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrative.FieldDetails:     {Type: field.TypeJSON, Column: narrative.FieldDetails},
 		},
 	}
-	graph.Nodes[34] = &sqlgraph.Node{
+	graph.Nodes[35] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   narrativehistory.Table,
 			Columns: narrativehistory.Columns,
@@ -1108,7 +1124,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrativehistory.FieldDetails:     {Type: field.TypeJSON, Column: narrativehistory.FieldDetails},
 		},
 	}
-	graph.Nodes[35] = &sqlgraph.Node{
+	graph.Nodes[36] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   note.Table,
 			Columns: note.Columns,
@@ -1131,7 +1147,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			note.FieldText:        {Type: field.TypeString, Column: note.FieldText},
 		},
 	}
-	graph.Nodes[36] = &sqlgraph.Node{
+	graph.Nodes[37] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   notehistory.Table,
 			Columns: notehistory.Columns,
@@ -1158,7 +1174,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notehistory.FieldText:        {Type: field.TypeString, Column: notehistory.FieldText},
 		},
 	}
-	graph.Nodes[37] = &sqlgraph.Node{
+	graph.Nodes[38] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmembership.Table,
 			Columns: orgmembership.Columns,
@@ -1181,7 +1197,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembership.FieldUserID:         {Type: field.TypeString, Column: orgmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[38] = &sqlgraph.Node{
+	graph.Nodes[39] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmembershiphistory.Table,
 			Columns: orgmembershiphistory.Columns,
@@ -1208,7 +1224,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembershiphistory.FieldUserID:         {Type: field.TypeString, Column: orgmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[39] = &sqlgraph.Node{
+	graph.Nodes[40] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgsubscription.Table,
 			Columns: orgsubscription.Columns,
@@ -1238,7 +1254,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscription.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscription.FieldFeatures},
 		},
 	}
-	graph.Nodes[40] = &sqlgraph.Node{
+	graph.Nodes[41] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgsubscriptionhistory.Table,
 			Columns: orgsubscriptionhistory.Columns,
@@ -1272,7 +1288,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatures},
 		},
 	}
-	graph.Nodes[41] = &sqlgraph.Node{
+	graph.Nodes[42] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organization.Table,
 			Columns: organization.Columns,
@@ -1300,7 +1316,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organization.FieldDedicatedDb:          {Type: field.TypeBool, Column: organization.FieldDedicatedDb},
 		},
 	}
-	graph.Nodes[42] = &sqlgraph.Node{
+	graph.Nodes[43] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationhistory.Table,
 			Columns: organizationhistory.Columns,
@@ -1332,7 +1348,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldDedicatedDb:          {Type: field.TypeBool, Column: organizationhistory.FieldDedicatedDb},
 		},
 	}
-	graph.Nodes[43] = &sqlgraph.Node{
+	graph.Nodes[44] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationsetting.Table,
 			Columns: organizationsetting.Columns,
@@ -1362,7 +1378,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldStripeID:       {Type: field.TypeString, Column: organizationsetting.FieldStripeID},
 		},
 	}
-	graph.Nodes[44] = &sqlgraph.Node{
+	graph.Nodes[45] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationsettinghistory.Table,
 			Columns: organizationsettinghistory.Columns,
@@ -1396,7 +1412,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldStripeID:       {Type: field.TypeString, Column: organizationsettinghistory.FieldStripeID},
 		},
 	}
-	graph.Nodes[45] = &sqlgraph.Node{
+	graph.Nodes[46] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   passwordresettoken.Table,
 			Columns: passwordresettoken.Columns,
@@ -1421,7 +1437,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			passwordresettoken.FieldSecret:      {Type: field.TypeBytes, Column: passwordresettoken.FieldSecret},
 		},
 	}
-	graph.Nodes[46] = &sqlgraph.Node{
+	graph.Nodes[47] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   personalaccesstoken.Table,
 			Columns: personalaccesstoken.Columns,
@@ -1449,7 +1465,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			personalaccesstoken.FieldLastUsedAt:  {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
 		},
 	}
-	graph.Nodes[47] = &sqlgraph.Node{
+	graph.Nodes[48] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   procedure.Table,
 			Columns: procedure.Columns,
@@ -1480,7 +1496,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldDetails:         {Type: field.TypeJSON, Column: procedure.FieldDetails},
 		},
 	}
-	graph.Nodes[48] = &sqlgraph.Node{
+	graph.Nodes[49] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   procedurehistory.Table,
 			Columns: procedurehistory.Columns,
@@ -1515,7 +1531,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldDetails:         {Type: field.TypeJSON, Column: procedurehistory.FieldDetails},
 		},
 	}
-	graph.Nodes[49] = &sqlgraph.Node{
+	graph.Nodes[50] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   program.Table,
 			Columns: program.Columns,
@@ -1545,7 +1561,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldAuditorReadComments:  {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
 		},
 	}
-	graph.Nodes[50] = &sqlgraph.Node{
+	graph.Nodes[51] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programhistory.Table,
 			Columns: programhistory.Columns,
@@ -1579,7 +1595,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldAuditorReadComments:  {Type: field.TypeBool, Column: programhistory.FieldAuditorReadComments},
 		},
 	}
-	graph.Nodes[51] = &sqlgraph.Node{
+	graph.Nodes[52] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programmembership.Table,
 			Columns: programmembership.Columns,
@@ -1602,7 +1618,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programmembership.FieldUserID:      {Type: field.TypeString, Column: programmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[52] = &sqlgraph.Node{
+	graph.Nodes[53] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programmembershiphistory.Table,
 			Columns: programmembershiphistory.Columns,
@@ -1629,7 +1645,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: programmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[53] = &sqlgraph.Node{
+	graph.Nodes[54] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   risk.Table,
 			Columns: risk.Columns,
@@ -1661,7 +1677,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldDetails:       {Type: field.TypeJSON, Column: risk.FieldDetails},
 		},
 	}
-	graph.Nodes[54] = &sqlgraph.Node{
+	graph.Nodes[55] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   riskhistory.Table,
 			Columns: riskhistory.Columns,
@@ -1697,7 +1713,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldDetails:       {Type: field.TypeJSON, Column: riskhistory.FieldDetails},
 		},
 	}
-	graph.Nodes[55] = &sqlgraph.Node{
+	graph.Nodes[56] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   standard.Table,
 			Columns: standard.Columns,
@@ -1728,7 +1744,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldDetails:         {Type: field.TypeJSON, Column: standard.FieldDetails},
 		},
 	}
-	graph.Nodes[56] = &sqlgraph.Node{
+	graph.Nodes[57] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   standardhistory.Table,
 			Columns: standardhistory.Columns,
@@ -1763,7 +1779,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldDetails:         {Type: field.TypeJSON, Column: standardhistory.FieldDetails},
 		},
 	}
-	graph.Nodes[57] = &sqlgraph.Node{
+	graph.Nodes[58] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subcontrol.Table,
 			Columns: subcontrol.Columns,
@@ -1801,7 +1817,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldDetails:                        {Type: field.TypeJSON, Column: subcontrol.FieldDetails},
 		},
 	}
-	graph.Nodes[58] = &sqlgraph.Node{
+	graph.Nodes[59] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subcontrolhistory.Table,
 			Columns: subcontrolhistory.Columns,
@@ -1843,7 +1859,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldDetails:                        {Type: field.TypeJSON, Column: subcontrolhistory.FieldDetails},
 		},
 	}
-	graph.Nodes[59] = &sqlgraph.Node{
+	graph.Nodes[60] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subscriber.Table,
 			Columns: subscriber.Columns,
@@ -1873,7 +1889,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subscriber.FieldSecret:        {Type: field.TypeBytes, Column: subscriber.FieldSecret},
 		},
 	}
-	graph.Nodes[60] = &sqlgraph.Node{
+	graph.Nodes[61] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tfasetting.Table,
 			Columns: tfasetting.Columns,
@@ -1901,7 +1917,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tfasetting.FieldTotpAllowed:     {Type: field.TypeBool, Column: tfasetting.FieldTotpAllowed},
 		},
 	}
-	graph.Nodes[61] = &sqlgraph.Node{
+	graph.Nodes[62] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   task.Table,
 			Columns: task.Columns,
@@ -1928,7 +1944,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldCompleted:   {Type: field.TypeTime, Column: task.FieldCompleted},
 		},
 	}
-	graph.Nodes[62] = &sqlgraph.Node{
+	graph.Nodes[63] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   taskhistory.Table,
 			Columns: taskhistory.Columns,
@@ -1959,7 +1975,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldCompleted:   {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
 		},
 	}
-	graph.Nodes[63] = &sqlgraph.Node{
+	graph.Nodes[64] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   template.Table,
 			Columns: template.Columns,
@@ -1986,7 +2002,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldUischema:     {Type: field.TypeJSON, Column: template.FieldUischema},
 		},
 	}
-	graph.Nodes[64] = &sqlgraph.Node{
+	graph.Nodes[65] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   templatehistory.Table,
 			Columns: templatehistory.Columns,
@@ -2017,7 +2033,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldUischema:     {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
 		},
 	}
-	graph.Nodes[65] = &sqlgraph.Node{
+	graph.Nodes[66] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -2051,7 +2067,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
-	graph.Nodes[66] = &sqlgraph.Node{
+	graph.Nodes[67] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -2089,7 +2105,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
-	graph.Nodes[67] = &sqlgraph.Node{
+	graph.Nodes[68] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -2119,7 +2135,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[68] = &sqlgraph.Node{
+	graph.Nodes[69] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -2153,7 +2169,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[69] = &sqlgraph.Node{
+	graph.Nodes[70] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -2193,7 +2209,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"APIToken",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2205,7 +2221,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"APIToken",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2229,7 +2245,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"ActionPlan",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2241,7 +2257,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"ActionPlan",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"standard",
@@ -2313,7 +2329,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Contact",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2325,7 +2341,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Contact",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2373,7 +2389,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Control",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2385,7 +2401,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Control",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2553,7 +2569,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"ControlObjective",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2565,7 +2581,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"ControlObjective",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2733,7 +2749,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"DocumentData",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2745,7 +2761,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"DocumentData",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2805,7 +2821,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"EmailVerificationToken",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2817,7 +2833,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"EmailVerificationToken",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2841,7 +2857,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Entity",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2853,7 +2869,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Entity",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2937,7 +2953,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"EntityType",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2949,7 +2965,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"EntityType",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2985,7 +3001,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Event",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -2997,7 +3013,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Event",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"user",
@@ -3141,7 +3157,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"File",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -3153,7 +3169,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"File",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"user",
@@ -3297,7 +3313,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Group",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -3309,7 +3325,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Group",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -3753,7 +3769,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"GroupMembership",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -3765,7 +3781,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"GroupMembership",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"group",
@@ -3813,7 +3829,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"GroupSetting",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -3825,7 +3841,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"GroupSetting",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"group",
@@ -3849,7 +3865,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Hush",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -3861,7 +3877,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Hush",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"integrations",
@@ -3909,7 +3925,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Integration",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -3921,7 +3937,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Integration",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -3969,7 +3985,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"InternalPolicy",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -3981,7 +3997,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"InternalPolicy",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4101,7 +4117,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Invite",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -4113,7 +4129,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Invite",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4149,7 +4165,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Narrative",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -4161,7 +4177,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Narrative",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4281,7 +4297,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Note",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -4293,7 +4309,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Note",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4353,7 +4369,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"OrgMembership",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -4365,7 +4381,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"OrgMembership",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"organization",
@@ -4413,7 +4429,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"OrgSubscription",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -4425,7 +4441,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"OrgSubscription",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4449,7 +4465,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Organization",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -4461,7 +4477,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Organization",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"control_creators",
@@ -4941,7 +4957,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"OrganizationSetting",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -4953,7 +4969,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"OrganizationSetting",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"organization",
@@ -4989,7 +5005,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"PasswordResetToken",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5001,7 +5017,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"PasswordResetToken",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5025,7 +5041,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"PersonalAccessToken",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5037,7 +5053,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"PersonalAccessToken",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5085,7 +5101,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Procedure",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5097,7 +5113,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Procedure",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5217,7 +5233,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Program",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5229,7 +5245,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Program",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5457,7 +5473,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"ProgramMembership",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5469,7 +5485,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"ProgramMembership",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"program",
@@ -5505,7 +5521,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Risk",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5517,7 +5533,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Risk",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5625,7 +5641,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Standard",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5637,7 +5653,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Standard",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"control_objectives",
@@ -5709,7 +5725,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Subcontrol",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5721,7 +5737,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Subcontrol",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5805,7 +5821,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Subscriber",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5817,7 +5833,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Subscriber",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5853,7 +5869,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"TFASetting",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5865,7 +5881,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"TFASetting",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5889,7 +5905,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Task",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -5901,7 +5917,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Task",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"assigner",
@@ -6033,7 +6049,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Template",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -6045,7 +6061,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Template",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -6321,7 +6337,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"UserSetting",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -6333,7 +6349,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"UserSetting",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"user",
@@ -6381,7 +6397,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Webauthn",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"updated_by",
@@ -6393,7 +6409,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Webauthn",
-		"User",
+		"ChangeActor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -6537,7 +6553,7 @@ func (f *APITokenFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *APITokenFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *APITokenFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -6551,7 +6567,7 @@ func (f *APITokenFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *APITokenFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *APITokenFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -6694,7 +6710,7 @@ func (f *ActionPlanFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *ActionPlanFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *ActionPlanFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -6708,7 +6724,7 @@ func (f *ActionPlanFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *ActionPlanFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *ActionPlanFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -6922,6 +6938,56 @@ func (f *ActionPlanHistoryFilter) WhereDetails(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (caq *ChangeActorQuery) addPredicate(pred func(s *sql.Selector)) {
+	caq.predicates = append(caq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the ChangeActorQuery builder.
+func (caq *ChangeActorQuery) Filter() *ChangeActorFilter {
+	return &ChangeActorFilter{config: caq.config, predicateAdder: caq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *ChangeActorMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the ChangeActorMutation builder.
+func (m *ChangeActorMutation) Filter() *ChangeActorFilter {
+	return &ChangeActorFilter{config: m.config, predicateAdder: m}
+}
+
+// ChangeActorFilter provides a generic filtering capability at runtime for ChangeActorQuery.
+type ChangeActorFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *ChangeActorFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *ChangeActorFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(changeactor.FieldID))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *ChangeActorFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(changeactor.FieldName))
+}
+
+// WhereActorType applies the entql string predicate on the actor_type field.
+func (f *ChangeActorFilter) WhereActorType(p entql.StringP) {
+	f.Where(p.Field(changeactor.FieldActorType))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (cq *ContactQuery) addPredicate(pred func(s *sql.Selector)) {
 	cq.predicates = append(cq.predicates, pred)
 }
@@ -6950,7 +7016,7 @@ type ContactFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ContactFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7047,7 +7113,7 @@ func (f *ContactFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *ContactFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *ContactFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -7061,7 +7127,7 @@ func (f *ContactFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *ContactFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *ContactFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -7140,7 +7206,7 @@ type ContactHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ContactHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7280,7 +7346,7 @@ type ControlFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ControlFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7402,7 +7468,7 @@ func (f *ControlFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *ControlFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -7416,7 +7482,7 @@ func (f *ControlFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *ControlFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -7635,7 +7701,7 @@ type ControlHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ControlHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7800,7 +7866,7 @@ type ControlObjectiveFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ControlObjectiveFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7917,7 +7983,7 @@ func (f *ControlObjectiveFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *ControlObjectiveFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *ControlObjectiveFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -7931,7 +7997,7 @@ func (f *ControlObjectiveFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *ControlObjectiveFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *ControlObjectiveFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -8150,7 +8216,7 @@ type ControlObjectiveHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ControlObjectiveHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8310,7 +8376,7 @@ type DocumentDataFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *DocumentDataFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8382,7 +8448,7 @@ func (f *DocumentDataFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *DocumentDataFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *DocumentDataFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -8396,7 +8462,7 @@ func (f *DocumentDataFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *DocumentDataFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *DocumentDataFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -8489,7 +8555,7 @@ type DocumentDataHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *DocumentDataHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8604,7 +8670,7 @@ type EmailVerificationTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EmailVerificationTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8681,7 +8747,7 @@ func (f *EmailVerificationTokenFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *EmailVerificationTokenFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *EmailVerificationTokenFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -8695,7 +8761,7 @@ func (f *EmailVerificationTokenFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *EmailVerificationTokenFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *EmailVerificationTokenFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -8746,7 +8812,7 @@ type EntityFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8838,7 +8904,7 @@ func (f *EntityFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *EntityFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *EntityFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -8852,7 +8918,7 @@ func (f *EntityFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *EntityFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *EntityFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -8973,7 +9039,7 @@ type EntityHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9108,7 +9174,7 @@ type EntityTypeFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityTypeFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[15].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9175,7 +9241,7 @@ func (f *EntityTypeFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *EntityTypeFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *EntityTypeFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -9189,7 +9255,7 @@ func (f *EntityTypeFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *EntityTypeFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *EntityTypeFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -9254,7 +9320,7 @@ type EntityTypeHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityTypeHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[15].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[16].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9364,7 +9430,7 @@ type EventFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EventFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[16].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[17].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9431,7 +9497,7 @@ func (f *EventFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *EventFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *EventFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -9445,7 +9511,7 @@ func (f *EventFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *EventFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *EventFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -9636,7 +9702,7 @@ type EventHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EventHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[17].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[18].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9746,7 +9812,7 @@ type FileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[18].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[19].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9873,7 +9939,7 @@ func (f *FileFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *FileFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *FileFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -9887,7 +9953,7 @@ func (f *FileFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *FileFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *FileFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -10078,7 +10144,7 @@ type FileHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[19].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[20].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10248,7 +10314,7 @@ type GroupFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[20].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[21].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10335,7 +10401,7 @@ func (f *GroupFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *GroupFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -10349,7 +10415,7 @@ func (f *GroupFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *GroupFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *GroupFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -10890,7 +10956,7 @@ type GroupHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[21].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[22].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11020,7 +11086,7 @@ type GroupMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[22].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[23].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11087,7 +11153,7 @@ func (f *GroupMembershipFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *GroupMembershipFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *GroupMembershipFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -11101,7 +11167,7 @@ func (f *GroupMembershipFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *GroupMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *GroupMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -11180,7 +11246,7 @@ type GroupMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[23].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[24].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11290,7 +11356,7 @@ type GroupSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[24].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[25].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11372,7 +11438,7 @@ func (f *GroupSettingFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *GroupSettingFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *GroupSettingFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -11386,7 +11452,7 @@ func (f *GroupSettingFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *GroupSettingFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *GroupSettingFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -11437,7 +11503,7 @@ type GroupSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[25].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11562,7 +11628,7 @@ type HushFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11639,7 +11705,7 @@ func (f *HushFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *HushFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *HushFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -11653,7 +11719,7 @@ func (f *HushFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *HushFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *HushFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -11732,7 +11798,7 @@ type HushHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[28].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11852,7 +11918,7 @@ type IntegrationFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IntegrationFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[28].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[29].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11929,7 +11995,7 @@ func (f *IntegrationFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *IntegrationFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *IntegrationFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -11943,7 +12009,7 @@ func (f *IntegrationFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *IntegrationFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *IntegrationFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -12022,7 +12088,7 @@ type IntegrationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IntegrationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[29].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[30].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12142,7 +12208,7 @@ type InternalPolicyFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[30].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[31].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12244,7 +12310,7 @@ func (f *InternalPolicyFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *InternalPolicyFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *InternalPolicyFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -12258,7 +12324,7 @@ func (f *InternalPolicyFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *InternalPolicyFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *InternalPolicyFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -12421,7 +12487,7 @@ type InternalPolicyHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[31].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[32].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12566,7 +12632,7 @@ type InviteFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InviteFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[32].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[33].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12663,7 +12729,7 @@ func (f *InviteFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *InviteFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *InviteFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -12677,7 +12743,7 @@ func (f *InviteFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *InviteFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *InviteFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -12742,7 +12808,7 @@ type NarrativeFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NarrativeFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[33].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[34].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12824,7 +12890,7 @@ func (f *NarrativeFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *NarrativeFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *NarrativeFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -12838,7 +12904,7 @@ func (f *NarrativeFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *NarrativeFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *NarrativeFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -13001,7 +13067,7 @@ type NarrativeHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NarrativeHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[34].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[35].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13126,7 +13192,7 @@ type NoteFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NoteFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[35].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13193,7 +13259,7 @@ func (f *NoteFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *NoteFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *NoteFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -13207,7 +13273,7 @@ func (f *NoteFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *NoteFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *NoteFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -13300,7 +13366,7 @@ type NoteHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NoteHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13410,7 +13476,7 @@ type OrgMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13477,7 +13543,7 @@ func (f *OrgMembershipFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *OrgMembershipFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *OrgMembershipFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -13491,7 +13557,7 @@ func (f *OrgMembershipFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *OrgMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *OrgMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -13570,7 +13636,7 @@ type OrgMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13680,7 +13746,7 @@ type OrgSubscriptionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgSubscriptionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13782,7 +13848,7 @@ func (f *OrgSubscriptionFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *OrgSubscriptionFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *OrgSubscriptionFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -13796,7 +13862,7 @@ func (f *OrgSubscriptionFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *OrgSubscriptionFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *OrgSubscriptionFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -13847,7 +13913,7 @@ type OrgSubscriptionHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgSubscriptionHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13992,7 +14058,7 @@ type OrganizationFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14084,7 +14150,7 @@ func (f *OrganizationFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *OrganizationFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -14098,7 +14164,7 @@ func (f *OrganizationFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *OrganizationFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -14681,7 +14747,7 @@ type OrganizationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14816,7 +14882,7 @@ type OrganizationSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14918,7 +14984,7 @@ func (f *OrganizationSettingFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *OrganizationSettingFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *OrganizationSettingFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -14932,7 +14998,7 @@ func (f *OrganizationSettingFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *OrganizationSettingFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *OrganizationSettingFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -14997,7 +15063,7 @@ type OrganizationSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15142,7 +15208,7 @@ type PasswordResetTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PasswordResetTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15219,7 +15285,7 @@ func (f *PasswordResetTokenFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *PasswordResetTokenFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *PasswordResetTokenFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -15233,7 +15299,7 @@ func (f *PasswordResetTokenFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *PasswordResetTokenFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *PasswordResetTokenFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -15284,7 +15350,7 @@ type PersonalAccessTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PersonalAccessTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15376,7 +15442,7 @@ func (f *PersonalAccessTokenFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *PersonalAccessTokenFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *PersonalAccessTokenFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -15390,7 +15456,7 @@ func (f *PersonalAccessTokenFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *PersonalAccessTokenFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *PersonalAccessTokenFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -15469,7 +15535,7 @@ type ProcedureFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProcedureFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15576,7 +15642,7 @@ func (f *ProcedureFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *ProcedureFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *ProcedureFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -15590,7 +15656,7 @@ func (f *ProcedureFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *ProcedureFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *ProcedureFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -15753,7 +15819,7 @@ type ProcedureHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProcedureHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15903,7 +15969,7 @@ type ProgramFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16005,7 +16071,7 @@ func (f *ProgramFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *ProgramFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *ProgramFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -16019,7 +16085,7 @@ func (f *ProgramFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *ProgramFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *ProgramFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -16308,7 +16374,7 @@ type ProgramHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16453,7 +16519,7 @@ type ProgramMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16520,7 +16586,7 @@ func (f *ProgramMembershipFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *ProgramMembershipFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *ProgramMembershipFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -16534,7 +16600,7 @@ func (f *ProgramMembershipFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *ProgramMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *ProgramMembershipFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -16599,7 +16665,7 @@ type ProgramMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16709,7 +16775,7 @@ type RiskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RiskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16821,7 +16887,7 @@ func (f *RiskFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *RiskFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *RiskFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -16835,7 +16901,7 @@ func (f *RiskFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *RiskFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *RiskFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -16984,7 +17050,7 @@ type RiskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RiskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17139,7 +17205,7 @@ type StandardFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StandardFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17246,7 +17312,7 @@ func (f *StandardFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *StandardFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *StandardFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -17260,7 +17326,7 @@ func (f *StandardFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *StandardFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *StandardFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -17367,7 +17433,7 @@ type StandardHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StandardHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17517,7 +17583,7 @@ type SubcontrolFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubcontrolFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17659,7 +17725,7 @@ func (f *SubcontrolFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *SubcontrolFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *SubcontrolFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -17673,7 +17739,7 @@ func (f *SubcontrolFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *SubcontrolFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *SubcontrolFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -17794,7 +17860,7 @@ type SubcontrolHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubcontrolHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17979,7 +18045,7 @@ type SubscriberFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubscriberFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18081,7 +18147,7 @@ func (f *SubscriberFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *SubscriberFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *SubscriberFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -18095,7 +18161,7 @@ func (f *SubscriberFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *SubscriberFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *SubscriberFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -18160,7 +18226,7 @@ type TFASettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TFASettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18252,7 +18318,7 @@ func (f *TFASettingFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *TFASettingFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *TFASettingFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -18266,7 +18332,7 @@ func (f *TFASettingFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *TFASettingFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *TFASettingFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -18317,7 +18383,7 @@ type TaskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18404,7 +18470,7 @@ func (f *TaskFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *TaskFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *TaskFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -18418,7 +18484,7 @@ func (f *TaskFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *TaskFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *TaskFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -18595,7 +18661,7 @@ type TaskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18725,7 +18791,7 @@ type TemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18812,7 +18878,7 @@ func (f *TemplateFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *TemplateFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *TemplateFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -18826,7 +18892,7 @@ func (f *TemplateFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *TemplateFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *TemplateFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -18905,7 +18971,7 @@ type TemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19035,7 +19101,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19446,7 +19512,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19611,7 +19677,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19713,7 +19779,7 @@ func (f *UserSettingFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *UserSettingFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *UserSettingFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -19727,7 +19793,7 @@ func (f *UserSettingFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *UserSettingFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *UserSettingFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -19806,7 +19872,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19951,7 +20017,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20053,7 +20119,7 @@ func (f *WebauthnFilter) WhereHasCreatedBy() {
 }
 
 // WhereHasCreatedByWith applies a predicate to check if query has an edge created_by with a given conditions (other predicates).
-func (f *WebauthnFilter) WhereHasCreatedByWith(preds ...predicate.User) {
+func (f *WebauthnFilter) WhereHasCreatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("created_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -20067,7 +20133,7 @@ func (f *WebauthnFilter) WhereHasUpdatedBy() {
 }
 
 // WhereHasUpdatedByWith applies a predicate to check if query has an edge updated_by with a given conditions (other predicates).
-func (f *WebauthnFilter) WhereHasUpdatedByWith(preds ...predicate.User) {
+func (f *WebauthnFilter) WhereHasUpdatedByWith(preds ...predicate.ChangeActor) {
 	f.Where(entql.HasEdgeWith("updated_by", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)

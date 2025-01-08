@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -211,14 +211,14 @@ func (gsc *GroupSettingCreate) SetNillableID(s *string) *GroupSettingCreate {
 	return gsc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (gsc *GroupSettingCreate) SetCreatedBy(u *User) *GroupSettingCreate {
-	return gsc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (gsc *GroupSettingCreate) SetCreatedBy(c *ChangeActor) *GroupSettingCreate {
+	return gsc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (gsc *GroupSettingCreate) SetUpdatedBy(u *User) *GroupSettingCreate {
-	return gsc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (gsc *GroupSettingCreate) SetUpdatedBy(c *ChangeActor) *GroupSettingCreate {
+	return gsc.SetUpdatedByID(c.ID)
 }
 
 // SetGroup sets the "group" edge to the Group entity.
@@ -419,7 +419,7 @@ func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec
 			Columns: []string{groupsetting.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gsc.schemaConfig.GroupSetting
@@ -437,7 +437,7 @@ func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec
 			Columns: []string{groupsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gsc.schemaConfig.GroupSetting

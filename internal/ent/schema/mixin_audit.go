@@ -84,13 +84,23 @@ func (a AuditMixin) Edges() []ent.Edge {
 	}
 
 	return []ent.Edge{
-		edge.To("created_by", User.Type).
+		edge.To("created_by", ChangeActor.Type).
 			Field("created_by_id").
-			Immutable().
-			Unique(),
-		edge.To("updated_by", User.Type).
+			Unique().
+			Annotations(
+				entgql.Skip(
+					entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput,
+				),
+			).
+			Immutable(),
+		edge.To("updated_by", ChangeActor.Type).
 			Field("updated_by_id").
-			Unique(),
+			Unique().
+			Annotations(
+				entgql.Skip(
+					entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput,
+				),
+			),
 	}
 }
 

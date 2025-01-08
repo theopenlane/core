@@ -47,11 +47,13 @@ func ({{ . }}) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 
         // the above annotations create all the graphQL goodness; if you need the schema only and not the endpoints, use the below annotation instead
-        // if you do not need the graphql bits, also be certain to add an exclusion to scripts/files_to_skip.txt
+        // if you do not need the graphql bits
 		// entgql.Skip(entgql.SkipAll),
+		// entx.SchemaGenSkip(true),
+		// entx.QueryGenSkip(true)
 
 		// the below annotation adds the entfga policy that will check access to the entity
 		// remove this annotation (or replace with another policy) if you want checks to be defined

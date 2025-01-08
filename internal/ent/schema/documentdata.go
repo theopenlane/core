@@ -64,7 +64,7 @@ func (DocumentData) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.OrganizationInheritedChecks(), // TODO(sfunk): update to template checks instead of org checks
 	}
 }

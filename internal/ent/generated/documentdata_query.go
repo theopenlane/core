@@ -13,13 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -31,8 +31,8 @@ type DocumentDataQuery struct {
 	order           []documentdata.OrderOption
 	inters          []Interceptor
 	predicates      []predicate.DocumentData
-	withCreatedBy   *UserQuery
-	withUpdatedBy   *UserQuery
+	withCreatedBy   *ChangeActorQuery
+	withUpdatedBy   *ChangeActorQuery
 	withOwner       *OrganizationQuery
 	withTemplate    *TemplateQuery
 	withEntity      *EntityQuery
@@ -78,8 +78,8 @@ func (ddq *DocumentDataQuery) Order(o ...documentdata.OrderOption) *DocumentData
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (ddq *DocumentDataQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: ddq.config}).Query()
+func (ddq *DocumentDataQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: ddq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ddq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -90,11 +90,11 @@ func (ddq *DocumentDataQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(documentdata.Table, documentdata.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.CreatedByTable, documentdata.CreatedByColumn),
 		)
 		schemaConfig := ddq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.DocumentData
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
 		return fromU, nil
@@ -103,8 +103,8 @@ func (ddq *DocumentDataQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (ddq *DocumentDataQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: ddq.config}).Query()
+func (ddq *DocumentDataQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: ddq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ddq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -115,11 +115,11 @@ func (ddq *DocumentDataQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(documentdata.Table, documentdata.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.UpdatedByTable, documentdata.UpdatedByColumn),
 		)
 		schemaConfig := ddq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.DocumentData
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
 		return fromU, nil
@@ -434,8 +434,8 @@ func (ddq *DocumentDataQuery) Clone() *DocumentDataQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithCreatedBy(opts ...func(*UserQuery)) *DocumentDataQuery {
-	query := (&UserClient{config: ddq.config}).Query()
+func (ddq *DocumentDataQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *DocumentDataQuery {
+	query := (&ChangeActorClient{config: ddq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -445,8 +445,8 @@ func (ddq *DocumentDataQuery) WithCreatedBy(opts ...func(*UserQuery)) *DocumentD
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithUpdatedBy(opts ...func(*UserQuery)) *DocumentDataQuery {
-	query := (&UserClient{config: ddq.config}).Query()
+func (ddq *DocumentDataQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *DocumentDataQuery {
+	query := (&ChangeActorClient{config: ddq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -616,13 +616,13 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	}
 	if query := ddq.withCreatedBy; query != nil {
 		if err := ddq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *DocumentData, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *DocumentData, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := ddq.withUpdatedBy; query != nil {
 		if err := ddq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *DocumentData, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *DocumentData, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -674,7 +674,7 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
-func (ddq *DocumentDataQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *User)) error {
+func (ddq *DocumentDataQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*DocumentData)
 	for i := range nodes {
@@ -687,7 +687,7 @@ func (ddq *DocumentDataQuery) loadCreatedBy(ctx context.Context, query *UserQuer
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -703,7 +703,7 @@ func (ddq *DocumentDataQuery) loadCreatedBy(ctx context.Context, query *UserQuer
 	}
 	return nil
 }
-func (ddq *DocumentDataQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *User)) error {
+func (ddq *DocumentDataQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*DocumentData)
 	for i := range nodes {
@@ -716,7 +716,7 @@ func (ddq *DocumentDataQuery) loadUpdatedBy(ctx context.Context, query *UserQuer
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

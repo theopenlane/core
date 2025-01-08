@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -145,6 +146,7 @@ func checkColumn(table, column string) error {
 			apitoken.Table:                   apitoken.ValidColumn,
 			actionplan.Table:                 actionplan.ValidColumn,
 			actionplanhistory.Table:          actionplanhistory.ValidColumn,
+			changeactor.Table:                changeactor.ValidColumn,
 			contact.Table:                    contact.ValidColumn,
 			contacthistory.Table:             contacthistory.ValidColumn,
 			control.Table:                    control.ValidColumn,

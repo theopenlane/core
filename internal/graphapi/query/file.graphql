@@ -28,9 +28,8 @@ query GetAllFiles {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         uri
       }
@@ -86,9 +85,8 @@ query GetFiles($where: FileWhereInput) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         uri
       }

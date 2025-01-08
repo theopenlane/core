@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Note is the model entity for the Note schema.
@@ -51,9 +51,9 @@ type Note struct {
 // NoteEdges holds the relations/edges for other nodes in the graph.
 type NoteEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Entity holds the value of the entity edge.
@@ -74,22 +74,22 @@ type NoteEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e NoteEdges) CreatedByOrErr() (*User, error) {
+func (e NoteEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e NoteEdges) UpdatedByOrErr() (*User, error) {
+func (e NoteEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -251,12 +251,12 @@ func (n *Note) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the Note entity.
-func (n *Note) QueryCreatedBy() *UserQuery {
+func (n *Note) QueryCreatedBy() *ChangeActorQuery {
 	return NewNoteClient(n.config).QueryCreatedBy(n)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the Note entity.
-func (n *Note) QueryUpdatedBy() *UserQuery {
+func (n *Note) QueryUpdatedBy() *ChangeActorQuery {
 	return NewNoteClient(n.config).QueryUpdatedBy(n)
 }
 

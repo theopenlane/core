@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
@@ -59,9 +60,9 @@ type Task struct {
 // TaskEdges holds the relations/edges for other nodes in the graph.
 type TaskEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Assigner holds the value of the assigner edge.
 	Assigner *User `json:"assigner,omitempty"`
 	// Assignee holds the value of the assignee edge.
@@ -100,22 +101,22 @@ type TaskEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TaskEdges) CreatedByOrErr() (*User, error) {
+func (e TaskEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TaskEdges) UpdatedByOrErr() (*User, error) {
+func (e TaskEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -366,12 +367,12 @@ func (t *Task) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the Task entity.
-func (t *Task) QueryCreatedBy() *UserQuery {
+func (t *Task) QueryCreatedBy() *ChangeActorQuery {
 	return NewTaskClient(t.config).QueryCreatedBy(t)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the Task entity.
-func (t *Task) QueryUpdatedBy() *UserQuery {
+func (t *Task) QueryUpdatedBy() *ChangeActorQuery {
 	return NewTaskClient(t.config).QueryUpdatedBy(t)
 }
 

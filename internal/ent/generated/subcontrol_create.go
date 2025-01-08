@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -358,14 +359,14 @@ func (sc *SubcontrolCreate) SetNillableID(s *string) *SubcontrolCreate {
 	return sc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (sc *SubcontrolCreate) SetCreatedBy(u *User) *SubcontrolCreate {
-	return sc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (sc *SubcontrolCreate) SetCreatedBy(c *ChangeActor) *SubcontrolCreate {
+	return sc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (sc *SubcontrolCreate) SetUpdatedBy(u *User) *SubcontrolCreate {
-	return sc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (sc *SubcontrolCreate) SetUpdatedBy(c *ChangeActor) *SubcontrolCreate {
+	return sc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -683,7 +684,7 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			Columns: []string{subcontrol.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Subcontrol
@@ -701,7 +702,7 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			Columns: []string{subcontrol.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Subcontrol

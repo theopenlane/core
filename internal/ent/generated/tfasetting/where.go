@@ -820,18 +820,18 @@ func HasCreatedBy() predicate.TFASetting {
 			sqlgraph.Edge(sqlgraph.M2O, false, CreatedByTable, CreatedByColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.TFASetting
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasCreatedByWith applies the HasEdge predicate on the "created_by" edge with a given conditions (other predicates).
-func HasCreatedByWith(preds ...predicate.User) predicate.TFASetting {
+func HasCreatedByWith(preds ...predicate.ChangeActor) predicate.TFASetting {
 	return predicate.TFASetting(func(s *sql.Selector) {
 		step := newCreatedByStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.TFASetting
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -849,18 +849,18 @@ func HasUpdatedBy() predicate.TFASetting {
 			sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByTable, UpdatedByColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.TFASetting
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasUpdatedByWith applies the HasEdge predicate on the "updated_by" edge with a given conditions (other predicates).
-func HasUpdatedByWith(preds ...predicate.User) predicate.TFASetting {
+func HasUpdatedByWith(preds ...predicate.ChangeActor) predicate.TFASetting {
 	return predicate.TFASetting(func(s *sql.Selector) {
 		step := newUpdatedByStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.TFASetting
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

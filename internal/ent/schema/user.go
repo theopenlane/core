@@ -192,7 +192,7 @@ func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		// Delete users from groups and orgs when the user is deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

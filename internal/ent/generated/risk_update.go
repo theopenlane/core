@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -20,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -290,9 +290,9 @@ func (ru *RiskUpdate) ClearDetails() *RiskUpdate {
 	return ru
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ru *RiskUpdate) SetUpdatedBy(u *User) *RiskUpdate {
-	return ru.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ru *RiskUpdate) SetUpdatedBy(c *ChangeActor) *RiskUpdate {
+	return ru.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -410,7 +410,7 @@ func (ru *RiskUpdate) Mutation() *RiskMutation {
 	return ru.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (ru *RiskUpdate) ClearUpdatedBy() *RiskUpdate {
 	ru.mutation.ClearUpdatedBy()
 	return ru
@@ -748,7 +748,7 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{risk.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ru.schemaConfig.Risk
@@ -762,7 +762,7 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{risk.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ru.schemaConfig.Risk
@@ -1412,9 +1412,9 @@ func (ruo *RiskUpdateOne) ClearDetails() *RiskUpdateOne {
 	return ruo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ruo *RiskUpdateOne) SetUpdatedBy(u *User) *RiskUpdateOne {
-	return ruo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ruo *RiskUpdateOne) SetUpdatedBy(c *ChangeActor) *RiskUpdateOne {
+	return ruo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1532,7 +1532,7 @@ func (ruo *RiskUpdateOne) Mutation() *RiskMutation {
 	return ruo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (ruo *RiskUpdateOne) ClearUpdatedBy() *RiskUpdateOne {
 	ruo.mutation.ClearUpdatedBy()
 	return ruo
@@ -1900,7 +1900,7 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 			Columns: []string{risk.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ruo.schemaConfig.Risk
@@ -1914,7 +1914,7 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 			Columns: []string{risk.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ruo.schemaConfig.Risk

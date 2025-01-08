@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -121,9 +121,9 @@ func (hu *HushUpdate) ClearKind() *HushUpdate {
 	return hu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (hu *HushUpdate) SetUpdatedBy(u *User) *HushUpdate {
-	return hu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (hu *HushUpdate) SetUpdatedBy(c *ChangeActor) *HushUpdate {
+	return hu.SetUpdatedByID(c.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -176,7 +176,7 @@ func (hu *HushUpdate) Mutation() *HushMutation {
 	return hu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (hu *HushUpdate) ClearUpdatedBy() *HushUpdate {
 	hu.mutation.ClearUpdatedBy()
 	return hu
@@ -359,7 +359,7 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{hush.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = hu.schemaConfig.Hush
@@ -373,7 +373,7 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{hush.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = hu.schemaConfig.Hush
@@ -636,9 +636,9 @@ func (huo *HushUpdateOne) ClearKind() *HushUpdateOne {
 	return huo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (huo *HushUpdateOne) SetUpdatedBy(u *User) *HushUpdateOne {
-	return huo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (huo *HushUpdateOne) SetUpdatedBy(c *ChangeActor) *HushUpdateOne {
+	return huo.SetUpdatedByID(c.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -691,7 +691,7 @@ func (huo *HushUpdateOne) Mutation() *HushMutation {
 	return huo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (huo *HushUpdateOne) ClearUpdatedBy() *HushUpdateOne {
 	huo.mutation.ClearUpdatedBy()
 	return huo
@@ -904,7 +904,7 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 			Columns: []string{hush.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = huo.schemaConfig.Hush
@@ -918,7 +918,7 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 			Columns: []string{hush.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = huo.schemaConfig.Hush

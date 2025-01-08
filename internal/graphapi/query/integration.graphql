@@ -91,9 +91,8 @@ query GetAllIntegrations {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
     }
@@ -147,9 +146,8 @@ query GetIntegrations($where: IntegrationWhereInput) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
     }

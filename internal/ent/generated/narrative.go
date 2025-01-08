@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Narrative is the model entity for the Narrative schema.
@@ -55,9 +55,9 @@ type Narrative struct {
 // NarrativeEdges holds the relations/edges for other nodes in the graph.
 type NarrativeEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -94,22 +94,22 @@ type NarrativeEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e NarrativeEdges) CreatedByOrErr() (*User, error) {
+func (e NarrativeEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e NarrativeEdges) UpdatedByOrErr() (*User, error) {
+func (e NarrativeEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -325,12 +325,12 @@ func (n *Narrative) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the Narrative entity.
-func (n *Narrative) QueryCreatedBy() *UserQuery {
+func (n *Narrative) QueryCreatedBy() *ChangeActorQuery {
 	return NewNarrativeClient(n.config).QueryCreatedBy(n)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the Narrative entity.
-func (n *Narrative) QueryUpdatedBy() *UserQuery {
+func (n *Narrative) QueryUpdatedBy() *ChangeActorQuery {
 	return NewNarrativeClient(n.config).QueryUpdatedBy(n)
 }
 

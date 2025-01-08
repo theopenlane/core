@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -19,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // InternalPolicyCreate is the builder for creating a InternalPolicy entity.
@@ -257,14 +257,14 @@ func (ipc *InternalPolicyCreate) SetNillableID(s *string) *InternalPolicyCreate 
 	return ipc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (ipc *InternalPolicyCreate) SetCreatedBy(u *User) *InternalPolicyCreate {
-	return ipc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (ipc *InternalPolicyCreate) SetCreatedBy(c *ChangeActor) *InternalPolicyCreate {
+	return ipc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ipc *InternalPolicyCreate) SetUpdatedBy(u *User) *InternalPolicyCreate {
-	return ipc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ipc *InternalPolicyCreate) SetUpdatedBy(c *ChangeActor) *InternalPolicyCreate {
+	return ipc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -582,7 +582,7 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 			Columns: []string{internalpolicy.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipc.schemaConfig.InternalPolicy
@@ -600,7 +600,7 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 			Columns: []string{internalpolicy.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipc.schemaConfig.InternalPolicy

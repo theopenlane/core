@@ -35,15 +35,15 @@ var (
 		PrimaryKey: []*schema.Column{APITokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "api_tokens_users_created_by",
+				Symbol:     "api_tokens_change_actors_created_by",
 				Columns:    []*schema.Column{APITokensColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "api_tokens_users_updated_by",
+				Symbol:     "api_tokens_change_actors_updated_by",
 				Columns:    []*schema.Column{APITokensColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -87,15 +87,15 @@ var (
 		PrimaryKey: []*schema.Column{ActionPlansColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "action_plans_users_created_by",
+				Symbol:     "action_plans_change_actors_created_by",
 				Columns:    []*schema.Column{ActionPlansColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "action_plans_users_updated_by",
+				Symbol:     "action_plans_change_actors_updated_by",
 				Columns:    []*schema.Column{ActionPlansColumns[15]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -136,6 +136,18 @@ var (
 			},
 		},
 	}
+	// ChangeActorsColumns holds the columns for the "change_actors" table.
+	ChangeActorsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
+		{Name: "actor_type", Type: field.TypeString},
+	}
+	// ChangeActorsTable holds the schema information for the "change_actors" table.
+	ChangeActorsTable = &schema.Table{
+		Name:       "change_actors",
+		Columns:    ChangeActorsColumns,
+		PrimaryKey: []*schema.Column{ChangeActorsColumns[0]},
+	}
 	// ContactsColumns holds the columns for the "contacts" table.
 	ContactsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -163,15 +175,15 @@ var (
 		PrimaryKey: []*schema.Column{ContactsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "contacts_users_created_by",
+				Symbol:     "contacts_change_actors_created_by",
 				Columns:    []*schema.Column{ContactsColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "contacts_users_updated_by",
+				Symbol:     "contacts_change_actors_updated_by",
 				Columns:    []*schema.Column{ContactsColumns[15]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -253,15 +265,15 @@ var (
 		PrimaryKey: []*schema.Column{ControlsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "controls_users_created_by",
+				Symbol:     "controls_change_actors_created_by",
 				Columns:    []*schema.Column{ControlsColumns[19]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_users_updated_by",
+				Symbol:     "controls_change_actors_updated_by",
 				Columns:    []*schema.Column{ControlsColumns[20]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -364,15 +376,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "control_objectives_users_created_by",
+				Symbol:     "control_objectives_change_actors_created_by",
 				Columns:    []*schema.Column{ControlObjectivesColumns[19]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "control_objectives_users_updated_by",
+				Symbol:     "control_objectives_change_actors_updated_by",
 				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -446,15 +458,15 @@ var (
 		PrimaryKey: []*schema.Column{DocumentDataColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "document_data_users_created_by",
+				Symbol:     "document_data_change_actors_created_by",
 				Columns:    []*schema.Column{DocumentDataColumns[8]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "document_data_users_updated_by",
+				Symbol:     "document_data_change_actors_updated_by",
 				Columns:    []*schema.Column{DocumentDataColumns[9]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -526,15 +538,15 @@ var (
 		PrimaryKey: []*schema.Column{EmailVerificationTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "email_verification_tokens_users_created_by",
+				Symbol:     "email_verification_tokens_change_actors_created_by",
 				Columns:    []*schema.Column{EmailVerificationTokensColumns[10]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "email_verification_tokens_users_updated_by",
+				Symbol:     "email_verification_tokens_change_actors_updated_by",
 				Columns:    []*schema.Column{EmailVerificationTokensColumns[11]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -582,15 +594,15 @@ var (
 		PrimaryKey: []*schema.Column{EntitiesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "entities_users_created_by",
+				Symbol:     "entities_change_actors_created_by",
 				Columns:    []*schema.Column{EntitiesColumns[12]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_users_updated_by",
+				Symbol:     "entities_change_actors_updated_by",
 				Columns:    []*schema.Column{EntitiesColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -680,15 +692,15 @@ var (
 		PrimaryKey: []*schema.Column{EntityTypesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "entity_types_users_created_by",
+				Symbol:     "entity_types_change_actors_created_by",
 				Columns:    []*schema.Column{EntityTypesColumns[8]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entity_types_users_updated_by",
+				Symbol:     "entity_types_change_actors_updated_by",
 				Columns:    []*schema.Column{EntityTypesColumns[9]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -761,15 +773,15 @@ var (
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "events_users_created_by",
+				Symbol:     "events_change_actors_created_by",
 				Columns:    []*schema.Column{EventsColumns[9]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "events_users_updated_by",
+				Symbol:     "events_change_actors_updated_by",
 				Columns:    []*schema.Column{EventsColumns[10]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -838,15 +850,15 @@ var (
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "files_users_created_by",
+				Symbol:     "files_change_actors_created_by",
 				Columns:    []*schema.Column{FilesColumns[21]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "files_users_updated_by",
+				Symbol:     "files_change_actors_updated_by",
 				Columns:    []*schema.Column{FilesColumns[22]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -919,15 +931,15 @@ var (
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "groups_users_created_by",
+				Symbol:     "groups_change_actors_created_by",
 				Columns:    []*schema.Column{GroupsColumns[12]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_users_updated_by",
+				Symbol:     "groups_change_actors_updated_by",
 				Columns:    []*schema.Column{GroupsColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1004,15 +1016,15 @@ var (
 		PrimaryKey: []*schema.Column{GroupMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "group_memberships_users_created_by",
+				Symbol:     "group_memberships_change_actors_created_by",
 				Columns:    []*schema.Column{GroupMembershipsColumns[7]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "group_memberships_users_updated_by",
+				Symbol:     "group_memberships_change_actors_updated_by",
 				Columns:    []*schema.Column{GroupMembershipsColumns[8]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1100,15 +1112,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "group_settings_users_created_by",
+				Symbol:     "group_settings_change_actors_created_by",
 				Columns:    []*schema.Column{GroupSettingsColumns[12]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "group_settings_users_updated_by",
+				Symbol:     "group_settings_change_actors_updated_by",
 				Columns:    []*schema.Column{GroupSettingsColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1170,15 +1182,15 @@ var (
 		PrimaryKey: []*schema.Column{HushesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "hushes_users_created_by",
+				Symbol:     "hushes_change_actors_created_by",
 				Columns:    []*schema.Column{HushesColumns[11]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "hushes_users_updated_by",
+				Symbol:     "hushes_change_actors_updated_by",
 				Columns:    []*schema.Column{HushesColumns[12]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1246,15 +1258,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integrations_users_created_by",
+				Symbol:     "integrations_change_actors_created_by",
 				Columns:    []*schema.Column{IntegrationsColumns[11]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integrations_users_updated_by",
+				Symbol:     "integrations_change_actors_updated_by",
 				Columns:    []*schema.Column{IntegrationsColumns[12]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1326,15 +1338,15 @@ var (
 		PrimaryKey: []*schema.Column{InternalPoliciesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "internal_policies_users_created_by",
+				Symbol:     "internal_policies_change_actors_created_by",
 				Columns:    []*schema.Column{InternalPoliciesColumns[15]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_users_updated_by",
+				Symbol:     "internal_policies_change_actors_updated_by",
 				Columns:    []*schema.Column{InternalPoliciesColumns[16]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1410,15 +1422,15 @@ var (
 		PrimaryKey: []*schema.Column{InvitesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "invites_users_created_by",
+				Symbol:     "invites_change_actors_created_by",
 				Columns:    []*schema.Column{InvitesColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "invites_users_updated_by",
+				Symbol:     "invites_change_actors_updated_by",
 				Columns:    []*schema.Column{InvitesColumns[15]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1463,15 +1475,15 @@ var (
 		PrimaryKey: []*schema.Column{NarrativesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "narratives_users_created_by",
+				Symbol:     "narratives_change_actors_created_by",
 				Columns:    []*schema.Column{NarrativesColumns[11]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "narratives_users_updated_by",
+				Symbol:     "narratives_change_actors_updated_by",
 				Columns:    []*schema.Column{NarrativesColumns[12]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1544,15 +1556,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_users_created_by",
+				Symbol:     "notes_change_actors_created_by",
 				Columns:    []*schema.Column{NotesColumns[9]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_users_updated_by",
+				Symbol:     "notes_change_actors_updated_by",
 				Columns:    []*schema.Column{NotesColumns[10]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1615,15 +1627,15 @@ var (
 		PrimaryKey: []*schema.Column{OrgMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "org_memberships_users_created_by",
+				Symbol:     "org_memberships_change_actors_created_by",
 				Columns:    []*schema.Column{OrgMembershipsColumns[7]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "org_memberships_users_updated_by",
+				Symbol:     "org_memberships_change_actors_updated_by",
 				Columns:    []*schema.Column{OrgMembershipsColumns[8]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1709,15 +1721,15 @@ var (
 		PrimaryKey: []*schema.Column{OrgSubscriptionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "org_subscriptions_users_created_by",
+				Symbol:     "org_subscriptions_change_actors_created_by",
 				Columns:    []*schema.Column{OrgSubscriptionsColumns[15]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "org_subscriptions_users_updated_by",
+				Symbol:     "org_subscriptions_change_actors_updated_by",
 				Columns:    []*schema.Column{OrgSubscriptionsColumns[16]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1792,15 +1804,15 @@ var (
 		PrimaryKey: []*schema.Column{OrganizationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "organizations_users_created_by",
+				Symbol:     "organizations_change_actors_created_by",
 				Columns:    []*schema.Column{OrganizationsColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "organizations_users_updated_by",
+				Symbol:     "organizations_change_actors_updated_by",
 				Columns:    []*schema.Column{OrganizationsColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -1891,15 +1903,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "organization_settings_users_created_by",
+				Symbol:     "organization_settings_change_actors_created_by",
 				Columns:    []*schema.Column{OrganizationSettingsColumns[16]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "organization_settings_users_updated_by",
+				Symbol:     "organization_settings_change_actors_updated_by",
 				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1965,15 +1977,15 @@ var (
 		PrimaryKey: []*schema.Column{PasswordResetTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "password_reset_tokens_users_created_by",
+				Symbol:     "password_reset_tokens_change_actors_created_by",
 				Columns:    []*schema.Column{PasswordResetTokensColumns[10]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "password_reset_tokens_users_updated_by",
+				Symbol:     "password_reset_tokens_change_actors_updated_by",
 				Columns:    []*schema.Column{PasswordResetTokensColumns[11]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2020,15 +2032,15 @@ var (
 		PrimaryKey: []*schema.Column{PersonalAccessTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "personal_access_tokens_users_created_by",
+				Symbol:     "personal_access_tokens_change_actors_created_by",
 				Columns:    []*schema.Column{PersonalAccessTokensColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "personal_access_tokens_users_updated_by",
+				Symbol:     "personal_access_tokens_change_actors_updated_by",
 				Columns:    []*schema.Column{PersonalAccessTokensColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2089,15 +2101,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_users_created_by",
+				Symbol:     "procedures_change_actors_created_by",
 				Columns:    []*schema.Column{ProceduresColumns[18]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_users_updated_by",
+				Symbol:     "procedures_change_actors_updated_by",
 				Columns:    []*schema.Column{ProceduresColumns[19]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2181,15 +2193,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "programs_users_created_by",
+				Symbol:     "programs_change_actors_created_by",
 				Columns:    []*schema.Column{ProgramsColumns[16]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "programs_users_updated_by",
+				Symbol:     "programs_change_actors_updated_by",
 				Columns:    []*schema.Column{ProgramsColumns[17]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2253,15 +2265,15 @@ var (
 		PrimaryKey: []*schema.Column{ProgramMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "program_memberships_users_created_by",
+				Symbol:     "program_memberships_change_actors_created_by",
 				Columns:    []*schema.Column{ProgramMembershipsColumns[7]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "program_memberships_users_updated_by",
+				Symbol:     "program_memberships_change_actors_updated_by",
 				Columns:    []*schema.Column{ProgramMembershipsColumns[8]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2362,15 +2374,15 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "risks_users_created_by",
+				Symbol:     "risks_change_actors_created_by",
 				Columns:    []*schema.Column{RisksColumns[19]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_users_updated_by",
+				Symbol:     "risks_change_actors_updated_by",
 				Columns:    []*schema.Column{RisksColumns[20]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2444,15 +2456,15 @@ var (
 		PrimaryKey: []*schema.Column{StandardsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "standards_users_created_by",
+				Symbol:     "standards_change_actors_created_by",
 				Columns:    []*schema.Column{StandardsColumns[17]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "standards_users_updated_by",
+				Symbol:     "standards_change_actors_updated_by",
 				Columns:    []*schema.Column{StandardsColumns[18]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2552,15 +2564,15 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "subcontrols_users_created_by",
+				Symbol:     "subcontrols_change_actors_created_by",
 				Columns:    []*schema.Column{SubcontrolsColumns[26]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subcontrols_users_updated_by",
+				Symbol:     "subcontrols_change_actors_updated_by",
 				Columns:    []*schema.Column{SubcontrolsColumns[27]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2645,15 +2657,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subscribers_users_created_by",
+				Symbol:     "subscribers_change_actors_created_by",
 				Columns:    []*schema.Column{SubscribersColumns[16]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subscribers_users_updated_by",
+				Symbol:     "subscribers_change_actors_updated_by",
 				Columns:    []*schema.Column{SubscribersColumns[17]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2694,15 +2706,15 @@ var (
 		PrimaryKey: []*schema.Column{TfaSettingsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "tfa_settings_users_created_by",
+				Symbol:     "tfa_settings_change_actors_created_by",
 				Columns:    []*schema.Column{TfaSettingsColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tfa_settings_users_updated_by",
+				Symbol:     "tfa_settings_change_actors_updated_by",
 				Columns:    []*schema.Column{TfaSettingsColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2750,15 +2762,15 @@ var (
 		PrimaryKey: []*schema.Column{TasksColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "tasks_users_created_by",
+				Symbol:     "tasks_change_actors_created_by",
 				Columns:    []*schema.Column{TasksColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_users_updated_by",
+				Symbol:     "tasks_change_actors_updated_by",
 				Columns:    []*schema.Column{TasksColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2841,15 +2853,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "templates_users_created_by",
+				Symbol:     "templates_change_actors_created_by",
 				Columns:    []*schema.Column{TemplatesColumns[13]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "templates_users_updated_by",
+				Symbol:     "templates_change_actors_updated_by",
 				Columns:    []*schema.Column{TemplatesColumns[14]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -3030,15 +3042,15 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "user_settings_users_created_by",
+				Symbol:     "user_settings_change_actors_created_by",
 				Columns:    []*schema.Column{UserSettingsColumns[16]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "user_settings_users_updated_by",
+				Symbol:     "user_settings_change_actors_updated_by",
 				Columns:    []*schema.Column{UserSettingsColumns[17]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -3121,15 +3133,15 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "webauthns_users_created_by",
+				Symbol:     "webauthns_change_actors_created_by",
 				Columns:    []*schema.Column{WebauthnsColumns[16]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "webauthns_users_updated_by",
+				Symbol:     "webauthns_change_actors_updated_by",
 				Columns:    []*schema.Column{WebauthnsColumns[17]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -5364,6 +5376,7 @@ var (
 		APITokensTable,
 		ActionPlansTable,
 		ActionPlanHistoryTable,
+		ChangeActorsTable,
 		ContactsTable,
 		ContactHistoryTable,
 		ControlsTable,
@@ -5524,22 +5537,23 @@ var (
 )
 
 func init() {
-	APITokensTable.ForeignKeys[0].RefTable = UsersTable
-	APITokensTable.ForeignKeys[1].RefTable = UsersTable
+	APITokensTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	APITokensTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	APITokensTable.ForeignKeys[2].RefTable = OrganizationsTable
-	ActionPlansTable.ForeignKeys[0].RefTable = UsersTable
-	ActionPlansTable.ForeignKeys[1].RefTable = UsersTable
+	ActionPlansTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	ActionPlansTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
-	ContactsTable.ForeignKeys[0].RefTable = UsersTable
-	ContactsTable.ForeignKeys[1].RefTable = UsersTable
+	ChangeActorsTable.Annotation = &entsql.Annotation{}
+	ContactsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	ContactsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	ContactsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ContactHistoryTable.Annotation = &entsql.Annotation{
 		Table: "contact_history",
 	}
-	ControlsTable.ForeignKeys[0].RefTable = UsersTable
-	ControlsTable.ForeignKeys[1].RefTable = UsersTable
+	ControlsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	ControlsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	ControlsTable.ForeignKeys[2].RefTable = ControlObjectivesTable
 	ControlsTable.ForeignKeys[3].RefTable = InternalPoliciesTable
 	ControlsTable.ForeignKeys[4].RefTable = OrganizationsTable
@@ -5547,146 +5561,146 @@ func init() {
 		Table: "control_history",
 	}
 	ControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable
-	ControlObjectivesTable.ForeignKeys[1].RefTable = UsersTable
-	ControlObjectivesTable.ForeignKeys[2].RefTable = UsersTable
+	ControlObjectivesTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	ControlObjectivesTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	ControlObjectivesTable.ForeignKeys[3].RefTable = OrganizationsTable
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
 	}
-	DocumentDataTable.ForeignKeys[0].RefTable = UsersTable
-	DocumentDataTable.ForeignKeys[1].RefTable = UsersTable
+	DocumentDataTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	DocumentDataTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	DocumentDataTable.ForeignKeys[2].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[3].RefTable = TemplatesTable
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
 		Table: "document_data_history",
 	}
-	EmailVerificationTokensTable.ForeignKeys[0].RefTable = UsersTable
-	EmailVerificationTokensTable.ForeignKeys[1].RefTable = UsersTable
+	EmailVerificationTokensTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	EmailVerificationTokensTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	EmailVerificationTokensTable.ForeignKeys[2].RefTable = UsersTable
-	EntitiesTable.ForeignKeys[0].RefTable = UsersTable
-	EntitiesTable.ForeignKeys[1].RefTable = UsersTable
+	EntitiesTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	EntitiesTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	EntitiesTable.ForeignKeys[2].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[3].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[4].RefTable = OrganizationsTable
 	EntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_history",
 	}
-	EntityTypesTable.ForeignKeys[0].RefTable = UsersTable
-	EntityTypesTable.ForeignKeys[1].RefTable = UsersTable
+	EntityTypesTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	EntityTypesTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	EntityTypesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
-	EventsTable.ForeignKeys[0].RefTable = UsersTable
-	EventsTable.ForeignKeys[1].RefTable = UsersTable
+	EventsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	EventsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}
-	FilesTable.ForeignKeys[0].RefTable = UsersTable
-	FilesTable.ForeignKeys[1].RefTable = UsersTable
+	FilesTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	FilesTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
-	GroupsTable.ForeignKeys[0].RefTable = UsersTable
-	GroupsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	GroupsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	GroupsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
-	GroupMembershipsTable.ForeignKeys[0].RefTable = UsersTable
-	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupMembershipsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	GroupMembershipsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	GroupMembershipsTable.ForeignKeys[2].RefTable = GroupsTable
 	GroupMembershipsTable.ForeignKeys[3].RefTable = UsersTable
 	GroupMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_membership_history",
 	}
 	GroupSettingsTable.ForeignKeys[0].RefTable = GroupsTable
-	GroupSettingsTable.ForeignKeys[1].RefTable = UsersTable
-	GroupSettingsTable.ForeignKeys[2].RefTable = UsersTable
+	GroupSettingsTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	GroupSettingsTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	GroupSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_setting_history",
 	}
-	HushesTable.ForeignKeys[0].RefTable = UsersTable
-	HushesTable.ForeignKeys[1].RefTable = UsersTable
+	HushesTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	HushesTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	HushHistoryTable.Annotation = &entsql.Annotation{
 		Table: "hush_history",
 	}
 	IntegrationsTable.ForeignKeys[0].RefTable = GroupsTable
-	IntegrationsTable.ForeignKeys[1].RefTable = UsersTable
-	IntegrationsTable.ForeignKeys[2].RefTable = UsersTable
+	IntegrationsTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	IntegrationsTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	IntegrationsTable.ForeignKeys[3].RefTable = OrganizationsTable
 	IntegrationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "integration_history",
 	}
-	InternalPoliciesTable.ForeignKeys[0].RefTable = UsersTable
-	InternalPoliciesTable.ForeignKeys[1].RefTable = UsersTable
+	InternalPoliciesTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	InternalPoliciesTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	InternalPoliciesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
 		Table: "internal_policy_history",
 	}
-	InvitesTable.ForeignKeys[0].RefTable = UsersTable
-	InvitesTable.ForeignKeys[1].RefTable = UsersTable
+	InvitesTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	InvitesTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	InvitesTable.ForeignKeys[2].RefTable = OrganizationsTable
-	NarrativesTable.ForeignKeys[0].RefTable = UsersTable
-	NarrativesTable.ForeignKeys[1].RefTable = UsersTable
+	NarrativesTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	NarrativesTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	NarrativesTable.ForeignKeys[2].RefTable = OrganizationsTable
 	NarrativeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "narrative_history",
 	}
 	NotesTable.ForeignKeys[0].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[1].RefTable = UsersTable
-	NotesTable.ForeignKeys[2].RefTable = UsersTable
+	NotesTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	NotesTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	NotesTable.ForeignKeys[3].RefTable = OrganizationsTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
-	OrgMembershipsTable.ForeignKeys[0].RefTable = UsersTable
-	OrgMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	OrgMembershipsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	OrgMembershipsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	OrgMembershipsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	OrgMembershipsTable.ForeignKeys[3].RefTable = UsersTable
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
 	}
-	OrgSubscriptionsTable.ForeignKeys[0].RefTable = UsersTable
-	OrgSubscriptionsTable.ForeignKeys[1].RefTable = UsersTable
+	OrgSubscriptionsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	OrgSubscriptionsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	OrgSubscriptionsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	OrgSubscriptionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_subscription_history",
 	}
-	OrganizationsTable.ForeignKeys[0].RefTable = UsersTable
-	OrganizationsTable.ForeignKeys[1].RefTable = UsersTable
+	OrganizationsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	OrganizationsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	OrganizationsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_history",
 	}
 	OrganizationSettingsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	OrganizationSettingsTable.ForeignKeys[1].RefTable = UsersTable
-	OrganizationSettingsTable.ForeignKeys[2].RefTable = UsersTable
+	OrganizationSettingsTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	OrganizationSettingsTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	OrganizationSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_setting_history",
 	}
-	PasswordResetTokensTable.ForeignKeys[0].RefTable = UsersTable
-	PasswordResetTokensTable.ForeignKeys[1].RefTable = UsersTable
+	PasswordResetTokensTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	PasswordResetTokensTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	PasswordResetTokensTable.ForeignKeys[2].RefTable = UsersTable
-	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable
-	PersonalAccessTokensTable.ForeignKeys[1].RefTable = UsersTable
+	PersonalAccessTokensTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	PersonalAccessTokensTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	PersonalAccessTokensTable.ForeignKeys[2].RefTable = UsersTable
 	ProceduresTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ProceduresTable.ForeignKeys[1].RefTable = OrganizationsTable
-	ProceduresTable.ForeignKeys[2].RefTable = UsersTable
-	ProceduresTable.ForeignKeys[3].RefTable = UsersTable
+	ProceduresTable.ForeignKeys[2].RefTable = ChangeActorsTable
+	ProceduresTable.ForeignKeys[3].RefTable = ChangeActorsTable
 	ProceduresTable.ForeignKeys[4].RefTable = StandardsTable
 	ProcedureHistoryTable.Annotation = &entsql.Annotation{
 		Table: "procedure_history",
 	}
 	ProgramsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	ProgramsTable.ForeignKeys[1].RefTable = UsersTable
-	ProgramsTable.ForeignKeys[2].RefTable = UsersTable
+	ProgramsTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	ProgramsTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	ProgramHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_history",
 	}
-	ProgramMembershipsTable.ForeignKeys[0].RefTable = UsersTable
-	ProgramMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	ProgramMembershipsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	ProgramMembershipsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	ProgramMembershipsTable.ForeignKeys[2].RefTable = ProgramsTable
 	ProgramMembershipsTable.ForeignKeys[3].RefTable = UsersTable
 	ProgramMembershipHistoryTable.Annotation = &entsql.Annotation{
@@ -5694,40 +5708,40 @@ func init() {
 	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RisksTable.ForeignKeys[1].RefTable = OrganizationsTable
-	RisksTable.ForeignKeys[2].RefTable = UsersTable
-	RisksTable.ForeignKeys[3].RefTable = UsersTable
+	RisksTable.ForeignKeys[2].RefTable = ChangeActorsTable
+	RisksTable.ForeignKeys[3].RefTable = ChangeActorsTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
-	StandardsTable.ForeignKeys[0].RefTable = UsersTable
-	StandardsTable.ForeignKeys[1].RefTable = UsersTable
+	StandardsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	StandardsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	SubcontrolsTable.ForeignKeys[1].RefTable = NotesTable
 	SubcontrolsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	SubcontrolsTable.ForeignKeys[3].RefTable = UsersTable
-	SubcontrolsTable.ForeignKeys[4].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[3].RefTable = ChangeActorsTable
+	SubcontrolsTable.ForeignKeys[4].RefTable = ChangeActorsTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
-	SubscribersTable.ForeignKeys[1].RefTable = UsersTable
-	SubscribersTable.ForeignKeys[2].RefTable = UsersTable
-	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
-	TfaSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	SubscribersTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	SubscribersTable.ForeignKeys[2].RefTable = ChangeActorsTable
+	TfaSettingsTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	TfaSettingsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	TfaSettingsTable.ForeignKeys[2].RefTable = UsersTable
-	TasksTable.ForeignKeys[0].RefTable = UsersTable
-	TasksTable.ForeignKeys[1].RefTable = UsersTable
+	TasksTable.ForeignKeys[0].RefTable = ChangeActorsTable
+	TasksTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	TasksTable.ForeignKeys[2].RefTable = UsersTable
 	TasksTable.ForeignKeys[3].RefTable = UsersTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	TemplatesTable.ForeignKeys[1].RefTable = UsersTable
-	TemplatesTable.ForeignKeys[2].RefTable = UsersTable
+	TemplatesTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	TemplatesTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
@@ -5736,15 +5750,15 @@ func init() {
 		Table: "user_history",
 	}
 	UserSettingsTable.ForeignKeys[0].RefTable = UsersTable
-	UserSettingsTable.ForeignKeys[1].RefTable = UsersTable
-	UserSettingsTable.ForeignKeys[2].RefTable = UsersTable
+	UserSettingsTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	UserSettingsTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	UserSettingsTable.ForeignKeys[3].RefTable = OrganizationsTable
 	UserSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_setting_history",
 	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
-	WebauthnsTable.ForeignKeys[1].RefTable = UsersTable
-	WebauthnsTable.ForeignKeys[2].RefTable = UsersTable
+	WebauthnsTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	WebauthnsTable.ForeignKeys[2].RefTable = ChangeActorsTable
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
 	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ControlBlockedGroupsTable.ForeignKeys[0].RefTable = ControlsTable

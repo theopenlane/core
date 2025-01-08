@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -80,9 +80,9 @@ func (omu *OrgMembershipUpdate) SetNillableRole(e *enums.Role) *OrgMembershipUpd
 	return omu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (omu *OrgMembershipUpdate) SetUpdatedBy(u *User) *OrgMembershipUpdate {
-	return omu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (omu *OrgMembershipUpdate) SetUpdatedBy(c *ChangeActor) *OrgMembershipUpdate {
+	return omu.SetUpdatedByID(c.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -105,7 +105,7 @@ func (omu *OrgMembershipUpdate) Mutation() *OrgMembershipMutation {
 	return omu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (omu *OrgMembershipUpdate) ClearUpdatedBy() *OrgMembershipUpdate {
 	omu.mutation.ClearUpdatedBy()
 	return omu
@@ -234,7 +234,7 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Columns: []string{orgmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = omu.schemaConfig.OrgMembership
@@ -248,7 +248,7 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			Columns: []string{orgmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = omu.schemaConfig.OrgMembership
@@ -375,9 +375,9 @@ func (omuo *OrgMembershipUpdateOne) SetNillableRole(e *enums.Role) *OrgMembershi
 	return omuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (omuo *OrgMembershipUpdateOne) SetUpdatedBy(u *User) *OrgMembershipUpdateOne {
-	return omuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (omuo *OrgMembershipUpdateOne) SetUpdatedBy(c *ChangeActor) *OrgMembershipUpdateOne {
+	return omuo.SetUpdatedByID(c.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -400,7 +400,7 @@ func (omuo *OrgMembershipUpdateOne) Mutation() *OrgMembershipMutation {
 	return omuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (omuo *OrgMembershipUpdateOne) ClearUpdatedBy() *OrgMembershipUpdateOne {
 	omuo.mutation.ClearUpdatedBy()
 	return omuo
@@ -559,7 +559,7 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 			Columns: []string{orgmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = omuo.schemaConfig.OrgMembership
@@ -573,7 +573,7 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 			Columns: []string{orgmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = omuo.schemaConfig.OrgMembership

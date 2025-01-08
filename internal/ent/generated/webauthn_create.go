@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 )
@@ -217,14 +218,14 @@ func (wc *WebauthnCreate) SetNillableID(s *string) *WebauthnCreate {
 	return wc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (wc *WebauthnCreate) SetCreatedBy(u *User) *WebauthnCreate {
-	return wc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (wc *WebauthnCreate) SetCreatedBy(c *ChangeActor) *WebauthnCreate {
+	return wc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (wc *WebauthnCreate) SetUpdatedBy(u *User) *WebauthnCreate {
-	return wc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (wc *WebauthnCreate) SetUpdatedBy(c *ChangeActor) *WebauthnCreate {
+	return wc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -452,7 +453,7 @@ func (wc *WebauthnCreate) createSpec() (*Webauthn, *sqlgraph.CreateSpec) {
 			Columns: []string{webauthn.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = wc.schemaConfig.Webauthn
@@ -470,7 +471,7 @@ func (wc *WebauthnCreate) createSpec() (*Webauthn, *sqlgraph.CreateSpec) {
 			Columns: []string{webauthn.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = wc.schemaConfig.Webauthn

@@ -18,14 +18,13 @@ query GetAllUserSettings {
         createdByID
         deletedAt
         deletedByID
-      updatedAt
-      updatedByID
-      updatedBy {
+        updatedAt
+        updatedByID
+        updatedBy {
           id
-          firstName
-          lastName
-          email
-      }
+          name
+          actorType
+        }
       }
     }
   }
@@ -74,14 +73,13 @@ query GetUserSettings($where: UserSettingWhereInput!) {
         createdByID
         deletedAt
         deletedByID
-      updatedAt
-      updatedByID
-      updatedBy {
+        updatedAt
+        updatedByID
+        updatedBy {
           id
-          firstName
-          lastName
-          email
-      }
+          name
+          actorType
+        }
       }
     }
   }
@@ -105,10 +103,9 @@ mutation UpdateUserSetting($updateUserSettingId: ID!, $input: UpdateUserSettingI
       createdAt
       createdByID
       createdBy {
-          id
-          firstName
-          lastName
-          email
+        id
+        name
+        actorType
       }
       deletedAt
       deletedByID

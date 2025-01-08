@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -27,8 +28,8 @@ type ProgramMembershipQuery struct {
 	order         []programmembership.OrderOption
 	inters        []Interceptor
 	predicates    []predicate.ProgramMembership
-	withCreatedBy *UserQuery
-	withUpdatedBy *UserQuery
+	withCreatedBy *ChangeActorQuery
+	withUpdatedBy *ChangeActorQuery
 	withProgram   *ProgramQuery
 	withUser      *UserQuery
 	loadTotal     []func(context.Context, []*ProgramMembership) error
@@ -70,8 +71,8 @@ func (pmq *ProgramMembershipQuery) Order(o ...programmembership.OrderOption) *Pr
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (pmq *ProgramMembershipQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: pmq.config}).Query()
+func (pmq *ProgramMembershipQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: pmq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pmq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -82,11 +83,11 @@ func (pmq *ProgramMembershipQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.CreatedByTable, programmembership.CreatedByColumn),
 		)
 		schemaConfig := pmq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
 		return fromU, nil
@@ -95,8 +96,8 @@ func (pmq *ProgramMembershipQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (pmq *ProgramMembershipQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: pmq.config}).Query()
+func (pmq *ProgramMembershipQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: pmq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pmq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -107,11 +108,11 @@ func (pmq *ProgramMembershipQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UpdatedByTable, programmembership.UpdatedByColumn),
 		)
 		schemaConfig := pmq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
 		return fromU, nil
@@ -374,8 +375,8 @@ func (pmq *ProgramMembershipQuery) Clone() *ProgramMembershipQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pmq *ProgramMembershipQuery) WithCreatedBy(opts ...func(*UserQuery)) *ProgramMembershipQuery {
-	query := (&UserClient{config: pmq.config}).Query()
+func (pmq *ProgramMembershipQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ProgramMembershipQuery {
+	query := (&ChangeActorClient{config: pmq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -385,8 +386,8 @@ func (pmq *ProgramMembershipQuery) WithCreatedBy(opts ...func(*UserQuery)) *Prog
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pmq *ProgramMembershipQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ProgramMembershipQuery {
-	query := (&UserClient{config: pmq.config}).Query()
+func (pmq *ProgramMembershipQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ProgramMembershipQuery {
+	query := (&ChangeActorClient{config: pmq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -532,13 +533,13 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	}
 	if query := pmq.withCreatedBy; query != nil {
 		if err := pmq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *ProgramMembership, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *ProgramMembership, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := pmq.withUpdatedBy; query != nil {
 		if err := pmq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *ProgramMembership, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *ProgramMembership, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -562,7 +563,7 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	return nodes, nil
 }
 
-func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *User)) error {
+func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ProgramMembership)
 	for i := range nodes {
@@ -575,7 +576,7 @@ func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *Use
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -591,7 +592,7 @@ func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *Use
 	}
 	return nil
 }
-func (pmq *ProgramMembershipQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *User)) error {
+func (pmq *ProgramMembershipQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ProgramMembership)
 	for i := range nodes {
@@ -604,7 +605,7 @@ func (pmq *ProgramMembershipQuery) loadUpdatedBy(ctx context.Context, query *Use
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

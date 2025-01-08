@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 )
@@ -62,9 +63,9 @@ type Webauthn struct {
 // WebauthnEdges holds the relations/edges for other nodes in the graph.
 type WebauthnEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -76,22 +77,22 @@ type WebauthnEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e WebauthnEdges) CreatedByOrErr() (*User, error) {
+func (e WebauthnEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e WebauthnEdges) UpdatedByOrErr() (*User, error) {
+func (e WebauthnEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -263,12 +264,12 @@ func (w *Webauthn) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the Webauthn entity.
-func (w *Webauthn) QueryCreatedBy() *UserQuery {
+func (w *Webauthn) QueryCreatedBy() *ChangeActorQuery {
 	return NewWebauthnClient(w.config).QueryCreatedBy(w)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the Webauthn entity.
-func (w *Webauthn) QueryUpdatedBy() *UserQuery {
+func (w *Webauthn) QueryUpdatedBy() *ChangeActorQuery {
 	return NewWebauthnClient(w.config).QueryUpdatedBy(w)
 }
 

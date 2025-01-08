@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -42,8 +43,8 @@ type ProgramQuery struct {
 	order                      []program.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.Program
-	withCreatedBy              *UserQuery
-	withUpdatedBy              *UserQuery
+	withCreatedBy              *ChangeActorQuery
+	withUpdatedBy              *ChangeActorQuery
 	withOwner                  *OrganizationQuery
 	withBlockedGroups          *GroupQuery
 	withEditors                *GroupQuery
@@ -118,8 +119,8 @@ func (pq *ProgramQuery) Order(o ...program.OrderOption) *ProgramQuery {
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (pq *ProgramQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: pq.config}).Query()
+func (pq *ProgramQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -130,11 +131,11 @@ func (pq *ProgramQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, program.CreatedByTable, program.CreatedByColumn),
 		)
 		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Program
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -143,8 +144,8 @@ func (pq *ProgramQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (pq *ProgramQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: pq.config}).Query()
+func (pq *ProgramQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -155,11 +156,11 @@ func (pq *ProgramQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, program.UpdatedByTable, program.UpdatedByColumn),
 		)
 		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Program
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -838,8 +839,8 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithCreatedBy(opts ...func(*UserQuery)) *ProgramQuery {
-	query := (&UserClient{config: pq.config}).Query()
+func (pq *ProgramQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ProgramQuery {
+	query := (&ChangeActorClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -849,8 +850,8 @@ func (pq *ProgramQuery) WithCreatedBy(opts ...func(*UserQuery)) *ProgramQuery {
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ProgramQuery {
-	query := (&UserClient{config: pq.config}).Query()
+func (pq *ProgramQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ProgramQuery {
+	query := (&ChangeActorClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -1188,13 +1189,13 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	}
 	if query := pq.withCreatedBy; query != nil {
 		if err := pq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Program, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *Program, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := pq.withUpdatedBy; query != nil {
 		if err := pq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Program, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *Program, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1452,7 +1453,7 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	return nodes, nil
 }
 
-func (pq *ProgramQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Program, init func(*Program), assign func(*Program, *User)) error {
+func (pq *ProgramQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Program, init func(*Program), assign func(*Program, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Program)
 	for i := range nodes {
@@ -1465,7 +1466,7 @@ func (pq *ProgramQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nod
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1481,7 +1482,7 @@ func (pq *ProgramQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nod
 	}
 	return nil
 }
-func (pq *ProgramQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Program, init func(*Program), assign func(*Program, *User)) error {
+func (pq *ProgramQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Program, init func(*Program), assign func(*Program, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Program)
 	for i := range nodes {
@@ -1494,7 +1495,7 @@ func (pq *ProgramQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nod
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

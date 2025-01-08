@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -216,14 +217,14 @@ func (tc *TaskCreate) SetNillableID(s *string) *TaskCreate {
 	return tc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (tc *TaskCreate) SetCreatedBy(u *User) *TaskCreate {
-	return tc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (tc *TaskCreate) SetCreatedBy(c *ChangeActor) *TaskCreate {
+	return tc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (tc *TaskCreate) SetUpdatedBy(u *User) *TaskCreate {
-	return tc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (tc *TaskCreate) SetUpdatedBy(c *ChangeActor) *TaskCreate {
+	return tc.SetUpdatedByID(c.ID)
 }
 
 // SetAssignerID sets the "assigner" edge to the User entity by ID.
@@ -568,7 +569,7 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			Columns: []string{task.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tc.schemaConfig.Task
@@ -586,7 +587,7 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			Columns: []string{task.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tc.schemaConfig.Task

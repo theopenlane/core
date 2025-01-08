@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -361,9 +362,9 @@ func (fu *FileUpdate) ClearFileContents() *FileUpdate {
 	return fu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (fu *FileUpdate) SetUpdatedBy(u *User) *FileUpdate {
-	return fu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (fu *FileUpdate) SetUpdatedBy(c *ChangeActor) *FileUpdate {
+	return fu.SetUpdatedByID(c.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -536,7 +537,7 @@ func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (fu *FileUpdate) ClearUpdatedBy() *FileUpdate {
 	fu.mutation.ClearUpdatedBy()
 	return fu
@@ -963,7 +964,7 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{file.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fu.schemaConfig.File
@@ -977,7 +978,7 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{file.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fu.schemaConfig.File
@@ -1856,9 +1857,9 @@ func (fuo *FileUpdateOne) ClearFileContents() *FileUpdateOne {
 	return fuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (fuo *FileUpdateOne) SetUpdatedBy(u *User) *FileUpdateOne {
-	return fuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (fuo *FileUpdateOne) SetUpdatedBy(c *ChangeActor) *FileUpdateOne {
+	return fuo.SetUpdatedByID(c.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -2031,7 +2032,7 @@ func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (fuo *FileUpdateOne) ClearUpdatedBy() *FileUpdateOne {
 	fuo.mutation.ClearUpdatedBy()
 	return fuo
@@ -2488,7 +2489,7 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			Columns: []string{file.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fuo.schemaConfig.File
@@ -2502,7 +2503,7 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			Columns: []string{file.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fuo.schemaConfig.File

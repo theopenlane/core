@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -216,9 +217,9 @@ func (wu *WebauthnUpdate) SetNillableUserVerified(b *bool) *WebauthnUpdate {
 	return wu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (wu *WebauthnUpdate) SetUpdatedBy(u *User) *WebauthnUpdate {
-	return wu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (wu *WebauthnUpdate) SetUpdatedBy(c *ChangeActor) *WebauthnUpdate {
+	return wu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -231,7 +232,7 @@ func (wu *WebauthnUpdate) Mutation() *WebauthnMutation {
 	return wu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (wu *WebauthnUpdate) ClearUpdatedBy() *WebauthnUpdate {
 	wu.mutation.ClearUpdatedBy()
 	return wu
@@ -380,7 +381,7 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{webauthn.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = wu.schemaConfig.Webauthn
@@ -394,7 +395,7 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{webauthn.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = wu.schemaConfig.Webauthn
@@ -641,9 +642,9 @@ func (wuo *WebauthnUpdateOne) SetNillableUserVerified(b *bool) *WebauthnUpdateOn
 	return wuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (wuo *WebauthnUpdateOne) SetUpdatedBy(u *User) *WebauthnUpdateOne {
-	return wuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (wuo *WebauthnUpdateOne) SetUpdatedBy(c *ChangeActor) *WebauthnUpdateOne {
+	return wuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -656,7 +657,7 @@ func (wuo *WebauthnUpdateOne) Mutation() *WebauthnMutation {
 	return wuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (wuo *WebauthnUpdateOne) ClearUpdatedBy() *WebauthnUpdateOne {
 	wuo.mutation.ClearUpdatedBy()
 	return wuo
@@ -835,7 +836,7 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 			Columns: []string{webauthn.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = wuo.schemaConfig.Webauthn
@@ -849,7 +850,7 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 			Columns: []string{webauthn.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = wuo.schemaConfig.Webauthn

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -408,9 +409,9 @@ func (su *SubcontrolUpdate) ClearDetails() *SubcontrolUpdate {
 	return su
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (su *SubcontrolUpdate) SetUpdatedBy(u *User) *SubcontrolUpdate {
-	return su.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (su *SubcontrolUpdate) SetUpdatedBy(c *ChangeActor) *SubcontrolUpdate {
+	return su.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -502,7 +503,7 @@ func (su *SubcontrolUpdate) Mutation() *SubcontrolMutation {
 	return su.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (su *SubcontrolUpdate) ClearUpdatedBy() *SubcontrolUpdate {
 	su.mutation.ClearUpdatedBy()
 	return su
@@ -809,7 +810,7 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{subcontrol.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = su.schemaConfig.Subcontrol
@@ -823,7 +824,7 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{subcontrol.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = su.schemaConfig.Subcontrol
@@ -1480,9 +1481,9 @@ func (suo *SubcontrolUpdateOne) ClearDetails() *SubcontrolUpdateOne {
 	return suo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (suo *SubcontrolUpdateOne) SetUpdatedBy(u *User) *SubcontrolUpdateOne {
-	return suo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (suo *SubcontrolUpdateOne) SetUpdatedBy(c *ChangeActor) *SubcontrolUpdateOne {
+	return suo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1574,7 +1575,7 @@ func (suo *SubcontrolUpdateOne) Mutation() *SubcontrolMutation {
 	return suo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (suo *SubcontrolUpdateOne) ClearUpdatedBy() *SubcontrolUpdateOne {
 	suo.mutation.ClearUpdatedBy()
 	return suo
@@ -1911,7 +1912,7 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 			Columns: []string{subcontrol.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = suo.schemaConfig.Subcontrol
@@ -1925,7 +1926,7 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 			Columns: []string{subcontrol.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = suo.schemaConfig.Subcontrol

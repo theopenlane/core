@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -260,14 +260,14 @@ func (osc *OrganizationSettingCreate) SetNillableID(s *string) *OrganizationSett
 	return osc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (osc *OrganizationSettingCreate) SetCreatedBy(u *User) *OrganizationSettingCreate {
-	return osc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (osc *OrganizationSettingCreate) SetCreatedBy(c *ChangeActor) *OrganizationSettingCreate {
+	return osc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (osc *OrganizationSettingCreate) SetUpdatedBy(u *User) *OrganizationSettingCreate {
-	return osc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (osc *OrganizationSettingCreate) SetUpdatedBy(c *ChangeActor) *OrganizationSettingCreate {
+	return osc.SetUpdatedByID(c.ID)
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
@@ -491,7 +491,7 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 			Columns: []string{organizationsetting.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osc.schemaConfig.OrganizationSetting
@@ -509,7 +509,7 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 			Columns: []string{organizationsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osc.schemaConfig.OrganizationSetting

@@ -18,6 +18,8 @@ type Tx struct {
 	ActionPlan *ActionPlanClient
 	// ActionPlanHistory is the client for interacting with the ActionPlanHistory builders.
 	ActionPlanHistory *ActionPlanHistoryClient
+	// ChangeActor is the client for interacting with the ChangeActor builders.
+	ChangeActor *ChangeActorClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
 	// ContactHistory is the client for interacting with the ContactHistory builders.
@@ -286,6 +288,7 @@ func (tx *Tx) init() {
 	tx.APIToken = NewAPITokenClient(tx.config)
 	tx.ActionPlan = NewActionPlanClient(tx.config)
 	tx.ActionPlanHistory = NewActionPlanHistoryClient(tx.config)
+	tx.ChangeActor = NewChangeActorClient(tx.config)
 	tx.Contact = NewContactClient(tx.config)
 	tx.ContactHistory = NewContactHistoryClient(tx.config)
 	tx.Control = NewControlClient(tx.config)

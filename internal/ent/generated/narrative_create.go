@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -18,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // NarrativeCreate is the builder for creating a Narrative entity.
@@ -192,14 +192,14 @@ func (nc *NarrativeCreate) SetNillableID(s *string) *NarrativeCreate {
 	return nc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (nc *NarrativeCreate) SetCreatedBy(u *User) *NarrativeCreate {
-	return nc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (nc *NarrativeCreate) SetCreatedBy(c *ChangeActor) *NarrativeCreate {
+	return nc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (nc *NarrativeCreate) SetUpdatedBy(u *User) *NarrativeCreate {
-	return nc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (nc *NarrativeCreate) SetUpdatedBy(c *ChangeActor) *NarrativeCreate {
+	return nc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -507,7 +507,7 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 			Columns: []string{narrative.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nc.schemaConfig.Narrative
@@ -525,7 +525,7 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 			Columns: []string{narrative.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nc.schemaConfig.Narrative

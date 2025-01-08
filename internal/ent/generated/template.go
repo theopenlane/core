@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/customtypes"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -59,9 +59,9 @@ type Template struct {
 // TemplateEdges holds the relations/edges for other nodes in the graph.
 type TemplateEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Documents holds the value of the documents edge.
@@ -80,22 +80,22 @@ type TemplateEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TemplateEdges) CreatedByOrErr() (*User, error) {
+func (e TemplateEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TemplateEdges) UpdatedByOrErr() (*User, error) {
+func (e TemplateEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -265,12 +265,12 @@ func (t *Template) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the Template entity.
-func (t *Template) QueryCreatedBy() *UserQuery {
+func (t *Template) QueryCreatedBy() *ChangeActorQuery {
 	return NewTemplateClient(t.config).QueryCreatedBy(t)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the Template entity.
-func (t *Template) QueryUpdatedBy() *UserQuery {
+func (t *Template) QueryUpdatedBy() *ChangeActorQuery {
 	return NewTemplateClient(t.config).QueryUpdatedBy(t)
 }
 

@@ -65,16 +65,16 @@ const (
 	Table = "events"
 	// CreatedByTable is the table that holds the created_by relation/edge.
 	CreatedByTable = "events"
-	// CreatedByInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	CreatedByInverseTable = "users"
+	// CreatedByInverseTable is the table name for the ChangeActor entity.
+	// It exists in this package in order to avoid circular dependency with the "changeactor" package.
+	CreatedByInverseTable = "change_actors"
 	// CreatedByColumn is the table column denoting the created_by relation/edge.
 	CreatedByColumn = "created_by_id"
 	// UpdatedByTable is the table that holds the updated_by relation/edge.
 	UpdatedByTable = "events"
-	// UpdatedByInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UpdatedByInverseTable = "users"
+	// UpdatedByInverseTable is the table name for the ChangeActor entity.
+	// It exists in this package in order to avoid circular dependency with the "changeactor" package.
+	UpdatedByInverseTable = "change_actors"
 	// UpdatedByColumn is the table column denoting the updated_by relation/edge.
 	UpdatedByColumn = "updated_by_id"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.

@@ -13,12 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/customtypes"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -174,9 +174,9 @@ func (tu *TemplateUpdate) ClearUischema() *TemplateUpdate {
 	return tu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (tu *TemplateUpdate) SetUpdatedBy(u *User) *TemplateUpdate {
-	return tu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (tu *TemplateUpdate) SetUpdatedBy(c *ChangeActor) *TemplateUpdate {
+	return tu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -219,7 +219,7 @@ func (tu *TemplateUpdate) Mutation() *TemplateMutation {
 	return tu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (tu *TemplateUpdate) ClearUpdatedBy() *TemplateUpdate {
 	tu.mutation.ClearUpdatedBy()
 	return tu
@@ -408,7 +408,7 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{template.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tu.schemaConfig.Template
@@ -422,7 +422,7 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{template.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tu.schemaConfig.Template
@@ -718,9 +718,9 @@ func (tuo *TemplateUpdateOne) ClearUischema() *TemplateUpdateOne {
 	return tuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (tuo *TemplateUpdateOne) SetUpdatedBy(u *User) *TemplateUpdateOne {
-	return tuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (tuo *TemplateUpdateOne) SetUpdatedBy(c *ChangeActor) *TemplateUpdateOne {
+	return tuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -763,7 +763,7 @@ func (tuo *TemplateUpdateOne) Mutation() *TemplateMutation {
 	return tuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (tuo *TemplateUpdateOne) ClearUpdatedBy() *TemplateUpdateOne {
 	tuo.mutation.ClearUpdatedBy()
 	return tuo
@@ -982,7 +982,7 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 			Columns: []string{template.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tuo.schemaConfig.Template
@@ -996,7 +996,7 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 			Columns: []string{template.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tuo.schemaConfig.Template

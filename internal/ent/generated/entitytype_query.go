@@ -13,11 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -29,8 +29,8 @@ type EntityTypeQuery struct {
 	order             []entitytype.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.EntityType
-	withCreatedBy     *UserQuery
-	withUpdatedBy     *UserQuery
+	withCreatedBy     *ChangeActorQuery
+	withUpdatedBy     *ChangeActorQuery
 	withOwner         *OrganizationQuery
 	withEntities      *EntityQuery
 	loadTotal         []func(context.Context, []*EntityType) error
@@ -73,8 +73,8 @@ func (etq *EntityTypeQuery) Order(o ...entitytype.OrderOption) *EntityTypeQuery 
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (etq *EntityTypeQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: etq.config}).Query()
+func (etq *EntityTypeQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: etq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := etq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -85,11 +85,11 @@ func (etq *EntityTypeQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entitytype.Table, entitytype.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.CreatedByTable, entitytype.CreatedByColumn),
 		)
 		schemaConfig := etq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.EntityType
 		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
 		return fromU, nil
@@ -98,8 +98,8 @@ func (etq *EntityTypeQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (etq *EntityTypeQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: etq.config}).Query()
+func (etq *EntityTypeQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: etq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := etq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -110,11 +110,11 @@ func (etq *EntityTypeQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entitytype.Table, entitytype.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.UpdatedByTable, entitytype.UpdatedByColumn),
 		)
 		schemaConfig := etq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.EntityType
 		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
 		return fromU, nil
@@ -377,8 +377,8 @@ func (etq *EntityTypeQuery) Clone() *EntityTypeQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (etq *EntityTypeQuery) WithCreatedBy(opts ...func(*UserQuery)) *EntityTypeQuery {
-	query := (&UserClient{config: etq.config}).Query()
+func (etq *EntityTypeQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *EntityTypeQuery {
+	query := (&ChangeActorClient{config: etq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -388,8 +388,8 @@ func (etq *EntityTypeQuery) WithCreatedBy(opts ...func(*UserQuery)) *EntityTypeQ
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (etq *EntityTypeQuery) WithUpdatedBy(opts ...func(*UserQuery)) *EntityTypeQuery {
-	query := (&UserClient{config: etq.config}).Query()
+func (etq *EntityTypeQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *EntityTypeQuery {
+	query := (&ChangeActorClient{config: etq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -535,13 +535,13 @@ func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	}
 	if query := etq.withCreatedBy; query != nil {
 		if err := etq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *EntityType, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *EntityType, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := etq.withUpdatedBy; query != nil {
 		if err := etq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *EntityType, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *EntityType, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -573,7 +573,7 @@ func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *User)) error {
+func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*EntityType)
 	for i := range nodes {
@@ -586,7 +586,7 @@ func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *UserQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -602,7 +602,7 @@ func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *UserQuery,
 	}
 	return nil
 }
-func (etq *EntityTypeQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *User)) error {
+func (etq *EntityTypeQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*EntityType)
 	for i := range nodes {
@@ -615,7 +615,7 @@ func (etq *EntityTypeQuery) loadUpdatedBy(ctx context.Context, query *UserQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

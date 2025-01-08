@@ -15,6 +15,9 @@ type ActionPlan func(*sql.Selector)
 // ActionPlanHistory is the predicate function for actionplanhistory builders.
 type ActionPlanHistory func(*sql.Selector)
 
+// ChangeActor is the predicate function for changeactor builders.
+type ChangeActor func(*sql.Selector)
+
 // Contact is the predicate function for contact builders.
 type Contact func(*sql.Selector)
 

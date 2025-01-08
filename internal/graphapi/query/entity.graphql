@@ -5,9 +5,8 @@ mutation CreateBulkCSVEntity($input: Upload!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       displayName
@@ -19,9 +18,8 @@ mutation CreateBulkCSVEntity($input: Upload!) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
       entityType {
@@ -44,9 +42,8 @@ mutation CreateBulkEntity($input: [CreateEntityInput!]) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       displayName
@@ -58,9 +55,8 @@ mutation CreateBulkEntity($input: [CreateEntityInput!]) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
       entityType {
@@ -83,9 +79,8 @@ mutation CreateEntity($input: CreateEntityInput!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       displayName
@@ -97,9 +92,8 @@ mutation CreateEntity($input: CreateEntityInput!) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
       entityType {
@@ -147,9 +141,8 @@ query GetAllEntities {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
     }
@@ -182,9 +175,8 @@ query GetEntities($where: EntityWhereInput) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
     }
@@ -232,9 +224,8 @@ mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       displayName
@@ -246,9 +237,8 @@ mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       }
       entityType {

@@ -8,7 +8,7 @@ require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.1
 	entgo.io/contrib v0.6.0
-	entgo.io/ent v0.14.1
+	entgo.io/ent v0.14.2-0.20241231052425-fc57ede2fe0d
 	github.com/99designs/gqlgen v0.17.61
 	github.com/99designs/keyring v1.2.2
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
@@ -306,7 +306,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.26.1 // indirect
+	ariga.io/atlas v0.27.1-0.20240912191503-92195304dbe1 // indirect
 	cloud.google.com/go/auth v0.12.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.6 // indirect
 	cloud.google.com/go/compute/metadata v0.5.2 // indirect

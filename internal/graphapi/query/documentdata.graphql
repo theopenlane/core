@@ -7,10 +7,9 @@ mutation CreateDocumentData($input: CreateDocumentDataInput!) {
       createdAt
       createdByID
       createdBy {
-          id
-          firstName
-          lastName
-          email
+        id
+        name
+        actorType
       }
       updatedAt
       updatedByID
@@ -45,10 +44,9 @@ mutation UpdateDocumentData($updateDocumentDataId: ID!, $input: UpdateDocumentDa
       createdAt
       createdByID
       createdBy {
-          id
-          firstName
-          lastName
-          email
+        id
+        name
+        actorType
       }
       updatedAt
       updatedByID

@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -121,9 +121,9 @@ func (nu *NoteUpdate) SetNillableText(s *string) *NoteUpdate {
 	return nu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (nu *NoteUpdate) SetUpdatedBy(u *User) *NoteUpdate {
-	return nu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (nu *NoteUpdate) SetUpdatedBy(c *ChangeActor) *NoteUpdate {
+	return nu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -185,7 +185,7 @@ func (nu *NoteUpdate) Mutation() *NoteMutation {
 	return nu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (nu *NoteUpdate) ClearUpdatedBy() *NoteUpdate {
 	nu.mutation.ClearUpdatedBy()
 	return nu
@@ -357,7 +357,7 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{note.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nu.schemaConfig.Note
@@ -371,7 +371,7 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{note.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nu.schemaConfig.Note
@@ -646,9 +646,9 @@ func (nuo *NoteUpdateOne) SetNillableText(s *string) *NoteUpdateOne {
 	return nuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (nuo *NoteUpdateOne) SetUpdatedBy(u *User) *NoteUpdateOne {
-	return nuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (nuo *NoteUpdateOne) SetUpdatedBy(c *ChangeActor) *NoteUpdateOne {
+	return nuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -710,7 +710,7 @@ func (nuo *NoteUpdateOne) Mutation() *NoteMutation {
 	return nuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (nuo *NoteUpdateOne) ClearUpdatedBy() *NoteUpdateOne {
 	nuo.mutation.ClearUpdatedBy()
 	return nuo
@@ -912,7 +912,7 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 			Columns: []string{note.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Note
@@ -926,7 +926,7 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 			Columns: []string{note.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Note

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -162,14 +163,14 @@ func (gmc *GroupMembershipCreate) SetNillableID(s *string) *GroupMembershipCreat
 	return gmc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (gmc *GroupMembershipCreate) SetCreatedBy(u *User) *GroupMembershipCreate {
-	return gmc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (gmc *GroupMembershipCreate) SetCreatedBy(c *ChangeActor) *GroupMembershipCreate {
+	return gmc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (gmc *GroupMembershipCreate) SetUpdatedBy(u *User) *GroupMembershipCreate {
-	return gmc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (gmc *GroupMembershipCreate) SetUpdatedBy(c *ChangeActor) *GroupMembershipCreate {
+	return gmc.SetUpdatedByID(c.ID)
 }
 
 // SetGroup sets the "group" edge to the Group entity.
@@ -362,7 +363,7 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 			Columns: []string{groupmembership.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmc.schemaConfig.GroupMembership
@@ -380,7 +381,7 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 			Columns: []string{groupmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmc.schemaConfig.GroupMembership

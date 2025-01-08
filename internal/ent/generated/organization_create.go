@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -256,14 +257,14 @@ func (oc *OrganizationCreate) SetNillableID(s *string) *OrganizationCreate {
 	return oc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (oc *OrganizationCreate) SetCreatedBy(u *User) *OrganizationCreate {
-	return oc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (oc *OrganizationCreate) SetCreatedBy(c *ChangeActor) *OrganizationCreate {
+	return oc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (oc *OrganizationCreate) SetUpdatedBy(u *User) *OrganizationCreate {
-	return oc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (oc *OrganizationCreate) SetUpdatedBy(c *ChangeActor) *OrganizationCreate {
+	return oc.SetUpdatedByID(c.ID)
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
@@ -1064,7 +1065,7 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Columns: []string{organization.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = oc.schemaConfig.Organization
@@ -1082,7 +1083,7 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Columns: []string{organization.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = oc.schemaConfig.Organization

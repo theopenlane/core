@@ -6,9 +6,8 @@ mutation CreateBulkCSVSubcontrol($input: Upload!) {
       createdByID
       createdBy {
         id
-        firstName
-        lastName
-        email
+        name
+        actorType
       }
       description
       details
@@ -41,9 +40,8 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
       createdByID
       createdBy {
         id
-        firstName
-        lastName
-        email
+        name
+        actorType
       }
       description
       details
@@ -76,9 +74,8 @@ mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
       createdByID
       createdBy {
         id
-        firstName
-        lastName
-        email
+        name
+        actorType
       }
       description
       details
@@ -140,9 +137,8 @@ query GetAllSubcontrols {
         updatedByID
         updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
         }
         version
         controls {
@@ -212,9 +208,8 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
         updatedByID
         updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
         }
         version
         controls {
@@ -234,9 +229,8 @@ mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInpu
       createdByID
       createdBy {
         id
-        firstName
-        lastName
-        email
+        name
+        actorType
       }
       description
       details

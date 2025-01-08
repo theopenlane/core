@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -79,9 +79,9 @@ func (pmu *ProgramMembershipUpdate) SetNillableRole(e *enums.Role) *ProgramMembe
 	return pmu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (pmu *ProgramMembershipUpdate) SetUpdatedBy(u *User) *ProgramMembershipUpdate {
-	return pmu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (pmu *ProgramMembershipUpdate) SetUpdatedBy(c *ChangeActor) *ProgramMembershipUpdate {
+	return pmu.SetUpdatedByID(c.ID)
 }
 
 // Mutation returns the ProgramMembershipMutation object of the builder.
@@ -89,7 +89,7 @@ func (pmu *ProgramMembershipUpdate) Mutation() *ProgramMembershipMutation {
 	return pmu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (pmu *ProgramMembershipUpdate) ClearUpdatedBy() *ProgramMembershipUpdate {
 	pmu.mutation.ClearUpdatedBy()
 	return pmu
@@ -197,7 +197,7 @@ func (pmu *ProgramMembershipUpdate) sqlSave(ctx context.Context) (n int, err err
 			Columns: []string{programmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmu.schemaConfig.ProgramMembership
@@ -211,7 +211,7 @@ func (pmu *ProgramMembershipUpdate) sqlSave(ctx context.Context) (n int, err err
 			Columns: []string{programmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmu.schemaConfig.ProgramMembership
@@ -290,9 +290,9 @@ func (pmuo *ProgramMembershipUpdateOne) SetNillableRole(e *enums.Role) *ProgramM
 	return pmuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (pmuo *ProgramMembershipUpdateOne) SetUpdatedBy(u *User) *ProgramMembershipUpdateOne {
-	return pmuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (pmuo *ProgramMembershipUpdateOne) SetUpdatedBy(c *ChangeActor) *ProgramMembershipUpdateOne {
+	return pmuo.SetUpdatedByID(c.ID)
 }
 
 // Mutation returns the ProgramMembershipMutation object of the builder.
@@ -300,7 +300,7 @@ func (pmuo *ProgramMembershipUpdateOne) Mutation() *ProgramMembershipMutation {
 	return pmuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedBy() *ProgramMembershipUpdateOne {
 	pmuo.mutation.ClearUpdatedBy()
 	return pmuo
@@ -438,7 +438,7 @@ func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 			Columns: []string{programmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmuo.schemaConfig.ProgramMembership
@@ -452,7 +452,7 @@ func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 			Columns: []string{programmembership.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmuo.schemaConfig.ProgramMembership

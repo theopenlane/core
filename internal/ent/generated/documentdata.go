@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/customtypes"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // DocumentData is the model entity for the DocumentData schema.
@@ -53,9 +53,9 @@ type DocumentData struct {
 // DocumentDataEdges holds the relations/edges for other nodes in the graph.
 type DocumentDataEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Template holds the value of the template edge.
@@ -76,22 +76,22 @@ type DocumentDataEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DocumentDataEdges) CreatedByOrErr() (*User, error) {
+func (e DocumentDataEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DocumentDataEdges) UpdatedByOrErr() (*User, error) {
+func (e DocumentDataEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -252,12 +252,12 @@ func (dd *DocumentData) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the DocumentData entity.
-func (dd *DocumentData) QueryCreatedBy() *UserQuery {
+func (dd *DocumentData) QueryCreatedBy() *ChangeActorQuery {
 	return NewDocumentDataClient(dd.config).QueryCreatedBy(dd)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the DocumentData entity.
-func (dd *DocumentData) QueryUpdatedBy() *UserQuery {
+func (dd *DocumentData) QueryUpdatedBy() *ChangeActorQuery {
 	return NewDocumentDataClient(dd.config).QueryUpdatedBy(dd)
 }
 

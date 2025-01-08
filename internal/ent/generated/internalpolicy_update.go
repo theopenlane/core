@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -22,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -257,9 +257,9 @@ func (ipu *InternalPolicyUpdate) ClearDetails() *InternalPolicyUpdate {
 	return ipu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ipu *InternalPolicyUpdate) SetUpdatedBy(u *User) *InternalPolicyUpdate {
-	return ipu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ipu *InternalPolicyUpdate) SetUpdatedBy(c *ChangeActor) *InternalPolicyUpdate {
+	return ipu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -392,7 +392,7 @@ func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return ipu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (ipu *InternalPolicyUpdate) ClearUpdatedBy() *InternalPolicyUpdate {
 	ipu.mutation.ClearUpdatedBy()
 	return ipu
@@ -726,7 +726,7 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 			Columns: []string{internalpolicy.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipu.schemaConfig.InternalPolicy
@@ -740,7 +740,7 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 			Columns: []string{internalpolicy.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipu.schemaConfig.InternalPolicy
@@ -1404,9 +1404,9 @@ func (ipuo *InternalPolicyUpdateOne) ClearDetails() *InternalPolicyUpdateOne {
 	return ipuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ipuo *InternalPolicyUpdateOne) SetUpdatedBy(u *User) *InternalPolicyUpdateOne {
-	return ipuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ipuo *InternalPolicyUpdateOne) SetUpdatedBy(c *ChangeActor) *InternalPolicyUpdateOne {
+	return ipuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1539,7 +1539,7 @@ func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return ipuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (ipuo *InternalPolicyUpdateOne) ClearUpdatedBy() *InternalPolicyUpdateOne {
 	ipuo.mutation.ClearUpdatedBy()
 	return ipuo
@@ -1903,7 +1903,7 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			Columns: []string{internalpolicy.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.InternalPolicy
@@ -1917,7 +1917,7 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			Columns: []string{internalpolicy.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.InternalPolicy

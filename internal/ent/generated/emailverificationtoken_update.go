@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -126,9 +127,9 @@ func (evtu *EmailVerificationTokenUpdate) SetSecret(b []byte) *EmailVerification
 	return evtu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (evtu *EmailVerificationTokenUpdate) SetUpdatedBy(u *User) *EmailVerificationTokenUpdate {
-	return evtu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (evtu *EmailVerificationTokenUpdate) SetUpdatedBy(c *ChangeActor) *EmailVerificationTokenUpdate {
+	return evtu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -141,7 +142,7 @@ func (evtu *EmailVerificationTokenUpdate) Mutation() *EmailVerificationTokenMuta
 	return evtu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (evtu *EmailVerificationTokenUpdate) ClearUpdatedBy() *EmailVerificationTokenUpdate {
 	evtu.mutation.ClearUpdatedBy()
 	return evtu
@@ -271,7 +272,7 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 			Columns: []string{emailverificationtoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtu.schemaConfig.EmailVerificationToken
@@ -285,7 +286,7 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 			Columns: []string{emailverificationtoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtu.schemaConfig.EmailVerificationToken
@@ -443,9 +444,9 @@ func (evtuo *EmailVerificationTokenUpdateOne) SetSecret(b []byte) *EmailVerifica
 	return evtuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedBy(u *User) *EmailVerificationTokenUpdateOne {
-	return evtuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedBy(c *ChangeActor) *EmailVerificationTokenUpdateOne {
+	return evtuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -458,7 +459,7 @@ func (evtuo *EmailVerificationTokenUpdateOne) Mutation() *EmailVerificationToken
 	return evtuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedBy() *EmailVerificationTokenUpdateOne {
 	evtuo.mutation.ClearUpdatedBy()
 	return evtuo
@@ -618,7 +619,7 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 			Columns: []string{emailverificationtoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtuo.schemaConfig.EmailVerificationToken
@@ -632,7 +633,7 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 			Columns: []string{emailverificationtoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtuo.schemaConfig.EmailVerificationToken

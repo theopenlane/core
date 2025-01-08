@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -41,8 +42,8 @@ type GroupQuery struct {
 	order                                  []group.OrderOption
 	inters                                 []Interceptor
 	predicates                             []predicate.Group
-	withCreatedBy                          *UserQuery
-	withUpdatedBy                          *UserQuery
+	withCreatedBy                          *ChangeActorQuery
+	withUpdatedBy                          *ChangeActorQuery
 	withOwner                              *OrganizationQuery
 	withControlCreators                    *OrganizationQuery
 	withControlObjectiveCreators           *OrganizationQuery
@@ -152,8 +153,8 @@ func (gq *GroupQuery) Order(o ...group.OrderOption) *GroupQuery {
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (gq *GroupQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: gq.config}).Query()
+func (gq *GroupQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: gq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -164,11 +165,11 @@ func (gq *GroupQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, group.CreatedByTable, group.CreatedByColumn),
 		)
 		schemaConfig := gq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
 		return fromU, nil
@@ -177,8 +178,8 @@ func (gq *GroupQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (gq *GroupQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: gq.config}).Query()
+func (gq *GroupQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: gq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -189,11 +190,11 @@ func (gq *GroupQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, group.UpdatedByTable, group.UpdatedByColumn),
 		)
 		schemaConfig := gq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
 		return fromU, nil
@@ -1340,8 +1341,8 @@ func (gq *GroupQuery) Clone() *GroupQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithCreatedBy(opts ...func(*UserQuery)) *GroupQuery {
-	query := (&UserClient{config: gq.config}).Query()
+func (gq *GroupQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *GroupQuery {
+	query := (&ChangeActorClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -1351,8 +1352,8 @@ func (gq *GroupQuery) WithCreatedBy(opts ...func(*UserQuery)) *GroupQuery {
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (gq *GroupQuery) WithUpdatedBy(opts ...func(*UserQuery)) *GroupQuery {
-	query := (&UserClient{config: gq.config}).Query()
+func (gq *GroupQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *GroupQuery {
+	query := (&ChangeActorClient{config: gq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -1906,13 +1907,13 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 	}
 	if query := gq.withCreatedBy; query != nil {
 		if err := gq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Group, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *Group, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := gq.withUpdatedBy; query != nil {
 		if err := gq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Group, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *Group, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2430,7 +2431,7 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 	return nodes, nil
 }
 
-func (gq *GroupQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Group, init func(*Group), assign func(*Group, *User)) error {
+func (gq *GroupQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Group, init func(*Group), assign func(*Group, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Group)
 	for i := range nodes {
@@ -2443,7 +2444,7 @@ func (gq *GroupQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -2459,7 +2460,7 @@ func (gq *GroupQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes
 	}
 	return nil
 }
-func (gq *GroupQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Group, init func(*Group), assign func(*Group, *User)) error {
+func (gq *GroupQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Group, init func(*Group), assign func(*Group, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Group)
 	for i := range nodes {
@@ -2472,7 +2473,7 @@ func (gq *GroupQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

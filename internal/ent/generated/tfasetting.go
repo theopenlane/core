@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -58,9 +59,9 @@ type TFASetting struct {
 // TFASettingEdges holds the relations/edges for other nodes in the graph.
 type TFASettingEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -72,22 +73,22 @@ type TFASettingEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TFASettingEdges) CreatedByOrErr() (*User, error) {
+func (e TFASettingEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TFASettingEdges) UpdatedByOrErr() (*User, error) {
+func (e TFASettingEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -246,12 +247,12 @@ func (ts *TFASetting) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the TFASetting entity.
-func (ts *TFASetting) QueryCreatedBy() *UserQuery {
+func (ts *TFASetting) QueryCreatedBy() *ChangeActorQuery {
 	return NewTFASettingClient(ts.config).QueryCreatedBy(ts)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the TFASetting entity.
-func (ts *TFASetting) QueryUpdatedBy() *UserQuery {
+func (ts *TFASetting) QueryUpdatedBy() *ChangeActorQuery {
 	return NewTFASettingClient(ts.config).QueryUpdatedBy(ts)
 }
 

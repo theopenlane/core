@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -161,14 +162,14 @@ func (ec *EventCreate) SetNillableID(s *string) *EventCreate {
 	return ec
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (ec *EventCreate) SetCreatedBy(u *User) *EventCreate {
-	return ec.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (ec *EventCreate) SetCreatedBy(c *ChangeActor) *EventCreate {
+	return ec.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ec *EventCreate) SetUpdatedBy(u *User) *EventCreate {
-	return ec.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ec *EventCreate) SetUpdatedBy(c *ChangeActor) *EventCreate {
+	return ec.SetUpdatedByID(c.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -492,7 +493,7 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 			Columns: []string{event.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ec.schemaConfig.Event
@@ -510,7 +511,7 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 			Columns: []string{event.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ec.schemaConfig.Event

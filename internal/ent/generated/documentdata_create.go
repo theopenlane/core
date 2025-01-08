@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/customtypes"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // DocumentDataCreate is the builder for creating a DocumentData entity.
@@ -170,14 +170,14 @@ func (ddc *DocumentDataCreate) SetNillableID(s *string) *DocumentDataCreate {
 	return ddc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (ddc *DocumentDataCreate) SetCreatedBy(u *User) *DocumentDataCreate {
-	return ddc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (ddc *DocumentDataCreate) SetCreatedBy(c *ChangeActor) *DocumentDataCreate {
+	return ddc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ddc *DocumentDataCreate) SetUpdatedBy(u *User) *DocumentDataCreate {
-	return ddc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ddc *DocumentDataCreate) SetUpdatedBy(c *ChangeActor) *DocumentDataCreate {
+	return ddc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -383,7 +383,7 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 			Columns: []string{documentdata.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ddc.schemaConfig.DocumentData
@@ -401,7 +401,7 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 			Columns: []string{documentdata.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ddc.schemaConfig.DocumentData

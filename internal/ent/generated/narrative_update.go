@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -21,7 +22,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -170,9 +170,9 @@ func (nu *NarrativeUpdate) ClearDetails() *NarrativeUpdate {
 	return nu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (nu *NarrativeUpdate) SetUpdatedBy(u *User) *NarrativeUpdate {
-	return nu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (nu *NarrativeUpdate) SetUpdatedBy(c *ChangeActor) *NarrativeUpdate {
+	return nu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -305,7 +305,7 @@ func (nu *NarrativeUpdate) Mutation() *NarrativeMutation {
 	return nu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (nu *NarrativeUpdate) ClearUpdatedBy() *NarrativeUpdate {
 	nu.mutation.ClearUpdatedBy()
 	return nu
@@ -618,7 +618,7 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{narrative.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nu.schemaConfig.Narrative
@@ -632,7 +632,7 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{narrative.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nu.schemaConfig.Narrative
@@ -1210,9 +1210,9 @@ func (nuo *NarrativeUpdateOne) ClearDetails() *NarrativeUpdateOne {
 	return nuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (nuo *NarrativeUpdateOne) SetUpdatedBy(u *User) *NarrativeUpdateOne {
-	return nuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (nuo *NarrativeUpdateOne) SetUpdatedBy(c *ChangeActor) *NarrativeUpdateOne {
+	return nuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1345,7 +1345,7 @@ func (nuo *NarrativeUpdateOne) Mutation() *NarrativeMutation {
 	return nuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (nuo *NarrativeUpdateOne) ClearUpdatedBy() *NarrativeUpdateOne {
 	nuo.mutation.ClearUpdatedBy()
 	return nuo
@@ -1688,7 +1688,7 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 			Columns: []string{narrative.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Narrative
@@ -1702,7 +1702,7 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 			Columns: []string{narrative.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Narrative

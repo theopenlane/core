@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -35,8 +36,8 @@ type TaskQuery struct {
 	order                     []task.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.Task
-	withCreatedBy             *UserQuery
-	withUpdatedBy             *UserQuery
+	withCreatedBy             *ChangeActorQuery
+	withUpdatedBy             *ChangeActorQuery
 	withAssigner              *UserQuery
 	withAssignee              *UserQuery
 	withOrganization          *OrganizationQuery
@@ -95,8 +96,8 @@ func (tq *TaskQuery) Order(o ...task.OrderOption) *TaskQuery {
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (tq *TaskQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: tq.config}).Query()
+func (tq *TaskQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -107,11 +108,11 @@ func (tq *TaskQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, task.CreatedByTable, task.CreatedByColumn),
 		)
 		schemaConfig := tq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -120,8 +121,8 @@ func (tq *TaskQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (tq *TaskQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: tq.config}).Query()
+func (tq *TaskQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -132,11 +133,11 @@ func (tq *TaskQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, task.UpdatedByTable, task.UpdatedByColumn),
 		)
 		schemaConfig := tq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -607,8 +608,8 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithCreatedBy(opts ...func(*UserQuery)) *TaskQuery {
-	query := (&UserClient{config: tq.config}).Query()
+func (tq *TaskQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *TaskQuery {
+	query := (&ChangeActorClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -618,8 +619,8 @@ func (tq *TaskQuery) WithCreatedBy(opts ...func(*UserQuery)) *TaskQuery {
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithUpdatedBy(opts ...func(*UserQuery)) *TaskQuery {
-	query := (&UserClient{config: tq.config}).Query()
+func (tq *TaskQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *TaskQuery {
+	query := (&ChangeActorClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -868,13 +869,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	}
 	if query := tq.withCreatedBy; query != nil {
 		if err := tq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Task, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *Task, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := tq.withUpdatedBy; query != nil {
 		if err := tq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Task, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *Task, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1010,7 +1011,7 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	return nodes, nil
 }
 
-func (tq *TaskQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
+func (tq *TaskQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Task, init func(*Task), assign func(*Task, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
 	for i := range nodes {
@@ -1023,7 +1024,7 @@ func (tq *TaskQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes 
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1039,7 +1040,7 @@ func (tq *TaskQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes 
 	}
 	return nil
 }
-func (tq *TaskQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
+func (tq *TaskQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Task, init func(*Task), assign func(*Task, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
 	for i := range nodes {
@@ -1052,7 +1053,7 @@ func (tq *TaskQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes 
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

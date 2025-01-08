@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -215,9 +216,9 @@ func (tsu *TFASettingUpdate) ClearTotpAllowed() *TFASettingUpdate {
 	return tsu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (tsu *TFASettingUpdate) SetUpdatedBy(u *User) *TFASettingUpdate {
-	return tsu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (tsu *TFASettingUpdate) SetUpdatedBy(c *ChangeActor) *TFASettingUpdate {
+	return tsu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -230,7 +231,7 @@ func (tsu *TFASettingUpdate) Mutation() *TFASettingMutation {
 	return tsu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (tsu *TFASettingUpdate) ClearUpdatedBy() *TFASettingUpdate {
 	tsu.mutation.ClearUpdatedBy()
 	return tsu
@@ -371,7 +372,7 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{tfasetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsu.schemaConfig.TFASetting
@@ -385,7 +386,7 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{tfasetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsu.schemaConfig.TFASetting
@@ -631,9 +632,9 @@ func (tsuo *TFASettingUpdateOne) ClearTotpAllowed() *TFASettingUpdateOne {
 	return tsuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (tsuo *TFASettingUpdateOne) SetUpdatedBy(u *User) *TFASettingUpdateOne {
-	return tsuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (tsuo *TFASettingUpdateOne) SetUpdatedBy(c *ChangeActor) *TFASettingUpdateOne {
+	return tsuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -646,7 +647,7 @@ func (tsuo *TFASettingUpdateOne) Mutation() *TFASettingMutation {
 	return tsuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (tsuo *TFASettingUpdateOne) ClearUpdatedBy() *TFASettingUpdateOne {
 	tsuo.mutation.ClearUpdatedBy()
 	return tsuo
@@ -817,7 +818,7 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 			Columns: []string{tfasetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsuo.schemaConfig.TFASetting
@@ -831,7 +832,7 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 			Columns: []string{tfasetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsuo.schemaConfig.TFASetting

@@ -8,7 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
-func (at *APIToken) CreatedBy(ctx context.Context) (*User, error) {
+func (at *APIToken) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := at.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = at.QueryCreatedBy().Only(ctx)
@@ -16,7 +16,7 @@ func (at *APIToken) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (at *APIToken) UpdatedBy(ctx context.Context) (*User, error) {
+func (at *APIToken) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := at.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = at.QueryUpdatedBy().Only(ctx)
@@ -32,7 +32,7 @@ func (at *APIToken) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (ap *ActionPlan) CreatedBy(ctx context.Context) (*User, error) {
+func (ap *ActionPlan) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := ap.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = ap.QueryCreatedBy().Only(ctx)
@@ -40,7 +40,7 @@ func (ap *ActionPlan) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (ap *ActionPlan) UpdatedBy(ctx context.Context) (*User, error) {
+func (ap *ActionPlan) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := ap.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = ap.QueryUpdatedBy().Only(ctx)
@@ -108,7 +108,7 @@ func (ap *ActionPlan) Program(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
-func (c *Contact) CreatedBy(ctx context.Context) (*User, error) {
+func (c *Contact) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := c.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = c.QueryCreatedBy().Only(ctx)
@@ -116,7 +116,7 @@ func (c *Contact) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (c *Contact) UpdatedBy(ctx context.Context) (*User, error) {
+func (c *Contact) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := c.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = c.QueryUpdatedBy().Only(ctx)
@@ -156,7 +156,7 @@ func (c *Contact) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
-func (c *Control) CreatedBy(ctx context.Context) (*User, error) {
+func (c *Control) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := c.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = c.QueryCreatedBy().Only(ctx)
@@ -164,7 +164,7 @@ func (c *Control) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (c *Control) UpdatedBy(ctx context.Context) (*User, error) {
+func (c *Control) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := c.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = c.QueryUpdatedBy().Only(ctx)
@@ -324,7 +324,7 @@ func (c *Control) Programs(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (co *ControlObjective) CreatedBy(ctx context.Context) (*User, error) {
+func (co *ControlObjective) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := co.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = co.QueryCreatedBy().Only(ctx)
@@ -332,7 +332,7 @@ func (co *ControlObjective) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (co *ControlObjective) UpdatedBy(ctx context.Context) (*User, error) {
+func (co *ControlObjective) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := co.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = co.QueryUpdatedBy().Only(ctx)
@@ -492,7 +492,7 @@ func (co *ControlObjective) Programs(ctx context.Context) (result []*Program, er
 	return result, err
 }
 
-func (dd *DocumentData) CreatedBy(ctx context.Context) (*User, error) {
+func (dd *DocumentData) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := dd.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = dd.QueryCreatedBy().Only(ctx)
@@ -500,7 +500,7 @@ func (dd *DocumentData) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (dd *DocumentData) UpdatedBy(ctx context.Context) (*User, error) {
+func (dd *DocumentData) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := dd.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = dd.QueryUpdatedBy().Only(ctx)
@@ -548,7 +548,7 @@ func (dd *DocumentData) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
-func (e *Entity) CreatedBy(ctx context.Context) (*User, error) {
+func (e *Entity) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := e.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = e.QueryCreatedBy().Only(ctx)
@@ -556,7 +556,7 @@ func (e *Entity) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (e *Entity) UpdatedBy(ctx context.Context) (*User, error) {
+func (e *Entity) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := e.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = e.QueryUpdatedBy().Only(ctx)
@@ -628,7 +628,7 @@ func (e *Entity) EntityType(ctx context.Context) (*EntityType, error) {
 	return result, MaskNotFound(err)
 }
 
-func (et *EntityType) CreatedBy(ctx context.Context) (*User, error) {
+func (et *EntityType) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := et.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = et.QueryCreatedBy().Only(ctx)
@@ -636,7 +636,7 @@ func (et *EntityType) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (et *EntityType) UpdatedBy(ctx context.Context) (*User, error) {
+func (et *EntityType) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := et.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = et.QueryUpdatedBy().Only(ctx)
@@ -664,7 +664,7 @@ func (et *EntityType) Entities(ctx context.Context) (result []*Entity, err error
 	return result, err
 }
 
-func (e *Event) CreatedBy(ctx context.Context) (*User, error) {
+func (e *Event) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := e.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = e.QueryCreatedBy().Only(ctx)
@@ -672,7 +672,7 @@ func (e *Event) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (e *Event) UpdatedBy(ctx context.Context) (*User, error) {
+func (e *Event) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := e.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = e.QueryUpdatedBy().Only(ctx)
@@ -812,7 +812,7 @@ func (e *Event) File(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
-func (f *File) CreatedBy(ctx context.Context) (*User, error) {
+func (f *File) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := f.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = f.QueryCreatedBy().Only(ctx)
@@ -820,7 +820,7 @@ func (f *File) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (f *File) UpdatedBy(ctx context.Context) (*User, error) {
+func (f *File) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := f.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = f.QueryUpdatedBy().Only(ctx)
@@ -960,7 +960,7 @@ func (f *File) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (gr *Group) CreatedBy(ctx context.Context) (*User, error) {
+func (gr *Group) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := gr.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = gr.QueryCreatedBy().Only(ctx)
@@ -968,7 +968,7 @@ func (gr *Group) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (gr *Group) UpdatedBy(ctx context.Context) (*User, error) {
+func (gr *Group) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := gr.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = gr.QueryUpdatedBy().Only(ctx)
@@ -1400,7 +1400,7 @@ func (gr *Group) Members(ctx context.Context) (result []*GroupMembership, err er
 	return result, err
 }
 
-func (gm *GroupMembership) CreatedBy(ctx context.Context) (*User, error) {
+func (gm *GroupMembership) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := gm.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = gm.QueryCreatedBy().Only(ctx)
@@ -1408,7 +1408,7 @@ func (gm *GroupMembership) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (gm *GroupMembership) UpdatedBy(ctx context.Context) (*User, error) {
+func (gm *GroupMembership) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := gm.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = gm.QueryUpdatedBy().Only(ctx)
@@ -1444,7 +1444,7 @@ func (gm *GroupMembership) Events(ctx context.Context) (result []*Event, err err
 	return result, err
 }
 
-func (gs *GroupSetting) CreatedBy(ctx context.Context) (*User, error) {
+func (gs *GroupSetting) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := gs.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = gs.QueryCreatedBy().Only(ctx)
@@ -1452,7 +1452,7 @@ func (gs *GroupSetting) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (gs *GroupSetting) UpdatedBy(ctx context.Context) (*User, error) {
+func (gs *GroupSetting) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := gs.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = gs.QueryUpdatedBy().Only(ctx)
@@ -1468,7 +1468,7 @@ func (gs *GroupSetting) Group(ctx context.Context) (*Group, error) {
 	return result, MaskNotFound(err)
 }
 
-func (h *Hush) CreatedBy(ctx context.Context) (*User, error) {
+func (h *Hush) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := h.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = h.QueryCreatedBy().Only(ctx)
@@ -1476,7 +1476,7 @@ func (h *Hush) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (h *Hush) UpdatedBy(ctx context.Context) (*User, error) {
+func (h *Hush) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := h.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = h.QueryUpdatedBy().Only(ctx)
@@ -1520,7 +1520,7 @@ func (h *Hush) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (i *Integration) CreatedBy(ctx context.Context) (*User, error) {
+func (i *Integration) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := i.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = i.QueryCreatedBy().Only(ctx)
@@ -1528,7 +1528,7 @@ func (i *Integration) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (i *Integration) UpdatedBy(ctx context.Context) (*User, error) {
+func (i *Integration) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := i.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = i.QueryUpdatedBy().Only(ctx)
@@ -1568,7 +1568,7 @@ func (i *Integration) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (ip *InternalPolicy) CreatedBy(ctx context.Context) (*User, error) {
+func (ip *InternalPolicy) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := ip.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = ip.QueryCreatedBy().Only(ctx)
@@ -1576,7 +1576,7 @@ func (ip *InternalPolicy) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (ip *InternalPolicy) UpdatedBy(ctx context.Context) (*User, error) {
+func (ip *InternalPolicy) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := ip.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = ip.QueryUpdatedBy().Only(ctx)
@@ -1688,7 +1688,7 @@ func (ip *InternalPolicy) Programs(ctx context.Context) (result []*Program, err 
 	return result, err
 }
 
-func (i *Invite) CreatedBy(ctx context.Context) (*User, error) {
+func (i *Invite) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := i.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = i.QueryCreatedBy().Only(ctx)
@@ -1696,7 +1696,7 @@ func (i *Invite) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (i *Invite) UpdatedBy(ctx context.Context) (*User, error) {
+func (i *Invite) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := i.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = i.QueryUpdatedBy().Only(ctx)
@@ -1724,7 +1724,7 @@ func (i *Invite) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (n *Narrative) CreatedBy(ctx context.Context) (*User, error) {
+func (n *Narrative) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := n.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = n.QueryCreatedBy().Only(ctx)
@@ -1732,7 +1732,7 @@ func (n *Narrative) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (n *Narrative) UpdatedBy(ctx context.Context) (*User, error) {
+func (n *Narrative) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := n.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = n.QueryUpdatedBy().Only(ctx)
@@ -1844,7 +1844,7 @@ func (n *Narrative) Programs(ctx context.Context) (result []*Program, err error)
 	return result, err
 }
 
-func (n *Note) CreatedBy(ctx context.Context) (*User, error) {
+func (n *Note) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := n.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = n.QueryCreatedBy().Only(ctx)
@@ -1852,7 +1852,7 @@ func (n *Note) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (n *Note) UpdatedBy(ctx context.Context) (*User, error) {
+func (n *Note) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := n.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = n.QueryUpdatedBy().Only(ctx)
@@ -1900,7 +1900,7 @@ func (n *Note) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (om *OrgMembership) CreatedBy(ctx context.Context) (*User, error) {
+func (om *OrgMembership) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := om.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = om.QueryCreatedBy().Only(ctx)
@@ -1908,7 +1908,7 @@ func (om *OrgMembership) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (om *OrgMembership) UpdatedBy(ctx context.Context) (*User, error) {
+func (om *OrgMembership) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := om.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = om.QueryUpdatedBy().Only(ctx)
@@ -1944,7 +1944,7 @@ func (om *OrgMembership) Events(ctx context.Context) (result []*Event, err error
 	return result, err
 }
 
-func (os *OrgSubscription) CreatedBy(ctx context.Context) (*User, error) {
+func (os *OrgSubscription) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := os.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = os.QueryCreatedBy().Only(ctx)
@@ -1952,7 +1952,7 @@ func (os *OrgSubscription) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (os *OrgSubscription) UpdatedBy(ctx context.Context) (*User, error) {
+func (os *OrgSubscription) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := os.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = os.QueryUpdatedBy().Only(ctx)
@@ -1968,7 +1968,7 @@ func (os *OrgSubscription) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (o *Organization) CreatedBy(ctx context.Context) (*User, error) {
+func (o *Organization) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := o.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = o.QueryCreatedBy().Only(ctx)
@@ -1976,7 +1976,7 @@ func (o *Organization) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (o *Organization) UpdatedBy(ctx context.Context) (*User, error) {
+func (o *Organization) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := o.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = o.QueryUpdatedBy().Only(ctx)
@@ -2453,7 +2453,7 @@ func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, er
 	return result, err
 }
 
-func (os *OrganizationSetting) CreatedBy(ctx context.Context) (*User, error) {
+func (os *OrganizationSetting) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := os.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = os.QueryCreatedBy().Only(ctx)
@@ -2461,7 +2461,7 @@ func (os *OrganizationSetting) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (os *OrganizationSetting) UpdatedBy(ctx context.Context) (*User, error) {
+func (os *OrganizationSetting) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := os.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = os.QueryUpdatedBy().Only(ctx)
@@ -2489,7 +2489,7 @@ func (os *OrganizationSetting) Files(ctx context.Context) (result []*File, err e
 	return result, err
 }
 
-func (pat *PersonalAccessToken) CreatedBy(ctx context.Context) (*User, error) {
+func (pat *PersonalAccessToken) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := pat.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = pat.QueryCreatedBy().Only(ctx)
@@ -2497,7 +2497,7 @@ func (pat *PersonalAccessToken) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (pat *PersonalAccessToken) UpdatedBy(ctx context.Context) (*User, error) {
+func (pat *PersonalAccessToken) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := pat.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = pat.QueryUpdatedBy().Only(ctx)
@@ -2537,7 +2537,7 @@ func (pat *PersonalAccessToken) Events(ctx context.Context) (result []*Event, er
 	return result, err
 }
 
-func (pr *Procedure) CreatedBy(ctx context.Context) (*User, error) {
+func (pr *Procedure) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := pr.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = pr.QueryCreatedBy().Only(ctx)
@@ -2545,7 +2545,7 @@ func (pr *Procedure) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (pr *Procedure) UpdatedBy(ctx context.Context) (*User, error) {
+func (pr *Procedure) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := pr.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = pr.QueryUpdatedBy().Only(ctx)
@@ -2657,7 +2657,7 @@ func (pr *Procedure) Programs(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
-func (pr *Program) CreatedBy(ctx context.Context) (*User, error) {
+func (pr *Program) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := pr.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = pr.QueryCreatedBy().Only(ctx)
@@ -2665,7 +2665,7 @@ func (pr *Program) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (pr *Program) UpdatedBy(ctx context.Context) (*User, error) {
+func (pr *Program) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := pr.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = pr.QueryUpdatedBy().Only(ctx)
@@ -2885,7 +2885,7 @@ func (pr *Program) Members(ctx context.Context) (result []*ProgramMembership, er
 	return result, err
 }
 
-func (pm *ProgramMembership) CreatedBy(ctx context.Context) (*User, error) {
+func (pm *ProgramMembership) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := pm.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = pm.QueryCreatedBy().Only(ctx)
@@ -2893,7 +2893,7 @@ func (pm *ProgramMembership) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (pm *ProgramMembership) UpdatedBy(ctx context.Context) (*User, error) {
+func (pm *ProgramMembership) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := pm.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = pm.QueryUpdatedBy().Only(ctx)
@@ -2917,7 +2917,7 @@ func (pm *ProgramMembership) User(ctx context.Context) (*User, error) {
 	return result, err
 }
 
-func (r *Risk) CreatedBy(ctx context.Context) (*User, error) {
+func (r *Risk) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := r.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = r.QueryCreatedBy().Only(ctx)
@@ -2925,7 +2925,7 @@ func (r *Risk) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (r *Risk) UpdatedBy(ctx context.Context) (*User, error) {
+func (r *Risk) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := r.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = r.QueryUpdatedBy().Only(ctx)
@@ -3025,7 +3025,7 @@ func (r *Risk) Programs(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (s *Standard) CreatedBy(ctx context.Context) (*User, error) {
+func (s *Standard) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := s.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = s.QueryCreatedBy().Only(ctx)
@@ -3033,7 +3033,7 @@ func (s *Standard) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (s *Standard) UpdatedBy(ctx context.Context) (*User, error) {
+func (s *Standard) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := s.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = s.QueryUpdatedBy().Only(ctx)
@@ -3101,7 +3101,7 @@ func (s *Standard) Programs(ctx context.Context) (result []*Program, err error) 
 	return result, err
 }
 
-func (s *Subcontrol) CreatedBy(ctx context.Context) (*User, error) {
+func (s *Subcontrol) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := s.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = s.QueryCreatedBy().Only(ctx)
@@ -3109,7 +3109,7 @@ func (s *Subcontrol) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (s *Subcontrol) UpdatedBy(ctx context.Context) (*User, error) {
+func (s *Subcontrol) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := s.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = s.QueryUpdatedBy().Only(ctx)
@@ -3181,7 +3181,7 @@ func (s *Subcontrol) Programs(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
-func (s *Subscriber) CreatedBy(ctx context.Context) (*User, error) {
+func (s *Subscriber) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := s.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = s.QueryCreatedBy().Only(ctx)
@@ -3189,7 +3189,7 @@ func (s *Subscriber) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (s *Subscriber) UpdatedBy(ctx context.Context) (*User, error) {
+func (s *Subscriber) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := s.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = s.QueryUpdatedBy().Only(ctx)
@@ -3217,7 +3217,7 @@ func (s *Subscriber) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (ts *TFASetting) CreatedBy(ctx context.Context) (*User, error) {
+func (ts *TFASetting) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := ts.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = ts.QueryCreatedBy().Only(ctx)
@@ -3225,7 +3225,7 @@ func (ts *TFASetting) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (ts *TFASetting) UpdatedBy(ctx context.Context) (*User, error) {
+func (ts *TFASetting) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := ts.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = ts.QueryUpdatedBy().Only(ctx)
@@ -3241,7 +3241,7 @@ func (ts *TFASetting) Owner(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (t *Task) CreatedBy(ctx context.Context) (*User, error) {
+func (t *Task) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := t.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = t.QueryCreatedBy().Only(ctx)
@@ -3249,7 +3249,7 @@ func (t *Task) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (t *Task) UpdatedBy(ctx context.Context) (*User, error) {
+func (t *Task) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := t.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = t.QueryUpdatedBy().Only(ctx)
@@ -3369,7 +3369,7 @@ func (t *Task) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (t *Template) CreatedBy(ctx context.Context) (*User, error) {
+func (t *Template) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := t.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = t.QueryCreatedBy().Only(ctx)
@@ -3377,7 +3377,7 @@ func (t *Template) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (t *Template) UpdatedBy(ctx context.Context) (*User, error) {
+func (t *Template) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := t.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = t.QueryUpdatedBy().Only(ctx)
@@ -3601,7 +3601,7 @@ func (u *User) ProgramMemberships(ctx context.Context) (result []*ProgramMembers
 	return result, err
 }
 
-func (us *UserSetting) CreatedBy(ctx context.Context) (*User, error) {
+func (us *UserSetting) CreatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := us.Edges.CreatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = us.QueryCreatedBy().Only(ctx)
@@ -3609,7 +3609,7 @@ func (us *UserSetting) CreatedBy(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (us *UserSetting) UpdatedBy(ctx context.Context) (*User, error) {
+func (us *UserSetting) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
 	result, err := us.Edges.UpdatedByOrErr()
 	if IsNotLoaded(err) {
 		result, err = us.QueryUpdatedBy().Only(ctx)

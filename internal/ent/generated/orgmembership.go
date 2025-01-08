@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -49,9 +50,9 @@ type OrgMembership struct {
 // OrgMembershipEdges holds the relations/edges for other nodes in the graph.
 type OrgMembershipEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Organization holds the value of the organization edge.
 	Organization *Organization `json:"organization,omitempty"`
 	// User holds the value of the user edge.
@@ -69,22 +70,22 @@ type OrgMembershipEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrgMembershipEdges) CreatedByOrErr() (*User, error) {
+func (e OrgMembershipEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrgMembershipEdges) UpdatedByOrErr() (*User, error) {
+func (e OrgMembershipEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -224,12 +225,12 @@ func (om *OrgMembership) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the OrgMembership entity.
-func (om *OrgMembership) QueryCreatedBy() *UserQuery {
+func (om *OrgMembership) QueryCreatedBy() *ChangeActorQuery {
 	return NewOrgMembershipClient(om.config).QueryCreatedBy(om)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the OrgMembership entity.
-func (om *OrgMembership) QueryUpdatedBy() *UserQuery {
+func (om *OrgMembership) QueryUpdatedBy() *ChangeActorQuery {
 	return NewOrgMembershipClient(om.config).QueryUpdatedBy(om)
 }
 

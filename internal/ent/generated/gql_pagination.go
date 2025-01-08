@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -908,6 +909,255 @@ func (aph *ActionPlanHistory) ToEdge(order *ActionPlanHistoryOrder) *ActionPlanH
 	return &ActionPlanHistoryEdge{
 		Node:   aph,
 		Cursor: order.Field.toCursor(aph),
+	}
+}
+
+// ChangeActorEdge is the edge representation of ChangeActor.
+type ChangeActorEdge struct {
+	Node   *ChangeActor `json:"node"`
+	Cursor Cursor       `json:"cursor"`
+}
+
+// ChangeActorConnection is the connection containing edges to ChangeActor.
+type ChangeActorConnection struct {
+	Edges      []*ChangeActorEdge `json:"edges"`
+	PageInfo   PageInfo           `json:"pageInfo"`
+	TotalCount int                `json:"totalCount"`
+}
+
+func (c *ChangeActorConnection) build(nodes []*ChangeActor, pager *changeactorPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ChangeActor
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ChangeActor {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ChangeActor {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ChangeActorEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ChangeActorEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ChangeActorPaginateOption enables pagination customization.
+type ChangeActorPaginateOption func(*changeactorPager) error
+
+// WithChangeActorOrder configures pagination ordering.
+func WithChangeActorOrder(order *ChangeActorOrder) ChangeActorPaginateOption {
+	if order == nil {
+		order = DefaultChangeActorOrder
+	}
+	o := *order
+	return func(pager *changeactorPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultChangeActorOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithChangeActorFilter configures pagination filter.
+func WithChangeActorFilter(filter func(*ChangeActorQuery) (*ChangeActorQuery, error)) ChangeActorPaginateOption {
+	return func(pager *changeactorPager) error {
+		if filter == nil {
+			return errors.New("ChangeActorQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type changeactorPager struct {
+	reverse bool
+	order   *ChangeActorOrder
+	filter  func(*ChangeActorQuery) (*ChangeActorQuery, error)
+}
+
+func newChangeActorPager(opts []ChangeActorPaginateOption, reverse bool) (*changeactorPager, error) {
+	pager := &changeactorPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultChangeActorOrder
+	}
+	return pager, nil
+}
+
+func (p *changeactorPager) applyFilter(query *ChangeActorQuery) (*ChangeActorQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *changeactorPager) toCursor(ca *ChangeActor) Cursor {
+	return p.order.Field.toCursor(ca)
+}
+
+func (p *changeactorPager) applyCursors(query *ChangeActorQuery, after, before *Cursor) (*ChangeActorQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultChangeActorOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *changeactorPager) applyOrder(query *ChangeActorQuery) *ChangeActorQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultChangeActorOrder.Field {
+		query = query.Order(DefaultChangeActorOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *changeactorPager) orderExpr(query *ChangeActorQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultChangeActorOrder.Field {
+			b.Comma().Ident(DefaultChangeActorOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ChangeActor.
+func (ca *ChangeActorQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ChangeActorPaginateOption,
+) (*ChangeActorConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newChangeActorPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if ca, err = pager.applyFilter(ca); err != nil {
+		return nil, err
+	}
+	conn := &ChangeActorConnection{Edges: []*ChangeActorEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := ca.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if ca, err = pager.applyCursors(ca, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		ca.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := ca.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	ca = pager.applyOrder(ca)
+	nodes, err := ca.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ChangeActorOrderField defines the ordering field of ChangeActor.
+type ChangeActorOrderField struct {
+	// Value extracts the ordering value from the given ChangeActor.
+	Value    func(*ChangeActor) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) changeactor.OrderOption
+	toCursor func(*ChangeActor) Cursor
+}
+
+// ChangeActorOrder defines the ordering of ChangeActor.
+type ChangeActorOrder struct {
+	Direction OrderDirection         `json:"direction"`
+	Field     *ChangeActorOrderField `json:"field"`
+}
+
+// DefaultChangeActorOrder is the default ordering of ChangeActor.
+var DefaultChangeActorOrder = &ChangeActorOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ChangeActorOrderField{
+		Value: func(ca *ChangeActor) (ent.Value, error) {
+			return ca.ID, nil
+		},
+		column: changeactor.FieldID,
+		toTerm: changeactor.ByID,
+		toCursor: func(ca *ChangeActor) Cursor {
+			return Cursor{ID: ca.ID}
+		},
+	},
+}
+
+// ToEdge converts ChangeActor into ChangeActorEdge.
+func (ca *ChangeActor) ToEdge(order *ChangeActorOrder) *ChangeActorEdge {
+	if order == nil {
+		order = DefaultChangeActorOrder
+	}
+	return &ChangeActorEdge{
+		Node:   ca,
+		Cursor: order.Field.toCursor(ca),
 	}
 }
 

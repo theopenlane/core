@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -216,6 +217,33 @@ func (f TraverseActionPlanHistory) Traverse(ctx context.Context, q generated.Que
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.ActionPlanHistoryQuery", q)
+}
+
+// The ChangeActorFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ChangeActorFunc func(context.Context, *generated.ChangeActorQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ChangeActorFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ChangeActorQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ChangeActorQuery", q)
+}
+
+// The TraverseChangeActor type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseChangeActor func(context.Context, *generated.ChangeActorQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseChangeActor) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseChangeActor) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ChangeActorQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ChangeActorQuery", q)
 }
 
 // The ContactFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2036,6 +2064,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ActionPlanQuery, predicate.ActionPlan, actionplan.OrderOption]{typ: generated.TypeActionPlan, tq: q}, nil
 	case *generated.ActionPlanHistoryQuery:
 		return &query[*generated.ActionPlanHistoryQuery, predicate.ActionPlanHistory, actionplanhistory.OrderOption]{typ: generated.TypeActionPlanHistory, tq: q}, nil
+	case *generated.ChangeActorQuery:
+		return &query[*generated.ChangeActorQuery, predicate.ChangeActor, changeactor.OrderOption]{typ: generated.TypeChangeActor, tq: q}, nil
 	case *generated.ContactQuery:
 		return &query[*generated.ContactQuery, predicate.Contact, contact.OrderOption]{typ: generated.TypeContact, tq: q}, nil
 	case *generated.ContactHistoryQuery:

@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // EntityTypeCreate is the builder for creating a EntityType entity.
@@ -161,14 +161,14 @@ func (etc *EntityTypeCreate) SetNillableID(s *string) *EntityTypeCreate {
 	return etc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (etc *EntityTypeCreate) SetCreatedBy(u *User) *EntityTypeCreate {
-	return etc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (etc *EntityTypeCreate) SetCreatedBy(c *ChangeActor) *EntityTypeCreate {
+	return etc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (etc *EntityTypeCreate) SetUpdatedBy(u *User) *EntityTypeCreate {
-	return etc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (etc *EntityTypeCreate) SetUpdatedBy(c *ChangeActor) *EntityTypeCreate {
+	return etc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -353,7 +353,7 @@ func (etc *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 			Columns: []string{entitytype.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = etc.schemaConfig.EntityType
@@ -371,7 +371,7 @@ func (etc *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 			Columns: []string{entitytype.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = etc.schemaConfig.EntityType

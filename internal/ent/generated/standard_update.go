@@ -13,13 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -274,9 +274,9 @@ func (su *StandardUpdate) ClearDetails() *StandardUpdate {
 	return su
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (su *StandardUpdate) SetUpdatedBy(u *User) *StandardUpdate {
-	return su.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (su *StandardUpdate) SetUpdatedBy(c *ChangeActor) *StandardUpdate {
+	return su.SetUpdatedByID(c.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -359,7 +359,7 @@ func (su *StandardUpdate) Mutation() *StandardMutation {
 	return su.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (su *StandardUpdate) ClearUpdatedBy() *StandardUpdate {
 	su.mutation.ClearUpdatedBy()
 	return su
@@ -631,7 +631,7 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{standard.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = su.schemaConfig.Standard
@@ -645,7 +645,7 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{standard.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = su.schemaConfig.Standard
@@ -1154,9 +1154,9 @@ func (suo *StandardUpdateOne) ClearDetails() *StandardUpdateOne {
 	return suo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (suo *StandardUpdateOne) SetUpdatedBy(u *User) *StandardUpdateOne {
-	return suo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (suo *StandardUpdateOne) SetUpdatedBy(c *ChangeActor) *StandardUpdateOne {
+	return suo.SetUpdatedByID(c.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -1239,7 +1239,7 @@ func (suo *StandardUpdateOne) Mutation() *StandardMutation {
 	return suo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (suo *StandardUpdateOne) ClearUpdatedBy() *StandardUpdateOne {
 	suo.mutation.ClearUpdatedBy()
 	return suo
@@ -1541,7 +1541,7 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 			Columns: []string{standard.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = suo.schemaConfig.Standard
@@ -1555,7 +1555,7 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 			Columns: []string{standard.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = suo.schemaConfig.Standard

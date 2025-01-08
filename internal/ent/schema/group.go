@@ -152,7 +152,7 @@ func (Group) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

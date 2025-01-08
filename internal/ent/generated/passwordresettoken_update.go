@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -126,9 +127,9 @@ func (prtu *PasswordResetTokenUpdate) SetSecret(b []byte) *PasswordResetTokenUpd
 	return prtu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (prtu *PasswordResetTokenUpdate) SetUpdatedBy(u *User) *PasswordResetTokenUpdate {
-	return prtu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (prtu *PasswordResetTokenUpdate) SetUpdatedBy(c *ChangeActor) *PasswordResetTokenUpdate {
+	return prtu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -141,7 +142,7 @@ func (prtu *PasswordResetTokenUpdate) Mutation() *PasswordResetTokenMutation {
 	return prtu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (prtu *PasswordResetTokenUpdate) ClearUpdatedBy() *PasswordResetTokenUpdate {
 	prtu.mutation.ClearUpdatedBy()
 	return prtu
@@ -271,7 +272,7 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 			Columns: []string{passwordresettoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtu.schemaConfig.PasswordResetToken
@@ -285,7 +286,7 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 			Columns: []string{passwordresettoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtu.schemaConfig.PasswordResetToken
@@ -443,9 +444,9 @@ func (prtuo *PasswordResetTokenUpdateOne) SetSecret(b []byte) *PasswordResetToke
 	return prtuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedBy(u *User) *PasswordResetTokenUpdateOne {
-	return prtuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedBy(c *ChangeActor) *PasswordResetTokenUpdateOne {
+	return prtuo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -458,7 +459,7 @@ func (prtuo *PasswordResetTokenUpdateOne) Mutation() *PasswordResetTokenMutation
 	return prtuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedBy() *PasswordResetTokenUpdateOne {
 	prtuo.mutation.ClearUpdatedBy()
 	return prtuo
@@ -618,7 +619,7 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 			Columns: []string{passwordresettoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtuo.schemaConfig.PasswordResetToken
@@ -632,7 +633,7 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 			Columns: []string{passwordresettoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtuo.schemaConfig.PasswordResetToken

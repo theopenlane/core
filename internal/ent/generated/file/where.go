@@ -1575,18 +1575,18 @@ func HasCreatedBy() predicate.File {
 			sqlgraph.Edge(sqlgraph.M2O, false, CreatedByTable, CreatedByColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasCreatedByWith applies the HasEdge predicate on the "created_by" edge with a given conditions (other predicates).
-func HasCreatedByWith(preds ...predicate.User) predicate.File {
+func HasCreatedByWith(preds ...predicate.ChangeActor) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := newCreatedByStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -1604,18 +1604,18 @@ func HasUpdatedBy() predicate.File {
 			sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByTable, UpdatedByColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasUpdatedByWith applies the HasEdge predicate on the "updated_by" edge with a given conditions (other predicates).
-func HasUpdatedByWith(preds ...predicate.User) predicate.File {
+func HasUpdatedByWith(preds ...predicate.ChangeActor) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := newUpdatedByStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -49,9 +50,9 @@ type GroupMembership struct {
 // GroupMembershipEdges holds the relations/edges for other nodes in the graph.
 type GroupMembershipEdges struct {
 	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *User `json:"created_by,omitempty"`
+	CreatedBy *ChangeActor `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *User `json:"updated_by,omitempty"`
+	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
 	// Group holds the value of the group edge.
 	Group *Group `json:"group,omitempty"`
 	// User holds the value of the user edge.
@@ -69,22 +70,22 @@ type GroupMembershipEdges struct {
 
 // CreatedByOrErr returns the CreatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e GroupMembershipEdges) CreatedByOrErr() (*User, error) {
+func (e GroupMembershipEdges) CreatedByOrErr() (*ChangeActor, error) {
 	if e.CreatedBy != nil {
 		return e.CreatedBy, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "created_by"}
 }
 
 // UpdatedByOrErr returns the UpdatedBy value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e GroupMembershipEdges) UpdatedByOrErr() (*User, error) {
+func (e GroupMembershipEdges) UpdatedByOrErr() (*ChangeActor, error) {
 	if e.UpdatedBy != nil {
 		return e.UpdatedBy, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
+		return nil, &NotFoundError{label: changeactor.Label}
 	}
 	return nil, &NotLoadedError{edge: "updated_by"}
 }
@@ -224,12 +225,12 @@ func (gm *GroupMembership) Value(name string) (ent.Value, error) {
 }
 
 // QueryCreatedBy queries the "created_by" edge of the GroupMembership entity.
-func (gm *GroupMembership) QueryCreatedBy() *UserQuery {
+func (gm *GroupMembership) QueryCreatedBy() *ChangeActorQuery {
 	return NewGroupMembershipClient(gm.config).QueryCreatedBy(gm)
 }
 
 // QueryUpdatedBy queries the "updated_by" edge of the GroupMembership entity.
-func (gm *GroupMembership) QueryUpdatedBy() *UserQuery {
+func (gm *GroupMembership) QueryUpdatedBy() *ChangeActorQuery {
 	return NewGroupMembershipClient(gm.config).QueryUpdatedBy(gm)
 }
 

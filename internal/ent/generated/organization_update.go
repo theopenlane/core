@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -192,9 +193,9 @@ func (ou *OrganizationUpdate) SetNillableDedicatedDb(b *bool) *OrganizationUpdat
 	return ou
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ou *OrganizationUpdate) SetUpdatedBy(u *User) *OrganizationUpdate {
-	return ou.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ou *OrganizationUpdate) SetUpdatedBy(c *ChangeActor) *OrganizationUpdate {
+	return ou.SetUpdatedByID(c.ID)
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
@@ -776,7 +777,7 @@ func (ou *OrganizationUpdate) Mutation() *OrganizationMutation {
 	return ou.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (ou *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
 	ou.mutation.ClearUpdatedBy()
 	return ou
@@ -1703,7 +1704,7 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{organization.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ou.schemaConfig.Organization
@@ -1717,7 +1718,7 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{organization.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ou.schemaConfig.Organization
@@ -3710,9 +3711,9 @@ func (ouo *OrganizationUpdateOne) SetNillableDedicatedDb(b *bool) *OrganizationU
 	return ouo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (ouo *OrganizationUpdateOne) SetUpdatedBy(u *User) *OrganizationUpdateOne {
-	return ouo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (ouo *OrganizationUpdateOne) SetUpdatedBy(c *ChangeActor) *OrganizationUpdateOne {
+	return ouo.SetUpdatedByID(c.ID)
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
@@ -4294,7 +4295,7 @@ func (ouo *OrganizationUpdateOne) Mutation() *OrganizationMutation {
 	return ouo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (ouo *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
 	ouo.mutation.ClearUpdatedBy()
 	return ouo
@@ -5251,7 +5252,7 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			Columns: []string{organization.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Organization
@@ -5265,7 +5266,7 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			Columns: []string{organization.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Organization

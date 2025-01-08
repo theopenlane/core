@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -163,14 +164,14 @@ func (prtc *PasswordResetTokenCreate) SetNillableID(s *string) *PasswordResetTok
 	return prtc
 }
 
-// SetCreatedBy sets the "created_by" edge to the User entity.
-func (prtc *PasswordResetTokenCreate) SetCreatedBy(u *User) *PasswordResetTokenCreate {
-	return prtc.SetCreatedByID(u.ID)
+// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
+func (prtc *PasswordResetTokenCreate) SetCreatedBy(c *ChangeActor) *PasswordResetTokenCreate {
+	return prtc.SetCreatedByID(c.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (prtc *PasswordResetTokenCreate) SetUpdatedBy(u *User) *PasswordResetTokenCreate {
-	return prtc.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (prtc *PasswordResetTokenCreate) SetUpdatedBy(c *ChangeActor) *PasswordResetTokenCreate {
+	return prtc.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -364,7 +365,7 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 			Columns: []string{passwordresettoken.CreatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtc.schemaConfig.PasswordResetToken
@@ -382,7 +383,7 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 			Columns: []string{passwordresettoken.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtc.schemaConfig.PasswordResetToken

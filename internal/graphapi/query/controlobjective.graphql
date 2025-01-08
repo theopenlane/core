@@ -9,9 +9,8 @@ mutation CreateBulkCSVControlObjective($input: Upload!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       details
@@ -39,9 +38,8 @@ mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       details
@@ -69,9 +67,8 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       details
@@ -133,9 +130,8 @@ query GetAllControlObjectives {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         version
         programs {
@@ -218,9 +214,8 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
       updatedByID
       updatedBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
         version
         programs {
@@ -253,9 +248,8 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
       createdByID
       createdBy {
           id
-          firstName
-          lastName
-          email
+          name
+          actorType
       }
       description
       details

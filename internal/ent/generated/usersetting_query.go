@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -29,8 +30,8 @@ type UserSettingQuery struct {
 	order          []usersetting.OrderOption
 	inters         []Interceptor
 	predicates     []predicate.UserSetting
-	withCreatedBy  *UserQuery
-	withUpdatedBy  *UserQuery
+	withCreatedBy  *ChangeActorQuery
+	withUpdatedBy  *ChangeActorQuery
 	withUser       *UserQuery
 	withDefaultOrg *OrganizationQuery
 	withFiles      *FileQuery
@@ -75,8 +76,8 @@ func (usq *UserSettingQuery) Order(o ...usersetting.OrderOption) *UserSettingQue
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (usq *UserSettingQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: usq.config}).Query()
+func (usq *UserSettingQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: usq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := usq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -87,11 +88,11 @@ func (usq *UserSettingQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(usersetting.Table, usersetting.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.CreatedByTable, usersetting.CreatedByColumn),
 		)
 		schemaConfig := usq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.UserSetting
 		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
 		return fromU, nil
@@ -100,8 +101,8 @@ func (usq *UserSettingQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (usq *UserSettingQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: usq.config}).Query()
+func (usq *UserSettingQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: usq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := usq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -112,11 +113,11 @@ func (usq *UserSettingQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(usersetting.Table, usersetting.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.UpdatedByTable, usersetting.UpdatedByColumn),
 		)
 		schemaConfig := usq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.UserSetting
 		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
 		return fromU, nil
@@ -405,8 +406,8 @@ func (usq *UserSettingQuery) Clone() *UserSettingQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (usq *UserSettingQuery) WithCreatedBy(opts ...func(*UserQuery)) *UserSettingQuery {
-	query := (&UserClient{config: usq.config}).Query()
+func (usq *UserSettingQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *UserSettingQuery {
+	query := (&ChangeActorClient{config: usq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -416,8 +417,8 @@ func (usq *UserSettingQuery) WithCreatedBy(opts ...func(*UserQuery)) *UserSettin
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (usq *UserSettingQuery) WithUpdatedBy(opts ...func(*UserQuery)) *UserSettingQuery {
-	query := (&UserClient{config: usq.config}).Query()
+func (usq *UserSettingQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *UserSettingQuery {
+	query := (&ChangeActorClient{config: usq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -582,13 +583,13 @@ func (usq *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	}
 	if query := usq.withCreatedBy; query != nil {
 		if err := usq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *UserSetting, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *UserSetting, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := usq.withUpdatedBy; query != nil {
 		if err := usq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *UserSetting, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *UserSetting, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -626,7 +627,7 @@ func (usq *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	return nodes, nil
 }
 
-func (usq *UserSettingQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *User)) error {
+func (usq *UserSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*UserSetting)
 	for i := range nodes {
@@ -639,7 +640,7 @@ func (usq *UserSettingQuery) loadCreatedBy(ctx context.Context, query *UserQuery
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -655,7 +656,7 @@ func (usq *UserSettingQuery) loadCreatedBy(ctx context.Context, query *UserQuery
 	}
 	return nil
 }
-func (usq *UserSettingQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *User)) error {
+func (usq *UserSettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*UserSetting)
 	for i := range nodes {
@@ -668,7 +669,7 @@ func (usq *UserSettingQuery) loadUpdatedBy(ctx context.Context, query *UserQuery
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

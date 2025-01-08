@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -173,9 +173,9 @@ func (gsu *GroupSettingUpdate) ClearGroupID() *GroupSettingUpdate {
 	return gsu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (gsu *GroupSettingUpdate) SetUpdatedBy(u *User) *GroupSettingUpdate {
-	return gsu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (gsu *GroupSettingUpdate) SetUpdatedBy(c *ChangeActor) *GroupSettingUpdate {
+	return gsu.SetUpdatedByID(c.ID)
 }
 
 // SetGroup sets the "group" edge to the Group entity.
@@ -188,7 +188,7 @@ func (gsu *GroupSettingUpdate) Mutation() *GroupSettingMutation {
 	return gsu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (gsu *GroupSettingUpdate) ClearUpdatedBy() *GroupSettingUpdate {
 	gsu.mutation.ClearUpdatedBy()
 	return gsu
@@ -327,7 +327,7 @@ func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{groupsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gsu.schemaConfig.GroupSetting
@@ -341,7 +341,7 @@ func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{groupsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gsu.schemaConfig.GroupSetting
@@ -543,9 +543,9 @@ func (gsuo *GroupSettingUpdateOne) ClearGroupID() *GroupSettingUpdateOne {
 	return gsuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (gsuo *GroupSettingUpdateOne) SetUpdatedBy(u *User) *GroupSettingUpdateOne {
-	return gsuo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (gsuo *GroupSettingUpdateOne) SetUpdatedBy(c *ChangeActor) *GroupSettingUpdateOne {
+	return gsuo.SetUpdatedByID(c.ID)
 }
 
 // SetGroup sets the "group" edge to the Group entity.
@@ -558,7 +558,7 @@ func (gsuo *GroupSettingUpdateOne) Mutation() *GroupSettingMutation {
 	return gsuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (gsuo *GroupSettingUpdateOne) ClearUpdatedBy() *GroupSettingUpdateOne {
 	gsuo.mutation.ClearUpdatedBy()
 	return gsuo
@@ -727,7 +727,7 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 			Columns: []string{groupsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gsuo.schemaConfig.GroupSetting
@@ -741,7 +741,7 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 			Columns: []string{groupsetting.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gsuo.schemaConfig.GroupSetting

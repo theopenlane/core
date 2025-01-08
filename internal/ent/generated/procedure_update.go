@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -22,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -277,9 +277,9 @@ func (pu *ProcedureUpdate) ClearDetails() *ProcedureUpdate {
 	return pu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (pu *ProcedureUpdate) SetUpdatedBy(u *User) *ProcedureUpdate {
-	return pu.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (pu *ProcedureUpdate) SetUpdatedBy(c *ChangeActor) *ProcedureUpdate {
+	return pu.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -412,7 +412,7 @@ func (pu *ProcedureUpdate) Mutation() *ProcedureMutation {
 	return pu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (pu *ProcedureUpdate) ClearUpdatedBy() *ProcedureUpdate {
 	pu.mutation.ClearUpdatedBy()
 	return pu
@@ -752,7 +752,7 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{procedure.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pu.schemaConfig.Procedure
@@ -766,7 +766,7 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{procedure.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pu.schemaConfig.Procedure
@@ -1450,9 +1450,9 @@ func (puo *ProcedureUpdateOne) ClearDetails() *ProcedureUpdateOne {
 	return puo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (puo *ProcedureUpdateOne) SetUpdatedBy(u *User) *ProcedureUpdateOne {
-	return puo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (puo *ProcedureUpdateOne) SetUpdatedBy(c *ChangeActor) *ProcedureUpdateOne {
+	return puo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1585,7 +1585,7 @@ func (puo *ProcedureUpdateOne) Mutation() *ProcedureMutation {
 	return puo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (puo *ProcedureUpdateOne) ClearUpdatedBy() *ProcedureUpdateOne {
 	puo.mutation.ClearUpdatedBy()
 	return puo
@@ -1955,7 +1955,7 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 			Columns: []string{procedure.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = puo.schemaConfig.Procedure
@@ -1969,7 +1969,7 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 			Columns: []string{procedure.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = puo.schemaConfig.Procedure

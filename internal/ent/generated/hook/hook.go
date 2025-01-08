@@ -45,6 +45,18 @@ func (f ActionPlanHistoryFunc) Mutate(ctx context.Context, m generated.Mutation)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ActionPlanHistoryMutation", m)
 }
 
+// The ChangeActorFunc type is an adapter to allow the use of ordinary
+// function as ChangeActor mutator.
+type ChangeActorFunc func(context.Context, *generated.ChangeActorMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ChangeActorFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ChangeActorMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ChangeActorMutation", m)
+}
+
 // The ContactFunc type is an adapter to allow the use of ordinary
 // function as Contact mutator.
 type ContactFunc func(context.Context, *generated.ContactMutation) (generated.Value, error)

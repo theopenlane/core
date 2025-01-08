@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -23,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -35,8 +35,8 @@ type InternalPolicyQuery struct {
 	order                      []internalpolicy.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.InternalPolicy
-	withCreatedBy              *UserQuery
-	withUpdatedBy              *UserQuery
+	withCreatedBy              *ChangeActorQuery
+	withUpdatedBy              *ChangeActorQuery
 	withOwner                  *OrganizationQuery
 	withBlockedGroups          *GroupQuery
 	withEditors                *GroupQuery
@@ -93,8 +93,8 @@ func (ipq *InternalPolicyQuery) Order(o ...internalpolicy.OrderOption) *Internal
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (ipq *InternalPolicyQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: ipq.config}).Query()
+func (ipq *InternalPolicyQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: ipq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ipq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -105,11 +105,11 @@ func (ipq *InternalPolicyQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.CreatedByTable, internalpolicy.CreatedByColumn),
 		)
 		schemaConfig := ipq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
@@ -118,8 +118,8 @@ func (ipq *InternalPolicyQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (ipq *InternalPolicyQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: ipq.config}).Query()
+func (ipq *InternalPolicyQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: ipq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ipq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -130,11 +130,11 @@ func (ipq *InternalPolicyQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.UpdatedByTable, internalpolicy.UpdatedByColumn),
 		)
 		schemaConfig := ipq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
@@ -579,8 +579,8 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithCreatedBy(opts ...func(*UserQuery)) *InternalPolicyQuery {
-	query := (&UserClient{config: ipq.config}).Query()
+func (ipq *InternalPolicyQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *InternalPolicyQuery {
+	query := (&ChangeActorClient{config: ipq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -590,8 +590,8 @@ func (ipq *InternalPolicyQuery) WithCreatedBy(opts ...func(*UserQuery)) *Interna
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithUpdatedBy(opts ...func(*UserQuery)) *InternalPolicyQuery {
-	query := (&UserClient{config: ipq.config}).Query()
+func (ipq *InternalPolicyQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *InternalPolicyQuery {
+	query := (&ChangeActorClient{config: ipq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -821,13 +821,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	}
 	if query := ipq.withCreatedBy; query != nil {
 		if err := ipq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *InternalPolicy, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *InternalPolicy, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := ipq.withUpdatedBy; query != nil {
 		if err := ipq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *InternalPolicy, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *InternalPolicy, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -959,7 +959,7 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	return nodes, nil
 }
 
-func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *User)) error {
+func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*InternalPolicy)
 	for i := range nodes {
@@ -972,7 +972,7 @@ func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *UserQu
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -988,7 +988,7 @@ func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *UserQu
 	}
 	return nil
 }
-func (ipq *InternalPolicyQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *User)) error {
+func (ipq *InternalPolicyQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*InternalPolicy)
 	for i := range nodes {
@@ -1001,7 +1001,7 @@ func (ipq *InternalPolicyQuery) loadUpdatedBy(ctx context.Context, query *UserQu
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

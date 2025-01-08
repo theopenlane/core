@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -25,7 +26,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -314,9 +314,9 @@ func (cou *ControlObjectiveUpdate) ClearDetails() *ControlObjectiveUpdate {
 	return cou
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (cou *ControlObjectiveUpdate) SetUpdatedBy(u *User) *ControlObjectiveUpdate {
-	return cou.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (cou *ControlObjectiveUpdate) SetUpdatedBy(c *ChangeActor) *ControlObjectiveUpdate {
+	return cou.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -509,7 +509,7 @@ func (cou *ControlObjectiveUpdate) Mutation() *ControlObjectiveMutation {
 	return cou.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (cou *ControlObjectiveUpdate) ClearUpdatedBy() *ControlObjectiveUpdate {
 	cou.mutation.ClearUpdatedBy()
 	return cou
@@ -948,7 +948,7 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{controlobjective.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cou.schemaConfig.ControlObjective
@@ -962,7 +962,7 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{controlobjective.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cou.schemaConfig.ControlObjective
@@ -1872,9 +1872,9 @@ func (couo *ControlObjectiveUpdateOne) ClearDetails() *ControlObjectiveUpdateOne
 	return couo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the User entity.
-func (couo *ControlObjectiveUpdateOne) SetUpdatedBy(u *User) *ControlObjectiveUpdateOne {
-	return couo.SetUpdatedByID(u.ID)
+// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
+func (couo *ControlObjectiveUpdateOne) SetUpdatedBy(c *ChangeActor) *ControlObjectiveUpdateOne {
+	return couo.SetUpdatedByID(c.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -2067,7 +2067,7 @@ func (couo *ControlObjectiveUpdateOne) Mutation() *ControlObjectiveMutation {
 	return couo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the User entity.
+// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
 func (couo *ControlObjectiveUpdateOne) ClearUpdatedBy() *ControlObjectiveUpdateOne {
 	couo.mutation.ClearUpdatedBy()
 	return couo
@@ -2536,7 +2536,7 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 			Columns: []string{controlobjective.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = couo.schemaConfig.ControlObjective
@@ -2550,7 +2550,7 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 			Columns: []string{controlobjective.UpdatedByColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = couo.schemaConfig.ControlObjective

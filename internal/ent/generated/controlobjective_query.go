@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -26,7 +27,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -38,8 +38,8 @@ type ControlObjectiveQuery struct {
 	order                     []controlobjective.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.ControlObjective
-	withCreatedBy             *UserQuery
-	withUpdatedBy             *UserQuery
+	withCreatedBy             *ChangeActorQuery
+	withUpdatedBy             *ChangeActorQuery
 	withOwner                 *OrganizationQuery
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
@@ -105,8 +105,8 @@ func (coq *ControlObjectiveQuery) Order(o ...controlobjective.OrderOption) *Cont
 }
 
 // QueryCreatedBy chains the current query on the "created_by" edge.
-func (coq *ControlObjectiveQuery) QueryCreatedBy() *UserQuery {
-	query := (&UserClient{config: coq.config}).Query()
+func (coq *ControlObjectiveQuery) QueryCreatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: coq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := coq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -117,11 +117,11 @@ func (coq *ControlObjectiveQuery) QueryCreatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.CreatedByTable, controlobjective.CreatedByColumn),
 		)
 		schemaConfig := coq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.ControlObjective
 		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
 		return fromU, nil
@@ -130,8 +130,8 @@ func (coq *ControlObjectiveQuery) QueryCreatedBy() *UserQuery {
 }
 
 // QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (coq *ControlObjectiveQuery) QueryUpdatedBy() *UserQuery {
-	query := (&UserClient{config: coq.config}).Query()
+func (coq *ControlObjectiveQuery) QueryUpdatedBy() *ChangeActorQuery {
+	query := (&ChangeActorClient{config: coq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := coq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -142,11 +142,11 @@ func (coq *ControlObjectiveQuery) QueryUpdatedBy() *UserQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.To(changeactor.Table, changeactor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.UpdatedByTable, controlobjective.UpdatedByColumn),
 		)
 		schemaConfig := coq.schemaConfig
-		step.To.Schema = schemaConfig.User
+		step.To.Schema = schemaConfig.ChangeActor
 		step.Edge.Schema = schemaConfig.ControlObjective
 		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
 		return fromU, nil
@@ -695,8 +695,8 @@ func (coq *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
 
 // WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithCreatedBy(opts ...func(*UserQuery)) *ControlObjectiveQuery {
-	query := (&UserClient{config: coq.config}).Query()
+func (coq *ControlObjectiveQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ControlObjectiveQuery {
+	query := (&ChangeActorClient{config: coq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -706,8 +706,8 @@ func (coq *ControlObjectiveQuery) WithCreatedBy(opts ...func(*UserQuery)) *Contr
 
 // WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
 // the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithUpdatedBy(opts ...func(*UserQuery)) *ControlObjectiveQuery {
-	query := (&UserClient{config: coq.config}).Query()
+func (coq *ControlObjectiveQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ControlObjectiveQuery {
+	query := (&ChangeActorClient{config: coq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -989,13 +989,13 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	}
 	if query := coq.withCreatedBy; query != nil {
 		if err := coq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *ControlObjective, e *User) { n.Edges.CreatedBy = e }); err != nil {
+			func(n *ControlObjective, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := coq.withUpdatedBy; query != nil {
 		if err := coq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *ControlObjective, e *User) { n.Edges.UpdatedBy = e }); err != nil {
+			func(n *ControlObjective, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1183,7 +1183,7 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	return nodes, nil
 }
 
-func (coq *ControlObjectiveQuery) loadCreatedBy(ctx context.Context, query *UserQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *User)) error {
+func (coq *ControlObjectiveQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ControlObjective)
 	for i := range nodes {
@@ -1196,7 +1196,7 @@ func (coq *ControlObjectiveQuery) loadCreatedBy(ctx context.Context, query *User
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1212,7 +1212,7 @@ func (coq *ControlObjectiveQuery) loadCreatedBy(ctx context.Context, query *User
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadUpdatedBy(ctx context.Context, query *UserQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *User)) error {
+func (coq *ControlObjectiveQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *ChangeActor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ControlObjective)
 	for i := range nodes {
@@ -1225,7 +1225,7 @@ func (coq *ControlObjectiveQuery) loadUpdatedBy(ctx context.Context, query *User
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(user.IDIn(ids...))
+	query.Where(changeactor.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

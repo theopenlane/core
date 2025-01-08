@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -242,12 +243,12 @@ type APITokenWhereInput struct {
 	LastUsedAtNotNil bool        `json:"lastUsedAtNotNil,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -733,7 +734,7 @@ func (i *APITokenWhereInput) P() (predicate.APIToken, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -751,7 +752,7 @@ func (i *APITokenWhereInput) P() (predicate.APIToken, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -991,12 +992,12 @@ type ActionPlanWhereInput struct {
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "standard" edge predicates.
 	HasStandard     *bool                 `json:"hasStandard,omitempty"`
@@ -1603,7 +1604,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -1621,7 +1622,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -2695,6 +2696,246 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	}
 }
 
+// ChangeActorWhereInput represents a where input for filtering ChangeActor queries.
+type ChangeActorWhereInput struct {
+	Predicates []predicate.ChangeActor  `json:"-"`
+	Not        *ChangeActorWhereInput   `json:"not,omitempty"`
+	Or         []*ChangeActorWhereInput `json:"or,omitempty"`
+	And        []*ChangeActorWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "actor_type" field predicates.
+	ActorType             *string  `json:"actorType,omitempty"`
+	ActorTypeNEQ          *string  `json:"actorTypeNEQ,omitempty"`
+	ActorTypeIn           []string `json:"actorTypeIn,omitempty"`
+	ActorTypeNotIn        []string `json:"actorTypeNotIn,omitempty"`
+	ActorTypeGT           *string  `json:"actorTypeGT,omitempty"`
+	ActorTypeGTE          *string  `json:"actorTypeGTE,omitempty"`
+	ActorTypeLT           *string  `json:"actorTypeLT,omitempty"`
+	ActorTypeLTE          *string  `json:"actorTypeLTE,omitempty"`
+	ActorTypeContains     *string  `json:"actorTypeContains,omitempty"`
+	ActorTypeHasPrefix    *string  `json:"actorTypeHasPrefix,omitempty"`
+	ActorTypeHasSuffix    *string  `json:"actorTypeHasSuffix,omitempty"`
+	ActorTypeEqualFold    *string  `json:"actorTypeEqualFold,omitempty"`
+	ActorTypeContainsFold *string  `json:"actorTypeContainsFold,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ChangeActorWhereInput) AddPredicates(predicates ...predicate.ChangeActor) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ChangeActorWhereInput filter on the ChangeActorQuery builder.
+func (i *ChangeActorWhereInput) Filter(q *ChangeActorQuery) (*ChangeActorQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyChangeActorWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyChangeActorWhereInput is returned in case the ChangeActorWhereInput is empty.
+var ErrEmptyChangeActorWhereInput = errors.New("generated: empty predicate ChangeActorWhereInput")
+
+// P returns a predicate for filtering changeactors.
+// An error is returned if the input is empty or invalid.
+func (i *ChangeActorWhereInput) P() (predicate.ChangeActor, error) {
+	var predicates []predicate.ChangeActor
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, changeactor.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.ChangeActor, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, changeactor.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.ChangeActor, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, changeactor.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, changeactor.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, changeactor.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, changeactor.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, changeactor.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, changeactor.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, changeactor.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, changeactor.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, changeactor.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, changeactor.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, changeactor.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.Name != nil {
+		predicates = append(predicates, changeactor.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, changeactor.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, changeactor.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, changeactor.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, changeactor.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, changeactor.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, changeactor.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, changeactor.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, changeactor.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, changeactor.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, changeactor.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, changeactor.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, changeactor.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.ActorType != nil {
+		predicates = append(predicates, changeactor.ActorTypeEQ(*i.ActorType))
+	}
+	if i.ActorTypeNEQ != nil {
+		predicates = append(predicates, changeactor.ActorTypeNEQ(*i.ActorTypeNEQ))
+	}
+	if len(i.ActorTypeIn) > 0 {
+		predicates = append(predicates, changeactor.ActorTypeIn(i.ActorTypeIn...))
+	}
+	if len(i.ActorTypeNotIn) > 0 {
+		predicates = append(predicates, changeactor.ActorTypeNotIn(i.ActorTypeNotIn...))
+	}
+	if i.ActorTypeGT != nil {
+		predicates = append(predicates, changeactor.ActorTypeGT(*i.ActorTypeGT))
+	}
+	if i.ActorTypeGTE != nil {
+		predicates = append(predicates, changeactor.ActorTypeGTE(*i.ActorTypeGTE))
+	}
+	if i.ActorTypeLT != nil {
+		predicates = append(predicates, changeactor.ActorTypeLT(*i.ActorTypeLT))
+	}
+	if i.ActorTypeLTE != nil {
+		predicates = append(predicates, changeactor.ActorTypeLTE(*i.ActorTypeLTE))
+	}
+	if i.ActorTypeContains != nil {
+		predicates = append(predicates, changeactor.ActorTypeContains(*i.ActorTypeContains))
+	}
+	if i.ActorTypeHasPrefix != nil {
+		predicates = append(predicates, changeactor.ActorTypeHasPrefix(*i.ActorTypeHasPrefix))
+	}
+	if i.ActorTypeHasSuffix != nil {
+		predicates = append(predicates, changeactor.ActorTypeHasSuffix(*i.ActorTypeHasSuffix))
+	}
+	if i.ActorTypeEqualFold != nil {
+		predicates = append(predicates, changeactor.ActorTypeEqualFold(*i.ActorTypeEqualFold))
+	}
+	if i.ActorTypeContainsFold != nil {
+		predicates = append(predicates, changeactor.ActorTypeContainsFold(*i.ActorTypeContainsFold))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyChangeActorWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return changeactor.And(predicates...), nil
+	}
+}
+
 // ContactWhereInput represents a where input for filtering Contact queries.
 type ContactWhereInput struct {
 	Predicates []predicate.Contact  `json:"-"`
@@ -2925,12 +3166,12 @@ type ContactWhereInput struct {
 	StatusNotIn []enums.UserStatus `json:"statusNotIn,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -3601,7 +3842,7 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -3619,7 +3860,7 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -5064,12 +5305,12 @@ type ControlWhereInput struct {
 	MappedFrameworksContainsFold *string  `json:"mappedFrameworksContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -5987,7 +6228,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -6005,7 +6246,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -7897,12 +8138,12 @@ type ControlObjectiveWhereInput struct {
 	MappedFrameworksContainsFold *string  `json:"mappedFrameworksContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -8775,7 +9016,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -8793,7 +9034,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -10472,12 +10713,12 @@ type DocumentDataWhereInput struct {
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -10915,7 +11156,7 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -10933,7 +11174,7 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -11953,12 +12194,12 @@ type EntityWhereInput struct {
 	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -12545,7 +12786,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -12563,7 +12804,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -13760,12 +14001,12 @@ type EntityTypeWhereInput struct {
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -14195,7 +14436,7 @@ func (i *EntityTypeWhereInput) P() (predicate.EntityType, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -14213,7 +14454,7 @@ func (i *EntityTypeWhereInput) P() (predicate.EntityType, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -15132,12 +15373,12 @@ type EventWhereInput struct {
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "user" edge predicates.
 	HasUser     *bool             `json:"hasUser,omitempty"`
@@ -15573,7 +15814,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -15591,7 +15832,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -16815,12 +17056,12 @@ type FileWhereInput struct {
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "user" edge predicates.
 	HasUser     *bool             `json:"hasUser,omitempty"`
@@ -17739,7 +17980,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -17757,7 +17998,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -19491,12 +19732,12 @@ type GroupWhereInput struct {
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -20101,7 +20342,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -20119,7 +20360,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -21720,12 +21961,12 @@ type GroupMembershipWhereInput struct {
 	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "group" edge predicates.
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
@@ -22165,7 +22406,7 @@ func (i *GroupMembershipWhereInput) P() (predicate.GroupMembership, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -22183,7 +22424,7 @@ func (i *GroupMembershipWhereInput) P() (predicate.GroupMembership, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -23151,12 +23392,12 @@ type GroupSettingWhereInput struct {
 	GroupIDContainsFold *string  `json:"groupIDContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "group" edge predicates.
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
@@ -23591,7 +23832,7 @@ func (i *GroupSettingWhereInput) P() (predicate.GroupSetting, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -23609,7 +23850,7 @@ func (i *GroupSettingWhereInput) P() (predicate.GroupSetting, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -24557,12 +24798,12 @@ type HushWhereInput struct {
 	SecretNameContainsFold *string  `json:"secretNameContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "integrations" edge predicates.
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
@@ -25041,7 +25282,7 @@ func (i *HushWhereInput) P() (predicate.Hush, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -25059,7 +25300,7 @@ func (i *HushWhereInput) P() (predicate.Hush, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -26087,12 +26328,12 @@ type IntegrationWhereInput struct {
 	KindContainsFold *string  `json:"kindContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -26571,7 +26812,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -26589,7 +26830,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -27702,12 +27943,12 @@ type InternalPolicyWhereInput struct {
 	BackgroundContainsFold *string  `json:"backgroundContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -28435,7 +28676,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -28453,7 +28694,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -29933,12 +30174,12 @@ type InviteWhereInput struct {
 	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -30491,7 +30732,7 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -30509,7 +30750,7 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -30736,12 +30977,12 @@ type NarrativeWhereInput struct {
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -31283,7 +31524,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -31301,7 +31542,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -32474,12 +32715,12 @@ type NoteWhereInput struct {
 	TextContainsFold *string  `json:"textContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -32917,7 +33158,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -32935,7 +33176,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -33906,12 +34147,12 @@ type OrgMembershipWhereInput struct {
 	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
@@ -34351,7 +34592,7 @@ func (i *OrgMembershipWhereInput) P() (predicate.OrgMembership, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -34369,7 +34610,7 @@ func (i *OrgMembershipWhereInput) P() (predicate.OrgMembership, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -35414,12 +35655,12 @@ type OrgSubscriptionWhereInput struct {
 	ExpiresAtNotNil bool        `json:"expiresAtNotNil,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -36067,7 +36308,7 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -36085,7 +36326,7 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -37329,12 +37570,12 @@ type OrganizationWhereInput struct {
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "control_creators" edge predicates.
 	HasControlCreators     *bool              `json:"hasControlCreators,omitempty"`
@@ -37969,7 +38210,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -37987,7 +38228,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -39759,12 +40000,12 @@ type OrganizationSettingWhereInput struct {
 	StripeIDContainsFold *string  `json:"stripeIDContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
@@ -40443,7 +40684,7 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -40461,7 +40702,7 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -41743,12 +41984,12 @@ type PersonalAccessTokenWhereInput struct {
 	LastUsedAtNotNil bool        `json:"lastUsedAtNotNil,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
@@ -42197,7 +42438,7 @@ func (i *PersonalAccessTokenWhereInput) P() (predicate.PersonalAccessToken, erro
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -42215,7 +42456,7 @@ func (i *PersonalAccessTokenWhereInput) P() (predicate.PersonalAccessToken, erro
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -42547,12 +42788,12 @@ type ProcedureWhereInput struct {
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -43325,7 +43566,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -43343,7 +43584,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -44893,12 +45134,12 @@ type ProgramWhereInput struct {
 	AuditorReadCommentsNEQ *bool `json:"auditorReadCommentsNEQ,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -45527,7 +45768,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -45545,7 +45786,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -46962,12 +47203,12 @@ type ProgramMembershipWhereInput struct {
 	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "program" edge predicates.
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
@@ -47403,7 +47644,7 @@ func (i *ProgramMembershipWhereInput) P() (predicate.ProgramMembership, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -47421,7 +47662,7 @@ func (i *ProgramMembershipWhereInput) P() (predicate.ProgramMembership, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -48478,12 +48719,12 @@ type RiskWhereInput struct {
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -49237,7 +49478,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -49255,7 +49496,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -50829,12 +51070,12 @@ type StandardWhereInput struct {
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "control_objectives" edge predicates.
 	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
@@ -51591,7 +51832,7 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -51609,7 +51850,7 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -53254,12 +53495,12 @@ type SubcontrolWhereInput struct {
 	ImplementationVerificationDateNotNil bool        `json:"implementationVerificationDateNotNil,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -54299,7 +54540,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -54317,7 +54558,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -56169,12 +56410,12 @@ type SubscriberWhereInput struct {
 	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -56667,7 +56908,7 @@ func (i *SubscriberWhereInput) P() (predicate.Subscriber, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -56685,7 +56926,7 @@ func (i *SubscriberWhereInput) P() (predicate.Subscriber, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -56875,12 +57116,12 @@ type TFASettingWhereInput struct {
 	TotpAllowedNotNil bool  `json:"totpAllowedNotNil,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
@@ -57285,7 +57526,7 @@ func (i *TFASettingWhereInput) P() (predicate.TFASetting, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -57303,7 +57544,7 @@ func (i *TFASettingWhereInput) P() (predicate.TFASetting, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -57510,12 +57751,12 @@ type TaskWhereInput struct {
 	CompletedNotNil bool        `json:"completedNotNil,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "assigner" edge predicates.
 	HasAssigner     *bool             `json:"hasAssigner,omitempty"`
@@ -58049,7 +58290,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -58067,7 +58308,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -59267,12 +59508,12 @@ type TemplateWhereInput struct {
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -59763,7 +60004,7 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -59781,7 +60022,7 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -63601,12 +63842,12 @@ type UserSettingWhereInput struct {
 	IsTfaEnabledNotNil bool  `json:"isTfaEnabledNotNil,omitempty"`
 
 	// "created_by" edge predicates.
-	HasCreatedBy     *bool             `json:"hasCreatedBy,omitempty"`
-	HasCreatedByWith []*UserWhereInput `json:"hasCreatedByWith,omitempty"`
+	HasCreatedBy     *bool                    `json:"hasCreatedBy,omitempty"`
+	HasCreatedByWith []*ChangeActorWhereInput `json:"hasCreatedByWith,omitempty"`
 
 	// "updated_by" edge predicates.
-	HasUpdatedBy     *bool             `json:"hasUpdatedBy,omitempty"`
-	HasUpdatedByWith []*UserWhereInput `json:"hasUpdatedByWith,omitempty"`
+	HasUpdatedBy     *bool                    `json:"hasUpdatedBy,omitempty"`
+	HasUpdatedByWith []*ChangeActorWhereInput `json:"hasUpdatedByWith,omitempty"`
 
 	// "user" edge predicates.
 	HasUser     *bool             `json:"hasUser,omitempty"`
@@ -64109,7 +64350,7 @@ func (i *UserSettingWhereInput) P() (predicate.UserSetting, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasCreatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasCreatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasCreatedByWith))
 		for _, w := range i.HasCreatedByWith {
 			p, err := w.P()
 			if err != nil {
@@ -64127,7 +64368,7 @@ func (i *UserSettingWhereInput) P() (predicate.UserSetting, error) {
 		predicates = append(predicates, p)
 	}
 	if len(i.HasUpdatedByWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUpdatedByWith))
+		with := make([]predicate.ChangeActor, 0, len(i.HasUpdatedByWith))
 		for _, w := range i.HasUpdatedByWith {
 			p, err := w.P()
 			if err != nil {

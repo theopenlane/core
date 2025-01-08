@@ -10,6 +10,7 @@ type SchemaConfig struct {
 	APIToken                             string // APIToken table.
 	ActionPlan                           string // ActionPlan table.
 	ActionPlanHistory                    string // ActionPlanHistory table.
+	ChangeActor                          string // ChangeActor table.
 	Contact                              string // Contact table.
 	ContactFiles                         string // Contact-files->File table.
 	ContactHistory                       string // ContactHistory table.
