@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/entx"
@@ -23,18 +22,6 @@ func (ChangeActor) Fields() []ent.Field {
 
 func (ChangeActor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.View(`SELECT
-				id,
-				first_name || ' ' || last_name AS name,
-				'user' AS actor_type
-			FROM users
-			UNION ALL
-			SELECT
-				id,
-				name,
-				'token' AS actor_type
-			FROM api_tokens`),
-		// entsql.Skip(),
 		entx.SchemaGenSkip(true),
 		entx.SchemaSearchable(false),
 		entx.QueryGenSkip(true),

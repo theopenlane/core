@@ -1,0 +1,14 @@
+union Actor =  User | APIToken
+
+type CreatedBy {
+    actor: Actor
+}
+
+type UpdatedBy (
+    """
+    ID of the subject that did the update
+    """
+    createdByID: ID!
+) {
+    actor: Actor
+}

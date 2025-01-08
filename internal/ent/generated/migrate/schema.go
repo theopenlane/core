@@ -5545,7 +5545,6 @@ func init() {
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
-	ChangeActorsTable.Annotation = &entsql.Annotation{}
 	ContactsTable.ForeignKeys[0].RefTable = ChangeActorsTable
 	ContactsTable.ForeignKeys[1].RefTable = ChangeActorsTable
 	ContactsTable.ForeignKeys[2].RefTable = OrganizationsTable

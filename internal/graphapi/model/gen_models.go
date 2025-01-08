@@ -10,6 +10,10 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 )
 
+type Actor interface {
+	IsActor()
+}
+
 type SearchResult interface {
 	IsSearchResult()
 }
@@ -225,6 +229,10 @@ type CreateMemberWithProgramInput struct {
 type CreateProgramWithMembersInput struct {
 	Program *generated.CreateProgramInput   `json:"program"`
 	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
+}
+
+type CreatedBy struct {
+	Actor Actor `json:"actor,omitempty"`
 }
 
 // Return response for createBulkDocumentData mutation
@@ -1014,6 +1022,10 @@ func (TemplateSearchResult) IsSearchResult() {}
 type TemplateUpdatePayload struct {
 	// Updated template
 	Template *generated.Template `json:"template"`
+}
+
+type UpdatedBy struct {
+	Actor Actor `json:"actor,omitempty"`
 }
 
 // Return response for createBulkUser mutation
