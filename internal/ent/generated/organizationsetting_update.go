@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -204,15 +205,15 @@ func (osu *OrganizationSettingUpdate) ClearBillingPhone() *OrganizationSettingUp
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (osu *OrganizationSettingUpdate) SetBillingAddress(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetBillingAddress(s)
+func (osu *OrganizationSettingUpdate) SetBillingAddress(m models.Address) *OrganizationSettingUpdate {
+	osu.mutation.SetBillingAddress(m)
 	return osu
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableBillingAddress(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetBillingAddress(*s)
+func (osu *OrganizationSettingUpdate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingUpdate {
+	if m != nil {
+		osu.SetBillingAddress(*m)
 	}
 	return osu
 }
@@ -511,10 +512,10 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 		_spec.ClearField(organizationsetting.FieldBillingPhone, field.TypeString)
 	}
 	if value, ok := osu.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeJSON, value)
 	}
 	if osu.mutation.BillingAddressCleared() {
-		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeString)
+		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeJSON)
 	}
 	if value, ok := osu.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsetting.FieldTaxIdentifier, field.TypeString, value)
@@ -806,15 +807,15 @@ func (osuo *OrganizationSettingUpdateOne) ClearBillingPhone() *OrganizationSetti
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (osuo *OrganizationSettingUpdateOne) SetBillingAddress(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetBillingAddress(s)
+func (osuo *OrganizationSettingUpdateOne) SetBillingAddress(m models.Address) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetBillingAddress(m)
 	return osuo
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableBillingAddress(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetBillingAddress(*s)
+func (osuo *OrganizationSettingUpdateOne) SetNillableBillingAddress(m *models.Address) *OrganizationSettingUpdateOne {
+	if m != nil {
+		osuo.SetBillingAddress(*m)
 	}
 	return osuo
 }
@@ -1143,10 +1144,10 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 		_spec.ClearField(organizationsetting.FieldBillingPhone, field.TypeString)
 	}
 	if value, ok := osuo.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeJSON, value)
 	}
 	if osuo.mutation.BillingAddressCleared() {
-		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeString)
+		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeJSON)
 	}
 	if value, ok := osuo.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsetting.FieldTaxIdentifier, field.TypeString, value)

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrganizationSettingCreate is the builder for creating a OrganizationSetting entity.
@@ -176,15 +177,15 @@ func (osc *OrganizationSettingCreate) SetNillableBillingPhone(s *string) *Organi
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (osc *OrganizationSettingCreate) SetBillingAddress(s string) *OrganizationSettingCreate {
-	osc.mutation.SetBillingAddress(s)
+func (osc *OrganizationSettingCreate) SetBillingAddress(m models.Address) *OrganizationSettingCreate {
+	osc.mutation.SetBillingAddress(m)
 	return osc
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableBillingAddress(s *string) *OrganizationSettingCreate {
-	if s != nil {
-		osc.SetBillingAddress(*s)
+func (osc *OrganizationSettingCreate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingCreate {
+	if m != nil {
+		osc.SetBillingAddress(*m)
 	}
 	return osc
 }
@@ -465,7 +466,7 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 		_node.BillingPhone = value
 	}
 	if value, ok := osc.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeJSON, value)
 		_node.BillingAddress = value
 	}
 	if value, ok := osc.mutation.TaxIdentifier(); ok {

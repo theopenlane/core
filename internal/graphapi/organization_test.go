@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -168,6 +169,13 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			listOrgs:       true,
 			settings: &openlaneclient.CreateOrganizationSettingInput{
 				Domains: []string{"meow.theopenlane.io"},
+				BillingAddress: &models.Address{
+					Line1:      gofakeit.StreetNumber() + " " + gofakeit.Street(),
+					City:       gofakeit.City(),
+					State:      gofakeit.State(),
+					PostalCode: gofakeit.Zip(),
+					Country:    gofakeit.Country(),
+				},
 			},
 			parentOrgID: "", // root org
 			client:      suite.client.api,
@@ -324,6 +332,14 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 					assert.Equal(t, resp.CreateOrganization.Organization.ID, userResp.User.Setting.DefaultOrg.ID)
 				} else {
 					assert.NotEqual(t, resp.CreateOrganization.Organization.ID, userResp.User.Setting.DefaultOrg.ID)
+				}
+
+				if tc.settings.BillingAddress != nil {
+					assert.Equal(t, tc.settings.BillingAddress.Line1, resp.CreateOrganization.Organization.Setting.BillingAddress.Line1)
+					assert.Equal(t, tc.settings.BillingAddress.City, resp.CreateOrganization.Organization.Setting.BillingAddress.City)
+					assert.Equal(t, tc.settings.BillingAddress.State, resp.CreateOrganization.Organization.Setting.BillingAddress.State)
+					assert.Equal(t, tc.settings.BillingAddress.PostalCode, resp.CreateOrganization.Organization.Setting.BillingAddress.PostalCode)
+					assert.Equal(t, tc.settings.BillingAddress.Country, resp.CreateOrganization.Organization.Setting.BillingAddress.Country)
 				}
 			}
 

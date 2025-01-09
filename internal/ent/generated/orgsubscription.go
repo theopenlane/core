@@ -57,6 +57,8 @@ type OrgSubscription struct {
 	// The values are being populated by the OrgSubscriptionQuery when eager-loading is set.
 	Edges        OrgSubscriptionEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	SubscriptionURL string `json:"subscriptionURL,omitempty"`
 }
 
 // OrgSubscriptionEdges holds the relations/edges for other nodes in the graph.

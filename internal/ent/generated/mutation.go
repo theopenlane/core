@@ -84,6 +84,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -73351,7 +73352,7 @@ type OrganizationSettingMutation struct {
 	billing_contact     *string
 	billing_email       *string
 	billing_phone       *string
-	billing_address     *string
+	billing_address     *models.Address
 	tax_identifier      *string
 	geo_location        *enums.Region
 	stripe_id           *string
@@ -74078,12 +74079,12 @@ func (m *OrganizationSettingMutation) ResetBillingPhone() {
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (m *OrganizationSettingMutation) SetBillingAddress(s string) {
-	m.billing_address = &s
+func (m *OrganizationSettingMutation) SetBillingAddress(value models.Address) {
+	m.billing_address = &value
 }
 
 // BillingAddress returns the value of the "billing_address" field in the mutation.
-func (m *OrganizationSettingMutation) BillingAddress() (r string, exists bool) {
+func (m *OrganizationSettingMutation) BillingAddress() (r models.Address, exists bool) {
 	v := m.billing_address
 	if v == nil {
 		return
@@ -74094,7 +74095,7 @@ func (m *OrganizationSettingMutation) BillingAddress() (r string, exists bool) {
 // OldBillingAddress returns the old "billing_address" field's value of the OrganizationSetting entity.
 // If the OrganizationSetting object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationSettingMutation) OldBillingAddress(ctx context.Context) (v string, err error) {
+func (m *OrganizationSettingMutation) OldBillingAddress(ctx context.Context) (v models.Address, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldBillingAddress is only allowed on UpdateOne operations")
 	}
@@ -74668,7 +74669,7 @@ func (m *OrganizationSettingMutation) SetField(name string, value ent.Value) err
 		m.SetBillingPhone(v)
 		return nil
 	case organizationsetting.FieldBillingAddress:
-		v, ok := value.(string)
+		v, ok := value.(models.Address)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -75030,7 +75031,7 @@ type OrganizationSettingHistoryMutation struct {
 	billing_contact *string
 	billing_email   *string
 	billing_phone   *string
-	billing_address *string
+	billing_address *models.Address
 	tax_identifier  *string
 	geo_location    *enums.Region
 	organization_id *string
@@ -75874,12 +75875,12 @@ func (m *OrganizationSettingHistoryMutation) ResetBillingPhone() {
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (m *OrganizationSettingHistoryMutation) SetBillingAddress(s string) {
-	m.billing_address = &s
+func (m *OrganizationSettingHistoryMutation) SetBillingAddress(value models.Address) {
+	m.billing_address = &value
 }
 
 // BillingAddress returns the value of the "billing_address" field in the mutation.
-func (m *OrganizationSettingHistoryMutation) BillingAddress() (r string, exists bool) {
+func (m *OrganizationSettingHistoryMutation) BillingAddress() (r models.Address, exists bool) {
 	v := m.billing_address
 	if v == nil {
 		return
@@ -75890,7 +75891,7 @@ func (m *OrganizationSettingHistoryMutation) BillingAddress() (r string, exists 
 // OldBillingAddress returns the old "billing_address" field's value of the OrganizationSettingHistory entity.
 // If the OrganizationSettingHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationSettingHistoryMutation) OldBillingAddress(ctx context.Context) (v string, err error) {
+func (m *OrganizationSettingHistoryMutation) OldBillingAddress(ctx context.Context) (v models.Address, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldBillingAddress is only allowed on UpdateOne operations")
 	}
@@ -76425,7 +76426,7 @@ func (m *OrganizationSettingHistoryMutation) SetField(name string, value ent.Val
 		m.SetBillingPhone(v)
 		return nil
 	case organizationsettinghistory.FieldBillingAddress:
-		v, ok := value.(string)
+		v, ok := value.(models.Address)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

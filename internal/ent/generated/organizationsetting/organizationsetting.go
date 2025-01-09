@@ -209,11 +209,6 @@ func ByBillingPhone(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBillingPhone, opts...).ToFunc()
 }
 
-// ByBillingAddress orders the results by the billing_address field.
-func ByBillingAddress(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBillingAddress, opts...).ToFunc()
-}
-
 // ByTaxIdentifier orders the results by the tax_identifier field.
 func ByTaxIdentifier(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTaxIdentifier, opts...).ToFunc()

@@ -8,6 +8,7 @@ import (
 
 	emixin "github.com/theopenlane/entx/mixin"
 
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
@@ -74,7 +75,8 @@ func (OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		// since we only have queries, we can just use the interceptors for queries and can skip the fga generated checks
+		// entfga.MembershipChecks("organization"),
 	}
 }
 
@@ -85,18 +87,7 @@ func (OrgSubscription) Hooks() []ent.Hook {
 
 // Interceptors of the OrgSubscription
 func (OrgSubscription) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		interceptors.InterceptorSubscriptionURL(),
+	}
 }
-
-// Policy of the OrgSubscription
-//func (OrgSubscription) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithQueryRules(
-//			entfga.CheckReadAccess[*generated.Subscriptio](),
-//		),
-//		policy.WithMutationRules(
-//			entfga.CheckEditAccess[*generated.ContactMutation](),
-//		),
-//	)
-//}
-//

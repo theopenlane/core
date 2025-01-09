@@ -26,7 +26,6 @@ func init() {
 	updateCmd.Flags().StringP("billing-contact", "c", "", "billing contact for the org")
 	updateCmd.Flags().StringP("billing-email", "e", "", "billing email for the org")
 	updateCmd.Flags().StringP("billing-phone", "p", "", "billing phone for the org")
-	updateCmd.Flags().StringP("billing-address", "a", "", "billing address for the org")
 	updateCmd.Flags().StringP("tax-identifier", "x", "", "tax identifier for the org")
 	updateCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the org")
 }
@@ -51,11 +50,6 @@ func updateValidation() (id string, input openlaneclient.UpdateOrganizationSetti
 	billingPhone := cmd.Config.String("billing-phone")
 	if billingPhone != "" {
 		input.BillingPhone = &billingPhone
-	}
-
-	billingAddress := cmd.Config.String("billing-address")
-	if billingAddress != "" {
-		input.BillingAddress = &billingAddress
 	}
 
 	taxIdentifier := cmd.Config.String("tax-identifier")

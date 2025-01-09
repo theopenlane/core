@@ -126,11 +126,6 @@ func BillingPhone(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldBillingPhone, v))
 }
 
-// BillingAddress applies equality check predicate on the "billing_address" field. It's identical to BillingAddressEQ.
-func BillingAddress(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldBillingAddress, v))
-}
-
 // TaxIdentifier applies equality check predicate on the "tax_identifier" field. It's identical to TaxIdentifierEQ.
 func TaxIdentifier(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldTaxIdentifier, v))
@@ -966,61 +961,6 @@ func BillingPhoneContainsFold(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldBillingPhone, v))
 }
 
-// BillingAddressEQ applies the EQ predicate on the "billing_address" field.
-func BillingAddressEQ(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldBillingAddress, v))
-}
-
-// BillingAddressNEQ applies the NEQ predicate on the "billing_address" field.
-func BillingAddressNEQ(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldBillingAddress, v))
-}
-
-// BillingAddressIn applies the In predicate on the "billing_address" field.
-func BillingAddressIn(vs ...string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldBillingAddress, vs...))
-}
-
-// BillingAddressNotIn applies the NotIn predicate on the "billing_address" field.
-func BillingAddressNotIn(vs ...string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldBillingAddress, vs...))
-}
-
-// BillingAddressGT applies the GT predicate on the "billing_address" field.
-func BillingAddressGT(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldBillingAddress, v))
-}
-
-// BillingAddressGTE applies the GTE predicate on the "billing_address" field.
-func BillingAddressGTE(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldBillingAddress, v))
-}
-
-// BillingAddressLT applies the LT predicate on the "billing_address" field.
-func BillingAddressLT(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldBillingAddress, v))
-}
-
-// BillingAddressLTE applies the LTE predicate on the "billing_address" field.
-func BillingAddressLTE(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldBillingAddress, v))
-}
-
-// BillingAddressContains applies the Contains predicate on the "billing_address" field.
-func BillingAddressContains(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldBillingAddress, v))
-}
-
-// BillingAddressHasPrefix applies the HasPrefix predicate on the "billing_address" field.
-func BillingAddressHasPrefix(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldBillingAddress, v))
-}
-
-// BillingAddressHasSuffix applies the HasSuffix predicate on the "billing_address" field.
-func BillingAddressHasSuffix(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldBillingAddress, v))
-}
-
 // BillingAddressIsNil applies the IsNil predicate on the "billing_address" field.
 func BillingAddressIsNil() predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldBillingAddress))
@@ -1029,16 +969,6 @@ func BillingAddressIsNil() predicate.OrganizationSettingHistory {
 // BillingAddressNotNil applies the NotNil predicate on the "billing_address" field.
 func BillingAddressNotNil() predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldBillingAddress))
-}
-
-// BillingAddressEqualFold applies the EqualFold predicate on the "billing_address" field.
-func BillingAddressEqualFold(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldBillingAddress, v))
-}
-
-// BillingAddressContainsFold applies the ContainsFold predicate on the "billing_address" field.
-func BillingAddressContainsFold(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldBillingAddress, v))
 }
 
 // TaxIdentifierEQ applies the EQ predicate on the "tax_identifier" field.

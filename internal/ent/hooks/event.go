@@ -202,7 +202,15 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 		return err
 	}
 
+	if orgCust.StripeCustomerID == "" {
+		log.Warn().Msg("No Stripe customer ID found, skipping billing update")
+
+		return nil
+	}
+
+	log.Warn().Msg("checking for billing update")
 	if params, hasUpdate := entitlements.CheckForBillingUpdate(event.Properties(), orgCust); hasUpdate {
+		log.Info().Interface("params", params).Msg("updating customer")
 		if _, err := entMgr.UpdateCustomer(orgCust.StripeCustomerID, params); err != nil {
 			log.Err(err).Msg("Failed to update customer")
 
@@ -230,6 +238,8 @@ func handleOrganizationSettingsCreate(event soiree.Event) error {
 
 		return err
 	}
+
+	log.Info().Interface("orgCust", orgCust).Msg("organization customer")
 
 	// our resolvers support creating organizations + settings with attributes in the payload, so in the event this is populated we want to do nothing
 	if orgCust.StripeCustomerID == "" {

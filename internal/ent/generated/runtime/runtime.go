@@ -2154,8 +2154,10 @@ func init() {
 	orgsubscription.Hooks[2] = orgsubscriptionMixinHooks4[0]
 	orgsubscriptionMixinInters3 := orgsubscriptionMixin[3].Interceptors()
 	orgsubscriptionMixinInters4 := orgsubscriptionMixin[4].Interceptors()
+	orgsubscriptionInters := schema.OrgSubscription{}.Interceptors()
 	orgsubscription.Interceptors[0] = orgsubscriptionMixinInters3[0]
 	orgsubscription.Interceptors[1] = orgsubscriptionMixinInters4[0]
+	orgsubscription.Interceptors[2] = orgsubscriptionInters[0]
 	orgsubscriptionMixinFields0 := orgsubscriptionMixin[0].Fields()
 	_ = orgsubscriptionMixinFields0
 	orgsubscriptionMixinFields1 := orgsubscriptionMixin[1].Fields()

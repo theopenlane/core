@@ -1,75 +1,3 @@
-mutation CreateBulkCSVOrgSubscription($input: Upload!) {
-  createBulkCSVOrgSubscription(input: $input) {
-    orgSubscriptions {
-      active
-      createdAt
-      createdBy
-      expiresAt
-      features
-      id
-      ownerID
-      productTier
-      stripeCustomerID
-      stripeProductTierID
-      stripeSubscriptionID
-      stripeSubscriptionStatus
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkOrgSubscription($input: [CreateOrgSubscriptionInput!]) {
-  createBulkOrgSubscription(input: $input) {
-    orgSubscriptions {
-      active
-      createdAt
-      createdBy
-      expiresAt
-      features
-      id
-      ownerID
-      productTier
-      stripeCustomerID
-      stripeProductTierID
-      stripeSubscriptionID
-      stripeSubscriptionStatus
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateOrgSubscription($input: CreateOrgSubscriptionInput!) {
-  createOrgSubscription(input: $input) {
-    orgSubscription {
-      active
-      createdAt
-      createdBy
-      expiresAt
-      features
-      id
-      ownerID
-      productTier
-      stripeCustomerID
-      stripeProductTierID
-      stripeSubscriptionID
-      stripeSubscriptionStatus
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation DeleteOrgSubscription($deleteOrgSubscriptionId: ID!) {
-  deleteOrgSubscription(id: $deleteOrgSubscriptionId) {
-    deletedID
-  }
-}
-
 query GetAllOrgSubscriptions {
   orgSubscriptions {
     edges {
@@ -134,28 +62,6 @@ query GetOrgSubscriptions($where: OrgSubscriptionWhereInput) {
         updatedAt
         updatedBy
       }
-    }
-  }
-}
-
-mutation UpdateOrgSubscription($updateOrgSubscriptionId: ID!, $input: UpdateOrgSubscriptionInput!) {
-  updateOrgSubscription(id: $updateOrgSubscriptionId, input: $input) {
-    orgSubscription {
-      active
-      createdAt
-      createdBy
-      expiresAt
-      features
-      id
-      ownerID
-      productTier
-      stripeCustomerID
-      stripeProductTierID
-      stripeSubscriptionID
-      stripeSubscriptionStatus
-      tags
-      updatedAt
-      updatedBy
     }
   }
 }

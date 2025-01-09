@@ -37474,23 +37474,6 @@ type OrganizationSettingWhereInput struct {
 	BillingPhoneEqualFold    *string  `json:"billingPhoneEqualFold,omitempty"`
 	BillingPhoneContainsFold *string  `json:"billingPhoneContainsFold,omitempty"`
 
-	// "billing_address" field predicates.
-	BillingAddress             *string  `json:"billingAddress,omitempty"`
-	BillingAddressNEQ          *string  `json:"billingAddressNEQ,omitempty"`
-	BillingAddressIn           []string `json:"billingAddressIn,omitempty"`
-	BillingAddressNotIn        []string `json:"billingAddressNotIn,omitempty"`
-	BillingAddressGT           *string  `json:"billingAddressGT,omitempty"`
-	BillingAddressGTE          *string  `json:"billingAddressGTE,omitempty"`
-	BillingAddressLT           *string  `json:"billingAddressLT,omitempty"`
-	BillingAddressLTE          *string  `json:"billingAddressLTE,omitempty"`
-	BillingAddressContains     *string  `json:"billingAddressContains,omitempty"`
-	BillingAddressHasPrefix    *string  `json:"billingAddressHasPrefix,omitempty"`
-	BillingAddressHasSuffix    *string  `json:"billingAddressHasSuffix,omitempty"`
-	BillingAddressIsNil        bool     `json:"billingAddressIsNil,omitempty"`
-	BillingAddressNotNil       bool     `json:"billingAddressNotNil,omitempty"`
-	BillingAddressEqualFold    *string  `json:"billingAddressEqualFold,omitempty"`
-	BillingAddressContainsFold *string  `json:"billingAddressContainsFold,omitempty"`
-
 	// "tax_identifier" field predicates.
 	TaxIdentifier             *string  `json:"taxIdentifier,omitempty"`
 	TaxIdentifierNEQ          *string  `json:"taxIdentifierNEQ,omitempty"`
@@ -38020,51 +38003,6 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.BillingPhoneContainsFold != nil {
 		predicates = append(predicates, organizationsetting.BillingPhoneContainsFold(*i.BillingPhoneContainsFold))
 	}
-	if i.BillingAddress != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressEQ(*i.BillingAddress))
-	}
-	if i.BillingAddressNEQ != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressNEQ(*i.BillingAddressNEQ))
-	}
-	if len(i.BillingAddressIn) > 0 {
-		predicates = append(predicates, organizationsetting.BillingAddressIn(i.BillingAddressIn...))
-	}
-	if len(i.BillingAddressNotIn) > 0 {
-		predicates = append(predicates, organizationsetting.BillingAddressNotIn(i.BillingAddressNotIn...))
-	}
-	if i.BillingAddressGT != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressGT(*i.BillingAddressGT))
-	}
-	if i.BillingAddressGTE != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressGTE(*i.BillingAddressGTE))
-	}
-	if i.BillingAddressLT != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressLT(*i.BillingAddressLT))
-	}
-	if i.BillingAddressLTE != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressLTE(*i.BillingAddressLTE))
-	}
-	if i.BillingAddressContains != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressContains(*i.BillingAddressContains))
-	}
-	if i.BillingAddressHasPrefix != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressHasPrefix(*i.BillingAddressHasPrefix))
-	}
-	if i.BillingAddressHasSuffix != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressHasSuffix(*i.BillingAddressHasSuffix))
-	}
-	if i.BillingAddressIsNil {
-		predicates = append(predicates, organizationsetting.BillingAddressIsNil())
-	}
-	if i.BillingAddressNotNil {
-		predicates = append(predicates, organizationsetting.BillingAddressNotNil())
-	}
-	if i.BillingAddressEqualFold != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressEqualFold(*i.BillingAddressEqualFold))
-	}
-	if i.BillingAddressContainsFold != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressContainsFold(*i.BillingAddressContainsFold))
-	}
 	if i.TaxIdentifier != nil {
 		predicates = append(predicates, organizationsetting.TaxIdentifierEQ(*i.TaxIdentifier))
 	}
@@ -38454,23 +38392,6 @@ type OrganizationSettingHistoryWhereInput struct {
 	BillingPhoneNotNil       bool     `json:"billingPhoneNotNil,omitempty"`
 	BillingPhoneEqualFold    *string  `json:"billingPhoneEqualFold,omitempty"`
 	BillingPhoneContainsFold *string  `json:"billingPhoneContainsFold,omitempty"`
-
-	// "billing_address" field predicates.
-	BillingAddress             *string  `json:"billingAddress,omitempty"`
-	BillingAddressNEQ          *string  `json:"billingAddressNEQ,omitempty"`
-	BillingAddressIn           []string `json:"billingAddressIn,omitempty"`
-	BillingAddressNotIn        []string `json:"billingAddressNotIn,omitempty"`
-	BillingAddressGT           *string  `json:"billingAddressGT,omitempty"`
-	BillingAddressGTE          *string  `json:"billingAddressGTE,omitempty"`
-	BillingAddressLT           *string  `json:"billingAddressLT,omitempty"`
-	BillingAddressLTE          *string  `json:"billingAddressLTE,omitempty"`
-	BillingAddressContains     *string  `json:"billingAddressContains,omitempty"`
-	BillingAddressHasPrefix    *string  `json:"billingAddressHasPrefix,omitempty"`
-	BillingAddressHasSuffix    *string  `json:"billingAddressHasSuffix,omitempty"`
-	BillingAddressIsNil        bool     `json:"billingAddressIsNil,omitempty"`
-	BillingAddressNotNil       bool     `json:"billingAddressNotNil,omitempty"`
-	BillingAddressEqualFold    *string  `json:"billingAddressEqualFold,omitempty"`
-	BillingAddressContainsFold *string  `json:"billingAddressContainsFold,omitempty"`
 
 	// "tax_identifier" field predicates.
 	TaxIdentifier             *string  `json:"taxIdentifier,omitempty"`
@@ -39073,51 +38994,6 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	}
 	if i.BillingPhoneContainsFold != nil {
 		predicates = append(predicates, organizationsettinghistory.BillingPhoneContainsFold(*i.BillingPhoneContainsFold))
-	}
-	if i.BillingAddress != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressEQ(*i.BillingAddress))
-	}
-	if i.BillingAddressNEQ != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressNEQ(*i.BillingAddressNEQ))
-	}
-	if len(i.BillingAddressIn) > 0 {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressIn(i.BillingAddressIn...))
-	}
-	if len(i.BillingAddressNotIn) > 0 {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressNotIn(i.BillingAddressNotIn...))
-	}
-	if i.BillingAddressGT != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressGT(*i.BillingAddressGT))
-	}
-	if i.BillingAddressGTE != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressGTE(*i.BillingAddressGTE))
-	}
-	if i.BillingAddressLT != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressLT(*i.BillingAddressLT))
-	}
-	if i.BillingAddressLTE != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressLTE(*i.BillingAddressLTE))
-	}
-	if i.BillingAddressContains != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressContains(*i.BillingAddressContains))
-	}
-	if i.BillingAddressHasPrefix != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressHasPrefix(*i.BillingAddressHasPrefix))
-	}
-	if i.BillingAddressHasSuffix != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressHasSuffix(*i.BillingAddressHasSuffix))
-	}
-	if i.BillingAddressIsNil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressIsNil())
-	}
-	if i.BillingAddressNotNil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressNotNil())
-	}
-	if i.BillingAddressEqualFold != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressEqualFold(*i.BillingAddressEqualFold))
-	}
-	if i.BillingAddressContainsFold != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressContainsFold(*i.BillingAddressContainsFold))
 	}
 	if i.TaxIdentifier != nil {
 		predicates = append(predicates, organizationsettinghistory.TaxIdentifierEQ(*i.TaxIdentifier))

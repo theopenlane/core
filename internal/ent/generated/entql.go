@@ -1335,7 +1335,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldBillingContact: {Type: field.TypeString, Column: organizationsetting.FieldBillingContact},
 			organizationsetting.FieldBillingEmail:   {Type: field.TypeString, Column: organizationsetting.FieldBillingEmail},
 			organizationsetting.FieldBillingPhone:   {Type: field.TypeString, Column: organizationsetting.FieldBillingPhone},
-			organizationsetting.FieldBillingAddress: {Type: field.TypeString, Column: organizationsetting.FieldBillingAddress},
+			organizationsetting.FieldBillingAddress: {Type: field.TypeJSON, Column: organizationsetting.FieldBillingAddress},
 			organizationsetting.FieldTaxIdentifier:  {Type: field.TypeString, Column: organizationsetting.FieldTaxIdentifier},
 			organizationsetting.FieldGeoLocation:    {Type: field.TypeEnum, Column: organizationsetting.FieldGeoLocation},
 			organizationsetting.FieldOrganizationID: {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
@@ -1368,7 +1368,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldBillingContact: {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingContact},
 			organizationsettinghistory.FieldBillingEmail:   {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingEmail},
 			organizationsettinghistory.FieldBillingPhone:   {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingPhone},
-			organizationsettinghistory.FieldBillingAddress: {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingAddress},
+			organizationsettinghistory.FieldBillingAddress: {Type: field.TypeJSON, Column: organizationsettinghistory.FieldBillingAddress},
 			organizationsettinghistory.FieldTaxIdentifier:  {Type: field.TypeString, Column: organizationsettinghistory.FieldTaxIdentifier},
 			organizationsettinghistory.FieldGeoLocation:    {Type: field.TypeEnum, Column: organizationsettinghistory.FieldGeoLocation},
 			organizationsettinghistory.FieldOrganizationID: {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
@@ -13200,8 +13200,8 @@ func (f *OrganizationSettingFilter) WhereBillingPhone(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldBillingPhone))
 }
 
-// WhereBillingAddress applies the entql string predicate on the billing_address field.
-func (f *OrganizationSettingFilter) WhereBillingAddress(p entql.StringP) {
+// WhereBillingAddress applies the entql json.RawMessage predicate on the billing_address field.
+func (f *OrganizationSettingFilter) WhereBillingAddress(p entql.BytesP) {
 	f.Where(p.Field(organizationsetting.FieldBillingAddress))
 }
 
@@ -13368,8 +13368,8 @@ func (f *OrganizationSettingHistoryFilter) WhereBillingPhone(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldBillingPhone))
 }
 
-// WhereBillingAddress applies the entql string predicate on the billing_address field.
-func (f *OrganizationSettingHistoryFilter) WhereBillingAddress(p entql.StringP) {
+// WhereBillingAddress applies the entql json.RawMessage predicate on the billing_address field.
+func (f *OrganizationSettingHistoryFilter) WhereBillingAddress(p entql.BytesP) {
 	f.Where(p.Field(organizationsettinghistory.FieldBillingAddress))
 }
 
