@@ -37,7 +37,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 
 			// if its not a list, check the single entry
 			orgSub, ok := v.(*generated.OrgSubscription)
-			if !ok {
+			if ok {
 				setSubscriptionURL(orgSub, q) // nolint:errcheck
 			}
 
@@ -46,12 +46,13 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 	})
 }
 
+// setSubscriptionURL sets the subscription URL for the org subscription response
 func setSubscriptionURL(orgSub *generated.OrgSubscription, q *generated.OrgSubscriptionQuery) error {
 	if orgSub == nil {
 		return nil
 	}
 
-	// if the subscription doesn't have a stripe subscription or customer ID, skip
+	// if the subscription doesn't have a stripe ID or customer ID, skip
 	if orgSub.StripeSubscriptionID == "" || orgSub.StripeCustomerID == "" {
 		return nil
 	}
