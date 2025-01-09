@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Task_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Task_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Task_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Task_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Task_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedByID":
@@ -93,10 +101,14 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_due(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Task_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Task_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Task_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Task_updatedByService(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -173,6 +185,14 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Task_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Task_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Task_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Task_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Task_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedByID":
@@ -191,10 +211,14 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_due(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Task_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Task_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Task_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Task_updatedByService(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -315,6 +339,14 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Task_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Task_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Task_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Task_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Task_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedByID":
@@ -333,10 +365,14 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_due(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Task_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Task_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Task_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Task_updatedByService(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":

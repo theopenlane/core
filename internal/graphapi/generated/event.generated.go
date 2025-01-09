@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 				return ec.fieldContext_Event_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Event_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Event_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Event_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Event_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Event_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Event_tags(ctx, field)
 			case "eventID":
@@ -85,10 +93,14 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Event_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Event_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Event_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Event_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
@@ -167,6 +179,14 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Event_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Event_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Event_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Event_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Event_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Event_tags(ctx, field)
 			case "eventID":
@@ -177,10 +197,14 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Event_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Event_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Event_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Event_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
@@ -303,6 +327,14 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Event_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Event_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Event_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Event_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Event_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Event_tags(ctx, field)
 			case "eventID":
@@ -313,10 +345,14 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Event_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Event_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Event_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Event_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":

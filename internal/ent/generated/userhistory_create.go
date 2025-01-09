@@ -126,6 +126,62 @@ func (uhc *UserHistoryCreate) SetNillableUpdatedByID(s *string) *UserHistoryCrea
 	return uhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (uhc *UserHistoryCreate) SetCreatedByUserID(s string) *UserHistoryCreate {
+	uhc.mutation.SetCreatedByUserID(s)
+	return uhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (uhc *UserHistoryCreate) SetNillableCreatedByUserID(s *string) *UserHistoryCreate {
+	if s != nil {
+		uhc.SetCreatedByUserID(*s)
+	}
+	return uhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (uhc *UserHistoryCreate) SetUpdatedByUserID(s string) *UserHistoryCreate {
+	uhc.mutation.SetUpdatedByUserID(s)
+	return uhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (uhc *UserHistoryCreate) SetNillableUpdatedByUserID(s *string) *UserHistoryCreate {
+	if s != nil {
+		uhc.SetUpdatedByUserID(*s)
+	}
+	return uhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (uhc *UserHistoryCreate) SetCreatedByServiceID(s string) *UserHistoryCreate {
+	uhc.mutation.SetCreatedByServiceID(s)
+	return uhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (uhc *UserHistoryCreate) SetNillableCreatedByServiceID(s *string) *UserHistoryCreate {
+	if s != nil {
+		uhc.SetCreatedByServiceID(*s)
+	}
+	return uhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (uhc *UserHistoryCreate) SetUpdatedByServiceID(s string) *UserHistoryCreate {
+	uhc.mutation.SetUpdatedByServiceID(s)
+	return uhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (uhc *UserHistoryCreate) SetNillableUpdatedByServiceID(s *string) *UserHistoryCreate {
+	if s != nil {
+		uhc.SetUpdatedByServiceID(*s)
+	}
+	return uhc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (uhc *UserHistoryCreate) SetDeletedAt(t time.Time) *UserHistoryCreate {
 	uhc.mutation.SetDeletedAt(t)
@@ -525,6 +581,22 @@ func (uhc *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) 
 	if value, ok := uhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(userhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := uhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(userhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := uhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(userhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := uhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(userhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := uhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(userhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := uhc.mutation.DeletedAt(); ok {
 		_spec.SetField(userhistory.FieldDeletedAt, field.TypeTime, value)

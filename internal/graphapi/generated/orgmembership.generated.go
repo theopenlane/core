@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_OrgMembershipBulkCreatePayload_orgMembe
 				return ec.fieldContext_OrgMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrgMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrgMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrgMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrgMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrgMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -85,10 +93,14 @@ func (ec *executionContext) fieldContext_OrgMembershipBulkCreatePayload_orgMembe
 				return ec.fieldContext_OrgMembership_organizationID(ctx, field)
 			case "userID":
 				return ec.fieldContext_OrgMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrgMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrgMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrgMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrgMembership_updatedByService(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrgMembership_organization(ctx, field)
 			case "user":
@@ -151,6 +163,14 @@ func (ec *executionContext) fieldContext_OrgMembershipCreatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrgMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrgMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrgMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrgMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrgMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -161,10 +181,14 @@ func (ec *executionContext) fieldContext_OrgMembershipCreatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_organizationID(ctx, field)
 			case "userID":
 				return ec.fieldContext_OrgMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrgMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrgMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrgMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrgMembership_updatedByService(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrgMembership_organization(ctx, field)
 			case "user":
@@ -271,6 +295,14 @@ func (ec *executionContext) fieldContext_OrgMembershipUpdatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrgMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrgMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrgMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrgMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrgMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -281,10 +313,14 @@ func (ec *executionContext) fieldContext_OrgMembershipUpdatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_organizationID(ctx, field)
 			case "userID":
 				return ec.fieldContext_OrgMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrgMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrgMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrgMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrgMembership_updatedByService(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrgMembership_organization(ctx, field)
 			case "user":

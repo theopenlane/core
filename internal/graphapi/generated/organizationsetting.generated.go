@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrganizationSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrganizationSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrganizationSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrganizationSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrganizationSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "deletedAt":
@@ -99,10 +107,14 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "stripeID":
 				return ec.fieldContext_OrganizationSetting_stripeID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrganizationSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrganizationSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrganizationSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrganizationSetting_updatedByService(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -163,6 +175,14 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrganizationSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrganizationSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrganizationSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrganizationSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrganizationSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "deletedAt":
@@ -187,10 +207,14 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "stripeID":
 				return ec.fieldContext_OrganizationSetting_stripeID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrganizationSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrganizationSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrganizationSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrganizationSetting_updatedByService(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -295,6 +319,14 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrganizationSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrganizationSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrganizationSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrganizationSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrganizationSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "deletedAt":
@@ -319,10 +351,14 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "stripeID":
 				return ec.fieldContext_OrganizationSetting_stripeID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrganizationSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrganizationSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrganizationSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrganizationSetting_updatedByService(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

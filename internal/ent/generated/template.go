@@ -11,10 +11,12 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/customtypes"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Template is the model entity for the Template schema.
@@ -30,6 +32,14 @@ type Template struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -54,14 +64,23 @@ type Template struct {
 	// The values are being populated by the TemplateQuery when eager-loading is set.
 	Edges        TemplateEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // TemplateEdges holds the relations/edges for other nodes in the graph.
 type TemplateEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Documents holds the value of the documents edge.
@@ -70,34 +89,56 @@ type TemplateEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [7]map[string]int
 
 	namedDocuments map[string][]*DocumentData
 	namedFiles     map[string][]*File
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TemplateEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e TemplateEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TemplateEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e TemplateEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TemplateEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TemplateEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -105,7 +146,7 @@ func (e TemplateEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e TemplateEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -114,7 +155,7 @@ func (e TemplateEdges) OwnerOrErr() (*Organization, error) {
 // DocumentsOrErr returns the Documents value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Documents, nil
 	}
 	return nil, &NotLoadedError{edge: "documents"}
@@ -123,7 +164,7 @@ func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -136,7 +177,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case template.FieldTags, template.FieldJsonconfig, template.FieldUischema:
 			values[i] = new([]byte)
-		case template.FieldID, template.FieldCreatedByID, template.FieldUpdatedByID, template.FieldDeletedByID, template.FieldMappingID, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription:
+		case template.FieldID, template.FieldCreatedByID, template.FieldUpdatedByID, template.FieldCreatedByUserID, template.FieldUpdatedByUserID, template.FieldCreatedByServiceID, template.FieldUpdatedByServiceID, template.FieldDeletedByID, template.FieldMappingID, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -184,6 +225,30 @@ func (t *Template) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				t.UpdatedByID = value.String
+			}
+		case template.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				t.CreatedByUserID = value.String
+			}
+		case template.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				t.UpdatedByUserID = value.String
+			}
+		case template.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				t.CreatedByServiceID = value.String
+			}
+		case template.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				t.UpdatedByServiceID = value.String
 			}
 		case template.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -264,14 +329,24 @@ func (t *Template) Value(name string) (ent.Value, error) {
 	return t.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the Template entity.
-func (t *Template) QueryCreatedBy() *ChangeActorQuery {
-	return NewTemplateClient(t.config).QueryCreatedBy(t)
+// QueryCreatedByUser queries the "created_by_user" edge of the Template entity.
+func (t *Template) QueryCreatedByUser() *UserQuery {
+	return NewTemplateClient(t.config).QueryCreatedByUser(t)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the Template entity.
-func (t *Template) QueryUpdatedBy() *ChangeActorQuery {
-	return NewTemplateClient(t.config).QueryUpdatedBy(t)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the Template entity.
+func (t *Template) QueryUpdatedByUser() *UserQuery {
+	return NewTemplateClient(t.config).QueryUpdatedByUser(t)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the Template entity.
+func (t *Template) QueryCreatedByService() *APITokenQuery {
+	return NewTemplateClient(t.config).QueryCreatedByService(t)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the Template entity.
+func (t *Template) QueryUpdatedByService() *APITokenQuery {
+	return NewTemplateClient(t.config).QueryUpdatedByService(t)
 }
 
 // QueryOwner queries the "owner" edge of the Template entity.
@@ -323,6 +398,18 @@ func (t *Template) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(t.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(t.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(t.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(t.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(t.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(t.DeletedAt.Format(time.ANSIC))

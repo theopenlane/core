@@ -63,6 +63,46 @@ func (hhu *HushHistoryUpdate) ClearUpdatedByID() *HushHistoryUpdate {
 	return hhu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (hhu *HushHistoryUpdate) SetUpdatedByUserID(s string) *HushHistoryUpdate {
+	hhu.mutation.SetUpdatedByUserID(s)
+	return hhu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (hhu *HushHistoryUpdate) SetNillableUpdatedByUserID(s *string) *HushHistoryUpdate {
+	if s != nil {
+		hhu.SetUpdatedByUserID(*s)
+	}
+	return hhu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (hhu *HushHistoryUpdate) ClearUpdatedByUserID() *HushHistoryUpdate {
+	hhu.mutation.ClearUpdatedByUserID()
+	return hhu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (hhu *HushHistoryUpdate) SetUpdatedByServiceID(s string) *HushHistoryUpdate {
+	hhu.mutation.SetUpdatedByServiceID(s)
+	return hhu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (hhu *HushHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *HushHistoryUpdate {
+	if s != nil {
+		hhu.SetUpdatedByServiceID(*s)
+	}
+	return hhu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (hhu *HushHistoryUpdate) ClearUpdatedByServiceID() *HushHistoryUpdate {
+	hhu.mutation.ClearUpdatedByServiceID()
+	return hhu
+}
+
 // SetName sets the "name" field.
 func (hhu *HushHistoryUpdate) SetName(s string) *HushHistoryUpdate {
 	hhu.mutation.SetName(s)
@@ -197,6 +237,24 @@ func (hhu *HushHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hhu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if hhu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(hushhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := hhu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if hhu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if hhu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(hushhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := hhu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if hhu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if hhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -277,6 +335,46 @@ func (hhuo *HushHistoryUpdateOne) SetNillableUpdatedByID(s *string) *HushHistory
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (hhuo *HushHistoryUpdateOne) ClearUpdatedByID() *HushHistoryUpdateOne {
 	hhuo.mutation.ClearUpdatedByID()
+	return hhuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (hhuo *HushHistoryUpdateOne) SetUpdatedByUserID(s string) *HushHistoryUpdateOne {
+	hhuo.mutation.SetUpdatedByUserID(s)
+	return hhuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (hhuo *HushHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *HushHistoryUpdateOne {
+	if s != nil {
+		hhuo.SetUpdatedByUserID(*s)
+	}
+	return hhuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (hhuo *HushHistoryUpdateOne) ClearUpdatedByUserID() *HushHistoryUpdateOne {
+	hhuo.mutation.ClearUpdatedByUserID()
+	return hhuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (hhuo *HushHistoryUpdateOne) SetUpdatedByServiceID(s string) *HushHistoryUpdateOne {
+	hhuo.mutation.SetUpdatedByServiceID(s)
+	return hhuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (hhuo *HushHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *HushHistoryUpdateOne {
+	if s != nil {
+		hhuo.SetUpdatedByServiceID(*s)
+	}
+	return hhuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (hhuo *HushHistoryUpdateOne) ClearUpdatedByServiceID() *HushHistoryUpdateOne {
+	hhuo.mutation.ClearUpdatedByServiceID()
 	return hhuo
 }
 
@@ -443,6 +541,24 @@ func (hhuo *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHisto
 	}
 	if hhuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if hhuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(hushhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := hhuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if hhuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if hhuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(hushhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := hhuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if hhuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if hhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedAt, field.TypeTime)

@@ -13,11 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -25,17 +26,19 @@ import (
 // EntityTypeQuery is the builder for querying EntityType entities.
 type EntityTypeQuery struct {
 	config
-	ctx               *QueryContext
-	order             []entitytype.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.EntityType
-	withCreatedBy     *ChangeActorQuery
-	withUpdatedBy     *ChangeActorQuery
-	withOwner         *OrganizationQuery
-	withEntities      *EntityQuery
-	loadTotal         []func(context.Context, []*EntityType) error
-	modifiers         []func(*sql.Selector)
-	withNamedEntities map[string]*EntityQuery
+	ctx                  *QueryContext
+	order                []entitytype.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.EntityType
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOwner            *OrganizationQuery
+	withEntities         *EntityQuery
+	loadTotal            []func(context.Context, []*EntityType) error
+	modifiers            []func(*sql.Selector)
+	withNamedEntities    map[string]*EntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -72,9 +75,9 @@ func (etq *EntityTypeQuery) Order(o ...entitytype.OrderOption) *EntityTypeQuery 
 	return etq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (etq *EntityTypeQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: etq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (etq *EntityTypeQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: etq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := etq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -85,11 +88,11 @@ func (etq *EntityTypeQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entitytype.Table, entitytype.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.CreatedByTable, entitytype.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.CreatedByUserTable, entitytype.CreatedByUserColumn),
 		)
 		schemaConfig := etq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.EntityType
 		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
 		return fromU, nil
@@ -97,9 +100,9 @@ func (etq *EntityTypeQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (etq *EntityTypeQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: etq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (etq *EntityTypeQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: etq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := etq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -110,11 +113,61 @@ func (etq *EntityTypeQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entitytype.Table, entitytype.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.UpdatedByTable, entitytype.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.UpdatedByUserTable, entitytype.UpdatedByUserColumn),
 		)
 		schemaConfig := etq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.EntityType
+		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (etq *EntityTypeQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: etq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := etq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := etq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entitytype.Table, entitytype.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.CreatedByServiceTable, entitytype.CreatedByServiceColumn),
+		)
+		schemaConfig := etq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.EntityType
+		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (etq *EntityTypeQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: etq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := etq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := etq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entitytype.Table, entitytype.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.UpdatedByServiceTable, entitytype.UpdatedByServiceColumn),
+		)
+		schemaConfig := etq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.EntityType
 		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
 		return fromU, nil
@@ -359,15 +412,17 @@ func (etq *EntityTypeQuery) Clone() *EntityTypeQuery {
 		return nil
 	}
 	return &EntityTypeQuery{
-		config:        etq.config,
-		ctx:           etq.ctx.Clone(),
-		order:         append([]entitytype.OrderOption{}, etq.order...),
-		inters:        append([]Interceptor{}, etq.inters...),
-		predicates:    append([]predicate.EntityType{}, etq.predicates...),
-		withCreatedBy: etq.withCreatedBy.Clone(),
-		withUpdatedBy: etq.withUpdatedBy.Clone(),
-		withOwner:     etq.withOwner.Clone(),
-		withEntities:  etq.withEntities.Clone(),
+		config:               etq.config,
+		ctx:                  etq.ctx.Clone(),
+		order:                append([]entitytype.OrderOption{}, etq.order...),
+		inters:               append([]Interceptor{}, etq.inters...),
+		predicates:           append([]predicate.EntityType{}, etq.predicates...),
+		withCreatedByUser:    etq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    etq.withUpdatedByUser.Clone(),
+		withCreatedByService: etq.withCreatedByService.Clone(),
+		withUpdatedByService: etq.withUpdatedByService.Clone(),
+		withOwner:            etq.withOwner.Clone(),
+		withEntities:         etq.withEntities.Clone(),
 		// clone intermediate query.
 		sql:       etq.sql.Clone(),
 		path:      etq.path,
@@ -375,25 +430,47 @@ func (etq *EntityTypeQuery) Clone() *EntityTypeQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (etq *EntityTypeQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *EntityTypeQuery {
-	query := (&ChangeActorClient{config: etq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (etq *EntityTypeQuery) WithCreatedByUser(opts ...func(*UserQuery)) *EntityTypeQuery {
+	query := (&UserClient{config: etq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	etq.withCreatedBy = query
+	etq.withCreatedByUser = query
 	return etq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (etq *EntityTypeQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *EntityTypeQuery {
-	query := (&ChangeActorClient{config: etq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (etq *EntityTypeQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *EntityTypeQuery {
+	query := (&UserClient{config: etq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	etq.withUpdatedBy = query
+	etq.withUpdatedByUser = query
+	return etq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (etq *EntityTypeQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *EntityTypeQuery {
+	query := (&APITokenClient{config: etq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	etq.withCreatedByService = query
+	return etq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (etq *EntityTypeQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *EntityTypeQuery {
+	query := (&APITokenClient{config: etq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	etq.withUpdatedByService = query
 	return etq
 }
 
@@ -503,9 +580,11 @@ func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*EntityType{}
 		_spec       = etq.querySpec()
-		loadedTypes = [4]bool{
-			etq.withCreatedBy != nil,
-			etq.withUpdatedBy != nil,
+		loadedTypes = [6]bool{
+			etq.withCreatedByUser != nil,
+			etq.withUpdatedByUser != nil,
+			etq.withCreatedByService != nil,
+			etq.withUpdatedByService != nil,
 			etq.withOwner != nil,
 			etq.withEntities != nil,
 		}
@@ -533,15 +612,27 @@ func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := etq.withCreatedBy; query != nil {
-		if err := etq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *EntityType, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := etq.withCreatedByUser; query != nil {
+		if err := etq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *EntityType, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := etq.withUpdatedBy; query != nil {
-		if err := etq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *EntityType, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := etq.withUpdatedByUser; query != nil {
+		if err := etq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *EntityType, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := etq.withCreatedByService; query != nil {
+		if err := etq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *EntityType, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := etq.withUpdatedByService; query != nil {
+		if err := etq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *EntityType, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -573,11 +664,11 @@ func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *ChangeActor)) error {
+func (etq *EntityTypeQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*EntityType)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -586,7 +677,7 @@ func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -594,7 +685,7 @@ func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -602,11 +693,11 @@ func (etq *EntityTypeQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	}
 	return nil
 }
-func (etq *EntityTypeQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *ChangeActor)) error {
+func (etq *EntityTypeQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*EntityType)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -615,7 +706,7 @@ func (etq *EntityTypeQuery) loadUpdatedBy(ctx context.Context, query *ChangeActo
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -623,7 +714,65 @@ func (etq *EntityTypeQuery) loadUpdatedBy(ctx context.Context, query *ChangeActo
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (etq *EntityTypeQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*EntityType)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (etq *EntityTypeQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*EntityType)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -722,11 +871,17 @@ func (etq *EntityTypeQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if etq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(entitytype.FieldCreatedByID)
+		if etq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(entitytype.FieldCreatedByUserID)
 		}
-		if etq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(entitytype.FieldUpdatedByID)
+		if etq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(entitytype.FieldUpdatedByUserID)
+		}
+		if etq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(entitytype.FieldCreatedByServiceID)
+		}
+		if etq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(entitytype.FieldUpdatedByServiceID)
 		}
 		if etq.withOwner != nil {
 			_spec.Node.AddColumnOnce(entitytype.FieldOwnerID)

@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -26,18 +26,20 @@ import (
 // OrgMembershipQuery is the builder for querying OrgMembership entities.
 type OrgMembershipQuery struct {
 	config
-	ctx              *QueryContext
-	order            []orgmembership.OrderOption
-	inters           []Interceptor
-	predicates       []predicate.OrgMembership
-	withCreatedBy    *ChangeActorQuery
-	withUpdatedBy    *ChangeActorQuery
-	withOrganization *OrganizationQuery
-	withUser         *UserQuery
-	withEvents       *EventQuery
-	loadTotal        []func(context.Context, []*OrgMembership) error
-	modifiers        []func(*sql.Selector)
-	withNamedEvents  map[string]*EventQuery
+	ctx                  *QueryContext
+	order                []orgmembership.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.OrgMembership
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOrganization     *OrganizationQuery
+	withUser             *UserQuery
+	withEvents           *EventQuery
+	loadTotal            []func(context.Context, []*OrgMembership) error
+	modifiers            []func(*sql.Selector)
+	withNamedEvents      map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -74,9 +76,9 @@ func (omq *OrgMembershipQuery) Order(o ...orgmembership.OrderOption) *OrgMembers
 	return omq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (omq *OrgMembershipQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: omq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (omq *OrgMembershipQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: omq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := omq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -87,11 +89,11 @@ func (omq *OrgMembershipQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgmembership.Table, orgmembership.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.CreatedByTable, orgmembership.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.CreatedByUserTable, orgmembership.CreatedByUserColumn),
 		)
 		schemaConfig := omq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrgMembership
 		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
 		return fromU, nil
@@ -99,9 +101,9 @@ func (omq *OrgMembershipQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (omq *OrgMembershipQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: omq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (omq *OrgMembershipQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: omq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := omq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -112,11 +114,61 @@ func (omq *OrgMembershipQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgmembership.Table, orgmembership.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.UpdatedByTable, orgmembership.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.UpdatedByUserTable, orgmembership.UpdatedByUserColumn),
 		)
 		schemaConfig := omq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.OrgMembership
+		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (omq *OrgMembershipQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: omq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := omq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := omq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmembership.Table, orgmembership.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.CreatedByServiceTable, orgmembership.CreatedByServiceColumn),
+		)
+		schemaConfig := omq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.OrgMembership
+		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (omq *OrgMembershipQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: omq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := omq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := omq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmembership.Table, orgmembership.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.UpdatedByServiceTable, orgmembership.UpdatedByServiceColumn),
+		)
+		schemaConfig := omq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.OrgMembership
 		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
 		return fromU, nil
@@ -386,16 +438,18 @@ func (omq *OrgMembershipQuery) Clone() *OrgMembershipQuery {
 		return nil
 	}
 	return &OrgMembershipQuery{
-		config:           omq.config,
-		ctx:              omq.ctx.Clone(),
-		order:            append([]orgmembership.OrderOption{}, omq.order...),
-		inters:           append([]Interceptor{}, omq.inters...),
-		predicates:       append([]predicate.OrgMembership{}, omq.predicates...),
-		withCreatedBy:    omq.withCreatedBy.Clone(),
-		withUpdatedBy:    omq.withUpdatedBy.Clone(),
-		withOrganization: omq.withOrganization.Clone(),
-		withUser:         omq.withUser.Clone(),
-		withEvents:       omq.withEvents.Clone(),
+		config:               omq.config,
+		ctx:                  omq.ctx.Clone(),
+		order:                append([]orgmembership.OrderOption{}, omq.order...),
+		inters:               append([]Interceptor{}, omq.inters...),
+		predicates:           append([]predicate.OrgMembership{}, omq.predicates...),
+		withCreatedByUser:    omq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    omq.withUpdatedByUser.Clone(),
+		withCreatedByService: omq.withCreatedByService.Clone(),
+		withUpdatedByService: omq.withUpdatedByService.Clone(),
+		withOrganization:     omq.withOrganization.Clone(),
+		withUser:             omq.withUser.Clone(),
+		withEvents:           omq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       omq.sql.Clone(),
 		path:      omq.path,
@@ -403,25 +457,47 @@ func (omq *OrgMembershipQuery) Clone() *OrgMembershipQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (omq *OrgMembershipQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *OrgMembershipQuery {
-	query := (&ChangeActorClient{config: omq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (omq *OrgMembershipQuery) WithCreatedByUser(opts ...func(*UserQuery)) *OrgMembershipQuery {
+	query := (&UserClient{config: omq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	omq.withCreatedBy = query
+	omq.withCreatedByUser = query
 	return omq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (omq *OrgMembershipQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *OrgMembershipQuery {
-	query := (&ChangeActorClient{config: omq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (omq *OrgMembershipQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *OrgMembershipQuery {
+	query := (&UserClient{config: omq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	omq.withUpdatedBy = query
+	omq.withUpdatedByUser = query
+	return omq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (omq *OrgMembershipQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *OrgMembershipQuery {
+	query := (&APITokenClient{config: omq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	omq.withCreatedByService = query
+	return omq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (omq *OrgMembershipQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *OrgMembershipQuery {
+	query := (&APITokenClient{config: omq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	omq.withUpdatedByService = query
 	return omq
 }
 
@@ -542,9 +618,11 @@ func (omq *OrgMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*OrgMembership{}
 		_spec       = omq.querySpec()
-		loadedTypes = [5]bool{
-			omq.withCreatedBy != nil,
-			omq.withUpdatedBy != nil,
+		loadedTypes = [7]bool{
+			omq.withCreatedByUser != nil,
+			omq.withUpdatedByUser != nil,
+			omq.withCreatedByService != nil,
+			omq.withUpdatedByService != nil,
 			omq.withOrganization != nil,
 			omq.withUser != nil,
 			omq.withEvents != nil,
@@ -573,15 +651,27 @@ func (omq *OrgMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := omq.withCreatedBy; query != nil {
-		if err := omq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *OrgMembership, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := omq.withCreatedByUser; query != nil {
+		if err := omq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *OrgMembership, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := omq.withUpdatedBy; query != nil {
-		if err := omq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *OrgMembership, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := omq.withUpdatedByUser; query != nil {
+		if err := omq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *OrgMembership, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := omq.withCreatedByService; query != nil {
+		if err := omq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *OrgMembership, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := omq.withUpdatedByService; query != nil {
+		if err := omq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *OrgMembership, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -619,11 +709,11 @@ func (omq *OrgMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
-func (omq *OrgMembershipQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *ChangeActor)) error {
+func (omq *OrgMembershipQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgMembership)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -632,7 +722,7 @@ func (omq *OrgMembershipQuery) loadCreatedBy(ctx context.Context, query *ChangeA
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -640,7 +730,7 @@ func (omq *OrgMembershipQuery) loadCreatedBy(ctx context.Context, query *ChangeA
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -648,11 +738,11 @@ func (omq *OrgMembershipQuery) loadCreatedBy(ctx context.Context, query *ChangeA
 	}
 	return nil
 }
-func (omq *OrgMembershipQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *ChangeActor)) error {
+func (omq *OrgMembershipQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgMembership)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -661,7 +751,7 @@ func (omq *OrgMembershipQuery) loadUpdatedBy(ctx context.Context, query *ChangeA
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -669,7 +759,65 @@ func (omq *OrgMembershipQuery) loadUpdatedBy(ctx context.Context, query *ChangeA
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (omq *OrgMembershipQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*OrgMembership)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (omq *OrgMembershipQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*OrgMembership)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -828,11 +976,17 @@ func (omq *OrgMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if omq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(orgmembership.FieldCreatedByID)
+		if omq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(orgmembership.FieldCreatedByUserID)
 		}
-		if omq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(orgmembership.FieldUpdatedByID)
+		if omq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(orgmembership.FieldUpdatedByUserID)
+		}
+		if omq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(orgmembership.FieldCreatedByServiceID)
+		}
+		if omq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(orgmembership.FieldUpdatedByServiceID)
 		}
 		if omq.withOrganization != nil {
 			_spec.Node.AddColumnOnce(orgmembership.FieldOrganizationID)

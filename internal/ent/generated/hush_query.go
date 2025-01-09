@@ -12,12 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -29,8 +30,10 @@ type HushQuery struct {
 	order                 []hush.OrderOption
 	inters                []Interceptor
 	predicates            []predicate.Hush
-	withCreatedBy         *ChangeActorQuery
-	withUpdatedBy         *ChangeActorQuery
+	withCreatedByUser     *UserQuery
+	withUpdatedByUser     *UserQuery
+	withCreatedByService  *APITokenQuery
+	withUpdatedByService  *APITokenQuery
 	withIntegrations      *IntegrationQuery
 	withOrganization      *OrganizationQuery
 	withEvents            *EventQuery
@@ -75,9 +78,9 @@ func (hq *HushQuery) Order(o ...hush.OrderOption) *HushQuery {
 	return hq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (hq *HushQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: hq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (hq *HushQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: hq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := hq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -88,11 +91,11 @@ func (hq *HushQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(hush.Table, hush.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, hush.CreatedByTable, hush.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.CreatedByUserTable, hush.CreatedByUserColumn),
 		)
 		schemaConfig := hq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Hush
 		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
 		return fromU, nil
@@ -100,9 +103,9 @@ func (hq *HushQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (hq *HushQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: hq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (hq *HushQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: hq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := hq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -113,11 +116,61 @@ func (hq *HushQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(hush.Table, hush.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, hush.UpdatedByTable, hush.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.UpdatedByUserTable, hush.UpdatedByUserColumn),
 		)
 		schemaConfig := hq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Hush
+		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (hq *HushQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: hq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := hq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := hq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.CreatedByServiceTable, hush.CreatedByServiceColumn),
+		)
+		schemaConfig := hq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Hush
+		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (hq *HushQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: hq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := hq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := hq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.UpdatedByServiceTable, hush.UpdatedByServiceColumn),
+		)
+		schemaConfig := hq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Hush
 		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
 		return fromU, nil
@@ -387,16 +440,18 @@ func (hq *HushQuery) Clone() *HushQuery {
 		return nil
 	}
 	return &HushQuery{
-		config:           hq.config,
-		ctx:              hq.ctx.Clone(),
-		order:            append([]hush.OrderOption{}, hq.order...),
-		inters:           append([]Interceptor{}, hq.inters...),
-		predicates:       append([]predicate.Hush{}, hq.predicates...),
-		withCreatedBy:    hq.withCreatedBy.Clone(),
-		withUpdatedBy:    hq.withUpdatedBy.Clone(),
-		withIntegrations: hq.withIntegrations.Clone(),
-		withOrganization: hq.withOrganization.Clone(),
-		withEvents:       hq.withEvents.Clone(),
+		config:               hq.config,
+		ctx:                  hq.ctx.Clone(),
+		order:                append([]hush.OrderOption{}, hq.order...),
+		inters:               append([]Interceptor{}, hq.inters...),
+		predicates:           append([]predicate.Hush{}, hq.predicates...),
+		withCreatedByUser:    hq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    hq.withUpdatedByUser.Clone(),
+		withCreatedByService: hq.withCreatedByService.Clone(),
+		withUpdatedByService: hq.withUpdatedByService.Clone(),
+		withIntegrations:     hq.withIntegrations.Clone(),
+		withOrganization:     hq.withOrganization.Clone(),
+		withEvents:           hq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       hq.sql.Clone(),
 		path:      hq.path,
@@ -404,25 +459,47 @@ func (hq *HushQuery) Clone() *HushQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (hq *HushQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *HushQuery {
-	query := (&ChangeActorClient{config: hq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (hq *HushQuery) WithCreatedByUser(opts ...func(*UserQuery)) *HushQuery {
+	query := (&UserClient{config: hq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	hq.withCreatedBy = query
+	hq.withCreatedByUser = query
 	return hq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (hq *HushQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *HushQuery {
-	query := (&ChangeActorClient{config: hq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (hq *HushQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *HushQuery {
+	query := (&UserClient{config: hq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	hq.withUpdatedBy = query
+	hq.withUpdatedByUser = query
+	return hq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (hq *HushQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *HushQuery {
+	query := (&APITokenClient{config: hq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	hq.withCreatedByService = query
+	return hq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (hq *HushQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *HushQuery {
+	query := (&APITokenClient{config: hq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	hq.withUpdatedByService = query
 	return hq
 }
 
@@ -537,9 +614,11 @@ func (hq *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 	var (
 		nodes       = []*Hush{}
 		_spec       = hq.querySpec()
-		loadedTypes = [5]bool{
-			hq.withCreatedBy != nil,
-			hq.withUpdatedBy != nil,
+		loadedTypes = [7]bool{
+			hq.withCreatedByUser != nil,
+			hq.withUpdatedByUser != nil,
+			hq.withCreatedByService != nil,
+			hq.withUpdatedByService != nil,
 			hq.withIntegrations != nil,
 			hq.withOrganization != nil,
 			hq.withEvents != nil,
@@ -568,15 +647,27 @@ func (hq *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := hq.withCreatedBy; query != nil {
-		if err := hq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Hush, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := hq.withCreatedByUser; query != nil {
+		if err := hq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Hush, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := hq.withUpdatedBy; query != nil {
-		if err := hq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Hush, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := hq.withUpdatedByUser; query != nil {
+		if err := hq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Hush, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := hq.withCreatedByService; query != nil {
+		if err := hq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Hush, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := hq.withUpdatedByService; query != nil {
+		if err := hq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Hush, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -630,11 +721,11 @@ func (hq *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 	return nodes, nil
 }
 
-func (hq *HushQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *ChangeActor)) error {
+func (hq *HushQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Hush)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -643,7 +734,7 @@ func (hq *HushQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -651,7 +742,7 @@ func (hq *HushQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -659,11 +750,11 @@ func (hq *HushQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	}
 	return nil
 }
-func (hq *HushQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *ChangeActor)) error {
+func (hq *HushQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Hush)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -672,7 +763,7 @@ func (hq *HushQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -680,7 +771,65 @@ func (hq *HushQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (hq *HushQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Hush)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (hq *HushQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Hush)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -905,11 +1054,17 @@ func (hq *HushQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if hq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(hush.FieldCreatedByID)
+		if hq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(hush.FieldCreatedByUserID)
 		}
-		if hq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(hush.FieldUpdatedByID)
+		if hq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(hush.FieldUpdatedByUserID)
+		}
+		if hq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(hush.FieldCreatedByServiceID)
+		}
+		if hq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(hush.FieldUpdatedByServiceID)
 		}
 	}
 	if ps := hq.predicates; len(ps) > 0 {

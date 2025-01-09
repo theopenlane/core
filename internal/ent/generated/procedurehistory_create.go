@@ -125,6 +125,62 @@ func (phc *ProcedureHistoryCreate) SetNillableUpdatedByID(s *string) *ProcedureH
 	return phc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (phc *ProcedureHistoryCreate) SetCreatedByUserID(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetCreatedByUserID(s)
+	return phc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableCreatedByUserID(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetCreatedByUserID(*s)
+	}
+	return phc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (phc *ProcedureHistoryCreate) SetUpdatedByUserID(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetUpdatedByUserID(s)
+	return phc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableUpdatedByUserID(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetUpdatedByUserID(*s)
+	}
+	return phc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (phc *ProcedureHistoryCreate) SetCreatedByServiceID(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetCreatedByServiceID(s)
+	return phc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableCreatedByServiceID(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetCreatedByServiceID(*s)
+	}
+	return phc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (phc *ProcedureHistoryCreate) SetUpdatedByServiceID(s string) *ProcedureHistoryCreate {
+	phc.mutation.SetUpdatedByServiceID(s)
+	return phc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (phc *ProcedureHistoryCreate) SetNillableUpdatedByServiceID(s *string) *ProcedureHistoryCreate {
+	if s != nil {
+		phc.SetUpdatedByServiceID(*s)
+	}
+	return phc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (phc *ProcedureHistoryCreate) SetDeletedAt(t time.Time) *ProcedureHistoryCreate {
 	phc.mutation.SetDeletedAt(t)
@@ -476,6 +532,22 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 	if value, ok := phc.mutation.UpdatedByID(); ok {
 		_spec.SetField(procedurehistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := phc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(procedurehistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := phc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(procedurehistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := phc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(procedurehistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := phc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(procedurehistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := phc.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)

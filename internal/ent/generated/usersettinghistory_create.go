@@ -126,6 +126,62 @@ func (ushc *UserSettingHistoryCreate) SetNillableUpdatedByID(s *string) *UserSet
 	return ushc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ushc *UserSettingHistoryCreate) SetCreatedByUserID(s string) *UserSettingHistoryCreate {
+	ushc.mutation.SetCreatedByUserID(s)
+	return ushc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ushc *UserSettingHistoryCreate) SetNillableCreatedByUserID(s *string) *UserSettingHistoryCreate {
+	if s != nil {
+		ushc.SetCreatedByUserID(*s)
+	}
+	return ushc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ushc *UserSettingHistoryCreate) SetUpdatedByUserID(s string) *UserSettingHistoryCreate {
+	ushc.mutation.SetUpdatedByUserID(s)
+	return ushc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ushc *UserSettingHistoryCreate) SetNillableUpdatedByUserID(s *string) *UserSettingHistoryCreate {
+	if s != nil {
+		ushc.SetUpdatedByUserID(*s)
+	}
+	return ushc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ushc *UserSettingHistoryCreate) SetCreatedByServiceID(s string) *UserSettingHistoryCreate {
+	ushc.mutation.SetCreatedByServiceID(s)
+	return ushc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ushc *UserSettingHistoryCreate) SetNillableCreatedByServiceID(s *string) *UserSettingHistoryCreate {
+	if s != nil {
+		ushc.SetCreatedByServiceID(*s)
+	}
+	return ushc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ushc *UserSettingHistoryCreate) SetUpdatedByServiceID(s string) *UserSettingHistoryCreate {
+	ushc.mutation.SetUpdatedByServiceID(s)
+	return ushc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ushc *UserSettingHistoryCreate) SetNillableUpdatedByServiceID(s *string) *UserSettingHistoryCreate {
+	if s != nil {
+		ushc.SetUpdatedByServiceID(*s)
+	}
+	return ushc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (ushc *UserSettingHistoryCreate) SetMappingID(s string) *UserSettingHistoryCreate {
 	ushc.mutation.SetMappingID(s)
@@ -492,6 +548,22 @@ func (ushc *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgra
 	if value, ok := ushc.mutation.UpdatedByID(); ok {
 		_spec.SetField(usersettinghistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := ushc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(usersettinghistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := ushc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(usersettinghistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := ushc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(usersettinghistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := ushc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(usersettinghistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := ushc.mutation.MappingID(); ok {
 		_spec.SetField(usersettinghistory.FieldMappingID, field.TypeString, value)

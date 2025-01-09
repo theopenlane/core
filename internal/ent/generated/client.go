@@ -1072,18 +1072,18 @@ func (c *APITokenClient) GetX(ctx context.Context, id string) *APIToken {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a APIToken.
-func (c *APITokenClient) QueryCreatedBy(at *APIToken) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a APIToken.
+func (c *APITokenClient) QueryCreatedByUser(at *APIToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := at.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(apitoken.Table, apitoken.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, apitoken.CreatedByTable, apitoken.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, apitoken.CreatedByUserTable, apitoken.CreatedByUserColumn),
 		)
 		schemaConfig := at.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.APIToken
 		fromV = sqlgraph.Neighbors(at.driver.Dialect(), step)
 		return fromV, nil
@@ -1091,18 +1091,56 @@ func (c *APITokenClient) QueryCreatedBy(at *APIToken) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a APIToken.
-func (c *APITokenClient) QueryUpdatedBy(at *APIToken) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a APIToken.
+func (c *APITokenClient) QueryUpdatedByUser(at *APIToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := at.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(apitoken.Table, apitoken.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, apitoken.UpdatedByTable, apitoken.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, apitoken.UpdatedByUserTable, apitoken.UpdatedByUserColumn),
 		)
 		schemaConfig := at.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.APIToken
+		fromV = sqlgraph.Neighbors(at.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a APIToken.
+func (c *APITokenClient) QueryCreatedByService(at *APIToken) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := at.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(apitoken.Table, apitoken.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, apitoken.CreatedByServiceTable, apitoken.CreatedByServiceColumn),
+		)
+		schemaConfig := at.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.APIToken
+		fromV = sqlgraph.Neighbors(at.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a APIToken.
+func (c *APITokenClient) QueryUpdatedByService(at *APIToken) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := at.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(apitoken.Table, apitoken.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, apitoken.UpdatedByServiceTable, apitoken.UpdatedByServiceColumn),
+		)
+		schemaConfig := at.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.APIToken
 		fromV = sqlgraph.Neighbors(at.driver.Dialect(), step)
 		return fromV, nil
@@ -1264,18 +1302,18 @@ func (c *ActionPlanClient) GetX(ctx context.Context, id string) *ActionPlan {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a ActionPlan.
-func (c *ActionPlanClient) QueryCreatedBy(ap *ActionPlan) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a ActionPlan.
+func (c *ActionPlanClient) QueryCreatedByUser(ap *ActionPlan) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ap.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.CreatedByTable, actionplan.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.CreatedByUserTable, actionplan.CreatedByUserColumn),
 		)
 		schemaConfig := ap.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.ActionPlan
 		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
 		return fromV, nil
@@ -1283,18 +1321,56 @@ func (c *ActionPlanClient) QueryCreatedBy(ap *ActionPlan) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a ActionPlan.
-func (c *ActionPlanClient) QueryUpdatedBy(ap *ActionPlan) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a ActionPlan.
+func (c *ActionPlanClient) QueryUpdatedByUser(ap *ActionPlan) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ap.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.UpdatedByTable, actionplan.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.UpdatedByUserTable, actionplan.UpdatedByUserColumn),
 		)
 		schemaConfig := ap.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a ActionPlan.
+func (c *ActionPlanClient) QueryCreatedByService(ap *ActionPlan) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.CreatedByServiceTable, actionplan.CreatedByServiceColumn),
+		)
+		schemaConfig := ap.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a ActionPlan.
+func (c *ActionPlanClient) QueryUpdatedByService(ap *ActionPlan) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.UpdatedByServiceTable, actionplan.UpdatedByServiceColumn),
+		)
+		schemaConfig := ap.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.ActionPlan
 		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
 		return fromV, nil
@@ -1798,18 +1874,18 @@ func (c *ContactClient) GetX(ctx context.Context, id string) *Contact {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Contact.
-func (c *ContactClient) QueryCreatedBy(co *Contact) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Contact.
+func (c *ContactClient) QueryCreatedByUser(co *Contact) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(contact.Table, contact.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, contact.CreatedByTable, contact.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, contact.CreatedByUserTable, contact.CreatedByUserColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Contact
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -1817,18 +1893,56 @@ func (c *ContactClient) QueryCreatedBy(co *Contact) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Contact.
-func (c *ContactClient) QueryUpdatedBy(co *Contact) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Contact.
+func (c *ContactClient) QueryUpdatedByUser(co *Contact) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(contact.Table, contact.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, contact.UpdatedByTable, contact.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, contact.UpdatedByUserTable, contact.UpdatedByUserColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Contact
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Contact.
+func (c *ContactClient) QueryCreatedByService(co *Contact) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, contact.CreatedByServiceTable, contact.CreatedByServiceColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Contact
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Contact.
+func (c *ContactClient) QueryUpdatedByService(co *Contact) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, contact.UpdatedByServiceTable, contact.UpdatedByServiceColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Contact
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -2163,18 +2277,18 @@ func (c *ControlClient) GetX(ctx context.Context, id string) *Control {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Control.
-func (c *ControlClient) QueryCreatedBy(co *Control) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Control.
+func (c *ControlClient) QueryCreatedByUser(co *Control) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, control.CreatedByTable, control.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.CreatedByUserTable, control.CreatedByUserColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Control
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -2182,18 +2296,56 @@ func (c *ControlClient) QueryCreatedBy(co *Control) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Control.
-func (c *ControlClient) QueryUpdatedBy(co *Control) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Control.
+func (c *ControlClient) QueryUpdatedByUser(co *Control) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, control.UpdatedByTable, control.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.UpdatedByUserTable, control.UpdatedByUserColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Control.
+func (c *ControlClient) QueryCreatedByService(co *Control) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.CreatedByServiceTable, control.CreatedByServiceColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Control.
+func (c *ControlClient) QueryUpdatedByService(co *Control) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.UpdatedByServiceTable, control.UpdatedByServiceColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Control
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -2718,18 +2870,18 @@ func (c *ControlObjectiveClient) GetX(ctx context.Context, id string) *ControlOb
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a ControlObjective.
-func (c *ControlObjectiveClient) QueryCreatedBy(co *ControlObjective) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryCreatedByUser(co *ControlObjective) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.CreatedByTable, controlobjective.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.CreatedByUserTable, controlobjective.CreatedByUserColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.ControlObjective
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -2737,18 +2889,56 @@ func (c *ControlObjectiveClient) QueryCreatedBy(co *ControlObjective) *ChangeAct
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a ControlObjective.
-func (c *ControlObjectiveClient) QueryUpdatedBy(co *ControlObjective) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryUpdatedByUser(co *ControlObjective) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.UpdatedByTable, controlobjective.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.UpdatedByUserTable, controlobjective.UpdatedByUserColumn),
 		)
 		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ControlObjective
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryCreatedByService(co *ControlObjective) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.CreatedByServiceTable, controlobjective.CreatedByServiceColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.ControlObjective
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryUpdatedByService(co *ControlObjective) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlobjective.UpdatedByServiceTable, controlobjective.UpdatedByServiceColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.ControlObjective
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -3273,18 +3463,18 @@ func (c *DocumentDataClient) GetX(ctx context.Context, id string) *DocumentData 
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a DocumentData.
-func (c *DocumentDataClient) QueryCreatedBy(dd *DocumentData) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a DocumentData.
+func (c *DocumentDataClient) QueryCreatedByUser(dd *DocumentData) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := dd.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(documentdata.Table, documentdata.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.CreatedByTable, documentdata.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.CreatedByUserTable, documentdata.CreatedByUserColumn),
 		)
 		schemaConfig := dd.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.DocumentData
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
 		return fromV, nil
@@ -3292,18 +3482,56 @@ func (c *DocumentDataClient) QueryCreatedBy(dd *DocumentData) *ChangeActorQuery 
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a DocumentData.
-func (c *DocumentDataClient) QueryUpdatedBy(dd *DocumentData) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a DocumentData.
+func (c *DocumentDataClient) QueryUpdatedByUser(dd *DocumentData) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := dd.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(documentdata.Table, documentdata.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.UpdatedByTable, documentdata.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.UpdatedByUserTable, documentdata.UpdatedByUserColumn),
 		)
 		schemaConfig := dd.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a DocumentData.
+func (c *DocumentDataClient) QueryCreatedByService(dd *DocumentData) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := dd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.CreatedByServiceTable, documentdata.CreatedByServiceColumn),
+		)
+		schemaConfig := dd.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.DocumentData
+		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a DocumentData.
+func (c *DocumentDataClient) QueryUpdatedByService(dd *DocumentData) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := dd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.UpdatedByServiceTable, documentdata.UpdatedByServiceColumn),
+		)
+		schemaConfig := dd.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.DocumentData
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
 		return fromV, nil
@@ -3657,18 +3885,18 @@ func (c *EmailVerificationTokenClient) GetX(ctx context.Context, id string) *Ema
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a EmailVerificationToken.
-func (c *EmailVerificationTokenClient) QueryCreatedBy(evt *EmailVerificationToken) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a EmailVerificationToken.
+func (c *EmailVerificationTokenClient) QueryCreatedByUser(evt *EmailVerificationToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := evt.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailverificationtoken.Table, emailverificationtoken.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.CreatedByTable, emailverificationtoken.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.CreatedByUserTable, emailverificationtoken.CreatedByUserColumn),
 		)
 		schemaConfig := evt.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.EmailVerificationToken
 		fromV = sqlgraph.Neighbors(evt.driver.Dialect(), step)
 		return fromV, nil
@@ -3676,18 +3904,56 @@ func (c *EmailVerificationTokenClient) QueryCreatedBy(evt *EmailVerificationToke
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a EmailVerificationToken.
-func (c *EmailVerificationTokenClient) QueryUpdatedBy(evt *EmailVerificationToken) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a EmailVerificationToken.
+func (c *EmailVerificationTokenClient) QueryUpdatedByUser(evt *EmailVerificationToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := evt.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailverificationtoken.Table, emailverificationtoken.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.UpdatedByTable, emailverificationtoken.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.UpdatedByUserTable, emailverificationtoken.UpdatedByUserColumn),
 		)
 		schemaConfig := evt.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.EmailVerificationToken
+		fromV = sqlgraph.Neighbors(evt.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a EmailVerificationToken.
+func (c *EmailVerificationTokenClient) QueryCreatedByService(evt *EmailVerificationToken) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := evt.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailverificationtoken.Table, emailverificationtoken.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.CreatedByServiceTable, emailverificationtoken.CreatedByServiceColumn),
+		)
+		schemaConfig := evt.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.EmailVerificationToken
+		fromV = sqlgraph.Neighbors(evt.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a EmailVerificationToken.
+func (c *EmailVerificationTokenClient) QueryUpdatedByService(evt *EmailVerificationToken) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := evt.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailverificationtoken.Table, emailverificationtoken.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.UpdatedByServiceTable, emailverificationtoken.UpdatedByServiceColumn),
+		)
+		schemaConfig := evt.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.EmailVerificationToken
 		fromV = sqlgraph.Neighbors(evt.driver.Dialect(), step)
 		return fromV, nil
@@ -3849,18 +4115,18 @@ func (c *EntityClient) GetX(ctx context.Context, id string) *Entity {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Entity.
-func (c *EntityClient) QueryCreatedBy(e *Entity) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Entity.
+func (c *EntityClient) QueryCreatedByUser(e *Entity) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entity.Table, entity.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, entity.CreatedByTable, entity.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.CreatedByUserTable, entity.CreatedByUserColumn),
 		)
 		schemaConfig := e.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Entity
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
@@ -3868,18 +4134,56 @@ func (c *EntityClient) QueryCreatedBy(e *Entity) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Entity.
-func (c *EntityClient) QueryUpdatedBy(e *Entity) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Entity.
+func (c *EntityClient) QueryUpdatedByUser(e *Entity) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entity.Table, entity.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, entity.UpdatedByTable, entity.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.UpdatedByUserTable, entity.UpdatedByUserColumn),
 		)
 		schemaConfig := e.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Entity.
+func (c *EntityClient) QueryCreatedByService(e *Entity) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.CreatedByServiceTable, entity.CreatedByServiceColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Entity.
+func (c *EntityClient) QueryUpdatedByService(e *Entity) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.UpdatedByServiceTable, entity.UpdatedByServiceColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Entity
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
@@ -4271,18 +4575,18 @@ func (c *EntityTypeClient) GetX(ctx context.Context, id string) *EntityType {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a EntityType.
-func (c *EntityTypeClient) QueryCreatedBy(et *EntityType) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a EntityType.
+func (c *EntityTypeClient) QueryCreatedByUser(et *EntityType) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := et.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entitytype.Table, entitytype.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.CreatedByTable, entitytype.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.CreatedByUserTable, entitytype.CreatedByUserColumn),
 		)
 		schemaConfig := et.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.EntityType
 		fromV = sqlgraph.Neighbors(et.driver.Dialect(), step)
 		return fromV, nil
@@ -4290,18 +4594,56 @@ func (c *EntityTypeClient) QueryCreatedBy(et *EntityType) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a EntityType.
-func (c *EntityTypeClient) QueryUpdatedBy(et *EntityType) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a EntityType.
+func (c *EntityTypeClient) QueryUpdatedByUser(et *EntityType) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := et.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entitytype.Table, entitytype.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.UpdatedByTable, entitytype.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.UpdatedByUserTable, entitytype.UpdatedByUserColumn),
 		)
 		schemaConfig := et.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.EntityType
+		fromV = sqlgraph.Neighbors(et.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a EntityType.
+func (c *EntityTypeClient) QueryCreatedByService(et *EntityType) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := et.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entitytype.Table, entitytype.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.CreatedByServiceTable, entitytype.CreatedByServiceColumn),
+		)
+		schemaConfig := et.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.EntityType
+		fromV = sqlgraph.Neighbors(et.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a EntityType.
+func (c *EntityTypeClient) QueryUpdatedByService(et *EntityType) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := et.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entitytype.Table, entitytype.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entitytype.UpdatedByServiceTable, entitytype.UpdatedByServiceColumn),
+		)
+		schemaConfig := et.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.EntityType
 		fromV = sqlgraph.Neighbors(et.driver.Dialect(), step)
 		return fromV, nil
@@ -4617,18 +4959,18 @@ func (c *EventClient) GetX(ctx context.Context, id string) *Event {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Event.
-func (c *EventClient) QueryCreatedBy(e *Event) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Event.
+func (c *EventClient) QueryCreatedByUser(e *Event) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, event.CreatedByTable, event.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, event.CreatedByUserTable, event.CreatedByUserColumn),
 		)
 		schemaConfig := e.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Event
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
@@ -4636,18 +4978,56 @@ func (c *EventClient) QueryCreatedBy(e *Event) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Event.
-func (c *EventClient) QueryUpdatedBy(e *Event) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Event.
+func (c *EventClient) QueryUpdatedByUser(e *Event) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, event.UpdatedByTable, event.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, event.UpdatedByUserTable, event.UpdatedByUserColumn),
 		)
 		schemaConfig := e.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Event.
+func (c *EventClient) QueryCreatedByService(e *Event) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, event.CreatedByServiceTable, event.CreatedByServiceColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Event.
+func (c *EventClient) QueryUpdatedByService(e *Event) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, event.UpdatedByServiceTable, event.UpdatedByServiceColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Event
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
@@ -4872,7 +5252,8 @@ func (c *EventClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *EventClient) Interceptors() []Interceptor {
-	return c.inters.Event
+	inters := c.inters.Event
+	return append(inters[:len(inters):len(inters)], event.Interceptors[:]...)
 }
 
 func (c *EventClient) mutate(ctx context.Context, m *EventMutation) (Value, error) {
@@ -5131,18 +5512,18 @@ func (c *FileClient) GetX(ctx context.Context, id string) *File {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a File.
-func (c *FileClient) QueryCreatedBy(f *File) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a File.
+func (c *FileClient) QueryCreatedByUser(f *File) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := f.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, file.CreatedByTable, file.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.CreatedByUserTable, file.CreatedByUserColumn),
 		)
 		schemaConfig := f.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.File
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
@@ -5150,18 +5531,56 @@ func (c *FileClient) QueryCreatedBy(f *File) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a File.
-func (c *FileClient) QueryUpdatedBy(f *File) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a File.
+func (c *FileClient) QueryUpdatedByUser(f *File) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := f.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, file.UpdatedByTable, file.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.UpdatedByUserTable, file.UpdatedByUserColumn),
 		)
 		schemaConfig := f.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a File.
+func (c *FileClient) QueryCreatedByService(f *File) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.CreatedByServiceTable, file.CreatedByServiceColumn),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a File.
+func (c *FileClient) QueryUpdatedByService(f *File) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.UpdatedByServiceTable, file.UpdatedByServiceColumn),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.File
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
@@ -5648,18 +6067,18 @@ func (c *GroupClient) GetX(ctx context.Context, id string) *Group {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Group.
-func (c *GroupClient) QueryCreatedBy(gr *Group) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Group.
+func (c *GroupClient) QueryCreatedByUser(gr *Group) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := gr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, group.CreatedByTable, group.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, group.CreatedByUserTable, group.CreatedByUserColumn),
 		)
 		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
 		return fromV, nil
@@ -5667,18 +6086,56 @@ func (c *GroupClient) QueryCreatedBy(gr *Group) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Group.
-func (c *GroupClient) QueryUpdatedBy(gr *Group) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Group.
+func (c *GroupClient) QueryUpdatedByUser(gr *Group) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := gr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, group.UpdatedByTable, group.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, group.UpdatedByUserTable, group.UpdatedByUserColumn),
 		)
 		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Group.
+func (c *GroupClient) QueryCreatedByService(gr *Group) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, group.CreatedByServiceTable, group.CreatedByServiceColumn),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Group.
+func (c *GroupClient) QueryUpdatedByService(gr *Group) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, group.UpdatedByServiceTable, group.UpdatedByServiceColumn),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Group
 		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
 		return fromV, nil
@@ -6640,18 +7097,18 @@ func (c *GroupMembershipClient) GetX(ctx context.Context, id string) *GroupMembe
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a GroupMembership.
-func (c *GroupMembershipClient) QueryCreatedBy(gm *GroupMembership) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a GroupMembership.
+func (c *GroupMembershipClient) QueryCreatedByUser(gm *GroupMembership) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := gm.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(groupmembership.Table, groupmembership.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.CreatedByTable, groupmembership.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.CreatedByUserTable, groupmembership.CreatedByUserColumn),
 		)
 		schemaConfig := gm.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.GroupMembership
 		fromV = sqlgraph.Neighbors(gm.driver.Dialect(), step)
 		return fromV, nil
@@ -6659,18 +7116,56 @@ func (c *GroupMembershipClient) QueryCreatedBy(gm *GroupMembership) *ChangeActor
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a GroupMembership.
-func (c *GroupMembershipClient) QueryUpdatedBy(gm *GroupMembership) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a GroupMembership.
+func (c *GroupMembershipClient) QueryUpdatedByUser(gm *GroupMembership) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := gm.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(groupmembership.Table, groupmembership.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.UpdatedByTable, groupmembership.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.UpdatedByUserTable, groupmembership.UpdatedByUserColumn),
 		)
 		schemaConfig := gm.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.GroupMembership
+		fromV = sqlgraph.Neighbors(gm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a GroupMembership.
+func (c *GroupMembershipClient) QueryCreatedByService(gm *GroupMembership) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupmembership.Table, groupmembership.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.CreatedByServiceTable, groupmembership.CreatedByServiceColumn),
+		)
+		schemaConfig := gm.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.GroupMembership
+		fromV = sqlgraph.Neighbors(gm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a GroupMembership.
+func (c *GroupMembershipClient) QueryUpdatedByService(gm *GroupMembership) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupmembership.Table, groupmembership.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.UpdatedByServiceTable, groupmembership.UpdatedByServiceColumn),
+		)
+		schemaConfig := gm.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.GroupMembership
 		fromV = sqlgraph.Neighbors(gm.driver.Dialect(), step)
 		return fromV, nil
@@ -7005,18 +7500,18 @@ func (c *GroupSettingClient) GetX(ctx context.Context, id string) *GroupSetting 
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a GroupSetting.
-func (c *GroupSettingClient) QueryCreatedBy(gs *GroupSetting) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a GroupSetting.
+func (c *GroupSettingClient) QueryCreatedByUser(gs *GroupSetting) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := gs.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.CreatedByTable, groupsetting.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.CreatedByUserTable, groupsetting.CreatedByUserColumn),
 		)
 		schemaConfig := gs.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.GroupSetting
 		fromV = sqlgraph.Neighbors(gs.driver.Dialect(), step)
 		return fromV, nil
@@ -7024,18 +7519,56 @@ func (c *GroupSettingClient) QueryCreatedBy(gs *GroupSetting) *ChangeActorQuery 
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a GroupSetting.
-func (c *GroupSettingClient) QueryUpdatedBy(gs *GroupSetting) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a GroupSetting.
+func (c *GroupSettingClient) QueryUpdatedByUser(gs *GroupSetting) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := gs.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.UpdatedByTable, groupsetting.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.UpdatedByUserTable, groupsetting.UpdatedByUserColumn),
 		)
 		schemaConfig := gs.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.GroupSetting
+		fromV = sqlgraph.Neighbors(gs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a GroupSetting.
+func (c *GroupSettingClient) QueryCreatedByService(gs *GroupSetting) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.CreatedByServiceTable, groupsetting.CreatedByServiceColumn),
+		)
+		schemaConfig := gs.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.GroupSetting
+		fromV = sqlgraph.Neighbors(gs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a GroupSetting.
+func (c *GroupSettingClient) QueryUpdatedByService(gs *GroupSetting) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.UpdatedByServiceTable, groupsetting.UpdatedByServiceColumn),
+		)
+		schemaConfig := gs.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.GroupSetting
 		fromV = sqlgraph.Neighbors(gs.driver.Dialect(), step)
 		return fromV, nil
@@ -7332,18 +7865,18 @@ func (c *HushClient) GetX(ctx context.Context, id string) *Hush {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Hush.
-func (c *HushClient) QueryCreatedBy(h *Hush) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Hush.
+func (c *HushClient) QueryCreatedByUser(h *Hush) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := h.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(hush.Table, hush.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, hush.CreatedByTable, hush.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.CreatedByUserTable, hush.CreatedByUserColumn),
 		)
 		schemaConfig := h.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Hush
 		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
 		return fromV, nil
@@ -7351,18 +7884,56 @@ func (c *HushClient) QueryCreatedBy(h *Hush) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Hush.
-func (c *HushClient) QueryUpdatedBy(h *Hush) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Hush.
+func (c *HushClient) QueryUpdatedByUser(h *Hush) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := h.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(hush.Table, hush.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, hush.UpdatedByTable, hush.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.UpdatedByUserTable, hush.UpdatedByUserColumn),
 		)
 		schemaConfig := h.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Hush
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Hush.
+func (c *HushClient) QueryCreatedByService(h *Hush) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.CreatedByServiceTable, hush.CreatedByServiceColumn),
+		)
+		schemaConfig := h.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Hush
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Hush.
+func (c *HushClient) QueryUpdatedByService(h *Hush) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, hush.UpdatedByServiceTable, hush.UpdatedByServiceColumn),
+		)
+		schemaConfig := h.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Hush
 		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
 		return fromV, nil
@@ -7695,18 +8266,18 @@ func (c *IntegrationClient) GetX(ctx context.Context, id string) *Integration {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Integration.
-func (c *IntegrationClient) QueryCreatedBy(i *Integration) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Integration.
+func (c *IntegrationClient) QueryCreatedByUser(i *Integration) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := i.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integration.Table, integration.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integration.CreatedByTable, integration.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integration.CreatedByUserTable, integration.CreatedByUserColumn),
 		)
 		schemaConfig := i.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Integration
 		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
 		return fromV, nil
@@ -7714,18 +8285,56 @@ func (c *IntegrationClient) QueryCreatedBy(i *Integration) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Integration.
-func (c *IntegrationClient) QueryUpdatedBy(i *Integration) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Integration.
+func (c *IntegrationClient) QueryUpdatedByUser(i *Integration) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := i.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integration.Table, integration.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integration.UpdatedByTable, integration.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integration.UpdatedByUserTable, integration.UpdatedByUserColumn),
 		)
 		schemaConfig := i.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Integration
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Integration.
+func (c *IntegrationClient) QueryCreatedByService(i *Integration) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integration.CreatedByServiceTable, integration.CreatedByServiceColumn),
+		)
+		schemaConfig := i.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Integration
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Integration.
+func (c *IntegrationClient) QueryUpdatedByService(i *Integration) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integration.UpdatedByServiceTable, integration.UpdatedByServiceColumn),
+		)
+		schemaConfig := i.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Integration
 		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
 		return fromV, nil
@@ -8060,18 +8669,18 @@ func (c *InternalPolicyClient) GetX(ctx context.Context, id string) *InternalPol
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a InternalPolicy.
-func (c *InternalPolicyClient) QueryCreatedBy(ip *InternalPolicy) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryCreatedByUser(ip *InternalPolicy) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ip.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.CreatedByTable, internalpolicy.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.CreatedByUserTable, internalpolicy.CreatedByUserColumn),
 		)
 		schemaConfig := ip.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
 		return fromV, nil
@@ -8079,18 +8688,56 @@ func (c *InternalPolicyClient) QueryCreatedBy(ip *InternalPolicy) *ChangeActorQu
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a InternalPolicy.
-func (c *InternalPolicyClient) QueryUpdatedBy(ip *InternalPolicy) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryUpdatedByUser(ip *InternalPolicy) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ip.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.UpdatedByTable, internalpolicy.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.UpdatedByUserTable, internalpolicy.UpdatedByUserColumn),
 		)
 		schemaConfig := ip.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryCreatedByService(ip *InternalPolicy) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ip.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.CreatedByServiceTable, internalpolicy.CreatedByServiceColumn),
+		)
+		schemaConfig := ip.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryUpdatedByService(ip *InternalPolicy) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ip.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.UpdatedByServiceTable, internalpolicy.UpdatedByServiceColumn),
+		)
+		schemaConfig := ip.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
 		return fromV, nil
@@ -8539,18 +9186,18 @@ func (c *InviteClient) GetX(ctx context.Context, id string) *Invite {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Invite.
-func (c *InviteClient) QueryCreatedBy(i *Invite) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Invite.
+func (c *InviteClient) QueryCreatedByUser(i *Invite) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := i.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(invite.Table, invite.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, invite.CreatedByTable, invite.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, invite.CreatedByUserTable, invite.CreatedByUserColumn),
 		)
 		schemaConfig := i.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Invite
 		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
 		return fromV, nil
@@ -8558,18 +9205,56 @@ func (c *InviteClient) QueryCreatedBy(i *Invite) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Invite.
-func (c *InviteClient) QueryUpdatedBy(i *Invite) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Invite.
+func (c *InviteClient) QueryUpdatedByUser(i *Invite) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := i.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(invite.Table, invite.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, invite.UpdatedByTable, invite.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, invite.UpdatedByUserTable, invite.UpdatedByUserColumn),
 		)
 		schemaConfig := i.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Invite
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Invite.
+func (c *InviteClient) QueryCreatedByService(i *Invite) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(invite.Table, invite.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, invite.CreatedByServiceTable, invite.CreatedByServiceColumn),
+		)
+		schemaConfig := i.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Invite
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Invite.
+func (c *InviteClient) QueryUpdatedByService(i *Invite) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(invite.Table, invite.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, invite.UpdatedByServiceTable, invite.UpdatedByServiceColumn),
+		)
+		schemaConfig := i.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Invite
 		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
 		return fromV, nil
@@ -8750,18 +9435,18 @@ func (c *NarrativeClient) GetX(ctx context.Context, id string) *Narrative {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Narrative.
-func (c *NarrativeClient) QueryCreatedBy(n *Narrative) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Narrative.
+func (c *NarrativeClient) QueryCreatedByUser(n *Narrative) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := n.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, narrative.CreatedByTable, narrative.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, narrative.CreatedByUserTable, narrative.CreatedByUserColumn),
 		)
 		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Narrative
 		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
 		return fromV, nil
@@ -8769,18 +9454,56 @@ func (c *NarrativeClient) QueryCreatedBy(n *Narrative) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Narrative.
-func (c *NarrativeClient) QueryUpdatedBy(n *Narrative) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Narrative.
+func (c *NarrativeClient) QueryUpdatedByUser(n *Narrative) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := n.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, narrative.UpdatedByTable, narrative.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, narrative.UpdatedByUserTable, narrative.UpdatedByUserColumn),
 		)
 		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Narrative
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Narrative.
+func (c *NarrativeClient) QueryCreatedByService(n *Narrative) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, narrative.CreatedByServiceTable, narrative.CreatedByServiceColumn),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Narrative
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Narrative.
+func (c *NarrativeClient) QueryUpdatedByService(n *Narrative) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, narrative.UpdatedByServiceTable, narrative.UpdatedByServiceColumn),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Narrative
 		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
 		return fromV, nil
@@ -9229,18 +9952,18 @@ func (c *NoteClient) GetX(ctx context.Context, id string) *Note {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Note.
-func (c *NoteClient) QueryCreatedBy(n *Note) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Note.
+func (c *NoteClient) QueryCreatedByUser(n *Note) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := n.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, note.CreatedByTable, note.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.CreatedByUserTable, note.CreatedByUserColumn),
 		)
 		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
 		return fromV, nil
@@ -9248,18 +9971,56 @@ func (c *NoteClient) QueryCreatedBy(n *Note) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Note.
-func (c *NoteClient) QueryUpdatedBy(n *Note) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Note.
+func (c *NoteClient) QueryUpdatedByUser(n *Note) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := n.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, note.UpdatedByTable, note.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.UpdatedByUserTable, note.UpdatedByUserColumn),
 		)
 		schemaConfig := n.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Note.
+func (c *NoteClient) QueryCreatedByService(n *Note) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.CreatedByServiceTable, note.CreatedByServiceColumn),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Note.
+func (c *NoteClient) QueryUpdatedByService(n *Note) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.UpdatedByServiceTable, note.UpdatedByServiceColumn),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
 		return fromV, nil
@@ -9613,18 +10374,18 @@ func (c *OrgMembershipClient) GetX(ctx context.Context, id string) *OrgMembershi
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a OrgMembership.
-func (c *OrgMembershipClient) QueryCreatedBy(om *OrgMembership) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a OrgMembership.
+func (c *OrgMembershipClient) QueryCreatedByUser(om *OrgMembership) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := om.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgmembership.Table, orgmembership.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.CreatedByTable, orgmembership.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.CreatedByUserTable, orgmembership.CreatedByUserColumn),
 		)
 		schemaConfig := om.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrgMembership
 		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
 		return fromV, nil
@@ -9632,18 +10393,56 @@ func (c *OrgMembershipClient) QueryCreatedBy(om *OrgMembership) *ChangeActorQuer
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a OrgMembership.
-func (c *OrgMembershipClient) QueryUpdatedBy(om *OrgMembership) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a OrgMembership.
+func (c *OrgMembershipClient) QueryUpdatedByUser(om *OrgMembership) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := om.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgmembership.Table, orgmembership.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.UpdatedByTable, orgmembership.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.UpdatedByUserTable, orgmembership.UpdatedByUserColumn),
 		)
 		schemaConfig := om.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.OrgMembership
+		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a OrgMembership.
+func (c *OrgMembershipClient) QueryCreatedByService(om *OrgMembership) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := om.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmembership.Table, orgmembership.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.CreatedByServiceTable, orgmembership.CreatedByServiceColumn),
+		)
+		schemaConfig := om.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.OrgMembership
+		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a OrgMembership.
+func (c *OrgMembershipClient) QueryUpdatedByService(om *OrgMembership) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := om.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmembership.Table, orgmembership.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.UpdatedByServiceTable, orgmembership.UpdatedByServiceColumn),
+		)
+		schemaConfig := om.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.OrgMembership
 		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
 		return fromV, nil
@@ -9978,18 +10777,18 @@ func (c *OrgSubscriptionClient) GetX(ctx context.Context, id string) *OrgSubscri
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a OrgSubscription.
-func (c *OrgSubscriptionClient) QueryCreatedBy(os *OrgSubscription) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryCreatedByUser(os *OrgSubscription) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := os.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.CreatedByTable, orgsubscription.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.CreatedByUserTable, orgsubscription.CreatedByUserColumn),
 		)
 		schemaConfig := os.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
@@ -9997,18 +10796,56 @@ func (c *OrgSubscriptionClient) QueryCreatedBy(os *OrgSubscription) *ChangeActor
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a OrgSubscription.
-func (c *OrgSubscriptionClient) QueryUpdatedBy(os *OrgSubscription) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryUpdatedByUser(os *OrgSubscription) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := os.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.UpdatedByTable, orgsubscription.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.UpdatedByUserTable, orgsubscription.UpdatedByUserColumn),
 		)
 		schemaConfig := os.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryCreatedByService(os *OrgSubscription) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.CreatedByServiceTable, orgsubscription.CreatedByServiceColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryUpdatedByService(os *OrgSubscription) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.UpdatedByServiceTable, orgsubscription.UpdatedByServiceColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
@@ -10303,18 +11140,18 @@ func (c *OrganizationClient) GetX(ctx context.Context, id string) *Organization 
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Organization.
-func (c *OrganizationClient) QueryCreatedBy(o *Organization) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Organization.
+func (c *OrganizationClient) QueryCreatedByUser(o *Organization) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := o.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, organization.CreatedByTable, organization.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organization.CreatedByUserTable, organization.CreatedByUserColumn),
 		)
 		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Organization
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
@@ -10322,18 +11159,56 @@ func (c *OrganizationClient) QueryCreatedBy(o *Organization) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Organization.
-func (c *OrganizationClient) QueryUpdatedBy(o *Organization) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Organization.
+func (c *OrganizationClient) QueryUpdatedByUser(o *Organization) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := o.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, organization.UpdatedByTable, organization.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organization.UpdatedByUserTable, organization.UpdatedByUserColumn),
 		)
 		schemaConfig := o.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Organization
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Organization.
+func (c *OrganizationClient) QueryCreatedByService(o *Organization) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organization.CreatedByServiceTable, organization.CreatedByServiceColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Organization
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Organization.
+func (c *OrganizationClient) QueryUpdatedByService(o *Organization) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organization.UpdatedByServiceTable, organization.UpdatedByServiceColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Organization
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
@@ -11352,18 +12227,18 @@ func (c *OrganizationSettingClient) GetX(ctx context.Context, id string) *Organi
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a OrganizationSetting.
-func (c *OrganizationSettingClient) QueryCreatedBy(os *OrganizationSetting) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a OrganizationSetting.
+func (c *OrganizationSettingClient) QueryCreatedByUser(os *OrganizationSetting) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := os.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.CreatedByTable, organizationsetting.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.CreatedByUserTable, organizationsetting.CreatedByUserColumn),
 		)
 		schemaConfig := os.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrganizationSetting
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
@@ -11371,18 +12246,56 @@ func (c *OrganizationSettingClient) QueryCreatedBy(os *OrganizationSetting) *Cha
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a OrganizationSetting.
-func (c *OrganizationSettingClient) QueryUpdatedBy(os *OrganizationSetting) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a OrganizationSetting.
+func (c *OrganizationSettingClient) QueryUpdatedByUser(os *OrganizationSetting) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := os.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.UpdatedByTable, organizationsetting.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.UpdatedByUserTable, organizationsetting.UpdatedByUserColumn),
 		)
 		schemaConfig := os.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.OrganizationSetting
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a OrganizationSetting.
+func (c *OrganizationSettingClient) QueryCreatedByService(os *OrganizationSetting) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.CreatedByServiceTable, organizationsetting.CreatedByServiceColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.OrganizationSetting
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a OrganizationSetting.
+func (c *OrganizationSettingClient) QueryUpdatedByService(os *OrganizationSetting) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.UpdatedByServiceTable, organizationsetting.UpdatedByServiceColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.OrganizationSetting
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
@@ -11698,18 +12611,18 @@ func (c *PasswordResetTokenClient) GetX(ctx context.Context, id string) *Passwor
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a PasswordResetToken.
-func (c *PasswordResetTokenClient) QueryCreatedBy(prt *PasswordResetToken) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a PasswordResetToken.
+func (c *PasswordResetTokenClient) QueryCreatedByUser(prt *PasswordResetToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := prt.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(passwordresettoken.Table, passwordresettoken.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, passwordresettoken.CreatedByTable, passwordresettoken.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passwordresettoken.CreatedByUserTable, passwordresettoken.CreatedByUserColumn),
 		)
 		schemaConfig := prt.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.PasswordResetToken
 		fromV = sqlgraph.Neighbors(prt.driver.Dialect(), step)
 		return fromV, nil
@@ -11717,18 +12630,56 @@ func (c *PasswordResetTokenClient) QueryCreatedBy(prt *PasswordResetToken) *Chan
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a PasswordResetToken.
-func (c *PasswordResetTokenClient) QueryUpdatedBy(prt *PasswordResetToken) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a PasswordResetToken.
+func (c *PasswordResetTokenClient) QueryUpdatedByUser(prt *PasswordResetToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := prt.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(passwordresettoken.Table, passwordresettoken.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, passwordresettoken.UpdatedByTable, passwordresettoken.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passwordresettoken.UpdatedByUserTable, passwordresettoken.UpdatedByUserColumn),
 		)
 		schemaConfig := prt.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.PasswordResetToken
+		fromV = sqlgraph.Neighbors(prt.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a PasswordResetToken.
+func (c *PasswordResetTokenClient) QueryCreatedByService(prt *PasswordResetToken) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := prt.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(passwordresettoken.Table, passwordresettoken.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passwordresettoken.CreatedByServiceTable, passwordresettoken.CreatedByServiceColumn),
+		)
+		schemaConfig := prt.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.PasswordResetToken
+		fromV = sqlgraph.Neighbors(prt.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a PasswordResetToken.
+func (c *PasswordResetTokenClient) QueryUpdatedByService(prt *PasswordResetToken) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := prt.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(passwordresettoken.Table, passwordresettoken.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passwordresettoken.UpdatedByServiceTable, passwordresettoken.UpdatedByServiceColumn),
+		)
+		schemaConfig := prt.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.PasswordResetToken
 		fromV = sqlgraph.Neighbors(prt.driver.Dialect(), step)
 		return fromV, nil
@@ -11890,18 +12841,18 @@ func (c *PersonalAccessTokenClient) GetX(ctx context.Context, id string) *Person
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a PersonalAccessToken.
-func (c *PersonalAccessTokenClient) QueryCreatedBy(pat *PersonalAccessToken) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a PersonalAccessToken.
+func (c *PersonalAccessTokenClient) QueryCreatedByUser(pat *PersonalAccessToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pat.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(personalaccesstoken.Table, personalaccesstoken.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.CreatedByTable, personalaccesstoken.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.CreatedByUserTable, personalaccesstoken.CreatedByUserColumn),
 		)
 		schemaConfig := pat.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.PersonalAccessToken
 		fromV = sqlgraph.Neighbors(pat.driver.Dialect(), step)
 		return fromV, nil
@@ -11909,18 +12860,56 @@ func (c *PersonalAccessTokenClient) QueryCreatedBy(pat *PersonalAccessToken) *Ch
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a PersonalAccessToken.
-func (c *PersonalAccessTokenClient) QueryUpdatedBy(pat *PersonalAccessToken) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a PersonalAccessToken.
+func (c *PersonalAccessTokenClient) QueryUpdatedByUser(pat *PersonalAccessToken) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pat.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(personalaccesstoken.Table, personalaccesstoken.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.UpdatedByTable, personalaccesstoken.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.UpdatedByUserTable, personalaccesstoken.UpdatedByUserColumn),
 		)
 		schemaConfig := pat.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.PersonalAccessToken
+		fromV = sqlgraph.Neighbors(pat.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a PersonalAccessToken.
+func (c *PersonalAccessTokenClient) QueryCreatedByService(pat *PersonalAccessToken) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pat.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalaccesstoken.Table, personalaccesstoken.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.CreatedByServiceTable, personalaccesstoken.CreatedByServiceColumn),
+		)
+		schemaConfig := pat.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.PersonalAccessToken
+		fromV = sqlgraph.Neighbors(pat.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a PersonalAccessToken.
+func (c *PersonalAccessTokenClient) QueryUpdatedByService(pat *PersonalAccessToken) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pat.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalaccesstoken.Table, personalaccesstoken.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.UpdatedByServiceTable, personalaccesstoken.UpdatedByServiceColumn),
+		)
+		schemaConfig := pat.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.PersonalAccessToken
 		fromV = sqlgraph.Neighbors(pat.driver.Dialect(), step)
 		return fromV, nil
@@ -12120,18 +13109,18 @@ func (c *ProcedureClient) GetX(ctx context.Context, id string) *Procedure {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Procedure.
-func (c *ProcedureClient) QueryCreatedBy(pr *Procedure) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Procedure.
+func (c *ProcedureClient) QueryCreatedByUser(pr *Procedure) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(procedure.Table, procedure.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, procedure.CreatedByTable, procedure.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.CreatedByUserTable, procedure.CreatedByUserColumn),
 		)
 		schemaConfig := pr.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Procedure
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
@@ -12139,18 +13128,56 @@ func (c *ProcedureClient) QueryCreatedBy(pr *Procedure) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Procedure.
-func (c *ProcedureClient) QueryUpdatedBy(pr *Procedure) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Procedure.
+func (c *ProcedureClient) QueryUpdatedByUser(pr *Procedure) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(procedure.Table, procedure.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, procedure.UpdatedByTable, procedure.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.UpdatedByUserTable, procedure.UpdatedByUserColumn),
 		)
 		schemaConfig := pr.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Procedure.
+func (c *ProcedureClient) QueryCreatedByService(pr *Procedure) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.CreatedByServiceTable, procedure.CreatedByServiceColumn),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Procedure.
+func (c *ProcedureClient) QueryUpdatedByService(pr *Procedure) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.UpdatedByServiceTable, procedure.UpdatedByServiceColumn),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Procedure
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
@@ -12599,18 +13626,18 @@ func (c *ProgramClient) GetX(ctx context.Context, id string) *Program {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Program.
-func (c *ProgramClient) QueryCreatedBy(pr *Program) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Program.
+func (c *ProgramClient) QueryCreatedByUser(pr *Program) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, program.CreatedByTable, program.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.CreatedByUserTable, program.CreatedByUserColumn),
 		)
 		schemaConfig := pr.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Program
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
@@ -12618,18 +13645,56 @@ func (c *ProgramClient) QueryCreatedBy(pr *Program) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Program.
-func (c *ProgramClient) QueryUpdatedBy(pr *Program) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Program.
+func (c *ProgramClient) QueryUpdatedByUser(pr *Program) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, program.UpdatedByTable, program.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.UpdatedByUserTable, program.UpdatedByUserColumn),
 		)
 		schemaConfig := pr.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Program.
+func (c *ProgramClient) QueryCreatedByService(pr *Program) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.CreatedByServiceTable, program.CreatedByServiceColumn),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Program.
+func (c *ProgramClient) QueryUpdatedByService(pr *Program) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.UpdatedByServiceTable, program.UpdatedByServiceColumn),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Program
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
@@ -13249,18 +14314,18 @@ func (c *ProgramMembershipClient) GetX(ctx context.Context, id string) *ProgramM
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a ProgramMembership.
-func (c *ProgramMembershipClient) QueryCreatedBy(pm *ProgramMembership) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a ProgramMembership.
+func (c *ProgramMembershipClient) QueryCreatedByUser(pm *ProgramMembership) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pm.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(programmembership.Table, programmembership.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.CreatedByTable, programmembership.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.CreatedByUserTable, programmembership.CreatedByUserColumn),
 		)
 		schemaConfig := pm.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromV = sqlgraph.Neighbors(pm.driver.Dialect(), step)
 		return fromV, nil
@@ -13268,18 +14333,56 @@ func (c *ProgramMembershipClient) QueryCreatedBy(pm *ProgramMembership) *ChangeA
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a ProgramMembership.
-func (c *ProgramMembershipClient) QueryUpdatedBy(pm *ProgramMembership) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a ProgramMembership.
+func (c *ProgramMembershipClient) QueryUpdatedByUser(pm *ProgramMembership) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pm.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(programmembership.Table, programmembership.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UpdatedByTable, programmembership.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UpdatedByUserTable, programmembership.UpdatedByUserColumn),
 		)
 		schemaConfig := pm.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromV = sqlgraph.Neighbors(pm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a ProgramMembership.
+func (c *ProgramMembershipClient) QueryCreatedByService(pm *ProgramMembership) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.CreatedByServiceTable, programmembership.CreatedByServiceColumn),
+		)
+		schemaConfig := pm.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromV = sqlgraph.Neighbors(pm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a ProgramMembership.
+func (c *ProgramMembershipClient) QueryUpdatedByService(pm *ProgramMembership) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UpdatedByServiceTable, programmembership.UpdatedByServiceColumn),
+		)
+		schemaConfig := pm.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromV = sqlgraph.Neighbors(pm.driver.Dialect(), step)
 		return fromV, nil
@@ -13595,18 +14698,18 @@ func (c *RiskClient) GetX(ctx context.Context, id string) *Risk {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Risk.
-func (c *RiskClient) QueryCreatedBy(r *Risk) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Risk.
+func (c *RiskClient) QueryCreatedByUser(r *Risk) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := r.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, risk.CreatedByTable, risk.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.CreatedByUserTable, risk.CreatedByUserColumn),
 		)
 		schemaConfig := r.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Risk
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
@@ -13614,18 +14717,56 @@ func (c *RiskClient) QueryCreatedBy(r *Risk) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Risk.
-func (c *RiskClient) QueryUpdatedBy(r *Risk) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Risk.
+func (c *RiskClient) QueryUpdatedByUser(r *Risk) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := r.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, risk.UpdatedByTable, risk.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.UpdatedByUserTable, risk.UpdatedByUserColumn),
 		)
 		schemaConfig := r.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Risk.
+func (c *RiskClient) QueryCreatedByService(r *Risk) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.CreatedByServiceTable, risk.CreatedByServiceColumn),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Risk.
+func (c *RiskClient) QueryUpdatedByService(r *Risk) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.UpdatedByServiceTable, risk.UpdatedByServiceColumn),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Risk
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
@@ -14055,18 +15196,18 @@ func (c *StandardClient) GetX(ctx context.Context, id string) *Standard {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Standard.
-func (c *StandardClient) QueryCreatedBy(s *Standard) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Standard.
+func (c *StandardClient) QueryCreatedByUser(s *Standard) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, standard.CreatedByTable, standard.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.CreatedByUserTable, standard.CreatedByUserColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Standard
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -14074,18 +15215,56 @@ func (c *StandardClient) QueryCreatedBy(s *Standard) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Standard.
-func (c *StandardClient) QueryUpdatedBy(s *Standard) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Standard.
+func (c *StandardClient) QueryUpdatedByUser(s *Standard) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, standard.UpdatedByTable, standard.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.UpdatedByUserTable, standard.UpdatedByUserColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Standard
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Standard.
+func (c *StandardClient) QueryCreatedByService(s *Standard) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.CreatedByServiceTable, standard.CreatedByServiceColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Standard
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Standard.
+func (c *StandardClient) QueryUpdatedByService(s *Standard) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.UpdatedByServiceTable, standard.UpdatedByServiceColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Standard
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -14456,18 +15635,18 @@ func (c *SubcontrolClient) GetX(ctx context.Context, id string) *Subcontrol {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Subcontrol.
-func (c *SubcontrolClient) QueryCreatedBy(s *Subcontrol) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Subcontrol.
+func (c *SubcontrolClient) QueryCreatedByUser(s *Subcontrol) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.CreatedByTable, subcontrol.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.CreatedByUserTable, subcontrol.CreatedByUserColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Subcontrol
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -14475,18 +15654,56 @@ func (c *SubcontrolClient) QueryCreatedBy(s *Subcontrol) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Subcontrol.
-func (c *SubcontrolClient) QueryUpdatedBy(s *Subcontrol) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Subcontrol.
+func (c *SubcontrolClient) QueryUpdatedByUser(s *Subcontrol) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.UpdatedByTable, subcontrol.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.UpdatedByUserTable, subcontrol.UpdatedByUserColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Subcontrol.
+func (c *SubcontrolClient) QueryCreatedByService(s *Subcontrol) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.CreatedByServiceTable, subcontrol.CreatedByServiceColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Subcontrol.
+func (c *SubcontrolClient) QueryUpdatedByService(s *Subcontrol) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.UpdatedByServiceTable, subcontrol.UpdatedByServiceColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Subcontrol
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -14878,18 +16095,18 @@ func (c *SubscriberClient) GetX(ctx context.Context, id string) *Subscriber {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Subscriber.
-func (c *SubscriberClient) QueryCreatedBy(s *Subscriber) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Subscriber.
+func (c *SubscriberClient) QueryCreatedByUser(s *Subscriber) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, subscriber.CreatedByTable, subscriber.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subscriber.CreatedByUserTable, subscriber.CreatedByUserColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Subscriber
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -14897,18 +16114,56 @@ func (c *SubscriberClient) QueryCreatedBy(s *Subscriber) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Subscriber.
-func (c *SubscriberClient) QueryUpdatedBy(s *Subscriber) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Subscriber.
+func (c *SubscriberClient) QueryUpdatedByUser(s *Subscriber) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, subscriber.UpdatedByTable, subscriber.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subscriber.UpdatedByUserTable, subscriber.UpdatedByUserColumn),
 		)
 		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Subscriber.
+func (c *SubscriberClient) QueryCreatedByService(s *Subscriber) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subscriber.CreatedByServiceTable, subscriber.CreatedByServiceColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Subscriber.
+func (c *SubscriberClient) QueryUpdatedByService(s *Subscriber) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subscriber.UpdatedByServiceTable, subscriber.UpdatedByServiceColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Subscriber
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -15089,18 +16344,18 @@ func (c *TFASettingClient) GetX(ctx context.Context, id string) *TFASetting {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a TFASetting.
-func (c *TFASettingClient) QueryCreatedBy(ts *TFASetting) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a TFASetting.
+func (c *TFASettingClient) QueryCreatedByUser(ts *TFASetting) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ts.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tfasetting.Table, tfasetting.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.CreatedByTable, tfasetting.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.CreatedByUserTable, tfasetting.CreatedByUserColumn),
 		)
 		schemaConfig := ts.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.TFASetting
 		fromV = sqlgraph.Neighbors(ts.driver.Dialect(), step)
 		return fromV, nil
@@ -15108,18 +16363,56 @@ func (c *TFASettingClient) QueryCreatedBy(ts *TFASetting) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a TFASetting.
-func (c *TFASettingClient) QueryUpdatedBy(ts *TFASetting) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a TFASetting.
+func (c *TFASettingClient) QueryUpdatedByUser(ts *TFASetting) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ts.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tfasetting.Table, tfasetting.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.UpdatedByTable, tfasetting.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.UpdatedByUserTable, tfasetting.UpdatedByUserColumn),
 		)
 		schemaConfig := ts.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.TFASetting
+		fromV = sqlgraph.Neighbors(ts.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a TFASetting.
+func (c *TFASettingClient) QueryCreatedByService(ts *TFASetting) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ts.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tfasetting.Table, tfasetting.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.CreatedByServiceTable, tfasetting.CreatedByServiceColumn),
+		)
+		schemaConfig := ts.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.TFASetting
+		fromV = sqlgraph.Neighbors(ts.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a TFASetting.
+func (c *TFASettingClient) QueryUpdatedByService(ts *TFASetting) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ts.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tfasetting.Table, tfasetting.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.UpdatedByServiceTable, tfasetting.UpdatedByServiceColumn),
+		)
+		schemaConfig := ts.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.TFASetting
 		fromV = sqlgraph.Neighbors(ts.driver.Dialect(), step)
 		return fromV, nil
@@ -15281,18 +16574,18 @@ func (c *TaskClient) GetX(ctx context.Context, id string) *Task {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Task.
-func (c *TaskClient) QueryCreatedBy(t *Task) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Task.
+func (c *TaskClient) QueryCreatedByUser(t *Task) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, task.CreatedByTable, task.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.CreatedByUserTable, task.CreatedByUserColumn),
 		)
 		schemaConfig := t.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Task
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
@@ -15300,18 +16593,56 @@ func (c *TaskClient) QueryCreatedBy(t *Task) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Task.
-func (c *TaskClient) QueryUpdatedBy(t *Task) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Task.
+func (c *TaskClient) QueryUpdatedByUser(t *Task) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, task.UpdatedByTable, task.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.UpdatedByUserTable, task.UpdatedByUserColumn),
 		)
 		schemaConfig := t.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Task.
+func (c *TaskClient) QueryCreatedByService(t *Task) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.CreatedByServiceTable, task.CreatedByServiceColumn),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Task.
+func (c *TaskClient) QueryUpdatedByService(t *Task) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.UpdatedByServiceTable, task.UpdatedByServiceColumn),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Task
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
@@ -15779,18 +17110,18 @@ func (c *TemplateClient) GetX(ctx context.Context, id string) *Template {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Template.
-func (c *TemplateClient) QueryCreatedBy(t *Template) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Template.
+func (c *TemplateClient) QueryCreatedByUser(t *Template) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(template.Table, template.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, template.CreatedByTable, template.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.CreatedByUserTable, template.CreatedByUserColumn),
 		)
 		schemaConfig := t.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Template
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
@@ -15798,18 +17129,56 @@ func (c *TemplateClient) QueryCreatedBy(t *Template) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Template.
-func (c *TemplateClient) QueryUpdatedBy(t *Template) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Template.
+func (c *TemplateClient) QueryUpdatedByUser(t *Template) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(template.Table, template.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, template.UpdatedByTable, template.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.UpdatedByUserTable, template.UpdatedByUserColumn),
 		)
 		schemaConfig := t.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Template.
+func (c *TemplateClient) QueryCreatedByService(t *Template) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.CreatedByServiceTable, template.CreatedByServiceColumn),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Template.
+func (c *TemplateClient) QueryUpdatedByService(t *Template) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.UpdatedByServiceTable, template.UpdatedByServiceColumn),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Template
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
@@ -16774,18 +18143,18 @@ func (c *UserSettingClient) GetX(ctx context.Context, id string) *UserSetting {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a UserSetting.
-func (c *UserSettingClient) QueryCreatedBy(us *UserSetting) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a UserSetting.
+func (c *UserSettingClient) QueryCreatedByUser(us *UserSetting) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := us.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(usersetting.Table, usersetting.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.CreatedByTable, usersetting.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.CreatedByUserTable, usersetting.CreatedByUserColumn),
 		)
 		schemaConfig := us.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserSetting
 		fromV = sqlgraph.Neighbors(us.driver.Dialect(), step)
 		return fromV, nil
@@ -16793,18 +18162,56 @@ func (c *UserSettingClient) QueryCreatedBy(us *UserSetting) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a UserSetting.
-func (c *UserSettingClient) QueryUpdatedBy(us *UserSetting) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a UserSetting.
+func (c *UserSettingClient) QueryUpdatedByUser(us *UserSetting) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := us.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(usersetting.Table, usersetting.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.UpdatedByTable, usersetting.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.UpdatedByUserTable, usersetting.UpdatedByUserColumn),
 		)
 		schemaConfig := us.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserSetting
+		fromV = sqlgraph.Neighbors(us.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a UserSetting.
+func (c *UserSettingClient) QueryCreatedByService(us *UserSetting) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := us.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usersetting.Table, usersetting.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.CreatedByServiceTable, usersetting.CreatedByServiceColumn),
+		)
+		schemaConfig := us.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.UserSetting
+		fromV = sqlgraph.Neighbors(us.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a UserSetting.
+func (c *UserSettingClient) QueryUpdatedByService(us *UserSetting) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := us.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usersetting.Table, usersetting.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.UpdatedByServiceTable, usersetting.UpdatedByServiceColumn),
+		)
+		schemaConfig := us.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.UserSetting
 		fromV = sqlgraph.Neighbors(us.driver.Dialect(), step)
 		return fromV, nil
@@ -17138,18 +18545,18 @@ func (c *WebauthnClient) GetX(ctx context.Context, id string) *Webauthn {
 	return obj
 }
 
-// QueryCreatedBy queries the created_by edge of a Webauthn.
-func (c *WebauthnClient) QueryCreatedBy(w *Webauthn) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryCreatedByUser queries the created_by_user edge of a Webauthn.
+func (c *WebauthnClient) QueryCreatedByUser(w *Webauthn) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := w.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(webauthn.Table, webauthn.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.CreatedByTable, webauthn.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.CreatedByUserTable, webauthn.CreatedByUserColumn),
 		)
 		schemaConfig := w.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Webauthn
 		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
 		return fromV, nil
@@ -17157,18 +18564,56 @@ func (c *WebauthnClient) QueryCreatedBy(w *Webauthn) *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy queries the updated_by edge of a Webauthn.
-func (c *WebauthnClient) QueryUpdatedBy(w *Webauthn) *ChangeActorQuery {
-	query := (&ChangeActorClient{config: c.config}).Query()
+// QueryUpdatedByUser queries the updated_by_user edge of a Webauthn.
+func (c *WebauthnClient) QueryUpdatedByUser(w *Webauthn) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := w.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(webauthn.Table, webauthn.FieldID, id),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.UpdatedByTable, webauthn.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.UpdatedByUserTable, webauthn.UpdatedByUserColumn),
 		)
 		schemaConfig := w.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Webauthn
+		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCreatedByService queries the created_by_service edge of a Webauthn.
+func (c *WebauthnClient) QueryCreatedByService(w *Webauthn) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := w.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webauthn.Table, webauthn.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.CreatedByServiceTable, webauthn.CreatedByServiceColumn),
+		)
+		schemaConfig := w.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Webauthn
+		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService queries the updated_by_service edge of a Webauthn.
+func (c *WebauthnClient) QueryUpdatedByService(w *Webauthn) *APITokenQuery {
+	query := (&APITokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := w.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webauthn.Table, webauthn.FieldID, id),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webauthn.UpdatedByServiceTable, webauthn.UpdatedByServiceColumn),
+		)
+		schemaConfig := w.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Webauthn
 		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
 		return fromV, nil

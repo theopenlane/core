@@ -10,10 +10,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Program is the model entity for the Program schema.
@@ -29,6 +31,14 @@ type Program struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -59,14 +69,23 @@ type Program struct {
 	// The values are being populated by the ProgramQuery when eager-loading is set.
 	Edges        ProgramEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // ProgramEdges holds the relations/edges for other nodes in the graph.
 type ProgramEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -105,9 +124,9 @@ type ProgramEdges struct {
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [22]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -128,26 +147,48 @@ type ProgramEdges struct {
 	namedMembers           map[string][]*ProgramMembership
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ProgramEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e ProgramEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ProgramEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e ProgramEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProgramEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProgramEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -155,7 +196,7 @@ func (e ProgramEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e ProgramEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -164,7 +205,7 @@ func (e ProgramEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -173,7 +214,7 @@ func (e ProgramEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -182,7 +223,7 @@ func (e ProgramEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -191,7 +232,7 @@ func (e ProgramEdges) ViewersOrErr() ([]*Group, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -200,7 +241,7 @@ func (e ProgramEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -209,7 +250,7 @@ func (e ProgramEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -218,7 +259,7 @@ func (e ProgramEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -227,7 +268,7 @@ func (e ProgramEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -236,7 +277,7 @@ func (e ProgramEdges) ProceduresOrErr() ([]*Procedure, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -245,7 +286,7 @@ func (e ProgramEdges) RisksOrErr() ([]*Risk, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -254,7 +295,7 @@ func (e ProgramEdges) TasksOrErr() ([]*Task, error) {
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) NotesOrErr() ([]*Note, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.Notes, nil
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -263,7 +304,7 @@ func (e ProgramEdges) NotesOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[16] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -272,7 +313,7 @@ func (e ProgramEdges) FilesOrErr() ([]*File, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[17] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -281,7 +322,7 @@ func (e ProgramEdges) NarrativesOrErr() ([]*Narrative, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[18] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -290,7 +331,7 @@ func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // StandardsOrErr returns the Standards value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) StandardsOrErr() ([]*Standard, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[19] {
 		return e.Standards, nil
 	}
 	return nil, &NotLoadedError{edge: "standards"}
@@ -299,7 +340,7 @@ func (e ProgramEdges) StandardsOrErr() ([]*Standard, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[20] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -308,7 +349,7 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[21] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -323,7 +364,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedByID, program.FieldUpdatedByID, program.FieldMappingID, program.FieldDeletedByID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
+		case program.FieldID, program.FieldCreatedByID, program.FieldUpdatedByID, program.FieldCreatedByUserID, program.FieldUpdatedByUserID, program.FieldCreatedByServiceID, program.FieldUpdatedByServiceID, program.FieldMappingID, program.FieldDeletedByID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -371,6 +412,30 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				pr.UpdatedByID = value.String
+			}
+		case program.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				pr.CreatedByUserID = value.String
+			}
+		case program.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				pr.UpdatedByUserID = value.String
+			}
+		case program.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				pr.CreatedByServiceID = value.String
+			}
+		case program.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				pr.UpdatedByServiceID = value.String
 			}
 		case program.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -465,14 +530,24 @@ func (pr *Program) Value(name string) (ent.Value, error) {
 	return pr.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the Program entity.
-func (pr *Program) QueryCreatedBy() *ChangeActorQuery {
-	return NewProgramClient(pr.config).QueryCreatedBy(pr)
+// QueryCreatedByUser queries the "created_by_user" edge of the Program entity.
+func (pr *Program) QueryCreatedByUser() *UserQuery {
+	return NewProgramClient(pr.config).QueryCreatedByUser(pr)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the Program entity.
-func (pr *Program) QueryUpdatedBy() *ChangeActorQuery {
-	return NewProgramClient(pr.config).QueryUpdatedBy(pr)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the Program entity.
+func (pr *Program) QueryUpdatedByUser() *UserQuery {
+	return NewProgramClient(pr.config).QueryUpdatedByUser(pr)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the Program entity.
+func (pr *Program) QueryCreatedByService() *APITokenQuery {
+	return NewProgramClient(pr.config).QueryCreatedByService(pr)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the Program entity.
+func (pr *Program) QueryUpdatedByService() *APITokenQuery {
+	return NewProgramClient(pr.config).QueryUpdatedByService(pr)
 }
 
 // QueryOwner queries the "owner" edge of the Program entity.
@@ -599,6 +674,18 @@ func (pr *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(pr.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(pr.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(pr.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(pr.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(pr.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(pr.MappingID)

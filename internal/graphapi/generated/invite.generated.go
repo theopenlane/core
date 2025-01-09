@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Invite_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Invite_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Invite_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Invite_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Invite_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Invite_deletedAt(ctx, field)
 			case "deletedByID":
@@ -93,10 +101,14 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Invite_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Invite_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Invite_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Invite_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -157,6 +169,14 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Invite_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Invite_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Invite_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Invite_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Invite_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Invite_deletedAt(ctx, field)
 			case "deletedByID":
@@ -175,10 +195,14 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Invite_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Invite_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Invite_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Invite_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
@@ -283,6 +307,14 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Invite_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Invite_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Invite_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Invite_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Invite_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Invite_deletedAt(ctx, field)
 			case "deletedByID":
@@ -301,10 +333,14 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
 			case "requestorID":
 				return ec.fieldContext_Invite_requestorID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Invite_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Invite_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Invite_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Invite_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":

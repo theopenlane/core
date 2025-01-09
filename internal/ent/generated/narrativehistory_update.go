@@ -64,6 +64,46 @@ func (nhu *NarrativeHistoryUpdate) ClearUpdatedByID() *NarrativeHistoryUpdate {
 	return nhu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nhu *NarrativeHistoryUpdate) SetUpdatedByUserID(s string) *NarrativeHistoryUpdate {
+	nhu.mutation.SetUpdatedByUserID(s)
+	return nhu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nhu *NarrativeHistoryUpdate) SetNillableUpdatedByUserID(s *string) *NarrativeHistoryUpdate {
+	if s != nil {
+		nhu.SetUpdatedByUserID(*s)
+	}
+	return nhu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (nhu *NarrativeHistoryUpdate) ClearUpdatedByUserID() *NarrativeHistoryUpdate {
+	nhu.mutation.ClearUpdatedByUserID()
+	return nhu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nhu *NarrativeHistoryUpdate) SetUpdatedByServiceID(s string) *NarrativeHistoryUpdate {
+	nhu.mutation.SetUpdatedByServiceID(s)
+	return nhu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nhu *NarrativeHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *NarrativeHistoryUpdate {
+	if s != nil {
+		nhu.SetUpdatedByServiceID(*s)
+	}
+	return nhu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (nhu *NarrativeHistoryUpdate) ClearUpdatedByServiceID() *NarrativeHistoryUpdate {
+	nhu.mutation.ClearUpdatedByServiceID()
+	return nhu
+}
+
 // SetTags sets the "tags" field.
 func (nhu *NarrativeHistoryUpdate) SetTags(s []string) *NarrativeHistoryUpdate {
 	nhu.mutation.SetTags(s)
@@ -248,6 +288,24 @@ func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if nhu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(narrativehistory.FieldUpdatedByID, field.TypeString)
 	}
+	if nhu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(narrativehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := nhu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if nhu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(narrativehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if nhu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(narrativehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := nhu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if nhu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(narrativehistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if nhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -342,6 +400,46 @@ func (nhuo *NarrativeHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Narrat
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (nhuo *NarrativeHistoryUpdateOne) ClearUpdatedByID() *NarrativeHistoryUpdateOne {
 	nhuo.mutation.ClearUpdatedByID()
+	return nhuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nhuo *NarrativeHistoryUpdateOne) SetUpdatedByUserID(s string) *NarrativeHistoryUpdateOne {
+	nhuo.mutation.SetUpdatedByUserID(s)
+	return nhuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nhuo *NarrativeHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *NarrativeHistoryUpdateOne {
+	if s != nil {
+		nhuo.SetUpdatedByUserID(*s)
+	}
+	return nhuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (nhuo *NarrativeHistoryUpdateOne) ClearUpdatedByUserID() *NarrativeHistoryUpdateOne {
+	nhuo.mutation.ClearUpdatedByUserID()
+	return nhuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nhuo *NarrativeHistoryUpdateOne) SetUpdatedByServiceID(s string) *NarrativeHistoryUpdateOne {
+	nhuo.mutation.SetUpdatedByServiceID(s)
+	return nhuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nhuo *NarrativeHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *NarrativeHistoryUpdateOne {
+	if s != nil {
+		nhuo.SetUpdatedByServiceID(*s)
+	}
+	return nhuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (nhuo *NarrativeHistoryUpdateOne) ClearUpdatedByServiceID() *NarrativeHistoryUpdateOne {
+	nhuo.mutation.ClearUpdatedByServiceID()
 	return nhuo
 }
 
@@ -558,6 +656,24 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 	}
 	if nhuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(narrativehistory.FieldUpdatedByID, field.TypeString)
+	}
+	if nhuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(narrativehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := nhuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if nhuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(narrativehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if nhuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(narrativehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := nhuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if nhuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(narrativehistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if nhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldDeletedAt, field.TypeTime)

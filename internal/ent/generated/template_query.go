@@ -13,12 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -26,19 +27,21 @@ import (
 // TemplateQuery is the builder for querying Template entities.
 type TemplateQuery struct {
 	config
-	ctx                *QueryContext
-	order              []template.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Template
-	withCreatedBy      *ChangeActorQuery
-	withUpdatedBy      *ChangeActorQuery
-	withOwner          *OrganizationQuery
-	withDocuments      *DocumentDataQuery
-	withFiles          *FileQuery
-	loadTotal          []func(context.Context, []*Template) error
-	modifiers          []func(*sql.Selector)
-	withNamedDocuments map[string]*DocumentDataQuery
-	withNamedFiles     map[string]*FileQuery
+	ctx                  *QueryContext
+	order                []template.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Template
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOwner            *OrganizationQuery
+	withDocuments        *DocumentDataQuery
+	withFiles            *FileQuery
+	loadTotal            []func(context.Context, []*Template) error
+	modifiers            []func(*sql.Selector)
+	withNamedDocuments   map[string]*DocumentDataQuery
+	withNamedFiles       map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -75,9 +78,9 @@ func (tq *TemplateQuery) Order(o ...template.OrderOption) *TemplateQuery {
 	return tq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (tq *TemplateQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: tq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (tq *TemplateQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -88,11 +91,11 @@ func (tq *TemplateQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(template.Table, template.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, template.CreatedByTable, template.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.CreatedByUserTable, template.CreatedByUserColumn),
 		)
 		schemaConfig := tq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Template
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -100,9 +103,9 @@ func (tq *TemplateQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (tq *TemplateQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: tq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (tq *TemplateQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -113,11 +116,61 @@ func (tq *TemplateQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(template.Table, template.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, template.UpdatedByTable, template.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.UpdatedByUserTable, template.UpdatedByUserColumn),
 		)
 		schemaConfig := tq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Template
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (tq *TemplateQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.CreatedByServiceTable, template.CreatedByServiceColumn),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Template
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (tq *TemplateQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, template.UpdatedByServiceTable, template.UpdatedByServiceColumn),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Template
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -387,16 +440,18 @@ func (tq *TemplateQuery) Clone() *TemplateQuery {
 		return nil
 	}
 	return &TemplateQuery{
-		config:        tq.config,
-		ctx:           tq.ctx.Clone(),
-		order:         append([]template.OrderOption{}, tq.order...),
-		inters:        append([]Interceptor{}, tq.inters...),
-		predicates:    append([]predicate.Template{}, tq.predicates...),
-		withCreatedBy: tq.withCreatedBy.Clone(),
-		withUpdatedBy: tq.withUpdatedBy.Clone(),
-		withOwner:     tq.withOwner.Clone(),
-		withDocuments: tq.withDocuments.Clone(),
-		withFiles:     tq.withFiles.Clone(),
+		config:               tq.config,
+		ctx:                  tq.ctx.Clone(),
+		order:                append([]template.OrderOption{}, tq.order...),
+		inters:               append([]Interceptor{}, tq.inters...),
+		predicates:           append([]predicate.Template{}, tq.predicates...),
+		withCreatedByUser:    tq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    tq.withUpdatedByUser.Clone(),
+		withCreatedByService: tq.withCreatedByService.Clone(),
+		withUpdatedByService: tq.withUpdatedByService.Clone(),
+		withOwner:            tq.withOwner.Clone(),
+		withDocuments:        tq.withDocuments.Clone(),
+		withFiles:            tq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       tq.sql.Clone(),
 		path:      tq.path,
@@ -404,25 +459,47 @@ func (tq *TemplateQuery) Clone() *TemplateQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TemplateQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *TemplateQuery {
-	query := (&ChangeActorClient{config: tq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TemplateQuery) WithCreatedByUser(opts ...func(*UserQuery)) *TemplateQuery {
+	query := (&UserClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withCreatedBy = query
+	tq.withCreatedByUser = query
 	return tq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TemplateQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *TemplateQuery {
-	query := (&ChangeActorClient{config: tq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TemplateQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *TemplateQuery {
+	query := (&UserClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withUpdatedBy = query
+	tq.withUpdatedByUser = query
+	return tq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TemplateQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *TemplateQuery {
+	query := (&APITokenClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withCreatedByService = query
+	return tq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TemplateQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *TemplateQuery {
+	query := (&APITokenClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withUpdatedByService = query
 	return tq
 }
 
@@ -543,9 +620,11 @@ func (tq *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	var (
 		nodes       = []*Template{}
 		_spec       = tq.querySpec()
-		loadedTypes = [5]bool{
-			tq.withCreatedBy != nil,
-			tq.withUpdatedBy != nil,
+		loadedTypes = [7]bool{
+			tq.withCreatedByUser != nil,
+			tq.withUpdatedByUser != nil,
+			tq.withCreatedByService != nil,
+			tq.withUpdatedByService != nil,
 			tq.withOwner != nil,
 			tq.withDocuments != nil,
 			tq.withFiles != nil,
@@ -574,15 +653,27 @@ func (tq *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tq.withCreatedBy; query != nil {
-		if err := tq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Template, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := tq.withCreatedByUser; query != nil {
+		if err := tq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Template, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withUpdatedBy; query != nil {
-		if err := tq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Template, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := tq.withUpdatedByUser; query != nil {
+		if err := tq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Template, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withCreatedByService; query != nil {
+		if err := tq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Template, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withUpdatedByService; query != nil {
+		if err := tq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Template, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -628,11 +719,11 @@ func (tq *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	return nodes, nil
 }
 
-func (tq *TemplateQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Template, init func(*Template), assign func(*Template, *ChangeActor)) error {
+func (tq *TemplateQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Template, init func(*Template), assign func(*Template, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Template)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -641,7 +732,7 @@ func (tq *TemplateQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQu
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -649,7 +740,7 @@ func (tq *TemplateQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQu
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -657,11 +748,11 @@ func (tq *TemplateQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQu
 	}
 	return nil
 }
-func (tq *TemplateQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Template, init func(*Template), assign func(*Template, *ChangeActor)) error {
+func (tq *TemplateQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Template, init func(*Template), assign func(*Template, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Template)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -670,7 +761,7 @@ func (tq *TemplateQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQu
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -678,7 +769,65 @@ func (tq *TemplateQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQu
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tq *TemplateQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Template, init func(*Template), assign func(*Template, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Template)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tq *TemplateQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Template, init func(*Template), assign func(*Template, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Template)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -838,11 +987,17 @@ func (tq *TemplateQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if tq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(template.FieldCreatedByID)
+		if tq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(template.FieldCreatedByUserID)
 		}
-		if tq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(template.FieldUpdatedByID)
+		if tq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(template.FieldUpdatedByUserID)
+		}
+		if tq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(template.FieldCreatedByServiceID)
+		}
+		if tq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(template.FieldUpdatedByServiceID)
 		}
 		if tq.withOwner != nil {
 			_spec.Node.AddColumnOnce(template.FieldOwnerID)

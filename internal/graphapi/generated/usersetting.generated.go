@@ -74,6 +74,14 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 				return ec.fieldContext_UserSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_UserSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_UserSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_UserSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_UserSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_UserSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
@@ -96,10 +104,14 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
 			case "isTfaEnabled":
 				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_UserSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_UserSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_UserSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_UserSetting_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":
@@ -162,6 +174,14 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_UserSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_UserSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_UserSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_UserSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_UserSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
@@ -184,10 +204,14 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
 			case "isTfaEnabled":
 				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_UserSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_UserSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_UserSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_UserSetting_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":
@@ -250,6 +274,14 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_UserSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_UserSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_UserSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_UserSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_UserSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
@@ -272,10 +304,14 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
 			case "isTfaEnabled":
 				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_UserSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_UserSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_UserSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_UserSetting_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":

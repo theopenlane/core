@@ -36,6 +36,14 @@ type TaskHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -68,7 +76,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case taskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldUpdatedBy, taskhistory.FieldCreatedByID, taskhistory.FieldUpdatedByID, taskhistory.FieldMappingID, taskhistory.FieldDeletedByID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldStatus:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldUpdatedBy, taskhistory.FieldCreatedByID, taskhistory.FieldUpdatedByID, taskhistory.FieldCreatedByUserID, taskhistory.FieldUpdatedByUserID, taskhistory.FieldCreatedByServiceID, taskhistory.FieldUpdatedByServiceID, taskhistory.FieldMappingID, taskhistory.FieldDeletedByID, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt, taskhistory.FieldDue, taskhistory.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -141,6 +149,30 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				th.UpdatedByID = value.String
+			}
+		case taskhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				th.CreatedByUserID = value.String
+			}
+		case taskhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				th.UpdatedByUserID = value.String
+			}
+		case taskhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				th.CreatedByServiceID = value.String
+			}
+		case taskhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				th.UpdatedByServiceID = value.String
 			}
 		case taskhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -267,6 +299,18 @@ func (th *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(th.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(th.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(th.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(th.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(th.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(th.MappingID)

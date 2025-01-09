@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -68,6 +68,46 @@ func (su *SubcontrolUpdate) SetNillableUpdatedByID(s *string) *SubcontrolUpdate 
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (su *SubcontrolUpdate) ClearUpdatedByID() *SubcontrolUpdate {
 	su.mutation.ClearUpdatedByID()
+	return su
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (su *SubcontrolUpdate) SetUpdatedByUserID(s string) *SubcontrolUpdate {
+	su.mutation.SetUpdatedByUserID(s)
+	return su
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableUpdatedByUserID(s *string) *SubcontrolUpdate {
+	if s != nil {
+		su.SetUpdatedByUserID(*s)
+	}
+	return su
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (su *SubcontrolUpdate) ClearUpdatedByUserID() *SubcontrolUpdate {
+	su.mutation.ClearUpdatedByUserID()
+	return su
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (su *SubcontrolUpdate) SetUpdatedByServiceID(s string) *SubcontrolUpdate {
+	su.mutation.SetUpdatedByServiceID(s)
+	return su
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableUpdatedByServiceID(s *string) *SubcontrolUpdate {
+	if s != nil {
+		su.SetUpdatedByServiceID(*s)
+	}
+	return su
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (su *SubcontrolUpdate) ClearUpdatedByServiceID() *SubcontrolUpdate {
+	su.mutation.ClearUpdatedByServiceID()
 	return su
 }
 
@@ -409,9 +449,14 @@ func (su *SubcontrolUpdate) ClearDetails() *SubcontrolUpdate {
 	return su
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (su *SubcontrolUpdate) SetUpdatedBy(c *ChangeActor) *SubcontrolUpdate {
-	return su.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (su *SubcontrolUpdate) SetUpdatedByUser(u *User) *SubcontrolUpdate {
+	return su.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (su *SubcontrolUpdate) SetUpdatedByService(a *APIToken) *SubcontrolUpdate {
+	return su.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -503,9 +548,15 @@ func (su *SubcontrolUpdate) Mutation() *SubcontrolMutation {
 	return su.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (su *SubcontrolUpdate) ClearUpdatedBy() *SubcontrolUpdate {
-	su.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (su *SubcontrolUpdate) ClearUpdatedByUser() *SubcontrolUpdate {
+	su.mutation.ClearUpdatedByUser()
+	return su
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (su *SubcontrolUpdate) ClearUpdatedByService() *SubcontrolUpdate {
+	su.mutation.ClearUpdatedByService()
 	return su
 }
 
@@ -692,6 +743,15 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subcontrol.FieldUpdatedAt, field.TypeTime)
 	}
+	if su.mutation.CreatedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := su.mutation.UpdatedByID(); ok {
+		_spec.SetField(subcontrol.FieldUpdatedByID, field.TypeString, value)
+	}
+	if su.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldUpdatedByID, field.TypeString)
+	}
 	if su.mutation.DeletedAtCleared() {
 		_spec.ClearField(subcontrol.FieldDeletedAt, field.TypeTime)
 	}
@@ -802,29 +862,60 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.DetailsCleared() {
 		_spec.ClearField(subcontrol.FieldDetails, field.TypeJSON)
 	}
-	if su.mutation.UpdatedByCleared() {
+	if su.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   subcontrol.UpdatedByTable,
-			Columns: []string{subcontrol.UpdatedByColumn},
+			Table:   subcontrol.UpdatedByUserTable,
+			Columns: []string{subcontrol.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = su.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := su.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   subcontrol.UpdatedByTable,
-			Columns: []string{subcontrol.UpdatedByColumn},
+			Table:   subcontrol.UpdatedByUserTable,
+			Columns: []string{subcontrol.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.UpdatedByServiceTable,
+			Columns: []string{subcontrol.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.UpdatedByServiceTable,
+			Columns: []string{subcontrol.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = su.schemaConfig.Subcontrol
@@ -1140,6 +1231,46 @@ func (suo *SubcontrolUpdateOne) SetNillableUpdatedByID(s *string) *SubcontrolUpd
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (suo *SubcontrolUpdateOne) ClearUpdatedByID() *SubcontrolUpdateOne {
 	suo.mutation.ClearUpdatedByID()
+	return suo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (suo *SubcontrolUpdateOne) SetUpdatedByUserID(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetUpdatedByUserID(s)
+	return suo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableUpdatedByUserID(s *string) *SubcontrolUpdateOne {
+	if s != nil {
+		suo.SetUpdatedByUserID(*s)
+	}
+	return suo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (suo *SubcontrolUpdateOne) ClearUpdatedByUserID() *SubcontrolUpdateOne {
+	suo.mutation.ClearUpdatedByUserID()
+	return suo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (suo *SubcontrolUpdateOne) SetUpdatedByServiceID(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetUpdatedByServiceID(s)
+	return suo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableUpdatedByServiceID(s *string) *SubcontrolUpdateOne {
+	if s != nil {
+		suo.SetUpdatedByServiceID(*s)
+	}
+	return suo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (suo *SubcontrolUpdateOne) ClearUpdatedByServiceID() *SubcontrolUpdateOne {
+	suo.mutation.ClearUpdatedByServiceID()
 	return suo
 }
 
@@ -1481,9 +1612,14 @@ func (suo *SubcontrolUpdateOne) ClearDetails() *SubcontrolUpdateOne {
 	return suo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (suo *SubcontrolUpdateOne) SetUpdatedBy(c *ChangeActor) *SubcontrolUpdateOne {
-	return suo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (suo *SubcontrolUpdateOne) SetUpdatedByUser(u *User) *SubcontrolUpdateOne {
+	return suo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (suo *SubcontrolUpdateOne) SetUpdatedByService(a *APIToken) *SubcontrolUpdateOne {
+	return suo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1575,9 +1711,15 @@ func (suo *SubcontrolUpdateOne) Mutation() *SubcontrolMutation {
 	return suo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (suo *SubcontrolUpdateOne) ClearUpdatedBy() *SubcontrolUpdateOne {
-	suo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (suo *SubcontrolUpdateOne) ClearUpdatedByUser() *SubcontrolUpdateOne {
+	suo.mutation.ClearUpdatedByUser()
+	return suo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (suo *SubcontrolUpdateOne) ClearUpdatedByService() *SubcontrolUpdateOne {
+	suo.mutation.ClearUpdatedByService()
 	return suo
 }
 
@@ -1794,6 +1936,15 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	if suo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subcontrol.FieldUpdatedAt, field.TypeTime)
 	}
+	if suo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := suo.mutation.UpdatedByID(); ok {
+		_spec.SetField(subcontrol.FieldUpdatedByID, field.TypeString, value)
+	}
+	if suo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldUpdatedByID, field.TypeString)
+	}
 	if suo.mutation.DeletedAtCleared() {
 		_spec.ClearField(subcontrol.FieldDeletedAt, field.TypeTime)
 	}
@@ -1904,29 +2055,60 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	if suo.mutation.DetailsCleared() {
 		_spec.ClearField(subcontrol.FieldDetails, field.TypeJSON)
 	}
-	if suo.mutation.UpdatedByCleared() {
+	if suo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   subcontrol.UpdatedByTable,
-			Columns: []string{subcontrol.UpdatedByColumn},
+			Table:   subcontrol.UpdatedByUserTable,
+			Columns: []string{subcontrol.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = suo.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := suo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   subcontrol.UpdatedByTable,
-			Columns: []string{subcontrol.UpdatedByColumn},
+			Table:   subcontrol.UpdatedByUserTable,
+			Columns: []string{subcontrol.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.UpdatedByServiceTable,
+			Columns: []string{subcontrol.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.UpdatedByServiceTable,
+			Columns: []string{subcontrol.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = suo.schemaConfig.Subcontrol

@@ -9,8 +9,7 @@ mutation CreateBulkCSVControl($input: Upload!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -39,8 +38,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -69,8 +67,7 @@ mutation CreateControl($input: CreateControlInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -138,8 +135,7 @@ query GetAllControls {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         version
         subcontrols {
@@ -232,8 +228,7 @@ query GetControls($where: ControlWhereInput) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         version
         subcontrols {
@@ -270,8 +265,7 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details

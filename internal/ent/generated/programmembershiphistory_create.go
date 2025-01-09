@@ -126,6 +126,62 @@ func (pmhc *ProgramMembershipHistoryCreate) SetNillableUpdatedByID(s *string) *P
 	return pmhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (pmhc *ProgramMembershipHistoryCreate) SetCreatedByUserID(s string) *ProgramMembershipHistoryCreate {
+	pmhc.mutation.SetCreatedByUserID(s)
+	return pmhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (pmhc *ProgramMembershipHistoryCreate) SetNillableCreatedByUserID(s *string) *ProgramMembershipHistoryCreate {
+	if s != nil {
+		pmhc.SetCreatedByUserID(*s)
+	}
+	return pmhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pmhc *ProgramMembershipHistoryCreate) SetUpdatedByUserID(s string) *ProgramMembershipHistoryCreate {
+	pmhc.mutation.SetUpdatedByUserID(s)
+	return pmhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pmhc *ProgramMembershipHistoryCreate) SetNillableUpdatedByUserID(s *string) *ProgramMembershipHistoryCreate {
+	if s != nil {
+		pmhc.SetUpdatedByUserID(*s)
+	}
+	return pmhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (pmhc *ProgramMembershipHistoryCreate) SetCreatedByServiceID(s string) *ProgramMembershipHistoryCreate {
+	pmhc.mutation.SetCreatedByServiceID(s)
+	return pmhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (pmhc *ProgramMembershipHistoryCreate) SetNillableCreatedByServiceID(s *string) *ProgramMembershipHistoryCreate {
+	if s != nil {
+		pmhc.SetCreatedByServiceID(*s)
+	}
+	return pmhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pmhc *ProgramMembershipHistoryCreate) SetUpdatedByServiceID(s string) *ProgramMembershipHistoryCreate {
+	pmhc.mutation.SetUpdatedByServiceID(s)
+	return pmhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pmhc *ProgramMembershipHistoryCreate) SetNillableUpdatedByServiceID(s *string) *ProgramMembershipHistoryCreate {
+	if s != nil {
+		pmhc.SetUpdatedByServiceID(*s)
+	}
+	return pmhc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (pmhc *ProgramMembershipHistoryCreate) SetMappingID(s string) *ProgramMembershipHistoryCreate {
 	pmhc.mutation.SetMappingID(s)
@@ -384,6 +440,22 @@ func (pmhc *ProgramMembershipHistoryCreate) createSpec() (*ProgramMembershipHist
 	if value, ok := pmhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := pmhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(programmembershiphistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := pmhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(programmembershiphistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := pmhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(programmembershiphistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := pmhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(programmembershiphistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := pmhc.mutation.MappingID(); ok {
 		_spec.SetField(programmembershiphistory.FieldMappingID, field.TypeString, value)

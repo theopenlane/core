@@ -36,6 +36,14 @@ type ContactHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -72,7 +80,7 @@ func (*ContactHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case contacthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldUpdatedBy, contacthistory.FieldCreatedByID, contacthistory.FieldUpdatedByID, contacthistory.FieldMappingID, contacthistory.FieldDeletedByID, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus:
+		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldUpdatedBy, contacthistory.FieldCreatedByID, contacthistory.FieldUpdatedByID, contacthistory.FieldCreatedByUserID, contacthistory.FieldUpdatedByUserID, contacthistory.FieldCreatedByServiceID, contacthistory.FieldUpdatedByServiceID, contacthistory.FieldMappingID, contacthistory.FieldDeletedByID, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case contacthistory.FieldHistoryTime, contacthistory.FieldCreatedAt, contacthistory.FieldUpdatedAt, contacthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -145,6 +153,30 @@ func (ch *ContactHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				ch.UpdatedByID = value.String
+			}
+		case contacthistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				ch.CreatedByUserID = value.String
+			}
+		case contacthistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				ch.UpdatedByUserID = value.String
+			}
+		case contacthistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				ch.CreatedByServiceID = value.String
+			}
+		case contacthistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				ch.UpdatedByServiceID = value.String
 			}
 		case contacthistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -281,6 +313,18 @@ func (ch *ContactHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(ch.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(ch.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(ch.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(ch.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(ch.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ch.MappingID)

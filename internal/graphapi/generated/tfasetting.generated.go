@@ -77,6 +77,14 @@ func (ec *executionContext) fieldContext_TFASettingCreatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_TFASetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_TFASetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_TFASetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_TFASetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_TFASetting_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
 			case "deletedByID":
@@ -91,10 +99,14 @@ func (ec *executionContext) fieldContext_TFASettingCreatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_recoveryCodes(ctx, field)
 			case "totpAllowed":
 				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TFASetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_TFASetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_TFASetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_TFASetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_TFASetting_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_TFASetting_owner(ctx, field)
 			}
@@ -153,6 +165,14 @@ func (ec *executionContext) fieldContext_TFASettingUpdatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_TFASetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_TFASetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_TFASetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_TFASetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_TFASetting_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
 			case "deletedByID":
@@ -167,10 +187,14 @@ func (ec *executionContext) fieldContext_TFASettingUpdatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_recoveryCodes(ctx, field)
 			case "totpAllowed":
 				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TFASetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_TFASetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_TFASetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_TFASetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_TFASetting_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_TFASetting_owner(ctx, field)
 			}

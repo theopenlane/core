@@ -125,6 +125,62 @@ func (ehc *EntityHistoryCreate) SetNillableUpdatedByID(s *string) *EntityHistory
 	return ehc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ehc *EntityHistoryCreate) SetCreatedByUserID(s string) *EntityHistoryCreate {
+	ehc.mutation.SetCreatedByUserID(s)
+	return ehc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ehc *EntityHistoryCreate) SetNillableCreatedByUserID(s *string) *EntityHistoryCreate {
+	if s != nil {
+		ehc.SetCreatedByUserID(*s)
+	}
+	return ehc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ehc *EntityHistoryCreate) SetUpdatedByUserID(s string) *EntityHistoryCreate {
+	ehc.mutation.SetUpdatedByUserID(s)
+	return ehc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ehc *EntityHistoryCreate) SetNillableUpdatedByUserID(s *string) *EntityHistoryCreate {
+	if s != nil {
+		ehc.SetUpdatedByUserID(*s)
+	}
+	return ehc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ehc *EntityHistoryCreate) SetCreatedByServiceID(s string) *EntityHistoryCreate {
+	ehc.mutation.SetCreatedByServiceID(s)
+	return ehc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ehc *EntityHistoryCreate) SetNillableCreatedByServiceID(s *string) *EntityHistoryCreate {
+	if s != nil {
+		ehc.SetCreatedByServiceID(*s)
+	}
+	return ehc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ehc *EntityHistoryCreate) SetUpdatedByServiceID(s string) *EntityHistoryCreate {
+	ehc.mutation.SetUpdatedByServiceID(s)
+	return ehc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ehc *EntityHistoryCreate) SetNillableUpdatedByServiceID(s *string) *EntityHistoryCreate {
+	if s != nil {
+		ehc.SetUpdatedByServiceID(*s)
+	}
+	return ehc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (ehc *EntityHistoryCreate) SetMappingID(s string) *EntityHistoryCreate {
 	ehc.mutation.SetMappingID(s)
@@ -443,6 +499,22 @@ func (ehc *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSp
 	if value, ok := ehc.mutation.UpdatedByID(); ok {
 		_spec.SetField(entityhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := ehc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(entityhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := ehc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(entityhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := ehc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(entityhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := ehc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(entityhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := ehc.mutation.MappingID(); ok {
 		_spec.SetField(entityhistory.FieldMappingID, field.TypeString, value)

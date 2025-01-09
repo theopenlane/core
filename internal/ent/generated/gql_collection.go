@@ -102,34 +102,64 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: at.config}).Query()
+				query = (&UserClient{config: at.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			at.withCreatedBy = query
-			if _, ok := fieldSeen[apitoken.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, apitoken.FieldCreatedByID)
-				fieldSeen[apitoken.FieldCreatedByID] = struct{}{}
+			at.withCreatedByUser = query
+			if _, ok := fieldSeen[apitoken.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldCreatedByUserID)
+				fieldSeen[apitoken.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: at.config}).Query()
+				query = (&UserClient{config: at.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			at.withUpdatedBy = query
-			if _, ok := fieldSeen[apitoken.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, apitoken.FieldUpdatedByID)
-				fieldSeen[apitoken.FieldUpdatedByID] = struct{}{}
+			at.withUpdatedByUser = query
+			if _, ok := fieldSeen[apitoken.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldUpdatedByUserID)
+				fieldSeen[apitoken.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: at.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			at.withCreatedByService = query
+			if _, ok := fieldSeen[apitoken.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldCreatedByServiceID)
+				fieldSeen[apitoken.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: at.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			at.withUpdatedByService = query
+			if _, ok := fieldSeen[apitoken.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldUpdatedByServiceID)
+				fieldSeen[apitoken.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -165,6 +195,26 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[apitoken.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, apitoken.FieldUpdatedByID)
 				fieldSeen[apitoken.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[apitoken.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldCreatedByUserID)
+				fieldSeen[apitoken.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[apitoken.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldUpdatedByUserID)
+				fieldSeen[apitoken.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[apitoken.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldCreatedByServiceID)
+				fieldSeen[apitoken.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[apitoken.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldUpdatedByServiceID)
+				fieldSeen[apitoken.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[apitoken.FieldDeletedAt]; !ok {
@@ -279,34 +329,64 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: ap.config}).Query()
+				query = (&UserClient{config: ap.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			ap.withCreatedBy = query
-			if _, ok := fieldSeen[actionplan.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, actionplan.FieldCreatedByID)
-				fieldSeen[actionplan.FieldCreatedByID] = struct{}{}
+			ap.withCreatedByUser = query
+			if _, ok := fieldSeen[actionplan.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldCreatedByUserID)
+				fieldSeen[actionplan.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: ap.config}).Query()
+				query = (&UserClient{config: ap.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			ap.withUpdatedBy = query
-			if _, ok := fieldSeen[actionplan.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, actionplan.FieldUpdatedByID)
-				fieldSeen[actionplan.FieldUpdatedByID] = struct{}{}
+			ap.withUpdatedByUser = query
+			if _, ok := fieldSeen[actionplan.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldUpdatedByUserID)
+				fieldSeen[actionplan.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: ap.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			ap.withCreatedByService = query
+			if _, ok := fieldSeen[actionplan.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldCreatedByServiceID)
+				fieldSeen[actionplan.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: ap.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			ap.withUpdatedByService = query
+			if _, ok := fieldSeen[actionplan.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldUpdatedByServiceID)
+				fieldSeen[actionplan.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "standard":
@@ -392,6 +472,26 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[actionplan.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldUpdatedByID)
 				fieldSeen[actionplan.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[actionplan.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldCreatedByUserID)
+				fieldSeen[actionplan.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[actionplan.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldUpdatedByUserID)
+				fieldSeen[actionplan.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[actionplan.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldCreatedByServiceID)
+				fieldSeen[actionplan.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[actionplan.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldUpdatedByServiceID)
+				fieldSeen[actionplan.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[actionplan.FieldDeletedAt]; !ok {
@@ -544,6 +644,26 @@ func (aph *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[actionplanhistory.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldUpdatedByID)
 				fieldSeen[actionplanhistory.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[actionplanhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldCreatedByUserID)
+				fieldSeen[actionplanhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[actionplanhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldUpdatedByUserID)
+				fieldSeen[actionplanhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[actionplanhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldCreatedByServiceID)
+				fieldSeen[actionplanhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[actionplanhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldUpdatedByServiceID)
+				fieldSeen[actionplanhistory.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[actionplanhistory.FieldDeletedAt]; !ok {
@@ -730,34 +850,64 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: c.config}).Query()
+				query = (&UserClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			c.withCreatedBy = query
-			if _, ok := fieldSeen[contact.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, contact.FieldCreatedByID)
-				fieldSeen[contact.FieldCreatedByID] = struct{}{}
+			c.withCreatedByUser = query
+			if _, ok := fieldSeen[contact.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldCreatedByUserID)
+				fieldSeen[contact.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: c.config}).Query()
+				query = (&UserClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			c.withUpdatedBy = query
-			if _, ok := fieldSeen[contact.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, contact.FieldUpdatedByID)
-				fieldSeen[contact.FieldUpdatedByID] = struct{}{}
+			c.withUpdatedByUser = query
+			if _, ok := fieldSeen[contact.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldUpdatedByUserID)
+				fieldSeen[contact.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			c.withCreatedByService = query
+			if _, ok := fieldSeen[contact.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldCreatedByServiceID)
+				fieldSeen[contact.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			c.withUpdatedByService = query
+			if _, ok := fieldSeen[contact.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldUpdatedByServiceID)
+				fieldSeen[contact.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -819,6 +969,26 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if _, ok := fieldSeen[contact.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, contact.FieldUpdatedByID)
 				fieldSeen[contact.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[contact.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldCreatedByUserID)
+				fieldSeen[contact.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[contact.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldUpdatedByUserID)
+				fieldSeen[contact.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[contact.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldCreatedByServiceID)
+				fieldSeen[contact.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[contact.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldUpdatedByServiceID)
+				fieldSeen[contact.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[contact.FieldDeletedAt]; !ok {
@@ -977,6 +1147,26 @@ func (ch *ContactHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, contacthistory.FieldUpdatedByID)
 				fieldSeen[contacthistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[contacthistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldCreatedByUserID)
+				fieldSeen[contacthistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[contacthistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldUpdatedByUserID)
+				fieldSeen[contacthistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[contacthistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldCreatedByServiceID)
+				fieldSeen[contacthistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[contacthistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldUpdatedByServiceID)
+				fieldSeen[contacthistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[contacthistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, contacthistory.FieldDeletedAt)
@@ -1095,34 +1285,64 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: c.config}).Query()
+				query = (&UserClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			c.withCreatedBy = query
-			if _, ok := fieldSeen[control.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, control.FieldCreatedByID)
-				fieldSeen[control.FieldCreatedByID] = struct{}{}
+			c.withCreatedByUser = query
+			if _, ok := fieldSeen[control.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, control.FieldCreatedByUserID)
+				fieldSeen[control.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: c.config}).Query()
+				query = (&UserClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			c.withUpdatedBy = query
-			if _, ok := fieldSeen[control.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, control.FieldUpdatedByID)
-				fieldSeen[control.FieldUpdatedByID] = struct{}{}
+			c.withUpdatedByUser = query
+			if _, ok := fieldSeen[control.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, control.FieldUpdatedByUserID)
+				fieldSeen[control.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			c.withCreatedByService = query
+			if _, ok := fieldSeen[control.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, control.FieldCreatedByServiceID)
+				fieldSeen[control.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			c.withUpdatedByService = query
+			if _, ok := fieldSeen[control.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, control.FieldUpdatedByServiceID)
+				fieldSeen[control.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -1315,6 +1535,26 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, control.FieldUpdatedByID)
 				fieldSeen[control.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[control.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, control.FieldCreatedByUserID)
+				fieldSeen[control.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[control.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, control.FieldUpdatedByUserID)
+				fieldSeen[control.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[control.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, control.FieldCreatedByServiceID)
+				fieldSeen[control.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[control.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, control.FieldUpdatedByServiceID)
+				fieldSeen[control.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[control.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, control.FieldDeletedAt)
@@ -1497,6 +1737,26 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldUpdatedByID)
 				fieldSeen[controlhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[controlhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldCreatedByUserID)
+				fieldSeen[controlhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[controlhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldUpdatedByUserID)
+				fieldSeen[controlhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[controlhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldCreatedByServiceID)
+				fieldSeen[controlhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[controlhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldUpdatedByServiceID)
+				fieldSeen[controlhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[controlhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldDeletedAt)
@@ -1640,34 +1900,64 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: co.config}).Query()
+				query = (&UserClient{config: co.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			co.withCreatedBy = query
-			if _, ok := fieldSeen[controlobjective.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldCreatedByID)
-				fieldSeen[controlobjective.FieldCreatedByID] = struct{}{}
+			co.withCreatedByUser = query
+			if _, ok := fieldSeen[controlobjective.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldCreatedByUserID)
+				fieldSeen[controlobjective.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: co.config}).Query()
+				query = (&UserClient{config: co.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			co.withUpdatedBy = query
-			if _, ok := fieldSeen[controlobjective.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldUpdatedByID)
-				fieldSeen[controlobjective.FieldUpdatedByID] = struct{}{}
+			co.withUpdatedByUser = query
+			if _, ok := fieldSeen[controlobjective.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldUpdatedByUserID)
+				fieldSeen[controlobjective.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			co.withCreatedByService = query
+			if _, ok := fieldSeen[controlobjective.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldCreatedByServiceID)
+				fieldSeen[controlobjective.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			co.withUpdatedByService = query
+			if _, ok := fieldSeen[controlobjective.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldUpdatedByServiceID)
+				fieldSeen[controlobjective.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -1860,6 +2150,26 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, controlobjective.FieldUpdatedByID)
 				fieldSeen[controlobjective.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[controlobjective.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldCreatedByUserID)
+				fieldSeen[controlobjective.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[controlobjective.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldUpdatedByUserID)
+				fieldSeen[controlobjective.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[controlobjective.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldCreatedByServiceID)
+				fieldSeen[controlobjective.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[controlobjective.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldUpdatedByServiceID)
+				fieldSeen[controlobjective.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[controlobjective.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, controlobjective.FieldDeletedAt)
@@ -2037,6 +2347,26 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldUpdatedByID)
 				fieldSeen[controlobjectivehistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldCreatedByUserID)
+				fieldSeen[controlobjectivehistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldUpdatedByUserID)
+				fieldSeen[controlobjectivehistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldCreatedByServiceID)
+				fieldSeen[controlobjectivehistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldUpdatedByServiceID)
+				fieldSeen[controlobjectivehistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldDeletedAt)
@@ -2175,34 +2505,64 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: dd.config}).Query()
+				query = (&UserClient{config: dd.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			dd.withCreatedBy = query
-			if _, ok := fieldSeen[documentdata.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, documentdata.FieldCreatedByID)
-				fieldSeen[documentdata.FieldCreatedByID] = struct{}{}
+			dd.withCreatedByUser = query
+			if _, ok := fieldSeen[documentdata.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, documentdata.FieldCreatedByUserID)
+				fieldSeen[documentdata.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: dd.config}).Query()
+				query = (&UserClient{config: dd.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			dd.withUpdatedBy = query
-			if _, ok := fieldSeen[documentdata.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, documentdata.FieldUpdatedByID)
-				fieldSeen[documentdata.FieldUpdatedByID] = struct{}{}
+			dd.withUpdatedByUser = query
+			if _, ok := fieldSeen[documentdata.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, documentdata.FieldUpdatedByUserID)
+				fieldSeen[documentdata.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: dd.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			dd.withCreatedByService = query
+			if _, ok := fieldSeen[documentdata.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, documentdata.FieldCreatedByServiceID)
+				fieldSeen[documentdata.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: dd.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			dd.withUpdatedByService = query
+			if _, ok := fieldSeen[documentdata.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, documentdata.FieldUpdatedByServiceID)
+				fieldSeen[documentdata.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -2279,6 +2639,26 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[documentdata.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, documentdata.FieldUpdatedByID)
 				fieldSeen[documentdata.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[documentdata.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, documentdata.FieldCreatedByUserID)
+				fieldSeen[documentdata.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[documentdata.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, documentdata.FieldUpdatedByUserID)
+				fieldSeen[documentdata.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[documentdata.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, documentdata.FieldCreatedByServiceID)
+				fieldSeen[documentdata.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[documentdata.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, documentdata.FieldUpdatedByServiceID)
+				fieldSeen[documentdata.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[documentdata.FieldTags]; !ok {
@@ -2412,6 +2792,26 @@ func (ddh *DocumentDataHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, documentdatahistory.FieldUpdatedByID)
 				fieldSeen[documentdatahistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[documentdatahistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, documentdatahistory.FieldCreatedByUserID)
+				fieldSeen[documentdatahistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[documentdatahistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, documentdatahistory.FieldUpdatedByUserID)
+				fieldSeen[documentdatahistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[documentdatahistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, documentdatahistory.FieldCreatedByServiceID)
+				fieldSeen[documentdatahistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[documentdatahistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, documentdatahistory.FieldUpdatedByServiceID)
+				fieldSeen[documentdatahistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[documentdatahistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, documentdatahistory.FieldTags)
@@ -2505,34 +2905,64 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: e.config}).Query()
+				query = (&UserClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			e.withCreatedBy = query
-			if _, ok := fieldSeen[entity.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, entity.FieldCreatedByID)
-				fieldSeen[entity.FieldCreatedByID] = struct{}{}
+			e.withCreatedByUser = query
+			if _, ok := fieldSeen[entity.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCreatedByUserID)
+				fieldSeen[entity.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: e.config}).Query()
+				query = (&UserClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			e.withUpdatedBy = query
-			if _, ok := fieldSeen[entity.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, entity.FieldUpdatedByID)
-				fieldSeen[entity.FieldUpdatedByID] = struct{}{}
+			e.withUpdatedByUser = query
+			if _, ok := fieldSeen[entity.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldUpdatedByUserID)
+				fieldSeen[entity.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			e.withCreatedByService = query
+			if _, ok := fieldSeen[entity.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCreatedByServiceID)
+				fieldSeen[entity.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			e.withUpdatedByService = query
+			if _, ok := fieldSeen[entity.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldUpdatedByServiceID)
+				fieldSeen[entity.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -2635,6 +3065,26 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			if _, ok := fieldSeen[entity.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, entity.FieldUpdatedByID)
 				fieldSeen[entity.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[entity.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCreatedByUserID)
+				fieldSeen[entity.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[entity.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldUpdatedByUserID)
+				fieldSeen[entity.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[entity.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCreatedByServiceID)
+				fieldSeen[entity.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[entity.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldUpdatedByServiceID)
+				fieldSeen[entity.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[entity.FieldDeletedAt]; !ok {
@@ -2810,6 +3260,26 @@ func (eh *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldUpdatedByID)
 				fieldSeen[entityhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[entityhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldCreatedByUserID)
+				fieldSeen[entityhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[entityhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldUpdatedByUserID)
+				fieldSeen[entityhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[entityhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldCreatedByServiceID)
+				fieldSeen[entityhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[entityhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldUpdatedByServiceID)
+				fieldSeen[entityhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[entityhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldDeletedAt)
@@ -2945,34 +3415,64 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: et.config}).Query()
+				query = (&UserClient{config: et.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			et.withCreatedBy = query
-			if _, ok := fieldSeen[entitytype.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, entitytype.FieldCreatedByID)
-				fieldSeen[entitytype.FieldCreatedByID] = struct{}{}
+			et.withCreatedByUser = query
+			if _, ok := fieldSeen[entitytype.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldCreatedByUserID)
+				fieldSeen[entitytype.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: et.config}).Query()
+				query = (&UserClient{config: et.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			et.withUpdatedBy = query
-			if _, ok := fieldSeen[entitytype.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, entitytype.FieldUpdatedByID)
-				fieldSeen[entitytype.FieldUpdatedByID] = struct{}{}
+			et.withUpdatedByUser = query
+			if _, ok := fieldSeen[entitytype.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldUpdatedByUserID)
+				fieldSeen[entitytype.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: et.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			et.withCreatedByService = query
+			if _, ok := fieldSeen[entitytype.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldCreatedByServiceID)
+				fieldSeen[entitytype.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: et.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			et.withUpdatedByService = query
+			if _, ok := fieldSeen[entitytype.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldUpdatedByServiceID)
+				fieldSeen[entitytype.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -3021,6 +3521,26 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[entitytype.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, entitytype.FieldUpdatedByID)
 				fieldSeen[entitytype.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[entitytype.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldCreatedByUserID)
+				fieldSeen[entitytype.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[entitytype.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldUpdatedByUserID)
+				fieldSeen[entitytype.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[entitytype.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldCreatedByServiceID)
+				fieldSeen[entitytype.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[entitytype.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldUpdatedByServiceID)
+				fieldSeen[entitytype.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[entitytype.FieldDeletedAt]; !ok {
@@ -3171,6 +3691,26 @@ func (eth *EntityTypeHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, entitytypehistory.FieldUpdatedByID)
 				fieldSeen[entitytypehistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[entitytypehistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entitytypehistory.FieldCreatedByUserID)
+				fieldSeen[entitytypehistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[entitytypehistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, entitytypehistory.FieldUpdatedByUserID)
+				fieldSeen[entitytypehistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[entitytypehistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entitytypehistory.FieldCreatedByServiceID)
+				fieldSeen[entitytypehistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[entitytypehistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, entitytypehistory.FieldUpdatedByServiceID)
+				fieldSeen[entitytypehistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[entitytypehistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, entitytypehistory.FieldDeletedAt)
@@ -3281,34 +3821,64 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: e.config}).Query()
+				query = (&UserClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			e.withCreatedBy = query
-			if _, ok := fieldSeen[event.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, event.FieldCreatedByID)
-				fieldSeen[event.FieldCreatedByID] = struct{}{}
+			e.withCreatedByUser = query
+			if _, ok := fieldSeen[event.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, event.FieldCreatedByUserID)
+				fieldSeen[event.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: e.config}).Query()
+				query = (&UserClient{config: e.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			e.withUpdatedBy = query
-			if _, ok := fieldSeen[event.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, event.FieldUpdatedByID)
-				fieldSeen[event.FieldUpdatedByID] = struct{}{}
+			e.withUpdatedByUser = query
+			if _, ok := fieldSeen[event.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, event.FieldUpdatedByUserID)
+				fieldSeen[event.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			e.withCreatedByService = query
+			if _, ok := fieldSeen[event.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, event.FieldCreatedByServiceID)
+				fieldSeen[event.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			e.withUpdatedByService = query
+			if _, ok := fieldSeen[event.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, event.FieldUpdatedByServiceID)
+				fieldSeen[event.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "user":
@@ -3473,6 +4043,26 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, event.FieldUpdatedByID)
 				fieldSeen[event.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[event.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, event.FieldCreatedByUserID)
+				fieldSeen[event.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[event.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, event.FieldUpdatedByUserID)
+				fieldSeen[event.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[event.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, event.FieldCreatedByServiceID)
+				fieldSeen[event.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[event.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, event.FieldUpdatedByServiceID)
+				fieldSeen[event.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[event.FieldTags]; !ok {
 				selectedFields = append(selectedFields, event.FieldTags)
@@ -3600,6 +4190,26 @@ func (eh *EventHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, eventhistory.FieldUpdatedByID)
 				fieldSeen[eventhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[eventhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldCreatedByUserID)
+				fieldSeen[eventhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[eventhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldUpdatedByUserID)
+				fieldSeen[eventhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[eventhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldCreatedByServiceID)
+				fieldSeen[eventhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[eventhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, eventhistory.FieldUpdatedByServiceID)
+				fieldSeen[eventhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[eventhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, eventhistory.FieldTags)
@@ -3688,34 +4298,64 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: f.config}).Query()
+				query = (&UserClient{config: f.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			f.withCreatedBy = query
-			if _, ok := fieldSeen[file.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, file.FieldCreatedByID)
-				fieldSeen[file.FieldCreatedByID] = struct{}{}
+			f.withCreatedByUser = query
+			if _, ok := fieldSeen[file.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, file.FieldCreatedByUserID)
+				fieldSeen[file.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: f.config}).Query()
+				query = (&UserClient{config: f.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			f.withUpdatedBy = query
-			if _, ok := fieldSeen[file.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, file.FieldUpdatedByID)
-				fieldSeen[file.FieldUpdatedByID] = struct{}{}
+			f.withUpdatedByUser = query
+			if _, ok := fieldSeen[file.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, file.FieldUpdatedByUserID)
+				fieldSeen[file.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			f.withCreatedByService = query
+			if _, ok := fieldSeen[file.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, file.FieldCreatedByServiceID)
+				fieldSeen[file.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			f.withUpdatedByService = query
+			if _, ok := fieldSeen[file.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, file.FieldUpdatedByServiceID)
+				fieldSeen[file.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "user":
@@ -3879,6 +4519,26 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[file.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, file.FieldUpdatedByID)
 				fieldSeen[file.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[file.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, file.FieldCreatedByUserID)
+				fieldSeen[file.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[file.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, file.FieldUpdatedByUserID)
+				fieldSeen[file.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[file.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, file.FieldCreatedByServiceID)
+				fieldSeen[file.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[file.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, file.FieldUpdatedByServiceID)
+				fieldSeen[file.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[file.FieldDeletedAt]; !ok {
@@ -4062,6 +4722,26 @@ func (fh *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, filehistory.FieldUpdatedByID)
 				fieldSeen[filehistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[filehistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldCreatedByUserID)
+				fieldSeen[filehistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[filehistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldUpdatedByUserID)
+				fieldSeen[filehistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[filehistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldCreatedByServiceID)
+				fieldSeen[filehistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[filehistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldUpdatedByServiceID)
+				fieldSeen[filehistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[filehistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldDeletedAt)
@@ -4205,34 +4885,64 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: gr.config}).Query()
+				query = (&UserClient{config: gr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			gr.withCreatedBy = query
-			if _, ok := fieldSeen[group.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, group.FieldCreatedByID)
-				fieldSeen[group.FieldCreatedByID] = struct{}{}
+			gr.withCreatedByUser = query
+			if _, ok := fieldSeen[group.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, group.FieldCreatedByUserID)
+				fieldSeen[group.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: gr.config}).Query()
+				query = (&UserClient{config: gr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			gr.withUpdatedBy = query
-			if _, ok := fieldSeen[group.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, group.FieldUpdatedByID)
-				fieldSeen[group.FieldUpdatedByID] = struct{}{}
+			gr.withUpdatedByUser = query
+			if _, ok := fieldSeen[group.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, group.FieldUpdatedByUserID)
+				fieldSeen[group.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			gr.withCreatedByService = query
+			if _, ok := fieldSeen[group.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, group.FieldCreatedByServiceID)
+				fieldSeen[group.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			gr.withUpdatedByService = query
+			if _, ok := fieldSeen[group.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, group.FieldUpdatedByServiceID)
+				fieldSeen[group.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -4722,6 +5432,26 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				selectedFields = append(selectedFields, group.FieldUpdatedByID)
 				fieldSeen[group.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[group.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, group.FieldCreatedByUserID)
+				fieldSeen[group.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[group.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, group.FieldUpdatedByUserID)
+				fieldSeen[group.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[group.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, group.FieldCreatedByServiceID)
+				fieldSeen[group.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[group.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, group.FieldUpdatedByServiceID)
+				fieldSeen[group.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[group.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, group.FieldDeletedAt)
@@ -4891,6 +5621,26 @@ func (gh *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, grouphistory.FieldUpdatedByID)
 				fieldSeen[grouphistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[grouphistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldCreatedByUserID)
+				fieldSeen[grouphistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[grouphistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldUpdatedByUserID)
+				fieldSeen[grouphistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[grouphistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldCreatedByServiceID)
+				fieldSeen[grouphistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[grouphistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldUpdatedByServiceID)
+				fieldSeen[grouphistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[grouphistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, grouphistory.FieldDeletedAt)
@@ -5021,34 +5771,64 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: gm.config}).Query()
+				query = (&UserClient{config: gm.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			gm.withCreatedBy = query
-			if _, ok := fieldSeen[groupmembership.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, groupmembership.FieldCreatedByID)
-				fieldSeen[groupmembership.FieldCreatedByID] = struct{}{}
+			gm.withCreatedByUser = query
+			if _, ok := fieldSeen[groupmembership.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupmembership.FieldCreatedByUserID)
+				fieldSeen[groupmembership.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: gm.config}).Query()
+				query = (&UserClient{config: gm.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			gm.withUpdatedBy = query
-			if _, ok := fieldSeen[groupmembership.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, groupmembership.FieldUpdatedByID)
-				fieldSeen[groupmembership.FieldUpdatedByID] = struct{}{}
+			gm.withUpdatedByUser = query
+			if _, ok := fieldSeen[groupmembership.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupmembership.FieldUpdatedByUserID)
+				fieldSeen[groupmembership.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: gm.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			gm.withCreatedByService = query
+			if _, ok := fieldSeen[groupmembership.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupmembership.FieldCreatedByServiceID)
+				fieldSeen[groupmembership.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: gm.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			gm.withUpdatedByService = query
+			if _, ok := fieldSeen[groupmembership.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupmembership.FieldUpdatedByServiceID)
+				fieldSeen[groupmembership.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "group":
@@ -5112,6 +5892,26 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[groupmembership.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, groupmembership.FieldUpdatedByID)
 				fieldSeen[groupmembership.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[groupmembership.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupmembership.FieldCreatedByUserID)
+				fieldSeen[groupmembership.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[groupmembership.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupmembership.FieldUpdatedByUserID)
+				fieldSeen[groupmembership.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[groupmembership.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupmembership.FieldCreatedByServiceID)
+				fieldSeen[groupmembership.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[groupmembership.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupmembership.FieldUpdatedByServiceID)
+				fieldSeen[groupmembership.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[groupmembership.FieldDeletedAt]; !ok {
@@ -5240,6 +6040,26 @@ func (gmh *GroupMembershipHistoryQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, groupmembershiphistory.FieldUpdatedByID)
 				fieldSeen[groupmembershiphistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[groupmembershiphistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupmembershiphistory.FieldCreatedByUserID)
+				fieldSeen[groupmembershiphistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[groupmembershiphistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupmembershiphistory.FieldUpdatedByUserID)
+				fieldSeen[groupmembershiphistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[groupmembershiphistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupmembershiphistory.FieldCreatedByServiceID)
+				fieldSeen[groupmembershiphistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[groupmembershiphistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupmembershiphistory.FieldUpdatedByServiceID)
+				fieldSeen[groupmembershiphistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[groupmembershiphistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, groupmembershiphistory.FieldDeletedAt)
@@ -5328,34 +6148,64 @@ func (gs *GroupSettingQuery) collectField(ctx context.Context, oneNode bool, opC
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: gs.config}).Query()
+				query = (&UserClient{config: gs.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			gs.withCreatedBy = query
-			if _, ok := fieldSeen[groupsetting.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, groupsetting.FieldCreatedByID)
-				fieldSeen[groupsetting.FieldCreatedByID] = struct{}{}
+			gs.withCreatedByUser = query
+			if _, ok := fieldSeen[groupsetting.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupsetting.FieldCreatedByUserID)
+				fieldSeen[groupsetting.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: gs.config}).Query()
+				query = (&UserClient{config: gs.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			gs.withUpdatedBy = query
-			if _, ok := fieldSeen[groupsetting.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, groupsetting.FieldUpdatedByID)
-				fieldSeen[groupsetting.FieldUpdatedByID] = struct{}{}
+			gs.withUpdatedByUser = query
+			if _, ok := fieldSeen[groupsetting.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupsetting.FieldUpdatedByUserID)
+				fieldSeen[groupsetting.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: gs.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			gs.withCreatedByService = query
+			if _, ok := fieldSeen[groupsetting.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupsetting.FieldCreatedByServiceID)
+				fieldSeen[groupsetting.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: gs.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			gs.withUpdatedByService = query
+			if _, ok := fieldSeen[groupsetting.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupsetting.FieldUpdatedByServiceID)
+				fieldSeen[groupsetting.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "group":
@@ -5391,6 +6241,26 @@ func (gs *GroupSettingQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[groupsetting.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, groupsetting.FieldUpdatedByID)
 				fieldSeen[groupsetting.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[groupsetting.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupsetting.FieldCreatedByUserID)
+				fieldSeen[groupsetting.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[groupsetting.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupsetting.FieldUpdatedByUserID)
+				fieldSeen[groupsetting.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[groupsetting.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupsetting.FieldCreatedByServiceID)
+				fieldSeen[groupsetting.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[groupsetting.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupsetting.FieldUpdatedByServiceID)
+				fieldSeen[groupsetting.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[groupsetting.FieldTags]; !ok {
@@ -5534,6 +6404,26 @@ func (gsh *GroupSettingHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, groupsettinghistory.FieldUpdatedByID)
 				fieldSeen[groupsettinghistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[groupsettinghistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupsettinghistory.FieldCreatedByUserID)
+				fieldSeen[groupsettinghistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[groupsettinghistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, groupsettinghistory.FieldUpdatedByUserID)
+				fieldSeen[groupsettinghistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[groupsettinghistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupsettinghistory.FieldCreatedByServiceID)
+				fieldSeen[groupsettinghistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[groupsettinghistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, groupsettinghistory.FieldUpdatedByServiceID)
+				fieldSeen[groupsettinghistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[groupsettinghistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, groupsettinghistory.FieldTags)
@@ -5637,34 +6527,64 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: h.config}).Query()
+				query = (&UserClient{config: h.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			h.withCreatedBy = query
-			if _, ok := fieldSeen[hush.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, hush.FieldCreatedByID)
-				fieldSeen[hush.FieldCreatedByID] = struct{}{}
+			h.withCreatedByUser = query
+			if _, ok := fieldSeen[hush.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldCreatedByUserID)
+				fieldSeen[hush.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: h.config}).Query()
+				query = (&UserClient{config: h.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			h.withUpdatedBy = query
-			if _, ok := fieldSeen[hush.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, hush.FieldUpdatedByID)
-				fieldSeen[hush.FieldUpdatedByID] = struct{}{}
+			h.withUpdatedByUser = query
+			if _, ok := fieldSeen[hush.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldUpdatedByUserID)
+				fieldSeen[hush.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			h.withCreatedByService = query
+			if _, ok := fieldSeen[hush.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldCreatedByServiceID)
+				fieldSeen[hush.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			h.withUpdatedByService = query
+			if _, ok := fieldSeen[hush.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldUpdatedByServiceID)
+				fieldSeen[hush.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "integrations":
@@ -5724,6 +6644,26 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[hush.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, hush.FieldUpdatedByID)
 				fieldSeen[hush.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[hush.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldCreatedByUserID)
+				fieldSeen[hush.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[hush.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldUpdatedByUserID)
+				fieldSeen[hush.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[hush.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldCreatedByServiceID)
+				fieldSeen[hush.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[hush.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldUpdatedByServiceID)
+				fieldSeen[hush.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[hush.FieldDeletedAt]; !ok {
@@ -5879,6 +6819,26 @@ func (hh *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, hushhistory.FieldUpdatedByID)
 				fieldSeen[hushhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[hushhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldCreatedByUserID)
+				fieldSeen[hushhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[hushhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldUpdatedByUserID)
+				fieldSeen[hushhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[hushhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldCreatedByServiceID)
+				fieldSeen[hushhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[hushhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldUpdatedByServiceID)
+				fieldSeen[hushhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[hushhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, hushhistory.FieldDeletedAt)
@@ -5994,34 +6954,64 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: i.config}).Query()
+				query = (&UserClient{config: i.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			i.withCreatedBy = query
-			if _, ok := fieldSeen[integration.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, integration.FieldCreatedByID)
-				fieldSeen[integration.FieldCreatedByID] = struct{}{}
+			i.withCreatedByUser = query
+			if _, ok := fieldSeen[integration.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldCreatedByUserID)
+				fieldSeen[integration.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: i.config}).Query()
+				query = (&UserClient{config: i.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			i.withUpdatedBy = query
-			if _, ok := fieldSeen[integration.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, integration.FieldUpdatedByID)
-				fieldSeen[integration.FieldUpdatedByID] = struct{}{}
+			i.withUpdatedByUser = query
+			if _, ok := fieldSeen[integration.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldUpdatedByUserID)
+				fieldSeen[integration.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: i.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			i.withCreatedByService = query
+			if _, ok := fieldSeen[integration.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldCreatedByServiceID)
+				fieldSeen[integration.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: i.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			i.withUpdatedByService = query
+			if _, ok := fieldSeen[integration.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldUpdatedByServiceID)
+				fieldSeen[integration.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -6083,6 +7073,26 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[integration.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, integration.FieldUpdatedByID)
 				fieldSeen[integration.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[integration.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldCreatedByUserID)
+				fieldSeen[integration.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[integration.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldUpdatedByUserID)
+				fieldSeen[integration.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[integration.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldCreatedByServiceID)
+				fieldSeen[integration.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[integration.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldUpdatedByServiceID)
+				fieldSeen[integration.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[integration.FieldTags]; !ok {
@@ -6243,6 +7253,26 @@ func (ih *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, integrationhistory.FieldUpdatedByID)
 				fieldSeen[integrationhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[integrationhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldCreatedByUserID)
+				fieldSeen[integrationhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[integrationhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldUpdatedByUserID)
+				fieldSeen[integrationhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[integrationhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldCreatedByServiceID)
+				fieldSeen[integrationhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[integrationhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldUpdatedByServiceID)
+				fieldSeen[integrationhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[integrationhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, integrationhistory.FieldTags)
@@ -6363,34 +7393,64 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: ip.config}).Query()
+				query = (&UserClient{config: ip.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			ip.withCreatedBy = query
-			if _, ok := fieldSeen[internalpolicy.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, internalpolicy.FieldCreatedByID)
-				fieldSeen[internalpolicy.FieldCreatedByID] = struct{}{}
+			ip.withCreatedByUser = query
+			if _, ok := fieldSeen[internalpolicy.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldCreatedByUserID)
+				fieldSeen[internalpolicy.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: ip.config}).Query()
+				query = (&UserClient{config: ip.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			ip.withUpdatedBy = query
-			if _, ok := fieldSeen[internalpolicy.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, internalpolicy.FieldUpdatedByID)
-				fieldSeen[internalpolicy.FieldUpdatedByID] = struct{}{}
+			ip.withUpdatedByUser = query
+			if _, ok := fieldSeen[internalpolicy.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldUpdatedByUserID)
+				fieldSeen[internalpolicy.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: ip.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			ip.withCreatedByService = query
+			if _, ok := fieldSeen[internalpolicy.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldCreatedByServiceID)
+				fieldSeen[internalpolicy.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: ip.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			ip.withUpdatedByService = query
+			if _, ok := fieldSeen[internalpolicy.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldUpdatedByServiceID)
+				fieldSeen[internalpolicy.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -6530,6 +7590,26 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[internalpolicy.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldUpdatedByID)
 				fieldSeen[internalpolicy.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[internalpolicy.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldCreatedByUserID)
+				fieldSeen[internalpolicy.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[internalpolicy.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldUpdatedByUserID)
+				fieldSeen[internalpolicy.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[internalpolicy.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldCreatedByServiceID)
+				fieldSeen[internalpolicy.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[internalpolicy.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldUpdatedByServiceID)
+				fieldSeen[internalpolicy.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[internalpolicy.FieldDeletedAt]; !ok {
@@ -6693,6 +7773,26 @@ func (iph *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldUpdatedByID)
 				fieldSeen[internalpolicyhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldCreatedByUserID)
+				fieldSeen[internalpolicyhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldUpdatedByUserID)
+				fieldSeen[internalpolicyhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldCreatedByServiceID)
+				fieldSeen[internalpolicyhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldUpdatedByServiceID)
+				fieldSeen[internalpolicyhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldDeletedAt)
@@ -6816,34 +7916,64 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: i.config}).Query()
+				query = (&UserClient{config: i.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			i.withCreatedBy = query
-			if _, ok := fieldSeen[invite.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, invite.FieldCreatedByID)
-				fieldSeen[invite.FieldCreatedByID] = struct{}{}
+			i.withCreatedByUser = query
+			if _, ok := fieldSeen[invite.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldCreatedByUserID)
+				fieldSeen[invite.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: i.config}).Query()
+				query = (&UserClient{config: i.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			i.withUpdatedBy = query
-			if _, ok := fieldSeen[invite.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, invite.FieldUpdatedByID)
-				fieldSeen[invite.FieldUpdatedByID] = struct{}{}
+			i.withUpdatedByUser = query
+			if _, ok := fieldSeen[invite.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldUpdatedByUserID)
+				fieldSeen[invite.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: i.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			i.withCreatedByService = query
+			if _, ok := fieldSeen[invite.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldCreatedByServiceID)
+				fieldSeen[invite.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: i.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			i.withUpdatedByService = query
+			if _, ok := fieldSeen[invite.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldUpdatedByServiceID)
+				fieldSeen[invite.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -6892,6 +8022,26 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			if _, ok := fieldSeen[invite.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, invite.FieldUpdatedByID)
 				fieldSeen[invite.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[invite.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldCreatedByUserID)
+				fieldSeen[invite.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[invite.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldUpdatedByUserID)
+				fieldSeen[invite.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[invite.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldCreatedByServiceID)
+				fieldSeen[invite.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[invite.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldUpdatedByServiceID)
+				fieldSeen[invite.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[invite.FieldDeletedAt]; !ok {
@@ -7001,34 +8151,64 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: n.config}).Query()
+				query = (&UserClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			n.withCreatedBy = query
-			if _, ok := fieldSeen[narrative.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, narrative.FieldCreatedByID)
-				fieldSeen[narrative.FieldCreatedByID] = struct{}{}
+			n.withCreatedByUser = query
+			if _, ok := fieldSeen[narrative.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldCreatedByUserID)
+				fieldSeen[narrative.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: n.config}).Query()
+				query = (&UserClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			n.withUpdatedBy = query
-			if _, ok := fieldSeen[narrative.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, narrative.FieldUpdatedByID)
-				fieldSeen[narrative.FieldUpdatedByID] = struct{}{}
+			n.withUpdatedByUser = query
+			if _, ok := fieldSeen[narrative.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldUpdatedByUserID)
+				fieldSeen[narrative.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			n.withCreatedByService = query
+			if _, ok := fieldSeen[narrative.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldCreatedByServiceID)
+				fieldSeen[narrative.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			n.withUpdatedByService = query
+			if _, ok := fieldSeen[narrative.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldUpdatedByServiceID)
+				fieldSeen[narrative.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -7168,6 +8348,26 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[narrative.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, narrative.FieldUpdatedByID)
 				fieldSeen[narrative.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[narrative.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldCreatedByUserID)
+				fieldSeen[narrative.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[narrative.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldUpdatedByUserID)
+				fieldSeen[narrative.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[narrative.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldCreatedByServiceID)
+				fieldSeen[narrative.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[narrative.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldUpdatedByServiceID)
+				fieldSeen[narrative.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[narrative.FieldDeletedAt]; !ok {
@@ -7311,6 +8511,26 @@ func (nh *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, narrativehistory.FieldUpdatedByID)
 				fieldSeen[narrativehistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[narrativehistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldCreatedByUserID)
+				fieldSeen[narrativehistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[narrativehistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldUpdatedByUserID)
+				fieldSeen[narrativehistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[narrativehistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldCreatedByServiceID)
+				fieldSeen[narrativehistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[narrativehistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldUpdatedByServiceID)
+				fieldSeen[narrativehistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[narrativehistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, narrativehistory.FieldDeletedAt)
@@ -7414,34 +8634,64 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: n.config}).Query()
+				query = (&UserClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			n.withCreatedBy = query
-			if _, ok := fieldSeen[note.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, note.FieldCreatedByID)
-				fieldSeen[note.FieldCreatedByID] = struct{}{}
+			n.withCreatedByUser = query
+			if _, ok := fieldSeen[note.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, note.FieldCreatedByUserID)
+				fieldSeen[note.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: n.config}).Query()
+				query = (&UserClient{config: n.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			n.withUpdatedBy = query
-			if _, ok := fieldSeen[note.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, note.FieldUpdatedByID)
-				fieldSeen[note.FieldUpdatedByID] = struct{}{}
+			n.withUpdatedByUser = query
+			if _, ok := fieldSeen[note.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, note.FieldUpdatedByUserID)
+				fieldSeen[note.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			n.withCreatedByService = query
+			if _, ok := fieldSeen[note.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, note.FieldCreatedByServiceID)
+				fieldSeen[note.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			n.withUpdatedByService = query
+			if _, ok := fieldSeen[note.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, note.FieldUpdatedByServiceID)
+				fieldSeen[note.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -7514,6 +8764,26 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[note.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, note.FieldUpdatedByID)
 				fieldSeen[note.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[note.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, note.FieldCreatedByUserID)
+				fieldSeen[note.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[note.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, note.FieldUpdatedByUserID)
+				fieldSeen[note.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[note.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, note.FieldCreatedByServiceID)
+				fieldSeen[note.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[note.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, note.FieldUpdatedByServiceID)
+				fieldSeen[note.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[note.FieldDeletedAt]; !ok {
@@ -7642,6 +8912,26 @@ func (nh *NoteHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, notehistory.FieldUpdatedByID)
 				fieldSeen[notehistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[notehistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldCreatedByUserID)
+				fieldSeen[notehistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[notehistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldUpdatedByUserID)
+				fieldSeen[notehistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[notehistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldCreatedByServiceID)
+				fieldSeen[notehistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[notehistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldUpdatedByServiceID)
+				fieldSeen[notehistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[notehistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, notehistory.FieldDeletedAt)
@@ -7730,34 +9020,64 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: om.config}).Query()
+				query = (&UserClient{config: om.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			om.withCreatedBy = query
-			if _, ok := fieldSeen[orgmembership.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, orgmembership.FieldCreatedByID)
-				fieldSeen[orgmembership.FieldCreatedByID] = struct{}{}
+			om.withCreatedByUser = query
+			if _, ok := fieldSeen[orgmembership.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldCreatedByUserID)
+				fieldSeen[orgmembership.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: om.config}).Query()
+				query = (&UserClient{config: om.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			om.withUpdatedBy = query
-			if _, ok := fieldSeen[orgmembership.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, orgmembership.FieldUpdatedByID)
-				fieldSeen[orgmembership.FieldUpdatedByID] = struct{}{}
+			om.withUpdatedByUser = query
+			if _, ok := fieldSeen[orgmembership.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldUpdatedByUserID)
+				fieldSeen[orgmembership.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: om.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			om.withCreatedByService = query
+			if _, ok := fieldSeen[orgmembership.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldCreatedByServiceID)
+				fieldSeen[orgmembership.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: om.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			om.withUpdatedByService = query
+			if _, ok := fieldSeen[orgmembership.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldUpdatedByServiceID)
+				fieldSeen[orgmembership.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "organization":
@@ -7821,6 +9141,26 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[orgmembership.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, orgmembership.FieldUpdatedByID)
 				fieldSeen[orgmembership.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[orgmembership.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldCreatedByUserID)
+				fieldSeen[orgmembership.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[orgmembership.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldUpdatedByUserID)
+				fieldSeen[orgmembership.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[orgmembership.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldCreatedByServiceID)
+				fieldSeen[orgmembership.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[orgmembership.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldUpdatedByServiceID)
+				fieldSeen[orgmembership.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[orgmembership.FieldDeletedAt]; !ok {
@@ -7949,6 +9289,26 @@ func (omh *OrgMembershipHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, orgmembershiphistory.FieldUpdatedByID)
 				fieldSeen[orgmembershiphistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldCreatedByUserID)
+				fieldSeen[orgmembershiphistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldUpdatedByUserID)
+				fieldSeen[orgmembershiphistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldCreatedByServiceID)
+				fieldSeen[orgmembershiphistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldUpdatedByServiceID)
+				fieldSeen[orgmembershiphistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[orgmembershiphistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, orgmembershiphistory.FieldDeletedAt)
@@ -8037,34 +9397,64 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: os.config}).Query()
+				query = (&UserClient{config: os.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			os.withCreatedBy = query
-			if _, ok := fieldSeen[orgsubscription.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, orgsubscription.FieldCreatedByID)
-				fieldSeen[orgsubscription.FieldCreatedByID] = struct{}{}
+			os.withCreatedByUser = query
+			if _, ok := fieldSeen[orgsubscription.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldCreatedByUserID)
+				fieldSeen[orgsubscription.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: os.config}).Query()
+				query = (&UserClient{config: os.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			os.withUpdatedBy = query
-			if _, ok := fieldSeen[orgsubscription.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, orgsubscription.FieldUpdatedByID)
-				fieldSeen[orgsubscription.FieldUpdatedByID] = struct{}{}
+			os.withUpdatedByUser = query
+			if _, ok := fieldSeen[orgsubscription.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldUpdatedByUserID)
+				fieldSeen[orgsubscription.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: os.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			os.withCreatedByService = query
+			if _, ok := fieldSeen[orgsubscription.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldCreatedByServiceID)
+				fieldSeen[orgsubscription.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: os.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			os.withUpdatedByService = query
+			if _, ok := fieldSeen[orgsubscription.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldUpdatedByServiceID)
+				fieldSeen[orgsubscription.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -8100,6 +9490,26 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[orgsubscription.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldUpdatedByID)
 				fieldSeen[orgsubscription.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[orgsubscription.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldCreatedByUserID)
+				fieldSeen[orgsubscription.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[orgsubscription.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldUpdatedByUserID)
+				fieldSeen[orgsubscription.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[orgsubscription.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldCreatedByServiceID)
+				fieldSeen[orgsubscription.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[orgsubscription.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldUpdatedByServiceID)
+				fieldSeen[orgsubscription.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[orgsubscription.FieldTags]; !ok {
@@ -8263,6 +9673,26 @@ func (osh *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldUpdatedByID)
 				fieldSeen[orgsubscriptionhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldCreatedByUserID)
+				fieldSeen[orgsubscriptionhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldUpdatedByUserID)
+				fieldSeen[orgsubscriptionhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldCreatedByServiceID)
+				fieldSeen[orgsubscriptionhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldUpdatedByServiceID)
+				fieldSeen[orgsubscriptionhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldTags)
@@ -8386,34 +9816,64 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: o.config}).Query()
+				query = (&UserClient{config: o.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			o.withCreatedBy = query
-			if _, ok := fieldSeen[organization.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, organization.FieldCreatedByID)
-				fieldSeen[organization.FieldCreatedByID] = struct{}{}
+			o.withCreatedByUser = query
+			if _, ok := fieldSeen[organization.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldCreatedByUserID)
+				fieldSeen[organization.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: o.config}).Query()
+				query = (&UserClient{config: o.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			o.withUpdatedBy = query
-			if _, ok := fieldSeen[organization.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, organization.FieldUpdatedByID)
-				fieldSeen[organization.FieldUpdatedByID] = struct{}{}
+			o.withUpdatedByUser = query
+			if _, ok := fieldSeen[organization.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldUpdatedByUserID)
+				fieldSeen[organization.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			o.withCreatedByService = query
+			if _, ok := fieldSeen[organization.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldCreatedByServiceID)
+				fieldSeen[organization.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			o.withUpdatedByService = query
+			if _, ok := fieldSeen[organization.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldUpdatedByServiceID)
+				fieldSeen[organization.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "controlCreators":
@@ -8591,10 +10051,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[12] == nil {
-								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[12][alias] = n
+							nodes[i].Edges.totalCount[14][alias] = n
 						}
 						return nil
 					})
@@ -8602,10 +10062,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Children)
-							if nodes[i].Edges.totalCount[12] == nil {
-								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[12][alias] = n
+							nodes[i].Edges.totalCount[14][alias] = n
 						}
 						return nil
 					})
@@ -9018,6 +10478,26 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, organization.FieldUpdatedByID)
 				fieldSeen[organization.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[organization.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldCreatedByUserID)
+				fieldSeen[organization.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[organization.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldUpdatedByUserID)
+				fieldSeen[organization.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[organization.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldCreatedByServiceID)
+				fieldSeen[organization.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[organization.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldUpdatedByServiceID)
+				fieldSeen[organization.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[organization.FieldTags]; !ok {
 				selectedFields = append(selectedFields, organization.FieldTags)
@@ -9187,6 +10667,26 @@ func (oh *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationhistory.FieldUpdatedByID)
 				fieldSeen[organizationhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[organizationhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldCreatedByUserID)
+				fieldSeen[organizationhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[organizationhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldUpdatedByUserID)
+				fieldSeen[organizationhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[organizationhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldCreatedByServiceID)
+				fieldSeen[organizationhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[organizationhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldUpdatedByServiceID)
+				fieldSeen[organizationhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[organizationhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, organizationhistory.FieldTags)
@@ -9317,34 +10817,64 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: os.config}).Query()
+				query = (&UserClient{config: os.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			os.withCreatedBy = query
-			if _, ok := fieldSeen[organizationsetting.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, organizationsetting.FieldCreatedByID)
-				fieldSeen[organizationsetting.FieldCreatedByID] = struct{}{}
+			os.withCreatedByUser = query
+			if _, ok := fieldSeen[organizationsetting.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldCreatedByUserID)
+				fieldSeen[organizationsetting.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: os.config}).Query()
+				query = (&UserClient{config: os.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			os.withUpdatedBy = query
-			if _, ok := fieldSeen[organizationsetting.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, organizationsetting.FieldUpdatedByID)
-				fieldSeen[organizationsetting.FieldUpdatedByID] = struct{}{}
+			os.withUpdatedByUser = query
+			if _, ok := fieldSeen[organizationsetting.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldUpdatedByUserID)
+				fieldSeen[organizationsetting.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: os.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			os.withCreatedByService = query
+			if _, ok := fieldSeen[organizationsetting.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldCreatedByServiceID)
+				fieldSeen[organizationsetting.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: os.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			os.withUpdatedByService = query
+			if _, ok := fieldSeen[organizationsetting.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldUpdatedByServiceID)
+				fieldSeen[organizationsetting.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "organization":
@@ -9393,6 +10923,26 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationsetting.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldUpdatedByID)
 				fieldSeen[organizationsetting.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[organizationsetting.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldCreatedByUserID)
+				fieldSeen[organizationsetting.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[organizationsetting.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldUpdatedByUserID)
+				fieldSeen[organizationsetting.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[organizationsetting.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldCreatedByServiceID)
+				fieldSeen[organizationsetting.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[organizationsetting.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldUpdatedByServiceID)
+				fieldSeen[organizationsetting.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[organizationsetting.FieldTags]; !ok {
@@ -9556,6 +11106,26 @@ func (osh *OrganizationSettingHistoryQuery) collectField(ctx context.Context, on
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldUpdatedByID)
 				fieldSeen[organizationsettinghistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldCreatedByUserID)
+				fieldSeen[organizationsettinghistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldUpdatedByUserID)
+				fieldSeen[organizationsettinghistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldCreatedByServiceID)
+				fieldSeen[organizationsettinghistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldUpdatedByServiceID)
+				fieldSeen[organizationsettinghistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldTags)
@@ -9679,34 +11249,64 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: pat.config}).Query()
+				query = (&UserClient{config: pat.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pat.withCreatedBy = query
-			if _, ok := fieldSeen[personalaccesstoken.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, personalaccesstoken.FieldCreatedByID)
-				fieldSeen[personalaccesstoken.FieldCreatedByID] = struct{}{}
+			pat.withCreatedByUser = query
+			if _, ok := fieldSeen[personalaccesstoken.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldCreatedByUserID)
+				fieldSeen[personalaccesstoken.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: pat.config}).Query()
+				query = (&UserClient{config: pat.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pat.withUpdatedBy = query
-			if _, ok := fieldSeen[personalaccesstoken.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, personalaccesstoken.FieldUpdatedByID)
-				fieldSeen[personalaccesstoken.FieldUpdatedByID] = struct{}{}
+			pat.withUpdatedByUser = query
+			if _, ok := fieldSeen[personalaccesstoken.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldUpdatedByUserID)
+				fieldSeen[personalaccesstoken.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: pat.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			pat.withCreatedByService = query
+			if _, ok := fieldSeen[personalaccesstoken.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldCreatedByServiceID)
+				fieldSeen[personalaccesstoken.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: pat.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			pat.withUpdatedByService = query
+			if _, ok := fieldSeen[personalaccesstoken.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldUpdatedByServiceID)
+				fieldSeen[personalaccesstoken.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -9768,6 +11368,26 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[personalaccesstoken.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, personalaccesstoken.FieldUpdatedByID)
 				fieldSeen[personalaccesstoken.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[personalaccesstoken.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldCreatedByUserID)
+				fieldSeen[personalaccesstoken.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[personalaccesstoken.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldUpdatedByUserID)
+				fieldSeen[personalaccesstoken.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[personalaccesstoken.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldCreatedByServiceID)
+				fieldSeen[personalaccesstoken.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[personalaccesstoken.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldUpdatedByServiceID)
+				fieldSeen[personalaccesstoken.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[personalaccesstoken.FieldDeletedAt]; !ok {
@@ -9877,34 +11497,64 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: pr.config}).Query()
+				query = (&UserClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pr.withCreatedBy = query
-			if _, ok := fieldSeen[procedure.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, procedure.FieldCreatedByID)
-				fieldSeen[procedure.FieldCreatedByID] = struct{}{}
+			pr.withCreatedByUser = query
+			if _, ok := fieldSeen[procedure.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldCreatedByUserID)
+				fieldSeen[procedure.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: pr.config}).Query()
+				query = (&UserClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pr.withUpdatedBy = query
-			if _, ok := fieldSeen[procedure.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, procedure.FieldUpdatedByID)
-				fieldSeen[procedure.FieldUpdatedByID] = struct{}{}
+			pr.withUpdatedByUser = query
+			if _, ok := fieldSeen[procedure.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldUpdatedByUserID)
+				fieldSeen[procedure.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			pr.withCreatedByService = query
+			if _, ok := fieldSeen[procedure.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldCreatedByServiceID)
+				fieldSeen[procedure.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			pr.withUpdatedByService = query
+			if _, ok := fieldSeen[procedure.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldUpdatedByServiceID)
+				fieldSeen[procedure.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -10044,6 +11694,26 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[procedure.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldUpdatedByID)
 				fieldSeen[procedure.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[procedure.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldCreatedByUserID)
+				fieldSeen[procedure.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[procedure.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldUpdatedByUserID)
+				fieldSeen[procedure.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[procedure.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldCreatedByServiceID)
+				fieldSeen[procedure.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[procedure.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldUpdatedByServiceID)
+				fieldSeen[procedure.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[procedure.FieldDeletedAt]; !ok {
@@ -10212,6 +11882,26 @@ func (ph *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, procedurehistory.FieldUpdatedByID)
 				fieldSeen[procedurehistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[procedurehistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldCreatedByUserID)
+				fieldSeen[procedurehistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[procedurehistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldUpdatedByUserID)
+				fieldSeen[procedurehistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[procedurehistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldCreatedByServiceID)
+				fieldSeen[procedurehistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[procedurehistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldUpdatedByServiceID)
+				fieldSeen[procedurehistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[procedurehistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldDeletedAt)
@@ -10340,34 +12030,64 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: pr.config}).Query()
+				query = (&UserClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pr.withCreatedBy = query
-			if _, ok := fieldSeen[program.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, program.FieldCreatedByID)
-				fieldSeen[program.FieldCreatedByID] = struct{}{}
+			pr.withCreatedByUser = query
+			if _, ok := fieldSeen[program.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, program.FieldCreatedByUserID)
+				fieldSeen[program.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: pr.config}).Query()
+				query = (&UserClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pr.withUpdatedBy = query
-			if _, ok := fieldSeen[program.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, program.FieldUpdatedByID)
-				fieldSeen[program.FieldUpdatedByID] = struct{}{}
+			pr.withUpdatedByUser = query
+			if _, ok := fieldSeen[program.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, program.FieldUpdatedByUserID)
+				fieldSeen[program.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			pr.withCreatedByService = query
+			if _, ok := fieldSeen[program.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, program.FieldCreatedByServiceID)
+				fieldSeen[program.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			pr.withUpdatedByService = query
+			if _, ok := fieldSeen[program.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, program.FieldUpdatedByServiceID)
+				fieldSeen[program.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -10625,6 +12345,26 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, program.FieldUpdatedByID)
 				fieldSeen[program.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[program.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, program.FieldCreatedByUserID)
+				fieldSeen[program.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[program.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, program.FieldUpdatedByUserID)
+				fieldSeen[program.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[program.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, program.FieldCreatedByServiceID)
+				fieldSeen[program.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[program.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, program.FieldUpdatedByServiceID)
+				fieldSeen[program.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[program.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, program.FieldDeletedAt)
@@ -10787,6 +12527,26 @@ func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, programhistory.FieldUpdatedByID)
 				fieldSeen[programhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[programhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldCreatedByUserID)
+				fieldSeen[programhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[programhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldUpdatedByUserID)
+				fieldSeen[programhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[programhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldCreatedByServiceID)
+				fieldSeen[programhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[programhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldUpdatedByServiceID)
+				fieldSeen[programhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[programhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldDeletedAt)
@@ -10910,34 +12670,64 @@ func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: pm.config}).Query()
+				query = (&UserClient{config: pm.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pm.withCreatedBy = query
-			if _, ok := fieldSeen[programmembership.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, programmembership.FieldCreatedByID)
-				fieldSeen[programmembership.FieldCreatedByID] = struct{}{}
+			pm.withCreatedByUser = query
+			if _, ok := fieldSeen[programmembership.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldCreatedByUserID)
+				fieldSeen[programmembership.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: pm.config}).Query()
+				query = (&UserClient{config: pm.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pm.withUpdatedBy = query
-			if _, ok := fieldSeen[programmembership.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, programmembership.FieldUpdatedByID)
-				fieldSeen[programmembership.FieldUpdatedByID] = struct{}{}
+			pm.withUpdatedByUser = query
+			if _, ok := fieldSeen[programmembership.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldUpdatedByUserID)
+				fieldSeen[programmembership.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: pm.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			pm.withCreatedByService = query
+			if _, ok := fieldSeen[programmembership.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldCreatedByServiceID)
+				fieldSeen[programmembership.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: pm.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			pm.withUpdatedByService = query
+			if _, ok := fieldSeen[programmembership.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldUpdatedByServiceID)
+				fieldSeen[programmembership.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "program":
@@ -10988,6 +12778,26 @@ func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[programmembership.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, programmembership.FieldUpdatedByID)
 				fieldSeen[programmembership.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[programmembership.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldCreatedByUserID)
+				fieldSeen[programmembership.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[programmembership.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldUpdatedByUserID)
+				fieldSeen[programmembership.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[programmembership.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldCreatedByServiceID)
+				fieldSeen[programmembership.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[programmembership.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldUpdatedByServiceID)
+				fieldSeen[programmembership.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[programmembership.FieldDeletedAt]; !ok {
@@ -11116,6 +12926,26 @@ func (pmh *ProgramMembershipHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, programmembershiphistory.FieldUpdatedByID)
 				fieldSeen[programmembershiphistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[programmembershiphistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldCreatedByUserID)
+				fieldSeen[programmembershiphistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[programmembershiphistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldUpdatedByUserID)
+				fieldSeen[programmembershiphistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[programmembershiphistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldCreatedByServiceID)
+				fieldSeen[programmembershiphistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[programmembershiphistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldUpdatedByServiceID)
+				fieldSeen[programmembershiphistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[programmembershiphistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, programmembershiphistory.FieldDeletedAt)
@@ -11204,34 +13034,64 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: r.config}).Query()
+				query = (&UserClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			r.withCreatedBy = query
-			if _, ok := fieldSeen[risk.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, risk.FieldCreatedByID)
-				fieldSeen[risk.FieldCreatedByID] = struct{}{}
+			r.withCreatedByUser = query
+			if _, ok := fieldSeen[risk.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldCreatedByUserID)
+				fieldSeen[risk.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: r.config}).Query()
+				query = (&UserClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			r.withUpdatedBy = query
-			if _, ok := fieldSeen[risk.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, risk.FieldUpdatedByID)
-				fieldSeen[risk.FieldUpdatedByID] = struct{}{}
+			r.withUpdatedByUser = query
+			if _, ok := fieldSeen[risk.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldUpdatedByUserID)
+				fieldSeen[risk.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			r.withCreatedByService = query
+			if _, ok := fieldSeen[risk.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldCreatedByServiceID)
+				fieldSeen[risk.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			r.withUpdatedByService = query
+			if _, ok := fieldSeen[risk.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldUpdatedByServiceID)
+				fieldSeen[risk.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -11358,6 +13218,26 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[risk.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldUpdatedByID)
 				fieldSeen[risk.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[risk.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldCreatedByUserID)
+				fieldSeen[risk.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[risk.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldUpdatedByUserID)
+				fieldSeen[risk.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[risk.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldCreatedByServiceID)
+				fieldSeen[risk.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[risk.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldUpdatedByServiceID)
+				fieldSeen[risk.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[risk.FieldDeletedAt]; !ok {
@@ -11531,6 +13411,26 @@ func (rh *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, riskhistory.FieldUpdatedByID)
 				fieldSeen[riskhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[riskhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldCreatedByUserID)
+				fieldSeen[riskhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[riskhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldUpdatedByUserID)
+				fieldSeen[riskhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[riskhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldCreatedByServiceID)
+				fieldSeen[riskhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[riskhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldUpdatedByServiceID)
+				fieldSeen[riskhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[riskhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldDeletedAt)
@@ -11664,34 +13564,64 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: s.config}).Query()
+				query = (&UserClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			s.withCreatedBy = query
-			if _, ok := fieldSeen[standard.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, standard.FieldCreatedByID)
-				fieldSeen[standard.FieldCreatedByID] = struct{}{}
+			s.withCreatedByUser = query
+			if _, ok := fieldSeen[standard.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldCreatedByUserID)
+				fieldSeen[standard.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: s.config}).Query()
+				query = (&UserClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			s.withUpdatedBy = query
-			if _, ok := fieldSeen[standard.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, standard.FieldUpdatedByID)
-				fieldSeen[standard.FieldUpdatedByID] = struct{}{}
+			s.withUpdatedByUser = query
+			if _, ok := fieldSeen[standard.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldUpdatedByUserID)
+				fieldSeen[standard.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			s.withCreatedByService = query
+			if _, ok := fieldSeen[standard.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldCreatedByServiceID)
+				fieldSeen[standard.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			s.withUpdatedByService = query
+			if _, ok := fieldSeen[standard.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldUpdatedByServiceID)
+				fieldSeen[standard.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "controlObjectives":
@@ -11777,6 +13707,26 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[standard.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, standard.FieldUpdatedByID)
 				fieldSeen[standard.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[standard.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldCreatedByUserID)
+				fieldSeen[standard.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[standard.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldUpdatedByUserID)
+				fieldSeen[standard.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[standard.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldCreatedByServiceID)
+				fieldSeen[standard.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[standard.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldUpdatedByServiceID)
+				fieldSeen[standard.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[standard.FieldDeletedAt]; !ok {
@@ -11945,6 +13895,26 @@ func (sh *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, standardhistory.FieldUpdatedByID)
 				fieldSeen[standardhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[standardhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldCreatedByUserID)
+				fieldSeen[standardhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[standardhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldUpdatedByUserID)
+				fieldSeen[standardhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[standardhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldCreatedByServiceID)
+				fieldSeen[standardhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[standardhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldUpdatedByServiceID)
+				fieldSeen[standardhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[standardhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldDeletedAt)
@@ -12073,34 +14043,64 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: s.config}).Query()
+				query = (&UserClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			s.withCreatedBy = query
-			if _, ok := fieldSeen[subcontrol.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldCreatedByID)
-				fieldSeen[subcontrol.FieldCreatedByID] = struct{}{}
+			s.withCreatedByUser = query
+			if _, ok := fieldSeen[subcontrol.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldCreatedByUserID)
+				fieldSeen[subcontrol.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: s.config}).Query()
+				query = (&UserClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			s.withUpdatedBy = query
-			if _, ok := fieldSeen[subcontrol.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldUpdatedByID)
-				fieldSeen[subcontrol.FieldUpdatedByID] = struct{}{}
+			s.withUpdatedByUser = query
+			if _, ok := fieldSeen[subcontrol.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldUpdatedByUserID)
+				fieldSeen[subcontrol.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			s.withCreatedByService = query
+			if _, ok := fieldSeen[subcontrol.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldCreatedByServiceID)
+				fieldSeen[subcontrol.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			s.withUpdatedByService = query
+			if _, ok := fieldSeen[subcontrol.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldUpdatedByServiceID)
+				fieldSeen[subcontrol.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -12199,6 +14199,26 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[subcontrol.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldUpdatedByID)
 				fieldSeen[subcontrol.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[subcontrol.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldCreatedByUserID)
+				fieldSeen[subcontrol.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[subcontrol.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldUpdatedByUserID)
+				fieldSeen[subcontrol.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[subcontrol.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldCreatedByServiceID)
+				fieldSeen[subcontrol.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[subcontrol.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldUpdatedByServiceID)
+				fieldSeen[subcontrol.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[subcontrol.FieldDeletedAt]; !ok {
@@ -12402,6 +14422,26 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldUpdatedByID)
 				fieldSeen[subcontrolhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldCreatedByUserID)
+				fieldSeen[subcontrolhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldUpdatedByUserID)
+				fieldSeen[subcontrolhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldCreatedByServiceID)
+				fieldSeen[subcontrolhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldUpdatedByServiceID)
+				fieldSeen[subcontrolhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[subcontrolhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldDeletedAt)
@@ -12565,34 +14605,64 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: s.config}).Query()
+				query = (&UserClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			s.withCreatedBy = query
-			if _, ok := fieldSeen[subscriber.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, subscriber.FieldCreatedByID)
-				fieldSeen[subscriber.FieldCreatedByID] = struct{}{}
+			s.withCreatedByUser = query
+			if _, ok := fieldSeen[subscriber.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldCreatedByUserID)
+				fieldSeen[subscriber.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: s.config}).Query()
+				query = (&UserClient{config: s.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			s.withUpdatedBy = query
-			if _, ok := fieldSeen[subscriber.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, subscriber.FieldUpdatedByID)
-				fieldSeen[subscriber.FieldUpdatedByID] = struct{}{}
+			s.withUpdatedByUser = query
+			if _, ok := fieldSeen[subscriber.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldUpdatedByUserID)
+				fieldSeen[subscriber.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			s.withCreatedByService = query
+			if _, ok := fieldSeen[subscriber.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldCreatedByServiceID)
+				fieldSeen[subscriber.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			s.withUpdatedByService = query
+			if _, ok := fieldSeen[subscriber.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldUpdatedByServiceID)
+				fieldSeen[subscriber.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -12641,6 +14711,26 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[subscriber.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, subscriber.FieldUpdatedByID)
 				fieldSeen[subscriber.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[subscriber.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldCreatedByUserID)
+				fieldSeen[subscriber.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[subscriber.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldUpdatedByUserID)
+				fieldSeen[subscriber.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[subscriber.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldCreatedByServiceID)
+				fieldSeen[subscriber.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[subscriber.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, subscriber.FieldUpdatedByServiceID)
+				fieldSeen[subscriber.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[subscriber.FieldTags]; !ok {
@@ -12750,34 +14840,64 @@ func (ts *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: ts.config}).Query()
+				query = (&UserClient{config: ts.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			ts.withCreatedBy = query
-			if _, ok := fieldSeen[tfasetting.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, tfasetting.FieldCreatedByID)
-				fieldSeen[tfasetting.FieldCreatedByID] = struct{}{}
+			ts.withCreatedByUser = query
+			if _, ok := fieldSeen[tfasetting.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, tfasetting.FieldCreatedByUserID)
+				fieldSeen[tfasetting.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: ts.config}).Query()
+				query = (&UserClient{config: ts.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			ts.withUpdatedBy = query
-			if _, ok := fieldSeen[tfasetting.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, tfasetting.FieldUpdatedByID)
-				fieldSeen[tfasetting.FieldUpdatedByID] = struct{}{}
+			ts.withUpdatedByUser = query
+			if _, ok := fieldSeen[tfasetting.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, tfasetting.FieldUpdatedByUserID)
+				fieldSeen[tfasetting.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: ts.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			ts.withCreatedByService = query
+			if _, ok := fieldSeen[tfasetting.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, tfasetting.FieldCreatedByServiceID)
+				fieldSeen[tfasetting.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: ts.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			ts.withUpdatedByService = query
+			if _, ok := fieldSeen[tfasetting.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, tfasetting.FieldUpdatedByServiceID)
+				fieldSeen[tfasetting.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -12813,6 +14933,26 @@ func (ts *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[tfasetting.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, tfasetting.FieldUpdatedByID)
 				fieldSeen[tfasetting.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[tfasetting.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, tfasetting.FieldCreatedByUserID)
+				fieldSeen[tfasetting.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[tfasetting.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, tfasetting.FieldUpdatedByUserID)
+				fieldSeen[tfasetting.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[tfasetting.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, tfasetting.FieldCreatedByServiceID)
+				fieldSeen[tfasetting.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[tfasetting.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, tfasetting.FieldUpdatedByServiceID)
+				fieldSeen[tfasetting.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[tfasetting.FieldDeletedAt]; !ok {
@@ -12912,34 +15052,64 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: t.config}).Query()
+				query = (&UserClient{config: t.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			t.withCreatedBy = query
-			if _, ok := fieldSeen[task.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, task.FieldCreatedByID)
-				fieldSeen[task.FieldCreatedByID] = struct{}{}
+			t.withCreatedByUser = query
+			if _, ok := fieldSeen[task.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, task.FieldCreatedByUserID)
+				fieldSeen[task.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: t.config}).Query()
+				query = (&UserClient{config: t.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			t.withUpdatedBy = query
-			if _, ok := fieldSeen[task.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, task.FieldUpdatedByID)
-				fieldSeen[task.FieldUpdatedByID] = struct{}{}
+			t.withUpdatedByUser = query
+			if _, ok := fieldSeen[task.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, task.FieldUpdatedByUserID)
+				fieldSeen[task.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			t.withCreatedByService = query
+			if _, ok := fieldSeen[task.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, task.FieldCreatedByServiceID)
+				fieldSeen[task.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			t.withUpdatedByService = query
+			if _, ok := fieldSeen[task.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, task.FieldUpdatedByServiceID)
+				fieldSeen[task.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "assigner":
@@ -13086,6 +15256,26 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[task.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, task.FieldUpdatedByID)
 				fieldSeen[task.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[task.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, task.FieldCreatedByUserID)
+				fieldSeen[task.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[task.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, task.FieldUpdatedByUserID)
+				fieldSeen[task.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[task.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, task.FieldCreatedByServiceID)
+				fieldSeen[task.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[task.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, task.FieldUpdatedByServiceID)
+				fieldSeen[task.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[task.FieldDeletedAt]; !ok {
@@ -13234,6 +15424,26 @@ func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, taskhistory.FieldUpdatedByID)
 				fieldSeen[taskhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[taskhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldCreatedByUserID)
+				fieldSeen[taskhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[taskhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldUpdatedByUserID)
+				fieldSeen[taskhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[taskhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldCreatedByServiceID)
+				fieldSeen[taskhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[taskhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldUpdatedByServiceID)
+				fieldSeen[taskhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[taskhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldDeletedAt)
@@ -13342,34 +15552,64 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: t.config}).Query()
+				query = (&UserClient{config: t.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			t.withCreatedBy = query
-			if _, ok := fieldSeen[template.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, template.FieldCreatedByID)
-				fieldSeen[template.FieldCreatedByID] = struct{}{}
+			t.withCreatedByUser = query
+			if _, ok := fieldSeen[template.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, template.FieldCreatedByUserID)
+				fieldSeen[template.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: t.config}).Query()
+				query = (&UserClient{config: t.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			t.withUpdatedBy = query
-			if _, ok := fieldSeen[template.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, template.FieldUpdatedByID)
-				fieldSeen[template.FieldUpdatedByID] = struct{}{}
+			t.withUpdatedByUser = query
+			if _, ok := fieldSeen[template.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, template.FieldUpdatedByUserID)
+				fieldSeen[template.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			t.withCreatedByService = query
+			if _, ok := fieldSeen[template.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, template.FieldCreatedByServiceID)
+				fieldSeen[template.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			t.withUpdatedByService = query
+			if _, ok := fieldSeen[template.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, template.FieldUpdatedByServiceID)
+				fieldSeen[template.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "owner":
@@ -13431,6 +15671,26 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[template.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, template.FieldUpdatedByID)
 				fieldSeen[template.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[template.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, template.FieldCreatedByUserID)
+				fieldSeen[template.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[template.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, template.FieldUpdatedByUserID)
+				fieldSeen[template.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[template.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, template.FieldCreatedByServiceID)
+				fieldSeen[template.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[template.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, template.FieldUpdatedByServiceID)
+				fieldSeen[template.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[template.FieldDeletedAt]; !ok {
@@ -13600,6 +15860,26 @@ func (th *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldUpdatedByID)
 				fieldSeen[templatehistory.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[templatehistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldCreatedByUserID)
+				fieldSeen[templatehistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[templatehistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldUpdatedByUserID)
+				fieldSeen[templatehistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[templatehistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldCreatedByServiceID)
+				fieldSeen[templatehistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[templatehistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldUpdatedByServiceID)
+				fieldSeen[templatehistory.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "deletedAt":
 			if _, ok := fieldSeen[templatehistory.FieldDeletedAt]; !ok {
@@ -13958,6 +16238,26 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, user.FieldUpdatedByID)
 				fieldSeen[user.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[user.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, user.FieldCreatedByUserID)
+				fieldSeen[user.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[user.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, user.FieldUpdatedByUserID)
+				fieldSeen[user.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[user.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, user.FieldCreatedByServiceID)
+				fieldSeen[user.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[user.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, user.FieldUpdatedByServiceID)
+				fieldSeen[user.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[user.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, user.FieldDeletedAt)
@@ -14157,6 +16457,26 @@ func (uh *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, userhistory.FieldUpdatedByID)
 				fieldSeen[userhistory.FieldUpdatedByID] = struct{}{}
 			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[userhistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldCreatedByUserID)
+				fieldSeen[userhistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[userhistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldUpdatedByUserID)
+				fieldSeen[userhistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[userhistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldCreatedByServiceID)
+				fieldSeen[userhistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[userhistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldUpdatedByServiceID)
+				fieldSeen[userhistory.FieldUpdatedByServiceID] = struct{}{}
+			}
 		case "deletedAt":
 			if _, ok := fieldSeen[userhistory.FieldDeletedAt]; !ok {
 				selectedFields = append(selectedFields, userhistory.FieldDeletedAt)
@@ -14317,34 +16637,64 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "createdBy":
+		case "createdByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: us.config}).Query()
+				query = (&UserClient{config: us.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			us.withCreatedBy = query
-			if _, ok := fieldSeen[usersetting.FieldCreatedByID]; !ok {
-				selectedFields = append(selectedFields, usersetting.FieldCreatedByID)
-				fieldSeen[usersetting.FieldCreatedByID] = struct{}{}
+			us.withCreatedByUser = query
+			if _, ok := fieldSeen[usersetting.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, usersetting.FieldCreatedByUserID)
+				fieldSeen[usersetting.FieldCreatedByUserID] = struct{}{}
 			}
 
-		case "updatedBy":
+		case "updatedByUser":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ChangeActorClient{config: us.config}).Query()
+				query = (&UserClient{config: us.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, changeactorImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			us.withUpdatedBy = query
-			if _, ok := fieldSeen[usersetting.FieldUpdatedByID]; !ok {
-				selectedFields = append(selectedFields, usersetting.FieldUpdatedByID)
-				fieldSeen[usersetting.FieldUpdatedByID] = struct{}{}
+			us.withUpdatedByUser = query
+			if _, ok := fieldSeen[usersetting.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, usersetting.FieldUpdatedByUserID)
+				fieldSeen[usersetting.FieldUpdatedByUserID] = struct{}{}
+			}
+
+		case "createdByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: us.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			us.withCreatedByService = query
+			if _, ok := fieldSeen[usersetting.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, usersetting.FieldCreatedByServiceID)
+				fieldSeen[usersetting.FieldCreatedByServiceID] = struct{}{}
+			}
+
+		case "updatedByService":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&APITokenClient{config: us.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, apitokenImplementors)...); err != nil {
+				return err
+			}
+			us.withUpdatedByService = query
+			if _, ok := fieldSeen[usersetting.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, usersetting.FieldUpdatedByServiceID)
+				fieldSeen[usersetting.FieldUpdatedByServiceID] = struct{}{}
 			}
 
 		case "user":
@@ -14404,6 +16754,26 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[usersetting.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, usersetting.FieldUpdatedByID)
 				fieldSeen[usersetting.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[usersetting.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, usersetting.FieldCreatedByUserID)
+				fieldSeen[usersetting.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[usersetting.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, usersetting.FieldUpdatedByUserID)
+				fieldSeen[usersetting.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[usersetting.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, usersetting.FieldCreatedByServiceID)
+				fieldSeen[usersetting.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[usersetting.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, usersetting.FieldUpdatedByServiceID)
+				fieldSeen[usersetting.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[usersetting.FieldTags]; !ok {
@@ -14561,6 +16931,26 @@ func (ush *UserSettingHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[usersettinghistory.FieldUpdatedByID]; !ok {
 				selectedFields = append(selectedFields, usersettinghistory.FieldUpdatedByID)
 				fieldSeen[usersettinghistory.FieldUpdatedByID] = struct{}{}
+			}
+		case "createdByUserID":
+			if _, ok := fieldSeen[usersettinghistory.FieldCreatedByUserID]; !ok {
+				selectedFields = append(selectedFields, usersettinghistory.FieldCreatedByUserID)
+				fieldSeen[usersettinghistory.FieldCreatedByUserID] = struct{}{}
+			}
+		case "updatedByUserID":
+			if _, ok := fieldSeen[usersettinghistory.FieldUpdatedByUserID]; !ok {
+				selectedFields = append(selectedFields, usersettinghistory.FieldUpdatedByUserID)
+				fieldSeen[usersettinghistory.FieldUpdatedByUserID] = struct{}{}
+			}
+		case "createdByServiceID":
+			if _, ok := fieldSeen[usersettinghistory.FieldCreatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, usersettinghistory.FieldCreatedByServiceID)
+				fieldSeen[usersettinghistory.FieldCreatedByServiceID] = struct{}{}
+			}
+		case "updatedByServiceID":
+			if _, ok := fieldSeen[usersettinghistory.FieldUpdatedByServiceID]; !ok {
+				selectedFields = append(selectedFields, usersettinghistory.FieldUpdatedByServiceID)
+				fieldSeen[usersettinghistory.FieldUpdatedByServiceID] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[usersettinghistory.FieldTags]; !ok {

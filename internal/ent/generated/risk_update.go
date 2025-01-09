@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -69,6 +70,46 @@ func (ru *RiskUpdate) SetNillableUpdatedByID(s *string) *RiskUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (ru *RiskUpdate) ClearUpdatedByID() *RiskUpdate {
 	ru.mutation.ClearUpdatedByID()
+	return ru
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ru *RiskUpdate) SetUpdatedByUserID(s string) *RiskUpdate {
+	ru.mutation.SetUpdatedByUserID(s)
+	return ru
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableUpdatedByUserID(s *string) *RiskUpdate {
+	if s != nil {
+		ru.SetUpdatedByUserID(*s)
+	}
+	return ru
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ru *RiskUpdate) ClearUpdatedByUserID() *RiskUpdate {
+	ru.mutation.ClearUpdatedByUserID()
+	return ru
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ru *RiskUpdate) SetUpdatedByServiceID(s string) *RiskUpdate {
+	ru.mutation.SetUpdatedByServiceID(s)
+	return ru
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ru *RiskUpdate) SetNillableUpdatedByServiceID(s *string) *RiskUpdate {
+	if s != nil {
+		ru.SetUpdatedByServiceID(*s)
+	}
+	return ru
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ru *RiskUpdate) ClearUpdatedByServiceID() *RiskUpdate {
+	ru.mutation.ClearUpdatedByServiceID()
 	return ru
 }
 
@@ -290,9 +331,14 @@ func (ru *RiskUpdate) ClearDetails() *RiskUpdate {
 	return ru
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ru *RiskUpdate) SetUpdatedBy(c *ChangeActor) *RiskUpdate {
-	return ru.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ru *RiskUpdate) SetUpdatedByUser(u *User) *RiskUpdate {
+	return ru.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ru *RiskUpdate) SetUpdatedByService(a *APIToken) *RiskUpdate {
+	return ru.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -410,9 +456,15 @@ func (ru *RiskUpdate) Mutation() *RiskMutation {
 	return ru.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (ru *RiskUpdate) ClearUpdatedBy() *RiskUpdate {
-	ru.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (ru *RiskUpdate) ClearUpdatedByUser() *RiskUpdate {
+	ru.mutation.ClearUpdatedByUser()
+	return ru
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (ru *RiskUpdate) ClearUpdatedByService() *RiskUpdate {
+	ru.mutation.ClearUpdatedByService()
 	return ru
 }
 
@@ -666,6 +718,15 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.UpdatedAtCleared() {
 		_spec.ClearField(risk.FieldUpdatedAt, field.TypeTime)
 	}
+	if ru.mutation.CreatedByIDCleared() {
+		_spec.ClearField(risk.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := ru.mutation.UpdatedByID(); ok {
+		_spec.SetField(risk.FieldUpdatedByID, field.TypeString, value)
+	}
+	if ru.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(risk.FieldUpdatedByID, field.TypeString)
+	}
 	if ru.mutation.DeletedAtCleared() {
 		_spec.ClearField(risk.FieldDeletedAt, field.TypeTime)
 	}
@@ -740,29 +801,60 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ru.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeJSON)
 	}
-	if ru.mutation.UpdatedByCleared() {
+	if ru.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   risk.UpdatedByTable,
-			Columns: []string{risk.UpdatedByColumn},
+			Table:   risk.UpdatedByUserTable,
+			Columns: []string{risk.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ru.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ru.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   risk.UpdatedByTable,
-			Columns: []string{risk.UpdatedByColumn},
+			Table:   risk.UpdatedByUserTable,
+			Columns: []string{risk.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByServiceTable,
+			Columns: []string{risk.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByServiceTable,
+			Columns: []string{risk.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ru.schemaConfig.Risk
@@ -1194,6 +1286,46 @@ func (ruo *RiskUpdateOne) ClearUpdatedByID() *RiskUpdateOne {
 	return ruo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ruo *RiskUpdateOne) SetUpdatedByUserID(s string) *RiskUpdateOne {
+	ruo.mutation.SetUpdatedByUserID(s)
+	return ruo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableUpdatedByUserID(s *string) *RiskUpdateOne {
+	if s != nil {
+		ruo.SetUpdatedByUserID(*s)
+	}
+	return ruo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ruo *RiskUpdateOne) ClearUpdatedByUserID() *RiskUpdateOne {
+	ruo.mutation.ClearUpdatedByUserID()
+	return ruo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ruo *RiskUpdateOne) SetUpdatedByServiceID(s string) *RiskUpdateOne {
+	ruo.mutation.SetUpdatedByServiceID(s)
+	return ruo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ruo *RiskUpdateOne) SetNillableUpdatedByServiceID(s *string) *RiskUpdateOne {
+	if s != nil {
+		ruo.SetUpdatedByServiceID(*s)
+	}
+	return ruo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ruo *RiskUpdateOne) ClearUpdatedByServiceID() *RiskUpdateOne {
+	ruo.mutation.ClearUpdatedByServiceID()
+	return ruo
+}
+
 // SetTags sets the "tags" field.
 func (ruo *RiskUpdateOne) SetTags(s []string) *RiskUpdateOne {
 	ruo.mutation.SetTags(s)
@@ -1412,9 +1544,14 @@ func (ruo *RiskUpdateOne) ClearDetails() *RiskUpdateOne {
 	return ruo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ruo *RiskUpdateOne) SetUpdatedBy(c *ChangeActor) *RiskUpdateOne {
-	return ruo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ruo *RiskUpdateOne) SetUpdatedByUser(u *User) *RiskUpdateOne {
+	return ruo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ruo *RiskUpdateOne) SetUpdatedByService(a *APIToken) *RiskUpdateOne {
+	return ruo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1532,9 +1669,15 @@ func (ruo *RiskUpdateOne) Mutation() *RiskMutation {
 	return ruo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (ruo *RiskUpdateOne) ClearUpdatedBy() *RiskUpdateOne {
-	ruo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (ruo *RiskUpdateOne) ClearUpdatedByUser() *RiskUpdateOne {
+	ruo.mutation.ClearUpdatedByUser()
+	return ruo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (ruo *RiskUpdateOne) ClearUpdatedByService() *RiskUpdateOne {
+	ruo.mutation.ClearUpdatedByService()
 	return ruo
 }
 
@@ -1818,6 +1961,15 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	if ruo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(risk.FieldUpdatedAt, field.TypeTime)
 	}
+	if ruo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(risk.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := ruo.mutation.UpdatedByID(); ok {
+		_spec.SetField(risk.FieldUpdatedByID, field.TypeString, value)
+	}
+	if ruo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(risk.FieldUpdatedByID, field.TypeString)
+	}
 	if ruo.mutation.DeletedAtCleared() {
 		_spec.ClearField(risk.FieldDeletedAt, field.TypeTime)
 	}
@@ -1892,29 +2044,60 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	if ruo.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeJSON)
 	}
-	if ruo.mutation.UpdatedByCleared() {
+	if ruo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   risk.UpdatedByTable,
-			Columns: []string{risk.UpdatedByColumn},
+			Table:   risk.UpdatedByUserTable,
+			Columns: []string{risk.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ruo.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ruo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   risk.UpdatedByTable,
-			Columns: []string{risk.UpdatedByColumn},
+			Table:   risk.UpdatedByUserTable,
+			Columns: []string{risk.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByServiceTable,
+			Columns: []string{risk.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.UpdatedByServiceTable,
+			Columns: []string{risk.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ruo.schemaConfig.Risk

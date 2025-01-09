@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Template_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Template_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Template_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Template_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Template_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Template_deletedAt(ctx, field)
 			case "deletedByID":
@@ -93,10 +101,14 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
 				return ec.fieldContext_Template_uischema(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Template_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Template_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Template_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Template_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
 			case "documents":
@@ -159,6 +171,14 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Template_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Template_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Template_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Template_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Template_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Template_deletedAt(ctx, field)
 			case "deletedByID":
@@ -177,10 +197,14 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
 				return ec.fieldContext_Template_uischema(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Template_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Template_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Template_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Template_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
 			case "documents":
@@ -287,6 +311,14 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Template_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Template_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Template_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Template_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Template_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Template_deletedAt(ctx, field)
 			case "deletedByID":
@@ -305,10 +337,14 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
 				return ec.fieldContext_Template_uischema(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Template_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Template_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Template_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Template_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
 			case "documents":

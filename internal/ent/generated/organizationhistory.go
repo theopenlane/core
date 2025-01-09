@@ -35,6 +35,14 @@ type OrganizationHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -71,7 +79,7 @@ func (*OrganizationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case organizationhistory.FieldPersonalOrg, organizationhistory.FieldDedicatedDb:
 			values[i] = new(sql.NullBool)
-		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldUpdatedBy, organizationhistory.FieldCreatedByID, organizationhistory.FieldUpdatedByID, organizationhistory.FieldMappingID, organizationhistory.FieldDeletedByID, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL:
+		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldUpdatedBy, organizationhistory.FieldCreatedByID, organizationhistory.FieldUpdatedByID, organizationhistory.FieldCreatedByUserID, organizationhistory.FieldUpdatedByUserID, organizationhistory.FieldCreatedByServiceID, organizationhistory.FieldUpdatedByServiceID, organizationhistory.FieldMappingID, organizationhistory.FieldDeletedByID, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case organizationhistory.FieldHistoryTime, organizationhistory.FieldCreatedAt, organizationhistory.FieldUpdatedAt, organizationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -144,6 +152,30 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				oh.UpdatedByID = value.String
+			}
+		case organizationhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				oh.CreatedByUserID = value.String
+			}
+		case organizationhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				oh.UpdatedByUserID = value.String
+			}
+		case organizationhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				oh.CreatedByServiceID = value.String
+			}
+		case organizationhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				oh.UpdatedByServiceID = value.String
 			}
 		case organizationhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -275,6 +307,18 @@ func (oh *OrganizationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(oh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(oh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(oh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(oh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(oh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(oh.MappingID)

@@ -64,6 +64,46 @@ func (fhu *FileHistoryUpdate) ClearUpdatedByID() *FileHistoryUpdate {
 	return fhu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (fhu *FileHistoryUpdate) SetUpdatedByUserID(s string) *FileHistoryUpdate {
+	fhu.mutation.SetUpdatedByUserID(s)
+	return fhu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableUpdatedByUserID(s *string) *FileHistoryUpdate {
+	if s != nil {
+		fhu.SetUpdatedByUserID(*s)
+	}
+	return fhu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (fhu *FileHistoryUpdate) ClearUpdatedByUserID() *FileHistoryUpdate {
+	fhu.mutation.ClearUpdatedByUserID()
+	return fhu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (fhu *FileHistoryUpdate) SetUpdatedByServiceID(s string) *FileHistoryUpdate {
+	fhu.mutation.SetUpdatedByServiceID(s)
+	return fhu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *FileHistoryUpdate {
+	if s != nil {
+		fhu.SetUpdatedByServiceID(*s)
+	}
+	return fhu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (fhu *FileHistoryUpdate) ClearUpdatedByServiceID() *FileHistoryUpdate {
+	fhu.mutation.ClearUpdatedByServiceID()
+	return fhu
+}
+
 // SetTags sets the "tags" field.
 func (fhu *FileHistoryUpdate) SetTags(s []string) *FileHistoryUpdate {
 	fhu.mutation.SetTags(s)
@@ -436,6 +476,24 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fhu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(filehistory.FieldUpdatedByID, field.TypeString)
 	}
+	if fhu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(filehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := fhu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if fhu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(filehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if fhu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(filehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := fhu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if fhu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(filehistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if fhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(filehistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -587,6 +645,46 @@ func (fhuo *FileHistoryUpdateOne) SetNillableUpdatedByID(s *string) *FileHistory
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (fhuo *FileHistoryUpdateOne) ClearUpdatedByID() *FileHistoryUpdateOne {
 	fhuo.mutation.ClearUpdatedByID()
+	return fhuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (fhuo *FileHistoryUpdateOne) SetUpdatedByUserID(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetUpdatedByUserID(s)
+	return fhuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *FileHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetUpdatedByUserID(*s)
+	}
+	return fhuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (fhuo *FileHistoryUpdateOne) ClearUpdatedByUserID() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearUpdatedByUserID()
+	return fhuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (fhuo *FileHistoryUpdateOne) SetUpdatedByServiceID(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetUpdatedByServiceID(s)
+	return fhuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *FileHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetUpdatedByServiceID(*s)
+	}
+	return fhuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (fhuo *FileHistoryUpdateOne) ClearUpdatedByServiceID() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearUpdatedByServiceID()
 	return fhuo
 }
 
@@ -991,6 +1089,24 @@ func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHisto
 	}
 	if fhuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(filehistory.FieldUpdatedByID, field.TypeString)
+	}
+	if fhuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(filehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := fhuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if fhuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(filehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if fhuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(filehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := fhuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if fhuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(filehistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if fhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(filehistory.FieldDeletedAt, field.TypeTime)

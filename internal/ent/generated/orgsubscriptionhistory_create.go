@@ -125,6 +125,62 @@ func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedByID(s *string) *Org
 	return oshc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetCreatedByUserID(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetCreatedByUserID(s)
+	return oshc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableCreatedByUserID(s *string) *OrgSubscriptionHistoryCreate {
+	if s != nil {
+		oshc.SetCreatedByUserID(*s)
+	}
+	return oshc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetUpdatedByUserID(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetUpdatedByUserID(s)
+	return oshc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedByUserID(s *string) *OrgSubscriptionHistoryCreate {
+	if s != nil {
+		oshc.SetUpdatedByUserID(*s)
+	}
+	return oshc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetCreatedByServiceID(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetCreatedByServiceID(s)
+	return oshc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableCreatedByServiceID(s *string) *OrgSubscriptionHistoryCreate {
+	if s != nil {
+		oshc.SetCreatedByServiceID(*s)
+	}
+	return oshc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetUpdatedByServiceID(s string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetUpdatedByServiceID(s)
+	return oshc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedByServiceID(s *string) *OrgSubscriptionHistoryCreate {
+	if s != nil {
+		oshc.SetUpdatedByServiceID(*s)
+	}
+	return oshc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (oshc *OrgSubscriptionHistoryCreate) SetMappingID(s string) *OrgSubscriptionHistoryCreate {
 	oshc.mutation.SetMappingID(s)
@@ -456,6 +512,22 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 	if value, ok := oshc.mutation.UpdatedByID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := oshc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := oshc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := oshc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := oshc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := oshc.mutation.MappingID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldMappingID, field.TypeString, value)

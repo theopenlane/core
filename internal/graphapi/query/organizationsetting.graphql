@@ -17,8 +17,7 @@ query GetAllOrganizationSettings {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         organization {
           id
@@ -72,8 +71,7 @@ query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         organization {
           id
@@ -96,8 +94,7 @@ mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: Up
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       domains
       geoLocation

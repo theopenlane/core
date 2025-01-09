@@ -16,8 +16,7 @@ mutation CreateBulkCSVTask($input: Upload!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
+
       }
       description
       details
@@ -50,8 +49,7 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
       createdByID
       createdBy {
         id
-        name
-        actorType
+
       }
       description
       details
@@ -84,8 +82,7 @@ mutation CreateTask($input: CreateTaskInput!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
+
       }
       description
       details
@@ -138,8 +135,7 @@ query GetAllTasks {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -205,8 +201,7 @@ query GetTasks($where: TaskWhereInput) {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -231,8 +226,7 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
+
       }
       description
       details

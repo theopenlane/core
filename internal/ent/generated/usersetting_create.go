@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -77,6 +77,62 @@ func (usc *UserSettingCreate) SetUpdatedByID(s string) *UserSettingCreate {
 func (usc *UserSettingCreate) SetNillableUpdatedByID(s *string) *UserSettingCreate {
 	if s != nil {
 		usc.SetUpdatedByID(*s)
+	}
+	return usc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (usc *UserSettingCreate) SetCreatedByUserID(s string) *UserSettingCreate {
+	usc.mutation.SetCreatedByUserID(s)
+	return usc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (usc *UserSettingCreate) SetNillableCreatedByUserID(s *string) *UserSettingCreate {
+	if s != nil {
+		usc.SetCreatedByUserID(*s)
+	}
+	return usc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (usc *UserSettingCreate) SetUpdatedByUserID(s string) *UserSettingCreate {
+	usc.mutation.SetUpdatedByUserID(s)
+	return usc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (usc *UserSettingCreate) SetNillableUpdatedByUserID(s *string) *UserSettingCreate {
+	if s != nil {
+		usc.SetUpdatedByUserID(*s)
+	}
+	return usc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (usc *UserSettingCreate) SetCreatedByServiceID(s string) *UserSettingCreate {
+	usc.mutation.SetCreatedByServiceID(s)
+	return usc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (usc *UserSettingCreate) SetNillableCreatedByServiceID(s *string) *UserSettingCreate {
+	if s != nil {
+		usc.SetCreatedByServiceID(*s)
+	}
+	return usc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (usc *UserSettingCreate) SetUpdatedByServiceID(s string) *UserSettingCreate {
+	usc.mutation.SetUpdatedByServiceID(s)
+	return usc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (usc *UserSettingCreate) SetNillableUpdatedByServiceID(s *string) *UserSettingCreate {
+	if s != nil {
+		usc.SetUpdatedByServiceID(*s)
 	}
 	return usc
 }
@@ -269,14 +325,24 @@ func (usc *UserSettingCreate) SetNillableID(s *string) *UserSettingCreate {
 	return usc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (usc *UserSettingCreate) SetCreatedBy(c *ChangeActor) *UserSettingCreate {
-	return usc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (usc *UserSettingCreate) SetCreatedByUser(u *User) *UserSettingCreate {
+	return usc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (usc *UserSettingCreate) SetUpdatedBy(c *ChangeActor) *UserSettingCreate {
-	return usc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (usc *UserSettingCreate) SetUpdatedByUser(u *User) *UserSettingCreate {
+	return usc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (usc *UserSettingCreate) SetCreatedByService(a *APIToken) *UserSettingCreate {
+	return usc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (usc *UserSettingCreate) SetUpdatedByService(a *APIToken) *UserSettingCreate {
+	return usc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
@@ -473,6 +539,14 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 		_spec.SetField(usersetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := usc.mutation.CreatedByID(); ok {
+		_spec.SetField(usersetting.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := usc.mutation.UpdatedByID(); ok {
+		_spec.SetField(usersetting.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := usc.mutation.MappingID(); ok {
 		_spec.SetField(usersetting.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -521,40 +595,76 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 		_spec.SetField(usersetting.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = &value
 	}
-	if nodes := usc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := usc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   usersetting.CreatedByTable,
-			Columns: []string{usersetting.CreatedByColumn},
+			Table:   usersetting.CreatedByUserTable,
+			Columns: []string{usersetting.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = usc.schemaConfig.UserSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := usc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := usc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   usersetting.UpdatedByTable,
-			Columns: []string{usersetting.UpdatedByColumn},
+			Table:   usersetting.UpdatedByUserTable,
+			Columns: []string{usersetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = usc.schemaConfig.UserSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := usc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.CreatedByServiceTable,
+			Columns: []string{usersetting.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usc.schemaConfig.UserSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := usc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   usersetting.UpdatedByServiceTable,
+			Columns: []string{usersetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usc.schemaConfig.UserSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := usc.mutation.UserIDs(); len(nodes) > 0 {

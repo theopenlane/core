@@ -8,18 +8,34 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
-func (at *APIToken) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := at.Edges.CreatedByOrErr()
+func (at *APIToken) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := at.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = at.QueryCreatedBy().Only(ctx)
+		result, err = at.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (at *APIToken) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := at.Edges.UpdatedByOrErr()
+func (at *APIToken) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := at.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = at.QueryUpdatedBy().Only(ctx)
+		result, err = at.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (at *APIToken) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := at.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = at.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (at *APIToken) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := at.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = at.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -32,18 +48,34 @@ func (at *APIToken) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (ap *ActionPlan) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := ap.Edges.CreatedByOrErr()
+func (ap *ActionPlan) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := ap.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = ap.QueryCreatedBy().Only(ctx)
+		result, err = ap.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (ap *ActionPlan) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := ap.Edges.UpdatedByOrErr()
+func (ap *ActionPlan) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := ap.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = ap.QueryUpdatedBy().Only(ctx)
+		result, err = ap.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ap *ActionPlan) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := ap.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = ap.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ap *ActionPlan) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := ap.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = ap.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -108,18 +140,34 @@ func (ap *ActionPlan) Program(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
-func (c *Contact) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := c.Edges.CreatedByOrErr()
+func (c *Contact) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := c.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = c.QueryCreatedBy().Only(ctx)
+		result, err = c.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (c *Contact) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := c.Edges.UpdatedByOrErr()
+func (c *Contact) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := c.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = c.QueryUpdatedBy().Only(ctx)
+		result, err = c.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (c *Contact) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := c.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = c.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (c *Contact) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := c.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = c.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -156,18 +204,34 @@ func (c *Contact) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
-func (c *Control) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := c.Edges.CreatedByOrErr()
+func (c *Control) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := c.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = c.QueryCreatedBy().Only(ctx)
+		result, err = c.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (c *Control) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := c.Edges.UpdatedByOrErr()
+func (c *Control) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := c.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = c.QueryUpdatedBy().Only(ctx)
+		result, err = c.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (c *Control) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := c.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = c.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (c *Control) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := c.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = c.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -324,18 +388,34 @@ func (c *Control) Programs(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (co *ControlObjective) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := co.Edges.CreatedByOrErr()
+func (co *ControlObjective) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := co.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = co.QueryCreatedBy().Only(ctx)
+		result, err = co.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (co *ControlObjective) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := co.Edges.UpdatedByOrErr()
+func (co *ControlObjective) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := co.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = co.QueryUpdatedBy().Only(ctx)
+		result, err = co.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (co *ControlObjective) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := co.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = co.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (co *ControlObjective) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := co.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = co.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -492,18 +572,34 @@ func (co *ControlObjective) Programs(ctx context.Context) (result []*Program, er
 	return result, err
 }
 
-func (dd *DocumentData) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := dd.Edges.CreatedByOrErr()
+func (dd *DocumentData) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := dd.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = dd.QueryCreatedBy().Only(ctx)
+		result, err = dd.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (dd *DocumentData) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := dd.Edges.UpdatedByOrErr()
+func (dd *DocumentData) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := dd.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = dd.QueryUpdatedBy().Only(ctx)
+		result, err = dd.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (dd *DocumentData) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := dd.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = dd.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (dd *DocumentData) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := dd.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = dd.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -548,18 +644,34 @@ func (dd *DocumentData) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
-func (e *Entity) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := e.Edges.CreatedByOrErr()
+func (e *Entity) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := e.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = e.QueryCreatedBy().Only(ctx)
+		result, err = e.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (e *Entity) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := e.Edges.UpdatedByOrErr()
+func (e *Entity) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := e.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = e.QueryUpdatedBy().Only(ctx)
+		result, err = e.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (e *Entity) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := e.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (e *Entity) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := e.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -628,18 +740,34 @@ func (e *Entity) EntityType(ctx context.Context) (*EntityType, error) {
 	return result, MaskNotFound(err)
 }
 
-func (et *EntityType) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := et.Edges.CreatedByOrErr()
+func (et *EntityType) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := et.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = et.QueryCreatedBy().Only(ctx)
+		result, err = et.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (et *EntityType) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := et.Edges.UpdatedByOrErr()
+func (et *EntityType) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := et.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = et.QueryUpdatedBy().Only(ctx)
+		result, err = et.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (et *EntityType) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := et.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = et.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (et *EntityType) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := et.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = et.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -664,18 +792,34 @@ func (et *EntityType) Entities(ctx context.Context) (result []*Entity, err error
 	return result, err
 }
 
-func (e *Event) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := e.Edges.CreatedByOrErr()
+func (e *Event) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := e.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = e.QueryCreatedBy().Only(ctx)
+		result, err = e.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (e *Event) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := e.Edges.UpdatedByOrErr()
+func (e *Event) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := e.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = e.QueryUpdatedBy().Only(ctx)
+		result, err = e.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (e *Event) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := e.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (e *Event) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := e.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -812,18 +956,34 @@ func (e *Event) File(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
-func (f *File) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := f.Edges.CreatedByOrErr()
+func (f *File) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := f.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = f.QueryCreatedBy().Only(ctx)
+		result, err = f.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (f *File) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := f.Edges.UpdatedByOrErr()
+func (f *File) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := f.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = f.QueryUpdatedBy().Only(ctx)
+		result, err = f.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (f *File) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := f.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = f.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (f *File) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := f.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = f.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -960,18 +1120,34 @@ func (f *File) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (gr *Group) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := gr.Edges.CreatedByOrErr()
+func (gr *Group) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := gr.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = gr.QueryCreatedBy().Only(ctx)
+		result, err = gr.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (gr *Group) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := gr.Edges.UpdatedByOrErr()
+func (gr *Group) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := gr.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = gr.QueryUpdatedBy().Only(ctx)
+		result, err = gr.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gr *Group) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := gr.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = gr.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gr *Group) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := gr.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = gr.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1400,18 +1576,34 @@ func (gr *Group) Members(ctx context.Context) (result []*GroupMembership, err er
 	return result, err
 }
 
-func (gm *GroupMembership) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := gm.Edges.CreatedByOrErr()
+func (gm *GroupMembership) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := gm.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = gm.QueryCreatedBy().Only(ctx)
+		result, err = gm.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (gm *GroupMembership) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := gm.Edges.UpdatedByOrErr()
+func (gm *GroupMembership) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := gm.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = gm.QueryUpdatedBy().Only(ctx)
+		result, err = gm.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gm *GroupMembership) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := gm.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = gm.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gm *GroupMembership) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := gm.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = gm.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1444,18 +1636,34 @@ func (gm *GroupMembership) Events(ctx context.Context) (result []*Event, err err
 	return result, err
 }
 
-func (gs *GroupSetting) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := gs.Edges.CreatedByOrErr()
+func (gs *GroupSetting) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := gs.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = gs.QueryCreatedBy().Only(ctx)
+		result, err = gs.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (gs *GroupSetting) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := gs.Edges.UpdatedByOrErr()
+func (gs *GroupSetting) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := gs.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = gs.QueryUpdatedBy().Only(ctx)
+		result, err = gs.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gs *GroupSetting) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := gs.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = gs.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (gs *GroupSetting) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := gs.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = gs.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1468,18 +1676,34 @@ func (gs *GroupSetting) Group(ctx context.Context) (*Group, error) {
 	return result, MaskNotFound(err)
 }
 
-func (h *Hush) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := h.Edges.CreatedByOrErr()
+func (h *Hush) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := h.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = h.QueryCreatedBy().Only(ctx)
+		result, err = h.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (h *Hush) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := h.Edges.UpdatedByOrErr()
+func (h *Hush) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := h.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = h.QueryUpdatedBy().Only(ctx)
+		result, err = h.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Hush) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := h.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Hush) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := h.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1520,18 +1744,34 @@ func (h *Hush) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (i *Integration) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := i.Edges.CreatedByOrErr()
+func (i *Integration) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := i.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = i.QueryCreatedBy().Only(ctx)
+		result, err = i.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (i *Integration) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := i.Edges.UpdatedByOrErr()
+func (i *Integration) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := i.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = i.QueryUpdatedBy().Only(ctx)
+		result, err = i.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (i *Integration) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := i.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = i.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (i *Integration) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := i.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = i.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1568,18 +1808,34 @@ func (i *Integration) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (ip *InternalPolicy) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := ip.Edges.CreatedByOrErr()
+func (ip *InternalPolicy) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := ip.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = ip.QueryCreatedBy().Only(ctx)
+		result, err = ip.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (ip *InternalPolicy) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := ip.Edges.UpdatedByOrErr()
+func (ip *InternalPolicy) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := ip.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = ip.QueryUpdatedBy().Only(ctx)
+		result, err = ip.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ip *InternalPolicy) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := ip.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = ip.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ip *InternalPolicy) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := ip.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = ip.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1688,18 +1944,34 @@ func (ip *InternalPolicy) Programs(ctx context.Context) (result []*Program, err 
 	return result, err
 }
 
-func (i *Invite) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := i.Edges.CreatedByOrErr()
+func (i *Invite) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := i.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = i.QueryCreatedBy().Only(ctx)
+		result, err = i.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (i *Invite) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := i.Edges.UpdatedByOrErr()
+func (i *Invite) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := i.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = i.QueryUpdatedBy().Only(ctx)
+		result, err = i.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (i *Invite) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := i.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = i.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (i *Invite) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := i.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = i.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1724,18 +1996,34 @@ func (i *Invite) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (n *Narrative) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := n.Edges.CreatedByOrErr()
+func (n *Narrative) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := n.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = n.QueryCreatedBy().Only(ctx)
+		result, err = n.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (n *Narrative) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := n.Edges.UpdatedByOrErr()
+func (n *Narrative) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := n.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = n.QueryUpdatedBy().Only(ctx)
+		result, err = n.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (n *Narrative) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := n.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = n.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (n *Narrative) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := n.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = n.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1844,18 +2132,34 @@ func (n *Narrative) Programs(ctx context.Context) (result []*Program, err error)
 	return result, err
 }
 
-func (n *Note) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := n.Edges.CreatedByOrErr()
+func (n *Note) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := n.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = n.QueryCreatedBy().Only(ctx)
+		result, err = n.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (n *Note) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := n.Edges.UpdatedByOrErr()
+func (n *Note) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := n.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = n.QueryUpdatedBy().Only(ctx)
+		result, err = n.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (n *Note) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := n.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = n.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (n *Note) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := n.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = n.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1900,18 +2204,34 @@ func (n *Note) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (om *OrgMembership) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := om.Edges.CreatedByOrErr()
+func (om *OrgMembership) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := om.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = om.QueryCreatedBy().Only(ctx)
+		result, err = om.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (om *OrgMembership) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := om.Edges.UpdatedByOrErr()
+func (om *OrgMembership) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := om.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = om.QueryUpdatedBy().Only(ctx)
+		result, err = om.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (om *OrgMembership) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := om.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = om.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (om *OrgMembership) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := om.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = om.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1944,18 +2264,34 @@ func (om *OrgMembership) Events(ctx context.Context) (result []*Event, err error
 	return result, err
 }
 
-func (os *OrgSubscription) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := os.Edges.CreatedByOrErr()
+func (os *OrgSubscription) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := os.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = os.QueryCreatedBy().Only(ctx)
+		result, err = os.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (os *OrgSubscription) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := os.Edges.UpdatedByOrErr()
+func (os *OrgSubscription) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := os.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = os.QueryUpdatedBy().Only(ctx)
+		result, err = os.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (os *OrgSubscription) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := os.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (os *OrgSubscription) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := os.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -1968,18 +2304,34 @@ func (os *OrgSubscription) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (o *Organization) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := o.Edges.CreatedByOrErr()
+func (o *Organization) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := o.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = o.QueryCreatedBy().Only(ctx)
+		result, err = o.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (o *Organization) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := o.Edges.UpdatedByOrErr()
+func (o *Organization) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := o.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = o.QueryUpdatedBy().Only(ctx)
+		result, err = o.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (o *Organization) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := o.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = o.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (o *Organization) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := o.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = o.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -2108,7 +2460,7 @@ func (o *Organization) Children(
 		WithOrganizationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[12][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[14][alias]
 	if nodes, err := o.NamedChildren(alias); err == nil || hasTotalCount {
 		pager, err := newOrganizationPager(opts, last != nil)
 		if err != nil {
@@ -2453,18 +2805,34 @@ func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, er
 	return result, err
 }
 
-func (os *OrganizationSetting) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := os.Edges.CreatedByOrErr()
+func (os *OrganizationSetting) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := os.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = os.QueryCreatedBy().Only(ctx)
+		result, err = os.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (os *OrganizationSetting) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := os.Edges.UpdatedByOrErr()
+func (os *OrganizationSetting) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := os.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = os.QueryUpdatedBy().Only(ctx)
+		result, err = os.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (os *OrganizationSetting) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := os.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (os *OrganizationSetting) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := os.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = os.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -2489,18 +2857,34 @@ func (os *OrganizationSetting) Files(ctx context.Context) (result []*File, err e
 	return result, err
 }
 
-func (pat *PersonalAccessToken) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := pat.Edges.CreatedByOrErr()
+func (pat *PersonalAccessToken) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := pat.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = pat.QueryCreatedBy().Only(ctx)
+		result, err = pat.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (pat *PersonalAccessToken) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := pat.Edges.UpdatedByOrErr()
+func (pat *PersonalAccessToken) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := pat.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = pat.QueryUpdatedBy().Only(ctx)
+		result, err = pat.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pat *PersonalAccessToken) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := pat.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = pat.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pat *PersonalAccessToken) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := pat.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = pat.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -2537,18 +2921,34 @@ func (pat *PersonalAccessToken) Events(ctx context.Context) (result []*Event, er
 	return result, err
 }
 
-func (pr *Procedure) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := pr.Edges.CreatedByOrErr()
+func (pr *Procedure) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := pr.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = pr.QueryCreatedBy().Only(ctx)
+		result, err = pr.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (pr *Procedure) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := pr.Edges.UpdatedByOrErr()
+func (pr *Procedure) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := pr.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = pr.QueryUpdatedBy().Only(ctx)
+		result, err = pr.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Procedure) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := pr.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Procedure) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := pr.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -2657,18 +3057,34 @@ func (pr *Procedure) Programs(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
-func (pr *Program) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := pr.Edges.CreatedByOrErr()
+func (pr *Program) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := pr.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = pr.QueryCreatedBy().Only(ctx)
+		result, err = pr.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (pr *Program) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := pr.Edges.UpdatedByOrErr()
+func (pr *Program) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := pr.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = pr.QueryUpdatedBy().Only(ctx)
+		result, err = pr.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Program) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := pr.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pr *Program) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := pr.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = pr.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -2885,18 +3301,34 @@ func (pr *Program) Members(ctx context.Context) (result []*ProgramMembership, er
 	return result, err
 }
 
-func (pm *ProgramMembership) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := pm.Edges.CreatedByOrErr()
+func (pm *ProgramMembership) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := pm.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = pm.QueryCreatedBy().Only(ctx)
+		result, err = pm.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (pm *ProgramMembership) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := pm.Edges.UpdatedByOrErr()
+func (pm *ProgramMembership) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := pm.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = pm.QueryUpdatedBy().Only(ctx)
+		result, err = pm.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pm *ProgramMembership) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := pm.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = pm.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pm *ProgramMembership) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := pm.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = pm.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -2917,18 +3349,34 @@ func (pm *ProgramMembership) User(ctx context.Context) (*User, error) {
 	return result, err
 }
 
-func (r *Risk) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := r.Edges.CreatedByOrErr()
+func (r *Risk) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := r.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = r.QueryCreatedBy().Only(ctx)
+		result, err = r.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (r *Risk) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := r.Edges.UpdatedByOrErr()
+func (r *Risk) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := r.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = r.QueryUpdatedBy().Only(ctx)
+		result, err = r.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (r *Risk) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := r.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = r.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (r *Risk) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := r.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = r.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -3025,18 +3473,34 @@ func (r *Risk) Programs(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (s *Standard) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := s.Edges.CreatedByOrErr()
+func (s *Standard) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := s.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = s.QueryCreatedBy().Only(ctx)
+		result, err = s.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (s *Standard) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := s.Edges.UpdatedByOrErr()
+func (s *Standard) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := s.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = s.QueryUpdatedBy().Only(ctx)
+		result, err = s.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Standard) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := s.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Standard) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := s.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -3101,18 +3565,34 @@ func (s *Standard) Programs(ctx context.Context) (result []*Program, err error) 
 	return result, err
 }
 
-func (s *Subcontrol) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := s.Edges.CreatedByOrErr()
+func (s *Subcontrol) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := s.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = s.QueryCreatedBy().Only(ctx)
+		result, err = s.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (s *Subcontrol) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := s.Edges.UpdatedByOrErr()
+func (s *Subcontrol) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := s.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = s.QueryUpdatedBy().Only(ctx)
+		result, err = s.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subcontrol) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := s.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subcontrol) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := s.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -3181,18 +3661,34 @@ func (s *Subcontrol) Programs(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
-func (s *Subscriber) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := s.Edges.CreatedByOrErr()
+func (s *Subscriber) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := s.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = s.QueryCreatedBy().Only(ctx)
+		result, err = s.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (s *Subscriber) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := s.Edges.UpdatedByOrErr()
+func (s *Subscriber) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := s.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = s.QueryUpdatedBy().Only(ctx)
+		result, err = s.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subscriber) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := s.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subscriber) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := s.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -3217,18 +3713,34 @@ func (s *Subscriber) Events(ctx context.Context) (result []*Event, err error) {
 	return result, err
 }
 
-func (ts *TFASetting) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := ts.Edges.CreatedByOrErr()
+func (ts *TFASetting) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := ts.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = ts.QueryCreatedBy().Only(ctx)
+		result, err = ts.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (ts *TFASetting) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := ts.Edges.UpdatedByOrErr()
+func (ts *TFASetting) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := ts.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = ts.QueryUpdatedBy().Only(ctx)
+		result, err = ts.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ts *TFASetting) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := ts.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = ts.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (ts *TFASetting) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := ts.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = ts.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -3241,18 +3753,34 @@ func (ts *TFASetting) Owner(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (t *Task) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := t.Edges.CreatedByOrErr()
+func (t *Task) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := t.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = t.QueryCreatedBy().Only(ctx)
+		result, err = t.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (t *Task) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := t.Edges.UpdatedByOrErr()
+func (t *Task) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := t.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = t.QueryUpdatedBy().Only(ctx)
+		result, err = t.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (t *Task) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := t.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (t *Task) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := t.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -3369,18 +3897,34 @@ func (t *Task) Program(ctx context.Context) (result []*Program, err error) {
 	return result, err
 }
 
-func (t *Template) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := t.Edges.CreatedByOrErr()
+func (t *Template) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := t.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = t.QueryCreatedBy().Only(ctx)
+		result, err = t.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (t *Template) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := t.Edges.UpdatedByOrErr()
+func (t *Template) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := t.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = t.QueryUpdatedBy().Only(ctx)
+		result, err = t.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (t *Template) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := t.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (t *Template) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := t.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -3601,18 +4145,34 @@ func (u *User) ProgramMemberships(ctx context.Context) (result []*ProgramMembers
 	return result, err
 }
 
-func (us *UserSetting) CreatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := us.Edges.CreatedByOrErr()
+func (us *UserSetting) CreatedByUser(ctx context.Context) (*User, error) {
+	result, err := us.Edges.CreatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = us.QueryCreatedBy().Only(ctx)
+		result, err = us.QueryCreatedByUser().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (us *UserSetting) UpdatedBy(ctx context.Context) (*ChangeActor, error) {
-	result, err := us.Edges.UpdatedByOrErr()
+func (us *UserSetting) UpdatedByUser(ctx context.Context) (*User, error) {
+	result, err := us.Edges.UpdatedByUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = us.QueryUpdatedBy().Only(ctx)
+		result, err = us.QueryUpdatedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (us *UserSetting) CreatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := us.Edges.CreatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = us.QueryCreatedByService().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (us *UserSetting) UpdatedByService(ctx context.Context) (*APIToken, error) {
+	result, err := us.Edges.UpdatedByServiceOrErr()
+	if IsNotLoaded(err) {
+		result, err = us.QueryUpdatedByService().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

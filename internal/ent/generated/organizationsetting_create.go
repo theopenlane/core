@@ -10,10 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -76,6 +77,62 @@ func (osc *OrganizationSettingCreate) SetUpdatedByID(s string) *OrganizationSett
 func (osc *OrganizationSettingCreate) SetNillableUpdatedByID(s *string) *OrganizationSettingCreate {
 	if s != nil {
 		osc.SetUpdatedByID(*s)
+	}
+	return osc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (osc *OrganizationSettingCreate) SetCreatedByUserID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetCreatedByUserID(s)
+	return osc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableCreatedByUserID(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetCreatedByUserID(*s)
+	}
+	return osc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (osc *OrganizationSettingCreate) SetUpdatedByUserID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetUpdatedByUserID(s)
+	return osc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableUpdatedByUserID(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetUpdatedByUserID(*s)
+	}
+	return osc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (osc *OrganizationSettingCreate) SetCreatedByServiceID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetCreatedByServiceID(s)
+	return osc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableCreatedByServiceID(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetCreatedByServiceID(*s)
+	}
+	return osc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (osc *OrganizationSettingCreate) SetUpdatedByServiceID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetUpdatedByServiceID(s)
+	return osc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableUpdatedByServiceID(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetUpdatedByServiceID(*s)
 	}
 	return osc
 }
@@ -260,14 +317,24 @@ func (osc *OrganizationSettingCreate) SetNillableID(s *string) *OrganizationSett
 	return osc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (osc *OrganizationSettingCreate) SetCreatedBy(c *ChangeActor) *OrganizationSettingCreate {
-	return osc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (osc *OrganizationSettingCreate) SetCreatedByUser(u *User) *OrganizationSettingCreate {
+	return osc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (osc *OrganizationSettingCreate) SetUpdatedBy(c *ChangeActor) *OrganizationSettingCreate {
-	return osc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (osc *OrganizationSettingCreate) SetUpdatedByUser(u *User) *OrganizationSettingCreate {
+	return osc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (osc *OrganizationSettingCreate) SetCreatedByService(a *APIToken) *OrganizationSettingCreate {
+	return osc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (osc *OrganizationSettingCreate) SetUpdatedByService(a *APIToken) *OrganizationSettingCreate {
+	return osc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
@@ -435,6 +502,14 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 		_spec.SetField(organizationsetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := osc.mutation.CreatedByID(); ok {
+		_spec.SetField(organizationsetting.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := osc.mutation.UpdatedByID(); ok {
+		_spec.SetField(organizationsetting.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := osc.mutation.MappingID(); ok {
 		_spec.SetField(organizationsetting.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -483,40 +558,76 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 		_spec.SetField(organizationsetting.FieldStripeID, field.TypeString, value)
 		_node.StripeID = value
 	}
-	if nodes := osc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := osc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organizationsetting.CreatedByTable,
-			Columns: []string{organizationsetting.CreatedByColumn},
+			Table:   organizationsetting.CreatedByUserTable,
+			Columns: []string{organizationsetting.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osc.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := osc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := osc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organizationsetting.UpdatedByTable,
-			Columns: []string{organizationsetting.UpdatedByColumn},
+			Table:   organizationsetting.UpdatedByUserTable,
+			Columns: []string{organizationsetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osc.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organizationsetting.CreatedByServiceTable,
+			Columns: []string{organizationsetting.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrganizationSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organizationsetting.UpdatedByServiceTable,
+			Columns: []string{organizationsetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrganizationSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {

@@ -125,6 +125,62 @@ func (aphc *ActionPlanHistoryCreate) SetNillableUpdatedByID(s *string) *ActionPl
 	return aphc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (aphc *ActionPlanHistoryCreate) SetCreatedByUserID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetCreatedByUserID(s)
+	return aphc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableCreatedByUserID(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetCreatedByUserID(*s)
+	}
+	return aphc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (aphc *ActionPlanHistoryCreate) SetUpdatedByUserID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetUpdatedByUserID(s)
+	return aphc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableUpdatedByUserID(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetUpdatedByUserID(*s)
+	}
+	return aphc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (aphc *ActionPlanHistoryCreate) SetCreatedByServiceID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetCreatedByServiceID(s)
+	return aphc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableCreatedByServiceID(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetCreatedByServiceID(*s)
+	}
+	return aphc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (aphc *ActionPlanHistoryCreate) SetUpdatedByServiceID(s string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetUpdatedByServiceID(s)
+	return aphc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (aphc *ActionPlanHistoryCreate) SetNillableUpdatedByServiceID(s *string) *ActionPlanHistoryCreate {
+	if s != nil {
+		aphc.SetUpdatedByServiceID(*s)
+	}
+	return aphc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (aphc *ActionPlanHistoryCreate) SetDeletedAt(t time.Time) *ActionPlanHistoryCreate {
 	aphc.mutation.SetDeletedAt(t)
@@ -416,6 +472,22 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 	if value, ok := aphc.mutation.UpdatedByID(); ok {
 		_spec.SetField(actionplanhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := aphc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(actionplanhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := aphc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := aphc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(actionplanhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := aphc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := aphc.mutation.DeletedAt(); ok {
 		_spec.SetField(actionplanhistory.FieldDeletedAt, field.TypeTime, value)

@@ -10,8 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Event is the model entity for the Event schema.
@@ -27,6 +29,14 @@ type Event struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -43,14 +53,23 @@ type Event struct {
 	// The values are being populated by the EventQuery when eager-loading is set.
 	Edges        EventEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // EventEdges holds the relations/edges for other nodes in the graph.
 type EventEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// User holds the value of the user edge.
 	User []*User `json:"user,omitempty"`
 	// Group holds the value of the group edge.
@@ -75,9 +94,9 @@ type EventEdges struct {
 	File []*File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [15]map[string]int
 
 	namedUser                map[string][]*User
 	namedGroup               map[string][]*Group
@@ -92,32 +111,54 @@ type EventEdges struct {
 	namedFile                map[string][]*File
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e EventEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e EventEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e EventEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e EventEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EventEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EventEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // UserOrErr returns the User value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.User, nil
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -126,7 +167,7 @@ func (e EventEdges) UserOrErr() ([]*User, error) {
 // GroupOrErr returns the Group value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) GroupOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Group, nil
 	}
 	return nil, &NotLoadedError{edge: "group"}
@@ -135,7 +176,7 @@ func (e EventEdges) GroupOrErr() ([]*Group, error) {
 // IntegrationOrErr returns the Integration value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) IntegrationOrErr() ([]*Integration, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Integration, nil
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -144,7 +185,7 @@ func (e EventEdges) IntegrationOrErr() ([]*Integration, error) {
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -153,7 +194,7 @@ func (e EventEdges) OrganizationOrErr() ([]*Organization, error) {
 // InviteOrErr returns the Invite value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) InviteOrErr() ([]*Invite, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Invite, nil
 	}
 	return nil, &NotLoadedError{edge: "invite"}
@@ -162,7 +203,7 @@ func (e EventEdges) InviteOrErr() ([]*Invite, error) {
 // PersonalAccessTokenOrErr returns the PersonalAccessToken value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) PersonalAccessTokenOrErr() ([]*PersonalAccessToken, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.PersonalAccessToken, nil
 	}
 	return nil, &NotLoadedError{edge: "personal_access_token"}
@@ -171,7 +212,7 @@ func (e EventEdges) PersonalAccessTokenOrErr() ([]*PersonalAccessToken, error) {
 // HushOrErr returns the Hush value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) HushOrErr() ([]*Hush, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Hush, nil
 	}
 	return nil, &NotLoadedError{edge: "hush"}
@@ -180,7 +221,7 @@ func (e EventEdges) HushOrErr() ([]*Hush, error) {
 // OrgmembershipOrErr returns the Orgmembership value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) OrgmembershipOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Orgmembership, nil
 	}
 	return nil, &NotLoadedError{edge: "orgmembership"}
@@ -189,7 +230,7 @@ func (e EventEdges) OrgmembershipOrErr() ([]*OrgMembership, error) {
 // GroupmembershipOrErr returns the Groupmembership value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) GroupmembershipOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Groupmembership, nil
 	}
 	return nil, &NotLoadedError{edge: "groupmembership"}
@@ -198,7 +239,7 @@ func (e EventEdges) GroupmembershipOrErr() ([]*GroupMembership, error) {
 // SubscriberOrErr returns the Subscriber value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) SubscriberOrErr() ([]*Subscriber, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Subscriber, nil
 	}
 	return nil, &NotLoadedError{edge: "subscriber"}
@@ -207,7 +248,7 @@ func (e EventEdges) SubscriberOrErr() ([]*Subscriber, error) {
 // FileOrErr returns the File value or an error if the edge
 // was not loaded in eager-loading.
 func (e EventEdges) FileOrErr() ([]*File, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.File, nil
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -220,7 +261,7 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case event.FieldTags, event.FieldMetadata:
 			values[i] = new([]byte)
-		case event.FieldID, event.FieldCreatedByID, event.FieldUpdatedByID, event.FieldMappingID, event.FieldEventID, event.FieldCorrelationID, event.FieldEventType:
+		case event.FieldID, event.FieldCreatedByID, event.FieldUpdatedByID, event.FieldCreatedByUserID, event.FieldUpdatedByUserID, event.FieldCreatedByServiceID, event.FieldUpdatedByServiceID, event.FieldMappingID, event.FieldEventID, event.FieldCorrelationID, event.FieldEventType:
 			values[i] = new(sql.NullString)
 		case event.FieldCreatedAt, event.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -268,6 +309,30 @@ func (e *Event) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				e.UpdatedByID = value.String
+			}
+		case event.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				e.CreatedByUserID = value.String
+			}
+		case event.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				e.UpdatedByUserID = value.String
+			}
+		case event.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				e.CreatedByServiceID = value.String
+			}
+		case event.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				e.UpdatedByServiceID = value.String
 			}
 		case event.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -322,14 +387,24 @@ func (e *Event) Value(name string) (ent.Value, error) {
 	return e.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the Event entity.
-func (e *Event) QueryCreatedBy() *ChangeActorQuery {
-	return NewEventClient(e.config).QueryCreatedBy(e)
+// QueryCreatedByUser queries the "created_by_user" edge of the Event entity.
+func (e *Event) QueryCreatedByUser() *UserQuery {
+	return NewEventClient(e.config).QueryCreatedByUser(e)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the Event entity.
-func (e *Event) QueryUpdatedBy() *ChangeActorQuery {
-	return NewEventClient(e.config).QueryUpdatedBy(e)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the Event entity.
+func (e *Event) QueryUpdatedByUser() *UserQuery {
+	return NewEventClient(e.config).QueryUpdatedByUser(e)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the Event entity.
+func (e *Event) QueryCreatedByService() *APITokenQuery {
+	return NewEventClient(e.config).QueryCreatedByService(e)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the Event entity.
+func (e *Event) QueryUpdatedByService() *APITokenQuery {
+	return NewEventClient(e.config).QueryUpdatedByService(e)
 }
 
 // QueryUser queries the "user" edge of the Event entity.
@@ -421,6 +496,18 @@ func (e *Event) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(e.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(e.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(e.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(e.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(e.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(e.MappingID)

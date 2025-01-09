@@ -125,6 +125,62 @@ func (cohc *ControlObjectiveHistoryCreate) SetNillableUpdatedByID(s *string) *Co
 	return cohc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (cohc *ControlObjectiveHistoryCreate) SetCreatedByUserID(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetCreatedByUserID(s)
+	return cohc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableCreatedByUserID(s *string) *ControlObjectiveHistoryCreate {
+	if s != nil {
+		cohc.SetCreatedByUserID(*s)
+	}
+	return cohc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (cohc *ControlObjectiveHistoryCreate) SetUpdatedByUserID(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetUpdatedByUserID(s)
+	return cohc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableUpdatedByUserID(s *string) *ControlObjectiveHistoryCreate {
+	if s != nil {
+		cohc.SetUpdatedByUserID(*s)
+	}
+	return cohc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (cohc *ControlObjectiveHistoryCreate) SetCreatedByServiceID(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetCreatedByServiceID(s)
+	return cohc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableCreatedByServiceID(s *string) *ControlObjectiveHistoryCreate {
+	if s != nil {
+		cohc.SetCreatedByServiceID(*s)
+	}
+	return cohc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (cohc *ControlObjectiveHistoryCreate) SetUpdatedByServiceID(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetUpdatedByServiceID(s)
+	return cohc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableUpdatedByServiceID(s *string) *ControlObjectiveHistoryCreate {
+	if s != nil {
+		cohc.SetUpdatedByServiceID(*s)
+	}
+	return cohc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (cohc *ControlObjectiveHistoryCreate) SetDeletedAt(t time.Time) *ControlObjectiveHistoryCreate {
 	cohc.mutation.SetDeletedAt(t)
@@ -499,6 +555,22 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 	if value, ok := cohc.mutation.UpdatedByID(); ok {
 		_spec.SetField(controlobjectivehistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := cohc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := cohc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := cohc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := cohc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := cohc.mutation.DeletedAt(); ok {
 		_spec.SetField(controlobjectivehistory.FieldDeletedAt, field.TypeTime, value)

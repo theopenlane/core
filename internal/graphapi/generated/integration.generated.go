@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_IntegrationBulkCreatePayload_integratio
 				return ec.fieldContext_Integration_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Integration_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Integration_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Integration_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Integration_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Integration_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "deletedAt":
@@ -89,10 +97,14 @@ func (ec *executionContext) fieldContext_IntegrationBulkCreatePayload_integratio
 				return ec.fieldContext_Integration_description(ctx, field)
 			case "kind":
 				return ec.fieldContext_Integration_kind(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Integration_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Integration_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Integration_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Integration_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Integration_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Integration_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Integration_owner(ctx, field)
 			case "secrets":
@@ -155,6 +167,14 @@ func (ec *executionContext) fieldContext_IntegrationCreatePayload_integration(_ 
 				return ec.fieldContext_Integration_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Integration_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Integration_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Integration_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Integration_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Integration_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "deletedAt":
@@ -169,10 +189,14 @@ func (ec *executionContext) fieldContext_IntegrationCreatePayload_integration(_ 
 				return ec.fieldContext_Integration_description(ctx, field)
 			case "kind":
 				return ec.fieldContext_Integration_kind(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Integration_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Integration_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Integration_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Integration_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Integration_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Integration_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Integration_owner(ctx, field)
 			case "secrets":
@@ -279,6 +303,14 @@ func (ec *executionContext) fieldContext_IntegrationUpdatePayload_integration(_ 
 				return ec.fieldContext_Integration_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Integration_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Integration_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Integration_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Integration_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Integration_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "deletedAt":
@@ -293,10 +325,14 @@ func (ec *executionContext) fieldContext_IntegrationUpdatePayload_integration(_ 
 				return ec.fieldContext_Integration_description(ctx, field)
 			case "kind":
 				return ec.fieldContext_Integration_kind(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Integration_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Integration_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Integration_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Integration_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Integration_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Integration_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Integration_owner(ctx, field)
 			case "secrets":

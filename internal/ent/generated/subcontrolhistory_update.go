@@ -64,6 +64,46 @@ func (shu *SubcontrolHistoryUpdate) ClearUpdatedByID() *SubcontrolHistoryUpdate 
 	return shu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (shu *SubcontrolHistoryUpdate) SetUpdatedByUserID(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetUpdatedByUserID(s)
+	return shu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableUpdatedByUserID(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetUpdatedByUserID(*s)
+	}
+	return shu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (shu *SubcontrolHistoryUpdate) ClearUpdatedByUserID() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearUpdatedByUserID()
+	return shu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (shu *SubcontrolHistoryUpdate) SetUpdatedByServiceID(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetUpdatedByServiceID(s)
+	return shu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetUpdatedByServiceID(*s)
+	}
+	return shu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (shu *SubcontrolHistoryUpdate) ClearUpdatedByServiceID() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearUpdatedByServiceID()
+	return shu
+}
+
 // SetTags sets the "tags" field.
 func (shu *SubcontrolHistoryUpdate) SetTags(s []string) *SubcontrolHistoryUpdate {
 	shu.mutation.SetTags(s)
@@ -488,6 +528,24 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if shu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := shu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if shu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if shu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := shu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if shu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if shu.mutation.DeletedAtCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -654,6 +712,46 @@ func (shuo *SubcontrolHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Subco
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (shuo *SubcontrolHistoryUpdateOne) ClearUpdatedByID() *SubcontrolHistoryUpdateOne {
 	shuo.mutation.ClearUpdatedByID()
+	return shuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetUpdatedByUserID(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetUpdatedByUserID(s)
+	return shuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetUpdatedByUserID(*s)
+	}
+	return shuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearUpdatedByUserID() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearUpdatedByUserID()
+	return shuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetUpdatedByServiceID(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetUpdatedByServiceID(s)
+	return shuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetUpdatedByServiceID(*s)
+	}
+	return shuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearUpdatedByServiceID() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearUpdatedByServiceID()
 	return shuo
 }
 
@@ -1110,6 +1208,24 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	}
 	if shuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if shuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := shuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if shuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if shuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := shuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if shuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if shuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDeletedAt, field.TypeTime)

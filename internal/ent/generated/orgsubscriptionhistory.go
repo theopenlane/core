@@ -35,6 +35,14 @@ type OrgSubscriptionHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -75,7 +83,7 @@ func (*OrgSubscriptionHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case orgsubscriptionhistory.FieldActive:
 			values[i] = new(sql.NullBool)
-		case orgsubscriptionhistory.FieldID, orgsubscriptionhistory.FieldRef, orgsubscriptionhistory.FieldUpdatedBy, orgsubscriptionhistory.FieldCreatedByID, orgsubscriptionhistory.FieldUpdatedByID, orgsubscriptionhistory.FieldMappingID, orgsubscriptionhistory.FieldDeletedByID, orgsubscriptionhistory.FieldOwnerID, orgsubscriptionhistory.FieldStripeSubscriptionID, orgsubscriptionhistory.FieldProductTier, orgsubscriptionhistory.FieldStripeProductTierID, orgsubscriptionhistory.FieldStripeSubscriptionStatus, orgsubscriptionhistory.FieldStripeCustomerID:
+		case orgsubscriptionhistory.FieldID, orgsubscriptionhistory.FieldRef, orgsubscriptionhistory.FieldUpdatedBy, orgsubscriptionhistory.FieldCreatedByID, orgsubscriptionhistory.FieldUpdatedByID, orgsubscriptionhistory.FieldCreatedByUserID, orgsubscriptionhistory.FieldUpdatedByUserID, orgsubscriptionhistory.FieldCreatedByServiceID, orgsubscriptionhistory.FieldUpdatedByServiceID, orgsubscriptionhistory.FieldMappingID, orgsubscriptionhistory.FieldDeletedByID, orgsubscriptionhistory.FieldOwnerID, orgsubscriptionhistory.FieldStripeSubscriptionID, orgsubscriptionhistory.FieldProductTier, orgsubscriptionhistory.FieldStripeProductTierID, orgsubscriptionhistory.FieldStripeSubscriptionStatus, orgsubscriptionhistory.FieldStripeCustomerID:
 			values[i] = new(sql.NullString)
 		case orgsubscriptionhistory.FieldHistoryTime, orgsubscriptionhistory.FieldCreatedAt, orgsubscriptionhistory.FieldUpdatedAt, orgsubscriptionhistory.FieldDeletedAt, orgsubscriptionhistory.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
@@ -148,6 +156,30 @@ func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				osh.UpdatedByID = value.String
+			}
+		case orgsubscriptionhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				osh.CreatedByUserID = value.String
+			}
+		case orgsubscriptionhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				osh.UpdatedByUserID = value.String
+			}
+		case orgsubscriptionhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				osh.CreatedByServiceID = value.String
+			}
+		case orgsubscriptionhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				osh.UpdatedByServiceID = value.String
 			}
 		case orgsubscriptionhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -293,6 +325,18 @@ func (osh *OrgSubscriptionHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(osh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(osh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(osh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(osh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(osh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(osh.MappingID)

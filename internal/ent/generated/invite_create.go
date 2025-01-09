@@ -10,10 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -76,6 +77,62 @@ func (ic *InviteCreate) SetUpdatedByID(s string) *InviteCreate {
 func (ic *InviteCreate) SetNillableUpdatedByID(s *string) *InviteCreate {
 	if s != nil {
 		ic.SetUpdatedByID(*s)
+	}
+	return ic
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ic *InviteCreate) SetCreatedByUserID(s string) *InviteCreate {
+	ic.mutation.SetCreatedByUserID(s)
+	return ic
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ic *InviteCreate) SetNillableCreatedByUserID(s *string) *InviteCreate {
+	if s != nil {
+		ic.SetCreatedByUserID(*s)
+	}
+	return ic
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ic *InviteCreate) SetUpdatedByUserID(s string) *InviteCreate {
+	ic.mutation.SetUpdatedByUserID(s)
+	return ic
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ic *InviteCreate) SetNillableUpdatedByUserID(s *string) *InviteCreate {
+	if s != nil {
+		ic.SetUpdatedByUserID(*s)
+	}
+	return ic
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ic *InviteCreate) SetCreatedByServiceID(s string) *InviteCreate {
+	ic.mutation.SetCreatedByServiceID(s)
+	return ic
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ic *InviteCreate) SetNillableCreatedByServiceID(s *string) *InviteCreate {
+	if s != nil {
+		ic.SetCreatedByServiceID(*s)
+	}
+	return ic
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ic *InviteCreate) SetUpdatedByServiceID(s string) *InviteCreate {
+	ic.mutation.SetUpdatedByServiceID(s)
+	return ic
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ic *InviteCreate) SetNillableUpdatedByServiceID(s *string) *InviteCreate {
+	if s != nil {
+		ic.SetUpdatedByServiceID(*s)
 	}
 	return ic
 }
@@ -238,14 +295,24 @@ func (ic *InviteCreate) SetNillableID(s *string) *InviteCreate {
 	return ic
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (ic *InviteCreate) SetCreatedBy(c *ChangeActor) *InviteCreate {
-	return ic.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (ic *InviteCreate) SetCreatedByUser(u *User) *InviteCreate {
+	return ic.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ic *InviteCreate) SetUpdatedBy(c *ChangeActor) *InviteCreate {
-	return ic.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ic *InviteCreate) SetUpdatedByUser(u *User) *InviteCreate {
+	return ic.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (ic *InviteCreate) SetCreatedByService(a *APIToken) *InviteCreate {
+	return ic.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ic *InviteCreate) SetUpdatedByService(a *APIToken) *InviteCreate {
+	return ic.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -457,6 +524,14 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 		_spec.SetField(invite.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := ic.mutation.CreatedByID(); ok {
+		_spec.SetField(invite.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := ic.mutation.UpdatedByID(); ok {
+		_spec.SetField(invite.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := ic.mutation.MappingID(); ok {
 		_spec.SetField(invite.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -501,40 +576,76 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
 	}
-	if nodes := ic.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := ic.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   invite.CreatedByTable,
-			Columns: []string{invite.CreatedByColumn},
+			Table:   invite.CreatedByUserTable,
+			Columns: []string{invite.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ic.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ic.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ic.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   invite.UpdatedByTable,
-			Columns: []string{invite.UpdatedByColumn},
+			Table:   invite.UpdatedByUserTable,
+			Columns: []string{invite.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ic.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ic.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.CreatedByServiceTable,
+			Columns: []string{invite.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ic.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ic.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByServiceTable,
+			Columns: []string{invite.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ic.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ic.mutation.OwnerIDs(); len(nodes) > 0 {

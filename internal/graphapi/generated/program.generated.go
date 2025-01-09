@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Program_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Program_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Program_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Program_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Program_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
 			case "deletedByID":
@@ -99,10 +107,14 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_auditorWriteComments(ctx, field)
 			case "auditorReadComments":
 				return ec.fieldContext_Program_auditorReadComments(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Program_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Program_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Program_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Program_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Program_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":
@@ -195,6 +207,14 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Program_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Program_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Program_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Program_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Program_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
 			case "deletedByID":
@@ -219,10 +239,14 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_auditorWriteComments(ctx, field)
 			case "auditorReadComments":
 				return ec.fieldContext_Program_auditorReadComments(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Program_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Program_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Program_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Program_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Program_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":
@@ -359,6 +383,14 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Program_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Program_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Program_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Program_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Program_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
 			case "deletedByID":
@@ -383,10 +415,14 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_auditorWriteComments(ctx, field)
 			case "auditorReadComments":
 				return ec.fieldContext_Program_auditorReadComments(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Program_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Program_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Program_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Program_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Program_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":

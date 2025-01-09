@@ -125,6 +125,62 @@ func (hhc *HushHistoryCreate) SetNillableUpdatedByID(s *string) *HushHistoryCrea
 	return hhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (hhc *HushHistoryCreate) SetCreatedByUserID(s string) *HushHistoryCreate {
+	hhc.mutation.SetCreatedByUserID(s)
+	return hhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableCreatedByUserID(s *string) *HushHistoryCreate {
+	if s != nil {
+		hhc.SetCreatedByUserID(*s)
+	}
+	return hhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (hhc *HushHistoryCreate) SetUpdatedByUserID(s string) *HushHistoryCreate {
+	hhc.mutation.SetUpdatedByUserID(s)
+	return hhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableUpdatedByUserID(s *string) *HushHistoryCreate {
+	if s != nil {
+		hhc.SetUpdatedByUserID(*s)
+	}
+	return hhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (hhc *HushHistoryCreate) SetCreatedByServiceID(s string) *HushHistoryCreate {
+	hhc.mutation.SetCreatedByServiceID(s)
+	return hhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableCreatedByServiceID(s *string) *HushHistoryCreate {
+	if s != nil {
+		hhc.SetCreatedByServiceID(*s)
+	}
+	return hhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (hhc *HushHistoryCreate) SetUpdatedByServiceID(s string) *HushHistoryCreate {
+	hhc.mutation.SetUpdatedByServiceID(s)
+	return hhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableUpdatedByServiceID(s *string) *HushHistoryCreate {
+	if s != nil {
+		hhc.SetUpdatedByServiceID(*s)
+	}
+	return hhc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (hhc *HushHistoryCreate) SetMappingID(s string) *HushHistoryCreate {
 	hhc.mutation.SetMappingID(s)
@@ -386,6 +442,22 @@ func (hhc *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) 
 	if value, ok := hhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(hushhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := hhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(hushhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := hhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := hhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(hushhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := hhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := hhc.mutation.MappingID(); ok {
 		_spec.SetField(hushhistory.FieldMappingID, field.TypeString, value)

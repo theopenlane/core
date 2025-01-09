@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // NarrativeCreate is the builder for creating a Narrative entity.
@@ -80,6 +81,62 @@ func (nc *NarrativeCreate) SetUpdatedByID(s string) *NarrativeCreate {
 func (nc *NarrativeCreate) SetNillableUpdatedByID(s *string) *NarrativeCreate {
 	if s != nil {
 		nc.SetUpdatedByID(*s)
+	}
+	return nc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (nc *NarrativeCreate) SetCreatedByUserID(s string) *NarrativeCreate {
+	nc.mutation.SetCreatedByUserID(s)
+	return nc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (nc *NarrativeCreate) SetNillableCreatedByUserID(s *string) *NarrativeCreate {
+	if s != nil {
+		nc.SetCreatedByUserID(*s)
+	}
+	return nc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nc *NarrativeCreate) SetUpdatedByUserID(s string) *NarrativeCreate {
+	nc.mutation.SetUpdatedByUserID(s)
+	return nc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nc *NarrativeCreate) SetNillableUpdatedByUserID(s *string) *NarrativeCreate {
+	if s != nil {
+		nc.SetUpdatedByUserID(*s)
+	}
+	return nc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (nc *NarrativeCreate) SetCreatedByServiceID(s string) *NarrativeCreate {
+	nc.mutation.SetCreatedByServiceID(s)
+	return nc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (nc *NarrativeCreate) SetNillableCreatedByServiceID(s *string) *NarrativeCreate {
+	if s != nil {
+		nc.SetCreatedByServiceID(*s)
+	}
+	return nc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nc *NarrativeCreate) SetUpdatedByServiceID(s string) *NarrativeCreate {
+	nc.mutation.SetUpdatedByServiceID(s)
+	return nc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nc *NarrativeCreate) SetNillableUpdatedByServiceID(s *string) *NarrativeCreate {
+	if s != nil {
+		nc.SetUpdatedByServiceID(*s)
 	}
 	return nc
 }
@@ -192,14 +249,24 @@ func (nc *NarrativeCreate) SetNillableID(s *string) *NarrativeCreate {
 	return nc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (nc *NarrativeCreate) SetCreatedBy(c *ChangeActor) *NarrativeCreate {
-	return nc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (nc *NarrativeCreate) SetCreatedByUser(u *User) *NarrativeCreate {
+	return nc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (nc *NarrativeCreate) SetUpdatedBy(c *ChangeActor) *NarrativeCreate {
-	return nc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (nc *NarrativeCreate) SetUpdatedByUser(u *User) *NarrativeCreate {
+	return nc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (nc *NarrativeCreate) SetCreatedByService(a *APIToken) *NarrativeCreate {
+	return nc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (nc *NarrativeCreate) SetUpdatedByService(a *APIToken) *NarrativeCreate {
+	return nc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -467,6 +534,14 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		_spec.SetField(narrative.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := nc.mutation.CreatedByID(); ok {
+		_spec.SetField(narrative.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := nc.mutation.UpdatedByID(); ok {
+		_spec.SetField(narrative.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := nc.mutation.DeletedAt(); ok {
 		_spec.SetField(narrative.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -499,40 +574,76 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		_spec.SetField(narrative.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
-	if nodes := nc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := nc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   narrative.CreatedByTable,
-			Columns: []string{narrative.CreatedByColumn},
+			Table:   narrative.CreatedByUserTable,
+			Columns: []string{narrative.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nc.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := nc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   narrative.UpdatedByTable,
-			Columns: []string{narrative.UpdatedByColumn},
+			Table:   narrative.UpdatedByUserTable,
+			Columns: []string{narrative.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nc.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.CreatedByServiceTable,
+			Columns: []string{narrative.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByServiceTable,
+			Columns: []string{narrative.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := nc.mutation.OwnerIDs(); len(nodes) > 0 {

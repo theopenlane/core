@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -73,6 +73,46 @@ func (eu *EventUpdate) SetNillableUpdatedByID(s *string) *EventUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (eu *EventUpdate) ClearUpdatedByID() *EventUpdate {
 	eu.mutation.ClearUpdatedByID()
+	return eu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (eu *EventUpdate) SetUpdatedByUserID(s string) *EventUpdate {
+	eu.mutation.SetUpdatedByUserID(s)
+	return eu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (eu *EventUpdate) SetNillableUpdatedByUserID(s *string) *EventUpdate {
+	if s != nil {
+		eu.SetUpdatedByUserID(*s)
+	}
+	return eu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (eu *EventUpdate) ClearUpdatedByUserID() *EventUpdate {
+	eu.mutation.ClearUpdatedByUserID()
+	return eu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (eu *EventUpdate) SetUpdatedByServiceID(s string) *EventUpdate {
+	eu.mutation.SetUpdatedByServiceID(s)
+	return eu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (eu *EventUpdate) SetNillableUpdatedByServiceID(s *string) *EventUpdate {
+	if s != nil {
+		eu.SetUpdatedByServiceID(*s)
+	}
+	return eu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (eu *EventUpdate) ClearUpdatedByServiceID() *EventUpdate {
+	eu.mutation.ClearUpdatedByServiceID()
 	return eu
 }
 
@@ -160,9 +200,14 @@ func (eu *EventUpdate) ClearMetadata() *EventUpdate {
 	return eu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (eu *EventUpdate) SetUpdatedBy(c *ChangeActor) *EventUpdate {
-	return eu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (eu *EventUpdate) SetUpdatedByUser(u *User) *EventUpdate {
+	return eu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (eu *EventUpdate) SetUpdatedByService(a *APIToken) *EventUpdate {
+	return eu.SetUpdatedByServiceID(a.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -335,9 +380,15 @@ func (eu *EventUpdate) Mutation() *EventMutation {
 	return eu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (eu *EventUpdate) ClearUpdatedBy() *EventUpdate {
-	eu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (eu *EventUpdate) ClearUpdatedByUser() *EventUpdate {
+	eu.mutation.ClearUpdatedByUser()
+	return eu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (eu *EventUpdate) ClearUpdatedByService() *EventUpdate {
+	eu.mutation.ClearUpdatedByService()
 	return eu
 }
 
@@ -638,6 +689,15 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if eu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(event.FieldUpdatedAt, field.TypeTime)
 	}
+	if eu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(event.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := eu.mutation.UpdatedByID(); ok {
+		_spec.SetField(event.FieldUpdatedByID, field.TypeString, value)
+	}
+	if eu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(event.FieldUpdatedByID, field.TypeString)
+	}
 	if value, ok := eu.mutation.Tags(); ok {
 		_spec.SetField(event.FieldTags, field.TypeJSON, value)
 	}
@@ -670,29 +730,60 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if eu.mutation.MetadataCleared() {
 		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
 	}
-	if eu.mutation.UpdatedByCleared() {
+	if eu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   event.UpdatedByTable,
-			Columns: []string{event.UpdatedByColumn},
+			Table:   event.UpdatedByUserTable,
+			Columns: []string{event.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = eu.schemaConfig.Event
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   event.UpdatedByTable,
-			Columns: []string{event.UpdatedByColumn},
+			Table:   event.UpdatedByUserTable,
+			Columns: []string{event.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.Event
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   event.UpdatedByServiceTable,
+			Columns: []string{event.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.Event
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   event.UpdatedByServiceTable,
+			Columns: []string{event.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = eu.schemaConfig.Event
@@ -1285,6 +1376,46 @@ func (euo *EventUpdateOne) ClearUpdatedByID() *EventUpdateOne {
 	return euo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (euo *EventUpdateOne) SetUpdatedByUserID(s string) *EventUpdateOne {
+	euo.mutation.SetUpdatedByUserID(s)
+	return euo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (euo *EventUpdateOne) SetNillableUpdatedByUserID(s *string) *EventUpdateOne {
+	if s != nil {
+		euo.SetUpdatedByUserID(*s)
+	}
+	return euo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (euo *EventUpdateOne) ClearUpdatedByUserID() *EventUpdateOne {
+	euo.mutation.ClearUpdatedByUserID()
+	return euo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (euo *EventUpdateOne) SetUpdatedByServiceID(s string) *EventUpdateOne {
+	euo.mutation.SetUpdatedByServiceID(s)
+	return euo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (euo *EventUpdateOne) SetNillableUpdatedByServiceID(s *string) *EventUpdateOne {
+	if s != nil {
+		euo.SetUpdatedByServiceID(*s)
+	}
+	return euo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (euo *EventUpdateOne) ClearUpdatedByServiceID() *EventUpdateOne {
+	euo.mutation.ClearUpdatedByServiceID()
+	return euo
+}
+
 // SetTags sets the "tags" field.
 func (euo *EventUpdateOne) SetTags(s []string) *EventUpdateOne {
 	euo.mutation.SetTags(s)
@@ -1369,9 +1500,14 @@ func (euo *EventUpdateOne) ClearMetadata() *EventUpdateOne {
 	return euo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (euo *EventUpdateOne) SetUpdatedBy(c *ChangeActor) *EventUpdateOne {
-	return euo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (euo *EventUpdateOne) SetUpdatedByUser(u *User) *EventUpdateOne {
+	return euo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (euo *EventUpdateOne) SetUpdatedByService(a *APIToken) *EventUpdateOne {
+	return euo.SetUpdatedByServiceID(a.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -1544,9 +1680,15 @@ func (euo *EventUpdateOne) Mutation() *EventMutation {
 	return euo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (euo *EventUpdateOne) ClearUpdatedBy() *EventUpdateOne {
-	euo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (euo *EventUpdateOne) ClearUpdatedByUser() *EventUpdateOne {
+	euo.mutation.ClearUpdatedByUser()
+	return euo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (euo *EventUpdateOne) ClearUpdatedByService() *EventUpdateOne {
+	euo.mutation.ClearUpdatedByService()
 	return euo
 }
 
@@ -1877,6 +2019,15 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 	if euo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(event.FieldUpdatedAt, field.TypeTime)
 	}
+	if euo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(event.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := euo.mutation.UpdatedByID(); ok {
+		_spec.SetField(event.FieldUpdatedByID, field.TypeString, value)
+	}
+	if euo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(event.FieldUpdatedByID, field.TypeString)
+	}
 	if value, ok := euo.mutation.Tags(); ok {
 		_spec.SetField(event.FieldTags, field.TypeJSON, value)
 	}
@@ -1909,29 +2060,60 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 	if euo.mutation.MetadataCleared() {
 		_spec.ClearField(event.FieldMetadata, field.TypeJSON)
 	}
-	if euo.mutation.UpdatedByCleared() {
+	if euo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   event.UpdatedByTable,
-			Columns: []string{event.UpdatedByColumn},
+			Table:   event.UpdatedByUserTable,
+			Columns: []string{event.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = euo.schemaConfig.Event
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   event.UpdatedByTable,
-			Columns: []string{event.UpdatedByColumn},
+			Table:   event.UpdatedByUserTable,
+			Columns: []string{event.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.Event
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   event.UpdatedByServiceTable,
+			Columns: []string{event.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.Event
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   event.UpdatedByServiceTable,
+			Columns: []string{event.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = euo.schemaConfig.Event

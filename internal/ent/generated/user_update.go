@@ -82,6 +82,46 @@ func (uu *UserUpdate) ClearUpdatedByID() *UserUpdate {
 	return uu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (uu *UserUpdate) SetUpdatedByUserID(s string) *UserUpdate {
+	uu.mutation.SetUpdatedByUserID(s)
+	return uu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableUpdatedByUserID(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetUpdatedByUserID(*s)
+	}
+	return uu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (uu *UserUpdate) ClearUpdatedByUserID() *UserUpdate {
+	uu.mutation.ClearUpdatedByUserID()
+	return uu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (uu *UserUpdate) SetUpdatedByServiceID(s string) *UserUpdate {
+	uu.mutation.SetUpdatedByServiceID(s)
+	return uu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableUpdatedByServiceID(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetUpdatedByServiceID(*s)
+	}
+	return uu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (uu *UserUpdate) ClearUpdatedByServiceID() *UserUpdate {
+	uu.mutation.ClearUpdatedByServiceID()
+	return uu
+}
+
 // SetTags sets the "tags" field.
 func (uu *UserUpdate) SetTags(s []string) *UserUpdate {
 	uu.mutation.SetTags(s)
@@ -1124,6 +1164,24 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(user.FieldUpdatedByID, field.TypeString)
+	}
+	if uu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(user.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := uu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(user.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if uu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(user.FieldUpdatedByUserID, field.TypeString)
+	}
+	if uu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(user.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := uu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(user.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if uu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(user.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if uu.mutation.DeletedAtCleared() {
 		_spec.ClearField(user.FieldDeletedAt, field.TypeTime)
@@ -2202,6 +2260,46 @@ func (uuo *UserUpdateOne) ClearUpdatedByID() *UserUpdateOne {
 	return uuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (uuo *UserUpdateOne) SetUpdatedByUserID(s string) *UserUpdateOne {
+	uuo.mutation.SetUpdatedByUserID(s)
+	return uuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableUpdatedByUserID(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetUpdatedByUserID(*s)
+	}
+	return uuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (uuo *UserUpdateOne) ClearUpdatedByUserID() *UserUpdateOne {
+	uuo.mutation.ClearUpdatedByUserID()
+	return uuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (uuo *UserUpdateOne) SetUpdatedByServiceID(s string) *UserUpdateOne {
+	uuo.mutation.SetUpdatedByServiceID(s)
+	return uuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableUpdatedByServiceID(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetUpdatedByServiceID(*s)
+	}
+	return uuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (uuo *UserUpdateOne) ClearUpdatedByServiceID() *UserUpdateOne {
+	uuo.mutation.ClearUpdatedByServiceID()
+	return uuo
+}
+
 // SetTags sets the "tags" field.
 func (uuo *UserUpdateOne) SetTags(s []string) *UserUpdateOne {
 	uuo.mutation.SetTags(s)
@@ -3274,6 +3372,24 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(user.FieldUpdatedByID, field.TypeString)
+	}
+	if uuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(user.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := uuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(user.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if uuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(user.FieldUpdatedByUserID, field.TypeString)
+	}
+	if uuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(user.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := uuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(user.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if uuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(user.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if uuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(user.FieldDeletedAt, field.TypeTime)

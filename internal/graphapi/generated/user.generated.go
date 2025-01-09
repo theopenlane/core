@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_User_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_User_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_User_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_User_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_User_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_User_deletedAt(ctx, field)
 			case "deletedByID":
@@ -193,6 +201,14 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_User_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_User_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_User_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_User_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_User_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_User_deletedAt(ctx, field)
 			case "deletedByID":
@@ -355,6 +371,14 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_User_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_User_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_User_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_User_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_User_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_User_deletedAt(ctx, field)
 			case "deletedByID":

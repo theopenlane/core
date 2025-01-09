@@ -35,6 +35,14 @@ type ControlHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -81,7 +89,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldUpdatedBy, controlhistory.FieldCreatedByID, controlhistory.FieldUpdatedByID, controlhistory.FieldDeletedByID, controlhistory.FieldMappingID, controlhistory.FieldOwnerID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldControlNumber, controlhistory.FieldFamily, controlhistory.FieldClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldUpdatedBy, controlhistory.FieldCreatedByID, controlhistory.FieldUpdatedByID, controlhistory.FieldCreatedByUserID, controlhistory.FieldUpdatedByUserID, controlhistory.FieldCreatedByServiceID, controlhistory.FieldUpdatedByServiceID, controlhistory.FieldDeletedByID, controlhistory.FieldMappingID, controlhistory.FieldOwnerID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldControlNumber, controlhistory.FieldFamily, controlhistory.FieldClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -154,6 +162,30 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				ch.UpdatedByID = value.String
+			}
+		case controlhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				ch.CreatedByUserID = value.String
+			}
+		case controlhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				ch.UpdatedByUserID = value.String
+			}
+		case controlhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				ch.CreatedByServiceID = value.String
+			}
+		case controlhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				ch.UpdatedByServiceID = value.String
 			}
 		case controlhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -322,6 +354,18 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(ch.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(ch.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(ch.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(ch.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(ch.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ch.DeletedAt.Format(time.ANSIC))

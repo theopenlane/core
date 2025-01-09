@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_OrgSubscriptionBulkCreatePayload_orgSub
 				return ec.fieldContext_OrgSubscription_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrgSubscription_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrgSubscription_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrgSubscription_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrgSubscription_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrgSubscription_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrgSubscription_tags(ctx, field)
 			case "deletedAt":
@@ -99,10 +107,14 @@ func (ec *executionContext) fieldContext_OrgSubscriptionBulkCreatePayload_orgSub
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrgSubscription_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrgSubscription_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrgSubscription_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrgSubscription_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			}
@@ -161,6 +173,14 @@ func (ec *executionContext) fieldContext_OrgSubscriptionCreatePayload_orgSubscri
 				return ec.fieldContext_OrgSubscription_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrgSubscription_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrgSubscription_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrgSubscription_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrgSubscription_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrgSubscription_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrgSubscription_tags(ctx, field)
 			case "deletedAt":
@@ -185,10 +205,14 @@ func (ec *executionContext) fieldContext_OrgSubscriptionCreatePayload_orgSubscri
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrgSubscription_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrgSubscription_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrgSubscription_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrgSubscription_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			}
@@ -291,6 +315,14 @@ func (ec *executionContext) fieldContext_OrgSubscriptionUpdatePayload_orgSubscri
 				return ec.fieldContext_OrgSubscription_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrgSubscription_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrgSubscription_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrgSubscription_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrgSubscription_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrgSubscription_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrgSubscription_tags(ctx, field)
 			case "deletedAt":
@@ -315,10 +347,14 @@ func (ec *executionContext) fieldContext_OrgSubscriptionUpdatePayload_orgSubscri
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrgSubscription_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrgSubscription_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrgSubscription_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrgSubscription_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			}

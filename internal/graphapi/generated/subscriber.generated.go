@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_SubscriberBulkCreatePayload_subscribers
 				return ec.fieldContext_Subscriber_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Subscriber_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Subscriber_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Subscriber_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Subscriber_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Subscriber_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "deletedAt":
@@ -93,10 +101,14 @@ func (ec *executionContext) fieldContext_SubscriberBulkCreatePayload_subscribers
 				return ec.fieldContext_Subscriber_verifiedPhone(ctx, field)
 			case "active":
 				return ec.fieldContext_Subscriber_active(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subscriber_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Subscriber_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Subscriber_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Subscriber_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Subscriber_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":
@@ -157,6 +169,14 @@ func (ec *executionContext) fieldContext_SubscriberCreatePayload_subscriber(_ co
 				return ec.fieldContext_Subscriber_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Subscriber_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Subscriber_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Subscriber_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Subscriber_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Subscriber_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "deletedAt":
@@ -175,10 +195,14 @@ func (ec *executionContext) fieldContext_SubscriberCreatePayload_subscriber(_ co
 				return ec.fieldContext_Subscriber_verifiedPhone(ctx, field)
 			case "active":
 				return ec.fieldContext_Subscriber_active(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subscriber_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Subscriber_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Subscriber_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Subscriber_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Subscriber_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":
@@ -283,6 +307,14 @@ func (ec *executionContext) fieldContext_SubscriberUpdatePayload_subscriber(_ co
 				return ec.fieldContext_Subscriber_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Subscriber_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Subscriber_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Subscriber_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Subscriber_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Subscriber_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "deletedAt":
@@ -301,10 +333,14 @@ func (ec *executionContext) fieldContext_SubscriberUpdatePayload_subscriber(_ co
 				return ec.fieldContext_Subscriber_verifiedPhone(ctx, field)
 			case "active":
 				return ec.fieldContext_Subscriber_active(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subscriber_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Subscriber_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Subscriber_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Subscriber_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Subscriber_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":

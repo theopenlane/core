@@ -14,6 +14,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -24,8 +26,10 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// APITokensTable holds the schema information for the "api_tokens" table.
@@ -35,20 +39,32 @@ var (
 		PrimaryKey: []*schema.Column{APITokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "api_tokens_change_actors_created_by",
-				Columns:    []*schema.Column{APITokensColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "api_tokens_users_created_by_user",
+				Columns:    []*schema.Column{APITokensColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "api_tokens_change_actors_updated_by",
-				Columns:    []*schema.Column{APITokensColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "api_tokens_users_updated_by_user",
+				Columns:    []*schema.Column{APITokensColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "api_tokens_api_tokens_created_by_service",
+				Columns:    []*schema.Column{APITokensColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "api_tokens_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{APITokensColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "api_tokens_organizations_api_tokens",
-				Columns:    []*schema.Column{APITokensColumns[15]},
+				Columns:    []*schema.Column{APITokensColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -57,7 +73,7 @@ var (
 			{
 				Name:    "apitoken_token",
 				Unique:  false,
-				Columns: []*schema.Column{APITokensColumns[8]},
+				Columns: []*schema.Column{APITokensColumns[10]},
 			},
 		},
 	}
@@ -66,6 +82,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -77,8 +95,10 @@ var (
 		{Name: "priority", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// ActionPlansTable holds the schema information for the "action_plans" table.
 	ActionPlansTable = &schema.Table{
@@ -87,15 +107,27 @@ var (
 		PrimaryKey: []*schema.Column{ActionPlansColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "action_plans_change_actors_created_by",
-				Columns:    []*schema.Column{ActionPlansColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "action_plans_users_created_by_user",
+				Columns:    []*schema.Column{ActionPlansColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "action_plans_change_actors_updated_by",
-				Columns:    []*schema.Column{ActionPlansColumns[15]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "action_plans_users_updated_by_user",
+				Columns:    []*schema.Column{ActionPlansColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_api_tokens_created_by_service",
+				Columns:    []*schema.Column{ActionPlansColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{ActionPlansColumns[19]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -111,6 +143,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -140,7 +176,7 @@ var (
 	ChangeActorsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
-		{Name: "actor_type", Type: field.TypeString},
+		{Name: "actor_type", Type: field.TypeEnum, Enums: []string{"user", "service"}},
 	}
 	// ChangeActorsTable holds the schema information for the "change_actors" table.
 	ChangeActorsTable = &schema.Table{
@@ -153,6 +189,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -164,8 +202,10 @@ var (
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING"}, Default: "ACTIVE"},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ContactsTable holds the schema information for the "contacts" table.
@@ -175,20 +215,32 @@ var (
 		PrimaryKey: []*schema.Column{ContactsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "contacts_change_actors_created_by",
-				Columns:    []*schema.Column{ContactsColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "contacts_users_created_by_user",
+				Columns:    []*schema.Column{ContactsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "contacts_change_actors_updated_by",
-				Columns:    []*schema.Column{ContactsColumns[15]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "contacts_users_updated_by_user",
+				Columns:    []*schema.Column{ContactsColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "contacts_api_tokens_created_by_service",
+				Columns:    []*schema.Column{ContactsColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "contacts_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{ContactsColumns[19]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "contacts_organizations_contacts",
-				Columns:    []*schema.Column{ContactsColumns[16]},
+				Columns:    []*schema.Column{ContactsColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -205,6 +257,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -236,6 +292,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -252,8 +310,10 @@ var (
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "control_objective_controls", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
@@ -265,32 +325,44 @@ var (
 		PrimaryKey: []*schema.Column{ControlsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "controls_change_actors_created_by",
-				Columns:    []*schema.Column{ControlsColumns[19]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "controls_users_created_by_user",
+				Columns:    []*schema.Column{ControlsColumns[21]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_change_actors_updated_by",
-				Columns:    []*schema.Column{ControlsColumns[20]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "controls_users_updated_by_user",
+				Columns:    []*schema.Column{ControlsColumns[22]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_api_tokens_created_by_service",
+				Columns:    []*schema.Column{ControlsColumns[23]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{ControlsColumns[24]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_control_objectives_controls",
-				Columns:    []*schema.Column{ControlsColumns[21]},
+				Columns:    []*schema.Column{ControlsColumns[25]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_internal_policies_controls",
-				Columns:    []*schema.Column{ControlsColumns[22]},
+				Columns:    []*schema.Column{ControlsColumns[26]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_organizations_controls",
-				Columns:    []*schema.Column{ControlsColumns[23]},
+				Columns:    []*schema.Column{ControlsColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -307,6 +379,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -343,6 +419,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -359,8 +437,10 @@ var (
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_control_objectives", Type: field.TypeString, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
@@ -371,25 +451,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "control_objectives_controls_control_objectives",
-				Columns:    []*schema.Column{ControlObjectivesColumns[18]},
+				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "control_objectives_change_actors_created_by",
-				Columns:    []*schema.Column{ControlObjectivesColumns[19]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "control_objectives_users_created_by_user",
+				Columns:    []*schema.Column{ControlObjectivesColumns[21]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "control_objectives_change_actors_updated_by",
-				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "control_objectives_users_updated_by_user",
+				Columns:    []*schema.Column{ControlObjectivesColumns[22]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_objectives_api_tokens_created_by_service",
+				Columns:    []*schema.Column{ControlObjectivesColumns[23]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_objectives_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{ControlObjectivesColumns[24]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "control_objectives_organizations_control_objectives",
-				Columns:    []*schema.Column{ControlObjectivesColumns[21]},
+				Columns:    []*schema.Column{ControlObjectivesColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -406,6 +498,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -441,13 +537,17 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "data", Type: field.TypeJSON},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString},
 	}
@@ -458,26 +558,38 @@ var (
 		PrimaryKey: []*schema.Column{DocumentDataColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "document_data_change_actors_created_by",
-				Columns:    []*schema.Column{DocumentDataColumns[8]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "document_data_users_created_by_user",
+				Columns:    []*schema.Column{DocumentDataColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "document_data_change_actors_updated_by",
-				Columns:    []*schema.Column{DocumentDataColumns[9]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "document_data_users_updated_by_user",
+				Columns:    []*schema.Column{DocumentDataColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "document_data_api_tokens_created_by_service",
+				Columns:    []*schema.Column{DocumentDataColumns[12]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "document_data_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{DocumentDataColumns[13]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "document_data_organizations_document_data",
-				Columns:    []*schema.Column{DocumentDataColumns[10]},
+				Columns:    []*schema.Column{DocumentDataColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "document_data_templates_documents",
-				Columns:    []*schema.Column{DocumentDataColumns[11]},
+				Columns:    []*schema.Column{DocumentDataColumns[15]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -494,6 +606,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -520,6 +636,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -527,8 +645,10 @@ var (
 		{Name: "ttl", Type: field.TypeTime},
 		{Name: "email", Type: field.TypeString},
 		{Name: "secret", Type: field.TypeBytes},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// EmailVerificationTokensTable holds the schema information for the "email_verification_tokens" table.
@@ -538,20 +658,32 @@ var (
 		PrimaryKey: []*schema.Column{EmailVerificationTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "email_verification_tokens_change_actors_created_by",
-				Columns:    []*schema.Column{EmailVerificationTokensColumns[10]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "email_verification_tokens_users_created_by_user",
+				Columns:    []*schema.Column{EmailVerificationTokensColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "email_verification_tokens_change_actors_updated_by",
-				Columns:    []*schema.Column{EmailVerificationTokensColumns[11]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "email_verification_tokens_users_updated_by_user",
+				Columns:    []*schema.Column{EmailVerificationTokensColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "email_verification_tokens_api_tokens_created_by_service",
+				Columns:    []*schema.Column{EmailVerificationTokensColumns[14]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "email_verification_tokens_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{EmailVerificationTokensColumns[15]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "email_verification_tokens_users_email_verification_tokens",
-				Columns:    []*schema.Column{EmailVerificationTokensColumns[12]},
+				Columns:    []*schema.Column{EmailVerificationTokensColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -560,7 +692,7 @@ var (
 			{
 				Name:    "emailverificationtoken_token",
 				Unique:  true,
-				Columns: []*schema.Column{EmailVerificationTokensColumns[6]},
+				Columns: []*schema.Column{EmailVerificationTokensColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -572,6 +704,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -581,8 +715,10 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "status", Type: field.TypeString, Nullable: true, Default: "active"},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_entities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -594,32 +730,44 @@ var (
 		PrimaryKey: []*schema.Column{EntitiesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "entities_change_actors_created_by",
-				Columns:    []*schema.Column{EntitiesColumns[12]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "entities_users_created_by_user",
+				Columns:    []*schema.Column{EntitiesColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_change_actors_updated_by",
-				Columns:    []*schema.Column{EntitiesColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "entities_users_updated_by_user",
+				Columns:    []*schema.Column{EntitiesColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_api_tokens_created_by_service",
+				Columns:    []*schema.Column{EntitiesColumns[16]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{EntitiesColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_entity_types_entity_type",
-				Columns:    []*schema.Column{EntitiesColumns[14]},
+				Columns:    []*schema.Column{EntitiesColumns[18]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_entity_types_entities",
-				Columns:    []*schema.Column{EntitiesColumns[15]},
+				Columns:    []*schema.Column{EntitiesColumns[19]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_organizations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[16]},
+				Columns:    []*schema.Column{EntitiesColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -628,7 +776,7 @@ var (
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[7], EntitiesColumns[16]},
+				Columns: []*schema.Column{EntitiesColumns[9], EntitiesColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -646,6 +794,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -676,13 +828,17 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 64},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EntityTypesTable holds the schema information for the "entity_types" table.
@@ -692,20 +848,32 @@ var (
 		PrimaryKey: []*schema.Column{EntityTypesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "entity_types_change_actors_created_by",
-				Columns:    []*schema.Column{EntityTypesColumns[8]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "entity_types_users_created_by_user",
+				Columns:    []*schema.Column{EntityTypesColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entity_types_change_actors_updated_by",
-				Columns:    []*schema.Column{EntityTypesColumns[9]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "entity_types_users_updated_by_user",
+				Columns:    []*schema.Column{EntityTypesColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entity_types_api_tokens_created_by_service",
+				Columns:    []*schema.Column{EntityTypesColumns[12]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entity_types_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{EntityTypesColumns[13]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entity_types_organizations_entity_types",
-				Columns:    []*schema.Column{EntityTypesColumns[10]},
+				Columns:    []*schema.Column{EntityTypesColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -714,7 +882,7 @@ var (
 			{
 				Name:    "entitytype_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntityTypesColumns[7], EntityTypesColumns[10]},
+				Columns: []*schema.Column{EntityTypesColumns[9], EntityTypesColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -732,6 +900,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -757,14 +929,18 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "event_id", Type: field.TypeString, Nullable: true},
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
@@ -773,15 +949,27 @@ var (
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "events_change_actors_created_by",
-				Columns:    []*schema.Column{EventsColumns[9]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "events_users_created_by_user",
+				Columns:    []*schema.Column{EventsColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "events_change_actors_updated_by",
-				Columns:    []*schema.Column{EventsColumns[10]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "events_users_updated_by_user",
+				Columns:    []*schema.Column{EventsColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_api_tokens_created_by_service",
+				Columns:    []*schema.Column{EventsColumns[13]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{EventsColumns[14]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -797,6 +985,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "event_id", Type: field.TypeString, Nullable: true},
@@ -822,6 +1014,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -840,8 +1034,10 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
 	FilesTable = &schema.Table{
@@ -850,15 +1046,27 @@ var (
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "files_change_actors_created_by",
-				Columns:    []*schema.Column{FilesColumns[21]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "files_users_created_by_user",
+				Columns:    []*schema.Column{FilesColumns[23]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "files_change_actors_updated_by",
-				Columns:    []*schema.Column{FilesColumns[22]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "files_users_updated_by_user",
+				Columns:    []*schema.Column{FilesColumns[24]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_api_tokens_created_by_service",
+				Columns:    []*schema.Column{FilesColumns[25]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{FilesColumns[26]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -874,6 +1082,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -911,6 +1123,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -920,8 +1134,10 @@ var (
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// GroupsTable holds the schema information for the "groups" table.
@@ -931,20 +1147,32 @@ var (
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "groups_change_actors_created_by",
-				Columns:    []*schema.Column{GroupsColumns[12]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "groups_users_created_by_user",
+				Columns:    []*schema.Column{GroupsColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_change_actors_updated_by",
-				Columns:    []*schema.Column{GroupsColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "groups_users_updated_by_user",
+				Columns:    []*schema.Column{GroupsColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_api_tokens_created_by_service",
+				Columns:    []*schema.Column{GroupsColumns[16]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{GroupsColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_groups",
-				Columns:    []*schema.Column{GroupsColumns[14]},
+				Columns:    []*schema.Column{GroupsColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -953,7 +1181,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[14]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -971,6 +1199,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -1000,12 +1232,16 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -1016,26 +1252,38 @@ var (
 		PrimaryKey: []*schema.Column{GroupMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "group_memberships_change_actors_created_by",
-				Columns:    []*schema.Column{GroupMembershipsColumns[7]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "group_memberships_users_created_by_user",
+				Columns:    []*schema.Column{GroupMembershipsColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "group_memberships_change_actors_updated_by",
-				Columns:    []*schema.Column{GroupMembershipsColumns[8]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "group_memberships_users_updated_by_user",
+				Columns:    []*schema.Column{GroupMembershipsColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "group_memberships_api_tokens_created_by_service",
+				Columns:    []*schema.Column{GroupMembershipsColumns[11]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "group_memberships_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{GroupMembershipsColumns[12]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "group_memberships_groups_group",
-				Columns:    []*schema.Column{GroupMembershipsColumns[9]},
+				Columns:    []*schema.Column{GroupMembershipsColumns[13]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "group_memberships_users_user",
-				Columns:    []*schema.Column{GroupMembershipsColumns[10]},
+				Columns:    []*schema.Column{GroupMembershipsColumns[14]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -1044,7 +1292,7 @@ var (
 			{
 				Name:    "groupmembership_user_id_group_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupMembershipsColumns[10], GroupMembershipsColumns[9]},
+				Columns: []*schema.Column{GroupMembershipsColumns[14], GroupMembershipsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1062,6 +1310,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -1087,6 +1339,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1096,8 +1350,10 @@ var (
 		{Name: "sync_to_slack", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "sync_to_github", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "group_id", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// GroupSettingsTable holds the schema information for the "group_settings" table.
 	GroupSettingsTable = &schema.Table{
@@ -1107,20 +1363,32 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "group_settings_groups_setting",
-				Columns:    []*schema.Column{GroupSettingsColumns[11]},
+				Columns:    []*schema.Column{GroupSettingsColumns[13]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "group_settings_change_actors_created_by",
-				Columns:    []*schema.Column{GroupSettingsColumns[12]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "group_settings_users_created_by_user",
+				Columns:    []*schema.Column{GroupSettingsColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "group_settings_change_actors_updated_by",
-				Columns:    []*schema.Column{GroupSettingsColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "group_settings_users_updated_by_user",
+				Columns:    []*schema.Column{GroupSettingsColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "group_settings_api_tokens_created_by_service",
+				Columns:    []*schema.Column{GroupSettingsColumns[16]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "group_settings_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{GroupSettingsColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1136,6 +1404,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1164,6 +1436,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -1172,8 +1446,10 @@ var (
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "secret_name", Type: field.TypeString, Nullable: true},
 		{Name: "secret_value", Type: field.TypeString, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// HushesTable holds the schema information for the "hushes" table.
 	HushesTable = &schema.Table{
@@ -1182,15 +1458,27 @@ var (
 		PrimaryKey: []*schema.Column{HushesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "hushes_change_actors_created_by",
-				Columns:    []*schema.Column{HushesColumns[11]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "hushes_users_created_by_user",
+				Columns:    []*schema.Column{HushesColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "hushes_change_actors_updated_by",
-				Columns:    []*schema.Column{HushesColumns[12]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "hushes_users_updated_by_user",
+				Columns:    []*schema.Column{HushesColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "hushes_api_tokens_created_by_service",
+				Columns:    []*schema.Column{HushesColumns[15]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "hushes_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{HushesColumns[16]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1206,6 +1494,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -1233,6 +1525,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1241,8 +1535,10 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "group_integrations", Type: field.TypeString, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// IntegrationsTable holds the schema information for the "integrations" table.
@@ -1253,25 +1549,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[10]},
+				Columns:    []*schema.Column{IntegrationsColumns[12]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integrations_change_actors_created_by",
-				Columns:    []*schema.Column{IntegrationsColumns[11]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "integrations_users_created_by_user",
+				Columns:    []*schema.Column{IntegrationsColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integrations_change_actors_updated_by",
-				Columns:    []*schema.Column{IntegrationsColumns[12]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "integrations_users_updated_by_user",
+				Columns:    []*schema.Column{IntegrationsColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integrations_api_tokens_created_by_service",
+				Columns:    []*schema.Column{IntegrationsColumns[15]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integrations_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{IntegrationsColumns[16]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_organizations_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[13]},
+				Columns:    []*schema.Column{IntegrationsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1288,6 +1596,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1315,6 +1627,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -1327,8 +1641,10 @@ var (
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// InternalPoliciesTable holds the schema information for the "internal_policies" table.
@@ -1338,20 +1654,32 @@ var (
 		PrimaryKey: []*schema.Column{InternalPoliciesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "internal_policies_change_actors_created_by",
-				Columns:    []*schema.Column{InternalPoliciesColumns[15]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "internal_policies_users_created_by_user",
+				Columns:    []*schema.Column{InternalPoliciesColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_change_actors_updated_by",
-				Columns:    []*schema.Column{InternalPoliciesColumns[16]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "internal_policies_users_updated_by_user",
+				Columns:    []*schema.Column{InternalPoliciesColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_api_tokens_created_by_service",
+				Columns:    []*schema.Column{InternalPoliciesColumns[19]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{InternalPoliciesColumns[20]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_organizations_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[17]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1368,6 +1696,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -1400,6 +1732,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -1411,8 +1745,10 @@ var (
 		{Name: "send_attempts", Type: field.TypeInt, Default: 0},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "secret", Type: field.TypeBytes},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// InvitesTable holds the schema information for the "invites" table.
@@ -1422,20 +1758,32 @@ var (
 		PrimaryKey: []*schema.Column{InvitesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "invites_change_actors_created_by",
-				Columns:    []*schema.Column{InvitesColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "invites_users_created_by_user",
+				Columns:    []*schema.Column{InvitesColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "invites_change_actors_updated_by",
-				Columns:    []*schema.Column{InvitesColumns[15]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "invites_users_updated_by_user",
+				Columns:    []*schema.Column{InvitesColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "invites_api_tokens_created_by_service",
+				Columns:    []*schema.Column{InvitesColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "invites_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{InvitesColumns[19]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "invites_organizations_invites",
-				Columns:    []*schema.Column{InvitesColumns[16]},
+				Columns:    []*schema.Column{InvitesColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1444,7 +1792,7 @@ var (
 			{
 				Name:    "invite_recipient_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InvitesColumns[8], InvitesColumns[16]},
+				Columns: []*schema.Column{InvitesColumns[10], InvitesColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1456,6 +1804,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -1464,8 +1814,10 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// NarrativesTable holds the schema information for the "narratives" table.
@@ -1475,20 +1827,32 @@ var (
 		PrimaryKey: []*schema.Column{NarrativesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "narratives_change_actors_created_by",
-				Columns:    []*schema.Column{NarrativesColumns[11]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "narratives_users_created_by_user",
+				Columns:    []*schema.Column{NarrativesColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "narratives_change_actors_updated_by",
-				Columns:    []*schema.Column{NarrativesColumns[12]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "narratives_users_updated_by_user",
+				Columns:    []*schema.Column{NarrativesColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "narratives_api_tokens_created_by_service",
+				Columns:    []*schema.Column{NarrativesColumns[15]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "narratives_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{NarrativesColumns[16]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "narratives_organizations_narratives",
-				Columns:    []*schema.Column{NarrativesColumns[13]},
+				Columns:    []*schema.Column{NarrativesColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -1505,6 +1869,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -1533,14 +1901,18 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "text", Type: field.TypeString},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.
@@ -1551,25 +1923,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "notes_entities_notes",
-				Columns:    []*schema.Column{NotesColumns[8]},
+				Columns:    []*schema.Column{NotesColumns[10]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_change_actors_created_by",
-				Columns:    []*schema.Column{NotesColumns[9]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "notes_users_created_by_user",
+				Columns:    []*schema.Column{NotesColumns[11]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_change_actors_updated_by",
-				Columns:    []*schema.Column{NotesColumns[10]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "notes_users_updated_by_user",
+				Columns:    []*schema.Column{NotesColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_api_tokens_created_by_service",
+				Columns:    []*schema.Column{NotesColumns[13]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{NotesColumns[14]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_organizations_notes",
-				Columns:    []*schema.Column{NotesColumns[11]},
+				Columns:    []*schema.Column{NotesColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1586,6 +1970,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -1611,12 +1999,16 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -1627,26 +2019,38 @@ var (
 		PrimaryKey: []*schema.Column{OrgMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "org_memberships_change_actors_created_by",
-				Columns:    []*schema.Column{OrgMembershipsColumns[7]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "org_memberships_users_created_by_user",
+				Columns:    []*schema.Column{OrgMembershipsColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "org_memberships_change_actors_updated_by",
-				Columns:    []*schema.Column{OrgMembershipsColumns[8]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "org_memberships_users_updated_by_user",
+				Columns:    []*schema.Column{OrgMembershipsColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_memberships_api_tokens_created_by_service",
+				Columns:    []*schema.Column{OrgMembershipsColumns[11]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_memberships_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{OrgMembershipsColumns[12]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "org_memberships_organizations_organization",
-				Columns:    []*schema.Column{OrgMembershipsColumns[9]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "org_memberships_users_user",
-				Columns:    []*schema.Column{OrgMembershipsColumns[10]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[14]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -1655,7 +2059,7 @@ var (
 			{
 				Name:    "orgmembership_user_id_organization_id",
 				Unique:  true,
-				Columns: []*schema.Column{OrgMembershipsColumns[10], OrgMembershipsColumns[9]},
+				Columns: []*schema.Column{OrgMembershipsColumns[14], OrgMembershipsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1673,6 +2077,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -1698,6 +2106,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1710,8 +2120,10 @@ var (
 		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrgSubscriptionsTable holds the schema information for the "org_subscriptions" table.
@@ -1721,20 +2133,32 @@ var (
 		PrimaryKey: []*schema.Column{OrgSubscriptionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "org_subscriptions_change_actors_created_by",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[15]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "org_subscriptions_users_created_by_user",
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[17]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "org_subscriptions_change_actors_updated_by",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[16]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "org_subscriptions_users_updated_by_user",
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_subscriptions_api_tokens_created_by_service",
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[19]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_subscriptions_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[20]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[17]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1751,6 +2175,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1783,6 +2211,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1793,8 +2223,10 @@ var (
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationsTable holds the schema information for the "organizations" table.
@@ -1804,20 +2236,32 @@ var (
 		PrimaryKey: []*schema.Column{OrganizationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "organizations_change_actors_created_by",
-				Columns:    []*schema.Column{OrganizationsColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "organizations_users_created_by_user",
+				Columns:    []*schema.Column{OrganizationsColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "organizations_change_actors_updated_by",
-				Columns:    []*schema.Column{OrganizationsColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "organizations_users_updated_by_user",
+				Columns:    []*schema.Column{OrganizationsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organizations_api_tokens_created_by_service",
+				Columns:    []*schema.Column{OrganizationsColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organizations_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{OrganizationsColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "organizations_organizations_children",
-				Columns:    []*schema.Column{OrganizationsColumns[15]},
+				Columns:    []*schema.Column{OrganizationsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1826,7 +2270,7 @@ var (
 			{
 				Name:    "organization_name",
 				Unique:  true,
-				Columns: []*schema.Column{OrganizationsColumns[7]},
+				Columns: []*schema.Column{OrganizationsColumns[9]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1844,6 +2288,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1874,6 +2322,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1887,8 +2337,10 @@ var (
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "stripe_id", Type: field.TypeString, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
 	OrganizationSettingsTable = &schema.Table{
@@ -1898,20 +2350,32 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[15]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "organization_settings_change_actors_created_by",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[16]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "organization_settings_users_created_by_user",
+				Columns:    []*schema.Column{OrganizationSettingsColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "organization_settings_change_actors_updated_by",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "organization_settings_users_updated_by_user",
+				Columns:    []*schema.Column{OrganizationSettingsColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organization_settings_api_tokens_created_by_service",
+				Columns:    []*schema.Column{OrganizationSettingsColumns[20]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organization_settings_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{OrganizationSettingsColumns[21]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1927,6 +2391,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -1959,6 +2427,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -1966,8 +2436,10 @@ var (
 		{Name: "ttl", Type: field.TypeTime},
 		{Name: "email", Type: field.TypeString},
 		{Name: "secret", Type: field.TypeBytes},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// PasswordResetTokensTable holds the schema information for the "password_reset_tokens" table.
@@ -1977,20 +2449,32 @@ var (
 		PrimaryKey: []*schema.Column{PasswordResetTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "password_reset_tokens_change_actors_created_by",
-				Columns:    []*schema.Column{PasswordResetTokensColumns[10]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "password_reset_tokens_users_created_by_user",
+				Columns:    []*schema.Column{PasswordResetTokensColumns[12]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "password_reset_tokens_change_actors_updated_by",
-				Columns:    []*schema.Column{PasswordResetTokensColumns[11]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "password_reset_tokens_users_updated_by_user",
+				Columns:    []*schema.Column{PasswordResetTokensColumns[13]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "password_reset_tokens_api_tokens_created_by_service",
+				Columns:    []*schema.Column{PasswordResetTokensColumns[14]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "password_reset_tokens_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{PasswordResetTokensColumns[15]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "password_reset_tokens_users_password_reset_tokens",
-				Columns:    []*schema.Column{PasswordResetTokensColumns[12]},
+				Columns:    []*schema.Column{PasswordResetTokensColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -1999,7 +2483,7 @@ var (
 			{
 				Name:    "passwordresettoken_token",
 				Unique:  true,
-				Columns: []*schema.Column{PasswordResetTokensColumns[6]},
+				Columns: []*schema.Column{PasswordResetTokensColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2011,6 +2495,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -2021,8 +2507,10 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
 	}
 	// PersonalAccessTokensTable holds the schema information for the "personal_access_tokens" table.
@@ -2032,20 +2520,32 @@ var (
 		PrimaryKey: []*schema.Column{PersonalAccessTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "personal_access_tokens_change_actors_created_by",
-				Columns:    []*schema.Column{PersonalAccessTokensColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "personal_access_tokens_users_created_by_user",
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "personal_access_tokens_change_actors_updated_by",
-				Columns:    []*schema.Column{PersonalAccessTokensColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "personal_access_tokens_users_updated_by_user",
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "personal_access_tokens_api_tokens_created_by_service",
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "personal_access_tokens_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "personal_access_tokens_users_personal_access_tokens",
-				Columns:    []*schema.Column{PersonalAccessTokensColumns[15]},
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[19]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -2054,7 +2554,7 @@ var (
 			{
 				Name:    "personalaccesstoken_token",
 				Unique:  false,
-				Columns: []*schema.Column{PersonalAccessTokensColumns[8]},
+				Columns: []*schema.Column{PersonalAccessTokensColumns[10]},
 			},
 		},
 	}
@@ -2063,6 +2563,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -2078,8 +2580,10 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "standard_procedures", Type: field.TypeString, Nullable: true},
 	}
 	// ProceduresTable holds the schema information for the "procedures" table.
@@ -2090,31 +2594,43 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "procedures_control_objectives_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[16]},
+				Columns:    []*schema.Column{ProceduresColumns[18]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_organizations_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[17]},
+				Columns:    []*schema.Column{ProceduresColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_change_actors_created_by",
-				Columns:    []*schema.Column{ProceduresColumns[18]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "procedures_users_created_by_user",
+				Columns:    []*schema.Column{ProceduresColumns[20]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_change_actors_updated_by",
-				Columns:    []*schema.Column{ProceduresColumns[19]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "procedures_users_updated_by_user",
+				Columns:    []*schema.Column{ProceduresColumns[21]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_api_tokens_created_by_service",
+				Columns:    []*schema.Column{ProceduresColumns[22]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{ProceduresColumns[23]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_standards_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[20]},
+				Columns:    []*schema.Column{ProceduresColumns[24]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2131,6 +2647,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -2164,6 +2684,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -2177,8 +2699,10 @@ var (
 		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
 		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramsTable holds the schema information for the "programs" table.
 	ProgramsTable = &schema.Table{
@@ -2188,20 +2712,32 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "programs_organizations_programs",
-				Columns:    []*schema.Column{ProgramsColumns[15]},
+				Columns:    []*schema.Column{ProgramsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "programs_change_actors_created_by",
-				Columns:    []*schema.Column{ProgramsColumns[16]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "programs_users_created_by_user",
+				Columns:    []*schema.Column{ProgramsColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "programs_change_actors_updated_by",
-				Columns:    []*schema.Column{ProgramsColumns[17]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "programs_users_updated_by_user",
+				Columns:    []*schema.Column{ProgramsColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "programs_api_tokens_created_by_service",
+				Columns:    []*schema.Column{ProgramsColumns[20]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "programs_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{ProgramsColumns[21]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2217,6 +2753,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -2249,12 +2789,16 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -2265,26 +2809,38 @@ var (
 		PrimaryKey: []*schema.Column{ProgramMembershipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "program_memberships_change_actors_created_by",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[7]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "program_memberships_users_created_by_user",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "program_memberships_change_actors_updated_by",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[8]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "program_memberships_users_updated_by_user",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "program_memberships_api_tokens_created_by_service",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[11]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "program_memberships_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[12]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "program_memberships_programs_program",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[9]},
+				Columns:    []*schema.Column{ProgramMembershipsColumns[13]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "program_memberships_users_user",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[10]},
+				Columns:    []*schema.Column{ProgramMembershipsColumns[14]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -2293,7 +2849,7 @@ var (
 			{
 				Name:    "programmembership_user_id_program_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProgramMembershipsColumns[10], ProgramMembershipsColumns[9]},
+				Columns: []*schema.Column{ProgramMembershipsColumns[14], ProgramMembershipsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2311,6 +2867,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -2336,6 +2896,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -2352,8 +2914,10 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// RisksTable holds the schema information for the "risks" table.
 	RisksTable = &schema.Table{
@@ -2363,26 +2927,38 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "risks_control_objectives_risks",
-				Columns:    []*schema.Column{RisksColumns[17]},
+				Columns:    []*schema.Column{RisksColumns[19]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_organizations_risks",
-				Columns:    []*schema.Column{RisksColumns[18]},
+				Columns:    []*schema.Column{RisksColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "risks_change_actors_created_by",
-				Columns:    []*schema.Column{RisksColumns[19]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "risks_users_created_by_user",
+				Columns:    []*schema.Column{RisksColumns[21]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_change_actors_updated_by",
-				Columns:    []*schema.Column{RisksColumns[20]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "risks_users_updated_by_user",
+				Columns:    []*schema.Column{RisksColumns[22]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_api_tokens_created_by_service",
+				Columns:    []*schema.Column{RisksColumns[23]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{RisksColumns[24]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2398,6 +2974,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -2432,6 +3012,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -2446,8 +3028,10 @@ var (
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// StandardsTable holds the schema information for the "standards" table.
 	StandardsTable = &schema.Table{
@@ -2456,15 +3040,27 @@ var (
 		PrimaryKey: []*schema.Column{StandardsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "standards_change_actors_created_by",
-				Columns:    []*schema.Column{StandardsColumns[17]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "standards_users_created_by_user",
+				Columns:    []*schema.Column{StandardsColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "standards_change_actors_updated_by",
-				Columns:    []*schema.Column{StandardsColumns[18]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "standards_users_updated_by_user",
+				Columns:    []*schema.Column{StandardsColumns[20]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "standards_api_tokens_created_by_service",
+				Columns:    []*schema.Column{StandardsColumns[21]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "standards_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{StandardsColumns[22]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2480,6 +3076,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -2513,6 +3113,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -2536,8 +3138,10 @@ var (
 		{Name: "control_objective_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "note_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubcontrolsTable holds the schema information for the "subcontrols" table.
 	SubcontrolsTable = &schema.Table{
@@ -2547,32 +3151,44 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subcontrols_control_objectives_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[23]},
+				Columns:    []*schema.Column{SubcontrolsColumns[25]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_notes_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[24]},
+				Columns:    []*schema.Column{SubcontrolsColumns[26]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_organizations_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[25]},
+				Columns:    []*schema.Column{SubcontrolsColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "subcontrols_change_actors_created_by",
-				Columns:    []*schema.Column{SubcontrolsColumns[26]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "subcontrols_users_created_by_user",
+				Columns:    []*schema.Column{SubcontrolsColumns[28]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subcontrols_change_actors_updated_by",
-				Columns:    []*schema.Column{SubcontrolsColumns[27]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "subcontrols_users_updated_by_user",
+				Columns:    []*schema.Column{SubcontrolsColumns[29]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_api_tokens_created_by_service",
+				Columns:    []*schema.Column{SubcontrolsColumns[30]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{SubcontrolsColumns[31]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2588,6 +3204,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -2628,6 +3248,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -2641,8 +3263,10 @@ var (
 		{Name: "ttl", Type: field.TypeTime},
 		{Name: "secret", Type: field.TypeBytes},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubscribersTable holds the schema information for the "subscribers" table.
 	SubscribersTable = &schema.Table{
@@ -2652,20 +3276,32 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subscribers_organizations_subscribers",
-				Columns:    []*schema.Column{SubscribersColumns[15]},
+				Columns:    []*schema.Column{SubscribersColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subscribers_change_actors_created_by",
-				Columns:    []*schema.Column{SubscribersColumns[16]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "subscribers_users_created_by_user",
+				Columns:    []*schema.Column{SubscribersColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subscribers_change_actors_updated_by",
-				Columns:    []*schema.Column{SubscribersColumns[17]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "subscribers_users_updated_by_user",
+				Columns:    []*schema.Column{SubscribersColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subscribers_api_tokens_created_by_service",
+				Columns:    []*schema.Column{SubscribersColumns[20]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subscribers_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{SubscribersColumns[21]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2673,7 +3309,7 @@ var (
 			{
 				Name:    "subscriber_email_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubscribersColumns[7], SubscribersColumns[15]},
+				Columns: []*schema.Column{SubscribersColumns[9], SubscribersColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2685,6 +3321,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -2695,8 +3333,10 @@ var (
 		{Name: "phone_otp_allowed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "email_otp_allowed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "totp_allowed", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// TfaSettingsTable holds the schema information for the "tfa_settings" table.
@@ -2706,20 +3346,32 @@ var (
 		PrimaryKey: []*schema.Column{TfaSettingsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "tfa_settings_change_actors_created_by",
-				Columns:    []*schema.Column{TfaSettingsColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "tfa_settings_users_created_by_user",
+				Columns:    []*schema.Column{TfaSettingsColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tfa_settings_change_actors_updated_by",
-				Columns:    []*schema.Column{TfaSettingsColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "tfa_settings_users_updated_by_user",
+				Columns:    []*schema.Column{TfaSettingsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tfa_settings_api_tokens_created_by_service",
+				Columns:    []*schema.Column{TfaSettingsColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tfa_settings_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{TfaSettingsColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tfa_settings_users_tfa_settings",
-				Columns:    []*schema.Column{TfaSettingsColumns[15]},
+				Columns:    []*schema.Column{TfaSettingsColumns[19]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2728,7 +3380,7 @@ var (
 			{
 				Name:    "tfasetting_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TfaSettingsColumns[15]},
+				Columns: []*schema.Column{TfaSettingsColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2740,6 +3392,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -2750,8 +3404,10 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_assigner_tasks", Type: field.TypeString},
 		{Name: "user_assignee_tasks", Type: field.TypeString, Nullable: true},
 	}
@@ -2762,26 +3418,38 @@ var (
 		PrimaryKey: []*schema.Column{TasksColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "tasks_change_actors_created_by",
-				Columns:    []*schema.Column{TasksColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "tasks_users_created_by_user",
+				Columns:    []*schema.Column{TasksColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_change_actors_updated_by",
-				Columns:    []*schema.Column{TasksColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "tasks_users_updated_by_user",
+				Columns:    []*schema.Column{TasksColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_api_tokens_created_by_service",
+				Columns:    []*schema.Column{TasksColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{TasksColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assigner_tasks",
-				Columns:    []*schema.Column{TasksColumns[15]},
+				Columns:    []*schema.Column{TasksColumns[19]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "tasks_users_assignee_tasks",
-				Columns:    []*schema.Column{TasksColumns[16]},
+				Columns:    []*schema.Column{TasksColumns[20]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2798,6 +3466,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
@@ -2827,6 +3499,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -2837,8 +3511,10 @@ var (
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// TemplatesTable holds the schema information for the "templates" table.
 	TemplatesTable = &schema.Table{
@@ -2848,20 +3524,32 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "templates_organizations_templates",
-				Columns:    []*schema.Column{TemplatesColumns[12]},
+				Columns:    []*schema.Column{TemplatesColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "templates_change_actors_created_by",
-				Columns:    []*schema.Column{TemplatesColumns[13]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "templates_users_created_by_user",
+				Columns:    []*schema.Column{TemplatesColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "templates_change_actors_updated_by",
-				Columns:    []*schema.Column{TemplatesColumns[14]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "templates_users_updated_by_user",
+				Columns:    []*schema.Column{TemplatesColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "templates_api_tokens_created_by_service",
+				Columns:    []*schema.Column{TemplatesColumns[17]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "templates_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{TemplatesColumns[18]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2869,7 +3557,7 @@ var (
 			{
 				Name:    "template_name_owner_id_template_type",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[7], TemplatesColumns[12], TemplatesColumns[8]},
+				Columns: []*schema.Column{TemplatesColumns[9], TemplatesColumns[14], TemplatesColumns[10]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2887,6 +3575,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -2918,6 +3610,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
@@ -2944,7 +3640,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "users_files_file",
-				Columns:    []*schema.Column{UsersColumns[21]},
+				Columns:    []*schema.Column{UsersColumns[25]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2958,7 +3654,7 @@ var (
 			{
 				Name:    "user_email_auth_provider",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[9], UsersColumns[19]},
+				Columns: []*schema.Column{UsersColumns[13], UsersColumns[23]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2976,6 +3672,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
@@ -3012,6 +3712,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -3025,8 +3727,10 @@ var (
 		{Name: "is_tfa_enabled", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_setting_default_org", Type: field.TypeString, Nullable: true},
 	}
 	// UserSettingsTable holds the schema information for the "user_settings" table.
@@ -3037,25 +3741,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "user_settings_users_setting",
-				Columns:    []*schema.Column{UserSettingsColumns[15]},
+				Columns:    []*schema.Column{UserSettingsColumns[17]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "user_settings_change_actors_created_by",
-				Columns:    []*schema.Column{UserSettingsColumns[16]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "user_settings_users_created_by_user",
+				Columns:    []*schema.Column{UserSettingsColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "user_settings_change_actors_updated_by",
-				Columns:    []*schema.Column{UserSettingsColumns[17]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "user_settings_users_updated_by_user",
+				Columns:    []*schema.Column{UserSettingsColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "user_settings_api_tokens_created_by_service",
+				Columns:    []*schema.Column{UserSettingsColumns[20]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "user_settings_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{UserSettingsColumns[21]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "user_settings_organizations_default_org",
-				Columns:    []*schema.Column{UserSettingsColumns[18]},
+				Columns:    []*schema.Column{UserSettingsColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3072,6 +3788,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -3104,6 +3824,8 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "credential_id", Type: field.TypeBytes, Unique: true, Nullable: true},
@@ -3117,8 +3839,10 @@ var (
 		{Name: "user_present", Type: field.TypeBool, Default: false},
 		{Name: "user_verified", Type: field.TypeBool, Default: false},
 		{Name: "owner_id", Type: field.TypeString},
-		{Name: "created_by_id", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "created_by_service_id", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_service_id", Type: field.TypeString, Nullable: true},
 	}
 	// WebauthnsTable holds the schema information for the "webauthns" table.
 	WebauthnsTable = &schema.Table{
@@ -3128,20 +3852,32 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "webauthns_users_webauthn",
-				Columns:    []*schema.Column{WebauthnsColumns[15]},
+				Columns:    []*schema.Column{WebauthnsColumns[17]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "webauthns_change_actors_created_by",
-				Columns:    []*schema.Column{WebauthnsColumns[16]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "webauthns_users_created_by_user",
+				Columns:    []*schema.Column{WebauthnsColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "webauthns_change_actors_updated_by",
-				Columns:    []*schema.Column{WebauthnsColumns[17]},
-				RefColumns: []*schema.Column{ChangeActorsColumns[0]},
+				Symbol:     "webauthns_users_updated_by_user",
+				Columns:    []*schema.Column{WebauthnsColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "webauthns_api_tokens_created_by_service",
+				Columns:    []*schema.Column{WebauthnsColumns[20]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "webauthns_api_tokens_updated_by_service",
+				Columns:    []*schema.Column{WebauthnsColumns[21]},
+				RefColumns: []*schema.Column{APITokensColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -5537,210 +6273,282 @@ var (
 )
 
 func init() {
-	APITokensTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	APITokensTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	APITokensTable.ForeignKeys[2].RefTable = OrganizationsTable
-	ActionPlansTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	ActionPlansTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	APITokensTable.ForeignKeys[0].RefTable = UsersTable
+	APITokensTable.ForeignKeys[1].RefTable = UsersTable
+	APITokensTable.ForeignKeys[2].RefTable = APITokensTable
+	APITokensTable.ForeignKeys[3].RefTable = APITokensTable
+	APITokensTable.ForeignKeys[4].RefTable = OrganizationsTable
+	ActionPlansTable.ForeignKeys[0].RefTable = UsersTable
+	ActionPlansTable.ForeignKeys[1].RefTable = UsersTable
+	ActionPlansTable.ForeignKeys[2].RefTable = APITokensTable
+	ActionPlansTable.ForeignKeys[3].RefTable = APITokensTable
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
-	ContactsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	ContactsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	ContactsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ContactsTable.ForeignKeys[0].RefTable = UsersTable
+	ContactsTable.ForeignKeys[1].RefTable = UsersTable
+	ContactsTable.ForeignKeys[2].RefTable = APITokensTable
+	ContactsTable.ForeignKeys[3].RefTable = APITokensTable
+	ContactsTable.ForeignKeys[4].RefTable = OrganizationsTable
 	ContactHistoryTable.Annotation = &entsql.Annotation{
 		Table: "contact_history",
 	}
-	ControlsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	ControlsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	ControlsTable.ForeignKeys[2].RefTable = ControlObjectivesTable
-	ControlsTable.ForeignKeys[3].RefTable = InternalPoliciesTable
-	ControlsTable.ForeignKeys[4].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[0].RefTable = UsersTable
+	ControlsTable.ForeignKeys[1].RefTable = UsersTable
+	ControlsTable.ForeignKeys[2].RefTable = APITokensTable
+	ControlsTable.ForeignKeys[3].RefTable = APITokensTable
+	ControlsTable.ForeignKeys[4].RefTable = ControlObjectivesTable
+	ControlsTable.ForeignKeys[5].RefTable = InternalPoliciesTable
+	ControlsTable.ForeignKeys[6].RefTable = OrganizationsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
 	ControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable
-	ControlObjectivesTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	ControlObjectivesTable.ForeignKeys[2].RefTable = ChangeActorsTable
-	ControlObjectivesTable.ForeignKeys[3].RefTable = OrganizationsTable
+	ControlObjectivesTable.ForeignKeys[1].RefTable = UsersTable
+	ControlObjectivesTable.ForeignKeys[2].RefTable = UsersTable
+	ControlObjectivesTable.ForeignKeys[3].RefTable = APITokensTable
+	ControlObjectivesTable.ForeignKeys[4].RefTable = APITokensTable
+	ControlObjectivesTable.ForeignKeys[5].RefTable = OrganizationsTable
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
 	}
-	DocumentDataTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	DocumentDataTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	DocumentDataTable.ForeignKeys[2].RefTable = OrganizationsTable
-	DocumentDataTable.ForeignKeys[3].RefTable = TemplatesTable
+	DocumentDataTable.ForeignKeys[0].RefTable = UsersTable
+	DocumentDataTable.ForeignKeys[1].RefTable = UsersTable
+	DocumentDataTable.ForeignKeys[2].RefTable = APITokensTable
+	DocumentDataTable.ForeignKeys[3].RefTable = APITokensTable
+	DocumentDataTable.ForeignKeys[4].RefTable = OrganizationsTable
+	DocumentDataTable.ForeignKeys[5].RefTable = TemplatesTable
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
 		Table: "document_data_history",
 	}
-	EmailVerificationTokensTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	EmailVerificationTokensTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	EmailVerificationTokensTable.ForeignKeys[2].RefTable = UsersTable
-	EntitiesTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	EntitiesTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	EntitiesTable.ForeignKeys[2].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[3].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[4].RefTable = OrganizationsTable
+	EmailVerificationTokensTable.ForeignKeys[0].RefTable = UsersTable
+	EmailVerificationTokensTable.ForeignKeys[1].RefTable = UsersTable
+	EmailVerificationTokensTable.ForeignKeys[2].RefTable = APITokensTable
+	EmailVerificationTokensTable.ForeignKeys[3].RefTable = APITokensTable
+	EmailVerificationTokensTable.ForeignKeys[4].RefTable = UsersTable
+	EntitiesTable.ForeignKeys[0].RefTable = UsersTable
+	EntitiesTable.ForeignKeys[1].RefTable = UsersTable
+	EntitiesTable.ForeignKeys[2].RefTable = APITokensTable
+	EntitiesTable.ForeignKeys[3].RefTable = APITokensTable
+	EntitiesTable.ForeignKeys[4].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[5].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[6].RefTable = OrganizationsTable
 	EntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_history",
 	}
-	EntityTypesTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	EntityTypesTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	EntityTypesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	EntityTypesTable.ForeignKeys[0].RefTable = UsersTable
+	EntityTypesTable.ForeignKeys[1].RefTable = UsersTable
+	EntityTypesTable.ForeignKeys[2].RefTable = APITokensTable
+	EntityTypesTable.ForeignKeys[3].RefTable = APITokensTable
+	EntityTypesTable.ForeignKeys[4].RefTable = OrganizationsTable
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
-	EventsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	EventsTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	EventsTable.ForeignKeys[0].RefTable = UsersTable
+	EventsTable.ForeignKeys[1].RefTable = UsersTable
+	EventsTable.ForeignKeys[2].RefTable = APITokensTable
+	EventsTable.ForeignKeys[3].RefTable = APITokensTable
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}
-	FilesTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	FilesTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	FilesTable.ForeignKeys[0].RefTable = UsersTable
+	FilesTable.ForeignKeys[1].RefTable = UsersTable
+	FilesTable.ForeignKeys[2].RefTable = APITokensTable
+	FilesTable.ForeignKeys[3].RefTable = APITokensTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
-	GroupsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	GroupsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	GroupsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[0].RefTable = UsersTable
+	GroupsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupsTable.ForeignKeys[2].RefTable = APITokensTable
+	GroupsTable.ForeignKeys[3].RefTable = APITokensTable
+	GroupsTable.ForeignKeys[4].RefTable = OrganizationsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
-	GroupMembershipsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	GroupMembershipsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	GroupMembershipsTable.ForeignKeys[2].RefTable = GroupsTable
-	GroupMembershipsTable.ForeignKeys[3].RefTable = UsersTable
+	GroupMembershipsTable.ForeignKeys[0].RefTable = UsersTable
+	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupMembershipsTable.ForeignKeys[2].RefTable = APITokensTable
+	GroupMembershipsTable.ForeignKeys[3].RefTable = APITokensTable
+	GroupMembershipsTable.ForeignKeys[4].RefTable = GroupsTable
+	GroupMembershipsTable.ForeignKeys[5].RefTable = UsersTable
 	GroupMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_membership_history",
 	}
 	GroupSettingsTable.ForeignKeys[0].RefTable = GroupsTable
-	GroupSettingsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	GroupSettingsTable.ForeignKeys[2].RefTable = ChangeActorsTable
+	GroupSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	GroupSettingsTable.ForeignKeys[2].RefTable = UsersTable
+	GroupSettingsTable.ForeignKeys[3].RefTable = APITokensTable
+	GroupSettingsTable.ForeignKeys[4].RefTable = APITokensTable
 	GroupSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_setting_history",
 	}
-	HushesTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	HushesTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	HushesTable.ForeignKeys[0].RefTable = UsersTable
+	HushesTable.ForeignKeys[1].RefTable = UsersTable
+	HushesTable.ForeignKeys[2].RefTable = APITokensTable
+	HushesTable.ForeignKeys[3].RefTable = APITokensTable
 	HushHistoryTable.Annotation = &entsql.Annotation{
 		Table: "hush_history",
 	}
 	IntegrationsTable.ForeignKeys[0].RefTable = GroupsTable
-	IntegrationsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	IntegrationsTable.ForeignKeys[2].RefTable = ChangeActorsTable
-	IntegrationsTable.ForeignKeys[3].RefTable = OrganizationsTable
+	IntegrationsTable.ForeignKeys[1].RefTable = UsersTable
+	IntegrationsTable.ForeignKeys[2].RefTable = UsersTable
+	IntegrationsTable.ForeignKeys[3].RefTable = APITokensTable
+	IntegrationsTable.ForeignKeys[4].RefTable = APITokensTable
+	IntegrationsTable.ForeignKeys[5].RefTable = OrganizationsTable
 	IntegrationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "integration_history",
 	}
-	InternalPoliciesTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	InternalPoliciesTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	InternalPoliciesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	InternalPoliciesTable.ForeignKeys[0].RefTable = UsersTable
+	InternalPoliciesTable.ForeignKeys[1].RefTable = UsersTable
+	InternalPoliciesTable.ForeignKeys[2].RefTable = APITokensTable
+	InternalPoliciesTable.ForeignKeys[3].RefTable = APITokensTable
+	InternalPoliciesTable.ForeignKeys[4].RefTable = OrganizationsTable
 	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
 		Table: "internal_policy_history",
 	}
-	InvitesTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	InvitesTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	InvitesTable.ForeignKeys[2].RefTable = OrganizationsTable
-	NarrativesTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	NarrativesTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	NarrativesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	InvitesTable.ForeignKeys[0].RefTable = UsersTable
+	InvitesTable.ForeignKeys[1].RefTable = UsersTable
+	InvitesTable.ForeignKeys[2].RefTable = APITokensTable
+	InvitesTable.ForeignKeys[3].RefTable = APITokensTable
+	InvitesTable.ForeignKeys[4].RefTable = OrganizationsTable
+	NarrativesTable.ForeignKeys[0].RefTable = UsersTable
+	NarrativesTable.ForeignKeys[1].RefTable = UsersTable
+	NarrativesTable.ForeignKeys[2].RefTable = APITokensTable
+	NarrativesTable.ForeignKeys[3].RefTable = APITokensTable
+	NarrativesTable.ForeignKeys[4].RefTable = OrganizationsTable
 	NarrativeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "narrative_history",
 	}
 	NotesTable.ForeignKeys[0].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	NotesTable.ForeignKeys[2].RefTable = ChangeActorsTable
-	NotesTable.ForeignKeys[3].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[1].RefTable = UsersTable
+	NotesTable.ForeignKeys[2].RefTable = UsersTable
+	NotesTable.ForeignKeys[3].RefTable = APITokensTable
+	NotesTable.ForeignKeys[4].RefTable = APITokensTable
+	NotesTable.ForeignKeys[5].RefTable = OrganizationsTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
-	OrgMembershipsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	OrgMembershipsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	OrgMembershipsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	OrgMembershipsTable.ForeignKeys[3].RefTable = UsersTable
+	OrgMembershipsTable.ForeignKeys[0].RefTable = UsersTable
+	OrgMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	OrgMembershipsTable.ForeignKeys[2].RefTable = APITokensTable
+	OrgMembershipsTable.ForeignKeys[3].RefTable = APITokensTable
+	OrgMembershipsTable.ForeignKeys[4].RefTable = OrganizationsTable
+	OrgMembershipsTable.ForeignKeys[5].RefTable = UsersTable
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
 	}
-	OrgSubscriptionsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	OrgSubscriptionsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	OrgSubscriptionsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	OrgSubscriptionsTable.ForeignKeys[0].RefTable = UsersTable
+	OrgSubscriptionsTable.ForeignKeys[1].RefTable = UsersTable
+	OrgSubscriptionsTable.ForeignKeys[2].RefTable = APITokensTable
+	OrgSubscriptionsTable.ForeignKeys[3].RefTable = APITokensTable
+	OrgSubscriptionsTable.ForeignKeys[4].RefTable = OrganizationsTable
 	OrgSubscriptionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_subscription_history",
 	}
-	OrganizationsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	OrganizationsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	OrganizationsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	OrganizationsTable.ForeignKeys[0].RefTable = UsersTable
+	OrganizationsTable.ForeignKeys[1].RefTable = UsersTable
+	OrganizationsTable.ForeignKeys[2].RefTable = APITokensTable
+	OrganizationsTable.ForeignKeys[3].RefTable = APITokensTable
+	OrganizationsTable.ForeignKeys[4].RefTable = OrganizationsTable
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_history",
 	}
 	OrganizationSettingsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	OrganizationSettingsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	OrganizationSettingsTable.ForeignKeys[2].RefTable = ChangeActorsTable
+	OrganizationSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	OrganizationSettingsTable.ForeignKeys[2].RefTable = UsersTable
+	OrganizationSettingsTable.ForeignKeys[3].RefTable = APITokensTable
+	OrganizationSettingsTable.ForeignKeys[4].RefTable = APITokensTable
 	OrganizationSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_setting_history",
 	}
-	PasswordResetTokensTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	PasswordResetTokensTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	PasswordResetTokensTable.ForeignKeys[2].RefTable = UsersTable
-	PersonalAccessTokensTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	PersonalAccessTokensTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	PersonalAccessTokensTable.ForeignKeys[2].RefTable = UsersTable
+	PasswordResetTokensTable.ForeignKeys[0].RefTable = UsersTable
+	PasswordResetTokensTable.ForeignKeys[1].RefTable = UsersTable
+	PasswordResetTokensTable.ForeignKeys[2].RefTable = APITokensTable
+	PasswordResetTokensTable.ForeignKeys[3].RefTable = APITokensTable
+	PasswordResetTokensTable.ForeignKeys[4].RefTable = UsersTable
+	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable
+	PersonalAccessTokensTable.ForeignKeys[1].RefTable = UsersTable
+	PersonalAccessTokensTable.ForeignKeys[2].RefTable = APITokensTable
+	PersonalAccessTokensTable.ForeignKeys[3].RefTable = APITokensTable
+	PersonalAccessTokensTable.ForeignKeys[4].RefTable = UsersTable
 	ProceduresTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ProceduresTable.ForeignKeys[1].RefTable = OrganizationsTable
-	ProceduresTable.ForeignKeys[2].RefTable = ChangeActorsTable
-	ProceduresTable.ForeignKeys[3].RefTable = ChangeActorsTable
-	ProceduresTable.ForeignKeys[4].RefTable = StandardsTable
+	ProceduresTable.ForeignKeys[2].RefTable = UsersTable
+	ProceduresTable.ForeignKeys[3].RefTable = UsersTable
+	ProceduresTable.ForeignKeys[4].RefTable = APITokensTable
+	ProceduresTable.ForeignKeys[5].RefTable = APITokensTable
+	ProceduresTable.ForeignKeys[6].RefTable = StandardsTable
 	ProcedureHistoryTable.Annotation = &entsql.Annotation{
 		Table: "procedure_history",
 	}
 	ProgramsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	ProgramsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	ProgramsTable.ForeignKeys[2].RefTable = ChangeActorsTable
+	ProgramsTable.ForeignKeys[1].RefTable = UsersTable
+	ProgramsTable.ForeignKeys[2].RefTable = UsersTable
+	ProgramsTable.ForeignKeys[3].RefTable = APITokensTable
+	ProgramsTable.ForeignKeys[4].RefTable = APITokensTable
 	ProgramHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_history",
 	}
-	ProgramMembershipsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	ProgramMembershipsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	ProgramMembershipsTable.ForeignKeys[2].RefTable = ProgramsTable
-	ProgramMembershipsTable.ForeignKeys[3].RefTable = UsersTable
+	ProgramMembershipsTable.ForeignKeys[0].RefTable = UsersTable
+	ProgramMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	ProgramMembershipsTable.ForeignKeys[2].RefTable = APITokensTable
+	ProgramMembershipsTable.ForeignKeys[3].RefTable = APITokensTable
+	ProgramMembershipsTable.ForeignKeys[4].RefTable = ProgramsTable
+	ProgramMembershipsTable.ForeignKeys[5].RefTable = UsersTable
 	ProgramMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_membership_history",
 	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RisksTable.ForeignKeys[1].RefTable = OrganizationsTable
-	RisksTable.ForeignKeys[2].RefTable = ChangeActorsTable
-	RisksTable.ForeignKeys[3].RefTable = ChangeActorsTable
+	RisksTable.ForeignKeys[2].RefTable = UsersTable
+	RisksTable.ForeignKeys[3].RefTable = UsersTable
+	RisksTable.ForeignKeys[4].RefTable = APITokensTable
+	RisksTable.ForeignKeys[5].RefTable = APITokensTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
-	StandardsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	StandardsTable.ForeignKeys[1].RefTable = ChangeActorsTable
+	StandardsTable.ForeignKeys[0].RefTable = UsersTable
+	StandardsTable.ForeignKeys[1].RefTable = UsersTable
+	StandardsTable.ForeignKeys[2].RefTable = APITokensTable
+	StandardsTable.ForeignKeys[3].RefTable = APITokensTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	SubcontrolsTable.ForeignKeys[1].RefTable = NotesTable
 	SubcontrolsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	SubcontrolsTable.ForeignKeys[3].RefTable = ChangeActorsTable
-	SubcontrolsTable.ForeignKeys[4].RefTable = ChangeActorsTable
+	SubcontrolsTable.ForeignKeys[3].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[4].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[5].RefTable = APITokensTable
+	SubcontrolsTable.ForeignKeys[6].RefTable = APITokensTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
-	SubscribersTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	SubscribersTable.ForeignKeys[2].RefTable = ChangeActorsTable
-	TfaSettingsTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	TfaSettingsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	TfaSettingsTable.ForeignKeys[2].RefTable = UsersTable
-	TasksTable.ForeignKeys[0].RefTable = ChangeActorsTable
-	TasksTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	TasksTable.ForeignKeys[2].RefTable = UsersTable
-	TasksTable.ForeignKeys[3].RefTable = UsersTable
+	SubscribersTable.ForeignKeys[1].RefTable = UsersTable
+	SubscribersTable.ForeignKeys[2].RefTable = UsersTable
+	SubscribersTable.ForeignKeys[3].RefTable = APITokensTable
+	SubscribersTable.ForeignKeys[4].RefTable = APITokensTable
+	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
+	TfaSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	TfaSettingsTable.ForeignKeys[2].RefTable = APITokensTable
+	TfaSettingsTable.ForeignKeys[3].RefTable = APITokensTable
+	TfaSettingsTable.ForeignKeys[4].RefTable = UsersTable
+	TasksTable.ForeignKeys[0].RefTable = UsersTable
+	TasksTable.ForeignKeys[1].RefTable = UsersTable
+	TasksTable.ForeignKeys[2].RefTable = APITokensTable
+	TasksTable.ForeignKeys[3].RefTable = APITokensTable
+	TasksTable.ForeignKeys[4].RefTable = UsersTable
+	TasksTable.ForeignKeys[5].RefTable = UsersTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	TemplatesTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	TemplatesTable.ForeignKeys[2].RefTable = ChangeActorsTable
+	TemplatesTable.ForeignKeys[1].RefTable = UsersTable
+	TemplatesTable.ForeignKeys[2].RefTable = UsersTable
+	TemplatesTable.ForeignKeys[3].RefTable = APITokensTable
+	TemplatesTable.ForeignKeys[4].RefTable = APITokensTable
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
@@ -5749,15 +6557,19 @@ func init() {
 		Table: "user_history",
 	}
 	UserSettingsTable.ForeignKeys[0].RefTable = UsersTable
-	UserSettingsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	UserSettingsTable.ForeignKeys[2].RefTable = ChangeActorsTable
-	UserSettingsTable.ForeignKeys[3].RefTable = OrganizationsTable
+	UserSettingsTable.ForeignKeys[1].RefTable = UsersTable
+	UserSettingsTable.ForeignKeys[2].RefTable = UsersTable
+	UserSettingsTable.ForeignKeys[3].RefTable = APITokensTable
+	UserSettingsTable.ForeignKeys[4].RefTable = APITokensTable
+	UserSettingsTable.ForeignKeys[5].RefTable = OrganizationsTable
 	UserSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_setting_history",
 	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
-	WebauthnsTable.ForeignKeys[1].RefTable = ChangeActorsTable
-	WebauthnsTable.ForeignKeys[2].RefTable = ChangeActorsTable
+	WebauthnsTable.ForeignKeys[1].RefTable = UsersTable
+	WebauthnsTable.ForeignKeys[2].RefTable = UsersTable
+	WebauthnsTable.ForeignKeys[3].RefTable = APITokensTable
+	WebauthnsTable.ForeignKeys[4].RefTable = APITokensTable
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
 	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ControlBlockedGroupsTable.ForeignKeys[0].RefTable = ControlsTable

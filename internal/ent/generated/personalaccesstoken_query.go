@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
@@ -30,8 +30,10 @@ type PersonalAccessTokenQuery struct {
 	order                  []personalaccesstoken.OrderOption
 	inters                 []Interceptor
 	predicates             []predicate.PersonalAccessToken
-	withCreatedBy          *ChangeActorQuery
-	withUpdatedBy          *ChangeActorQuery
+	withCreatedByUser      *UserQuery
+	withUpdatedByUser      *UserQuery
+	withCreatedByService   *APITokenQuery
+	withUpdatedByService   *APITokenQuery
 	withOwner              *UserQuery
 	withOrganizations      *OrganizationQuery
 	withEvents             *EventQuery
@@ -75,9 +77,9 @@ func (patq *PersonalAccessTokenQuery) Order(o ...personalaccesstoken.OrderOption
 	return patq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (patq *PersonalAccessTokenQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: patq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (patq *PersonalAccessTokenQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: patq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := patq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -88,11 +90,11 @@ func (patq *PersonalAccessTokenQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(personalaccesstoken.Table, personalaccesstoken.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.CreatedByTable, personalaccesstoken.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.CreatedByUserTable, personalaccesstoken.CreatedByUserColumn),
 		)
 		schemaConfig := patq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.PersonalAccessToken
 		fromU = sqlgraph.SetNeighbors(patq.driver.Dialect(), step)
 		return fromU, nil
@@ -100,9 +102,9 @@ func (patq *PersonalAccessTokenQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (patq *PersonalAccessTokenQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: patq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (patq *PersonalAccessTokenQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: patq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := patq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -113,11 +115,61 @@ func (patq *PersonalAccessTokenQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(personalaccesstoken.Table, personalaccesstoken.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.UpdatedByTable, personalaccesstoken.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.UpdatedByUserTable, personalaccesstoken.UpdatedByUserColumn),
 		)
 		schemaConfig := patq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.PersonalAccessToken
+		fromU = sqlgraph.SetNeighbors(patq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (patq *PersonalAccessTokenQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: patq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := patq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := patq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalaccesstoken.Table, personalaccesstoken.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.CreatedByServiceTable, personalaccesstoken.CreatedByServiceColumn),
+		)
+		schemaConfig := patq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.PersonalAccessToken
+		fromU = sqlgraph.SetNeighbors(patq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (patq *PersonalAccessTokenQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: patq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := patq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := patq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalaccesstoken.Table, personalaccesstoken.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, personalaccesstoken.UpdatedByServiceTable, personalaccesstoken.UpdatedByServiceColumn),
+		)
+		schemaConfig := patq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.PersonalAccessToken
 		fromU = sqlgraph.SetNeighbors(patq.driver.Dialect(), step)
 		return fromU, nil
@@ -387,16 +439,18 @@ func (patq *PersonalAccessTokenQuery) Clone() *PersonalAccessTokenQuery {
 		return nil
 	}
 	return &PersonalAccessTokenQuery{
-		config:            patq.config,
-		ctx:               patq.ctx.Clone(),
-		order:             append([]personalaccesstoken.OrderOption{}, patq.order...),
-		inters:            append([]Interceptor{}, patq.inters...),
-		predicates:        append([]predicate.PersonalAccessToken{}, patq.predicates...),
-		withCreatedBy:     patq.withCreatedBy.Clone(),
-		withUpdatedBy:     patq.withUpdatedBy.Clone(),
-		withOwner:         patq.withOwner.Clone(),
-		withOrganizations: patq.withOrganizations.Clone(),
-		withEvents:        patq.withEvents.Clone(),
+		config:               patq.config,
+		ctx:                  patq.ctx.Clone(),
+		order:                append([]personalaccesstoken.OrderOption{}, patq.order...),
+		inters:               append([]Interceptor{}, patq.inters...),
+		predicates:           append([]predicate.PersonalAccessToken{}, patq.predicates...),
+		withCreatedByUser:    patq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    patq.withUpdatedByUser.Clone(),
+		withCreatedByService: patq.withCreatedByService.Clone(),
+		withUpdatedByService: patq.withUpdatedByService.Clone(),
+		withOwner:            patq.withOwner.Clone(),
+		withOrganizations:    patq.withOrganizations.Clone(),
+		withEvents:           patq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       patq.sql.Clone(),
 		path:      patq.path,
@@ -404,25 +458,47 @@ func (patq *PersonalAccessTokenQuery) Clone() *PersonalAccessTokenQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (patq *PersonalAccessTokenQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *PersonalAccessTokenQuery {
-	query := (&ChangeActorClient{config: patq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (patq *PersonalAccessTokenQuery) WithCreatedByUser(opts ...func(*UserQuery)) *PersonalAccessTokenQuery {
+	query := (&UserClient{config: patq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	patq.withCreatedBy = query
+	patq.withCreatedByUser = query
 	return patq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (patq *PersonalAccessTokenQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *PersonalAccessTokenQuery {
-	query := (&ChangeActorClient{config: patq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (patq *PersonalAccessTokenQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *PersonalAccessTokenQuery {
+	query := (&UserClient{config: patq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	patq.withUpdatedBy = query
+	patq.withUpdatedByUser = query
+	return patq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (patq *PersonalAccessTokenQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *PersonalAccessTokenQuery {
+	query := (&APITokenClient{config: patq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	patq.withCreatedByService = query
+	return patq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (patq *PersonalAccessTokenQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *PersonalAccessTokenQuery {
+	query := (&APITokenClient{config: patq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	patq.withUpdatedByService = query
 	return patq
 }
 
@@ -543,9 +619,11 @@ func (patq *PersonalAccessTokenQuery) sqlAll(ctx context.Context, hooks ...query
 	var (
 		nodes       = []*PersonalAccessToken{}
 		_spec       = patq.querySpec()
-		loadedTypes = [5]bool{
-			patq.withCreatedBy != nil,
-			patq.withUpdatedBy != nil,
+		loadedTypes = [7]bool{
+			patq.withCreatedByUser != nil,
+			patq.withUpdatedByUser != nil,
+			patq.withCreatedByService != nil,
+			patq.withUpdatedByService != nil,
 			patq.withOwner != nil,
 			patq.withOrganizations != nil,
 			patq.withEvents != nil,
@@ -574,15 +652,27 @@ func (patq *PersonalAccessTokenQuery) sqlAll(ctx context.Context, hooks ...query
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := patq.withCreatedBy; query != nil {
-		if err := patq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *PersonalAccessToken, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := patq.withCreatedByUser; query != nil {
+		if err := patq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *PersonalAccessToken, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := patq.withUpdatedBy; query != nil {
-		if err := patq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *PersonalAccessToken, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := patq.withUpdatedByUser; query != nil {
+		if err := patq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *PersonalAccessToken, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := patq.withCreatedByService; query != nil {
+		if err := patq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *PersonalAccessToken, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := patq.withUpdatedByService; query != nil {
+		if err := patq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *PersonalAccessToken, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -630,11 +720,11 @@ func (patq *PersonalAccessTokenQuery) sqlAll(ctx context.Context, hooks ...query
 	return nodes, nil
 }
 
-func (patq *PersonalAccessTokenQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *ChangeActor)) error {
+func (patq *PersonalAccessTokenQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*PersonalAccessToken)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -643,7 +733,7 @@ func (patq *PersonalAccessTokenQuery) loadCreatedBy(ctx context.Context, query *
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -651,7 +741,7 @@ func (patq *PersonalAccessTokenQuery) loadCreatedBy(ctx context.Context, query *
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -659,11 +749,11 @@ func (patq *PersonalAccessTokenQuery) loadCreatedBy(ctx context.Context, query *
 	}
 	return nil
 }
-func (patq *PersonalAccessTokenQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *ChangeActor)) error {
+func (patq *PersonalAccessTokenQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*PersonalAccessToken)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -672,7 +762,7 @@ func (patq *PersonalAccessTokenQuery) loadUpdatedBy(ctx context.Context, query *
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -680,7 +770,65 @@ func (patq *PersonalAccessTokenQuery) loadUpdatedBy(ctx context.Context, query *
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (patq *PersonalAccessTokenQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*PersonalAccessToken)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (patq *PersonalAccessTokenQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*PersonalAccessToken)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -872,11 +1020,17 @@ func (patq *PersonalAccessTokenQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if patq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(personalaccesstoken.FieldCreatedByID)
+		if patq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(personalaccesstoken.FieldCreatedByUserID)
 		}
-		if patq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(personalaccesstoken.FieldUpdatedByID)
+		if patq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(personalaccesstoken.FieldUpdatedByUserID)
+		}
+		if patq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(personalaccesstoken.FieldCreatedByServiceID)
+		}
+		if patq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(personalaccesstoken.FieldUpdatedByServiceID)
 		}
 		if patq.withOwner != nil {
 			_spec.Node.AddColumnOnce(personalaccesstoken.FieldOwnerID)

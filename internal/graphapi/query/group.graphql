@@ -147,8 +147,7 @@ query GetAllGroups {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -172,8 +171,7 @@ query GetGroupByID($groupId: ID!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
+
       }
       id
       joinPolicy
@@ -241,8 +239,7 @@ query GetGroups($where: GroupWhereInput) {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -274,8 +271,7 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
+
       }
         visibility
       }

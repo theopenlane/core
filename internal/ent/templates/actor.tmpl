@@ -1,0 +1,13 @@
+{{- define "import/additional/stdsql" }}
+    "github.com/theopenlane/core/pkg/models
+{{- end }}
+
+{{ define "model/fields/additional" }}
+    {{- if hasSuffix $.Name "History" }}
+    {{- else }}
+        // CreatedBy includes the details about the user or service that created the object
+        CreatedBy models.Actor `json:"created_by,omitempty"`
+        // UpdatedBy includes the details about the user or service that last updated the object
+        UpdatedBy models.Actor `json:"updated_by,omitempty"`
+    {{- end }}
+{{ end }}

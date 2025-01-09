@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Standard_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Standard_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Standard_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Standard_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Standard_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Standard_deletedAt(ctx, field)
 			case "deletedByID":
@@ -101,10 +109,14 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Standard_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Standard_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Standard_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Standard_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Standard_updatedByService(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_Standard_controlObjectives(ctx, field)
 			case "controls":
@@ -171,6 +183,14 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Standard_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Standard_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Standard_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Standard_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Standard_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Standard_deletedAt(ctx, field)
 			case "deletedByID":
@@ -197,10 +217,14 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Standard_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Standard_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Standard_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Standard_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Standard_updatedByService(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_Standard_controlObjectives(ctx, field)
 			case "controls":
@@ -311,6 +335,14 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Standard_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Standard_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Standard_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Standard_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Standard_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Standard_deletedAt(ctx, field)
 			case "deletedByID":
@@ -337,10 +369,14 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Standard_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Standard_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Standard_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Standard_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Standard_updatedByService(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_Standard_controlObjectives(ctx, field)
 			case "controls":

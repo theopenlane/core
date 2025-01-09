@@ -10,10 +10,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Group is the model entity for the Group schema.
@@ -29,6 +31,14 @@ type Group struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -53,14 +63,23 @@ type Group struct {
 	// The values are being populated by the GroupQuery when eager-loading is set.
 	Edges        GroupEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // GroupEdges holds the relations/edges for other nodes in the graph.
 type GroupEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// ControlCreators holds the value of the control_creators edge.
@@ -135,9 +154,9 @@ type GroupEdges struct {
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [38]bool
+	loadedTypes [40]bool
 	// totalCount holds the count of the edges above.
-	totalCount [38]map[string]int
+	totalCount [40]map[string]int
 
 	namedControlCreators               map[string][]*Organization
 	namedControlObjectiveCreators      map[string][]*Organization
@@ -175,26 +194,48 @@ type GroupEdges struct {
 	namedMembers                       map[string][]*GroupMembership
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e GroupEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e GroupEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e GroupEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e GroupEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e GroupEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e GroupEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -202,7 +243,7 @@ func (e GroupEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e GroupEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -211,7 +252,7 @@ func (e GroupEdges) OwnerOrErr() (*Organization, error) {
 // ControlCreatorsOrErr returns the ControlCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.ControlCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "control_creators"}
@@ -220,7 +261,7 @@ func (e GroupEdges) ControlCreatorsOrErr() ([]*Organization, error) {
 // ControlObjectiveCreatorsOrErr returns the ControlObjectiveCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.ControlObjectiveCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_creators"}
@@ -229,7 +270,7 @@ func (e GroupEdges) ControlObjectiveCreatorsOrErr() ([]*Organization, error) {
 // GroupCreatorsOrErr returns the GroupCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) GroupCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.GroupCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "group_creators"}
@@ -238,7 +279,7 @@ func (e GroupEdges) GroupCreatorsOrErr() ([]*Organization, error) {
 // InternalPolicyCreatorsOrErr returns the InternalPolicyCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InternalPolicyCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.InternalPolicyCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy_creators"}
@@ -247,7 +288,7 @@ func (e GroupEdges) InternalPolicyCreatorsOrErr() ([]*Organization, error) {
 // NarrativeCreatorsOrErr returns the NarrativeCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.NarrativeCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_creators"}
@@ -256,7 +297,7 @@ func (e GroupEdges) NarrativeCreatorsOrErr() ([]*Organization, error) {
 // ProcedureCreatorsOrErr returns the ProcedureCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProcedureCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.ProcedureCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure_creators"}
@@ -265,7 +306,7 @@ func (e GroupEdges) ProcedureCreatorsOrErr() ([]*Organization, error) {
 // ProgramCreatorsOrErr returns the ProgramCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.ProgramCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "program_creators"}
@@ -274,7 +315,7 @@ func (e GroupEdges) ProgramCreatorsOrErr() ([]*Organization, error) {
 // RiskCreatorsOrErr returns the RiskCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.RiskCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_creators"}
@@ -283,7 +324,7 @@ func (e GroupEdges) RiskCreatorsOrErr() ([]*Organization, error) {
 // TemplateCreatorsOrErr returns the TemplateCreators value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) TemplateCreatorsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.TemplateCreators, nil
 	}
 	return nil, &NotLoadedError{edge: "template_creators"}
@@ -292,7 +333,7 @@ func (e GroupEdges) TemplateCreatorsOrErr() ([]*Organization, error) {
 // ProcedureEditorsOrErr returns the ProcedureEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProcedureEditorsOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.ProcedureEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure_editors"}
@@ -301,7 +342,7 @@ func (e GroupEdges) ProcedureEditorsOrErr() ([]*Procedure, error) {
 // ProcedureBlockedGroupsOrErr returns the ProcedureBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProcedureBlockedGroupsOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.ProcedureBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure_blocked_groups"}
@@ -310,7 +351,7 @@ func (e GroupEdges) ProcedureBlockedGroupsOrErr() ([]*Procedure, error) {
 // InternalPolicyEditorsOrErr returns the InternalPolicyEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InternalPolicyEditorsOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[16] {
 		return e.InternalPolicyEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy_editors"}
@@ -319,7 +360,7 @@ func (e GroupEdges) InternalPolicyEditorsOrErr() ([]*InternalPolicy, error) {
 // InternalPolicyBlockedGroupsOrErr returns the InternalPolicyBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InternalPolicyBlockedGroupsOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[17] {
 		return e.InternalPolicyBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy_blocked_groups"}
@@ -328,7 +369,7 @@ func (e GroupEdges) InternalPolicyBlockedGroupsOrErr() ([]*InternalPolicy, error
 // ProgramEditorsOrErr returns the ProgramEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramEditorsOrErr() ([]*Program, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[18] {
 		return e.ProgramEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "program_editors"}
@@ -337,7 +378,7 @@ func (e GroupEdges) ProgramEditorsOrErr() ([]*Program, error) {
 // ProgramBlockedGroupsOrErr returns the ProgramBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramBlockedGroupsOrErr() ([]*Program, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[19] {
 		return e.ProgramBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "program_blocked_groups"}
@@ -346,7 +387,7 @@ func (e GroupEdges) ProgramBlockedGroupsOrErr() ([]*Program, error) {
 // ProgramViewersOrErr returns the ProgramViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramViewersOrErr() ([]*Program, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[20] {
 		return e.ProgramViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "program_viewers"}
@@ -355,7 +396,7 @@ func (e GroupEdges) ProgramViewersOrErr() ([]*Program, error) {
 // RiskEditorsOrErr returns the RiskEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskEditorsOrErr() ([]*Risk, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[21] {
 		return e.RiskEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_editors"}
@@ -364,7 +405,7 @@ func (e GroupEdges) RiskEditorsOrErr() ([]*Risk, error) {
 // RiskBlockedGroupsOrErr returns the RiskBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskBlockedGroupsOrErr() ([]*Risk, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[22] {
 		return e.RiskBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_blocked_groups"}
@@ -373,7 +414,7 @@ func (e GroupEdges) RiskBlockedGroupsOrErr() ([]*Risk, error) {
 // RiskViewersOrErr returns the RiskViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskViewersOrErr() ([]*Risk, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[23] {
 		return e.RiskViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_viewers"}
@@ -382,7 +423,7 @@ func (e GroupEdges) RiskViewersOrErr() ([]*Risk, error) {
 // ControlObjectiveEditorsOrErr returns the ControlObjectiveEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveEditorsOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[24] {
 		return e.ControlObjectiveEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_editors"}
@@ -391,7 +432,7 @@ func (e GroupEdges) ControlObjectiveEditorsOrErr() ([]*ControlObjective, error) 
 // ControlObjectiveBlockedGroupsOrErr returns the ControlObjectiveBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveBlockedGroupsOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[25] {
 		return e.ControlObjectiveBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_blocked_groups"}
@@ -400,7 +441,7 @@ func (e GroupEdges) ControlObjectiveBlockedGroupsOrErr() ([]*ControlObjective, e
 // ControlObjectiveViewersOrErr returns the ControlObjectiveViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveViewersOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[26] {
 		return e.ControlObjectiveViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_viewers"}
@@ -409,7 +450,7 @@ func (e GroupEdges) ControlObjectiveViewersOrErr() ([]*ControlObjective, error) 
 // ControlEditorsOrErr returns the ControlEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[27] {
 		return e.ControlEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "control_editors"}
@@ -418,7 +459,7 @@ func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
 // ControlBlockedGroupsOrErr returns the ControlBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[28] {
 		return e.ControlBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "control_blocked_groups"}
@@ -427,7 +468,7 @@ func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
 // ControlViewersOrErr returns the ControlViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlViewersOrErr() ([]*Control, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[29] {
 		return e.ControlViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "control_viewers"}
@@ -436,7 +477,7 @@ func (e GroupEdges) ControlViewersOrErr() ([]*Control, error) {
 // NarrativeEditorsOrErr returns the NarrativeEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeEditorsOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[30] {
 		return e.NarrativeEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_editors"}
@@ -445,7 +486,7 @@ func (e GroupEdges) NarrativeEditorsOrErr() ([]*Narrative, error) {
 // NarrativeBlockedGroupsOrErr returns the NarrativeBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeBlockedGroupsOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[31] {
 		return e.NarrativeBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_blocked_groups"}
@@ -454,7 +495,7 @@ func (e GroupEdges) NarrativeBlockedGroupsOrErr() ([]*Narrative, error) {
 // NarrativeViewersOrErr returns the NarrativeViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeViewersOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[32] {
 		return e.NarrativeViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_viewers"}
@@ -465,7 +506,7 @@ func (e GroupEdges) NarrativeViewersOrErr() ([]*Narrative, error) {
 func (e GroupEdges) SettingOrErr() (*GroupSetting, error) {
 	if e.Setting != nil {
 		return e.Setting, nil
-	} else if e.loadedTypes[31] {
+	} else if e.loadedTypes[33] {
 		return nil, &NotFoundError{label: groupsetting.Label}
 	}
 	return nil, &NotLoadedError{edge: "setting"}
@@ -474,7 +515,7 @@ func (e GroupEdges) SettingOrErr() (*GroupSetting, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[34] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -483,7 +524,7 @@ func (e GroupEdges) UsersOrErr() ([]*User, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[35] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -492,7 +533,7 @@ func (e GroupEdges) EventsOrErr() ([]*Event, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[36] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -501,7 +542,7 @@ func (e GroupEdges) IntegrationsOrErr() ([]*Integration, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[37] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -510,7 +551,7 @@ func (e GroupEdges) FilesOrErr() ([]*File, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[38] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -519,7 +560,7 @@ func (e GroupEdges) TasksOrErr() ([]*Task, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[37] {
+	if e.loadedTypes[39] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -532,7 +573,7 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case group.FieldTags:
 			values[i] = new([]byte)
-		case group.FieldID, group.FieldCreatedByID, group.FieldUpdatedByID, group.FieldDeletedByID, group.FieldMappingID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldDisplayName:
+		case group.FieldID, group.FieldCreatedByID, group.FieldUpdatedByID, group.FieldCreatedByUserID, group.FieldUpdatedByUserID, group.FieldCreatedByServiceID, group.FieldUpdatedByServiceID, group.FieldDeletedByID, group.FieldMappingID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldDisplayName:
 			values[i] = new(sql.NullString)
 		case group.FieldCreatedAt, group.FieldUpdatedAt, group.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -580,6 +621,30 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				gr.UpdatedByID = value.String
+			}
+		case group.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				gr.CreatedByUserID = value.String
+			}
+		case group.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				gr.UpdatedByUserID = value.String
+			}
+		case group.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				gr.CreatedByServiceID = value.String
+			}
+		case group.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				gr.UpdatedByServiceID = value.String
 			}
 		case group.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -656,14 +721,24 @@ func (gr *Group) Value(name string) (ent.Value, error) {
 	return gr.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the Group entity.
-func (gr *Group) QueryCreatedBy() *ChangeActorQuery {
-	return NewGroupClient(gr.config).QueryCreatedBy(gr)
+// QueryCreatedByUser queries the "created_by_user" edge of the Group entity.
+func (gr *Group) QueryCreatedByUser() *UserQuery {
+	return NewGroupClient(gr.config).QueryCreatedByUser(gr)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the Group entity.
-func (gr *Group) QueryUpdatedBy() *ChangeActorQuery {
-	return NewGroupClient(gr.config).QueryUpdatedBy(gr)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the Group entity.
+func (gr *Group) QueryUpdatedByUser() *UserQuery {
+	return NewGroupClient(gr.config).QueryUpdatedByUser(gr)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the Group entity.
+func (gr *Group) QueryCreatedByService() *APITokenQuery {
+	return NewGroupClient(gr.config).QueryCreatedByService(gr)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the Group entity.
+func (gr *Group) QueryUpdatedByService() *APITokenQuery {
+	return NewGroupClient(gr.config).QueryUpdatedByService(gr)
 }
 
 // QueryOwner queries the "owner" edge of the Group entity.
@@ -880,6 +955,18 @@ func (gr *Group) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(gr.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(gr.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(gr.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(gr.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(gr.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(gr.DeletedAt.Format(time.ANSIC))

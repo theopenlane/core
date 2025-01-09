@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 				return ec.fieldContext_Narrative_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Narrative_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Narrative_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Narrative_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Narrative_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Narrative_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
 			case "deletedByID":
@@ -91,10 +99,14 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Narrative_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Narrative_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Narrative_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Narrative_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Narrative_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Narrative_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Narrative_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Narrative_owner(ctx, field)
 			case "blockedGroups":
@@ -169,6 +181,14 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Narrative_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Narrative_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Narrative_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Narrative_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Narrative_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
 			case "deletedByID":
@@ -185,10 +205,14 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Narrative_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Narrative_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Narrative_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Narrative_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Narrative_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Narrative_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Narrative_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Narrative_owner(ctx, field)
 			case "blockedGroups":
@@ -307,6 +331,14 @@ func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Narrative_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Narrative_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Narrative_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Narrative_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Narrative_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
 			case "deletedByID":
@@ -323,10 +355,14 @@ func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Narrative_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Narrative_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Narrative_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Narrative_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Narrative_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Narrative_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Narrative_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Narrative_owner(ctx, field)
 			case "blockedGroups":

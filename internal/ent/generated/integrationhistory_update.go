@@ -64,6 +64,46 @@ func (ihu *IntegrationHistoryUpdate) ClearUpdatedByID() *IntegrationHistoryUpdat
 	return ihu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ihu *IntegrationHistoryUpdate) SetUpdatedByUserID(s string) *IntegrationHistoryUpdate {
+	ihu.mutation.SetUpdatedByUserID(s)
+	return ihu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ihu *IntegrationHistoryUpdate) SetNillableUpdatedByUserID(s *string) *IntegrationHistoryUpdate {
+	if s != nil {
+		ihu.SetUpdatedByUserID(*s)
+	}
+	return ihu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ihu *IntegrationHistoryUpdate) ClearUpdatedByUserID() *IntegrationHistoryUpdate {
+	ihu.mutation.ClearUpdatedByUserID()
+	return ihu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ihu *IntegrationHistoryUpdate) SetUpdatedByServiceID(s string) *IntegrationHistoryUpdate {
+	ihu.mutation.SetUpdatedByServiceID(s)
+	return ihu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ihu *IntegrationHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *IntegrationHistoryUpdate {
+	if s != nil {
+		ihu.SetUpdatedByServiceID(*s)
+	}
+	return ihu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ihu *IntegrationHistoryUpdate) ClearUpdatedByServiceID() *IntegrationHistoryUpdate {
+	ihu.mutation.ClearUpdatedByServiceID()
+	return ihu
+}
+
 // SetTags sets the "tags" field.
 func (ihu *IntegrationHistoryUpdate) SetTags(s []string) *IntegrationHistoryUpdate {
 	ihu.mutation.SetTags(s)
@@ -242,6 +282,24 @@ func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if ihu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(integrationhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if ihu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(integrationhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := ihu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if ihu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(integrationhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if ihu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(integrationhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := ihu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if ihu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(integrationhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if value, ok := ihu.mutation.Tags(); ok {
 		_spec.SetField(integrationhistory.FieldTags, field.TypeJSON, value)
 	}
@@ -333,6 +391,46 @@ func (ihuo *IntegrationHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Inte
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (ihuo *IntegrationHistoryUpdateOne) ClearUpdatedByID() *IntegrationHistoryUpdateOne {
 	ihuo.mutation.ClearUpdatedByID()
+	return ihuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ihuo *IntegrationHistoryUpdateOne) SetUpdatedByUserID(s string) *IntegrationHistoryUpdateOne {
+	ihuo.mutation.SetUpdatedByUserID(s)
+	return ihuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ihuo *IntegrationHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *IntegrationHistoryUpdateOne {
+	if s != nil {
+		ihuo.SetUpdatedByUserID(*s)
+	}
+	return ihuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ihuo *IntegrationHistoryUpdateOne) ClearUpdatedByUserID() *IntegrationHistoryUpdateOne {
+	ihuo.mutation.ClearUpdatedByUserID()
+	return ihuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ihuo *IntegrationHistoryUpdateOne) SetUpdatedByServiceID(s string) *IntegrationHistoryUpdateOne {
+	ihuo.mutation.SetUpdatedByServiceID(s)
+	return ihuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ihuo *IntegrationHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *IntegrationHistoryUpdateOne {
+	if s != nil {
+		ihuo.SetUpdatedByServiceID(*s)
+	}
+	return ihuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ihuo *IntegrationHistoryUpdateOne) ClearUpdatedByServiceID() *IntegrationHistoryUpdateOne {
+	ihuo.mutation.ClearUpdatedByServiceID()
 	return ihuo
 }
 
@@ -543,6 +641,24 @@ func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *In
 	}
 	if ihuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(integrationhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if ihuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(integrationhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := ihuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if ihuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(integrationhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if ihuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(integrationhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := ihuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if ihuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(integrationhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if value, ok := ihuo.mutation.Tags(); ok {
 		_spec.SetField(integrationhistory.FieldTags, field.TypeJSON, value)

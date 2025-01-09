@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -38,8 +38,10 @@ type FileQuery struct {
 	order                        []file.OrderOption
 	inters                       []Interceptor
 	predicates                   []predicate.File
-	withCreatedBy                *ChangeActorQuery
-	withUpdatedBy                *ChangeActorQuery
+	withCreatedByUser            *UserQuery
+	withUpdatedByUser            *UserQuery
+	withCreatedByService         *APITokenQuery
+	withUpdatedByService         *APITokenQuery
 	withUser                     *UserQuery
 	withOrganization             *OrganizationQuery
 	withGroup                    *GroupQuery
@@ -100,9 +102,9 @@ func (fq *FileQuery) Order(o ...file.OrderOption) *FileQuery {
 	return fq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (fq *FileQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: fq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (fq *FileQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: fq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := fq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -113,11 +115,11 @@ func (fq *FileQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, file.CreatedByTable, file.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.CreatedByUserTable, file.CreatedByUserColumn),
 		)
 		schemaConfig := fq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
 		return fromU, nil
@@ -125,9 +127,9 @@ func (fq *FileQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (fq *FileQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: fq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (fq *FileQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: fq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := fq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -138,11 +140,61 @@ func (fq *FileQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, file.UpdatedByTable, file.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.UpdatedByUserTable, file.UpdatedByUserColumn),
 		)
 		schemaConfig := fq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (fq *FileQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.CreatedByServiceTable, file.CreatedByServiceColumn),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (fq *FileQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.UpdatedByServiceTable, file.UpdatedByServiceColumn),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
 		return fromU, nil
@@ -617,8 +669,10 @@ func (fq *FileQuery) Clone() *FileQuery {
 		order:                   append([]file.OrderOption{}, fq.order...),
 		inters:                  append([]Interceptor{}, fq.inters...),
 		predicates:              append([]predicate.File{}, fq.predicates...),
-		withCreatedBy:           fq.withCreatedBy.Clone(),
-		withUpdatedBy:           fq.withUpdatedBy.Clone(),
+		withCreatedByUser:       fq.withCreatedByUser.Clone(),
+		withUpdatedByUser:       fq.withUpdatedByUser.Clone(),
+		withCreatedByService:    fq.withCreatedByService.Clone(),
+		withUpdatedByService:    fq.withUpdatedByService.Clone(),
 		withUser:                fq.withUser.Clone(),
 		withOrganization:        fq.withOrganization.Clone(),
 		withGroup:               fq.withGroup.Clone(),
@@ -637,25 +691,47 @@ func (fq *FileQuery) Clone() *FileQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (fq *FileQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *FileQuery {
-	query := (&ChangeActorClient{config: fq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithCreatedByUser(opts ...func(*UserQuery)) *FileQuery {
+	query := (&UserClient{config: fq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	fq.withCreatedBy = query
+	fq.withCreatedByUser = query
 	return fq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (fq *FileQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *FileQuery {
-	query := (&ChangeActorClient{config: fq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *FileQuery {
+	query := (&UserClient{config: fq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	fq.withUpdatedBy = query
+	fq.withUpdatedByUser = query
+	return fq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *FileQuery {
+	query := (&APITokenClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withCreatedByService = query
+	return fq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *FileQuery {
+	query := (&APITokenClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withUpdatedByService = query
 	return fq
 }
 
@@ -864,9 +940,11 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 	var (
 		nodes       = []*File{}
 		_spec       = fq.querySpec()
-		loadedTypes = [13]bool{
-			fq.withCreatedBy != nil,
-			fq.withUpdatedBy != nil,
+		loadedTypes = [15]bool{
+			fq.withCreatedByUser != nil,
+			fq.withUpdatedByUser != nil,
+			fq.withCreatedByService != nil,
+			fq.withUpdatedByService != nil,
 			fq.withUser != nil,
 			fq.withOrganization != nil,
 			fq.withGroup != nil,
@@ -903,15 +981,27 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := fq.withCreatedBy; query != nil {
-		if err := fq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *File, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := fq.withCreatedByUser; query != nil {
+		if err := fq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *File, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := fq.withUpdatedBy; query != nil {
-		if err := fq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *File, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := fq.withUpdatedByUser; query != nil {
+		if err := fq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *File, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withCreatedByService; query != nil {
+		if err := fq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *File, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withUpdatedByService; query != nil {
+		if err := fq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *File, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1079,11 +1169,11 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 	return nodes, nil
 }
 
-func (fq *FileQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*File, init func(*File), assign func(*File, *ChangeActor)) error {
+func (fq *FileQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*File, init func(*File), assign func(*File, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*File)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1092,7 +1182,7 @@ func (fq *FileQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1100,7 +1190,7 @@ func (fq *FileQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1108,11 +1198,11 @@ func (fq *FileQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	}
 	return nil
 }
-func (fq *FileQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*File, init func(*File), assign func(*File, *ChangeActor)) error {
+func (fq *FileQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*File, init func(*File), assign func(*File, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*File)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1121,7 +1211,7 @@ func (fq *FileQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1129,7 +1219,65 @@ func (fq *FileQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (fq *FileQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*File, init func(*File), assign func(*File, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*File)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (fq *FileQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*File, init func(*File), assign func(*File, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*File)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1850,11 +1998,17 @@ func (fq *FileQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if fq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(file.FieldCreatedByID)
+		if fq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(file.FieldCreatedByUserID)
 		}
-		if fq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(file.FieldUpdatedByID)
+		if fq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(file.FieldUpdatedByUserID)
+		}
+		if fq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(file.FieldCreatedByServiceID)
+		}
+		if fq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(file.FieldUpdatedByServiceID)
 		}
 	}
 	if ps := fq.predicates; len(ps) > 0 {

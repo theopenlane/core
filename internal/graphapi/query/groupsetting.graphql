@@ -18,8 +18,7 @@ query GetAllGroupSettings {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -65,8 +64,7 @@ query GetGroupSettings($where: GroupSettingWhereInput!) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -90,8 +88,7 @@ mutation UpdateGroupSetting($updateGroupSettingId: ID!, $input: UpdateGroupSetti
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       updatedAt
       updatedByID

@@ -32,6 +32,7 @@ func main() {
 	entPackage := "github.com/theopenlane/core/internal/ent/generated"
 
 	if err := api.Generate(cfg,
+		// api.AddPlugin(fieldgen.NewExtraFieldsGen([]string{})), // add the fieldgen plugin
 		api.ReplacePlugin(resolvergen.New()), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),

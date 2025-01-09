@@ -77,6 +77,14 @@ func (ec *executionContext) fieldContext_APITokenSearchResult_apiTokens(_ contex
 				return ec.fieldContext_APIToken_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_APIToken_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_APIToken_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_APIToken_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_APIToken_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_APIToken_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_APIToken_deletedAt(ctx, field)
 			case "deletedByID":
@@ -97,10 +105,14 @@ func (ec *executionContext) fieldContext_APITokenSearchResult_apiTokens(_ contex
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_APIToken_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_APIToken_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_APIToken_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_APIToken_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -156,6 +168,14 @@ func (ec *executionContext) fieldContext_ActionPlanSearchResult_actionPlans(_ co
 				return ec.fieldContext_ActionPlan_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_ActionPlan_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_ActionPlan_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_ActionPlan_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_ActionPlan_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_ActionPlan_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
 			case "deletedByID":
@@ -176,10 +196,14 @@ func (ec *executionContext) fieldContext_ActionPlanSearchResult_actionPlans(_ co
 				return ec.fieldContext_ActionPlan_source(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_ActionPlan_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_ActionPlan_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_ActionPlan_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_ActionPlan_updatedByService(ctx, field)
 			case "standard":
 				return ec.fieldContext_ActionPlan_standard(ctx, field)
 			case "risk":
@@ -243,6 +267,14 @@ func (ec *executionContext) fieldContext_ContactSearchResult_contacts(_ context.
 				return ec.fieldContext_Contact_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Contact_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Contact_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Contact_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Contact_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Contact_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Contact_deletedAt(ctx, field)
 			case "deletedByID":
@@ -265,10 +297,14 @@ func (ec *executionContext) fieldContext_ContactSearchResult_contacts(_ context.
 				return ec.fieldContext_Contact_address(ctx, field)
 			case "status":
 				return ec.fieldContext_Contact_status(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Contact_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Contact_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Contact_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Contact_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
@@ -328,6 +364,14 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_ControlObjective_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_ControlObjective_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_ControlObjective_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_ControlObjective_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_ControlObjective_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
 			case "deletedByID":
@@ -358,10 +402,14 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlObjective_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_ControlObjective_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_ControlObjective_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_ControlObjective_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_ControlObjective_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlObjective_owner(ctx, field)
 			case "blockedGroups":
@@ -441,6 +489,14 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Control_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Control_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Control_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Control_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Control_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Control_deletedAt(ctx, field)
 			case "deletedByID":
@@ -473,10 +529,14 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_Control_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Control_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Control_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Control_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Control_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -556,6 +616,14 @@ func (ec *executionContext) fieldContext_DocumentDataSearchResult_documentData(_
 				return ec.fieldContext_DocumentData_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_DocumentData_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_DocumentData_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_DocumentData_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_DocumentData_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_DocumentData_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
@@ -568,10 +636,14 @@ func (ec *executionContext) fieldContext_DocumentDataSearchResult_documentData(_
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_DocumentData_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_DocumentData_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_DocumentData_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_DocumentData_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":
@@ -633,6 +705,14 @@ func (ec *executionContext) fieldContext_EntitySearchResult_entities(_ context.C
 				return ec.fieldContext_Entity_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Entity_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Entity_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Entity_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Entity_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Entity_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Entity_deletedAt(ctx, field)
 			case "deletedByID":
@@ -653,10 +733,14 @@ func (ec *executionContext) fieldContext_EntitySearchResult_entities(_ context.C
 				return ec.fieldContext_Entity_entityTypeID(ctx, field)
 			case "status":
 				return ec.fieldContext_Entity_status(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Entity_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Entity_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Entity_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Entity_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "contacts":
@@ -722,6 +806,14 @@ func (ec *executionContext) fieldContext_EntityTypeSearchResult_entityTypes(_ co
 				return ec.fieldContext_EntityType_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_EntityType_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_EntityType_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_EntityType_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_EntityType_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_EntityType_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_EntityType_deletedAt(ctx, field)
 			case "deletedByID":
@@ -732,10 +824,14 @@ func (ec *executionContext) fieldContext_EntityTypeSearchResult_entityTypes(_ co
 				return ec.fieldContext_EntityType_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_EntityType_name(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_EntityType_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_EntityType_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_EntityType_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_EntityType_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_EntityType_owner(ctx, field)
 			case "entities":
@@ -793,6 +889,14 @@ func (ec *executionContext) fieldContext_EventSearchResult_events(_ context.Cont
 				return ec.fieldContext_Event_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Event_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Event_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Event_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Event_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Event_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Event_tags(ctx, field)
 			case "eventID":
@@ -803,10 +907,14 @@ func (ec *executionContext) fieldContext_EventSearchResult_events(_ context.Cont
 				return ec.fieldContext_Event_eventType(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Event_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Event_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Event_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Event_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Event_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_Event_user(ctx, field)
 			case "group":
@@ -882,6 +990,14 @@ func (ec *executionContext) fieldContext_FileSearchResult_files(_ context.Contex
 				return ec.fieldContext_File_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_File_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_File_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_File_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_File_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_File_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_File_deletedAt(ctx, field)
 			case "deletedByID":
@@ -914,10 +1030,14 @@ func (ec *executionContext) fieldContext_FileSearchResult_files(_ context.Contex
 				return ec.fieldContext_File_storageVolume(ctx, field)
 			case "storagePath":
 				return ec.fieldContext_File_storagePath(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_File_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_File_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_File_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_File_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_File_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_File_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_File_user(ctx, field)
 			case "organization":
@@ -993,6 +1113,14 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Group_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Group_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Group_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Group_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Group_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Group_deletedAt(ctx, field)
 			case "deletedByID":
@@ -1011,10 +1139,14 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Group_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Group_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Group_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Group_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Group_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "controlCreators":
@@ -1140,6 +1272,14 @@ func (ec *executionContext) fieldContext_GroupSettingSearchResult_groupSettings(
 				return ec.fieldContext_GroupSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_GroupSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_GroupSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_GroupSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_GroupSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_GroupSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_GroupSetting_tags(ctx, field)
 			case "deletedAt":
@@ -1156,10 +1296,14 @@ func (ec *executionContext) fieldContext_GroupSettingSearchResult_groupSettings(
 				return ec.fieldContext_GroupSetting_syncToGithub(ctx, field)
 			case "groupID":
 				return ec.fieldContext_GroupSetting_groupID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_GroupSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_GroupSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_GroupSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_GroupSetting_updatedByService(ctx, field)
 			case "group":
 				return ec.fieldContext_GroupSetting_group(ctx, field)
 			}
@@ -1215,6 +1359,14 @@ func (ec *executionContext) fieldContext_IntegrationSearchResult_integrations(_ 
 				return ec.fieldContext_Integration_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Integration_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Integration_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Integration_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Integration_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Integration_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "deletedAt":
@@ -1229,10 +1381,14 @@ func (ec *executionContext) fieldContext_IntegrationSearchResult_integrations(_ 
 				return ec.fieldContext_Integration_description(ctx, field)
 			case "kind":
 				return ec.fieldContext_Integration_kind(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Integration_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Integration_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Integration_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Integration_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Integration_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Integration_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Integration_owner(ctx, field)
 			case "secrets":
@@ -1292,6 +1448,14 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 				return ec.fieldContext_InternalPolicy_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_InternalPolicy_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_InternalPolicy_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_InternalPolicy_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_InternalPolicy_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_InternalPolicy_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedByID":
@@ -1316,10 +1480,14 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 				return ec.fieldContext_InternalPolicy_background(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_InternalPolicy_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_InternalPolicy_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_InternalPolicy_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_InternalPolicy_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -1391,6 +1559,14 @@ func (ec *executionContext) fieldContext_NarrativeSearchResult_narratives(_ cont
 				return ec.fieldContext_Narrative_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Narrative_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Narrative_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Narrative_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Narrative_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Narrative_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
 			case "deletedByID":
@@ -1407,10 +1583,14 @@ func (ec *executionContext) fieldContext_NarrativeSearchResult_narratives(_ cont
 				return ec.fieldContext_Narrative_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Narrative_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Narrative_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Narrative_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Narrative_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Narrative_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Narrative_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Narrative_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Narrative_owner(ctx, field)
 			case "blockedGroups":
@@ -1482,6 +1662,14 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrgSubscription_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrgSubscription_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrgSubscription_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrgSubscription_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrgSubscription_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrgSubscription_tags(ctx, field)
 			case "deletedAt":
@@ -1506,10 +1694,14 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrgSubscription_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrgSubscription_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrgSubscription_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrgSubscription_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			}
@@ -1565,6 +1757,14 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Organization_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Organization_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Organization_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Organization_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Organization_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
@@ -1583,10 +1783,14 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Organization_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Organization_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Organization_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Organization_updatedByService(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
 			case "controlObjectiveCreators":
@@ -1718,6 +1922,14 @@ func (ec *executionContext) fieldContext_OrganizationSettingSearchResult_organiz
 				return ec.fieldContext_OrganizationSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_OrganizationSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_OrganizationSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_OrganizationSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_OrganizationSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_OrganizationSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "deletedAt":
@@ -1742,10 +1954,14 @@ func (ec *executionContext) fieldContext_OrganizationSettingSearchResult_organiz
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
 			case "stripeID":
 				return ec.fieldContext_OrganizationSetting_stripeID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_OrganizationSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_OrganizationSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_OrganizationSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_OrganizationSetting_updatedByService(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -1803,6 +2019,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenSearchResult_persona
 				return ec.fieldContext_PersonalAccessToken_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_PersonalAccessToken_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_PersonalAccessToken_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_PersonalAccessToken_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_PersonalAccessToken_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_PersonalAccessToken_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
 			case "deletedByID":
@@ -1821,10 +2045,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenSearchResult_persona
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_PersonalAccessToken_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_PersonalAccessToken_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_PersonalAccessToken_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_PersonalAccessToken_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
 			case "organizations":
@@ -1884,6 +2112,14 @@ func (ec *executionContext) fieldContext_ProcedureSearchResult_procedures(_ cont
 				return ec.fieldContext_Procedure_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Procedure_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Procedure_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Procedure_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Procedure_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Procedure_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedByID":
@@ -1910,10 +2146,14 @@ func (ec *executionContext) fieldContext_ProcedureSearchResult_procedures(_ cont
 				return ec.fieldContext_Procedure_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Procedure_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Procedure_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Procedure_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Procedure_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -1985,6 +2225,14 @@ func (ec *executionContext) fieldContext_ProgramSearchResult_programs(_ context.
 				return ec.fieldContext_Program_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Program_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Program_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Program_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Program_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Program_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
 			case "deletedByID":
@@ -2009,10 +2257,14 @@ func (ec *executionContext) fieldContext_ProgramSearchResult_programs(_ context.
 				return ec.fieldContext_Program_auditorWriteComments(ctx, field)
 			case "auditorReadComments":
 				return ec.fieldContext_Program_auditorReadComments(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Program_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Program_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Program_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Program_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Program_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Program_owner(ctx, field)
 			case "blockedGroups":
@@ -2102,6 +2354,14 @@ func (ec *executionContext) fieldContext_RiskSearchResult_risks(_ context.Contex
 				return ec.fieldContext_Risk_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Risk_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Risk_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Risk_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Risk_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Risk_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
 			case "deletedByID":
@@ -2130,10 +2390,14 @@ func (ec *executionContext) fieldContext_RiskSearchResult_risks(_ context.Contex
 				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Risk_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Risk_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Risk_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Risk_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -2345,6 +2609,14 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Standard_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Standard_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Standard_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Standard_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Standard_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Standard_deletedAt(ctx, field)
 			case "deletedByID":
@@ -2371,10 +2643,14 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Standard_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Standard_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Standard_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Standard_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Standard_updatedByService(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_Standard_controlObjectives(ctx, field)
 			case "controls":
@@ -2438,6 +2714,14 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Subcontrol_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Subcontrol_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Subcontrol_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Subcontrol_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Subcontrol_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
 			case "deletedByID":
@@ -2478,10 +2762,14 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_Subcontrol_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Subcontrol_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Subcontrol_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Subcontrol_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Subcontrol_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
@@ -2547,6 +2835,14 @@ func (ec *executionContext) fieldContext_SubscriberSearchResult_subscribers(_ co
 				return ec.fieldContext_Subscriber_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Subscriber_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Subscriber_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Subscriber_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Subscriber_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Subscriber_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "deletedAt":
@@ -2565,10 +2861,14 @@ func (ec *executionContext) fieldContext_SubscriberSearchResult_subscribers(_ co
 				return ec.fieldContext_Subscriber_verifiedPhone(ctx, field)
 			case "active":
 				return ec.fieldContext_Subscriber_active(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subscriber_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Subscriber_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Subscriber_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Subscriber_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Subscriber_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":
@@ -2626,6 +2926,14 @@ func (ec *executionContext) fieldContext_TFASettingSearchResult_tFASettings(_ co
 				return ec.fieldContext_TFASetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_TFASetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_TFASetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_TFASetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_TFASetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_TFASetting_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
 			case "deletedByID":
@@ -2640,10 +2948,14 @@ func (ec *executionContext) fieldContext_TFASettingSearchResult_tFASettings(_ co
 				return ec.fieldContext_TFASetting_recoveryCodes(ctx, field)
 			case "totpAllowed":
 				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TFASetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_TFASetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_TFASetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_TFASetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_TFASetting_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_TFASetting_owner(ctx, field)
 			}
@@ -2699,6 +3011,14 @@ func (ec *executionContext) fieldContext_TaskSearchResult_tasks(_ context.Contex
 				return ec.fieldContext_Task_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Task_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Task_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Task_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Task_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Task_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
 			case "deletedByID":
@@ -2717,10 +3037,14 @@ func (ec *executionContext) fieldContext_TaskSearchResult_tasks(_ context.Contex
 				return ec.fieldContext_Task_due(ctx, field)
 			case "completed":
 				return ec.fieldContext_Task_completed(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Task_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Task_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Task_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Task_updatedByService(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -2794,6 +3118,14 @@ func (ec *executionContext) fieldContext_TemplateSearchResult_templates(_ contex
 				return ec.fieldContext_Template_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Template_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Template_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Template_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Template_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Template_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Template_deletedAt(ctx, field)
 			case "deletedByID":
@@ -2812,10 +3144,14 @@ func (ec *executionContext) fieldContext_TemplateSearchResult_templates(_ contex
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
 				return ec.fieldContext_Template_uischema(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Template_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Template_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Template_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Template_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
 			case "documents":
@@ -2875,6 +3211,14 @@ func (ec *executionContext) fieldContext_UserSearchResult_users(_ context.Contex
 				return ec.fieldContext_User_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_User_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_User_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_User_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_User_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_User_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_User_deletedAt(ctx, field)
 			case "deletedByID":
@@ -2990,6 +3334,14 @@ func (ec *executionContext) fieldContext_UserSettingSearchResult_userSettings(_ 
 				return ec.fieldContext_UserSetting_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_UserSetting_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_UserSetting_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_UserSetting_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_UserSetting_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_UserSetting_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
@@ -3012,10 +3364,14 @@ func (ec *executionContext) fieldContext_UserSettingSearchResult_userSettings(_ 
 				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
 			case "isTfaEnabled":
 				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_UserSetting_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_UserSetting_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_UserSetting_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_UserSetting_updatedByService(ctx, field)
 			case "user":
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":

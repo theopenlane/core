@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -24,16 +24,18 @@ import (
 // ProgramMembershipQuery is the builder for querying ProgramMembership entities.
 type ProgramMembershipQuery struct {
 	config
-	ctx           *QueryContext
-	order         []programmembership.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.ProgramMembership
-	withCreatedBy *ChangeActorQuery
-	withUpdatedBy *ChangeActorQuery
-	withProgram   *ProgramQuery
-	withUser      *UserQuery
-	loadTotal     []func(context.Context, []*ProgramMembership) error
-	modifiers     []func(*sql.Selector)
+	ctx                  *QueryContext
+	order                []programmembership.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.ProgramMembership
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withProgram          *ProgramQuery
+	withUser             *UserQuery
+	loadTotal            []func(context.Context, []*ProgramMembership) error
+	modifiers            []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -70,9 +72,9 @@ func (pmq *ProgramMembershipQuery) Order(o ...programmembership.OrderOption) *Pr
 	return pmq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (pmq *ProgramMembershipQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: pmq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (pmq *ProgramMembershipQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: pmq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pmq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -83,11 +85,11 @@ func (pmq *ProgramMembershipQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.CreatedByTable, programmembership.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.CreatedByUserTable, programmembership.CreatedByUserColumn),
 		)
 		schemaConfig := pmq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
 		return fromU, nil
@@ -95,9 +97,9 @@ func (pmq *ProgramMembershipQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (pmq *ProgramMembershipQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: pmq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (pmq *ProgramMembershipQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: pmq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pmq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -108,11 +110,61 @@ func (pmq *ProgramMembershipQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UpdatedByTable, programmembership.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UpdatedByUserTable, programmembership.UpdatedByUserColumn),
 		)
 		schemaConfig := pmq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (pmq *ProgramMembershipQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: pmq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pmq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pmq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.CreatedByServiceTable, programmembership.CreatedByServiceColumn),
+		)
+		schemaConfig := pmq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (pmq *ProgramMembershipQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: pmq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pmq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pmq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UpdatedByServiceTable, programmembership.UpdatedByServiceColumn),
+		)
+		schemaConfig := pmq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
 		return fromU, nil
@@ -357,15 +409,17 @@ func (pmq *ProgramMembershipQuery) Clone() *ProgramMembershipQuery {
 		return nil
 	}
 	return &ProgramMembershipQuery{
-		config:        pmq.config,
-		ctx:           pmq.ctx.Clone(),
-		order:         append([]programmembership.OrderOption{}, pmq.order...),
-		inters:        append([]Interceptor{}, pmq.inters...),
-		predicates:    append([]predicate.ProgramMembership{}, pmq.predicates...),
-		withCreatedBy: pmq.withCreatedBy.Clone(),
-		withUpdatedBy: pmq.withUpdatedBy.Clone(),
-		withProgram:   pmq.withProgram.Clone(),
-		withUser:      pmq.withUser.Clone(),
+		config:               pmq.config,
+		ctx:                  pmq.ctx.Clone(),
+		order:                append([]programmembership.OrderOption{}, pmq.order...),
+		inters:               append([]Interceptor{}, pmq.inters...),
+		predicates:           append([]predicate.ProgramMembership{}, pmq.predicates...),
+		withCreatedByUser:    pmq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    pmq.withUpdatedByUser.Clone(),
+		withCreatedByService: pmq.withCreatedByService.Clone(),
+		withUpdatedByService: pmq.withUpdatedByService.Clone(),
+		withProgram:          pmq.withProgram.Clone(),
+		withUser:             pmq.withUser.Clone(),
 		// clone intermediate query.
 		sql:       pmq.sql.Clone(),
 		path:      pmq.path,
@@ -373,25 +427,47 @@ func (pmq *ProgramMembershipQuery) Clone() *ProgramMembershipQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pmq *ProgramMembershipQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ProgramMembershipQuery {
-	query := (&ChangeActorClient{config: pmq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (pmq *ProgramMembershipQuery) WithCreatedByUser(opts ...func(*UserQuery)) *ProgramMembershipQuery {
+	query := (&UserClient{config: pmq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pmq.withCreatedBy = query
+	pmq.withCreatedByUser = query
 	return pmq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pmq *ProgramMembershipQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ProgramMembershipQuery {
-	query := (&ChangeActorClient{config: pmq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (pmq *ProgramMembershipQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *ProgramMembershipQuery {
+	query := (&UserClient{config: pmq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pmq.withUpdatedBy = query
+	pmq.withUpdatedByUser = query
+	return pmq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (pmq *ProgramMembershipQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *ProgramMembershipQuery {
+	query := (&APITokenClient{config: pmq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pmq.withCreatedByService = query
+	return pmq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (pmq *ProgramMembershipQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *ProgramMembershipQuery {
+	query := (&APITokenClient{config: pmq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pmq.withUpdatedByService = query
 	return pmq
 }
 
@@ -501,9 +577,11 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*ProgramMembership{}
 		_spec       = pmq.querySpec()
-		loadedTypes = [4]bool{
-			pmq.withCreatedBy != nil,
-			pmq.withUpdatedBy != nil,
+		loadedTypes = [6]bool{
+			pmq.withCreatedByUser != nil,
+			pmq.withUpdatedByUser != nil,
+			pmq.withCreatedByService != nil,
+			pmq.withUpdatedByService != nil,
 			pmq.withProgram != nil,
 			pmq.withUser != nil,
 		}
@@ -531,15 +609,27 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pmq.withCreatedBy; query != nil {
-		if err := pmq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *ProgramMembership, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := pmq.withCreatedByUser; query != nil {
+		if err := pmq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *ProgramMembership, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pmq.withUpdatedBy; query != nil {
-		if err := pmq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *ProgramMembership, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := pmq.withUpdatedByUser; query != nil {
+		if err := pmq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *ProgramMembership, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pmq.withCreatedByService; query != nil {
+		if err := pmq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *ProgramMembership, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pmq.withUpdatedByService; query != nil {
+		if err := pmq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *ProgramMembership, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -563,11 +653,11 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	return nodes, nil
 }
 
-func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *ChangeActor)) error {
+func (pmq *ProgramMembershipQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ProgramMembership)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -576,7 +666,7 @@ func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *Cha
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -584,7 +674,7 @@ func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *Cha
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -592,11 +682,11 @@ func (pmq *ProgramMembershipQuery) loadCreatedBy(ctx context.Context, query *Cha
 	}
 	return nil
 }
-func (pmq *ProgramMembershipQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *ChangeActor)) error {
+func (pmq *ProgramMembershipQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ProgramMembership)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -605,7 +695,7 @@ func (pmq *ProgramMembershipQuery) loadUpdatedBy(ctx context.Context, query *Cha
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -613,7 +703,65 @@ func (pmq *ProgramMembershipQuery) loadUpdatedBy(ctx context.Context, query *Cha
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pmq *ProgramMembershipQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ProgramMembership)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pmq *ProgramMembershipQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ProgramMembership)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -710,11 +858,17 @@ func (pmq *ProgramMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if pmq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(programmembership.FieldCreatedByID)
+		if pmq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(programmembership.FieldCreatedByUserID)
 		}
-		if pmq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(programmembership.FieldUpdatedByID)
+		if pmq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(programmembership.FieldUpdatedByUserID)
+		}
+		if pmq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(programmembership.FieldCreatedByServiceID)
+		}
+		if pmq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(programmembership.FieldUpdatedByServiceID)
 		}
 		if pmq.withProgram != nil {
 			_spec.Node.AddColumnOnce(programmembership.FieldProgramID)

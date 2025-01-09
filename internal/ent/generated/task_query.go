@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -36,8 +36,10 @@ type TaskQuery struct {
 	order                     []task.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.Task
-	withCreatedBy             *ChangeActorQuery
-	withUpdatedBy             *ChangeActorQuery
+	withCreatedByUser         *UserQuery
+	withUpdatedByUser         *UserQuery
+	withCreatedByService      *APITokenQuery
+	withUpdatedByService      *APITokenQuery
 	withAssigner              *UserQuery
 	withAssignee              *UserQuery
 	withOrganization          *OrganizationQuery
@@ -95,9 +97,9 @@ func (tq *TaskQuery) Order(o ...task.OrderOption) *TaskQuery {
 	return tq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (tq *TaskQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: tq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (tq *TaskQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -108,11 +110,11 @@ func (tq *TaskQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, task.CreatedByTable, task.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.CreatedByUserTable, task.CreatedByUserColumn),
 		)
 		schemaConfig := tq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -120,9 +122,9 @@ func (tq *TaskQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (tq *TaskQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: tq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (tq *TaskQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -133,11 +135,61 @@ func (tq *TaskQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, task.UpdatedByTable, task.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.UpdatedByUserTable, task.UpdatedByUserColumn),
 		)
 		schemaConfig := tq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (tq *TaskQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.CreatedByServiceTable, task.CreatedByServiceColumn),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (tq *TaskQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, task.UpdatedByServiceTable, task.UpdatedByServiceColumn),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -587,8 +639,10 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 		order:                append([]task.OrderOption{}, tq.order...),
 		inters:               append([]Interceptor{}, tq.inters...),
 		predicates:           append([]predicate.Task{}, tq.predicates...),
-		withCreatedBy:        tq.withCreatedBy.Clone(),
-		withUpdatedBy:        tq.withUpdatedBy.Clone(),
+		withCreatedByUser:    tq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    tq.withUpdatedByUser.Clone(),
+		withCreatedByService: tq.withCreatedByService.Clone(),
+		withUpdatedByService: tq.withUpdatedByService.Clone(),
 		withAssigner:         tq.withAssigner.Clone(),
 		withAssignee:         tq.withAssignee.Clone(),
 		withOrganization:     tq.withOrganization.Clone(),
@@ -606,25 +660,47 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *TaskQuery {
-	query := (&ChangeActorClient{config: tq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithCreatedByUser(opts ...func(*UserQuery)) *TaskQuery {
+	query := (&UserClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withCreatedBy = query
+	tq.withCreatedByUser = query
 	return tq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *TaskQuery {
-	query := (&ChangeActorClient{config: tq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *TaskQuery {
+	query := (&UserClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withUpdatedBy = query
+	tq.withUpdatedByUser = query
+	return tq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *TaskQuery {
+	query := (&APITokenClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withCreatedByService = query
+	return tq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *TaskQuery {
+	query := (&APITokenClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withUpdatedByService = query
 	return tq
 }
 
@@ -823,9 +899,11 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		nodes       = []*Task{}
 		withFKs     = tq.withFKs
 		_spec       = tq.querySpec()
-		loadedTypes = [12]bool{
-			tq.withCreatedBy != nil,
-			tq.withUpdatedBy != nil,
+		loadedTypes = [14]bool{
+			tq.withCreatedByUser != nil,
+			tq.withUpdatedByUser != nil,
+			tq.withCreatedByService != nil,
+			tq.withUpdatedByService != nil,
 			tq.withAssigner != nil,
 			tq.withAssignee != nil,
 			tq.withOrganization != nil,
@@ -867,15 +945,27 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tq.withCreatedBy; query != nil {
-		if err := tq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Task, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := tq.withCreatedByUser; query != nil {
+		if err := tq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Task, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withUpdatedBy; query != nil {
-		if err := tq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Task, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := tq.withUpdatedByUser; query != nil {
+		if err := tq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Task, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withCreatedByService; query != nil {
+		if err := tq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Task, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withUpdatedByService; query != nil {
+		if err := tq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Task, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1011,11 +1101,11 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	return nodes, nil
 }
 
-func (tq *TaskQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Task, init func(*Task), assign func(*Task, *ChangeActor)) error {
+func (tq *TaskQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1024,7 +1114,7 @@ func (tq *TaskQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1032,7 +1122,7 @@ func (tq *TaskQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1040,11 +1130,11 @@ func (tq *TaskQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	}
 	return nil
 }
-func (tq *TaskQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Task, init func(*Task), assign func(*Task, *ChangeActor)) error {
+func (tq *TaskQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1053,7 +1143,7 @@ func (tq *TaskQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1061,7 +1151,65 @@ func (tq *TaskQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tq *TaskQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Task, init func(*Task), assign func(*Task, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Task)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tq *TaskQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Task, init func(*Task), assign func(*Task, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Task)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1660,11 +1808,17 @@ func (tq *TaskQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if tq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(task.FieldCreatedByID)
+		if tq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(task.FieldCreatedByUserID)
 		}
-		if tq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(task.FieldUpdatedByID)
+		if tq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(task.FieldUpdatedByUserID)
+		}
+		if tq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(task.FieldCreatedByServiceID)
+		}
+		if tq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(task.FieldUpdatedByServiceID)
 		}
 	}
 	if ps := tq.predicates; len(ps) > 0 {

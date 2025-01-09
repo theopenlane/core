@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -74,6 +74,62 @@ func (prtc *PasswordResetTokenCreate) SetUpdatedByID(s string) *PasswordResetTok
 func (prtc *PasswordResetTokenCreate) SetNillableUpdatedByID(s *string) *PasswordResetTokenCreate {
 	if s != nil {
 		prtc.SetUpdatedByID(*s)
+	}
+	return prtc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (prtc *PasswordResetTokenCreate) SetCreatedByUserID(s string) *PasswordResetTokenCreate {
+	prtc.mutation.SetCreatedByUserID(s)
+	return prtc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (prtc *PasswordResetTokenCreate) SetNillableCreatedByUserID(s *string) *PasswordResetTokenCreate {
+	if s != nil {
+		prtc.SetCreatedByUserID(*s)
+	}
+	return prtc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (prtc *PasswordResetTokenCreate) SetUpdatedByUserID(s string) *PasswordResetTokenCreate {
+	prtc.mutation.SetUpdatedByUserID(s)
+	return prtc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (prtc *PasswordResetTokenCreate) SetNillableUpdatedByUserID(s *string) *PasswordResetTokenCreate {
+	if s != nil {
+		prtc.SetUpdatedByUserID(*s)
+	}
+	return prtc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (prtc *PasswordResetTokenCreate) SetCreatedByServiceID(s string) *PasswordResetTokenCreate {
+	prtc.mutation.SetCreatedByServiceID(s)
+	return prtc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (prtc *PasswordResetTokenCreate) SetNillableCreatedByServiceID(s *string) *PasswordResetTokenCreate {
+	if s != nil {
+		prtc.SetCreatedByServiceID(*s)
+	}
+	return prtc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (prtc *PasswordResetTokenCreate) SetUpdatedByServiceID(s string) *PasswordResetTokenCreate {
+	prtc.mutation.SetUpdatedByServiceID(s)
+	return prtc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (prtc *PasswordResetTokenCreate) SetNillableUpdatedByServiceID(s *string) *PasswordResetTokenCreate {
+	if s != nil {
+		prtc.SetUpdatedByServiceID(*s)
 	}
 	return prtc
 }
@@ -164,14 +220,24 @@ func (prtc *PasswordResetTokenCreate) SetNillableID(s *string) *PasswordResetTok
 	return prtc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (prtc *PasswordResetTokenCreate) SetCreatedBy(c *ChangeActor) *PasswordResetTokenCreate {
-	return prtc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (prtc *PasswordResetTokenCreate) SetCreatedByUser(u *User) *PasswordResetTokenCreate {
+	return prtc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (prtc *PasswordResetTokenCreate) SetUpdatedBy(c *ChangeActor) *PasswordResetTokenCreate {
-	return prtc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (prtc *PasswordResetTokenCreate) SetUpdatedByUser(u *User) *PasswordResetTokenCreate {
+	return prtc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (prtc *PasswordResetTokenCreate) SetCreatedByService(a *APIToken) *PasswordResetTokenCreate {
+	return prtc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (prtc *PasswordResetTokenCreate) SetUpdatedByService(a *APIToken) *PasswordResetTokenCreate {
+	return prtc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -329,6 +395,14 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 		_spec.SetField(passwordresettoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := prtc.mutation.CreatedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := prtc.mutation.UpdatedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := prtc.mutation.MappingID(); ok {
 		_spec.SetField(passwordresettoken.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -357,40 +431,76 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 		_spec.SetField(passwordresettoken.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
 	}
-	if nodes := prtc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := prtc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   passwordresettoken.CreatedByTable,
-			Columns: []string{passwordresettoken.CreatedByColumn},
+			Table:   passwordresettoken.CreatedByUserTable,
+			Columns: []string{passwordresettoken.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtc.schemaConfig.PasswordResetToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := prtc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := prtc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   passwordresettoken.UpdatedByTable,
-			Columns: []string{passwordresettoken.UpdatedByColumn},
+			Table:   passwordresettoken.UpdatedByUserTable,
+			Columns: []string{passwordresettoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtc.schemaConfig.PasswordResetToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := prtc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.CreatedByServiceTable,
+			Columns: []string{passwordresettoken.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = prtc.schemaConfig.PasswordResetToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := prtc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.UpdatedByServiceTable,
+			Columns: []string{passwordresettoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = prtc.schemaConfig.PasswordResetToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := prtc.mutation.OwnerIDs(); len(nodes) > 0 {

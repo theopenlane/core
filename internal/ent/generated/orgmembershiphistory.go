@@ -35,6 +35,14 @@ type OrgMembershipHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -57,7 +65,7 @@ func (*OrgMembershipHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case orgmembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case orgmembershiphistory.FieldID, orgmembershiphistory.FieldRef, orgmembershiphistory.FieldUpdatedBy, orgmembershiphistory.FieldCreatedByID, orgmembershiphistory.FieldUpdatedByID, orgmembershiphistory.FieldMappingID, orgmembershiphistory.FieldDeletedByID, orgmembershiphistory.FieldRole, orgmembershiphistory.FieldOrganizationID, orgmembershiphistory.FieldUserID:
+		case orgmembershiphistory.FieldID, orgmembershiphistory.FieldRef, orgmembershiphistory.FieldUpdatedBy, orgmembershiphistory.FieldCreatedByID, orgmembershiphistory.FieldUpdatedByID, orgmembershiphistory.FieldCreatedByUserID, orgmembershiphistory.FieldUpdatedByUserID, orgmembershiphistory.FieldCreatedByServiceID, orgmembershiphistory.FieldUpdatedByServiceID, orgmembershiphistory.FieldMappingID, orgmembershiphistory.FieldDeletedByID, orgmembershiphistory.FieldRole, orgmembershiphistory.FieldOrganizationID, orgmembershiphistory.FieldUserID:
 			values[i] = new(sql.NullString)
 		case orgmembershiphistory.FieldHistoryTime, orgmembershiphistory.FieldCreatedAt, orgmembershiphistory.FieldUpdatedAt, orgmembershiphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -130,6 +138,30 @@ func (omh *OrgMembershipHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				omh.UpdatedByID = value.String
+			}
+		case orgmembershiphistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				omh.CreatedByUserID = value.String
+			}
+		case orgmembershiphistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				omh.UpdatedByUserID = value.String
+			}
+		case orgmembershiphistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				omh.CreatedByServiceID = value.String
+			}
+		case orgmembershiphistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				omh.UpdatedByServiceID = value.String
 			}
 		case orgmembershiphistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -228,6 +260,18 @@ func (omh *OrgMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(omh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(omh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(omh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(omh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(omh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(omh.MappingID)

@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -73,6 +73,46 @@ func (fu *FileUpdate) SetNillableUpdatedByID(s *string) *FileUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (fu *FileUpdate) ClearUpdatedByID() *FileUpdate {
 	fu.mutation.ClearUpdatedByID()
+	return fu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (fu *FileUpdate) SetUpdatedByUserID(s string) *FileUpdate {
+	fu.mutation.SetUpdatedByUserID(s)
+	return fu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableUpdatedByUserID(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetUpdatedByUserID(*s)
+	}
+	return fu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (fu *FileUpdate) ClearUpdatedByUserID() *FileUpdate {
+	fu.mutation.ClearUpdatedByUserID()
+	return fu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (fu *FileUpdate) SetUpdatedByServiceID(s string) *FileUpdate {
+	fu.mutation.SetUpdatedByServiceID(s)
+	return fu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableUpdatedByServiceID(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetUpdatedByServiceID(*s)
+	}
+	return fu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (fu *FileUpdate) ClearUpdatedByServiceID() *FileUpdate {
+	fu.mutation.ClearUpdatedByServiceID()
 	return fu
 }
 
@@ -362,9 +402,14 @@ func (fu *FileUpdate) ClearFileContents() *FileUpdate {
 	return fu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (fu *FileUpdate) SetUpdatedBy(c *ChangeActor) *FileUpdate {
-	return fu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (fu *FileUpdate) SetUpdatedByUser(u *User) *FileUpdate {
+	return fu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (fu *FileUpdate) SetUpdatedByService(a *APIToken) *FileUpdate {
+	return fu.SetUpdatedByServiceID(a.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -537,9 +582,15 @@ func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (fu *FileUpdate) ClearUpdatedBy() *FileUpdate {
-	fu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (fu *FileUpdate) ClearUpdatedByUser() *FileUpdate {
+	fu.mutation.ClearUpdatedByUser()
+	return fu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (fu *FileUpdate) ClearUpdatedByService() *FileUpdate {
+	fu.mutation.ClearUpdatedByService()
 	return fu
 }
 
@@ -858,6 +909,15 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(file.FieldUpdatedAt, field.TypeTime)
 	}
+	if fu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(file.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := fu.mutation.UpdatedByID(); ok {
+		_spec.SetField(file.FieldUpdatedByID, field.TypeString, value)
+	}
+	if fu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(file.FieldUpdatedByID, field.TypeString)
+	}
 	if fu.mutation.DeletedAtCleared() {
 		_spec.ClearField(file.FieldDeletedAt, field.TypeTime)
 	}
@@ -956,29 +1016,60 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.FileContentsCleared() {
 		_spec.ClearField(file.FieldFileContents, field.TypeBytes)
 	}
-	if fu.mutation.UpdatedByCleared() {
+	if fu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   file.UpdatedByTable,
-			Columns: []string{file.UpdatedByColumn},
+			Table:   file.UpdatedByUserTable,
+			Columns: []string{file.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fu.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := fu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   file.UpdatedByTable,
-			Columns: []string{file.UpdatedByColumn},
+			Table:   file.UpdatedByUserTable,
+			Columns: []string{file.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByServiceTable,
+			Columns: []string{file.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByServiceTable,
+			Columns: []string{file.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fu.schemaConfig.File
@@ -1571,6 +1662,46 @@ func (fuo *FileUpdateOne) ClearUpdatedByID() *FileUpdateOne {
 	return fuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (fuo *FileUpdateOne) SetUpdatedByUserID(s string) *FileUpdateOne {
+	fuo.mutation.SetUpdatedByUserID(s)
+	return fuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableUpdatedByUserID(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetUpdatedByUserID(*s)
+	}
+	return fuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (fuo *FileUpdateOne) ClearUpdatedByUserID() *FileUpdateOne {
+	fuo.mutation.ClearUpdatedByUserID()
+	return fuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (fuo *FileUpdateOne) SetUpdatedByServiceID(s string) *FileUpdateOne {
+	fuo.mutation.SetUpdatedByServiceID(s)
+	return fuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableUpdatedByServiceID(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetUpdatedByServiceID(*s)
+	}
+	return fuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (fuo *FileUpdateOne) ClearUpdatedByServiceID() *FileUpdateOne {
+	fuo.mutation.ClearUpdatedByServiceID()
+	return fuo
+}
+
 // SetTags sets the "tags" field.
 func (fuo *FileUpdateOne) SetTags(s []string) *FileUpdateOne {
 	fuo.mutation.SetTags(s)
@@ -1857,9 +1988,14 @@ func (fuo *FileUpdateOne) ClearFileContents() *FileUpdateOne {
 	return fuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (fuo *FileUpdateOne) SetUpdatedBy(c *ChangeActor) *FileUpdateOne {
-	return fuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (fuo *FileUpdateOne) SetUpdatedByUser(u *User) *FileUpdateOne {
+	return fuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (fuo *FileUpdateOne) SetUpdatedByService(a *APIToken) *FileUpdateOne {
+	return fuo.SetUpdatedByServiceID(a.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -2032,9 +2168,15 @@ func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (fuo *FileUpdateOne) ClearUpdatedBy() *FileUpdateOne {
-	fuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (fuo *FileUpdateOne) ClearUpdatedByUser() *FileUpdateOne {
+	fuo.mutation.ClearUpdatedByUser()
+	return fuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (fuo *FileUpdateOne) ClearUpdatedByService() *FileUpdateOne {
+	fuo.mutation.ClearUpdatedByService()
 	return fuo
 }
 
@@ -2383,6 +2525,15 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 	if fuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(file.FieldUpdatedAt, field.TypeTime)
 	}
+	if fuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(file.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := fuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(file.FieldUpdatedByID, field.TypeString, value)
+	}
+	if fuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(file.FieldUpdatedByID, field.TypeString)
+	}
 	if fuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(file.FieldDeletedAt, field.TypeTime)
 	}
@@ -2481,29 +2632,60 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 	if fuo.mutation.FileContentsCleared() {
 		_spec.ClearField(file.FieldFileContents, field.TypeBytes)
 	}
-	if fuo.mutation.UpdatedByCleared() {
+	if fuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   file.UpdatedByTable,
-			Columns: []string{file.UpdatedByColumn},
+			Table:   file.UpdatedByUserTable,
+			Columns: []string{file.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fuo.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := fuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   file.UpdatedByTable,
-			Columns: []string{file.UpdatedByColumn},
+			Table:   file.UpdatedByUserTable,
+			Columns: []string{file.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByServiceTable,
+			Columns: []string{file.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByServiceTable,
+			Columns: []string{file.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fuo.schemaConfig.File

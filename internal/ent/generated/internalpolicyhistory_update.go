@@ -64,6 +64,46 @@ func (iphu *InternalPolicyHistoryUpdate) ClearUpdatedByID() *InternalPolicyHisto
 	return iphu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (iphu *InternalPolicyHistoryUpdate) SetUpdatedByUserID(s string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetUpdatedByUserID(s)
+	return iphu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableUpdatedByUserID(s *string) *InternalPolicyHistoryUpdate {
+	if s != nil {
+		iphu.SetUpdatedByUserID(*s)
+	}
+	return iphu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearUpdatedByUserID() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearUpdatedByUserID()
+	return iphu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (iphu *InternalPolicyHistoryUpdate) SetUpdatedByServiceID(s string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetUpdatedByServiceID(s)
+	return iphu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *InternalPolicyHistoryUpdate {
+	if s != nil {
+		iphu.SetUpdatedByServiceID(*s)
+	}
+	return iphu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearUpdatedByServiceID() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearUpdatedByServiceID()
+	return iphu
+}
+
 // SetTags sets the "tags" field.
 func (iphu *InternalPolicyHistoryUpdate) SetTags(s []string) *InternalPolicyHistoryUpdate {
 	iphu.mutation.SetTags(s)
@@ -334,6 +374,24 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	if iphu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if iphu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := iphu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if iphu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if iphu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := iphu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if iphu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if iphu.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -455,6 +513,46 @@ func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableUpdatedByID(s *string) *
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (iphuo *InternalPolicyHistoryUpdateOne) ClearUpdatedByID() *InternalPolicyHistoryUpdateOne {
 	iphuo.mutation.ClearUpdatedByID()
+	return iphuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetUpdatedByUserID(s string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetUpdatedByUserID(s)
+	return iphuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *InternalPolicyHistoryUpdateOne {
+	if s != nil {
+		iphuo.SetUpdatedByUserID(*s)
+	}
+	return iphuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearUpdatedByUserID() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearUpdatedByUserID()
+	return iphuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetUpdatedByServiceID(s string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetUpdatedByServiceID(s)
+	return iphuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *InternalPolicyHistoryUpdateOne {
+	if s != nil {
+		iphuo.SetUpdatedByServiceID(*s)
+	}
+	return iphuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearUpdatedByServiceID() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearUpdatedByServiceID()
 	return iphuo
 }
 
@@ -757,6 +855,24 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if iphuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if iphuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := iphuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if iphuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if iphuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := iphuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if iphuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if iphuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDeletedAt, field.TypeTime)

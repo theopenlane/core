@@ -35,6 +35,14 @@ type EventHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -59,7 +67,7 @@ func (*EventHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case eventhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case eventhistory.FieldID, eventhistory.FieldRef, eventhistory.FieldUpdatedBy, eventhistory.FieldCreatedByID, eventhistory.FieldUpdatedByID, eventhistory.FieldMappingID, eventhistory.FieldEventID, eventhistory.FieldCorrelationID, eventhistory.FieldEventType:
+		case eventhistory.FieldID, eventhistory.FieldRef, eventhistory.FieldUpdatedBy, eventhistory.FieldCreatedByID, eventhistory.FieldUpdatedByID, eventhistory.FieldCreatedByUserID, eventhistory.FieldUpdatedByUserID, eventhistory.FieldCreatedByServiceID, eventhistory.FieldUpdatedByServiceID, eventhistory.FieldMappingID, eventhistory.FieldEventID, eventhistory.FieldCorrelationID, eventhistory.FieldEventType:
 			values[i] = new(sql.NullString)
 		case eventhistory.FieldHistoryTime, eventhistory.FieldCreatedAt, eventhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -132,6 +140,30 @@ func (eh *EventHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				eh.UpdatedByID = value.String
+			}
+		case eventhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				eh.CreatedByUserID = value.String
+			}
+		case eventhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				eh.UpdatedByUserID = value.String
+			}
+		case eventhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				eh.CreatedByServiceID = value.String
+			}
+		case eventhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				eh.UpdatedByServiceID = value.String
 			}
 		case eventhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -234,6 +266,18 @@ func (eh *EventHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(eh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(eh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(eh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(eh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(eh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(eh.MappingID)

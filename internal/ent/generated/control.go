@@ -10,9 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Control is the model entity for the Control schema.
@@ -28,6 +30,14 @@ type Control struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -68,14 +78,23 @@ type Control struct {
 	control_objective_controls *string
 	internal_policy_controls   *string
 	selectValues               sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // ControlEdges holds the relations/edges for other nodes in the graph.
 type ControlEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -104,9 +123,9 @@ type ControlEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [17]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -122,26 +141,48 @@ type ControlEdges struct {
 	namedPrograms          map[string][]*Program
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ControlEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e ControlEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ControlEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e ControlEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -149,7 +190,7 @@ func (e ControlEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e ControlEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -158,7 +199,7 @@ func (e ControlEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -167,7 +208,7 @@ func (e ControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -176,7 +217,7 @@ func (e ControlEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -185,7 +226,7 @@ func (e ControlEdges) ViewersOrErr() ([]*Group, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -194,7 +235,7 @@ func (e ControlEdges) ProceduresOrErr() ([]*Procedure, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -203,7 +244,7 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -212,7 +253,7 @@ func (e ControlEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 // StandardOrErr returns the Standard value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) StandardOrErr() ([]*Standard, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Standard, nil
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -221,7 +262,7 @@ func (e ControlEdges) StandardOrErr() ([]*Standard, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -230,7 +271,7 @@ func (e ControlEdges) NarrativesOrErr() ([]*Narrative, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -239,7 +280,7 @@ func (e ControlEdges) RisksOrErr() ([]*Risk, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -248,7 +289,7 @@ func (e ControlEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -257,7 +298,7 @@ func (e ControlEdges) TasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[16] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -270,7 +311,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case control.FieldTags, control.FieldDetails:
 			values[i] = new([]byte)
-		case control.FieldID, control.FieldCreatedByID, control.FieldUpdatedByID, control.FieldDeletedByID, control.FieldMappingID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
+		case control.FieldID, control.FieldCreatedByID, control.FieldUpdatedByID, control.FieldCreatedByUserID, control.FieldUpdatedByUserID, control.FieldCreatedByServiceID, control.FieldUpdatedByServiceID, control.FieldDeletedByID, control.FieldMappingID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -322,6 +363,30 @@ func (c *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				c.UpdatedByID = value.String
+			}
+		case control.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				c.CreatedByUserID = value.String
+			}
+		case control.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				c.UpdatedByUserID = value.String
+			}
+		case control.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				c.CreatedByServiceID = value.String
+			}
+		case control.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				c.UpdatedByServiceID = value.String
 			}
 		case control.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -456,14 +521,24 @@ func (c *Control) Value(name string) (ent.Value, error) {
 	return c.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the Control entity.
-func (c *Control) QueryCreatedBy() *ChangeActorQuery {
-	return NewControlClient(c.config).QueryCreatedBy(c)
+// QueryCreatedByUser queries the "created_by_user" edge of the Control entity.
+func (c *Control) QueryCreatedByUser() *UserQuery {
+	return NewControlClient(c.config).QueryCreatedByUser(c)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the Control entity.
-func (c *Control) QueryUpdatedBy() *ChangeActorQuery {
-	return NewControlClient(c.config).QueryUpdatedBy(c)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the Control entity.
+func (c *Control) QueryUpdatedByUser() *UserQuery {
+	return NewControlClient(c.config).QueryUpdatedByUser(c)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the Control entity.
+func (c *Control) QueryCreatedByService() *APITokenQuery {
+	return NewControlClient(c.config).QueryCreatedByService(c)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the Control entity.
+func (c *Control) QueryUpdatedByService() *APITokenQuery {
+	return NewControlClient(c.config).QueryUpdatedByService(c)
 }
 
 // QueryOwner queries the "owner" edge of the Control entity.
@@ -565,6 +640,18 @@ func (c *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(c.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(c.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(c.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(c.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(c.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(c.DeletedAt.Format(time.ANSIC))

@@ -9,8 +9,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Hush is the model entity for the Hush schema.
@@ -26,6 +28,14 @@ type Hush struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -46,14 +56,23 @@ type Hush struct {
 	// The values are being populated by the HushQuery when eager-loading is set.
 	Edges        HushEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // HushEdges holds the relations/edges for other nodes in the graph.
 type HushEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// the integration associated with the secret
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Organization holds the value of the organization edge.
@@ -62,41 +81,63 @@ type HushEdges struct {
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [7]map[string]int
 
 	namedIntegrations map[string][]*Integration
 	namedOrganization map[string][]*Organization
 	namedEvents       map[string][]*Event
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e HushEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e HushEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e HushEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e HushEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e HushEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e HushEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e HushEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -105,7 +146,7 @@ func (e HushEdges) IntegrationsOrErr() ([]*Integration, error) {
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e HushEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -114,7 +155,7 @@ func (e HushEdges) OrganizationOrErr() ([]*Organization, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e HushEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -125,7 +166,7 @@ func (*Hush) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case hush.FieldID, hush.FieldCreatedByID, hush.FieldUpdatedByID, hush.FieldMappingID, hush.FieldDeletedByID, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
+		case hush.FieldID, hush.FieldCreatedByID, hush.FieldUpdatedByID, hush.FieldCreatedByUserID, hush.FieldUpdatedByUserID, hush.FieldCreatedByServiceID, hush.FieldUpdatedByServiceID, hush.FieldMappingID, hush.FieldDeletedByID, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hush.FieldCreatedAt, hush.FieldUpdatedAt, hush.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -173,6 +214,30 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				h.UpdatedByID = value.String
+			}
+		case hush.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				h.CreatedByUserID = value.String
+			}
+		case hush.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				h.UpdatedByUserID = value.String
+			}
+		case hush.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				h.CreatedByServiceID = value.String
+			}
+		case hush.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				h.UpdatedByServiceID = value.String
 			}
 		case hush.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -235,14 +300,24 @@ func (h *Hush) Value(name string) (ent.Value, error) {
 	return h.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the Hush entity.
-func (h *Hush) QueryCreatedBy() *ChangeActorQuery {
-	return NewHushClient(h.config).QueryCreatedBy(h)
+// QueryCreatedByUser queries the "created_by_user" edge of the Hush entity.
+func (h *Hush) QueryCreatedByUser() *UserQuery {
+	return NewHushClient(h.config).QueryCreatedByUser(h)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the Hush entity.
-func (h *Hush) QueryUpdatedBy() *ChangeActorQuery {
-	return NewHushClient(h.config).QueryUpdatedBy(h)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the Hush entity.
+func (h *Hush) QueryUpdatedByUser() *UserQuery {
+	return NewHushClient(h.config).QueryUpdatedByUser(h)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the Hush entity.
+func (h *Hush) QueryCreatedByService() *APITokenQuery {
+	return NewHushClient(h.config).QueryCreatedByService(h)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the Hush entity.
+func (h *Hush) QueryUpdatedByService() *APITokenQuery {
+	return NewHushClient(h.config).QueryUpdatedByService(h)
 }
 
 // QueryIntegrations queries the "integrations" edge of the Hush entity.
@@ -294,6 +369,18 @@ func (h *Hush) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(h.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(h.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(h.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(h.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(h.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(h.MappingID)

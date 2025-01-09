@@ -10,11 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -77,6 +78,62 @@ func (cc *ContactCreate) SetUpdatedByID(s string) *ContactCreate {
 func (cc *ContactCreate) SetNillableUpdatedByID(s *string) *ContactCreate {
 	if s != nil {
 		cc.SetUpdatedByID(*s)
+	}
+	return cc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (cc *ContactCreate) SetCreatedByUserID(s string) *ContactCreate {
+	cc.mutation.SetCreatedByUserID(s)
+	return cc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableCreatedByUserID(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetCreatedByUserID(*s)
+	}
+	return cc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (cc *ContactCreate) SetUpdatedByUserID(s string) *ContactCreate {
+	cc.mutation.SetUpdatedByUserID(s)
+	return cc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableUpdatedByUserID(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetUpdatedByUserID(*s)
+	}
+	return cc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (cc *ContactCreate) SetCreatedByServiceID(s string) *ContactCreate {
+	cc.mutation.SetCreatedByServiceID(s)
+	return cc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableCreatedByServiceID(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetCreatedByServiceID(*s)
+	}
+	return cc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (cc *ContactCreate) SetUpdatedByServiceID(s string) *ContactCreate {
+	cc.mutation.SetUpdatedByServiceID(s)
+	return cc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableUpdatedByServiceID(s *string) *ContactCreate {
+	if s != nil {
+		cc.SetUpdatedByServiceID(*s)
 	}
 	return cc
 }
@@ -247,14 +304,24 @@ func (cc *ContactCreate) SetNillableID(s *string) *ContactCreate {
 	return cc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (cc *ContactCreate) SetCreatedBy(c *ChangeActor) *ContactCreate {
-	return cc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (cc *ContactCreate) SetCreatedByUser(u *User) *ContactCreate {
+	return cc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (cc *ContactCreate) SetUpdatedBy(c *ChangeActor) *ContactCreate {
-	return cc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (cc *ContactCreate) SetUpdatedByUser(u *User) *ContactCreate {
+	return cc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (cc *ContactCreate) SetCreatedByService(a *APIToken) *ContactCreate {
+	return cc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (cc *ContactCreate) SetUpdatedByService(a *APIToken) *ContactCreate {
+	return cc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -448,6 +515,14 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_spec.SetField(contact.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := cc.mutation.CreatedByID(); ok {
+		_spec.SetField(contact.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := cc.mutation.UpdatedByID(); ok {
+		_spec.SetField(contact.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := cc.mutation.MappingID(); ok {
 		_spec.SetField(contact.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -492,40 +567,76 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if nodes := cc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   contact.CreatedByTable,
-			Columns: []string{contact.CreatedByColumn},
+			Table:   contact.CreatedByUserTable,
+			Columns: []string{contact.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cc.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   contact.UpdatedByTable,
-			Columns: []string{contact.UpdatedByColumn},
+			Table:   contact.UpdatedByUserTable,
+			Columns: []string{contact.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cc.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.CreatedByServiceTable,
+			Columns: []string{contact.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.UpdatedByServiceTable,
+			Columns: []string{contact.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {

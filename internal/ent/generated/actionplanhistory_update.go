@@ -64,6 +64,46 @@ func (aphu *ActionPlanHistoryUpdate) ClearUpdatedByID() *ActionPlanHistoryUpdate
 	return aphu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (aphu *ActionPlanHistoryUpdate) SetUpdatedByUserID(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetUpdatedByUserID(s)
+	return aphu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableUpdatedByUserID(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetUpdatedByUserID(*s)
+	}
+	return aphu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (aphu *ActionPlanHistoryUpdate) ClearUpdatedByUserID() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearUpdatedByUserID()
+	return aphu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (aphu *ActionPlanHistoryUpdate) SetUpdatedByServiceID(s string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetUpdatedByServiceID(s)
+	return aphu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (aphu *ActionPlanHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *ActionPlanHistoryUpdate {
+	if s != nil {
+		aphu.SetUpdatedByServiceID(*s)
+	}
+	return aphu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (aphu *ActionPlanHistoryUpdate) ClearUpdatedByServiceID() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearUpdatedByServiceID()
+	return aphu
+}
+
 // SetTags sets the "tags" field.
 func (aphu *ActionPlanHistoryUpdate) SetTags(s []string) *ActionPlanHistoryUpdate {
 	aphu.mutation.SetTags(s)
@@ -288,6 +328,24 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if aphu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if aphu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := aphu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if aphu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if aphu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := aphu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if aphu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if aphu.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplanhistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -397,6 +455,46 @@ func (aphuo *ActionPlanHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Acti
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (aphuo *ActionPlanHistoryUpdateOne) ClearUpdatedByID() *ActionPlanHistoryUpdateOne {
 	aphuo.mutation.ClearUpdatedByID()
+	return aphuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetUpdatedByUserID(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetUpdatedByUserID(s)
+	return aphuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetUpdatedByUserID(*s)
+	}
+	return aphuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearUpdatedByUserID() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearUpdatedByUserID()
+	return aphuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetUpdatedByServiceID(s string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetUpdatedByServiceID(s)
+	return aphuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *ActionPlanHistoryUpdateOne {
+	if s != nil {
+		aphuo.SetUpdatedByServiceID(*s)
+	}
+	return aphuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearUpdatedByServiceID() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearUpdatedByServiceID()
 	return aphuo
 }
 
@@ -653,6 +751,24 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	}
 	if aphuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if aphuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := aphuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if aphuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if aphuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := aphuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if aphuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if aphuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplanhistory.FieldDeletedAt, field.TypeTime)

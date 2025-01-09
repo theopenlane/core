@@ -35,6 +35,14 @@ type NoteHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -59,7 +67,7 @@ func (*NoteHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case notehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldUpdatedBy, notehistory.FieldCreatedByID, notehistory.FieldUpdatedByID, notehistory.FieldMappingID, notehistory.FieldDeletedByID, notehistory.FieldOwnerID, notehistory.FieldText:
+		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldUpdatedBy, notehistory.FieldCreatedByID, notehistory.FieldUpdatedByID, notehistory.FieldCreatedByUserID, notehistory.FieldUpdatedByUserID, notehistory.FieldCreatedByServiceID, notehistory.FieldUpdatedByServiceID, notehistory.FieldMappingID, notehistory.FieldDeletedByID, notehistory.FieldOwnerID, notehistory.FieldText:
 			values[i] = new(sql.NullString)
 		case notehistory.FieldHistoryTime, notehistory.FieldCreatedAt, notehistory.FieldUpdatedAt, notehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -132,6 +140,30 @@ func (nh *NoteHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				nh.UpdatedByID = value.String
+			}
+		case notehistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				nh.CreatedByUserID = value.String
+			}
+		case notehistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				nh.UpdatedByUserID = value.String
+			}
+		case notehistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				nh.CreatedByServiceID = value.String
+			}
+		case notehistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				nh.UpdatedByServiceID = value.String
 			}
 		case notehistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -232,6 +264,18 @@ func (nh *NoteHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(nh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(nh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(nh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(nh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(nh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(nh.MappingID)

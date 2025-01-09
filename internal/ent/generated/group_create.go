@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -88,6 +88,62 @@ func (gc *GroupCreate) SetUpdatedByID(s string) *GroupCreate {
 func (gc *GroupCreate) SetNillableUpdatedByID(s *string) *GroupCreate {
 	if s != nil {
 		gc.SetUpdatedByID(*s)
+	}
+	return gc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (gc *GroupCreate) SetCreatedByUserID(s string) *GroupCreate {
+	gc.mutation.SetCreatedByUserID(s)
+	return gc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (gc *GroupCreate) SetNillableCreatedByUserID(s *string) *GroupCreate {
+	if s != nil {
+		gc.SetCreatedByUserID(*s)
+	}
+	return gc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gc *GroupCreate) SetUpdatedByUserID(s string) *GroupCreate {
+	gc.mutation.SetUpdatedByUserID(s)
+	return gc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gc *GroupCreate) SetNillableUpdatedByUserID(s *string) *GroupCreate {
+	if s != nil {
+		gc.SetUpdatedByUserID(*s)
+	}
+	return gc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (gc *GroupCreate) SetCreatedByServiceID(s string) *GroupCreate {
+	gc.mutation.SetCreatedByServiceID(s)
+	return gc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (gc *GroupCreate) SetNillableCreatedByServiceID(s *string) *GroupCreate {
+	if s != nil {
+		gc.SetCreatedByServiceID(*s)
+	}
+	return gc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gc *GroupCreate) SetUpdatedByServiceID(s string) *GroupCreate {
+	gc.mutation.SetUpdatedByServiceID(s)
+	return gc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gc *GroupCreate) SetNillableUpdatedByServiceID(s *string) *GroupCreate {
+	if s != nil {
+		gc.SetUpdatedByServiceID(*s)
 	}
 	return gc
 }
@@ -230,14 +286,24 @@ func (gc *GroupCreate) SetNillableID(s *string) *GroupCreate {
 	return gc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (gc *GroupCreate) SetCreatedBy(c *ChangeActor) *GroupCreate {
-	return gc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (gc *GroupCreate) SetCreatedByUser(u *User) *GroupCreate {
+	return gc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (gc *GroupCreate) SetUpdatedBy(c *ChangeActor) *GroupCreate {
-	return gc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (gc *GroupCreate) SetUpdatedByUser(u *User) *GroupCreate {
+	return gc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (gc *GroupCreate) SetCreatedByService(a *APIToken) *GroupCreate {
+	return gc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (gc *GroupCreate) SetUpdatedByService(a *APIToken) *GroupCreate {
+	return gc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -915,6 +981,14 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		_spec.SetField(group.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := gc.mutation.CreatedByID(); ok {
+		_spec.SetField(group.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := gc.mutation.UpdatedByID(); ok {
+		_spec.SetField(group.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := gc.mutation.DeletedAt(); ok {
 		_spec.SetField(group.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -951,40 +1025,76 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
 	}
-	if nodes := gc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := gc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   group.CreatedByTable,
-			Columns: []string{group.CreatedByColumn},
+			Table:   group.CreatedByUserTable,
+			Columns: []string{group.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gc.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := gc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   group.UpdatedByTable,
-			Columns: []string{group.UpdatedByColumn},
+			Table:   group.UpdatedByUserTable,
+			Columns: []string{group.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gc.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.CreatedByServiceTable,
+			Columns: []string{group.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByServiceTable,
+			Columns: []string{group.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := gc.mutation.OwnerIDs(); len(nodes) > 0 {

@@ -10,9 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // OrgSubscriptionCreate is the builder for creating a OrgSubscription entity.
@@ -74,6 +75,62 @@ func (osc *OrgSubscriptionCreate) SetUpdatedByID(s string) *OrgSubscriptionCreat
 func (osc *OrgSubscriptionCreate) SetNillableUpdatedByID(s *string) *OrgSubscriptionCreate {
 	if s != nil {
 		osc.SetUpdatedByID(*s)
+	}
+	return osc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (osc *OrgSubscriptionCreate) SetCreatedByUserID(s string) *OrgSubscriptionCreate {
+	osc.mutation.SetCreatedByUserID(s)
+	return osc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableCreatedByUserID(s *string) *OrgSubscriptionCreate {
+	if s != nil {
+		osc.SetCreatedByUserID(*s)
+	}
+	return osc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (osc *OrgSubscriptionCreate) SetUpdatedByUserID(s string) *OrgSubscriptionCreate {
+	osc.mutation.SetUpdatedByUserID(s)
+	return osc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableUpdatedByUserID(s *string) *OrgSubscriptionCreate {
+	if s != nil {
+		osc.SetUpdatedByUserID(*s)
+	}
+	return osc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (osc *OrgSubscriptionCreate) SetCreatedByServiceID(s string) *OrgSubscriptionCreate {
+	osc.mutation.SetCreatedByServiceID(s)
+	return osc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableCreatedByServiceID(s *string) *OrgSubscriptionCreate {
+	if s != nil {
+		osc.SetCreatedByServiceID(*s)
+	}
+	return osc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (osc *OrgSubscriptionCreate) SetUpdatedByServiceID(s string) *OrgSubscriptionCreate {
+	osc.mutation.SetUpdatedByServiceID(s)
+	return osc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableUpdatedByServiceID(s *string) *OrgSubscriptionCreate {
+	if s != nil {
+		osc.SetUpdatedByServiceID(*s)
 	}
 	return osc
 }
@@ -258,14 +315,24 @@ func (osc *OrgSubscriptionCreate) SetNillableID(s *string) *OrgSubscriptionCreat
 	return osc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (osc *OrgSubscriptionCreate) SetCreatedBy(c *ChangeActor) *OrgSubscriptionCreate {
-	return osc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (osc *OrgSubscriptionCreate) SetCreatedByUser(u *User) *OrgSubscriptionCreate {
+	return osc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (osc *OrgSubscriptionCreate) SetUpdatedBy(c *ChangeActor) *OrgSubscriptionCreate {
-	return osc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (osc *OrgSubscriptionCreate) SetUpdatedByUser(u *User) *OrgSubscriptionCreate {
+	return osc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (osc *OrgSubscriptionCreate) SetCreatedByService(a *APIToken) *OrgSubscriptionCreate {
+	return osc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (osc *OrgSubscriptionCreate) SetUpdatedByService(a *APIToken) *OrgSubscriptionCreate {
+	return osc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -406,6 +473,14 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 		_spec.SetField(orgsubscription.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := osc.mutation.CreatedByID(); ok {
+		_spec.SetField(orgsubscription.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := osc.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgsubscription.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := osc.mutation.MappingID(); ok {
 		_spec.SetField(orgsubscription.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -454,40 +529,76 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 		_node.Features = value
 	}
-	if nodes := osc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := osc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   orgsubscription.CreatedByTable,
-			Columns: []string{orgsubscription.CreatedByColumn},
+			Table:   orgsubscription.CreatedByUserTable,
+			Columns: []string{orgsubscription.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osc.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := osc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := osc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   orgsubscription.UpdatedByTable,
-			Columns: []string{orgsubscription.UpdatedByColumn},
+			Table:   orgsubscription.UpdatedByUserTable,
+			Columns: []string{orgsubscription.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osc.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.CreatedByServiceTable,
+			Columns: []string{orgsubscription.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgsubscription.UpdatedByServiceTable,
+			Columns: []string{orgsubscription.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := osc.mutation.OwnerIDs(); len(nodes) > 0 {

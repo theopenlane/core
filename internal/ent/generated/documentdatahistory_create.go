@@ -126,6 +126,62 @@ func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedByID(s *string) *Docume
 	return ddhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ddhc *DocumentDataHistoryCreate) SetCreatedByUserID(s string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetCreatedByUserID(s)
+	return ddhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableCreatedByUserID(s *string) *DocumentDataHistoryCreate {
+	if s != nil {
+		ddhc.SetCreatedByUserID(*s)
+	}
+	return ddhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ddhc *DocumentDataHistoryCreate) SetUpdatedByUserID(s string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetUpdatedByUserID(s)
+	return ddhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedByUserID(s *string) *DocumentDataHistoryCreate {
+	if s != nil {
+		ddhc.SetUpdatedByUserID(*s)
+	}
+	return ddhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ddhc *DocumentDataHistoryCreate) SetCreatedByServiceID(s string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetCreatedByServiceID(s)
+	return ddhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableCreatedByServiceID(s *string) *DocumentDataHistoryCreate {
+	if s != nil {
+		ddhc.SetCreatedByServiceID(*s)
+	}
+	return ddhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ddhc *DocumentDataHistoryCreate) SetUpdatedByServiceID(s string) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetUpdatedByServiceID(s)
+	return ddhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ddhc *DocumentDataHistoryCreate) SetNillableUpdatedByServiceID(s *string) *DocumentDataHistoryCreate {
+	if s != nil {
+		ddhc.SetUpdatedByServiceID(*s)
+	}
+	return ddhc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (ddhc *DocumentDataHistoryCreate) SetMappingID(s string) *DocumentDataHistoryCreate {
 	ddhc.mutation.SetMappingID(s)
@@ -382,6 +438,22 @@ func (ddhc *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlg
 	if value, ok := ddhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(documentdatahistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := ddhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(documentdatahistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := ddhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := ddhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(documentdatahistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := ddhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := ddhc.mutation.MappingID(); ok {
 		_spec.SetField(documentdatahistory.FieldMappingID, field.TypeString, value)

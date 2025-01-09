@@ -3,6 +3,10 @@
 package changeactor
 
 import (
+	"fmt"
+	"io"
+	"strconv"
+
 	"entgo.io/ent/dialect/sql"
 )
 
@@ -36,6 +40,29 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// ActorType defines the type for the "actor_type" enum field.
+type ActorType string
+
+// ActorType values.
+const (
+	ActorTypeUser    ActorType = "user"
+	ActorTypeService ActorType = "service"
+)
+
+func (at ActorType) String() string {
+	return string(at)
+}
+
+// ActorTypeValidator is a validator for the "actor_type" field enum values. It is called by the builders before save.
+func ActorTypeValidator(at ActorType) error {
+	switch at {
+	case ActorTypeUser, ActorTypeService:
+		return nil
+	default:
+		return fmt.Errorf("changeactor: invalid enum value for actor_type field: %q", at)
+	}
+}
+
 // OrderOption defines the ordering options for the ChangeActor queries.
 type OrderOption func(*sql.Selector)
 
@@ -52,4 +79,22 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByActorType orders the results by the actor_type field.
 func ByActorType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActorType, opts...).ToFunc()
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (e ActorType) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(e.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (e *ActorType) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*e = ActorType(str)
+	if err := ActorTypeValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid ActorType", str)
+	}
+	return nil
 }

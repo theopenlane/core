@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -35,8 +36,10 @@ type InternalPolicyQuery struct {
 	order                      []internalpolicy.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.InternalPolicy
-	withCreatedBy              *ChangeActorQuery
-	withUpdatedBy              *ChangeActorQuery
+	withCreatedByUser          *UserQuery
+	withUpdatedByUser          *UserQuery
+	withCreatedByService       *APITokenQuery
+	withUpdatedByService       *APITokenQuery
 	withOwner                  *OrganizationQuery
 	withBlockedGroups          *GroupQuery
 	withEditors                *GroupQuery
@@ -92,9 +95,9 @@ func (ipq *InternalPolicyQuery) Order(o ...internalpolicy.OrderOption) *Internal
 	return ipq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (ipq *InternalPolicyQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: ipq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (ipq *InternalPolicyQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: ipq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ipq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -105,11 +108,11 @@ func (ipq *InternalPolicyQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.CreatedByTable, internalpolicy.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.CreatedByUserTable, internalpolicy.CreatedByUserColumn),
 		)
 		schemaConfig := ipq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
@@ -117,9 +120,9 @@ func (ipq *InternalPolicyQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (ipq *InternalPolicyQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: ipq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (ipq *InternalPolicyQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: ipq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ipq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -130,11 +133,61 @@ func (ipq *InternalPolicyQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.UpdatedByTable, internalpolicy.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.UpdatedByUserTable, internalpolicy.UpdatedByUserColumn),
 		)
 		schemaConfig := ipq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (ipq *InternalPolicyQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.CreatedByServiceTable, internalpolicy.CreatedByServiceColumn),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (ipq *InternalPolicyQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.UpdatedByServiceTable, internalpolicy.UpdatedByServiceColumn),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
@@ -559,8 +612,10 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		order:                 append([]internalpolicy.OrderOption{}, ipq.order...),
 		inters:                append([]Interceptor{}, ipq.inters...),
 		predicates:            append([]predicate.InternalPolicy{}, ipq.predicates...),
-		withCreatedBy:         ipq.withCreatedBy.Clone(),
-		withUpdatedBy:         ipq.withUpdatedBy.Clone(),
+		withCreatedByUser:     ipq.withCreatedByUser.Clone(),
+		withUpdatedByUser:     ipq.withUpdatedByUser.Clone(),
+		withCreatedByService:  ipq.withCreatedByService.Clone(),
+		withUpdatedByService:  ipq.withUpdatedByService.Clone(),
 		withOwner:             ipq.withOwner.Clone(),
 		withBlockedGroups:     ipq.withBlockedGroups.Clone(),
 		withEditors:           ipq.withEditors.Clone(),
@@ -577,25 +632,47 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *InternalPolicyQuery {
-	query := (&ChangeActorClient{config: ipq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithCreatedByUser(opts ...func(*UserQuery)) *InternalPolicyQuery {
+	query := (&UserClient{config: ipq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	ipq.withCreatedBy = query
+	ipq.withCreatedByUser = query
 	return ipq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *InternalPolicyQuery {
-	query := (&ChangeActorClient{config: ipq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *InternalPolicyQuery {
+	query := (&UserClient{config: ipq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	ipq.withUpdatedBy = query
+	ipq.withUpdatedByUser = query
+	return ipq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *InternalPolicyQuery {
+	query := (&APITokenClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withCreatedByService = query
+	return ipq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *InternalPolicyQuery {
+	query := (&APITokenClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withUpdatedByService = query
 	return ipq
 }
 
@@ -782,9 +859,11 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	var (
 		nodes       = []*InternalPolicy{}
 		_spec       = ipq.querySpec()
-		loadedTypes = [11]bool{
-			ipq.withCreatedBy != nil,
-			ipq.withUpdatedBy != nil,
+		loadedTypes = [13]bool{
+			ipq.withCreatedByUser != nil,
+			ipq.withUpdatedByUser != nil,
+			ipq.withCreatedByService != nil,
+			ipq.withUpdatedByService != nil,
 			ipq.withOwner != nil,
 			ipq.withBlockedGroups != nil,
 			ipq.withEditors != nil,
@@ -819,15 +898,27 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := ipq.withCreatedBy; query != nil {
-		if err := ipq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *InternalPolicy, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := ipq.withCreatedByUser; query != nil {
+		if err := ipq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := ipq.withUpdatedBy; query != nil {
-		if err := ipq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *InternalPolicy, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := ipq.withUpdatedByUser; query != nil {
+		if err := ipq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ipq.withCreatedByService; query != nil {
+		if err := ipq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ipq.withUpdatedByService; query != nil {
+		if err := ipq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -959,11 +1050,11 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	return nodes, nil
 }
 
-func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *ChangeActor)) error {
+func (ipq *InternalPolicyQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*InternalPolicy)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -972,7 +1063,7 @@ func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *Change
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -980,7 +1071,7 @@ func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *Change
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -988,11 +1079,11 @@ func (ipq *InternalPolicyQuery) loadCreatedBy(ctx context.Context, query *Change
 	}
 	return nil
 }
-func (ipq *InternalPolicyQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *ChangeActor)) error {
+func (ipq *InternalPolicyQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*InternalPolicy)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1001,7 +1092,7 @@ func (ipq *InternalPolicyQuery) loadUpdatedBy(ctx context.Context, query *Change
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1009,7 +1100,65 @@ func (ipq *InternalPolicyQuery) loadUpdatedBy(ctx context.Context, query *Change
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*InternalPolicy)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*InternalPolicy)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1542,11 +1691,17 @@ func (ipq *InternalPolicyQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if ipq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(internalpolicy.FieldCreatedByID)
+		if ipq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldCreatedByUserID)
 		}
-		if ipq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(internalpolicy.FieldUpdatedByID)
+		if ipq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldUpdatedByUserID)
+		}
+		if ipq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldCreatedByServiceID)
+		}
+		if ipq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldUpdatedByServiceID)
 		}
 		if ipq.withOwner != nil {
 			_spec.Node.AddColumnOnce(internalpolicy.FieldOwnerID)

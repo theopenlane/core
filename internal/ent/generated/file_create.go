@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -84,6 +84,62 @@ func (fc *FileCreate) SetUpdatedByID(s string) *FileCreate {
 func (fc *FileCreate) SetNillableUpdatedByID(s *string) *FileCreate {
 	if s != nil {
 		fc.SetUpdatedByID(*s)
+	}
+	return fc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (fc *FileCreate) SetCreatedByUserID(s string) *FileCreate {
+	fc.mutation.SetCreatedByUserID(s)
+	return fc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableCreatedByUserID(s *string) *FileCreate {
+	if s != nil {
+		fc.SetCreatedByUserID(*s)
+	}
+	return fc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (fc *FileCreate) SetUpdatedByUserID(s string) *FileCreate {
+	fc.mutation.SetUpdatedByUserID(s)
+	return fc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableUpdatedByUserID(s *string) *FileCreate {
+	if s != nil {
+		fc.SetUpdatedByUserID(*s)
+	}
+	return fc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (fc *FileCreate) SetCreatedByServiceID(s string) *FileCreate {
+	fc.mutation.SetCreatedByServiceID(s)
+	return fc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableCreatedByServiceID(s *string) *FileCreate {
+	if s != nil {
+		fc.SetCreatedByServiceID(*s)
+	}
+	return fc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (fc *FileCreate) SetUpdatedByServiceID(s string) *FileCreate {
+	fc.mutation.SetUpdatedByServiceID(s)
+	return fc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableUpdatedByServiceID(s *string) *FileCreate {
+	if s != nil {
+		fc.SetUpdatedByServiceID(*s)
 	}
 	return fc
 }
@@ -314,14 +370,24 @@ func (fc *FileCreate) SetNillableID(s *string) *FileCreate {
 	return fc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (fc *FileCreate) SetCreatedBy(c *ChangeActor) *FileCreate {
-	return fc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (fc *FileCreate) SetCreatedByUser(u *User) *FileCreate {
+	return fc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (fc *FileCreate) SetUpdatedBy(c *ChangeActor) *FileCreate {
-	return fc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (fc *FileCreate) SetUpdatedByUser(u *User) *FileCreate {
+	return fc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (fc *FileCreate) SetCreatedByService(a *APIToken) *FileCreate {
+	return fc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (fc *FileCreate) SetUpdatedByService(a *APIToken) *FileCreate {
+	return fc.SetUpdatedByServiceID(a.ID)
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
@@ -629,6 +695,14 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := fc.mutation.CreatedByID(); ok {
+		_spec.SetField(file.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := fc.mutation.UpdatedByID(); ok {
+		_spec.SetField(file.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := fc.mutation.DeletedAt(); ok {
 		_spec.SetField(file.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -701,40 +775,76 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldFileContents, field.TypeBytes, value)
 		_node.FileContents = value
 	}
-	if nodes := fc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := fc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   file.CreatedByTable,
-			Columns: []string{file.CreatedByColumn},
+			Table:   file.CreatedByUserTable,
+			Columns: []string{file.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fc.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := fc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   file.UpdatedByTable,
-			Columns: []string{file.UpdatedByColumn},
+			Table:   file.UpdatedByUserTable,
+			Columns: []string{file.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = fc.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.CreatedByServiceTable,
+			Columns: []string{file.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.UpdatedByServiceTable,
+			Columns: []string{file.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := fc.mutation.UserIDs(); len(nodes) > 0 {

@@ -10,9 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // InternalPolicy is the model entity for the InternalPolicy schema.
@@ -28,6 +30,14 @@ type InternalPolicy struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -58,14 +68,23 @@ type InternalPolicy struct {
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges        InternalPolicyEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // InternalPolicyEdges holds the relations/edges for other nodes in the graph.
 type InternalPolicyEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -86,9 +105,9 @@ type InternalPolicyEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [13]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -100,26 +119,48 @@ type InternalPolicyEdges struct {
 	namedPrograms          map[string][]*Program
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e InternalPolicyEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e InternalPolicyEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e InternalPolicyEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e InternalPolicyEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InternalPolicyEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InternalPolicyEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -127,7 +168,7 @@ func (e InternalPolicyEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e InternalPolicyEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -136,7 +177,7 @@ func (e InternalPolicyEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -145,7 +186,7 @@ func (e InternalPolicyEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -154,7 +195,7 @@ func (e InternalPolicyEdges) EditorsOrErr() ([]*Group, error) {
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -163,7 +204,7 @@ func (e InternalPolicyEdges) ControlObjectivesOrErr() ([]*ControlObjective, erro
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -172,7 +213,7 @@ func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -181,7 +222,7 @@ func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -190,7 +231,7 @@ func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -199,7 +240,7 @@ func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -212,7 +253,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case internalpolicy.FieldTags, internalpolicy.FieldDetails:
 			values[i] = new([]byte)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedByID, internalpolicy.FieldUpdatedByID, internalpolicy.FieldDeletedByID, internalpolicy.FieldMappingID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedByID, internalpolicy.FieldUpdatedByID, internalpolicy.FieldCreatedByUserID, internalpolicy.FieldUpdatedByUserID, internalpolicy.FieldCreatedByServiceID, internalpolicy.FieldUpdatedByServiceID, internalpolicy.FieldDeletedByID, internalpolicy.FieldMappingID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -260,6 +301,30 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				ip.UpdatedByID = value.String
+			}
+		case internalpolicy.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				ip.CreatedByUserID = value.String
+			}
+		case internalpolicy.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				ip.UpdatedByUserID = value.String
+			}
+		case internalpolicy.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				ip.CreatedByServiceID = value.String
+			}
+		case internalpolicy.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				ip.UpdatedByServiceID = value.String
 			}
 		case internalpolicy.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -356,14 +421,24 @@ func (ip *InternalPolicy) Value(name string) (ent.Value, error) {
 	return ip.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryCreatedBy() *ChangeActorQuery {
-	return NewInternalPolicyClient(ip.config).QueryCreatedBy(ip)
+// QueryCreatedByUser queries the "created_by_user" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryCreatedByUser() *UserQuery {
+	return NewInternalPolicyClient(ip.config).QueryCreatedByUser(ip)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryUpdatedBy() *ChangeActorQuery {
-	return NewInternalPolicyClient(ip.config).QueryUpdatedBy(ip)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryUpdatedByUser() *UserQuery {
+	return NewInternalPolicyClient(ip.config).QueryUpdatedByUser(ip)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryCreatedByService() *APITokenQuery {
+	return NewInternalPolicyClient(ip.config).QueryCreatedByService(ip)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryUpdatedByService() *APITokenQuery {
+	return NewInternalPolicyClient(ip.config).QueryUpdatedByService(ip)
 }
 
 // QueryOwner queries the "owner" edge of the InternalPolicy entity.
@@ -445,6 +520,18 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(ip.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(ip.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(ip.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(ip.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(ip.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ip.DeletedAt.Format(time.ANSIC))

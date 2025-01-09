@@ -10,11 +10,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // UserSetting is the model entity for the UserSetting schema.
@@ -30,6 +31,14 @@ type UserSetting struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -61,14 +70,23 @@ type UserSetting struct {
 	Edges                    UserSettingEdges `json:"edges"`
 	user_setting_default_org *string
 	selectValues             sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // UserSettingEdges holds the relations/edges for other nodes in the graph.
 type UserSettingEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
 	// organization to load on user login
@@ -77,33 +95,55 @@ type UserSettingEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [7]map[string]int
 
 	namedFiles map[string][]*File
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e UserSettingEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e UserSettingEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e UserSettingEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e UserSettingEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e UserSettingEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e UserSettingEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -111,7 +151,7 @@ func (e UserSettingEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e UserSettingEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -122,7 +162,7 @@ func (e UserSettingEdges) UserOrErr() (*User, error) {
 func (e UserSettingEdges) DefaultOrgOrErr() (*Organization, error) {
 	if e.DefaultOrg != nil {
 		return e.DefaultOrg, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "default_org"}
@@ -131,7 +171,7 @@ func (e UserSettingEdges) DefaultOrgOrErr() (*Organization, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserSettingEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -146,7 +186,7 @@ func (*UserSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case usersetting.FieldLocked, usersetting.FieldEmailConfirmed, usersetting.FieldIsWebauthnAllowed, usersetting.FieldIsTfaEnabled:
 			values[i] = new(sql.NullBool)
-		case usersetting.FieldID, usersetting.FieldCreatedByID, usersetting.FieldUpdatedByID, usersetting.FieldMappingID, usersetting.FieldDeletedByID, usersetting.FieldUserID, usersetting.FieldStatus, usersetting.FieldPhoneNumber:
+		case usersetting.FieldID, usersetting.FieldCreatedByID, usersetting.FieldUpdatedByID, usersetting.FieldCreatedByUserID, usersetting.FieldUpdatedByUserID, usersetting.FieldCreatedByServiceID, usersetting.FieldUpdatedByServiceID, usersetting.FieldMappingID, usersetting.FieldDeletedByID, usersetting.FieldUserID, usersetting.FieldStatus, usersetting.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case usersetting.FieldCreatedAt, usersetting.FieldUpdatedAt, usersetting.FieldDeletedAt, usersetting.FieldSilencedAt, usersetting.FieldSuspendedAt:
 			values[i] = new(sql.NullTime)
@@ -196,6 +236,30 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				us.UpdatedByID = value.String
+			}
+		case usersetting.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				us.CreatedByUserID = value.String
+			}
+		case usersetting.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				us.UpdatedByUserID = value.String
+			}
+		case usersetting.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				us.CreatedByServiceID = value.String
+			}
+		case usersetting.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				us.UpdatedByServiceID = value.String
 			}
 		case usersetting.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -300,14 +364,24 @@ func (us *UserSetting) Value(name string) (ent.Value, error) {
 	return us.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the UserSetting entity.
-func (us *UserSetting) QueryCreatedBy() *ChangeActorQuery {
-	return NewUserSettingClient(us.config).QueryCreatedBy(us)
+// QueryCreatedByUser queries the "created_by_user" edge of the UserSetting entity.
+func (us *UserSetting) QueryCreatedByUser() *UserQuery {
+	return NewUserSettingClient(us.config).QueryCreatedByUser(us)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the UserSetting entity.
-func (us *UserSetting) QueryUpdatedBy() *ChangeActorQuery {
-	return NewUserSettingClient(us.config).QueryUpdatedBy(us)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the UserSetting entity.
+func (us *UserSetting) QueryUpdatedByUser() *UserQuery {
+	return NewUserSettingClient(us.config).QueryUpdatedByUser(us)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the UserSetting entity.
+func (us *UserSetting) QueryCreatedByService() *APITokenQuery {
+	return NewUserSettingClient(us.config).QueryCreatedByService(us)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the UserSetting entity.
+func (us *UserSetting) QueryUpdatedByService() *APITokenQuery {
+	return NewUserSettingClient(us.config).QueryUpdatedByService(us)
 }
 
 // QueryUser queries the "user" edge of the UserSetting entity.
@@ -359,6 +433,18 @@ func (us *UserSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(us.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(us.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(us.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(us.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(us.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(us.MappingID)

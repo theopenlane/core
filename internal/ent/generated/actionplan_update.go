@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -67,6 +67,46 @@ func (apu *ActionPlanUpdate) SetNillableUpdatedByID(s *string) *ActionPlanUpdate
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (apu *ActionPlanUpdate) ClearUpdatedByID() *ActionPlanUpdate {
 	apu.mutation.ClearUpdatedByID()
+	return apu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (apu *ActionPlanUpdate) SetUpdatedByUserID(s string) *ActionPlanUpdate {
+	apu.mutation.SetUpdatedByUserID(s)
+	return apu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (apu *ActionPlanUpdate) SetNillableUpdatedByUserID(s *string) *ActionPlanUpdate {
+	if s != nil {
+		apu.SetUpdatedByUserID(*s)
+	}
+	return apu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (apu *ActionPlanUpdate) ClearUpdatedByUserID() *ActionPlanUpdate {
+	apu.mutation.ClearUpdatedByUserID()
+	return apu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (apu *ActionPlanUpdate) SetUpdatedByServiceID(s string) *ActionPlanUpdate {
+	apu.mutation.SetUpdatedByServiceID(s)
+	return apu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (apu *ActionPlanUpdate) SetNillableUpdatedByServiceID(s *string) *ActionPlanUpdate {
+	if s != nil {
+		apu.SetUpdatedByServiceID(*s)
+	}
+	return apu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (apu *ActionPlanUpdate) ClearUpdatedByServiceID() *ActionPlanUpdate {
+	apu.mutation.ClearUpdatedByServiceID()
 	return apu
 }
 
@@ -214,9 +254,14 @@ func (apu *ActionPlanUpdate) ClearDetails() *ActionPlanUpdate {
 	return apu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (apu *ActionPlanUpdate) SetUpdatedBy(c *ChangeActor) *ActionPlanUpdate {
-	return apu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (apu *ActionPlanUpdate) SetUpdatedByUser(u *User) *ActionPlanUpdate {
+	return apu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (apu *ActionPlanUpdate) SetUpdatedByService(a *APIToken) *ActionPlanUpdate {
+	return apu.SetUpdatedByServiceID(a.ID)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -299,9 +344,15 @@ func (apu *ActionPlanUpdate) Mutation() *ActionPlanMutation {
 	return apu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (apu *ActionPlanUpdate) ClearUpdatedBy() *ActionPlanUpdate {
-	apu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (apu *ActionPlanUpdate) ClearUpdatedByUser() *ActionPlanUpdate {
+	apu.mutation.ClearUpdatedByUser()
+	return apu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (apu *ActionPlanUpdate) ClearUpdatedByService() *ActionPlanUpdate {
+	apu.mutation.ClearUpdatedByService()
 	return apu
 }
 
@@ -476,6 +527,15 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if apu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(actionplan.FieldUpdatedAt, field.TypeTime)
 	}
+	if apu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(actionplan.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := apu.mutation.UpdatedByID(); ok {
+		_spec.SetField(actionplan.FieldUpdatedByID, field.TypeString, value)
+	}
+	if apu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(actionplan.FieldUpdatedByID, field.TypeString)
+	}
 	if apu.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplan.FieldDeletedAt, field.TypeTime)
 	}
@@ -532,29 +592,60 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if apu.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeJSON)
 	}
-	if apu.mutation.UpdatedByCleared() {
+	if apu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   actionplan.UpdatedByTable,
-			Columns: []string{actionplan.UpdatedByColumn},
+			Table:   actionplan.UpdatedByUserTable,
+			Columns: []string{actionplan.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apu.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := apu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   actionplan.UpdatedByTable,
-			Columns: []string{actionplan.UpdatedByColumn},
+			Table:   actionplan.UpdatedByUserTable,
+			Columns: []string{actionplan.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if apu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByServiceTable,
+			Columns: []string{actionplan.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ActionPlan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByServiceTable,
+			Columns: []string{actionplan.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apu.schemaConfig.ActionPlan
@@ -859,6 +950,46 @@ func (apuo *ActionPlanUpdateOne) ClearUpdatedByID() *ActionPlanUpdateOne {
 	return apuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (apuo *ActionPlanUpdateOne) SetUpdatedByUserID(s string) *ActionPlanUpdateOne {
+	apuo.mutation.SetUpdatedByUserID(s)
+	return apuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (apuo *ActionPlanUpdateOne) SetNillableUpdatedByUserID(s *string) *ActionPlanUpdateOne {
+	if s != nil {
+		apuo.SetUpdatedByUserID(*s)
+	}
+	return apuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (apuo *ActionPlanUpdateOne) ClearUpdatedByUserID() *ActionPlanUpdateOne {
+	apuo.mutation.ClearUpdatedByUserID()
+	return apuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (apuo *ActionPlanUpdateOne) SetUpdatedByServiceID(s string) *ActionPlanUpdateOne {
+	apuo.mutation.SetUpdatedByServiceID(s)
+	return apuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (apuo *ActionPlanUpdateOne) SetNillableUpdatedByServiceID(s *string) *ActionPlanUpdateOne {
+	if s != nil {
+		apuo.SetUpdatedByServiceID(*s)
+	}
+	return apuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (apuo *ActionPlanUpdateOne) ClearUpdatedByServiceID() *ActionPlanUpdateOne {
+	apuo.mutation.ClearUpdatedByServiceID()
+	return apuo
+}
+
 // SetTags sets the "tags" field.
 func (apuo *ActionPlanUpdateOne) SetTags(s []string) *ActionPlanUpdateOne {
 	apuo.mutation.SetTags(s)
@@ -1003,9 +1134,14 @@ func (apuo *ActionPlanUpdateOne) ClearDetails() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (apuo *ActionPlanUpdateOne) SetUpdatedBy(c *ChangeActor) *ActionPlanUpdateOne {
-	return apuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (apuo *ActionPlanUpdateOne) SetUpdatedByUser(u *User) *ActionPlanUpdateOne {
+	return apuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (apuo *ActionPlanUpdateOne) SetUpdatedByService(a *APIToken) *ActionPlanUpdateOne {
+	return apuo.SetUpdatedByServiceID(a.ID)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -1088,9 +1224,15 @@ func (apuo *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
 	return apuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (apuo *ActionPlanUpdateOne) ClearUpdatedBy() *ActionPlanUpdateOne {
-	apuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (apuo *ActionPlanUpdateOne) ClearUpdatedByUser() *ActionPlanUpdateOne {
+	apuo.mutation.ClearUpdatedByUser()
+	return apuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (apuo *ActionPlanUpdateOne) ClearUpdatedByService() *ActionPlanUpdateOne {
+	apuo.mutation.ClearUpdatedByService()
 	return apuo
 }
 
@@ -1295,6 +1437,15 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	if apuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(actionplan.FieldUpdatedAt, field.TypeTime)
 	}
+	if apuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(actionplan.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := apuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(actionplan.FieldUpdatedByID, field.TypeString, value)
+	}
+	if apuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(actionplan.FieldUpdatedByID, field.TypeString)
+	}
 	if apuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplan.FieldDeletedAt, field.TypeTime)
 	}
@@ -1351,29 +1502,60 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	if apuo.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeJSON)
 	}
-	if apuo.mutation.UpdatedByCleared() {
+	if apuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   actionplan.UpdatedByTable,
-			Columns: []string{actionplan.UpdatedByColumn},
+			Table:   actionplan.UpdatedByUserTable,
+			Columns: []string{actionplan.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apuo.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := apuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   actionplan.UpdatedByTable,
-			Columns: []string{actionplan.UpdatedByColumn},
+			Table:   actionplan.UpdatedByUserTable,
+			Columns: []string{actionplan.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if apuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByServiceTable,
+			Columns: []string{actionplan.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ActionPlan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByServiceTable,
+			Columns: []string{actionplan.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apuo.schemaConfig.ActionPlan

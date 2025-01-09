@@ -52,24 +52,30 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	APIToken struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Description func(childComplexity int) int
-		ExpiresAt   func(childComplexity int) int
-		ID          func(childComplexity int) int
-		LastUsedAt  func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Scopes      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Token       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		ExpiresAt          func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		LastUsedAt         func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Scopes             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Token              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	APITokenBulkCreatePayload struct {
@@ -104,28 +110,34 @@ type ComplexityRoot struct {
 	}
 
 	ActionPlan struct {
-		Control     func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Description func(childComplexity int) int
-		Details     func(childComplexity int) int
-		DueDate     func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Priority    func(childComplexity int) int
-		Program     func(childComplexity int) int
-		Risk        func(childComplexity int) int
-		Source      func(childComplexity int) int
-		Standard    func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
-		User        func(childComplexity int) int
+		Control            func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		DueDate            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Priority           func(childComplexity int) int
+		Program            func(childComplexity int) int
+		Risk               func(childComplexity int) int
+		Source             func(childComplexity int) int
+		Standard           func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		User               func(childComplexity int) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -152,25 +164,29 @@ type ComplexityRoot struct {
 	}
 
 	ActionPlanHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Description func(childComplexity int) int
-		Details     func(childComplexity int) int
-		DueDate     func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Priority    func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Source      func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		DueDate            func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Priority           func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Source             func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	ActionPlanHistoryConnection struct {
@@ -219,27 +235,33 @@ type ComplexityRoot struct {
 	}
 
 	Contact struct {
-		Address     func(childComplexity int) int
-		Company     func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Email       func(childComplexity int) int
-		Entities    func(childComplexity int) int
-		Files       func(childComplexity int) int
-		FullName    func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		PhoneNumber func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		Address            func(childComplexity int) int
+		Company            func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Email              func(childComplexity int) int
+		Entities           func(childComplexity int) int
+		Files              func(childComplexity int) int
+		FullName           func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		PhoneNumber        func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Title              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	ContactBulkCreatePayload struct {
@@ -266,26 +288,30 @@ type ComplexityRoot struct {
 	}
 
 	ContactHistory struct {
-		Address     func(childComplexity int) int
-		Company     func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Email       func(childComplexity int) int
-		FullName    func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		PhoneNumber func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		Address            func(childComplexity int) int
+		Company            func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Email              func(childComplexity int) int
+		FullName           func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		PhoneNumber        func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Title              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	ContactHistoryConnection struct {
@@ -308,42 +334,48 @@ type ComplexityRoot struct {
 	}
 
 	Control struct {
-		ActionPlans       func(childComplexity int) int
-		BlockedGroups     func(childComplexity int) int
-		Class             func(childComplexity int) int
-		ControlNumber     func(childComplexity int) int
-		ControlObjectives func(childComplexity int) int
-		ControlType       func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		CreatedByID       func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedByID       func(childComplexity int) int
-		Description       func(childComplexity int) int
-		Details           func(childComplexity int) int
-		Editors           func(childComplexity int) int
-		Family            func(childComplexity int) int
-		ID                func(childComplexity int) int
-		MappedFrameworks  func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Narratives        func(childComplexity int) int
-		Owner             func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		Procedures        func(childComplexity int) int
-		Programs          func(childComplexity int) int
-		Risks             func(childComplexity int) int
-		Satisfies         func(childComplexity int) int
-		Source            func(childComplexity int) int
-		Standard          func(childComplexity int) int
-		Status            func(childComplexity int) int
-		Subcontrols       func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		Tasks             func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		UpdatedByID       func(childComplexity int) int
-		Version           func(childComplexity int) int
-		Viewers           func(childComplexity int) int
+		ActionPlans        func(childComplexity int) int
+		BlockedGroups      func(childComplexity int) int
+		Class              func(childComplexity int) int
+		ControlNumber      func(childComplexity int) int
+		ControlObjectives  func(childComplexity int) int
+		ControlType        func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Editors            func(childComplexity int) int
+		Family             func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		MappedFrameworks   func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Narratives         func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Procedures         func(childComplexity int) int
+		Programs           func(childComplexity int) int
+		Risks              func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		Source             func(childComplexity int) int
+		Standard           func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Subcontrols        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Tasks              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Version            func(childComplexity int) int
+		Viewers            func(childComplexity int) int
 	}
 
 	ControlBulkCreatePayload struct {
@@ -370,31 +402,35 @@ type ComplexityRoot struct {
 	}
 
 	ControlHistory struct {
-		Class            func(childComplexity int) int
-		ControlNumber    func(childComplexity int) int
-		ControlType      func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedByID      func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedByID      func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Details          func(childComplexity int) int
-		Family           func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		MappedFrameworks func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		Satisfies        func(childComplexity int) int
-		Source           func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		UpdatedByID      func(childComplexity int) int
-		Version          func(childComplexity int) int
+		Class              func(childComplexity int) int
+		ControlNumber      func(childComplexity int) int
+		ControlType        func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Family             func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		MappedFrameworks   func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		Source             func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Version            func(childComplexity int) int
 	}
 
 	ControlHistoryConnection struct {
@@ -415,8 +451,11 @@ type ComplexityRoot struct {
 		ControlObjectiveType func(childComplexity int) int
 		Controls             func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
 		CreatedByID          func(childComplexity int) int
+		CreatedByService     func(childComplexity int) int
+		CreatedByServiceID   func(childComplexity int) int
+		CreatedByUser        func(childComplexity int) int
+		CreatedByUserID      func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
 		DeletedByID          func(childComplexity int) int
 		Description          func(childComplexity int) int
@@ -440,8 +479,11 @@ type ComplexityRoot struct {
 		Tags                 func(childComplexity int) int
 		Tasks                func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
 		UpdatedByID          func(childComplexity int) int
+		UpdatedByService     func(childComplexity int) int
+		UpdatedByServiceID   func(childComplexity int) int
+		UpdatedByUser        func(childComplexity int) int
+		UpdatedByUserID      func(childComplexity int) int
 		Version              func(childComplexity int) int
 		Viewers              func(childComplexity int) int
 	}
@@ -475,6 +517,8 @@ type ComplexityRoot struct {
 		ControlObjectiveType func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedByID          func(childComplexity int) int
+		CreatedByServiceID   func(childComplexity int) int
+		CreatedByUserID      func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
 		DeletedByID          func(childComplexity int) int
 		Description          func(childComplexity int) int
@@ -493,6 +537,8 @@ type ComplexityRoot struct {
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		UpdatedByID          func(childComplexity int) int
+		UpdatedByServiceID   func(childComplexity int) int
+		UpdatedByUserID      func(childComplexity int) int
 		Version              func(childComplexity int) int
 	}
 
@@ -524,23 +570,29 @@ type ComplexityRoot struct {
 	}
 
 	DocumentData struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		Data        func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Entity      func(childComplexity int) int
-		Files       func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Template    func(childComplexity int) int
-		TemplateID  func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		Data               func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Entity             func(childComplexity int) int
+		Files              func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Template           func(childComplexity int) int
+		TemplateID         func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	DocumentDataBulkCreatePayload struct {
@@ -567,21 +619,25 @@ type ComplexityRoot struct {
 	}
 
 	DocumentDataHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		Data        func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		TemplateID  func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		Data               func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TemplateID         func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	DocumentDataHistoryConnection struct {
@@ -604,29 +660,35 @@ type ComplexityRoot struct {
 	}
 
 	Entity struct {
-		Contacts     func(childComplexity int) int
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		CreatedByID  func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedByID  func(childComplexity int) int
-		Description  func(childComplexity int) int
-		DisplayName  func(childComplexity int) int
-		Documents    func(childComplexity int) int
-		Domains      func(childComplexity int) int
-		EntityType   func(childComplexity int) int
-		EntityTypeID func(childComplexity int) int
-		Files        func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Notes        func(childComplexity int) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Status       func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		UpdatedByID  func(childComplexity int) int
+		Contacts           func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		Documents          func(childComplexity int) int
+		Domains            func(childComplexity int) int
+		EntityType         func(childComplexity int) int
+		EntityTypeID       func(childComplexity int) int
+		Files              func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Notes              func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	EntityBulkCreatePayload struct {
@@ -653,25 +715,29 @@ type ComplexityRoot struct {
 	}
 
 	EntityHistory struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedByID  func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedByID  func(childComplexity int) int
-		Description  func(childComplexity int) int
-		DisplayName  func(childComplexity int) int
-		Domains      func(childComplexity int) int
-		EntityTypeID func(childComplexity int) int
-		HistoryTime  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Operation    func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Ref          func(childComplexity int) int
-		Status       func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		UpdatedByID  func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		Domains            func(childComplexity int) int
+		EntityTypeID       func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	EntityHistoryConnection struct {
@@ -690,20 +756,26 @@ type ComplexityRoot struct {
 	}
 
 	EntityType struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Entities    func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Entities           func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	EntityTypeBulkCreatePayload struct {
@@ -730,20 +802,24 @@ type ComplexityRoot struct {
 	}
 
 	EntityTypeHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	EntityTypeHistoryConnection struct {
@@ -772,8 +848,11 @@ type ComplexityRoot struct {
 	Event struct {
 		CorrelationID       func(childComplexity int) int
 		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
 		CreatedByID         func(childComplexity int) int
+		CreatedByService    func(childComplexity int) int
+		CreatedByServiceID  func(childComplexity int) int
+		CreatedByUser       func(childComplexity int) int
+		CreatedByUserID     func(childComplexity int) int
 		EventID             func(childComplexity int) int
 		EventType           func(childComplexity int) int
 		File                func(childComplexity int) int
@@ -790,8 +869,11 @@ type ComplexityRoot struct {
 		Subscriber          func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
 		UpdatedByID         func(childComplexity int) int
+		UpdatedByService    func(childComplexity int) int
+		UpdatedByServiceID  func(childComplexity int) int
+		UpdatedByUser       func(childComplexity int) int
+		UpdatedByUserID     func(childComplexity int) int
 		User                func(childComplexity int) int
 	}
 
@@ -819,20 +901,24 @@ type ComplexityRoot struct {
 	}
 
 	EventHistory struct {
-		CorrelationID func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedByID   func(childComplexity int) int
-		EventID       func(childComplexity int) int
-		EventType     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Metadata      func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		UpdatedByID   func(childComplexity int) int
+		CorrelationID      func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		EventID            func(childComplexity int) int
+		EventType          func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Metadata           func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	EventHistoryConnection struct {
@@ -858,8 +944,11 @@ type ComplexityRoot struct {
 		CategoryType          func(childComplexity int) int
 		Contact               func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
 		CreatedByID           func(childComplexity int) int
+		CreatedByService      func(childComplexity int) int
+		CreatedByServiceID    func(childComplexity int) int
+		CreatedByUser         func(childComplexity int) int
+		CreatedByUserID       func(childComplexity int) int
 		DeletedAt             func(childComplexity int) int
 		DeletedByID           func(childComplexity int) int
 		DetectedContentType   func(childComplexity int) int
@@ -885,8 +974,11 @@ type ComplexityRoot struct {
 		Template              func(childComplexity int) int
 		URI                   func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
 		UpdatedByID           func(childComplexity int) int
+		UpdatedByService      func(childComplexity int) int
+		UpdatedByServiceID    func(childComplexity int) int
+		UpdatedByUser         func(childComplexity int) int
+		UpdatedByUserID       func(childComplexity int) int
 		User                  func(childComplexity int) int
 		UserSetting           func(childComplexity int) int
 	}
@@ -910,6 +1002,8 @@ type ComplexityRoot struct {
 		CategoryType          func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedByID           func(childComplexity int) int
+		CreatedByServiceID    func(childComplexity int) int
+		CreatedByUserID       func(childComplexity int) int
 		DeletedAt             func(childComplexity int) int
 		DeletedByID           func(childComplexity int) int
 		DetectedContentType   func(childComplexity int) int
@@ -932,6 +1026,8 @@ type ComplexityRoot struct {
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 		UpdatedByID           func(childComplexity int) int
+		UpdatedByServiceID    func(childComplexity int) int
+		UpdatedByUserID       func(childComplexity int) int
 	}
 
 	FileHistoryConnection struct {
@@ -959,8 +1055,11 @@ type ComplexityRoot struct {
 		ControlObjectiveViewers       func(childComplexity int) int
 		ControlViewers                func(childComplexity int) int
 		CreatedAt                     func(childComplexity int) int
-		CreatedBy                     func(childComplexity int) int
 		CreatedByID                   func(childComplexity int) int
+		CreatedByService              func(childComplexity int) int
+		CreatedByServiceID            func(childComplexity int) int
+		CreatedByUser                 func(childComplexity int) int
+		CreatedByUserID               func(childComplexity int) int
 		DeletedAt                     func(childComplexity int) int
 		DeletedByID                   func(childComplexity int) int
 		Description                   func(childComplexity int) int
@@ -999,8 +1098,11 @@ type ComplexityRoot struct {
 		Tasks                         func(childComplexity int) int
 		TemplateCreators              func(childComplexity int) int
 		UpdatedAt                     func(childComplexity int) int
-		UpdatedBy                     func(childComplexity int) int
 		UpdatedByID                   func(childComplexity int) int
+		UpdatedByService              func(childComplexity int) int
+		UpdatedByServiceID            func(childComplexity int) int
+		UpdatedByUser                 func(childComplexity int) int
+		UpdatedByUserID               func(childComplexity int) int
 		Users                         func(childComplexity int) int
 	}
 
@@ -1028,24 +1130,28 @@ type ComplexityRoot struct {
 	}
 
 	GroupHistory struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedByID     func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedByID     func(childComplexity int) int
-		Description     func(childComplexity int) int
-		DisplayName     func(childComplexity int) int
-		GravatarLogoURL func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		LogoURL         func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		UpdatedByID     func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		GravatarLogoURL    func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		LogoURL            func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	GroupHistoryConnection struct {
@@ -1060,21 +1166,27 @@ type ComplexityRoot struct {
 	}
 
 	GroupMembership struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Events      func(childComplexity int) int
-		Group       func(childComplexity int) int
-		GroupID     func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Role        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
-		User        func(childComplexity int) int
-		UserID      func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Events             func(childComplexity int) int
+		Group              func(childComplexity int) int
+		GroupID            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Role               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		User               func(childComplexity int) int
+		UserID             func(childComplexity int) int
 	}
 
 	GroupMembershipBulkCreatePayload struct {
@@ -1101,20 +1213,24 @@ type ComplexityRoot struct {
 	}
 
 	GroupMembershipHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		GroupID     func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Role        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
-		UserID      func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		GroupID            func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Role               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		UserID             func(childComplexity int) int
 	}
 
 	GroupMembershipHistoryConnection struct {
@@ -1137,22 +1253,28 @@ type ComplexityRoot struct {
 	}
 
 	GroupSetting struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		CreatedByID  func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedByID  func(childComplexity int) int
-		Group        func(childComplexity int) int
-		GroupID      func(childComplexity int) int
-		ID           func(childComplexity int) int
-		JoinPolicy   func(childComplexity int) int
-		SyncToGithub func(childComplexity int) int
-		SyncToSlack  func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		UpdatedByID  func(childComplexity int) int
-		Visibility   func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Group              func(childComplexity int) int
+		GroupID            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		JoinPolicy         func(childComplexity int) int
+		SyncToGithub       func(childComplexity int) int
+		SyncToSlack        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Visibility         func(childComplexity int) int
 	}
 
 	GroupSettingBulkCreatePayload struct {
@@ -1179,23 +1301,27 @@ type ComplexityRoot struct {
 	}
 
 	GroupSettingHistory struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedByID  func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedByID  func(childComplexity int) int
-		GroupID      func(childComplexity int) int
-		HistoryTime  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		JoinPolicy   func(childComplexity int) int
-		Operation    func(childComplexity int) int
-		Ref          func(childComplexity int) int
-		SyncToGithub func(childComplexity int) int
-		SyncToSlack  func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		UpdatedByID  func(childComplexity int) int
-		Visibility   func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		GroupID            func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		JoinPolicy         func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		SyncToGithub       func(childComplexity int) int
+		SyncToSlack        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Visibility         func(childComplexity int) int
 	}
 
 	GroupSettingHistoryConnection struct {
@@ -1222,22 +1348,28 @@ type ComplexityRoot struct {
 	}
 
 	Hush struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		CreatedByID  func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedByID  func(childComplexity int) int
-		Description  func(childComplexity int) int
-		Events       func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Integrations func(childComplexity int) int
-		Kind         func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Organization func(childComplexity int) int
-		SecretName   func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		UpdatedByID  func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Events             func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Integrations       func(childComplexity int) int
+		Kind               func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Organization       func(childComplexity int) int
+		SecretName         func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	HushBulkCreatePayload struct {
@@ -1264,21 +1396,25 @@ type ComplexityRoot struct {
 	}
 
 	HushHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Description func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Kind        func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		SecretName  func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Kind               func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		SecretName         func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	HushHistoryConnection struct {
@@ -1297,23 +1433,29 @@ type ComplexityRoot struct {
 	}
 
 	Integration struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Description func(childComplexity int) int
-		Events      func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Kind        func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Secrets     func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Events             func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Kind               func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Secrets            func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	IntegrationBulkCreatePayload struct {
@@ -1340,22 +1482,26 @@ type ComplexityRoot struct {
 	}
 
 	IntegrationHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Description func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Kind        func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Kind               func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	IntegrationHistoryConnection struct {
@@ -1378,34 +1524,40 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicy struct {
-		Background        func(childComplexity int) int
-		BlockedGroups     func(childComplexity int) int
-		ControlObjectives func(childComplexity int) int
-		Controls          func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		CreatedByID       func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedByID       func(childComplexity int) int
-		Description       func(childComplexity int) int
-		Details           func(childComplexity int) int
-		Editors           func(childComplexity int) int
-		ID                func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Narratives        func(childComplexity int) int
-		Owner             func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		PolicyType        func(childComplexity int) int
-		Procedures        func(childComplexity int) int
-		Programs          func(childComplexity int) int
-		PurposeAndScope   func(childComplexity int) int
-		Status            func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		Tasks             func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		UpdatedByID       func(childComplexity int) int
-		Version           func(childComplexity int) int
+		Background         func(childComplexity int) int
+		BlockedGroups      func(childComplexity int) int
+		ControlObjectives  func(childComplexity int) int
+		Controls           func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Editors            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Narratives         func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		PolicyType         func(childComplexity int) int
+		Procedures         func(childComplexity int) int
+		Programs           func(childComplexity int) int
+		PurposeAndScope    func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Tasks              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Version            func(childComplexity int) int
 	}
 
 	InternalPolicyBulkCreatePayload struct {
@@ -1432,27 +1584,31 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicyHistory struct {
-		Background      func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedByID     func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedByID     func(childComplexity int) int
-		Description     func(childComplexity int) int
-		Details         func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		PolicyType      func(childComplexity int) int
-		PurposeAndScope func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Status          func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		UpdatedByID     func(childComplexity int) int
-		Version         func(childComplexity int) int
+		Background         func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		PolicyType         func(childComplexity int) int
+		PurposeAndScope    func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Version            func(childComplexity int) int
 	}
 
 	InternalPolicyHistoryConnection struct {
@@ -1475,24 +1631,30 @@ type ComplexityRoot struct {
 	}
 
 	Invite struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		CreatedByID  func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedByID  func(childComplexity int) int
-		Events       func(childComplexity int) int
-		Expires      func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Recipient    func(childComplexity int) int
-		RequestorID  func(childComplexity int) int
-		Role         func(childComplexity int) int
-		SendAttempts func(childComplexity int) int
-		Status       func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		UpdatedByID  func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Events             func(childComplexity int) int
+		Expires            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Recipient          func(childComplexity int) int
+		RequestorID        func(childComplexity int) int
+		Role               func(childComplexity int) int
+		SendAttempts       func(childComplexity int) int
+		Status             func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	InviteBulkCreatePayload struct {
@@ -1694,30 +1856,36 @@ type ComplexityRoot struct {
 	}
 
 	Narrative struct {
-		BlockedGroups    func(childComplexity int) int
-		Control          func(childComplexity int) int
-		ControlObjective func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		CreatedByID      func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedByID      func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Details          func(childComplexity int) int
-		Editors          func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalPolicy   func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Procedure        func(childComplexity int) int
-		Programs         func(childComplexity int) int
-		Satisfies        func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		UpdatedByID      func(childComplexity int) int
-		Viewers          func(childComplexity int) int
+		BlockedGroups      func(childComplexity int) int
+		Control            func(childComplexity int) int
+		ControlObjective   func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Editors            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		InternalPolicy     func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Procedure          func(childComplexity int) int
+		Programs           func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Viewers            func(childComplexity int) int
 	}
 
 	NarrativeBulkCreatePayload struct {
@@ -1744,23 +1912,27 @@ type ComplexityRoot struct {
 	}
 
 	NarrativeHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Description func(childComplexity int) int
-		Details     func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Satisfies   func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	NarrativeHistoryConnection struct {
@@ -1783,22 +1955,28 @@ type ComplexityRoot struct {
 	}
 
 	Note struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Entity      func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Program     func(childComplexity int) int
-		Subcontrols func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Text        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Entity             func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Program            func(childComplexity int) int
+		Subcontrols        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Text               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	NoteConnection struct {
@@ -1813,20 +1991,24 @@ type ComplexityRoot struct {
 	}
 
 	NoteHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Text        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Text               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	NoteHistoryConnection struct {
@@ -1841,21 +2023,27 @@ type ComplexityRoot struct {
 	}
 
 	OrgMembership struct {
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		CreatedByID    func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedByID    func(childComplexity int) int
-		Events         func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Organization   func(childComplexity int) int
-		OrganizationID func(childComplexity int) int
-		Role           func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
-		UpdatedByID    func(childComplexity int) int
-		User           func(childComplexity int) int
-		UserID         func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Events             func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Organization       func(childComplexity int) int
+		OrganizationID     func(childComplexity int) int
+		Role               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		User               func(childComplexity int) int
+		UserID             func(childComplexity int) int
 	}
 
 	OrgMembershipBulkCreatePayload struct {
@@ -1882,20 +2070,24 @@ type ComplexityRoot struct {
 	}
 
 	OrgMembershipHistory struct {
-		CreatedAt      func(childComplexity int) int
-		CreatedByID    func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedByID    func(childComplexity int) int
-		HistoryTime    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Operation      func(childComplexity int) int
-		OrganizationID func(childComplexity int) int
-		Ref            func(childComplexity int) int
-		Role           func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
-		UpdatedByID    func(childComplexity int) int
-		UserID         func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OrganizationID     func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Role               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		UserID             func(childComplexity int) int
 	}
 
 	OrgMembershipHistoryConnection struct {
@@ -1916,8 +2108,11 @@ type ComplexityRoot struct {
 	OrgSubscription struct {
 		Active                   func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
-		CreatedBy                func(childComplexity int) int
 		CreatedByID              func(childComplexity int) int
+		CreatedByService         func(childComplexity int) int
+		CreatedByServiceID       func(childComplexity int) int
+		CreatedByUser            func(childComplexity int) int
+		CreatedByUserID          func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedByID              func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
@@ -1932,8 +2127,11 @@ type ComplexityRoot struct {
 		StripeSubscriptionStatus func(childComplexity int) int
 		Tags                     func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
-		UpdatedBy                func(childComplexity int) int
 		UpdatedByID              func(childComplexity int) int
+		UpdatedByService         func(childComplexity int) int
+		UpdatedByServiceID       func(childComplexity int) int
+		UpdatedByUser            func(childComplexity int) int
+		UpdatedByUserID          func(childComplexity int) int
 	}
 
 	OrgSubscriptionBulkCreatePayload struct {
@@ -1963,6 +2161,8 @@ type ComplexityRoot struct {
 		Active                   func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedByID              func(childComplexity int) int
+		CreatedByServiceID       func(childComplexity int) int
+		CreatedByUserID          func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedByID              func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
@@ -1981,6 +2181,8 @@ type ComplexityRoot struct {
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 		UpdatedByID              func(childComplexity int) int
+		UpdatedByServiceID       func(childComplexity int) int
+		UpdatedByUserID          func(childComplexity int) int
 	}
 
 	OrgSubscriptionHistoryConnection struct {
@@ -2012,8 +2214,11 @@ type ComplexityRoot struct {
 		ControlObjectives        func(childComplexity int) int
 		Controls                 func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
-		CreatedBy                func(childComplexity int) int
 		CreatedByID              func(childComplexity int) int
+		CreatedByService         func(childComplexity int) int
+		CreatedByServiceID       func(childComplexity int) int
+		CreatedByUser            func(childComplexity int) int
+		CreatedByUserID          func(childComplexity int) int
 		DedicatedDb              func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedByID              func(childComplexity int) int
@@ -2055,8 +2260,11 @@ type ComplexityRoot struct {
 		TemplateCreators         func(childComplexity int) int
 		Templates                func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
-		UpdatedBy                func(childComplexity int) int
 		UpdatedByID              func(childComplexity int) int
+		UpdatedByService         func(childComplexity int) int
+		UpdatedByServiceID       func(childComplexity int) int
+		UpdatedByUser            func(childComplexity int) int
+		UpdatedByUserID          func(childComplexity int) int
 		Users                    func(childComplexity int) int
 	}
 
@@ -2084,24 +2292,28 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationHistory struct {
-		AvatarRemoteURL func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedByID     func(childComplexity int) int
-		DedicatedDb     func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedByID     func(childComplexity int) int
-		Description     func(childComplexity int) int
-		DisplayName     func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		PersonalOrg     func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		UpdatedByID     func(childComplexity int) int
+		AvatarRemoteURL    func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DedicatedDb        func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		PersonalOrg        func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	OrganizationHistoryConnection struct {
@@ -2120,27 +2332,33 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSetting struct {
-		BillingAddress func(childComplexity int) int
-		BillingContact func(childComplexity int) int
-		BillingEmail   func(childComplexity int) int
-		BillingPhone   func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		CreatedByID    func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedByID    func(childComplexity int) int
-		Domains        func(childComplexity int) int
-		Files          func(childComplexity int) int
-		GeoLocation    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Organization   func(childComplexity int) int
-		OrganizationID func(childComplexity int) int
-		StripeID       func(childComplexity int) int
-		Tags           func(childComplexity int) int
-		TaxIdentifier  func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
-		UpdatedByID    func(childComplexity int) int
+		BillingAddress     func(childComplexity int) int
+		BillingContact     func(childComplexity int) int
+		BillingEmail       func(childComplexity int) int
+		BillingPhone       func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Domains            func(childComplexity int) int
+		Files              func(childComplexity int) int
+		GeoLocation        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Organization       func(childComplexity int) int
+		OrganizationID     func(childComplexity int) int
+		StripeID           func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TaxIdentifier      func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	OrganizationSettingBulkCreatePayload struct {
@@ -2167,27 +2385,31 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSettingHistory struct {
-		BillingAddress func(childComplexity int) int
-		BillingContact func(childComplexity int) int
-		BillingEmail   func(childComplexity int) int
-		BillingPhone   func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		CreatedByID    func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedByID    func(childComplexity int) int
-		Domains        func(childComplexity int) int
-		GeoLocation    func(childComplexity int) int
-		HistoryTime    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Operation      func(childComplexity int) int
-		OrganizationID func(childComplexity int) int
-		Ref            func(childComplexity int) int
-		StripeID       func(childComplexity int) int
-		Tags           func(childComplexity int) int
-		TaxIdentifier  func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
-		UpdatedByID    func(childComplexity int) int
+		BillingAddress     func(childComplexity int) int
+		BillingContact     func(childComplexity int) int
+		BillingEmail       func(childComplexity int) int
+		BillingPhone       func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Domains            func(childComplexity int) int
+		GeoLocation        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OrganizationID     func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		StripeID           func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TaxIdentifier      func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	OrganizationSettingHistoryConnection struct {
@@ -2221,25 +2443,31 @@ type ComplexityRoot struct {
 	}
 
 	PersonalAccessToken struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		CreatedByID   func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedByID   func(childComplexity int) int
-		Description   func(childComplexity int) int
-		Events        func(childComplexity int) int
-		ExpiresAt     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		LastUsedAt    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Organizations func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		Scopes        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Token         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		UpdatedByID   func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Events             func(childComplexity int) int
+		ExpiresAt          func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		LastUsedAt         func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Organizations      func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		Scopes             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Token              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	PersonalAccessTokenBulkCreatePayload struct {
@@ -2274,35 +2502,41 @@ type ComplexityRoot struct {
 	}
 
 	Procedure struct {
-		Background       func(childComplexity int) int
-		BlockedGroups    func(childComplexity int) int
-		Controls         func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		CreatedByID      func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedByID      func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Details          func(childComplexity int) int
-		Editors          func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalPolicies func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Narratives       func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		ProcedureType    func(childComplexity int) int
-		Programs         func(childComplexity int) int
-		PurposeAndScope  func(childComplexity int) int
-		Risks            func(childComplexity int) int
-		Satisfies        func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Tasks            func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		UpdatedByID      func(childComplexity int) int
-		Version          func(childComplexity int) int
+		Background         func(childComplexity int) int
+		BlockedGroups      func(childComplexity int) int
+		Controls           func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Editors            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		InternalPolicies   func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Narratives         func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		ProcedureType      func(childComplexity int) int
+		Programs           func(childComplexity int) int
+		PurposeAndScope    func(childComplexity int) int
+		Risks              func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Tasks              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Version            func(childComplexity int) int
 	}
 
 	ProcedureBulkCreatePayload struct {
@@ -2329,28 +2563,32 @@ type ComplexityRoot struct {
 	}
 
 	ProcedureHistory struct {
-		Background      func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedByID     func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedByID     func(childComplexity int) int
-		Description     func(childComplexity int) int
-		Details         func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		ProcedureType   func(childComplexity int) int
-		PurposeAndScope func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Satisfies       func(childComplexity int) int
-		Status          func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		UpdatedByID     func(childComplexity int) int
-		Version         func(childComplexity int) int
+		Background         func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		ProcedureType      func(childComplexity int) int
+		PurposeAndScope    func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Version            func(childComplexity int) int
 	}
 
 	ProcedureHistoryConnection struct {
@@ -2381,8 +2619,11 @@ type ComplexityRoot struct {
 		ControlObjectives    func(childComplexity int) int
 		Controls             func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
 		CreatedByID          func(childComplexity int) int
+		CreatedByService     func(childComplexity int) int
+		CreatedByServiceID   func(childComplexity int) int
+		CreatedByUser        func(childComplexity int) int
+		CreatedByUserID      func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
 		DeletedByID          func(childComplexity int) int
 		Description          func(childComplexity int) int
@@ -2406,8 +2647,11 @@ type ComplexityRoot struct {
 		Tags                 func(childComplexity int) int
 		Tasks                func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
 		UpdatedByID          func(childComplexity int) int
+		UpdatedByService     func(childComplexity int) int
+		UpdatedByServiceID   func(childComplexity int) int
+		UpdatedByUser        func(childComplexity int) int
+		UpdatedByUserID      func(childComplexity int) int
 		Users                func(childComplexity int) int
 		Viewers              func(childComplexity int) int
 	}
@@ -2441,6 +2685,8 @@ type ComplexityRoot struct {
 		AuditorWriteComments func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedByID          func(childComplexity int) int
+		CreatedByServiceID   func(childComplexity int) int
+		CreatedByUserID      func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
 		DeletedByID          func(childComplexity int) int
 		Description          func(childComplexity int) int
@@ -2457,6 +2703,8 @@ type ComplexityRoot struct {
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		UpdatedByID          func(childComplexity int) int
+		UpdatedByServiceID   func(childComplexity int) int
+		UpdatedByUserID      func(childComplexity int) int
 	}
 
 	ProgramHistoryConnection struct {
@@ -2471,20 +2719,26 @@ type ComplexityRoot struct {
 	}
 
 	ProgramMembership struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Program     func(childComplexity int) int
-		ProgramID   func(childComplexity int) int
-		Role        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
-		User        func(childComplexity int) int
-		UserID      func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Program            func(childComplexity int) int
+		ProgramID          func(childComplexity int) int
+		Role               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		User               func(childComplexity int) int
+		UserID             func(childComplexity int) int
 	}
 
 	ProgramMembershipBulkCreatePayload struct {
@@ -2511,20 +2765,24 @@ type ComplexityRoot struct {
 	}
 
 	ProgramMembershipHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		ProgramID   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Role        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
-		UserID      func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		ProgramID          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Role               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		UserID             func(childComplexity int) int
 	}
 
 	ProgramMembershipHistoryConnection struct {
@@ -2721,35 +2979,41 @@ type ComplexityRoot struct {
 	}
 
 	Risk struct {
-		ActionPlans   func(childComplexity int) int
-		BlockedGroups func(childComplexity int) int
-		BusinessCosts func(childComplexity int) int
-		Control       func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		CreatedByID   func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedByID   func(childComplexity int) int
-		Description   func(childComplexity int) int
-		Details       func(childComplexity int) int
-		Editors       func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Impact        func(childComplexity int) int
-		Likelihood    func(childComplexity int) int
-		Mitigation    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Procedure     func(childComplexity int) int
-		Programs      func(childComplexity int) int
-		RiskType      func(childComplexity int) int
-		Satisfies     func(childComplexity int) int
-		Status        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		UpdatedByID   func(childComplexity int) int
-		Viewers       func(childComplexity int) int
+		ActionPlans        func(childComplexity int) int
+		BlockedGroups      func(childComplexity int) int
+		BusinessCosts      func(childComplexity int) int
+		Control            func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Editors            func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Impact             func(childComplexity int) int
+		Likelihood         func(childComplexity int) int
+		Mitigation         func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Procedure          func(childComplexity int) int
+		Programs           func(childComplexity int) int
+		RiskType           func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Viewers            func(childComplexity int) int
 	}
 
 	RiskBulkCreatePayload struct {
@@ -2776,29 +3040,33 @@ type ComplexityRoot struct {
 	}
 
 	RiskHistory struct {
-		BusinessCosts func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedByID   func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedByID   func(childComplexity int) int
-		Description   func(childComplexity int) int
-		Details       func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Impact        func(childComplexity int) int
-		Likelihood    func(childComplexity int) int
-		Mitigation    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		RiskType      func(childComplexity int) int
-		Satisfies     func(childComplexity int) int
-		Status        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		UpdatedByID   func(childComplexity int) int
+		BusinessCosts      func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Impact             func(childComplexity int) int
+		Likelihood         func(childComplexity int) int
+		Mitigation         func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		RiskType           func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	RiskHistoryConnection struct {
@@ -2827,31 +3095,37 @@ type ComplexityRoot struct {
 	}
 
 	Standard struct {
-		ActionPlans       func(childComplexity int) int
-		Background        func(childComplexity int) int
-		ControlObjectives func(childComplexity int) int
-		Controls          func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		CreatedByID       func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedByID       func(childComplexity int) int
-		Description       func(childComplexity int) int
-		Details           func(childComplexity int) int
-		Family            func(childComplexity int) int
-		ID                func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Procedures        func(childComplexity int) int
-		Programs          func(childComplexity int) int
-		PurposeAndScope   func(childComplexity int) int
-		Satisfies         func(childComplexity int) int
-		StandardType      func(childComplexity int) int
-		Status            func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		UpdatedByID       func(childComplexity int) int
-		Version           func(childComplexity int) int
+		ActionPlans        func(childComplexity int) int
+		Background         func(childComplexity int) int
+		ControlObjectives  func(childComplexity int) int
+		Controls           func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Family             func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Procedures         func(childComplexity int) int
+		Programs           func(childComplexity int) int
+		PurposeAndScope    func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		StandardType       func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Version            func(childComplexity int) int
 	}
 
 	StandardBulkCreatePayload struct {
@@ -2878,28 +3152,32 @@ type ComplexityRoot struct {
 	}
 
 	StandardHistory struct {
-		Background      func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedByID     func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedByID     func(childComplexity int) int
-		Description     func(childComplexity int) int
-		Details         func(childComplexity int) int
-		Family          func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		PurposeAndScope func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Satisfies       func(childComplexity int) int
-		StandardType    func(childComplexity int) int
-		Status          func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		UpdatedByID     func(childComplexity int) int
-		Version         func(childComplexity int) int
+		Background         func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Family             func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		PurposeAndScope    func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Satisfies          func(childComplexity int) int
+		StandardType       func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Version            func(childComplexity int) int
 	}
 
 	StandardHistoryConnection struct {
@@ -2925,8 +3203,11 @@ type ComplexityRoot struct {
 		Class                          func(childComplexity int) int
 		Controls                       func(childComplexity int) int
 		CreatedAt                      func(childComplexity int) int
-		CreatedBy                      func(childComplexity int) int
 		CreatedByID                    func(childComplexity int) int
+		CreatedByService               func(childComplexity int) int
+		CreatedByServiceID             func(childComplexity int) int
+		CreatedByUser                  func(childComplexity int) int
+		CreatedByUserID                func(childComplexity int) int
 		DeletedAt                      func(childComplexity int) int
 		DeletedByID                    func(childComplexity int) int
 		Description                    func(childComplexity int) int
@@ -2951,8 +3232,11 @@ type ComplexityRoot struct {
 		Tags                           func(childComplexity int) int
 		Tasks                          func(childComplexity int) int
 		UpdatedAt                      func(childComplexity int) int
-		UpdatedBy                      func(childComplexity int) int
 		UpdatedByID                    func(childComplexity int) int
+		UpdatedByService               func(childComplexity int) int
+		UpdatedByServiceID             func(childComplexity int) int
+		UpdatedByUser                  func(childComplexity int) int
+		UpdatedByUserID                func(childComplexity int) int
 		User                           func(childComplexity int) int
 		Version                        func(childComplexity int) int
 	}
@@ -2984,6 +3268,8 @@ type ComplexityRoot struct {
 		Class                          func(childComplexity int) int
 		CreatedAt                      func(childComplexity int) int
 		CreatedByID                    func(childComplexity int) int
+		CreatedByServiceID             func(childComplexity int) int
+		CreatedByUserID                func(childComplexity int) int
 		DeletedAt                      func(childComplexity int) int
 		DeletedByID                    func(childComplexity int) int
 		Description                    func(childComplexity int) int
@@ -3009,6 +3295,8 @@ type ComplexityRoot struct {
 		UpdatedAt                      func(childComplexity int) int
 		UpdatedBy                      func(childComplexity int) int
 		UpdatedByID                    func(childComplexity int) int
+		UpdatedByServiceID             func(childComplexity int) int
+		UpdatedByUserID                func(childComplexity int) int
 		Version                        func(childComplexity int) int
 	}
 
@@ -3032,24 +3320,30 @@ type ComplexityRoot struct {
 	}
 
 	Subscriber struct {
-		Active        func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		CreatedByID   func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedByID   func(childComplexity int) int
-		Email         func(childComplexity int) int
-		Events        func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		PhoneNumber   func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		UpdatedByID   func(childComplexity int) int
-		VerifiedEmail func(childComplexity int) int
-		VerifiedPhone func(childComplexity int) int
+		Active             func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Email              func(childComplexity int) int
+		Events             func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		PhoneNumber        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		VerifiedEmail      func(childComplexity int) int
+		VerifiedPhone      func(childComplexity int) int
 	}
 
 	SubscriberBulkCreatePayload struct {
@@ -3084,21 +3378,27 @@ type ComplexityRoot struct {
 	}
 
 	TFASetting struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		CreatedByID   func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedByID   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		RecoveryCodes func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		TfaSecret     func(childComplexity int) int
-		TotpAllowed   func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		UpdatedByID   func(childComplexity int) int
-		Verified      func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		RecoveryCodes      func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TfaSecret          func(childComplexity int) int
+		TotpAllowed        func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		Verified           func(childComplexity int) int
 	}
 
 	TFASettingConnection struct {
@@ -3125,32 +3425,38 @@ type ComplexityRoot struct {
 	}
 
 	Task struct {
-		Assignee         func(childComplexity int) int
-		Assigner         func(childComplexity int) int
-		Completed        func(childComplexity int) int
-		Control          func(childComplexity int) int
-		ControlObjective func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		CreatedByID      func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedByID      func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Details          func(childComplexity int) int
-		Due              func(childComplexity int) int
-		Group            func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalPolicy   func(childComplexity int) int
-		Organization     func(childComplexity int) int
-		Procedure        func(childComplexity int) int
-		Program          func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Subcontrol       func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Title            func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		UpdatedByID      func(childComplexity int) int
+		Assignee           func(childComplexity int) int
+		Assigner           func(childComplexity int) int
+		Completed          func(childComplexity int) int
+		Control            func(childComplexity int) int
+		ControlObjective   func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Due                func(childComplexity int) int
+		Group              func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		InternalPolicy     func(childComplexity int) int
+		Organization       func(childComplexity int) int
+		Procedure          func(childComplexity int) int
+		Program            func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Subcontrol         func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Title              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	TaskBulkCreatePayload struct {
@@ -3177,24 +3483,28 @@ type ComplexityRoot struct {
 	}
 
 	TaskHistory struct {
-		Completed   func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedByID func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedByID func(childComplexity int) int
-		Description func(childComplexity int) int
-		Details     func(childComplexity int) int
-		Due         func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UpdatedByID func(childComplexity int) int
+		Completed          func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Details            func(childComplexity int) int
+		Due                func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		Title              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	TaskHistoryConnection struct {
@@ -3217,25 +3527,31 @@ type ComplexityRoot struct {
 	}
 
 	Template struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		CreatedByID  func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedByID  func(childComplexity int) int
-		Description  func(childComplexity int) int
-		Documents    func(childComplexity int) int
-		Files        func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Jsonconfig   func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		TemplateType func(childComplexity int) int
-		Uischema     func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		UpdatedByID  func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		Documents          func(childComplexity int) int
+		Files              func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Jsonconfig         func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TemplateType       func(childComplexity int) int
+		Uischema           func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	TemplateBulkCreatePayload struct {
@@ -3262,24 +3578,28 @@ type ComplexityRoot struct {
 	}
 
 	TemplateHistory struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedByID  func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedByID  func(childComplexity int) int
-		Description  func(childComplexity int) int
-		HistoryTime  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Jsonconfig   func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Operation    func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Ref          func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		TemplateType func(childComplexity int) int
-		Uischema     func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		UpdatedByID  func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		Description        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Jsonconfig         func(childComplexity int) int
+		Name               func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TemplateType       func(childComplexity int) int
+		Uischema           func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	TemplateHistoryConnection struct {
@@ -3312,6 +3632,8 @@ type ComplexityRoot struct {
 		AvatarUpdatedAt      func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedByID          func(childComplexity int) int
+		CreatedByServiceID   func(childComplexity int) int
+		CreatedByUserID      func(childComplexity int) int
 		DeletedAt            func(childComplexity int) int
 		DeletedByID          func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
@@ -3338,6 +3660,8 @@ type ComplexityRoot struct {
 		TfaSettings          func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedByID          func(childComplexity int) int
+		UpdatedByServiceID   func(childComplexity int) int
+		UpdatedByUserID      func(childComplexity int) int
 	}
 
 	UserBulkCreatePayload struct {
@@ -3364,30 +3688,34 @@ type ComplexityRoot struct {
 	}
 
 	UserHistory struct {
-		AuthProvider      func(childComplexity int) int
-		AvatarLocalFile   func(childComplexity int) int
-		AvatarLocalFileID func(childComplexity int) int
-		AvatarRemoteURL   func(childComplexity int) int
-		AvatarUpdatedAt   func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedByID       func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedByID       func(childComplexity int) int
-		DisplayName       func(childComplexity int) int
-		Email             func(childComplexity int) int
-		FirstName         func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		LastName          func(childComplexity int) int
-		LastSeen          func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		Role              func(childComplexity int) int
-		Sub               func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		UpdatedByID       func(childComplexity int) int
+		AuthProvider       func(childComplexity int) int
+		AvatarLocalFile    func(childComplexity int) int
+		AvatarLocalFileID  func(childComplexity int) int
+		AvatarRemoteURL    func(childComplexity int) int
+		AvatarUpdatedAt    func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		Email              func(childComplexity int) int
+		FirstName          func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		LastName           func(childComplexity int) int
+		LastSeen           func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Role               func(childComplexity int) int
+		Sub                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
 	}
 
 	UserHistoryConnection struct {
@@ -3406,27 +3734,33 @@ type ComplexityRoot struct {
 	}
 
 	UserSetting struct {
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		CreatedByID       func(childComplexity int) int
-		DefaultOrg        func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedByID       func(childComplexity int) int
-		EmailConfirmed    func(childComplexity int) int
-		Files             func(childComplexity int) int
-		ID                func(childComplexity int) int
-		IsTfaEnabled      func(childComplexity int) int
-		IsWebauthnAllowed func(childComplexity int) int
-		Locked            func(childComplexity int) int
-		SilencedAt        func(childComplexity int) int
-		Status            func(childComplexity int) int
-		SuspendedAt       func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		UpdatedByID       func(childComplexity int) int
-		User              func(childComplexity int) int
-		UserID            func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByService   func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUser      func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DefaultOrg         func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		EmailConfirmed     func(childComplexity int) int
+		Files              func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		IsTfaEnabled       func(childComplexity int) int
+		IsWebauthnAllowed  func(childComplexity int) int
+		Locked             func(childComplexity int) int
+		SilencedAt         func(childComplexity int) int
+		Status             func(childComplexity int) int
+		SuspendedAt        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByService   func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUser      func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		User               func(childComplexity int) int
+		UserID             func(childComplexity int) int
 	}
 
 	UserSettingBulkCreatePayload struct {
@@ -3449,26 +3783,30 @@ type ComplexityRoot struct {
 	}
 
 	UserSettingHistory struct {
-		CreatedAt         func(childComplexity int) int
-		CreatedByID       func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedByID       func(childComplexity int) int
-		EmailConfirmed    func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		IsTfaEnabled      func(childComplexity int) int
-		IsWebauthnAllowed func(childComplexity int) int
-		Locked            func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		SilencedAt        func(childComplexity int) int
-		Status            func(childComplexity int) int
-		SuspendedAt       func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		UpdatedByID       func(childComplexity int) int
-		UserID            func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedByID        func(childComplexity int) int
+		CreatedByServiceID func(childComplexity int) int
+		CreatedByUserID    func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedByID        func(childComplexity int) int
+		EmailConfirmed     func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		IsTfaEnabled       func(childComplexity int) int
+		IsWebauthnAllowed  func(childComplexity int) int
+		Locked             func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		SilencedAt         func(childComplexity int) int
+		Status             func(childComplexity int) int
+		SuspendedAt        func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		UpdatedByID        func(childComplexity int) int
+		UpdatedByServiceID func(childComplexity int) int
+		UpdatedByUserID    func(childComplexity int) int
+		UserID             func(childComplexity int) int
 	}
 
 	UserSettingHistoryConnection struct {
@@ -3521,19 +3859,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.APIToken.CreatedAt(childComplexity), true
 
-	case "APIToken.createdBy":
-		if e.complexity.APIToken.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.APIToken.CreatedBy(childComplexity), true
-
 	case "APIToken.createdByID":
 		if e.complexity.APIToken.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.APIToken.CreatedByID(childComplexity), true
+
+	case "APIToken.createdByService":
+		if e.complexity.APIToken.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.APIToken.CreatedByService(childComplexity), true
+
+	case "APIToken.createdByServiceID":
+		if e.complexity.APIToken.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.APIToken.CreatedByServiceID(childComplexity), true
+
+	case "APIToken.createdByUser":
+		if e.complexity.APIToken.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.APIToken.CreatedByUser(childComplexity), true
+
+	case "APIToken.createdByUserID":
+		if e.complexity.APIToken.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.APIToken.CreatedByUserID(childComplexity), true
 
 	case "APIToken.deletedAt":
 		if e.complexity.APIToken.DeletedAt == nil {
@@ -3626,19 +3985,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.APIToken.UpdatedAt(childComplexity), true
 
-	case "APIToken.updatedBy":
-		if e.complexity.APIToken.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.APIToken.UpdatedBy(childComplexity), true
-
 	case "APIToken.updatedByID":
 		if e.complexity.APIToken.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.APIToken.UpdatedByID(childComplexity), true
+
+	case "APIToken.updatedByService":
+		if e.complexity.APIToken.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.APIToken.UpdatedByService(childComplexity), true
+
+	case "APIToken.updatedByServiceID":
+		if e.complexity.APIToken.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.APIToken.UpdatedByServiceID(childComplexity), true
+
+	case "APIToken.updatedByUser":
+		if e.complexity.APIToken.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.APIToken.UpdatedByUser(childComplexity), true
+
+	case "APIToken.updatedByUserID":
+		if e.complexity.APIToken.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.APIToken.UpdatedByUserID(childComplexity), true
 
 	case "APITokenBulkCreatePayload.apiTokens":
 		if e.complexity.APITokenBulkCreatePayload.APITokens == nil {
@@ -3724,19 +4104,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ActionPlan.CreatedAt(childComplexity), true
 
-	case "ActionPlan.createdBy":
-		if e.complexity.ActionPlan.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.ActionPlan.CreatedBy(childComplexity), true
-
 	case "ActionPlan.createdByID":
 		if e.complexity.ActionPlan.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.ActionPlan.CreatedByID(childComplexity), true
+
+	case "ActionPlan.createdByService":
+		if e.complexity.ActionPlan.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.CreatedByService(childComplexity), true
+
+	case "ActionPlan.createdByServiceID":
+		if e.complexity.ActionPlan.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.CreatedByServiceID(childComplexity), true
+
+	case "ActionPlan.createdByUser":
+		if e.complexity.ActionPlan.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.CreatedByUser(childComplexity), true
+
+	case "ActionPlan.createdByUserID":
+		if e.complexity.ActionPlan.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.CreatedByUserID(childComplexity), true
 
 	case "ActionPlan.deletedAt":
 		if e.complexity.ActionPlan.DeletedAt == nil {
@@ -3843,19 +4244,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ActionPlan.UpdatedAt(childComplexity), true
 
-	case "ActionPlan.updatedBy":
-		if e.complexity.ActionPlan.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.ActionPlan.UpdatedBy(childComplexity), true
-
 	case "ActionPlan.updatedByID":
 		if e.complexity.ActionPlan.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.ActionPlan.UpdatedByID(childComplexity), true
+
+	case "ActionPlan.updatedByService":
+		if e.complexity.ActionPlan.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.UpdatedByService(childComplexity), true
+
+	case "ActionPlan.updatedByServiceID":
+		if e.complexity.ActionPlan.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.UpdatedByServiceID(childComplexity), true
+
+	case "ActionPlan.updatedByUser":
+		if e.complexity.ActionPlan.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.UpdatedByUser(childComplexity), true
+
+	case "ActionPlan.updatedByUserID":
+		if e.complexity.ActionPlan.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.UpdatedByUserID(childComplexity), true
 
 	case "ActionPlan.user":
 		if e.complexity.ActionPlan.User == nil {
@@ -3933,6 +4355,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ActionPlanHistory.CreatedByID(childComplexity), true
+
+	case "ActionPlanHistory.createdByServiceID":
+		if e.complexity.ActionPlanHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.CreatedByServiceID(childComplexity), true
+
+	case "ActionPlanHistory.createdByUserID":
+		if e.complexity.ActionPlanHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.CreatedByUserID(childComplexity), true
 
 	case "ActionPlanHistory.deletedAt":
 		if e.complexity.ActionPlanHistory.DeletedAt == nil {
@@ -4052,6 +4488,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ActionPlanHistory.UpdatedByID(childComplexity), true
+
+	case "ActionPlanHistory.updatedByServiceID":
+		if e.complexity.ActionPlanHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.UpdatedByServiceID(childComplexity), true
+
+	case "ActionPlanHistory.updatedByUserID":
+		if e.complexity.ActionPlanHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.UpdatedByUserID(childComplexity), true
 
 	case "ActionPlanHistoryConnection.edges":
 		if e.complexity.ActionPlanHistoryConnection.Edges == nil {
@@ -4221,19 +4671,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Contact.CreatedAt(childComplexity), true
 
-	case "Contact.createdBy":
-		if e.complexity.Contact.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Contact.CreatedBy(childComplexity), true
-
 	case "Contact.createdByID":
 		if e.complexity.Contact.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Contact.CreatedByID(childComplexity), true
+
+	case "Contact.createdByService":
+		if e.complexity.Contact.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Contact.CreatedByService(childComplexity), true
+
+	case "Contact.createdByServiceID":
+		if e.complexity.Contact.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Contact.CreatedByServiceID(childComplexity), true
+
+	case "Contact.createdByUser":
+		if e.complexity.Contact.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Contact.CreatedByUser(childComplexity), true
+
+	case "Contact.createdByUserID":
+		if e.complexity.Contact.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Contact.CreatedByUserID(childComplexity), true
 
 	case "Contact.deletedAt":
 		if e.complexity.Contact.DeletedAt == nil {
@@ -4333,19 +4804,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Contact.UpdatedAt(childComplexity), true
 
-	case "Contact.updatedBy":
-		if e.complexity.Contact.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Contact.UpdatedBy(childComplexity), true
-
 	case "Contact.updatedByID":
 		if e.complexity.Contact.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Contact.UpdatedByID(childComplexity), true
+
+	case "Contact.updatedByService":
+		if e.complexity.Contact.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Contact.UpdatedByService(childComplexity), true
+
+	case "Contact.updatedByServiceID":
+		if e.complexity.Contact.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Contact.UpdatedByServiceID(childComplexity), true
+
+	case "Contact.updatedByUser":
+		if e.complexity.Contact.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Contact.UpdatedByUser(childComplexity), true
+
+	case "Contact.updatedByUserID":
+		if e.complexity.Contact.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Contact.UpdatedByUserID(childComplexity), true
 
 	case "ContactBulkCreatePayload.contacts":
 		if e.complexity.ContactBulkCreatePayload.Contacts == nil {
@@ -4430,6 +4922,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ContactHistory.CreatedByID(childComplexity), true
+
+	case "ContactHistory.createdByServiceID":
+		if e.complexity.ContactHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ContactHistory.CreatedByServiceID(childComplexity), true
+
+	case "ContactHistory.createdByUserID":
+		if e.complexity.ContactHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ContactHistory.CreatedByUserID(childComplexity), true
 
 	case "ContactHistory.deletedAt":
 		if e.complexity.ContactHistory.DeletedAt == nil {
@@ -4543,6 +5049,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ContactHistory.UpdatedByID(childComplexity), true
 
+	case "ContactHistory.updatedByServiceID":
+		if e.complexity.ContactHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ContactHistory.UpdatedByServiceID(childComplexity), true
+
+	case "ContactHistory.updatedByUserID":
+		if e.complexity.ContactHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ContactHistory.UpdatedByUserID(childComplexity), true
+
 	case "ContactHistoryConnection.edges":
 		if e.complexity.ContactHistoryConnection.Edges == nil {
 			break
@@ -4641,19 +5161,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.CreatedAt(childComplexity), true
 
-	case "Control.createdBy":
-		if e.complexity.Control.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Control.CreatedBy(childComplexity), true
-
 	case "Control.createdByID":
 		if e.complexity.Control.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Control.CreatedByID(childComplexity), true
+
+	case "Control.createdByService":
+		if e.complexity.Control.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Control.CreatedByService(childComplexity), true
+
+	case "Control.createdByServiceID":
+		if e.complexity.Control.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Control.CreatedByServiceID(childComplexity), true
+
+	case "Control.createdByUser":
+		if e.complexity.Control.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Control.CreatedByUser(childComplexity), true
+
+	case "Control.createdByUserID":
+		if e.complexity.Control.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Control.CreatedByUserID(childComplexity), true
 
 	case "Control.deletedAt":
 		if e.complexity.Control.DeletedAt == nil {
@@ -4816,19 +5357,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Control.UpdatedAt(childComplexity), true
 
-	case "Control.updatedBy":
-		if e.complexity.Control.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Control.UpdatedBy(childComplexity), true
-
 	case "Control.updatedByID":
 		if e.complexity.Control.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Control.UpdatedByID(childComplexity), true
+
+	case "Control.updatedByService":
+		if e.complexity.Control.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Control.UpdatedByService(childComplexity), true
+
+	case "Control.updatedByServiceID":
+		if e.complexity.Control.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Control.UpdatedByServiceID(childComplexity), true
+
+	case "Control.updatedByUser":
+		if e.complexity.Control.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Control.UpdatedByUser(childComplexity), true
+
+	case "Control.updatedByUserID":
+		if e.complexity.Control.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Control.UpdatedByUserID(childComplexity), true
 
 	case "Control.version":
 		if e.complexity.Control.Version == nil {
@@ -4934,6 +5496,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlHistory.CreatedByID(childComplexity), true
+
+	case "ControlHistory.createdByServiceID":
+		if e.complexity.ControlHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.CreatedByServiceID(childComplexity), true
+
+	case "ControlHistory.createdByUserID":
+		if e.complexity.ControlHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.CreatedByUserID(childComplexity), true
 
 	case "ControlHistory.deletedAt":
 		if e.complexity.ControlHistory.DeletedAt == nil {
@@ -5068,6 +5644,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlHistory.UpdatedByID(childComplexity), true
 
+	case "ControlHistory.updatedByServiceID":
+		if e.complexity.ControlHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.UpdatedByServiceID(childComplexity), true
+
+	case "ControlHistory.updatedByUserID":
+		if e.complexity.ControlHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.UpdatedByUserID(childComplexity), true
+
 	case "ControlHistory.version":
 		if e.complexity.ControlHistory.Version == nil {
 			break
@@ -5152,19 +5742,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjective.CreatedAt(childComplexity), true
 
-	case "ControlObjective.createdBy":
-		if e.complexity.ControlObjective.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.CreatedBy(childComplexity), true
-
 	case "ControlObjective.createdByID":
 		if e.complexity.ControlObjective.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.ControlObjective.CreatedByID(childComplexity), true
+
+	case "ControlObjective.createdByService":
+		if e.complexity.ControlObjective.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.CreatedByService(childComplexity), true
+
+	case "ControlObjective.createdByServiceID":
+		if e.complexity.ControlObjective.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.CreatedByServiceID(childComplexity), true
+
+	case "ControlObjective.createdByUser":
+		if e.complexity.ControlObjective.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.CreatedByUser(childComplexity), true
+
+	case "ControlObjective.createdByUserID":
+		if e.complexity.ControlObjective.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.CreatedByUserID(childComplexity), true
 
 	case "ControlObjective.deletedAt":
 		if e.complexity.ControlObjective.DeletedAt == nil {
@@ -5327,19 +5938,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjective.UpdatedAt(childComplexity), true
 
-	case "ControlObjective.updatedBy":
-		if e.complexity.ControlObjective.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.UpdatedBy(childComplexity), true
-
 	case "ControlObjective.updatedByID":
 		if e.complexity.ControlObjective.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.ControlObjective.UpdatedByID(childComplexity), true
+
+	case "ControlObjective.updatedByService":
+		if e.complexity.ControlObjective.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.UpdatedByService(childComplexity), true
+
+	case "ControlObjective.updatedByServiceID":
+		if e.complexity.ControlObjective.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.UpdatedByServiceID(childComplexity), true
+
+	case "ControlObjective.updatedByUser":
+		if e.complexity.ControlObjective.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.UpdatedByUser(childComplexity), true
+
+	case "ControlObjective.updatedByUserID":
+		if e.complexity.ControlObjective.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.UpdatedByUserID(childComplexity), true
 
 	case "ControlObjective.version":
 		if e.complexity.ControlObjective.Version == nil {
@@ -5445,6 +6077,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ControlObjectiveHistory.CreatedByID(childComplexity), true
+
+	case "ControlObjectiveHistory.createdByServiceID":
+		if e.complexity.ControlObjectiveHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.CreatedByServiceID(childComplexity), true
+
+	case "ControlObjectiveHistory.createdByUserID":
+		if e.complexity.ControlObjectiveHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.CreatedByUserID(childComplexity), true
 
 	case "ControlObjectiveHistory.deletedAt":
 		if e.complexity.ControlObjectiveHistory.DeletedAt == nil {
@@ -5572,6 +6218,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ControlObjectiveHistory.UpdatedByID(childComplexity), true
 
+	case "ControlObjectiveHistory.updatedByServiceID":
+		if e.complexity.ControlObjectiveHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.UpdatedByServiceID(childComplexity), true
+
+	case "ControlObjectiveHistory.updatedByUserID":
+		if e.complexity.ControlObjectiveHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.UpdatedByUserID(childComplexity), true
+
 	case "ControlObjectiveHistory.version":
 		if e.complexity.ControlObjectiveHistory.Version == nil {
 			break
@@ -5649,19 +6309,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.DocumentData.CreatedAt(childComplexity), true
 
-	case "DocumentData.createdBy":
-		if e.complexity.DocumentData.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.DocumentData.CreatedBy(childComplexity), true
-
 	case "DocumentData.createdByID":
 		if e.complexity.DocumentData.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.DocumentData.CreatedByID(childComplexity), true
+
+	case "DocumentData.createdByService":
+		if e.complexity.DocumentData.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.CreatedByService(childComplexity), true
+
+	case "DocumentData.createdByServiceID":
+		if e.complexity.DocumentData.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.CreatedByServiceID(childComplexity), true
+
+	case "DocumentData.createdByUser":
+		if e.complexity.DocumentData.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.CreatedByUser(childComplexity), true
+
+	case "DocumentData.createdByUserID":
+		if e.complexity.DocumentData.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.CreatedByUserID(childComplexity), true
 
 	case "DocumentData.data":
 		if e.complexity.DocumentData.Data == nil {
@@ -5747,19 +6428,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.DocumentData.UpdatedAt(childComplexity), true
 
-	case "DocumentData.updatedBy":
-		if e.complexity.DocumentData.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.DocumentData.UpdatedBy(childComplexity), true
-
 	case "DocumentData.updatedByID":
 		if e.complexity.DocumentData.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.DocumentData.UpdatedByID(childComplexity), true
+
+	case "DocumentData.updatedByService":
+		if e.complexity.DocumentData.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.UpdatedByService(childComplexity), true
+
+	case "DocumentData.updatedByServiceID":
+		if e.complexity.DocumentData.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.UpdatedByServiceID(childComplexity), true
+
+	case "DocumentData.updatedByUser":
+		if e.complexity.DocumentData.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.UpdatedByUser(childComplexity), true
+
+	case "DocumentData.updatedByUserID":
+		if e.complexity.DocumentData.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.DocumentData.UpdatedByUserID(childComplexity), true
 
 	case "DocumentDataBulkCreatePayload.documentData":
 		if e.complexity.DocumentDataBulkCreatePayload.DocumentData == nil {
@@ -5830,6 +6532,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.DocumentDataHistory.CreatedByID(childComplexity), true
+
+	case "DocumentDataHistory.createdByServiceID":
+		if e.complexity.DocumentDataHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataHistory.CreatedByServiceID(childComplexity), true
+
+	case "DocumentDataHistory.createdByUserID":
+		if e.complexity.DocumentDataHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataHistory.CreatedByUserID(childComplexity), true
 
 	case "DocumentDataHistory.data":
 		if e.complexity.DocumentDataHistory.Data == nil {
@@ -5922,6 +6638,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.DocumentDataHistory.UpdatedByID(childComplexity), true
 
+	case "DocumentDataHistory.updatedByServiceID":
+		if e.complexity.DocumentDataHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataHistory.UpdatedByServiceID(childComplexity), true
+
+	case "DocumentDataHistory.updatedByUserID":
+		if e.complexity.DocumentDataHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.DocumentDataHistory.UpdatedByUserID(childComplexity), true
+
 	case "DocumentDataHistoryConnection.edges":
 		if e.complexity.DocumentDataHistoryConnection.Edges == nil {
 			break
@@ -5985,19 +6715,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Entity.CreatedAt(childComplexity), true
 
-	case "Entity.createdBy":
-		if e.complexity.Entity.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Entity.CreatedBy(childComplexity), true
-
 	case "Entity.createdByID":
 		if e.complexity.Entity.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Entity.CreatedByID(childComplexity), true
+
+	case "Entity.createdByService":
+		if e.complexity.Entity.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Entity.CreatedByService(childComplexity), true
+
+	case "Entity.createdByServiceID":
+		if e.complexity.Entity.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Entity.CreatedByServiceID(childComplexity), true
+
+	case "Entity.createdByUser":
+		if e.complexity.Entity.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Entity.CreatedByUser(childComplexity), true
+
+	case "Entity.createdByUserID":
+		if e.complexity.Entity.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Entity.CreatedByUserID(childComplexity), true
 
 	case "Entity.deletedAt":
 		if e.complexity.Entity.DeletedAt == nil {
@@ -6118,19 +6869,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Entity.UpdatedAt(childComplexity), true
 
-	case "Entity.updatedBy":
-		if e.complexity.Entity.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Entity.UpdatedBy(childComplexity), true
-
 	case "Entity.updatedByID":
 		if e.complexity.Entity.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Entity.UpdatedByID(childComplexity), true
+
+	case "Entity.updatedByService":
+		if e.complexity.Entity.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Entity.UpdatedByService(childComplexity), true
+
+	case "Entity.updatedByServiceID":
+		if e.complexity.Entity.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Entity.UpdatedByServiceID(childComplexity), true
+
+	case "Entity.updatedByUser":
+		if e.complexity.Entity.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Entity.UpdatedByUser(childComplexity), true
+
+	case "Entity.updatedByUserID":
+		if e.complexity.Entity.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Entity.UpdatedByUserID(childComplexity), true
 
 	case "EntityBulkCreatePayload.entities":
 		if e.complexity.EntityBulkCreatePayload.Entities == nil {
@@ -6201,6 +6973,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.EntityHistory.CreatedByID(childComplexity), true
+
+	case "EntityHistory.createdByServiceID":
+		if e.complexity.EntityHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.CreatedByServiceID(childComplexity), true
+
+	case "EntityHistory.createdByUserID":
+		if e.complexity.EntityHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.CreatedByUserID(childComplexity), true
 
 	case "EntityHistory.deletedAt":
 		if e.complexity.EntityHistory.DeletedAt == nil {
@@ -6321,6 +7107,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EntityHistory.UpdatedByID(childComplexity), true
 
+	case "EntityHistory.updatedByServiceID":
+		if e.complexity.EntityHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.UpdatedByServiceID(childComplexity), true
+
+	case "EntityHistory.updatedByUserID":
+		if e.complexity.EntityHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.UpdatedByUserID(childComplexity), true
+
 	case "EntityHistoryConnection.edges":
 		if e.complexity.EntityHistoryConnection.Edges == nil {
 			break
@@ -6370,19 +7170,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EntityType.CreatedAt(childComplexity), true
 
-	case "EntityType.createdBy":
-		if e.complexity.EntityType.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.EntityType.CreatedBy(childComplexity), true
-
 	case "EntityType.createdByID":
 		if e.complexity.EntityType.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.EntityType.CreatedByID(childComplexity), true
+
+	case "EntityType.createdByService":
+		if e.complexity.EntityType.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.EntityType.CreatedByService(childComplexity), true
+
+	case "EntityType.createdByServiceID":
+		if e.complexity.EntityType.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.EntityType.CreatedByServiceID(childComplexity), true
+
+	case "EntityType.createdByUser":
+		if e.complexity.EntityType.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.EntityType.CreatedByUser(childComplexity), true
+
+	case "EntityType.createdByUserID":
+		if e.complexity.EntityType.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EntityType.CreatedByUserID(childComplexity), true
 
 	case "EntityType.deletedAt":
 		if e.complexity.EntityType.DeletedAt == nil {
@@ -6447,19 +7268,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EntityType.UpdatedAt(childComplexity), true
 
-	case "EntityType.updatedBy":
-		if e.complexity.EntityType.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.EntityType.UpdatedBy(childComplexity), true
-
 	case "EntityType.updatedByID":
 		if e.complexity.EntityType.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.EntityType.UpdatedByID(childComplexity), true
+
+	case "EntityType.updatedByService":
+		if e.complexity.EntityType.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.EntityType.UpdatedByService(childComplexity), true
+
+	case "EntityType.updatedByServiceID":
+		if e.complexity.EntityType.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.EntityType.UpdatedByServiceID(childComplexity), true
+
+	case "EntityType.updatedByUser":
+		if e.complexity.EntityType.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.EntityType.UpdatedByUser(childComplexity), true
+
+	case "EntityType.updatedByUserID":
+		if e.complexity.EntityType.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EntityType.UpdatedByUserID(childComplexity), true
 
 	case "EntityTypeBulkCreatePayload.entityTypes":
 		if e.complexity.EntityTypeBulkCreatePayload.EntityTypes == nil {
@@ -6530,6 +7372,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.EntityTypeHistory.CreatedByID(childComplexity), true
+
+	case "EntityTypeHistory.createdByServiceID":
+		if e.complexity.EntityTypeHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeHistory.CreatedByServiceID(childComplexity), true
+
+	case "EntityTypeHistory.createdByUserID":
+		if e.complexity.EntityTypeHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeHistory.CreatedByUserID(childComplexity), true
 
 	case "EntityTypeHistory.deletedAt":
 		if e.complexity.EntityTypeHistory.DeletedAt == nil {
@@ -6615,6 +7471,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EntityTypeHistory.UpdatedByID(childComplexity), true
 
+	case "EntityTypeHistory.updatedByServiceID":
+		if e.complexity.EntityTypeHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeHistory.UpdatedByServiceID(childComplexity), true
+
+	case "EntityTypeHistory.updatedByUserID":
+		if e.complexity.EntityTypeHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeHistory.UpdatedByUserID(childComplexity), true
+
 	case "EntityTypeHistoryConnection.edges":
 		if e.complexity.EntityTypeHistoryConnection.Edges == nil {
 			break
@@ -6685,19 +7555,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Event.CreatedAt(childComplexity), true
 
-	case "Event.createdBy":
-		if e.complexity.Event.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Event.CreatedBy(childComplexity), true
-
 	case "Event.createdByID":
 		if e.complexity.Event.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Event.CreatedByID(childComplexity), true
+
+	case "Event.createdByService":
+		if e.complexity.Event.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Event.CreatedByService(childComplexity), true
+
+	case "Event.createdByServiceID":
+		if e.complexity.Event.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Event.CreatedByServiceID(childComplexity), true
+
+	case "Event.createdByUser":
+		if e.complexity.Event.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Event.CreatedByUser(childComplexity), true
+
+	case "Event.createdByUserID":
+		if e.complexity.Event.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Event.CreatedByUserID(childComplexity), true
 
 	case "Event.eventID":
 		if e.complexity.Event.EventID == nil {
@@ -6811,19 +7702,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Event.UpdatedAt(childComplexity), true
 
-	case "Event.updatedBy":
-		if e.complexity.Event.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Event.UpdatedBy(childComplexity), true
-
 	case "Event.updatedByID":
 		if e.complexity.Event.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Event.UpdatedByID(childComplexity), true
+
+	case "Event.updatedByService":
+		if e.complexity.Event.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Event.UpdatedByService(childComplexity), true
+
+	case "Event.updatedByServiceID":
+		if e.complexity.Event.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Event.UpdatedByServiceID(childComplexity), true
+
+	case "Event.updatedByUser":
+		if e.complexity.Event.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Event.UpdatedByUser(childComplexity), true
+
+	case "Event.updatedByUserID":
+		if e.complexity.Event.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Event.UpdatedByUserID(childComplexity), true
 
 	case "Event.user":
 		if e.complexity.Event.User == nil {
@@ -6909,6 +7821,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EventHistory.CreatedByID(childComplexity), true
 
+	case "EventHistory.createdByServiceID":
+		if e.complexity.EventHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.CreatedByServiceID(childComplexity), true
+
+	case "EventHistory.createdByUserID":
+		if e.complexity.EventHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.CreatedByUserID(childComplexity), true
+
 	case "EventHistory.eventID":
 		if e.complexity.EventHistory.EventID == nil {
 			break
@@ -6986,6 +7912,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.EventHistory.UpdatedByID(childComplexity), true
 
+	case "EventHistory.updatedByServiceID":
+		if e.complexity.EventHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.UpdatedByServiceID(childComplexity), true
+
+	case "EventHistory.updatedByUserID":
+		if e.complexity.EventHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EventHistory.UpdatedByUserID(childComplexity), true
+
 	case "EventHistoryConnection.edges":
 		if e.complexity.EventHistoryConnection.Edges == nil {
 			break
@@ -7056,19 +7996,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.File.CreatedAt(childComplexity), true
 
-	case "File.createdBy":
-		if e.complexity.File.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.File.CreatedBy(childComplexity), true
-
 	case "File.createdByID":
 		if e.complexity.File.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.File.CreatedByID(childComplexity), true
+
+	case "File.createdByService":
+		if e.complexity.File.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.File.CreatedByService(childComplexity), true
+
+	case "File.createdByServiceID":
+		if e.complexity.File.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.File.CreatedByServiceID(childComplexity), true
+
+	case "File.createdByUser":
+		if e.complexity.File.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.File.CreatedByUser(childComplexity), true
+
+	case "File.createdByUserID":
+		if e.complexity.File.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.File.CreatedByUserID(childComplexity), true
 
 	case "File.deletedAt":
 		if e.complexity.File.DeletedAt == nil {
@@ -7245,19 +8206,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.File.UpdatedAt(childComplexity), true
 
-	case "File.updatedBy":
-		if e.complexity.File.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.File.UpdatedBy(childComplexity), true
-
 	case "File.updatedByID":
 		if e.complexity.File.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.File.UpdatedByID(childComplexity), true
+
+	case "File.updatedByService":
+		if e.complexity.File.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.File.UpdatedByService(childComplexity), true
+
+	case "File.updatedByServiceID":
+		if e.complexity.File.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.File.UpdatedByServiceID(childComplexity), true
+
+	case "File.updatedByUser":
+		if e.complexity.File.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.File.UpdatedByUser(childComplexity), true
+
+	case "File.updatedByUserID":
+		if e.complexity.File.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.File.UpdatedByUserID(childComplexity), true
 
 	case "File.user":
 		if e.complexity.File.User == nil {
@@ -7335,6 +8317,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FileHistory.CreatedByID(childComplexity), true
+
+	case "FileHistory.createdByServiceID":
+		if e.complexity.FileHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.CreatedByServiceID(childComplexity), true
+
+	case "FileHistory.createdByUserID":
+		if e.complexity.FileHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.CreatedByUserID(childComplexity), true
 
 	case "FileHistory.deletedAt":
 		if e.complexity.FileHistory.DeletedAt == nil {
@@ -7490,6 +8486,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.FileHistory.UpdatedByID(childComplexity), true
 
+	case "FileHistory.updatedByServiceID":
+		if e.complexity.FileHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.UpdatedByServiceID(childComplexity), true
+
+	case "FileHistory.updatedByUserID":
+		if e.complexity.FileHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.UpdatedByUserID(childComplexity), true
+
 	case "FileHistoryConnection.edges":
 		if e.complexity.FileHistoryConnection.Edges == nil {
 			break
@@ -7595,19 +8605,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.CreatedAt(childComplexity), true
 
-	case "Group.createdBy":
-		if e.complexity.Group.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Group.CreatedBy(childComplexity), true
-
 	case "Group.createdByID":
 		if e.complexity.Group.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Group.CreatedByID(childComplexity), true
+
+	case "Group.createdByService":
+		if e.complexity.Group.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Group.CreatedByService(childComplexity), true
+
+	case "Group.createdByServiceID":
+		if e.complexity.Group.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Group.CreatedByServiceID(childComplexity), true
+
+	case "Group.createdByUser":
+		if e.complexity.Group.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Group.CreatedByUser(childComplexity), true
+
+	case "Group.createdByUserID":
+		if e.complexity.Group.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Group.CreatedByUserID(childComplexity), true
 
 	case "Group.deletedAt":
 		if e.complexity.Group.DeletedAt == nil {
@@ -7875,19 +8906,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.UpdatedAt(childComplexity), true
 
-	case "Group.updatedBy":
-		if e.complexity.Group.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Group.UpdatedBy(childComplexity), true
-
 	case "Group.updatedByID":
 		if e.complexity.Group.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Group.UpdatedByID(childComplexity), true
+
+	case "Group.updatedByService":
+		if e.complexity.Group.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Group.UpdatedByService(childComplexity), true
+
+	case "Group.updatedByServiceID":
+		if e.complexity.Group.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Group.UpdatedByServiceID(childComplexity), true
+
+	case "Group.updatedByUser":
+		if e.complexity.Group.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Group.UpdatedByUser(childComplexity), true
+
+	case "Group.updatedByUserID":
+		if e.complexity.Group.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Group.UpdatedByUserID(childComplexity), true
 
 	case "Group.users":
 		if e.complexity.Group.Users == nil {
@@ -7965,6 +9017,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupHistory.CreatedByID(childComplexity), true
+
+	case "GroupHistory.createdByServiceID":
+		if e.complexity.GroupHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.CreatedByServiceID(childComplexity), true
+
+	case "GroupHistory.createdByUserID":
+		if e.complexity.GroupHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.CreatedByUserID(childComplexity), true
 
 	case "GroupHistory.deletedAt":
 		if e.complexity.GroupHistory.DeletedAt == nil {
@@ -8078,6 +9144,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupHistory.UpdatedByID(childComplexity), true
 
+	case "GroupHistory.updatedByServiceID":
+		if e.complexity.GroupHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.UpdatedByServiceID(childComplexity), true
+
+	case "GroupHistory.updatedByUserID":
+		if e.complexity.GroupHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupHistory.UpdatedByUserID(childComplexity), true
+
 	case "GroupHistoryConnection.edges":
 		if e.complexity.GroupHistoryConnection.Edges == nil {
 			break
@@ -8120,19 +9200,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupMembership.CreatedAt(childComplexity), true
 
-	case "GroupMembership.createdBy":
-		if e.complexity.GroupMembership.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupMembership.CreatedBy(childComplexity), true
-
 	case "GroupMembership.createdByID":
 		if e.complexity.GroupMembership.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.GroupMembership.CreatedByID(childComplexity), true
+
+	case "GroupMembership.createdByService":
+		if e.complexity.GroupMembership.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.GroupMembership.CreatedByService(childComplexity), true
+
+	case "GroupMembership.createdByServiceID":
+		if e.complexity.GroupMembership.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupMembership.CreatedByServiceID(childComplexity), true
+
+	case "GroupMembership.createdByUser":
+		if e.complexity.GroupMembership.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.GroupMembership.CreatedByUser(childComplexity), true
+
+	case "GroupMembership.createdByUserID":
+		if e.complexity.GroupMembership.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupMembership.CreatedByUserID(childComplexity), true
 
 	case "GroupMembership.deletedAt":
 		if e.complexity.GroupMembership.DeletedAt == nil {
@@ -8190,19 +9291,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupMembership.UpdatedAt(childComplexity), true
 
-	case "GroupMembership.updatedBy":
-		if e.complexity.GroupMembership.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupMembership.UpdatedBy(childComplexity), true
-
 	case "GroupMembership.updatedByID":
 		if e.complexity.GroupMembership.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.GroupMembership.UpdatedByID(childComplexity), true
+
+	case "GroupMembership.updatedByService":
+		if e.complexity.GroupMembership.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.GroupMembership.UpdatedByService(childComplexity), true
+
+	case "GroupMembership.updatedByServiceID":
+		if e.complexity.GroupMembership.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupMembership.UpdatedByServiceID(childComplexity), true
+
+	case "GroupMembership.updatedByUser":
+		if e.complexity.GroupMembership.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.GroupMembership.UpdatedByUser(childComplexity), true
+
+	case "GroupMembership.updatedByUserID":
+		if e.complexity.GroupMembership.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupMembership.UpdatedByUserID(childComplexity), true
 
 	case "GroupMembership.user":
 		if e.complexity.GroupMembership.User == nil {
@@ -8288,6 +9410,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupMembershipHistory.CreatedByID(childComplexity), true
 
+	case "GroupMembershipHistory.createdByServiceID":
+		if e.complexity.GroupMembershipHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupMembershipHistory.CreatedByServiceID(childComplexity), true
+
+	case "GroupMembershipHistory.createdByUserID":
+		if e.complexity.GroupMembershipHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupMembershipHistory.CreatedByUserID(childComplexity), true
+
 	case "GroupMembershipHistory.deletedAt":
 		if e.complexity.GroupMembershipHistory.DeletedAt == nil {
 			break
@@ -8365,6 +9501,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupMembershipHistory.UpdatedByID(childComplexity), true
 
+	case "GroupMembershipHistory.updatedByServiceID":
+		if e.complexity.GroupMembershipHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupMembershipHistory.UpdatedByServiceID(childComplexity), true
+
+	case "GroupMembershipHistory.updatedByUserID":
+		if e.complexity.GroupMembershipHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupMembershipHistory.UpdatedByUserID(childComplexity), true
+
 	case "GroupMembershipHistory.userID":
 		if e.complexity.GroupMembershipHistory.UserID == nil {
 			break
@@ -8428,19 +9578,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupSetting.CreatedAt(childComplexity), true
 
-	case "GroupSetting.createdBy":
-		if e.complexity.GroupSetting.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupSetting.CreatedBy(childComplexity), true
-
 	case "GroupSetting.createdByID":
 		if e.complexity.GroupSetting.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.GroupSetting.CreatedByID(childComplexity), true
+
+	case "GroupSetting.createdByService":
+		if e.complexity.GroupSetting.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.GroupSetting.CreatedByService(childComplexity), true
+
+	case "GroupSetting.createdByServiceID":
+		if e.complexity.GroupSetting.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupSetting.CreatedByServiceID(childComplexity), true
+
+	case "GroupSetting.createdByUser":
+		if e.complexity.GroupSetting.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.GroupSetting.CreatedByUser(childComplexity), true
+
+	case "GroupSetting.createdByUserID":
+		if e.complexity.GroupSetting.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupSetting.CreatedByUserID(childComplexity), true
 
 	case "GroupSetting.deletedAt":
 		if e.complexity.GroupSetting.DeletedAt == nil {
@@ -8512,19 +9683,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupSetting.UpdatedAt(childComplexity), true
 
-	case "GroupSetting.updatedBy":
-		if e.complexity.GroupSetting.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupSetting.UpdatedBy(childComplexity), true
-
 	case "GroupSetting.updatedByID":
 		if e.complexity.GroupSetting.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.GroupSetting.UpdatedByID(childComplexity), true
+
+	case "GroupSetting.updatedByService":
+		if e.complexity.GroupSetting.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.GroupSetting.UpdatedByService(childComplexity), true
+
+	case "GroupSetting.updatedByServiceID":
+		if e.complexity.GroupSetting.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupSetting.UpdatedByServiceID(childComplexity), true
+
+	case "GroupSetting.updatedByUser":
+		if e.complexity.GroupSetting.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.GroupSetting.UpdatedByUser(childComplexity), true
+
+	case "GroupSetting.updatedByUserID":
+		if e.complexity.GroupSetting.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupSetting.UpdatedByUserID(childComplexity), true
 
 	case "GroupSetting.visibility":
 		if e.complexity.GroupSetting.Visibility == nil {
@@ -8602,6 +9794,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupSettingHistory.CreatedByID(childComplexity), true
+
+	case "GroupSettingHistory.createdByServiceID":
+		if e.complexity.GroupSettingHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupSettingHistory.CreatedByServiceID(childComplexity), true
+
+	case "GroupSettingHistory.createdByUserID":
+		if e.complexity.GroupSettingHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupSettingHistory.CreatedByUserID(childComplexity), true
 
 	case "GroupSettingHistory.deletedAt":
 		if e.complexity.GroupSettingHistory.DeletedAt == nil {
@@ -8701,6 +9907,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupSettingHistory.UpdatedByID(childComplexity), true
 
+	case "GroupSettingHistory.updatedByServiceID":
+		if e.complexity.GroupSettingHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.GroupSettingHistory.UpdatedByServiceID(childComplexity), true
+
+	case "GroupSettingHistory.updatedByUserID":
+		if e.complexity.GroupSettingHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.GroupSettingHistory.UpdatedByUserID(childComplexity), true
+
 	case "GroupSettingHistory.visibility":
 		if e.complexity.GroupSettingHistory.Visibility == nil {
 			break
@@ -8771,19 +9991,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Hush.CreatedAt(childComplexity), true
 
-	case "Hush.createdBy":
-		if e.complexity.Hush.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Hush.CreatedBy(childComplexity), true
-
 	case "Hush.createdByID":
 		if e.complexity.Hush.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Hush.CreatedByID(childComplexity), true
+
+	case "Hush.createdByService":
+		if e.complexity.Hush.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Hush.CreatedByService(childComplexity), true
+
+	case "Hush.createdByServiceID":
+		if e.complexity.Hush.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Hush.CreatedByServiceID(childComplexity), true
+
+	case "Hush.createdByUser":
+		if e.complexity.Hush.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Hush.CreatedByUser(childComplexity), true
+
+	case "Hush.createdByUserID":
+		if e.complexity.Hush.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Hush.CreatedByUserID(childComplexity), true
 
 	case "Hush.deletedAt":
 		if e.complexity.Hush.DeletedAt == nil {
@@ -8862,19 +10103,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Hush.UpdatedAt(childComplexity), true
 
-	case "Hush.updatedBy":
-		if e.complexity.Hush.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Hush.UpdatedBy(childComplexity), true
-
 	case "Hush.updatedByID":
 		if e.complexity.Hush.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Hush.UpdatedByID(childComplexity), true
+
+	case "Hush.updatedByService":
+		if e.complexity.Hush.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Hush.UpdatedByService(childComplexity), true
+
+	case "Hush.updatedByServiceID":
+		if e.complexity.Hush.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Hush.UpdatedByServiceID(childComplexity), true
+
+	case "Hush.updatedByUser":
+		if e.complexity.Hush.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Hush.UpdatedByUser(childComplexity), true
+
+	case "Hush.updatedByUserID":
+		if e.complexity.Hush.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Hush.UpdatedByUserID(childComplexity), true
 
 	case "HushBulkCreatePayload.hushes":
 		if e.complexity.HushBulkCreatePayload.Hushes == nil {
@@ -8945,6 +10207,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.HushHistory.CreatedByID(childComplexity), true
+
+	case "HushHistory.createdByServiceID":
+		if e.complexity.HushHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.CreatedByServiceID(childComplexity), true
+
+	case "HushHistory.createdByUserID":
+		if e.complexity.HushHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.CreatedByUserID(childComplexity), true
 
 	case "HushHistory.deletedAt":
 		if e.complexity.HushHistory.DeletedAt == nil {
@@ -9037,6 +10313,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.HushHistory.UpdatedByID(childComplexity), true
 
+	case "HushHistory.updatedByServiceID":
+		if e.complexity.HushHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.UpdatedByServiceID(childComplexity), true
+
+	case "HushHistory.updatedByUserID":
+		if e.complexity.HushHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.UpdatedByUserID(childComplexity), true
+
 	case "HushHistoryConnection.edges":
 		if e.complexity.HushHistoryConnection.Edges == nil {
 			break
@@ -9086,19 +10376,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Integration.CreatedAt(childComplexity), true
 
-	case "Integration.createdBy":
-		if e.complexity.Integration.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Integration.CreatedBy(childComplexity), true
-
 	case "Integration.createdByID":
 		if e.complexity.Integration.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Integration.CreatedByID(childComplexity), true
+
+	case "Integration.createdByService":
+		if e.complexity.Integration.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Integration.CreatedByService(childComplexity), true
+
+	case "Integration.createdByServiceID":
+		if e.complexity.Integration.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Integration.CreatedByServiceID(childComplexity), true
+
+	case "Integration.createdByUser":
+		if e.complexity.Integration.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Integration.CreatedByUser(childComplexity), true
+
+	case "Integration.createdByUserID":
+		if e.complexity.Integration.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Integration.CreatedByUserID(childComplexity), true
 
 	case "Integration.deletedAt":
 		if e.complexity.Integration.DeletedAt == nil {
@@ -9184,19 +10495,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Integration.UpdatedAt(childComplexity), true
 
-	case "Integration.updatedBy":
-		if e.complexity.Integration.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Integration.UpdatedBy(childComplexity), true
-
 	case "Integration.updatedByID":
 		if e.complexity.Integration.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Integration.UpdatedByID(childComplexity), true
+
+	case "Integration.updatedByService":
+		if e.complexity.Integration.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Integration.UpdatedByService(childComplexity), true
+
+	case "Integration.updatedByServiceID":
+		if e.complexity.Integration.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Integration.UpdatedByServiceID(childComplexity), true
+
+	case "Integration.updatedByUser":
+		if e.complexity.Integration.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Integration.UpdatedByUser(childComplexity), true
+
+	case "Integration.updatedByUserID":
+		if e.complexity.Integration.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Integration.UpdatedByUserID(childComplexity), true
 
 	case "IntegrationBulkCreatePayload.integrations":
 		if e.complexity.IntegrationBulkCreatePayload.Integrations == nil {
@@ -9267,6 +10599,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.IntegrationHistory.CreatedByID(childComplexity), true
+
+	case "IntegrationHistory.createdByServiceID":
+		if e.complexity.IntegrationHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.CreatedByServiceID(childComplexity), true
+
+	case "IntegrationHistory.createdByUserID":
+		if e.complexity.IntegrationHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.CreatedByUserID(childComplexity), true
 
 	case "IntegrationHistory.deletedAt":
 		if e.complexity.IntegrationHistory.DeletedAt == nil {
@@ -9366,6 +10712,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.IntegrationHistory.UpdatedByID(childComplexity), true
 
+	case "IntegrationHistory.updatedByServiceID":
+		if e.complexity.IntegrationHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.UpdatedByServiceID(childComplexity), true
+
+	case "IntegrationHistory.updatedByUserID":
+		if e.complexity.IntegrationHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.UpdatedByUserID(childComplexity), true
+
 	case "IntegrationHistoryConnection.edges":
 		if e.complexity.IntegrationHistoryConnection.Edges == nil {
 			break
@@ -9450,19 +10810,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InternalPolicy.CreatedAt(childComplexity), true
 
-	case "InternalPolicy.createdBy":
-		if e.complexity.InternalPolicy.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicy.CreatedBy(childComplexity), true
-
 	case "InternalPolicy.createdByID":
 		if e.complexity.InternalPolicy.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.InternalPolicy.CreatedByID(childComplexity), true
+
+	case "InternalPolicy.createdByService":
+		if e.complexity.InternalPolicy.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.CreatedByService(childComplexity), true
+
+	case "InternalPolicy.createdByServiceID":
+		if e.complexity.InternalPolicy.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.CreatedByServiceID(childComplexity), true
+
+	case "InternalPolicy.createdByUser":
+		if e.complexity.InternalPolicy.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.CreatedByUser(childComplexity), true
+
+	case "InternalPolicy.createdByUserID":
+		if e.complexity.InternalPolicy.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.CreatedByUserID(childComplexity), true
 
 	case "InternalPolicy.deletedAt":
 		if e.complexity.InternalPolicy.DeletedAt == nil {
@@ -9590,19 +10971,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InternalPolicy.UpdatedAt(childComplexity), true
 
-	case "InternalPolicy.updatedBy":
-		if e.complexity.InternalPolicy.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicy.UpdatedBy(childComplexity), true
-
 	case "InternalPolicy.updatedByID":
 		if e.complexity.InternalPolicy.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.InternalPolicy.UpdatedByID(childComplexity), true
+
+	case "InternalPolicy.updatedByService":
+		if e.complexity.InternalPolicy.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.UpdatedByService(childComplexity), true
+
+	case "InternalPolicy.updatedByServiceID":
+		if e.complexity.InternalPolicy.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.UpdatedByServiceID(childComplexity), true
+
+	case "InternalPolicy.updatedByUser":
+		if e.complexity.InternalPolicy.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.UpdatedByUser(childComplexity), true
+
+	case "InternalPolicy.updatedByUserID":
+		if e.complexity.InternalPolicy.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.UpdatedByUserID(childComplexity), true
 
 	case "InternalPolicy.version":
 		if e.complexity.InternalPolicy.Version == nil {
@@ -9687,6 +11089,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.InternalPolicyHistory.CreatedByID(childComplexity), true
+
+	case "InternalPolicyHistory.createdByServiceID":
+		if e.complexity.InternalPolicyHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.CreatedByServiceID(childComplexity), true
+
+	case "InternalPolicyHistory.createdByUserID":
+		if e.complexity.InternalPolicyHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.CreatedByUserID(childComplexity), true
 
 	case "InternalPolicyHistory.deletedAt":
 		if e.complexity.InternalPolicyHistory.DeletedAt == nil {
@@ -9807,6 +11223,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.InternalPolicyHistory.UpdatedByID(childComplexity), true
 
+	case "InternalPolicyHistory.updatedByServiceID":
+		if e.complexity.InternalPolicyHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.UpdatedByServiceID(childComplexity), true
+
+	case "InternalPolicyHistory.updatedByUserID":
+		if e.complexity.InternalPolicyHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.UpdatedByUserID(childComplexity), true
+
 	case "InternalPolicyHistory.version":
 		if e.complexity.InternalPolicyHistory.Version == nil {
 			break
@@ -9870,19 +11300,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Invite.CreatedAt(childComplexity), true
 
-	case "Invite.createdBy":
-		if e.complexity.Invite.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Invite.CreatedBy(childComplexity), true
-
 	case "Invite.createdByID":
 		if e.complexity.Invite.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Invite.CreatedByID(childComplexity), true
+
+	case "Invite.createdByService":
+		if e.complexity.Invite.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Invite.CreatedByService(childComplexity), true
+
+	case "Invite.createdByServiceID":
+		if e.complexity.Invite.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Invite.CreatedByServiceID(childComplexity), true
+
+	case "Invite.createdByUser":
+		if e.complexity.Invite.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Invite.CreatedByUser(childComplexity), true
+
+	case "Invite.createdByUserID":
+		if e.complexity.Invite.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Invite.CreatedByUserID(childComplexity), true
 
 	case "Invite.deletedAt":
 		if e.complexity.Invite.DeletedAt == nil {
@@ -9975,19 +11426,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Invite.UpdatedAt(childComplexity), true
 
-	case "Invite.updatedBy":
-		if e.complexity.Invite.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Invite.UpdatedBy(childComplexity), true
-
 	case "Invite.updatedByID":
 		if e.complexity.Invite.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Invite.UpdatedByID(childComplexity), true
+
+	case "Invite.updatedByService":
+		if e.complexity.Invite.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Invite.UpdatedByService(childComplexity), true
+
+	case "Invite.updatedByServiceID":
+		if e.complexity.Invite.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Invite.UpdatedByServiceID(childComplexity), true
+
+	case "Invite.updatedByUser":
+		if e.complexity.Invite.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Invite.UpdatedByUser(childComplexity), true
+
+	case "Invite.updatedByUserID":
+		if e.complexity.Invite.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Invite.UpdatedByUserID(childComplexity), true
 
 	case "InviteBulkCreatePayload.invites":
 		if e.complexity.InviteBulkCreatePayload.Invites == nil {
@@ -12096,19 +13568,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Narrative.CreatedAt(childComplexity), true
 
-	case "Narrative.createdBy":
-		if e.complexity.Narrative.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Narrative.CreatedBy(childComplexity), true
-
 	case "Narrative.createdByID":
 		if e.complexity.Narrative.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Narrative.CreatedByID(childComplexity), true
+
+	case "Narrative.createdByService":
+		if e.complexity.Narrative.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Narrative.CreatedByService(childComplexity), true
+
+	case "Narrative.createdByServiceID":
+		if e.complexity.Narrative.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Narrative.CreatedByServiceID(childComplexity), true
+
+	case "Narrative.createdByUser":
+		if e.complexity.Narrative.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Narrative.CreatedByUser(childComplexity), true
+
+	case "Narrative.createdByUserID":
+		if e.complexity.Narrative.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Narrative.CreatedByUserID(childComplexity), true
 
 	case "Narrative.deletedAt":
 		if e.complexity.Narrative.DeletedAt == nil {
@@ -12215,19 +13708,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Narrative.UpdatedAt(childComplexity), true
 
-	case "Narrative.updatedBy":
-		if e.complexity.Narrative.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Narrative.UpdatedBy(childComplexity), true
-
 	case "Narrative.updatedByID":
 		if e.complexity.Narrative.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Narrative.UpdatedByID(childComplexity), true
+
+	case "Narrative.updatedByService":
+		if e.complexity.Narrative.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Narrative.UpdatedByService(childComplexity), true
+
+	case "Narrative.updatedByServiceID":
+		if e.complexity.Narrative.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Narrative.UpdatedByServiceID(childComplexity), true
+
+	case "Narrative.updatedByUser":
+		if e.complexity.Narrative.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Narrative.UpdatedByUser(childComplexity), true
+
+	case "Narrative.updatedByUserID":
+		if e.complexity.Narrative.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Narrative.UpdatedByUserID(childComplexity), true
 
 	case "Narrative.viewers":
 		if e.complexity.Narrative.Viewers == nil {
@@ -12305,6 +13819,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NarrativeHistory.CreatedByID(childComplexity), true
+
+	case "NarrativeHistory.createdByServiceID":
+		if e.complexity.NarrativeHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.NarrativeHistory.CreatedByServiceID(childComplexity), true
+
+	case "NarrativeHistory.createdByUserID":
+		if e.complexity.NarrativeHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.NarrativeHistory.CreatedByUserID(childComplexity), true
 
 	case "NarrativeHistory.deletedAt":
 		if e.complexity.NarrativeHistory.DeletedAt == nil {
@@ -12411,6 +13939,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NarrativeHistory.UpdatedByID(childComplexity), true
 
+	case "NarrativeHistory.updatedByServiceID":
+		if e.complexity.NarrativeHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.NarrativeHistory.UpdatedByServiceID(childComplexity), true
+
+	case "NarrativeHistory.updatedByUserID":
+		if e.complexity.NarrativeHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.NarrativeHistory.UpdatedByUserID(childComplexity), true
+
 	case "NarrativeHistoryConnection.edges":
 		if e.complexity.NarrativeHistoryConnection.Edges == nil {
 			break
@@ -12467,19 +14009,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Note.CreatedAt(childComplexity), true
 
-	case "Note.createdBy":
-		if e.complexity.Note.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Note.CreatedBy(childComplexity), true
-
 	case "Note.createdByID":
 		if e.complexity.Note.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Note.CreatedByID(childComplexity), true
+
+	case "Note.createdByService":
+		if e.complexity.Note.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Note.CreatedByService(childComplexity), true
+
+	case "Note.createdByServiceID":
+		if e.complexity.Note.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Note.CreatedByServiceID(childComplexity), true
+
+	case "Note.createdByUser":
+		if e.complexity.Note.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Note.CreatedByUser(childComplexity), true
+
+	case "Note.createdByUserID":
+		if e.complexity.Note.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Note.CreatedByUserID(childComplexity), true
 
 	case "Note.deletedAt":
 		if e.complexity.Note.DeletedAt == nil {
@@ -12558,19 +14121,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Note.UpdatedAt(childComplexity), true
 
-	case "Note.updatedBy":
-		if e.complexity.Note.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Note.UpdatedBy(childComplexity), true
-
 	case "Note.updatedByID":
 		if e.complexity.Note.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Note.UpdatedByID(childComplexity), true
+
+	case "Note.updatedByService":
+		if e.complexity.Note.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Note.UpdatedByService(childComplexity), true
+
+	case "Note.updatedByServiceID":
+		if e.complexity.Note.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Note.UpdatedByServiceID(childComplexity), true
+
+	case "Note.updatedByUser":
+		if e.complexity.Note.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Note.UpdatedByUser(childComplexity), true
+
+	case "Note.updatedByUserID":
+		if e.complexity.Note.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Note.UpdatedByUserID(childComplexity), true
 
 	case "NoteConnection.edges":
 		if e.complexity.NoteConnection.Edges == nil {
@@ -12620,6 +14204,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NoteHistory.CreatedByID(childComplexity), true
+
+	case "NoteHistory.createdByServiceID":
+		if e.complexity.NoteHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.CreatedByServiceID(childComplexity), true
+
+	case "NoteHistory.createdByUserID":
+		if e.complexity.NoteHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.CreatedByUserID(childComplexity), true
 
 	case "NoteHistory.deletedAt":
 		if e.complexity.NoteHistory.DeletedAt == nil {
@@ -12705,6 +14303,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NoteHistory.UpdatedByID(childComplexity), true
 
+	case "NoteHistory.updatedByServiceID":
+		if e.complexity.NoteHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.UpdatedByServiceID(childComplexity), true
+
+	case "NoteHistory.updatedByUserID":
+		if e.complexity.NoteHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.UpdatedByUserID(childComplexity), true
+
 	case "NoteHistoryConnection.edges":
 		if e.complexity.NoteHistoryConnection.Edges == nil {
 			break
@@ -12747,19 +14359,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgMembership.CreatedAt(childComplexity), true
 
-	case "OrgMembership.createdBy":
-		if e.complexity.OrgMembership.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.OrgMembership.CreatedBy(childComplexity), true
-
 	case "OrgMembership.createdByID":
 		if e.complexity.OrgMembership.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.OrgMembership.CreatedByID(childComplexity), true
+
+	case "OrgMembership.createdByService":
+		if e.complexity.OrgMembership.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.OrgMembership.CreatedByService(childComplexity), true
+
+	case "OrgMembership.createdByServiceID":
+		if e.complexity.OrgMembership.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrgMembership.CreatedByServiceID(childComplexity), true
+
+	case "OrgMembership.createdByUser":
+		if e.complexity.OrgMembership.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.OrgMembership.CreatedByUser(childComplexity), true
+
+	case "OrgMembership.createdByUserID":
+		if e.complexity.OrgMembership.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrgMembership.CreatedByUserID(childComplexity), true
 
 	case "OrgMembership.deletedAt":
 		if e.complexity.OrgMembership.DeletedAt == nil {
@@ -12817,19 +14450,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgMembership.UpdatedAt(childComplexity), true
 
-	case "OrgMembership.updatedBy":
-		if e.complexity.OrgMembership.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.OrgMembership.UpdatedBy(childComplexity), true
-
 	case "OrgMembership.updatedByID":
 		if e.complexity.OrgMembership.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.OrgMembership.UpdatedByID(childComplexity), true
+
+	case "OrgMembership.updatedByService":
+		if e.complexity.OrgMembership.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.OrgMembership.UpdatedByService(childComplexity), true
+
+	case "OrgMembership.updatedByServiceID":
+		if e.complexity.OrgMembership.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrgMembership.UpdatedByServiceID(childComplexity), true
+
+	case "OrgMembership.updatedByUser":
+		if e.complexity.OrgMembership.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.OrgMembership.UpdatedByUser(childComplexity), true
+
+	case "OrgMembership.updatedByUserID":
+		if e.complexity.OrgMembership.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrgMembership.UpdatedByUserID(childComplexity), true
 
 	case "OrgMembership.user":
 		if e.complexity.OrgMembership.User == nil {
@@ -12915,6 +14569,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgMembershipHistory.CreatedByID(childComplexity), true
 
+	case "OrgMembershipHistory.createdByServiceID":
+		if e.complexity.OrgMembershipHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrgMembershipHistory.CreatedByServiceID(childComplexity), true
+
+	case "OrgMembershipHistory.createdByUserID":
+		if e.complexity.OrgMembershipHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrgMembershipHistory.CreatedByUserID(childComplexity), true
+
 	case "OrgMembershipHistory.deletedAt":
 		if e.complexity.OrgMembershipHistory.DeletedAt == nil {
 			break
@@ -12992,6 +14660,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgMembershipHistory.UpdatedByID(childComplexity), true
 
+	case "OrgMembershipHistory.updatedByServiceID":
+		if e.complexity.OrgMembershipHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrgMembershipHistory.UpdatedByServiceID(childComplexity), true
+
+	case "OrgMembershipHistory.updatedByUserID":
+		if e.complexity.OrgMembershipHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrgMembershipHistory.UpdatedByUserID(childComplexity), true
+
 	case "OrgMembershipHistory.userID":
 		if e.complexity.OrgMembershipHistory.UserID == nil {
 			break
@@ -13055,19 +14737,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.CreatedAt(childComplexity), true
 
-	case "OrgSubscription.createdBy":
-		if e.complexity.OrgSubscription.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.CreatedBy(childComplexity), true
-
 	case "OrgSubscription.createdByID":
 		if e.complexity.OrgSubscription.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.OrgSubscription.CreatedByID(childComplexity), true
+
+	case "OrgSubscription.createdByService":
+		if e.complexity.OrgSubscription.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.CreatedByService(childComplexity), true
+
+	case "OrgSubscription.createdByServiceID":
+		if e.complexity.OrgSubscription.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.CreatedByServiceID(childComplexity), true
+
+	case "OrgSubscription.createdByUser":
+		if e.complexity.OrgSubscription.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.CreatedByUser(childComplexity), true
+
+	case "OrgSubscription.createdByUserID":
+		if e.complexity.OrgSubscription.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.CreatedByUserID(childComplexity), true
 
 	case "OrgSubscription.deletedAt":
 		if e.complexity.OrgSubscription.DeletedAt == nil {
@@ -13167,19 +14870,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.UpdatedAt(childComplexity), true
 
-	case "OrgSubscription.updatedBy":
-		if e.complexity.OrgSubscription.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.UpdatedBy(childComplexity), true
-
 	case "OrgSubscription.updatedByID":
 		if e.complexity.OrgSubscription.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.OrgSubscription.UpdatedByID(childComplexity), true
+
+	case "OrgSubscription.updatedByService":
+		if e.complexity.OrgSubscription.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.UpdatedByService(childComplexity), true
+
+	case "OrgSubscription.updatedByServiceID":
+		if e.complexity.OrgSubscription.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.UpdatedByServiceID(childComplexity), true
+
+	case "OrgSubscription.updatedByUser":
+		if e.complexity.OrgSubscription.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.UpdatedByUser(childComplexity), true
+
+	case "OrgSubscription.updatedByUserID":
+		if e.complexity.OrgSubscription.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.UpdatedByUserID(childComplexity), true
 
 	case "OrgSubscriptionBulkCreatePayload.orgSubscriptions":
 		if e.complexity.OrgSubscriptionBulkCreatePayload.OrgSubscriptions == nil {
@@ -13257,6 +14981,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscriptionHistory.CreatedByID(childComplexity), true
+
+	case "OrgSubscriptionHistory.createdByServiceID":
+		if e.complexity.OrgSubscriptionHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.CreatedByServiceID(childComplexity), true
+
+	case "OrgSubscriptionHistory.createdByUserID":
+		if e.complexity.OrgSubscriptionHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.CreatedByUserID(childComplexity), true
 
 	case "OrgSubscriptionHistory.deletedAt":
 		if e.complexity.OrgSubscriptionHistory.DeletedAt == nil {
@@ -13384,6 +15122,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscriptionHistory.UpdatedByID(childComplexity), true
 
+	case "OrgSubscriptionHistory.updatedByServiceID":
+		if e.complexity.OrgSubscriptionHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.UpdatedByServiceID(childComplexity), true
+
+	case "OrgSubscriptionHistory.updatedByUserID":
+		if e.complexity.OrgSubscriptionHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.UpdatedByUserID(childComplexity), true
+
 	case "OrgSubscriptionHistoryConnection.edges":
 		if e.complexity.OrgSubscriptionHistoryConnection.Edges == nil {
 			break
@@ -13501,19 +15253,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.CreatedAt(childComplexity), true
 
-	case "Organization.createdBy":
-		if e.complexity.Organization.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Organization.CreatedBy(childComplexity), true
-
 	case "Organization.createdByID":
 		if e.complexity.Organization.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Organization.CreatedByID(childComplexity), true
+
+	case "Organization.createdByService":
+		if e.complexity.Organization.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Organization.CreatedByService(childComplexity), true
+
+	case "Organization.createdByServiceID":
+		if e.complexity.Organization.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Organization.CreatedByServiceID(childComplexity), true
+
+	case "Organization.createdByUser":
+		if e.complexity.Organization.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Organization.CreatedByUser(childComplexity), true
+
+	case "Organization.createdByUserID":
+		if e.complexity.Organization.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Organization.CreatedByUserID(childComplexity), true
 
 	case "Organization.dedicatedDb":
 		if e.complexity.Organization.DedicatedDb == nil {
@@ -13802,19 +15575,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.UpdatedAt(childComplexity), true
 
-	case "Organization.updatedBy":
-		if e.complexity.Organization.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Organization.UpdatedBy(childComplexity), true
-
 	case "Organization.updatedByID":
 		if e.complexity.Organization.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Organization.UpdatedByID(childComplexity), true
+
+	case "Organization.updatedByService":
+		if e.complexity.Organization.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Organization.UpdatedByService(childComplexity), true
+
+	case "Organization.updatedByServiceID":
+		if e.complexity.Organization.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Organization.UpdatedByServiceID(childComplexity), true
+
+	case "Organization.updatedByUser":
+		if e.complexity.Organization.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Organization.UpdatedByUser(childComplexity), true
+
+	case "Organization.updatedByUserID":
+		if e.complexity.Organization.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Organization.UpdatedByUserID(childComplexity), true
 
 	case "Organization.users":
 		if e.complexity.Organization.Users == nil {
@@ -13899,6 +15693,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrganizationHistory.CreatedByID(childComplexity), true
+
+	case "OrganizationHistory.createdByServiceID":
+		if e.complexity.OrganizationHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationHistory.CreatedByServiceID(childComplexity), true
+
+	case "OrganizationHistory.createdByUserID":
+		if e.complexity.OrganizationHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationHistory.CreatedByUserID(childComplexity), true
 
 	case "OrganizationHistory.dedicatedDb":
 		if e.complexity.OrganizationHistory.DedicatedDb == nil {
@@ -14005,6 +15813,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationHistory.UpdatedByID(childComplexity), true
 
+	case "OrganizationHistory.updatedByServiceID":
+		if e.complexity.OrganizationHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationHistory.UpdatedByServiceID(childComplexity), true
+
+	case "OrganizationHistory.updatedByUserID":
+		if e.complexity.OrganizationHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationHistory.UpdatedByUserID(childComplexity), true
+
 	case "OrganizationHistoryConnection.edges":
 		if e.complexity.OrganizationHistoryConnection.Edges == nil {
 			break
@@ -14082,19 +15904,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationSetting.CreatedAt(childComplexity), true
 
-	case "OrganizationSetting.createdBy":
-		if e.complexity.OrganizationSetting.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSetting.CreatedBy(childComplexity), true
-
 	case "OrganizationSetting.createdByID":
 		if e.complexity.OrganizationSetting.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.OrganizationSetting.CreatedByID(childComplexity), true
+
+	case "OrganizationSetting.createdByService":
+		if e.complexity.OrganizationSetting.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.CreatedByService(childComplexity), true
+
+	case "OrganizationSetting.createdByServiceID":
+		if e.complexity.OrganizationSetting.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.CreatedByServiceID(childComplexity), true
+
+	case "OrganizationSetting.createdByUser":
+		if e.complexity.OrganizationSetting.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.CreatedByUser(childComplexity), true
+
+	case "OrganizationSetting.createdByUserID":
+		if e.complexity.OrganizationSetting.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.CreatedByUserID(childComplexity), true
 
 	case "OrganizationSetting.deletedAt":
 		if e.complexity.OrganizationSetting.DeletedAt == nil {
@@ -14180,19 +16023,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationSetting.UpdatedAt(childComplexity), true
 
-	case "OrganizationSetting.updatedBy":
-		if e.complexity.OrganizationSetting.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSetting.UpdatedBy(childComplexity), true
-
 	case "OrganizationSetting.updatedByID":
 		if e.complexity.OrganizationSetting.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.OrganizationSetting.UpdatedByID(childComplexity), true
+
+	case "OrganizationSetting.updatedByService":
+		if e.complexity.OrganizationSetting.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.UpdatedByService(childComplexity), true
+
+	case "OrganizationSetting.updatedByServiceID":
+		if e.complexity.OrganizationSetting.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.UpdatedByServiceID(childComplexity), true
+
+	case "OrganizationSetting.updatedByUser":
+		if e.complexity.OrganizationSetting.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.UpdatedByUser(childComplexity), true
+
+	case "OrganizationSetting.updatedByUserID":
+		if e.complexity.OrganizationSetting.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.UpdatedByUserID(childComplexity), true
 
 	case "OrganizationSettingBulkCreatePayload.organizationSettings":
 		if e.complexity.OrganizationSettingBulkCreatePayload.OrganizationSettings == nil {
@@ -14291,6 +16155,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrganizationSettingHistory.CreatedByID(childComplexity), true
+
+	case "OrganizationSettingHistory.createdByServiceID":
+		if e.complexity.OrganizationSettingHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.CreatedByServiceID(childComplexity), true
+
+	case "OrganizationSettingHistory.createdByUserID":
+		if e.complexity.OrganizationSettingHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.CreatedByUserID(childComplexity), true
 
 	case "OrganizationSettingHistory.deletedAt":
 		if e.complexity.OrganizationSettingHistory.DeletedAt == nil {
@@ -14397,6 +16275,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationSettingHistory.UpdatedByID(childComplexity), true
 
+	case "OrganizationSettingHistory.updatedByServiceID":
+		if e.complexity.OrganizationSettingHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.UpdatedByServiceID(childComplexity), true
+
+	case "OrganizationSettingHistory.updatedByUserID":
+		if e.complexity.OrganizationSettingHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.UpdatedByUserID(childComplexity), true
+
 	case "OrganizationSettingHistoryConnection.edges":
 		if e.complexity.OrganizationSettingHistoryConnection.Edges == nil {
 			break
@@ -14488,19 +16380,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonalAccessToken.CreatedAt(childComplexity), true
 
-	case "PersonalAccessToken.createdBy":
-		if e.complexity.PersonalAccessToken.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.PersonalAccessToken.CreatedBy(childComplexity), true
-
 	case "PersonalAccessToken.createdByID":
 		if e.complexity.PersonalAccessToken.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.PersonalAccessToken.CreatedByID(childComplexity), true
+
+	case "PersonalAccessToken.createdByService":
+		if e.complexity.PersonalAccessToken.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.CreatedByService(childComplexity), true
+
+	case "PersonalAccessToken.createdByServiceID":
+		if e.complexity.PersonalAccessToken.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.CreatedByServiceID(childComplexity), true
+
+	case "PersonalAccessToken.createdByUser":
+		if e.complexity.PersonalAccessToken.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.CreatedByUser(childComplexity), true
+
+	case "PersonalAccessToken.createdByUserID":
+		if e.complexity.PersonalAccessToken.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.CreatedByUserID(childComplexity), true
 
 	case "PersonalAccessToken.deletedAt":
 		if e.complexity.PersonalAccessToken.DeletedAt == nil {
@@ -14600,19 +16513,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonalAccessToken.UpdatedAt(childComplexity), true
 
-	case "PersonalAccessToken.updatedBy":
-		if e.complexity.PersonalAccessToken.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.PersonalAccessToken.UpdatedBy(childComplexity), true
-
 	case "PersonalAccessToken.updatedByID":
 		if e.complexity.PersonalAccessToken.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.PersonalAccessToken.UpdatedByID(childComplexity), true
+
+	case "PersonalAccessToken.updatedByService":
+		if e.complexity.PersonalAccessToken.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.UpdatedByService(childComplexity), true
+
+	case "PersonalAccessToken.updatedByServiceID":
+		if e.complexity.PersonalAccessToken.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.UpdatedByServiceID(childComplexity), true
+
+	case "PersonalAccessToken.updatedByUser":
+		if e.complexity.PersonalAccessToken.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.UpdatedByUser(childComplexity), true
+
+	case "PersonalAccessToken.updatedByUserID":
+		if e.complexity.PersonalAccessToken.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.UpdatedByUserID(childComplexity), true
 
 	case "PersonalAccessTokenBulkCreatePayload.personalAccessTokens":
 		if e.complexity.PersonalAccessTokenBulkCreatePayload.PersonalAccessTokens == nil {
@@ -14712,19 +16646,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Procedure.CreatedAt(childComplexity), true
 
-	case "Procedure.createdBy":
-		if e.complexity.Procedure.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Procedure.CreatedBy(childComplexity), true
-
 	case "Procedure.createdByID":
 		if e.complexity.Procedure.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Procedure.CreatedByID(childComplexity), true
+
+	case "Procedure.createdByService":
+		if e.complexity.Procedure.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Procedure.CreatedByService(childComplexity), true
+
+	case "Procedure.createdByServiceID":
+		if e.complexity.Procedure.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.CreatedByServiceID(childComplexity), true
+
+	case "Procedure.createdByUser":
+		if e.complexity.Procedure.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Procedure.CreatedByUser(childComplexity), true
+
+	case "Procedure.createdByUserID":
+		if e.complexity.Procedure.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.CreatedByUserID(childComplexity), true
 
 	case "Procedure.deletedAt":
 		if e.complexity.Procedure.DeletedAt == nil {
@@ -14866,19 +16821,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Procedure.UpdatedAt(childComplexity), true
 
-	case "Procedure.updatedBy":
-		if e.complexity.Procedure.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Procedure.UpdatedBy(childComplexity), true
-
 	case "Procedure.updatedByID":
 		if e.complexity.Procedure.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Procedure.UpdatedByID(childComplexity), true
+
+	case "Procedure.updatedByService":
+		if e.complexity.Procedure.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Procedure.UpdatedByService(childComplexity), true
+
+	case "Procedure.updatedByServiceID":
+		if e.complexity.Procedure.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.UpdatedByServiceID(childComplexity), true
+
+	case "Procedure.updatedByUser":
+		if e.complexity.Procedure.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Procedure.UpdatedByUser(childComplexity), true
+
+	case "Procedure.updatedByUserID":
+		if e.complexity.Procedure.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.UpdatedByUserID(childComplexity), true
 
 	case "Procedure.version":
 		if e.complexity.Procedure.Version == nil {
@@ -14963,6 +16939,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProcedureHistory.CreatedByID(childComplexity), true
+
+	case "ProcedureHistory.createdByServiceID":
+		if e.complexity.ProcedureHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.CreatedByServiceID(childComplexity), true
+
+	case "ProcedureHistory.createdByUserID":
+		if e.complexity.ProcedureHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.CreatedByUserID(childComplexity), true
 
 	case "ProcedureHistory.deletedAt":
 		if e.complexity.ProcedureHistory.DeletedAt == nil {
@@ -15090,6 +17080,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProcedureHistory.UpdatedByID(childComplexity), true
 
+	case "ProcedureHistory.updatedByServiceID":
+		if e.complexity.ProcedureHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.UpdatedByServiceID(childComplexity), true
+
+	case "ProcedureHistory.updatedByUserID":
+		if e.complexity.ProcedureHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.UpdatedByUserID(childComplexity), true
+
 	case "ProcedureHistory.version":
 		if e.complexity.ProcedureHistory.Version == nil {
 			break
@@ -15202,19 +17206,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Program.CreatedAt(childComplexity), true
 
-	case "Program.createdBy":
-		if e.complexity.Program.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Program.CreatedBy(childComplexity), true
-
 	case "Program.createdByID":
 		if e.complexity.Program.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Program.CreatedByID(childComplexity), true
+
+	case "Program.createdByService":
+		if e.complexity.Program.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Program.CreatedByService(childComplexity), true
+
+	case "Program.createdByServiceID":
+		if e.complexity.Program.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Program.CreatedByServiceID(childComplexity), true
+
+	case "Program.createdByUser":
+		if e.complexity.Program.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Program.CreatedByUser(childComplexity), true
+
+	case "Program.createdByUserID":
+		if e.complexity.Program.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Program.CreatedByUserID(childComplexity), true
 
 	case "Program.deletedAt":
 		if e.complexity.Program.DeletedAt == nil {
@@ -15377,19 +17402,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Program.UpdatedAt(childComplexity), true
 
-	case "Program.updatedBy":
-		if e.complexity.Program.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Program.UpdatedBy(childComplexity), true
-
 	case "Program.updatedByID":
 		if e.complexity.Program.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Program.UpdatedByID(childComplexity), true
+
+	case "Program.updatedByService":
+		if e.complexity.Program.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Program.UpdatedByService(childComplexity), true
+
+	case "Program.updatedByServiceID":
+		if e.complexity.Program.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Program.UpdatedByServiceID(childComplexity), true
+
+	case "Program.updatedByUser":
+		if e.complexity.Program.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Program.UpdatedByUser(childComplexity), true
+
+	case "Program.updatedByUserID":
+		if e.complexity.Program.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Program.UpdatedByUserID(childComplexity), true
 
 	case "Program.users":
 		if e.complexity.Program.Users == nil {
@@ -15495,6 +17541,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProgramHistory.CreatedByID(childComplexity), true
+
+	case "ProgramHistory.createdByServiceID":
+		if e.complexity.ProgramHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.CreatedByServiceID(childComplexity), true
+
+	case "ProgramHistory.createdByUserID":
+		if e.complexity.ProgramHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.CreatedByUserID(childComplexity), true
 
 	case "ProgramHistory.deletedAt":
 		if e.complexity.ProgramHistory.DeletedAt == nil {
@@ -15608,6 +17668,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProgramHistory.UpdatedByID(childComplexity), true
 
+	case "ProgramHistory.updatedByServiceID":
+		if e.complexity.ProgramHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.UpdatedByServiceID(childComplexity), true
+
+	case "ProgramHistory.updatedByUserID":
+		if e.complexity.ProgramHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ProgramHistory.UpdatedByUserID(childComplexity), true
+
 	case "ProgramHistoryConnection.edges":
 		if e.complexity.ProgramHistoryConnection.Edges == nil {
 			break
@@ -15650,19 +17724,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProgramMembership.CreatedAt(childComplexity), true
 
-	case "ProgramMembership.createdBy":
-		if e.complexity.ProgramMembership.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.ProgramMembership.CreatedBy(childComplexity), true
-
 	case "ProgramMembership.createdByID":
 		if e.complexity.ProgramMembership.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.ProgramMembership.CreatedByID(childComplexity), true
+
+	case "ProgramMembership.createdByService":
+		if e.complexity.ProgramMembership.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembership.CreatedByService(childComplexity), true
+
+	case "ProgramMembership.createdByServiceID":
+		if e.complexity.ProgramMembership.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembership.CreatedByServiceID(childComplexity), true
+
+	case "ProgramMembership.createdByUser":
+		if e.complexity.ProgramMembership.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembership.CreatedByUser(childComplexity), true
+
+	case "ProgramMembership.createdByUserID":
+		if e.complexity.ProgramMembership.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembership.CreatedByUserID(childComplexity), true
 
 	case "ProgramMembership.deletedAt":
 		if e.complexity.ProgramMembership.DeletedAt == nil {
@@ -15713,19 +17808,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProgramMembership.UpdatedAt(childComplexity), true
 
-	case "ProgramMembership.updatedBy":
-		if e.complexity.ProgramMembership.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.ProgramMembership.UpdatedBy(childComplexity), true
-
 	case "ProgramMembership.updatedByID":
 		if e.complexity.ProgramMembership.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.ProgramMembership.UpdatedByID(childComplexity), true
+
+	case "ProgramMembership.updatedByService":
+		if e.complexity.ProgramMembership.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembership.UpdatedByService(childComplexity), true
+
+	case "ProgramMembership.updatedByServiceID":
+		if e.complexity.ProgramMembership.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembership.UpdatedByServiceID(childComplexity), true
+
+	case "ProgramMembership.updatedByUser":
+		if e.complexity.ProgramMembership.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembership.UpdatedByUser(childComplexity), true
+
+	case "ProgramMembership.updatedByUserID":
+		if e.complexity.ProgramMembership.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembership.UpdatedByUserID(childComplexity), true
 
 	case "ProgramMembership.user":
 		if e.complexity.ProgramMembership.User == nil {
@@ -15811,6 +17927,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProgramMembershipHistory.CreatedByID(childComplexity), true
 
+	case "ProgramMembershipHistory.createdByServiceID":
+		if e.complexity.ProgramMembershipHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembershipHistory.CreatedByServiceID(childComplexity), true
+
+	case "ProgramMembershipHistory.createdByUserID":
+		if e.complexity.ProgramMembershipHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembershipHistory.CreatedByUserID(childComplexity), true
+
 	case "ProgramMembershipHistory.deletedAt":
 		if e.complexity.ProgramMembershipHistory.DeletedAt == nil {
 			break
@@ -15887,6 +18017,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProgramMembershipHistory.UpdatedByID(childComplexity), true
+
+	case "ProgramMembershipHistory.updatedByServiceID":
+		if e.complexity.ProgramMembershipHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembershipHistory.UpdatedByServiceID(childComplexity), true
+
+	case "ProgramMembershipHistory.updatedByUserID":
+		if e.complexity.ProgramMembershipHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ProgramMembershipHistory.UpdatedByUserID(childComplexity), true
 
 	case "ProgramMembershipHistory.userID":
 		if e.complexity.ProgramMembershipHistory.UserID == nil {
@@ -17990,19 +20134,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Risk.CreatedAt(childComplexity), true
 
-	case "Risk.createdBy":
-		if e.complexity.Risk.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Risk.CreatedBy(childComplexity), true
-
 	case "Risk.createdByID":
 		if e.complexity.Risk.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Risk.CreatedByID(childComplexity), true
+
+	case "Risk.createdByService":
+		if e.complexity.Risk.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Risk.CreatedByService(childComplexity), true
+
+	case "Risk.createdByServiceID":
+		if e.complexity.Risk.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Risk.CreatedByServiceID(childComplexity), true
+
+	case "Risk.createdByUser":
+		if e.complexity.Risk.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Risk.CreatedByUser(childComplexity), true
+
+	case "Risk.createdByUserID":
+		if e.complexity.Risk.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Risk.CreatedByUserID(childComplexity), true
 
 	case "Risk.deletedAt":
 		if e.complexity.Risk.DeletedAt == nil {
@@ -18137,19 +20302,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Risk.UpdatedAt(childComplexity), true
 
-	case "Risk.updatedBy":
-		if e.complexity.Risk.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Risk.UpdatedBy(childComplexity), true
-
 	case "Risk.updatedByID":
 		if e.complexity.Risk.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Risk.UpdatedByID(childComplexity), true
+
+	case "Risk.updatedByService":
+		if e.complexity.Risk.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Risk.UpdatedByService(childComplexity), true
+
+	case "Risk.updatedByServiceID":
+		if e.complexity.Risk.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Risk.UpdatedByServiceID(childComplexity), true
+
+	case "Risk.updatedByUser":
+		if e.complexity.Risk.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Risk.UpdatedByUser(childComplexity), true
+
+	case "Risk.updatedByUserID":
+		if e.complexity.Risk.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Risk.UpdatedByUserID(childComplexity), true
 
 	case "Risk.viewers":
 		if e.complexity.Risk.Viewers == nil {
@@ -18234,6 +20420,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.RiskHistory.CreatedByID(childComplexity), true
+
+	case "RiskHistory.createdByServiceID":
+		if e.complexity.RiskHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.CreatedByServiceID(childComplexity), true
+
+	case "RiskHistory.createdByUserID":
+		if e.complexity.RiskHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.CreatedByUserID(childComplexity), true
 
 	case "RiskHistory.deletedAt":
 		if e.complexity.RiskHistory.DeletedAt == nil {
@@ -18375,6 +20575,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RiskHistory.UpdatedByID(childComplexity), true
 
+	case "RiskHistory.updatedByServiceID":
+		if e.complexity.RiskHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.UpdatedByServiceID(childComplexity), true
+
+	case "RiskHistory.updatedByUserID":
+		if e.complexity.RiskHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.UpdatedByUserID(childComplexity), true
+
 	case "RiskHistoryConnection.edges":
 		if e.complexity.RiskHistoryConnection.Edges == nil {
 			break
@@ -18480,19 +20694,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Standard.CreatedAt(childComplexity), true
 
-	case "Standard.createdBy":
-		if e.complexity.Standard.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Standard.CreatedBy(childComplexity), true
-
 	case "Standard.createdByID":
 		if e.complexity.Standard.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Standard.CreatedByID(childComplexity), true
+
+	case "Standard.createdByService":
+		if e.complexity.Standard.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Standard.CreatedByService(childComplexity), true
+
+	case "Standard.createdByServiceID":
+		if e.complexity.Standard.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Standard.CreatedByServiceID(childComplexity), true
+
+	case "Standard.createdByUser":
+		if e.complexity.Standard.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Standard.CreatedByUser(childComplexity), true
+
+	case "Standard.createdByUserID":
+		if e.complexity.Standard.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Standard.CreatedByUserID(childComplexity), true
 
 	case "Standard.deletedAt":
 		if e.complexity.Standard.DeletedAt == nil {
@@ -18599,19 +20834,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Standard.UpdatedAt(childComplexity), true
 
-	case "Standard.updatedBy":
-		if e.complexity.Standard.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Standard.UpdatedBy(childComplexity), true
-
 	case "Standard.updatedByID":
 		if e.complexity.Standard.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Standard.UpdatedByID(childComplexity), true
+
+	case "Standard.updatedByService":
+		if e.complexity.Standard.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Standard.UpdatedByService(childComplexity), true
+
+	case "Standard.updatedByServiceID":
+		if e.complexity.Standard.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Standard.UpdatedByServiceID(childComplexity), true
+
+	case "Standard.updatedByUser":
+		if e.complexity.Standard.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Standard.UpdatedByUser(childComplexity), true
+
+	case "Standard.updatedByUserID":
+		if e.complexity.Standard.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Standard.UpdatedByUserID(childComplexity), true
 
 	case "Standard.version":
 		if e.complexity.Standard.Version == nil {
@@ -18696,6 +20952,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.StandardHistory.CreatedByID(childComplexity), true
+
+	case "StandardHistory.createdByServiceID":
+		if e.complexity.StandardHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.CreatedByServiceID(childComplexity), true
+
+	case "StandardHistory.createdByUserID":
+		if e.complexity.StandardHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.CreatedByUserID(childComplexity), true
 
 	case "StandardHistory.deletedAt":
 		if e.complexity.StandardHistory.DeletedAt == nil {
@@ -18823,6 +21093,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.StandardHistory.UpdatedByID(childComplexity), true
 
+	case "StandardHistory.updatedByServiceID":
+		if e.complexity.StandardHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.UpdatedByServiceID(childComplexity), true
+
+	case "StandardHistory.updatedByUserID":
+		if e.complexity.StandardHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.UpdatedByUserID(childComplexity), true
+
 	case "StandardHistory.version":
 		if e.complexity.StandardHistory.Version == nil {
 			break
@@ -18900,19 +21184,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.CreatedAt(childComplexity), true
 
-	case "Subcontrol.createdBy":
-		if e.complexity.Subcontrol.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.CreatedBy(childComplexity), true
-
 	case "Subcontrol.createdByID":
 		if e.complexity.Subcontrol.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Subcontrol.CreatedByID(childComplexity), true
+
+	case "Subcontrol.createdByService":
+		if e.complexity.Subcontrol.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.CreatedByService(childComplexity), true
+
+	case "Subcontrol.createdByServiceID":
+		if e.complexity.Subcontrol.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.CreatedByServiceID(childComplexity), true
+
+	case "Subcontrol.createdByUser":
+		if e.complexity.Subcontrol.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.CreatedByUser(childComplexity), true
+
+	case "Subcontrol.createdByUserID":
+		if e.complexity.Subcontrol.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.CreatedByUserID(childComplexity), true
 
 	case "Subcontrol.deletedAt":
 		if e.complexity.Subcontrol.DeletedAt == nil {
@@ -19082,19 +21387,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subcontrol.UpdatedAt(childComplexity), true
 
-	case "Subcontrol.updatedBy":
-		if e.complexity.Subcontrol.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.UpdatedBy(childComplexity), true
-
 	case "Subcontrol.updatedByID":
 		if e.complexity.Subcontrol.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Subcontrol.UpdatedByID(childComplexity), true
+
+	case "Subcontrol.updatedByService":
+		if e.complexity.Subcontrol.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.UpdatedByService(childComplexity), true
+
+	case "Subcontrol.updatedByServiceID":
+		if e.complexity.Subcontrol.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.UpdatedByServiceID(childComplexity), true
+
+	case "Subcontrol.updatedByUser":
+		if e.complexity.Subcontrol.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.UpdatedByUser(childComplexity), true
+
+	case "Subcontrol.updatedByUserID":
+		if e.complexity.Subcontrol.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.UpdatedByUserID(childComplexity), true
 
 	case "Subcontrol.user":
 		if e.complexity.Subcontrol.User == nil {
@@ -19186,6 +21512,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SubcontrolHistory.CreatedByID(childComplexity), true
+
+	case "SubcontrolHistory.createdByServiceID":
+		if e.complexity.SubcontrolHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.CreatedByServiceID(childComplexity), true
+
+	case "SubcontrolHistory.createdByUserID":
+		if e.complexity.SubcontrolHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.CreatedByUserID(childComplexity), true
 
 	case "SubcontrolHistory.deletedAt":
 		if e.complexity.SubcontrolHistory.DeletedAt == nil {
@@ -19362,6 +21702,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SubcontrolHistory.UpdatedByID(childComplexity), true
 
+	case "SubcontrolHistory.updatedByServiceID":
+		if e.complexity.SubcontrolHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.UpdatedByServiceID(childComplexity), true
+
+	case "SubcontrolHistory.updatedByUserID":
+		if e.complexity.SubcontrolHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.UpdatedByUserID(childComplexity), true
+
 	case "SubcontrolHistory.version":
 		if e.complexity.SubcontrolHistory.Version == nil {
 			break
@@ -19432,19 +21786,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subscriber.CreatedAt(childComplexity), true
 
-	case "Subscriber.createdBy":
-		if e.complexity.Subscriber.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Subscriber.CreatedBy(childComplexity), true
-
 	case "Subscriber.createdByID":
 		if e.complexity.Subscriber.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Subscriber.CreatedByID(childComplexity), true
+
+	case "Subscriber.createdByService":
+		if e.complexity.Subscriber.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.CreatedByService(childComplexity), true
+
+	case "Subscriber.createdByServiceID":
+		if e.complexity.Subscriber.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.CreatedByServiceID(childComplexity), true
+
+	case "Subscriber.createdByUser":
+		if e.complexity.Subscriber.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.CreatedByUser(childComplexity), true
+
+	case "Subscriber.createdByUserID":
+		if e.complexity.Subscriber.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.CreatedByUserID(childComplexity), true
 
 	case "Subscriber.deletedAt":
 		if e.complexity.Subscriber.DeletedAt == nil {
@@ -19516,19 +21891,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subscriber.UpdatedAt(childComplexity), true
 
-	case "Subscriber.updatedBy":
-		if e.complexity.Subscriber.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Subscriber.UpdatedBy(childComplexity), true
-
 	case "Subscriber.updatedByID":
 		if e.complexity.Subscriber.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Subscriber.UpdatedByID(childComplexity), true
+
+	case "Subscriber.updatedByService":
+		if e.complexity.Subscriber.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.UpdatedByService(childComplexity), true
+
+	case "Subscriber.updatedByServiceID":
+		if e.complexity.Subscriber.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.UpdatedByServiceID(childComplexity), true
+
+	case "Subscriber.updatedByUser":
+		if e.complexity.Subscriber.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.UpdatedByUser(childComplexity), true
+
+	case "Subscriber.updatedByUserID":
+		if e.complexity.Subscriber.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Subscriber.UpdatedByUserID(childComplexity), true
 
 	case "Subscriber.verifiedEmail":
 		if e.complexity.Subscriber.VerifiedEmail == nil {
@@ -19621,19 +22017,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TFASetting.CreatedAt(childComplexity), true
 
-	case "TFASetting.createdBy":
-		if e.complexity.TFASetting.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.TFASetting.CreatedBy(childComplexity), true
-
 	case "TFASetting.createdByID":
 		if e.complexity.TFASetting.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.TFASetting.CreatedByID(childComplexity), true
+
+	case "TFASetting.createdByService":
+		if e.complexity.TFASetting.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.TFASetting.CreatedByService(childComplexity), true
+
+	case "TFASetting.createdByServiceID":
+		if e.complexity.TFASetting.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.TFASetting.CreatedByServiceID(childComplexity), true
+
+	case "TFASetting.createdByUser":
+		if e.complexity.TFASetting.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.TFASetting.CreatedByUser(childComplexity), true
+
+	case "TFASetting.createdByUserID":
+		if e.complexity.TFASetting.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TFASetting.CreatedByUserID(childComplexity), true
 
 	case "TFASetting.deletedAt":
 		if e.complexity.TFASetting.DeletedAt == nil {
@@ -19698,19 +22115,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TFASetting.UpdatedAt(childComplexity), true
 
-	case "TFASetting.updatedBy":
-		if e.complexity.TFASetting.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.TFASetting.UpdatedBy(childComplexity), true
-
 	case "TFASetting.updatedByID":
 		if e.complexity.TFASetting.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.TFASetting.UpdatedByID(childComplexity), true
+
+	case "TFASetting.updatedByService":
+		if e.complexity.TFASetting.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.TFASetting.UpdatedByService(childComplexity), true
+
+	case "TFASetting.updatedByServiceID":
+		if e.complexity.TFASetting.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.TFASetting.UpdatedByServiceID(childComplexity), true
+
+	case "TFASetting.updatedByUser":
+		if e.complexity.TFASetting.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.TFASetting.UpdatedByUser(childComplexity), true
+
+	case "TFASetting.updatedByUserID":
+		if e.complexity.TFASetting.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TFASetting.UpdatedByUserID(childComplexity), true
 
 	case "TFASetting.verified":
 		if e.complexity.TFASetting.Verified == nil {
@@ -19817,19 +22255,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Task.CreatedAt(childComplexity), true
 
-	case "Task.createdBy":
-		if e.complexity.Task.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Task.CreatedBy(childComplexity), true
-
 	case "Task.createdByID":
 		if e.complexity.Task.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Task.CreatedByID(childComplexity), true
+
+	case "Task.createdByService":
+		if e.complexity.Task.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Task.CreatedByService(childComplexity), true
+
+	case "Task.createdByServiceID":
+		if e.complexity.Task.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Task.CreatedByServiceID(childComplexity), true
+
+	case "Task.createdByUser":
+		if e.complexity.Task.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Task.CreatedByUser(childComplexity), true
+
+	case "Task.createdByUserID":
+		if e.complexity.Task.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Task.CreatedByUserID(childComplexity), true
 
 	case "Task.deletedAt":
 		if e.complexity.Task.DeletedAt == nil {
@@ -19943,19 +22402,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Task.UpdatedAt(childComplexity), true
 
-	case "Task.updatedBy":
-		if e.complexity.Task.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Task.UpdatedBy(childComplexity), true
-
 	case "Task.updatedByID":
 		if e.complexity.Task.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Task.UpdatedByID(childComplexity), true
+
+	case "Task.updatedByService":
+		if e.complexity.Task.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Task.UpdatedByService(childComplexity), true
+
+	case "Task.updatedByServiceID":
+		if e.complexity.Task.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Task.UpdatedByServiceID(childComplexity), true
+
+	case "Task.updatedByUser":
+		if e.complexity.Task.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Task.UpdatedByUser(childComplexity), true
+
+	case "Task.updatedByUserID":
+		if e.complexity.Task.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Task.UpdatedByUserID(childComplexity), true
 
 	case "TaskBulkCreatePayload.tasks":
 		if e.complexity.TaskBulkCreatePayload.Tasks == nil {
@@ -20033,6 +22513,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TaskHistory.CreatedByID(childComplexity), true
+
+	case "TaskHistory.createdByServiceID":
+		if e.complexity.TaskHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.CreatedByServiceID(childComplexity), true
+
+	case "TaskHistory.createdByUserID":
+		if e.complexity.TaskHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.CreatedByUserID(childComplexity), true
 
 	case "TaskHistory.deletedAt":
 		if e.complexity.TaskHistory.DeletedAt == nil {
@@ -20139,6 +22633,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TaskHistory.UpdatedByID(childComplexity), true
 
+	case "TaskHistory.updatedByServiceID":
+		if e.complexity.TaskHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.UpdatedByServiceID(childComplexity), true
+
+	case "TaskHistory.updatedByUserID":
+		if e.complexity.TaskHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.UpdatedByUserID(childComplexity), true
+
 	case "TaskHistoryConnection.edges":
 		if e.complexity.TaskHistoryConnection.Edges == nil {
 			break
@@ -20195,19 +22703,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Template.CreatedAt(childComplexity), true
 
-	case "Template.createdBy":
-		if e.complexity.Template.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.Template.CreatedBy(childComplexity), true
-
 	case "Template.createdByID":
 		if e.complexity.Template.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.Template.CreatedByID(childComplexity), true
+
+	case "Template.createdByService":
+		if e.complexity.Template.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.Template.CreatedByService(childComplexity), true
+
+	case "Template.createdByServiceID":
+		if e.complexity.Template.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Template.CreatedByServiceID(childComplexity), true
+
+	case "Template.createdByUser":
+		if e.complexity.Template.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Template.CreatedByUser(childComplexity), true
+
+	case "Template.createdByUserID":
+		if e.complexity.Template.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Template.CreatedByUserID(childComplexity), true
 
 	case "Template.deletedAt":
 		if e.complexity.Template.DeletedAt == nil {
@@ -20307,19 +22836,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Template.UpdatedAt(childComplexity), true
 
-	case "Template.updatedBy":
-		if e.complexity.Template.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.Template.UpdatedBy(childComplexity), true
-
 	case "Template.updatedByID":
 		if e.complexity.Template.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.Template.UpdatedByID(childComplexity), true
+
+	case "Template.updatedByService":
+		if e.complexity.Template.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.Template.UpdatedByService(childComplexity), true
+
+	case "Template.updatedByServiceID":
+		if e.complexity.Template.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.Template.UpdatedByServiceID(childComplexity), true
+
+	case "Template.updatedByUser":
+		if e.complexity.Template.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.Template.UpdatedByUser(childComplexity), true
+
+	case "Template.updatedByUserID":
+		if e.complexity.Template.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.Template.UpdatedByUserID(childComplexity), true
 
 	case "TemplateBulkCreatePayload.templates":
 		if e.complexity.TemplateBulkCreatePayload.Templates == nil {
@@ -20390,6 +22940,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TemplateHistory.CreatedByID(childComplexity), true
+
+	case "TemplateHistory.createdByServiceID":
+		if e.complexity.TemplateHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.CreatedByServiceID(childComplexity), true
+
+	case "TemplateHistory.createdByUserID":
+		if e.complexity.TemplateHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.CreatedByUserID(childComplexity), true
 
 	case "TemplateHistory.deletedAt":
 		if e.complexity.TemplateHistory.DeletedAt == nil {
@@ -20502,6 +23066,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TemplateHistory.UpdatedByID(childComplexity), true
+
+	case "TemplateHistory.updatedByServiceID":
+		if e.complexity.TemplateHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.UpdatedByServiceID(childComplexity), true
+
+	case "TemplateHistory.updatedByUserID":
+		if e.complexity.TemplateHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.UpdatedByUserID(childComplexity), true
 
 	case "TemplateHistoryConnection.edges":
 		if e.complexity.TemplateHistoryConnection.Edges == nil {
@@ -20621,6 +23199,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.User.CreatedByID(childComplexity), true
+
+	case "User.createdByServiceID":
+		if e.complexity.User.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.User.CreatedByServiceID(childComplexity), true
+
+	case "User.createdByUserID":
+		if e.complexity.User.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.User.CreatedByUserID(childComplexity), true
 
 	case "User.deletedAt":
 		if e.complexity.User.DeletedAt == nil {
@@ -20804,6 +23396,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.UpdatedByID(childComplexity), true
 
+	case "User.updatedByServiceID":
+		if e.complexity.User.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.User.UpdatedByServiceID(childComplexity), true
+
+	case "User.updatedByUserID":
+		if e.complexity.User.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.User.UpdatedByUserID(childComplexity), true
+
 	case "UserBulkCreatePayload.users":
 		if e.complexity.UserBulkCreatePayload.Users == nil {
 			break
@@ -20908,6 +23514,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserHistory.CreatedByID(childComplexity), true
+
+	case "UserHistory.createdByServiceID":
+		if e.complexity.UserHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.CreatedByServiceID(childComplexity), true
+
+	case "UserHistory.createdByUserID":
+		if e.complexity.UserHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.CreatedByUserID(childComplexity), true
 
 	case "UserHistory.deletedAt":
 		if e.complexity.UserHistory.DeletedAt == nil {
@@ -21028,6 +23648,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserHistory.UpdatedByID(childComplexity), true
 
+	case "UserHistory.updatedByServiceID":
+		if e.complexity.UserHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.UpdatedByServiceID(childComplexity), true
+
+	case "UserHistory.updatedByUserID":
+		if e.complexity.UserHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.UserHistory.UpdatedByUserID(childComplexity), true
+
 	case "UserHistoryConnection.edges":
 		if e.complexity.UserHistoryConnection.Edges == nil {
 			break
@@ -21077,19 +23711,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserSetting.CreatedAt(childComplexity), true
 
-	case "UserSetting.createdBy":
-		if e.complexity.UserSetting.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.UserSetting.CreatedBy(childComplexity), true
-
 	case "UserSetting.createdByID":
 		if e.complexity.UserSetting.CreatedByID == nil {
 			break
 		}
 
 		return e.complexity.UserSetting.CreatedByID(childComplexity), true
+
+	case "UserSetting.createdByService":
+		if e.complexity.UserSetting.CreatedByService == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.CreatedByService(childComplexity), true
+
+	case "UserSetting.createdByServiceID":
+		if e.complexity.UserSetting.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.CreatedByServiceID(childComplexity), true
+
+	case "UserSetting.createdByUser":
+		if e.complexity.UserSetting.CreatedByUser == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.CreatedByUser(childComplexity), true
+
+	case "UserSetting.createdByUserID":
+		if e.complexity.UserSetting.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.CreatedByUserID(childComplexity), true
 
 	case "UserSetting.defaultOrg":
 		if e.complexity.UserSetting.DefaultOrg == nil {
@@ -21189,19 +23844,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserSetting.UpdatedAt(childComplexity), true
 
-	case "UserSetting.updatedBy":
-		if e.complexity.UserSetting.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.UserSetting.UpdatedBy(childComplexity), true
-
 	case "UserSetting.updatedByID":
 		if e.complexity.UserSetting.UpdatedByID == nil {
 			break
 		}
 
 		return e.complexity.UserSetting.UpdatedByID(childComplexity), true
+
+	case "UserSetting.updatedByService":
+		if e.complexity.UserSetting.UpdatedByService == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.UpdatedByService(childComplexity), true
+
+	case "UserSetting.updatedByServiceID":
+		if e.complexity.UserSetting.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.UpdatedByServiceID(childComplexity), true
+
+	case "UserSetting.updatedByUser":
+		if e.complexity.UserSetting.UpdatedByUser == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.UpdatedByUser(childComplexity), true
+
+	case "UserSetting.updatedByUserID":
+		if e.complexity.UserSetting.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.UserSetting.UpdatedByUserID(childComplexity), true
 
 	case "UserSetting.user":
 		if e.complexity.UserSetting.User == nil {
@@ -21279,6 +23955,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserSettingHistory.CreatedByID(childComplexity), true
+
+	case "UserSettingHistory.createdByServiceID":
+		if e.complexity.UserSettingHistory.CreatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.UserSettingHistory.CreatedByServiceID(childComplexity), true
+
+	case "UserSettingHistory.createdByUserID":
+		if e.complexity.UserSettingHistory.CreatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.UserSettingHistory.CreatedByUserID(childComplexity), true
 
 	case "UserSettingHistory.deletedAt":
 		if e.complexity.UserSettingHistory.DeletedAt == nil {
@@ -21398,6 +24088,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserSettingHistory.UpdatedByID(childComplexity), true
+
+	case "UserSettingHistory.updatedByServiceID":
+		if e.complexity.UserSettingHistory.UpdatedByServiceID == nil {
+			break
+		}
+
+		return e.complexity.UserSettingHistory.UpdatedByServiceID(childComplexity), true
+
+	case "UserSettingHistory.updatedByUserID":
+		if e.complexity.UserSettingHistory.UpdatedByUserID == nil {
+			break
+		}
+
+		return e.complexity.UserSettingHistory.UpdatedByUserID(childComplexity), true
 
 	case "UserSettingHistory.userID":
 		if e.complexity.UserSettingHistory.UserID == nil {
@@ -22702,8 +25406,12 @@ type APIToken implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -22729,8 +25437,10 @@ type APIToken implements Node {
   description: String
   scopes: [String!]
   lastUsedAt: Time
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
 }
 """
@@ -22813,39 +25523,111 @@ input APITokenWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -22938,15 +25720,25 @@ input APITokenWhereInput {
   lastUsedAtIsNil: Boolean
   lastUsedAtNotNil: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -22957,8 +25749,12 @@ type ActionPlan implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -22993,8 +25789,10 @@ type ActionPlan implements Node {
   json data including details of the action plan
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   standard: [Standard!]
   risk: [Risk!]
   control: [Control!]
@@ -23041,6 +25839,10 @@ type ActionPlanHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -23252,6 +26054,78 @@ input ActionPlanHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -23434,39 +26308,111 @@ input ActionPlanWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -23600,15 +26546,25 @@ input ActionPlanWhereInput {
   sourceEqualFold: String
   sourceContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   standard edge predicates
   """
@@ -23638,7 +26594,14 @@ input ActionPlanWhereInput {
 type ChangeActor implements Node {
   id: ID!
   name: String!
-  actorType: String!
+  actorType: ChangeActorActorType!
+}
+"""
+ChangeActorActorType is enum for the field actor_type
+"""
+enum ChangeActorActorType @goModel(model: "github.com/theopenlane/core/internal/ent/generated/changeactor.ActorType") {
+  user
+  service
 }
 """
 ChangeActorWhereInput is used for filtering ChangeActor objects.
@@ -23680,26 +26643,21 @@ input ChangeActorWhereInput {
   """
   actor_type field predicates
   """
-  actorType: String
-  actorTypeNEQ: String
-  actorTypeIn: [String!]
-  actorTypeNotIn: [String!]
-  actorTypeGT: String
-  actorTypeGTE: String
-  actorTypeLT: String
-  actorTypeLTE: String
-  actorTypeContains: String
-  actorTypeHasPrefix: String
-  actorTypeHasSuffix: String
-  actorTypeEqualFold: String
-  actorTypeContainsFold: String
+  actorType: ChangeActorActorType
+  actorTypeNEQ: ChangeActorActorType
+  actorTypeIn: [ChangeActorActorType!]
+  actorTypeNotIn: [ChangeActorActorType!]
 }
 type Contact implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -23738,8 +26696,10 @@ type Contact implements Node {
   status of the contact
   """
   status: ContactUserStatus!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   entities: [Entity!]
   files: [File!]
@@ -23784,6 +26744,10 @@ type ContactHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -24009,6 +26973,78 @@ input ContactHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -24231,39 +27267,111 @@ input ContactWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -24427,15 +27535,25 @@ input ContactWhereInput {
   statusIn: [ContactUserStatus!]
   statusNotIn: [ContactUserStatus!]
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -24456,8 +27574,12 @@ type Control implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -24516,8 +27638,10 @@ type Control implements Node {
   json data including details of the control
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization!
   """
   groups that are blocked from viewing or editing the risk
@@ -24581,6 +27705,10 @@ type ControlHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -24815,6 +27943,78 @@ input ControlHistoryWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -25063,8 +28263,12 @@ type ControlObjective implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -25119,8 +28323,10 @@ type ControlObjective implements Node {
   json data including details of the control objective
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization!
   """
   groups that are blocked from viewing or editing the risk
@@ -25184,6 +28390,10 @@ type ControlObjectiveHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -25414,6 +28624,78 @@ input ControlObjectiveHistoryWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -25690,39 +28972,111 @@ input ControlObjectiveWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -25949,15 +29303,25 @@ input ControlObjectiveWhereInput {
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -26074,39 +29438,111 @@ input ControlWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -26351,15 +29787,25 @@ input ControlWhereInput {
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -27860,8 +31306,12 @@ type DocumentData implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -27880,8 +31330,10 @@ type DocumentData implements Node {
   the json data of the document
   """
   data: JSON!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   template: Template!
   entity: [Entity!]
@@ -27927,6 +31379,10 @@ type DocumentDataHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   """
   tags associated with the object
   """
@@ -28122,6 +31578,78 @@ input DocumentDataHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -28237,39 +31765,111 @@ input DocumentDataWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -28336,15 +31936,25 @@ input DocumentDataWhereInput {
   templateIDEqualFold: ID
   templateIDContainsFold: ID
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -28370,8 +31980,12 @@ type Entity implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -28406,8 +32020,10 @@ type Entity implements Node {
   status of the entity
   """
   status: String
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   contacts: [Contact!]
   documents: [DocumentData!]
@@ -28455,6 +32071,10 @@ type EntityHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -28686,6 +32306,78 @@ input EntityHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -28831,8 +32523,12 @@ type EntityType implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -28847,8 +32543,10 @@ type EntityType implements Node {
   the name of the entity
   """
   name: String!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   entities: [Entity!]
 }
@@ -28892,6 +32590,10 @@ type EntityTypeHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -29102,6 +32804,78 @@ input EntityTypeHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -29236,39 +33010,111 @@ input EntityTypeWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -29335,15 +33181,25 @@ input EntityTypeWhereInput {
   nameEqualFold: String
   nameContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -29405,39 +33261,111 @@ input EntityWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -29560,15 +33488,25 @@ input EntityWhereInput {
   statusEqualFold: String
   statusContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -29604,8 +33542,12 @@ type Event implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -29614,8 +33556,10 @@ type Event implements Node {
   correlationID: String
   eventType: String!
   metadata: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   user: [User!]
   group: [Group!]
   integration: [Integration!]
@@ -29668,6 +33612,10 @@ type EventHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   """
   tags associated with the object
   """
@@ -29853,6 +33801,78 @@ input EventHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   event_id field predicates
   """
   eventID: String
@@ -29955,39 +33975,111 @@ input EventWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   event_id field predicates
   """
@@ -30041,15 +34133,25 @@ input EventWhereInput {
   eventTypeEqualFold: String
   eventTypeContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   user edge predicates
   """
@@ -30110,8 +34212,12 @@ type File implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -30167,8 +34273,10 @@ type File implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   user: [User!]
   organization: [Organization!]
   group: [Group!]
@@ -30221,6 +34329,10 @@ type FileHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -30452,6 +34564,78 @@ input FileHistoryWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -30752,39 +34936,111 @@ input FileWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -31035,15 +35291,25 @@ input FileWhereInput {
   storagePathEqualFold: String
   storagePathContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   user edge predicates
   """
@@ -31104,8 +35370,12 @@ type Group implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -31136,8 +35406,10 @@ type Group implements Node {
   The group's displayed 'friendly' name
   """
   displayName: String!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   controlCreators: [Organization!]
   controlObjectiveCreators: [Organization!]
@@ -31215,6 +35487,10 @@ type GroupHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -31442,6 +35718,78 @@ input GroupHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -31527,15 +35875,21 @@ type GroupMembership implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   role: GroupMembershipRole!
   groupID: ID!
   userID: ID!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   group: Group!
   user: User!
   events: [Event!]
@@ -31580,6 +35934,10 @@ type GroupMembershipHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   role: GroupMembershipHistoryRole!
@@ -31769,6 +36127,78 @@ input GroupMembershipHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -31894,6 +36324,42 @@ input GroupMembershipWhereInput {
   updatedAtIsNil: Boolean
   updatedAtNotNil: Boolean
   """
+  created_by_id field predicates
+  """
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
+  createdByIDIsNil: Boolean
+  createdByIDNotNil: Boolean
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
+  """
+  updated_by_id field predicates
+  """
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
+  updatedByIDIsNil: Boolean
+  updatedByIDNotNil: Boolean
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -31956,8 +36422,12 @@ type GroupSetting implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -31984,8 +36454,10 @@ type GroupSetting implements Node {
   the group id associated with the settings
   """
   groupID: ID
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   group: Group
 }
 """
@@ -32028,6 +36500,10 @@ type GroupSettingHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   """
   tags associated with the object
   """
@@ -32247,6 +36723,78 @@ input GroupSettingHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -32390,39 +36938,111 @@ input GroupSettingWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -32501,15 +37121,25 @@ input GroupSettingWhereInput {
   groupIDEqualFold: ID
   groupIDContainsFold: ID
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   group edge predicates
   """
@@ -32566,39 +37196,111 @@ input GroupWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -32681,15 +37383,25 @@ input GroupWhereInput {
   displayNameEqualFold: String
   displayNameContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -32875,8 +37587,12 @@ type Hush implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -32895,8 +37611,10 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   """
   the integration associated with the secret
   """
@@ -32944,6 +37662,10 @@ type HushHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -33159,6 +37881,78 @@ input HushHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -33312,39 +38106,111 @@ input HushWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -33429,15 +38295,25 @@ input HushWhereInput {
   secretNameEqualFold: String
   secretNameContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   integrations edge predicates
   """
@@ -33458,8 +38334,12 @@ type Integration implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -33479,8 +38359,10 @@ type Integration implements Node {
   """
   description: String
   kind: String
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   """
   the secrets associated with the integration
@@ -33528,6 +38410,10 @@ type IntegrationHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   """
   tags associated with the object
   """
@@ -33744,6 +38630,78 @@ input IntegrationHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -33897,39 +38855,111 @@ input IntegrationWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -34014,15 +39044,25 @@ input IntegrationWhereInput {
   kindEqualFold: String
   kindContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -34043,8 +39083,12 @@ type InternalPolicy implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -34087,8 +39131,10 @@ type InternalPolicy implements Node {
   json data for the policy document
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -34145,6 +39191,10 @@ type InternalPolicyHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -34363,6 +39413,78 @@ input InternalPolicyHistoryWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -34587,39 +39709,111 @@ input InternalPolicyWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -34794,15 +39988,25 @@ input InternalPolicyWhereInput {
   backgroundEqualFold: String
   backgroundContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -34853,8 +40057,12 @@ type Invite implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -34882,8 +40090,10 @@ type Invite implements Node {
   the user who initiated the invitation
   """
   requestorID: String
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   events: [Event!]
 }
@@ -34983,39 +40193,111 @@ input InviteWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -35138,15 +40420,25 @@ input InviteWhereInput {
   requestorIDEqualFold: String
   requestorIDContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -35170,8 +40462,12 @@ type Narrative implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -35198,8 +40494,10 @@ type Narrative implements Node {
   json data for the narrative document
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization!
   """
   groups that are blocked from viewing or editing the risk
@@ -35259,6 +40557,10 @@ type NarrativeHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -35462,6 +40764,78 @@ input NarrativeHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -35611,39 +40985,111 @@ input NarrativeWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -35744,15 +41190,25 @@ input NarrativeWhereInput {
   satisfiesEqualFold: String
   satisfiesContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -35813,8 +41269,12 @@ type Note implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -35829,8 +41289,10 @@ type Note implements Node {
   the text of the note
   """
   text: String!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   entity: Entity
   subcontrols: [Subcontrol!]
@@ -35876,6 +41338,10 @@ type NoteHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -36067,6 +41533,78 @@ input NoteHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -36182,39 +41720,111 @@ input NoteWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -36281,15 +41891,25 @@ input NoteWhereInput {
   textEqualFold: String
   textContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -36328,15 +41948,21 @@ type OrgMembership implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   role: OrgMembershipRole!
   organizationID: ID!
   userID: ID!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   organization: Organization!
   user: User!
   events: [Event!]
@@ -36381,6 +42007,10 @@ type OrgMembershipHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   role: OrgMembershipHistoryRole!
@@ -36571,6 +42201,78 @@ input OrgMembershipHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -36697,6 +42399,42 @@ input OrgMembershipWhereInput {
   updatedAtIsNil: Boolean
   updatedAtNotNil: Boolean
   """
+  created_by_id field predicates
+  """
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
+  createdByIDIsNil: Boolean
+  createdByIDNotNil: Boolean
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
+  """
+  updated_by_id field predicates
+  """
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
+  updatedByIDIsNil: Boolean
+  updatedByIDNotNil: Boolean
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -36739,8 +42477,12 @@ type OrgSubscription implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -36783,8 +42525,10 @@ type OrgSubscription implements Node {
   the features associated with the subscription
   """
   features: [String!]
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
 }
 """
@@ -36827,6 +42571,10 @@ type OrgSubscriptionHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   """
   tags associated with the object
   """
@@ -37046,6 +42794,78 @@ input OrgSubscriptionHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -37253,39 +43073,111 @@ input OrgSubscriptionWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -37444,15 +43336,25 @@ input OrgSubscriptionWhereInput {
   expiresAtIsNil: Boolean
   expiresAtNotNil: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -37463,8 +43365,12 @@ type Organization implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -37495,8 +43401,10 @@ type Organization implements Node {
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   """
   groups that are allowed to create controls
   """
@@ -37634,6 +43542,10 @@ type OrganizationHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   """
   tags associated with the object
   """
@@ -37861,6 +43773,78 @@ input OrganizationHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -37975,8 +43959,12 @@ type OrganizationSetting implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -38019,8 +44007,10 @@ type OrganizationSetting implements Node {
   the ID of the stripe customer associated with the organization
   """
   stripeID: String
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   organization: Organization
   files: [File!]
 }
@@ -38064,6 +44054,10 @@ type OrganizationSettingHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   """
   tags associated with the object
   """
@@ -38291,6 +44285,78 @@ input OrganizationSettingHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -38515,39 +44581,111 @@ input OrganizationSettingWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -38715,15 +44853,25 @@ input OrganizationSettingWhereInput {
   stripeIDEqualFold: String
   stripeIDContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   organization edge predicates
   """
@@ -38785,39 +44933,111 @@ input OrganizationWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -38909,15 +45129,25 @@ input OrganizationWhereInput {
   avatarRemoteURLEqualFold: String
   avatarRemoteURLContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   control_creators edge predicates
   """
@@ -39140,8 +45370,12 @@ type PersonalAccessToken implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -39163,8 +45397,10 @@ type PersonalAccessToken implements Node {
   description: String
   scopes: [String!]
   lastUsedAt: Time
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: User!
   """
   the organization(s) the token is associated with
@@ -39252,39 +45488,111 @@ input PersonalAccessTokenWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -39359,15 +45667,25 @@ input PersonalAccessTokenWhereInput {
   lastUsedAtIsNil: Boolean
   lastUsedAtNotNil: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -39388,8 +45706,12 @@ type Procedure implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -39436,8 +45758,10 @@ type Procedure implements Node {
   json data for the procedure document
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -39494,6 +45818,10 @@ type ProcedureHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -39716,6 +46044,78 @@ input ProcedureHistoryWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -39958,39 +46358,111 @@ input ProcedureWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -40183,15 +46655,25 @@ input ProcedureWhereInput {
   satisfiesEqualFold: String
   satisfiesContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -40242,8 +46724,12 @@ type Program implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -40286,8 +46772,10 @@ type Program implements Node {
   can the auditor read comments
   """
   auditorReadComments: Boolean!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   """
   groups that are blocked from viewing or editing the risk
@@ -40359,6 +46847,10 @@ type ProgramHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -40588,6 +47080,78 @@ input ProgramHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -40723,15 +47287,21 @@ type ProgramMembership implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   role: ProgramMembershipRole!
   programID: ID!
   userID: ID!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   program: Program!
   user: User!
 }
@@ -40775,6 +47345,10 @@ type ProgramMembershipHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   role: ProgramMembershipHistoryRole!
@@ -40964,6 +47538,78 @@ input ProgramMembershipHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -41089,6 +47735,42 @@ input ProgramMembershipWhereInput {
   updatedAtIsNil: Boolean
   updatedAtNotNil: Boolean
   """
+  created_by_id field predicates
+  """
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
+  createdByIDIsNil: Boolean
+  createdByIDNotNil: Boolean
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
+  """
+  updated_by_id field predicates
+  """
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
+  updatedByIDIsNil: Boolean
+  updatedByIDNotNil: Boolean
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -41187,39 +47869,111 @@ input ProgramWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -41352,15 +48106,25 @@ input ProgramWhereInput {
   auditorReadComments: Boolean
   auditorReadCommentsNEQ: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -43298,8 +50062,12 @@ type Risk implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -43350,8 +50118,10 @@ type Risk implements Node {
   json data for the risk document
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization!
   """
   groups that are blocked from viewing or editing the risk
@@ -43410,6 +50180,10 @@ type RiskHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -43652,6 +50426,78 @@ input RiskHistoryWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -43908,39 +50754,111 @@ input RiskWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -44131,15 +51049,25 @@ input RiskWhereInput {
   satisfiesEqualFold: String
   satisfiesContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -44185,8 +51113,12 @@ type Standard implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -44233,8 +51165,10 @@ type Standard implements Node {
   json data with details of the standard
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   controlObjectives: [ControlObjective!]
   controls: [Control!]
   procedures: [Procedure!]
@@ -44281,6 +51215,10 @@ type StandardHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -44503,6 +51441,78 @@ input StandardHistoryWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -44745,39 +51755,111 @@ input StandardWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -44970,15 +52052,25 @@ input StandardWhereInput {
   satisfiesEqualFold: String
   satisfiesContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   control_objectives edge predicates
   """
@@ -45009,8 +52101,12 @@ type Subcontrol implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -45085,8 +52181,10 @@ type Subcontrol implements Node {
   json data details of the subcontrol
   """
   details: Map
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization!
   controls: [Control!]!
   user: [User!]
@@ -45134,6 +52232,10 @@ type SubcontrolHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -45384,6 +52486,78 @@ input SubcontrolHistoryWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -45740,39 +52914,111 @@ input SubcontrolWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -46079,15 +53325,25 @@ input SubcontrolWhereInput {
   implementationVerificationDateIsNil: Boolean
   implementationVerificationDateNotNil: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -46123,8 +53379,12 @@ type Subscriber implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -46155,8 +53415,10 @@ type Subscriber implements Node {
   indicates if the subscriber is active or not, active users will have at least one verified contact method
   """
   active: Boolean!
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   events: [Event!]
 }
@@ -46240,39 +53502,111 @@ input SubscriberWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -46372,15 +53706,25 @@ input SubscriberWhereInput {
   active: Boolean
   activeNEQ: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -46396,8 +53740,12 @@ type TFASetting implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -46420,8 +53768,10 @@ type TFASetting implements Node {
   specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
   """
   totpAllowed: Boolean
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: User
 }
 """
@@ -46504,39 +53854,111 @@ input TFASettingWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -46599,15 +54021,25 @@ input TFASettingWhereInput {
   totpAllowedIsNil: Boolean
   totpAllowedNotNil: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -46618,8 +54050,12 @@ type Task implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -46650,8 +54086,10 @@ type Task implements Node {
   the completion date of the task
   """
   completed: Time
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   assigner: User!
   assignee: User
   organization: [Organization!]
@@ -46703,6 +54141,10 @@ type TaskHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -46920,6 +54362,78 @@ input TaskHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -47078,39 +54592,111 @@ input TaskWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -47210,15 +54796,25 @@ input TaskWhereInput {
   completedIsNil: Boolean
   completedNotNil: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   assigner edge predicates
   """
@@ -47274,8 +54870,12 @@ type Template implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   deletedAt: Time
   deletedByID: String
   """
@@ -47306,8 +54906,10 @@ type Template implements Node {
   the uischema for the template to render in the UI
   """
   uischema: JSON
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   owner: Organization
   documents: [DocumentData!]
   files: [File!]
@@ -47359,6 +54961,10 @@ type TemplateHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -47592,6 +55198,78 @@ input TemplateHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -47751,39 +55429,111 @@ input TemplateWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -47875,15 +55625,25 @@ input TemplateWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   owner edge predicates
   """
@@ -49989,6 +57749,10 @@ type User implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -50100,6 +57864,10 @@ type UserHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   deletedAt: Time
   deletedByID: String
   """
@@ -50360,6 +58128,78 @@ input UserHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -50606,8 +58446,12 @@ type UserSetting implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
-  createdByID: ID
-  updatedByID: ID
+  createdByID: String
+  updatedByID: String
+  createdByUserID: ID
+  updatedByUserID: ID
+  createdByServiceID: ID
+  updatedByServiceID: ID
   """
   tags associated with the object
   """
@@ -50643,8 +58487,10 @@ type UserSetting implements Node {
   whether the user has two factor authentication enabled
   """
   isTfaEnabled: Boolean
-  createdBy: ChangeActor
-  updatedBy: ChangeActor
+  createdByUser: User
+  updatedByUser: User
+  createdByService: APIToken
+  updatedByService: APIToken
   user: User
   """
   organization to load on user login
@@ -50692,6 +58538,10 @@ type UserSettingHistory implements Node {
   updatedAt: Time
   createdByID: String
   updatedByID: String
+  createdByUserID: String
+  updatedByUserID: String
+  createdByServiceID: String
+  updatedByServiceID: String
   """
   tags associated with the object
   """
@@ -50914,6 +58764,78 @@ input UserSettingHistoryWhereInput {
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
   """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
+  """
   deleted_at field predicates
   """
   deletedAt: Time
@@ -51080,39 +59002,111 @@ input UserSettingWhereInput {
   """
   created_by_id field predicates
   """
-  createdByID: ID
-  createdByIDNEQ: ID
-  createdByIDIn: [ID!]
-  createdByIDNotIn: [ID!]
-  createdByIDGT: ID
-  createdByIDGTE: ID
-  createdByIDLT: ID
-  createdByIDLTE: ID
-  createdByIDContains: ID
-  createdByIDHasPrefix: ID
-  createdByIDHasSuffix: ID
+  createdByID: String
+  createdByIDNEQ: String
+  createdByIDIn: [String!]
+  createdByIDNotIn: [String!]
+  createdByIDGT: String
+  createdByIDGTE: String
+  createdByIDLT: String
+  createdByIDLTE: String
+  createdByIDContains: String
+  createdByIDHasPrefix: String
+  createdByIDHasSuffix: String
   createdByIDIsNil: Boolean
   createdByIDNotNil: Boolean
-  createdByIDEqualFold: ID
-  createdByIDContainsFold: ID
+  createdByIDEqualFold: String
+  createdByIDContainsFold: String
   """
   updated_by_id field predicates
   """
-  updatedByID: ID
-  updatedByIDNEQ: ID
-  updatedByIDIn: [ID!]
-  updatedByIDNotIn: [ID!]
-  updatedByIDGT: ID
-  updatedByIDGTE: ID
-  updatedByIDLT: ID
-  updatedByIDLTE: ID
-  updatedByIDContains: ID
-  updatedByIDHasPrefix: ID
-  updatedByIDHasSuffix: ID
+  updatedByID: String
+  updatedByIDNEQ: String
+  updatedByIDIn: [String!]
+  updatedByIDNotIn: [String!]
+  updatedByIDGT: String
+  updatedByIDGTE: String
+  updatedByIDLT: String
+  updatedByIDLTE: String
+  updatedByIDContains: String
+  updatedByIDHasPrefix: String
+  updatedByIDHasSuffix: String
   updatedByIDIsNil: Boolean
   updatedByIDNotNil: Boolean
-  updatedByIDEqualFold: ID
-  updatedByIDContainsFold: ID
+  updatedByIDEqualFold: String
+  updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: ID
+  createdByUserIDNEQ: ID
+  createdByUserIDIn: [ID!]
+  createdByUserIDNotIn: [ID!]
+  createdByUserIDGT: ID
+  createdByUserIDGTE: ID
+  createdByUserIDLT: ID
+  createdByUserIDLTE: ID
+  createdByUserIDContains: ID
+  createdByUserIDHasPrefix: ID
+  createdByUserIDHasSuffix: ID
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: ID
+  createdByUserIDContainsFold: ID
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: ID
+  updatedByUserIDNEQ: ID
+  updatedByUserIDIn: [ID!]
+  updatedByUserIDNotIn: [ID!]
+  updatedByUserIDGT: ID
+  updatedByUserIDGTE: ID
+  updatedByUserIDLT: ID
+  updatedByUserIDLTE: ID
+  updatedByUserIDContains: ID
+  updatedByUserIDHasPrefix: ID
+  updatedByUserIDHasSuffix: ID
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: ID
+  updatedByUserIDContainsFold: ID
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: ID
+  createdByServiceIDNEQ: ID
+  createdByServiceIDIn: [ID!]
+  createdByServiceIDNotIn: [ID!]
+  createdByServiceIDGT: ID
+  createdByServiceIDGTE: ID
+  createdByServiceIDLT: ID
+  createdByServiceIDLTE: ID
+  createdByServiceIDContains: ID
+  createdByServiceIDHasPrefix: ID
+  createdByServiceIDHasSuffix: ID
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: ID
+  createdByServiceIDContainsFold: ID
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: ID
+  updatedByServiceIDNEQ: ID
+  updatedByServiceIDIn: [ID!]
+  updatedByServiceIDNotIn: [ID!]
+  updatedByServiceIDGT: ID
+  updatedByServiceIDGTE: ID
+  updatedByServiceIDLT: ID
+  updatedByServiceIDLTE: ID
+  updatedByServiceIDContains: ID
+  updatedByServiceIDHasPrefix: ID
+  updatedByServiceIDHasSuffix: ID
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: ID
+  updatedByServiceIDContainsFold: ID
   """
   deleted_at field predicates
   """
@@ -51220,15 +59214,25 @@ input UserSettingWhereInput {
   isTfaEnabledIsNil: Boolean
   isTfaEnabledNotNil: Boolean
   """
-  created_by edge predicates
+  created_by_user edge predicates
   """
-  hasCreatedBy: Boolean
-  hasCreatedByWith: [ChangeActorWhereInput!]
+  hasCreatedByUser: Boolean
+  hasCreatedByUserWith: [UserWhereInput!]
   """
-  updated_by edge predicates
+  updated_by_user edge predicates
   """
-  hasUpdatedBy: Boolean
-  hasUpdatedByWith: [ChangeActorWhereInput!]
+  hasUpdatedByUser: Boolean
+  hasUpdatedByUserWith: [UserWhereInput!]
+  """
+  created_by_service edge predicates
+  """
+  hasCreatedByService: Boolean
+  hasCreatedByServiceWith: [APITokenWhereInput!]
+  """
+  updated_by_service edge predicates
+  """
+  hasUpdatedByService: Boolean
+  hasUpdatedByServiceWith: [APITokenWhereInput!]
   """
   user edge predicates
   """
@@ -51328,6 +59332,78 @@ input UserWhereInput {
   updatedByIDNotNil: Boolean
   updatedByIDEqualFold: String
   updatedByIDContainsFold: String
+  """
+  created_by_user_id field predicates
+  """
+  createdByUserID: String
+  createdByUserIDNEQ: String
+  createdByUserIDIn: [String!]
+  createdByUserIDNotIn: [String!]
+  createdByUserIDGT: String
+  createdByUserIDGTE: String
+  createdByUserIDLT: String
+  createdByUserIDLTE: String
+  createdByUserIDContains: String
+  createdByUserIDHasPrefix: String
+  createdByUserIDHasSuffix: String
+  createdByUserIDIsNil: Boolean
+  createdByUserIDNotNil: Boolean
+  createdByUserIDEqualFold: String
+  createdByUserIDContainsFold: String
+  """
+  updated_by_user_id field predicates
+  """
+  updatedByUserID: String
+  updatedByUserIDNEQ: String
+  updatedByUserIDIn: [String!]
+  updatedByUserIDNotIn: [String!]
+  updatedByUserIDGT: String
+  updatedByUserIDGTE: String
+  updatedByUserIDLT: String
+  updatedByUserIDLTE: String
+  updatedByUserIDContains: String
+  updatedByUserIDHasPrefix: String
+  updatedByUserIDHasSuffix: String
+  updatedByUserIDIsNil: Boolean
+  updatedByUserIDNotNil: Boolean
+  updatedByUserIDEqualFold: String
+  updatedByUserIDContainsFold: String
+  """
+  created_by_service_id field predicates
+  """
+  createdByServiceID: String
+  createdByServiceIDNEQ: String
+  createdByServiceIDIn: [String!]
+  createdByServiceIDNotIn: [String!]
+  createdByServiceIDGT: String
+  createdByServiceIDGTE: String
+  createdByServiceIDLT: String
+  createdByServiceIDLTE: String
+  createdByServiceIDContains: String
+  createdByServiceIDHasPrefix: String
+  createdByServiceIDHasSuffix: String
+  createdByServiceIDIsNil: Boolean
+  createdByServiceIDNotNil: Boolean
+  createdByServiceIDEqualFold: String
+  createdByServiceIDContainsFold: String
+  """
+  updated_by_service_id field predicates
+  """
+  updatedByServiceID: String
+  updatedByServiceIDNEQ: String
+  updatedByServiceIDIn: [String!]
+  updatedByServiceIDNotIn: [String!]
+  updatedByServiceIDGT: String
+  updatedByServiceIDGTE: String
+  updatedByServiceIDLT: String
+  updatedByServiceIDLTE: String
+  updatedByServiceIDContains: String
+  updatedByServiceIDHasPrefix: String
+  updatedByServiceIDHasSuffix: String
+  updatedByServiceIDIsNil: Boolean
+  updatedByServiceIDNotNil: Boolean
+  updatedByServiceIDEqualFold: String
+  updatedByServiceIDContainsFold: String
   """
   deleted_at field predicates
   """
@@ -53815,7 +61891,8 @@ type RiskBulkCreatePayload {
     """
     risks: [Risk!]
 }`, BuiltIn: false},
-	{Name: "../schema/scalars.graphql", Input: `scalar Upload`, BuiltIn: false},
+	{Name: "../schema/scalars.graphql", Input: `scalar Upload
+scalar Actor`, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
     Search across APIToken objects

@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -23,15 +23,17 @@ import (
 // APITokenQuery is the builder for querying APIToken entities.
 type APITokenQuery struct {
 	config
-	ctx           *QueryContext
-	order         []apitoken.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.APIToken
-	withCreatedBy *ChangeActorQuery
-	withUpdatedBy *ChangeActorQuery
-	withOwner     *OrganizationQuery
-	loadTotal     []func(context.Context, []*APIToken) error
-	modifiers     []func(*sql.Selector)
+	ctx                  *QueryContext
+	order                []apitoken.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.APIToken
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOwner            *OrganizationQuery
+	loadTotal            []func(context.Context, []*APIToken) error
+	modifiers            []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -68,9 +70,9 @@ func (atq *APITokenQuery) Order(o ...apitoken.OrderOption) *APITokenQuery {
 	return atq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (atq *APITokenQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: atq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (atq *APITokenQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: atq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := atq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -81,11 +83,11 @@ func (atq *APITokenQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(apitoken.Table, apitoken.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, apitoken.CreatedByTable, apitoken.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, apitoken.CreatedByUserTable, apitoken.CreatedByUserColumn),
 		)
 		schemaConfig := atq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.APIToken
 		fromU = sqlgraph.SetNeighbors(atq.driver.Dialect(), step)
 		return fromU, nil
@@ -93,9 +95,9 @@ func (atq *APITokenQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (atq *APITokenQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: atq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (atq *APITokenQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: atq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := atq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -106,11 +108,61 @@ func (atq *APITokenQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(apitoken.Table, apitoken.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, apitoken.UpdatedByTable, apitoken.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, apitoken.UpdatedByUserTable, apitoken.UpdatedByUserColumn),
 		)
 		schemaConfig := atq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.APIToken
+		fromU = sqlgraph.SetNeighbors(atq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (atq *APITokenQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: atq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := atq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := atq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(apitoken.Table, apitoken.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, apitoken.CreatedByServiceTable, apitoken.CreatedByServiceColumn),
+		)
+		schemaConfig := atq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.APIToken
+		fromU = sqlgraph.SetNeighbors(atq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (atq *APITokenQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: atq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := atq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := atq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(apitoken.Table, apitoken.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, apitoken.UpdatedByServiceTable, apitoken.UpdatedByServiceColumn),
+		)
+		schemaConfig := atq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.APIToken
 		fromU = sqlgraph.SetNeighbors(atq.driver.Dialect(), step)
 		return fromU, nil
@@ -330,14 +382,16 @@ func (atq *APITokenQuery) Clone() *APITokenQuery {
 		return nil
 	}
 	return &APITokenQuery{
-		config:        atq.config,
-		ctx:           atq.ctx.Clone(),
-		order:         append([]apitoken.OrderOption{}, atq.order...),
-		inters:        append([]Interceptor{}, atq.inters...),
-		predicates:    append([]predicate.APIToken{}, atq.predicates...),
-		withCreatedBy: atq.withCreatedBy.Clone(),
-		withUpdatedBy: atq.withUpdatedBy.Clone(),
-		withOwner:     atq.withOwner.Clone(),
+		config:               atq.config,
+		ctx:                  atq.ctx.Clone(),
+		order:                append([]apitoken.OrderOption{}, atq.order...),
+		inters:               append([]Interceptor{}, atq.inters...),
+		predicates:           append([]predicate.APIToken{}, atq.predicates...),
+		withCreatedByUser:    atq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    atq.withUpdatedByUser.Clone(),
+		withCreatedByService: atq.withCreatedByService.Clone(),
+		withUpdatedByService: atq.withUpdatedByService.Clone(),
+		withOwner:            atq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       atq.sql.Clone(),
 		path:      atq.path,
@@ -345,25 +399,47 @@ func (atq *APITokenQuery) Clone() *APITokenQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (atq *APITokenQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *APITokenQuery {
-	query := (&ChangeActorClient{config: atq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (atq *APITokenQuery) WithCreatedByUser(opts ...func(*UserQuery)) *APITokenQuery {
+	query := (&UserClient{config: atq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	atq.withCreatedBy = query
+	atq.withCreatedByUser = query
 	return atq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (atq *APITokenQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *APITokenQuery {
-	query := (&ChangeActorClient{config: atq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (atq *APITokenQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *APITokenQuery {
+	query := (&UserClient{config: atq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	atq.withUpdatedBy = query
+	atq.withUpdatedByUser = query
+	return atq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (atq *APITokenQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *APITokenQuery {
+	query := (&APITokenClient{config: atq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	atq.withCreatedByService = query
+	return atq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (atq *APITokenQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *APITokenQuery {
+	query := (&APITokenClient{config: atq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	atq.withUpdatedByService = query
 	return atq
 }
 
@@ -462,9 +538,11 @@ func (atq *APITokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AP
 	var (
 		nodes       = []*APIToken{}
 		_spec       = atq.querySpec()
-		loadedTypes = [3]bool{
-			atq.withCreatedBy != nil,
-			atq.withUpdatedBy != nil,
+		loadedTypes = [5]bool{
+			atq.withCreatedByUser != nil,
+			atq.withUpdatedByUser != nil,
+			atq.withCreatedByService != nil,
+			atq.withUpdatedByService != nil,
 			atq.withOwner != nil,
 		}
 	)
@@ -491,15 +569,27 @@ func (atq *APITokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AP
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := atq.withCreatedBy; query != nil {
-		if err := atq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *APIToken, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := atq.withCreatedByUser; query != nil {
+		if err := atq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *APIToken, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := atq.withUpdatedBy; query != nil {
-		if err := atq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *APIToken, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := atq.withUpdatedByUser; query != nil {
+		if err := atq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *APIToken, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := atq.withCreatedByService; query != nil {
+		if err := atq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *APIToken, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := atq.withUpdatedByService; query != nil {
+		if err := atq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *APIToken, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -517,11 +607,11 @@ func (atq *APITokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AP
 	return nodes, nil
 }
 
-func (atq *APITokenQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*APIToken, init func(*APIToken), assign func(*APIToken, *ChangeActor)) error {
+func (atq *APITokenQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*APIToken, init func(*APIToken), assign func(*APIToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*APIToken)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -530,7 +620,7 @@ func (atq *APITokenQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQ
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -538,7 +628,7 @@ func (atq *APITokenQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQ
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -546,11 +636,11 @@ func (atq *APITokenQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQ
 	}
 	return nil
 }
-func (atq *APITokenQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*APIToken, init func(*APIToken), assign func(*APIToken, *ChangeActor)) error {
+func (atq *APITokenQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*APIToken, init func(*APIToken), assign func(*APIToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*APIToken)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -559,7 +649,7 @@ func (atq *APITokenQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQ
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -567,7 +657,65 @@ func (atq *APITokenQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQ
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (atq *APITokenQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*APIToken, init func(*APIToken), assign func(*APIToken, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*APIToken)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (atq *APITokenQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*APIToken, init func(*APIToken), assign func(*APIToken, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*APIToken)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -635,11 +783,17 @@ func (atq *APITokenQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if atq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(apitoken.FieldCreatedByID)
+		if atq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(apitoken.FieldCreatedByUserID)
 		}
-		if atq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(apitoken.FieldUpdatedByID)
+		if atq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(apitoken.FieldUpdatedByUserID)
+		}
+		if atq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(apitoken.FieldCreatedByServiceID)
+		}
+		if atq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(apitoken.FieldUpdatedByServiceID)
 		}
 		if atq.withOwner != nil {
 			_spec.Node.AddColumnOnce(apitoken.FieldOwnerID)

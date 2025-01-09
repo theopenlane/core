@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Group_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Group_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Group_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Group_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Group_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Group_deletedAt(ctx, field)
 			case "deletedByID":
@@ -93,10 +101,14 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Group_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Group_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Group_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Group_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Group_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "controlCreators":
@@ -225,6 +237,14 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Group_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Group_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Group_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Group_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Group_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Group_deletedAt(ctx, field)
 			case "deletedByID":
@@ -243,10 +263,14 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Group_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Group_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Group_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Group_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Group_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "controlCreators":
@@ -419,6 +443,14 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Group_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Group_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Group_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Group_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Group_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Group_deletedAt(ctx, field)
 			case "deletedByID":
@@ -437,10 +469,14 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Group_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Group_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Group_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Group_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Group_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Group_owner(ctx, field)
 			case "controlCreators":

@@ -12,10 +12,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -23,15 +24,17 @@ import (
 // GroupSettingQuery is the builder for querying GroupSetting entities.
 type GroupSettingQuery struct {
 	config
-	ctx           *QueryContext
-	order         []groupsetting.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.GroupSetting
-	withCreatedBy *ChangeActorQuery
-	withUpdatedBy *ChangeActorQuery
-	withGroup     *GroupQuery
-	loadTotal     []func(context.Context, []*GroupSetting) error
-	modifiers     []func(*sql.Selector)
+	ctx                  *QueryContext
+	order                []groupsetting.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.GroupSetting
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withGroup            *GroupQuery
+	loadTotal            []func(context.Context, []*GroupSetting) error
+	modifiers            []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -68,9 +71,9 @@ func (gsq *GroupSettingQuery) Order(o ...groupsetting.OrderOption) *GroupSetting
 	return gsq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (gsq *GroupSettingQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: gsq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (gsq *GroupSettingQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: gsq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gsq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -81,11 +84,11 @@ func (gsq *GroupSettingQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.CreatedByTable, groupsetting.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.CreatedByUserTable, groupsetting.CreatedByUserColumn),
 		)
 		schemaConfig := gsq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.GroupSetting
 		fromU = sqlgraph.SetNeighbors(gsq.driver.Dialect(), step)
 		return fromU, nil
@@ -93,9 +96,9 @@ func (gsq *GroupSettingQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (gsq *GroupSettingQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: gsq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (gsq *GroupSettingQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: gsq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gsq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -106,11 +109,61 @@ func (gsq *GroupSettingQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.UpdatedByTable, groupsetting.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.UpdatedByUserTable, groupsetting.UpdatedByUserColumn),
 		)
 		schemaConfig := gsq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.GroupSetting
+		fromU = sqlgraph.SetNeighbors(gsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (gsq *GroupSettingQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: gsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.CreatedByServiceTable, groupsetting.CreatedByServiceColumn),
+		)
+		schemaConfig := gsq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.GroupSetting
+		fromU = sqlgraph.SetNeighbors(gsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (gsq *GroupSettingQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: gsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(groupsetting.Table, groupsetting.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupsetting.UpdatedByServiceTable, groupsetting.UpdatedByServiceColumn),
+		)
+		schemaConfig := gsq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.GroupSetting
 		fromU = sqlgraph.SetNeighbors(gsq.driver.Dialect(), step)
 		return fromU, nil
@@ -330,14 +383,16 @@ func (gsq *GroupSettingQuery) Clone() *GroupSettingQuery {
 		return nil
 	}
 	return &GroupSettingQuery{
-		config:        gsq.config,
-		ctx:           gsq.ctx.Clone(),
-		order:         append([]groupsetting.OrderOption{}, gsq.order...),
-		inters:        append([]Interceptor{}, gsq.inters...),
-		predicates:    append([]predicate.GroupSetting{}, gsq.predicates...),
-		withCreatedBy: gsq.withCreatedBy.Clone(),
-		withUpdatedBy: gsq.withUpdatedBy.Clone(),
-		withGroup:     gsq.withGroup.Clone(),
+		config:               gsq.config,
+		ctx:                  gsq.ctx.Clone(),
+		order:                append([]groupsetting.OrderOption{}, gsq.order...),
+		inters:               append([]Interceptor{}, gsq.inters...),
+		predicates:           append([]predicate.GroupSetting{}, gsq.predicates...),
+		withCreatedByUser:    gsq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    gsq.withUpdatedByUser.Clone(),
+		withCreatedByService: gsq.withCreatedByService.Clone(),
+		withUpdatedByService: gsq.withUpdatedByService.Clone(),
+		withGroup:            gsq.withGroup.Clone(),
 		// clone intermediate query.
 		sql:       gsq.sql.Clone(),
 		path:      gsq.path,
@@ -345,25 +400,47 @@ func (gsq *GroupSettingQuery) Clone() *GroupSettingQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (gsq *GroupSettingQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *GroupSettingQuery {
-	query := (&ChangeActorClient{config: gsq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (gsq *GroupSettingQuery) WithCreatedByUser(opts ...func(*UserQuery)) *GroupSettingQuery {
+	query := (&UserClient{config: gsq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gsq.withCreatedBy = query
+	gsq.withCreatedByUser = query
 	return gsq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (gsq *GroupSettingQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *GroupSettingQuery {
-	query := (&ChangeActorClient{config: gsq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (gsq *GroupSettingQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *GroupSettingQuery {
+	query := (&UserClient{config: gsq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gsq.withUpdatedBy = query
+	gsq.withUpdatedByUser = query
+	return gsq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (gsq *GroupSettingQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *GroupSettingQuery {
+	query := (&APITokenClient{config: gsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gsq.withCreatedByService = query
+	return gsq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (gsq *GroupSettingQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *GroupSettingQuery {
+	query := (&APITokenClient{config: gsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gsq.withUpdatedByService = query
 	return gsq
 }
 
@@ -462,9 +539,11 @@ func (gsq *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*GroupSetting{}
 		_spec       = gsq.querySpec()
-		loadedTypes = [3]bool{
-			gsq.withCreatedBy != nil,
-			gsq.withUpdatedBy != nil,
+		loadedTypes = [5]bool{
+			gsq.withCreatedByUser != nil,
+			gsq.withUpdatedByUser != nil,
+			gsq.withCreatedByService != nil,
+			gsq.withUpdatedByService != nil,
 			gsq.withGroup != nil,
 		}
 	)
@@ -491,15 +570,27 @@ func (gsq *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := gsq.withCreatedBy; query != nil {
-		if err := gsq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *GroupSetting, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := gsq.withCreatedByUser; query != nil {
+		if err := gsq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *GroupSetting, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := gsq.withUpdatedBy; query != nil {
-		if err := gsq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *GroupSetting, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := gsq.withUpdatedByUser; query != nil {
+		if err := gsq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *GroupSetting, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gsq.withCreatedByService; query != nil {
+		if err := gsq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *GroupSetting, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gsq.withUpdatedByService; query != nil {
+		if err := gsq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *GroupSetting, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -517,11 +608,11 @@ func (gsq *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
-func (gsq *GroupSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *ChangeActor)) error {
+func (gsq *GroupSettingQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*GroupSetting)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -530,7 +621,7 @@ func (gsq *GroupSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeAc
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -538,7 +629,7 @@ func (gsq *GroupSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeAc
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -546,11 +637,11 @@ func (gsq *GroupSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeAc
 	}
 	return nil
 }
-func (gsq *GroupSettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *ChangeActor)) error {
+func (gsq *GroupSettingQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*GroupSetting)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -559,7 +650,7 @@ func (gsq *GroupSettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeAc
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -567,7 +658,65 @@ func (gsq *GroupSettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeAc
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (gsq *GroupSettingQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*GroupSetting)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (gsq *GroupSettingQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*GroupSetting)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -635,11 +784,17 @@ func (gsq *GroupSettingQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if gsq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(groupsetting.FieldCreatedByID)
+		if gsq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(groupsetting.FieldCreatedByUserID)
 		}
-		if gsq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(groupsetting.FieldUpdatedByID)
+		if gsq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(groupsetting.FieldUpdatedByUserID)
+		}
+		if gsq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(groupsetting.FieldCreatedByServiceID)
+		}
+		if gsq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(groupsetting.FieldUpdatedByServiceID)
 		}
 		if gsq.withGroup != nil {
 			_spec.Node.AddColumnOnce(groupsetting.FieldGroupID)

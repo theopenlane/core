@@ -36,6 +36,14 @@ type DocumentDataHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -62,7 +70,7 @@ func (*DocumentDataHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case documentdatahistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case documentdatahistory.FieldID, documentdatahistory.FieldRef, documentdatahistory.FieldUpdatedBy, documentdatahistory.FieldCreatedByID, documentdatahistory.FieldUpdatedByID, documentdatahistory.FieldMappingID, documentdatahistory.FieldDeletedByID, documentdatahistory.FieldOwnerID, documentdatahistory.FieldTemplateID:
+		case documentdatahistory.FieldID, documentdatahistory.FieldRef, documentdatahistory.FieldUpdatedBy, documentdatahistory.FieldCreatedByID, documentdatahistory.FieldUpdatedByID, documentdatahistory.FieldCreatedByUserID, documentdatahistory.FieldUpdatedByUserID, documentdatahistory.FieldCreatedByServiceID, documentdatahistory.FieldUpdatedByServiceID, documentdatahistory.FieldMappingID, documentdatahistory.FieldDeletedByID, documentdatahistory.FieldOwnerID, documentdatahistory.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case documentdatahistory.FieldHistoryTime, documentdatahistory.FieldCreatedAt, documentdatahistory.FieldUpdatedAt, documentdatahistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -135,6 +143,30 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				ddh.UpdatedByID = value.String
+			}
+		case documentdatahistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				ddh.CreatedByUserID = value.String
+			}
+		case documentdatahistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				ddh.UpdatedByUserID = value.String
+			}
+		case documentdatahistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				ddh.CreatedByServiceID = value.String
+			}
+		case documentdatahistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				ddh.UpdatedByServiceID = value.String
 			}
 		case documentdatahistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -243,6 +275,18 @@ func (ddh *DocumentDataHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(ddh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(ddh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(ddh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(ddh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(ddh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ddh.MappingID)

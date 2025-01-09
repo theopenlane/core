@@ -35,6 +35,14 @@ type ActionPlanHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -69,7 +77,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldCreatedByID, actionplanhistory.FieldUpdatedByID, actionplanhistory.FieldDeletedByID, actionplanhistory.FieldMappingID, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldCreatedByID, actionplanhistory.FieldUpdatedByID, actionplanhistory.FieldCreatedByUserID, actionplanhistory.FieldUpdatedByUserID, actionplanhistory.FieldCreatedByServiceID, actionplanhistory.FieldUpdatedByServiceID, actionplanhistory.FieldDeletedByID, actionplanhistory.FieldMappingID, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -142,6 +150,30 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				aph.UpdatedByID = value.String
+			}
+		case actionplanhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				aph.CreatedByUserID = value.String
+			}
+		case actionplanhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				aph.UpdatedByUserID = value.String
+			}
+		case actionplanhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				aph.CreatedByServiceID = value.String
+			}
+		case actionplanhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				aph.UpdatedByServiceID = value.String
 			}
 		case actionplanhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -274,6 +306,18 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(aph.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(aph.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(aph.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(aph.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(aph.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(aph.DeletedAt.Format(time.ANSIC))

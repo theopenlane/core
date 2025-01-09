@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 )
@@ -74,6 +74,62 @@ func (wc *WebauthnCreate) SetUpdatedByID(s string) *WebauthnCreate {
 func (wc *WebauthnCreate) SetNillableUpdatedByID(s *string) *WebauthnCreate {
 	if s != nil {
 		wc.SetUpdatedByID(*s)
+	}
+	return wc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (wc *WebauthnCreate) SetCreatedByUserID(s string) *WebauthnCreate {
+	wc.mutation.SetCreatedByUserID(s)
+	return wc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (wc *WebauthnCreate) SetNillableCreatedByUserID(s *string) *WebauthnCreate {
+	if s != nil {
+		wc.SetCreatedByUserID(*s)
+	}
+	return wc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (wc *WebauthnCreate) SetUpdatedByUserID(s string) *WebauthnCreate {
+	wc.mutation.SetUpdatedByUserID(s)
+	return wc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (wc *WebauthnCreate) SetNillableUpdatedByUserID(s *string) *WebauthnCreate {
+	if s != nil {
+		wc.SetUpdatedByUserID(*s)
+	}
+	return wc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (wc *WebauthnCreate) SetCreatedByServiceID(s string) *WebauthnCreate {
+	wc.mutation.SetCreatedByServiceID(s)
+	return wc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (wc *WebauthnCreate) SetNillableCreatedByServiceID(s *string) *WebauthnCreate {
+	if s != nil {
+		wc.SetCreatedByServiceID(*s)
+	}
+	return wc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (wc *WebauthnCreate) SetUpdatedByServiceID(s string) *WebauthnCreate {
+	wc.mutation.SetUpdatedByServiceID(s)
+	return wc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (wc *WebauthnCreate) SetNillableUpdatedByServiceID(s *string) *WebauthnCreate {
+	if s != nil {
+		wc.SetUpdatedByServiceID(*s)
 	}
 	return wc
 }
@@ -218,14 +274,24 @@ func (wc *WebauthnCreate) SetNillableID(s *string) *WebauthnCreate {
 	return wc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (wc *WebauthnCreate) SetCreatedBy(c *ChangeActor) *WebauthnCreate {
-	return wc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (wc *WebauthnCreate) SetCreatedByUser(u *User) *WebauthnCreate {
+	return wc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (wc *WebauthnCreate) SetUpdatedBy(c *ChangeActor) *WebauthnCreate {
-	return wc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (wc *WebauthnCreate) SetUpdatedByUser(u *User) *WebauthnCreate {
+	return wc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (wc *WebauthnCreate) SetCreatedByService(a *APIToken) *WebauthnCreate {
+	return wc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (wc *WebauthnCreate) SetUpdatedByService(a *APIToken) *WebauthnCreate {
+	return wc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -397,6 +463,14 @@ func (wc *WebauthnCreate) createSpec() (*Webauthn, *sqlgraph.CreateSpec) {
 		_spec.SetField(webauthn.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := wc.mutation.CreatedByID(); ok {
+		_spec.SetField(webauthn.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := wc.mutation.UpdatedByID(); ok {
+		_spec.SetField(webauthn.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := wc.mutation.MappingID(); ok {
 		_spec.SetField(webauthn.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -445,40 +519,76 @@ func (wc *WebauthnCreate) createSpec() (*Webauthn, *sqlgraph.CreateSpec) {
 		_spec.SetField(webauthn.FieldUserVerified, field.TypeBool, value)
 		_node.UserVerified = value
 	}
-	if nodes := wc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := wc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   webauthn.CreatedByTable,
-			Columns: []string{webauthn.CreatedByColumn},
+			Table:   webauthn.CreatedByUserTable,
+			Columns: []string{webauthn.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = wc.schemaConfig.Webauthn
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := wc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := wc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   webauthn.UpdatedByTable,
-			Columns: []string{webauthn.UpdatedByColumn},
+			Table:   webauthn.UpdatedByUserTable,
+			Columns: []string{webauthn.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = wc.schemaConfig.Webauthn
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := wc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthn.CreatedByServiceTable,
+			Columns: []string{webauthn.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = wc.schemaConfig.Webauthn
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := wc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthn.UpdatedByServiceTable,
+			Columns: []string{webauthn.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = wc.schemaConfig.Webauthn
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := wc.mutation.OwnerIDs(); len(nodes) > 0 {

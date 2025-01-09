@@ -11,9 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -65,6 +66,46 @@ func (pmu *ProgramMembershipUpdate) ClearUpdatedByID() *ProgramMembershipUpdate 
 	return pmu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pmu *ProgramMembershipUpdate) SetUpdatedByUserID(s string) *ProgramMembershipUpdate {
+	pmu.mutation.SetUpdatedByUserID(s)
+	return pmu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pmu *ProgramMembershipUpdate) SetNillableUpdatedByUserID(s *string) *ProgramMembershipUpdate {
+	if s != nil {
+		pmu.SetUpdatedByUserID(*s)
+	}
+	return pmu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (pmu *ProgramMembershipUpdate) ClearUpdatedByUserID() *ProgramMembershipUpdate {
+	pmu.mutation.ClearUpdatedByUserID()
+	return pmu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pmu *ProgramMembershipUpdate) SetUpdatedByServiceID(s string) *ProgramMembershipUpdate {
+	pmu.mutation.SetUpdatedByServiceID(s)
+	return pmu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pmu *ProgramMembershipUpdate) SetNillableUpdatedByServiceID(s *string) *ProgramMembershipUpdate {
+	if s != nil {
+		pmu.SetUpdatedByServiceID(*s)
+	}
+	return pmu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (pmu *ProgramMembershipUpdate) ClearUpdatedByServiceID() *ProgramMembershipUpdate {
+	pmu.mutation.ClearUpdatedByServiceID()
+	return pmu
+}
+
 // SetRole sets the "role" field.
 func (pmu *ProgramMembershipUpdate) SetRole(e enums.Role) *ProgramMembershipUpdate {
 	pmu.mutation.SetRole(e)
@@ -79,9 +120,14 @@ func (pmu *ProgramMembershipUpdate) SetNillableRole(e *enums.Role) *ProgramMembe
 	return pmu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (pmu *ProgramMembershipUpdate) SetUpdatedBy(c *ChangeActor) *ProgramMembershipUpdate {
-	return pmu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (pmu *ProgramMembershipUpdate) SetUpdatedByUser(u *User) *ProgramMembershipUpdate {
+	return pmu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (pmu *ProgramMembershipUpdate) SetUpdatedByService(a *APIToken) *ProgramMembershipUpdate {
+	return pmu.SetUpdatedByServiceID(a.ID)
 }
 
 // Mutation returns the ProgramMembershipMutation object of the builder.
@@ -89,9 +135,15 @@ func (pmu *ProgramMembershipUpdate) Mutation() *ProgramMembershipMutation {
 	return pmu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (pmu *ProgramMembershipUpdate) ClearUpdatedBy() *ProgramMembershipUpdate {
-	pmu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (pmu *ProgramMembershipUpdate) ClearUpdatedByUser() *ProgramMembershipUpdate {
+	pmu.mutation.ClearUpdatedByUser()
+	return pmu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (pmu *ProgramMembershipUpdate) ClearUpdatedByService() *ProgramMembershipUpdate {
+	pmu.mutation.ClearUpdatedByService()
 	return pmu
 }
 
@@ -180,6 +232,15 @@ func (pmu *ProgramMembershipUpdate) sqlSave(ctx context.Context) (n int, err err
 	if pmu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedAt, field.TypeTime)
 	}
+	if pmu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(programmembership.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := pmu.mutation.UpdatedByID(); ok {
+		_spec.SetField(programmembership.FieldUpdatedByID, field.TypeString, value)
+	}
+	if pmu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(programmembership.FieldUpdatedByID, field.TypeString)
+	}
 	if pmu.mutation.DeletedAtCleared() {
 		_spec.ClearField(programmembership.FieldDeletedAt, field.TypeTime)
 	}
@@ -189,29 +250,60 @@ func (pmu *ProgramMembershipUpdate) sqlSave(ctx context.Context) (n int, err err
 	if value, ok := pmu.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 	}
-	if pmu.mutation.UpdatedByCleared() {
+	if pmu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   programmembership.UpdatedByTable,
-			Columns: []string{programmembership.UpdatedByColumn},
+			Table:   programmembership.UpdatedByUserTable,
+			Columns: []string{programmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmu.schemaConfig.ProgramMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pmu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := pmu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   programmembership.UpdatedByTable,
-			Columns: []string{programmembership.UpdatedByColumn},
+			Table:   programmembership.UpdatedByUserTable,
+			Columns: []string{programmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmu.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pmu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByServiceTable,
+			Columns: []string{programmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmu.schemaConfig.ProgramMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pmu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByServiceTable,
+			Columns: []string{programmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmu.schemaConfig.ProgramMembership
@@ -276,6 +368,46 @@ func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedByID() *ProgramMembershipUpd
 	return pmuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pmuo *ProgramMembershipUpdateOne) SetUpdatedByUserID(s string) *ProgramMembershipUpdateOne {
+	pmuo.mutation.SetUpdatedByUserID(s)
+	return pmuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pmuo *ProgramMembershipUpdateOne) SetNillableUpdatedByUserID(s *string) *ProgramMembershipUpdateOne {
+	if s != nil {
+		pmuo.SetUpdatedByUserID(*s)
+	}
+	return pmuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedByUserID() *ProgramMembershipUpdateOne {
+	pmuo.mutation.ClearUpdatedByUserID()
+	return pmuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pmuo *ProgramMembershipUpdateOne) SetUpdatedByServiceID(s string) *ProgramMembershipUpdateOne {
+	pmuo.mutation.SetUpdatedByServiceID(s)
+	return pmuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pmuo *ProgramMembershipUpdateOne) SetNillableUpdatedByServiceID(s *string) *ProgramMembershipUpdateOne {
+	if s != nil {
+		pmuo.SetUpdatedByServiceID(*s)
+	}
+	return pmuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedByServiceID() *ProgramMembershipUpdateOne {
+	pmuo.mutation.ClearUpdatedByServiceID()
+	return pmuo
+}
+
 // SetRole sets the "role" field.
 func (pmuo *ProgramMembershipUpdateOne) SetRole(e enums.Role) *ProgramMembershipUpdateOne {
 	pmuo.mutation.SetRole(e)
@@ -290,9 +422,14 @@ func (pmuo *ProgramMembershipUpdateOne) SetNillableRole(e *enums.Role) *ProgramM
 	return pmuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (pmuo *ProgramMembershipUpdateOne) SetUpdatedBy(c *ChangeActor) *ProgramMembershipUpdateOne {
-	return pmuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (pmuo *ProgramMembershipUpdateOne) SetUpdatedByUser(u *User) *ProgramMembershipUpdateOne {
+	return pmuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (pmuo *ProgramMembershipUpdateOne) SetUpdatedByService(a *APIToken) *ProgramMembershipUpdateOne {
+	return pmuo.SetUpdatedByServiceID(a.ID)
 }
 
 // Mutation returns the ProgramMembershipMutation object of the builder.
@@ -300,9 +437,15 @@ func (pmuo *ProgramMembershipUpdateOne) Mutation() *ProgramMembershipMutation {
 	return pmuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedBy() *ProgramMembershipUpdateOne {
-	pmuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedByUser() *ProgramMembershipUpdateOne {
+	pmuo.mutation.ClearUpdatedByUser()
+	return pmuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedByService() *ProgramMembershipUpdateOne {
+	pmuo.mutation.ClearUpdatedByService()
 	return pmuo
 }
 
@@ -421,6 +564,15 @@ func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 	if pmuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedAt, field.TypeTime)
 	}
+	if pmuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(programmembership.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := pmuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(programmembership.FieldUpdatedByID, field.TypeString, value)
+	}
+	if pmuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(programmembership.FieldUpdatedByID, field.TypeString)
+	}
 	if pmuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(programmembership.FieldDeletedAt, field.TypeTime)
 	}
@@ -430,29 +582,60 @@ func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 	if value, ok := pmuo.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 	}
-	if pmuo.mutation.UpdatedByCleared() {
+	if pmuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   programmembership.UpdatedByTable,
-			Columns: []string{programmembership.UpdatedByColumn},
+			Table:   programmembership.UpdatedByUserTable,
+			Columns: []string{programmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmuo.schemaConfig.ProgramMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pmuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := pmuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   programmembership.UpdatedByTable,
-			Columns: []string{programmembership.UpdatedByColumn},
+			Table:   programmembership.UpdatedByUserTable,
+			Columns: []string{programmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmuo.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pmuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByServiceTable,
+			Columns: []string{programmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmuo.schemaConfig.ProgramMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pmuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByServiceTable,
+			Columns: []string{programmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmuo.schemaConfig.ProgramMembership

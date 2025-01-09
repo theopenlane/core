@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 				return ec.fieldContext_PersonalAccessToken_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_PersonalAccessToken_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_PersonalAccessToken_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_PersonalAccessToken_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_PersonalAccessToken_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_PersonalAccessToken_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
 			case "deletedByID":
@@ -93,10 +101,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_PersonalAccessToken_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_PersonalAccessToken_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_PersonalAccessToken_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_PersonalAccessToken_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
 			case "organizations":
@@ -159,6 +171,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 				return ec.fieldContext_PersonalAccessToken_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_PersonalAccessToken_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_PersonalAccessToken_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_PersonalAccessToken_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_PersonalAccessToken_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_PersonalAccessToken_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
 			case "deletedByID":
@@ -177,10 +197,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_PersonalAccessToken_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_PersonalAccessToken_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_PersonalAccessToken_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_PersonalAccessToken_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
 			case "organizations":
@@ -287,6 +311,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 				return ec.fieldContext_PersonalAccessToken_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_PersonalAccessToken_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_PersonalAccessToken_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_PersonalAccessToken_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_PersonalAccessToken_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_PersonalAccessToken_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
 			case "deletedByID":
@@ -305,10 +337,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_PersonalAccessToken_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_PersonalAccessToken_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_PersonalAccessToken_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_PersonalAccessToken_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
 			case "organizations":

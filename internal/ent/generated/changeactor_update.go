@@ -45,15 +45,15 @@ func (cau *ChangeActorUpdate) SetNillableName(s *string) *ChangeActorUpdate {
 }
 
 // SetActorType sets the "actor_type" field.
-func (cau *ChangeActorUpdate) SetActorType(s string) *ChangeActorUpdate {
-	cau.mutation.SetActorType(s)
+func (cau *ChangeActorUpdate) SetActorType(ct changeactor.ActorType) *ChangeActorUpdate {
+	cau.mutation.SetActorType(ct)
 	return cau
 }
 
 // SetNillableActorType sets the "actor_type" field if the given value is not nil.
-func (cau *ChangeActorUpdate) SetNillableActorType(s *string) *ChangeActorUpdate {
-	if s != nil {
-		cau.SetActorType(*s)
+func (cau *ChangeActorUpdate) SetNillableActorType(ct *changeactor.ActorType) *ChangeActorUpdate {
+	if ct != nil {
+		cau.SetActorType(*ct)
 	}
 	return cau
 }
@@ -90,6 +90,16 @@ func (cau *ChangeActorUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cau *ChangeActorUpdate) check() error {
+	if v, ok := cau.mutation.ActorType(); ok {
+		if err := changeactor.ActorTypeValidator(v); err != nil {
+			return &ValidationError{Name: "actor_type", err: fmt.Errorf(`generated: validator failed for field "ChangeActor.actor_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cau *ChangeActorUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ChangeActorUpdate {
 	cau.modifiers = append(cau.modifiers, modifiers...)
@@ -97,6 +107,9 @@ func (cau *ChangeActorUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *C
 }
 
 func (cau *ChangeActorUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := cau.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(changeactor.Table, changeactor.Columns, sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString))
 	if ps := cau.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -109,7 +122,7 @@ func (cau *ChangeActorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(changeactor.FieldName, field.TypeString, value)
 	}
 	if value, ok := cau.mutation.ActorType(); ok {
-		_spec.SetField(changeactor.FieldActorType, field.TypeString, value)
+		_spec.SetField(changeactor.FieldActorType, field.TypeEnum, value)
 	}
 	_spec.Node.Schema = cau.schemaConfig.ChangeActor
 	ctx = internal.NewSchemaConfigContext(ctx, cau.schemaConfig)
@@ -150,15 +163,15 @@ func (cauo *ChangeActorUpdateOne) SetNillableName(s *string) *ChangeActorUpdateO
 }
 
 // SetActorType sets the "actor_type" field.
-func (cauo *ChangeActorUpdateOne) SetActorType(s string) *ChangeActorUpdateOne {
-	cauo.mutation.SetActorType(s)
+func (cauo *ChangeActorUpdateOne) SetActorType(ct changeactor.ActorType) *ChangeActorUpdateOne {
+	cauo.mutation.SetActorType(ct)
 	return cauo
 }
 
 // SetNillableActorType sets the "actor_type" field if the given value is not nil.
-func (cauo *ChangeActorUpdateOne) SetNillableActorType(s *string) *ChangeActorUpdateOne {
-	if s != nil {
-		cauo.SetActorType(*s)
+func (cauo *ChangeActorUpdateOne) SetNillableActorType(ct *changeactor.ActorType) *ChangeActorUpdateOne {
+	if ct != nil {
+		cauo.SetActorType(*ct)
 	}
 	return cauo
 }
@@ -208,6 +221,16 @@ func (cauo *ChangeActorUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cauo *ChangeActorUpdateOne) check() error {
+	if v, ok := cauo.mutation.ActorType(); ok {
+		if err := changeactor.ActorTypeValidator(v); err != nil {
+			return &ValidationError{Name: "actor_type", err: fmt.Errorf(`generated: validator failed for field "ChangeActor.actor_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cauo *ChangeActorUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ChangeActorUpdateOne {
 	cauo.modifiers = append(cauo.modifiers, modifiers...)
@@ -215,6 +238,9 @@ func (cauo *ChangeActorUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)
 }
 
 func (cauo *ChangeActorUpdateOne) sqlSave(ctx context.Context) (_node *ChangeActor, err error) {
+	if err := cauo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(changeactor.Table, changeactor.Columns, sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString))
 	id, ok := cauo.mutation.ID()
 	if !ok {
@@ -244,7 +270,7 @@ func (cauo *ChangeActorUpdateOne) sqlSave(ctx context.Context) (_node *ChangeAct
 		_spec.SetField(changeactor.FieldName, field.TypeString, value)
 	}
 	if value, ok := cauo.mutation.ActorType(); ok {
-		_spec.SetField(changeactor.FieldActorType, field.TypeString, value)
+		_spec.SetField(changeactor.FieldActorType, field.TypeEnum, value)
 	}
 	_spec.Node.Schema = cauo.schemaConfig.ChangeActor
 	ctx = internal.NewSchemaConfigContext(ctx, cauo.schemaConfig)

@@ -64,6 +64,46 @@ func (pmhu *ProgramMembershipHistoryUpdate) ClearUpdatedByID() *ProgramMembershi
 	return pmhu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pmhu *ProgramMembershipHistoryUpdate) SetUpdatedByUserID(s string) *ProgramMembershipHistoryUpdate {
+	pmhu.mutation.SetUpdatedByUserID(s)
+	return pmhu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pmhu *ProgramMembershipHistoryUpdate) SetNillableUpdatedByUserID(s *string) *ProgramMembershipHistoryUpdate {
+	if s != nil {
+		pmhu.SetUpdatedByUserID(*s)
+	}
+	return pmhu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (pmhu *ProgramMembershipHistoryUpdate) ClearUpdatedByUserID() *ProgramMembershipHistoryUpdate {
+	pmhu.mutation.ClearUpdatedByUserID()
+	return pmhu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pmhu *ProgramMembershipHistoryUpdate) SetUpdatedByServiceID(s string) *ProgramMembershipHistoryUpdate {
+	pmhu.mutation.SetUpdatedByServiceID(s)
+	return pmhu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pmhu *ProgramMembershipHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *ProgramMembershipHistoryUpdate {
+	if s != nil {
+		pmhu.SetUpdatedByServiceID(*s)
+	}
+	return pmhu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (pmhu *ProgramMembershipHistoryUpdate) ClearUpdatedByServiceID() *ProgramMembershipHistoryUpdate {
+	pmhu.mutation.ClearUpdatedByServiceID()
+	return pmhu
+}
+
 // SetRole sets the "role" field.
 func (pmhu *ProgramMembershipHistoryUpdate) SetRole(e enums.Role) *ProgramMembershipHistoryUpdate {
 	pmhu.mutation.SetRole(e)
@@ -177,6 +217,24 @@ func (pmhu *ProgramMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int,
 	if pmhu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(programmembershiphistory.FieldUpdatedByID, field.TypeString)
 	}
+	if pmhu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(programmembershiphistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := pmhu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(programmembershiphistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if pmhu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(programmembershiphistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if pmhu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(programmembershiphistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := pmhu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(programmembershiphistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if pmhu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(programmembershiphistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if pmhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(programmembershiphistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -239,6 +297,46 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) SetNillableUpdatedByID(s *string
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (pmhuo *ProgramMembershipHistoryUpdateOne) ClearUpdatedByID() *ProgramMembershipHistoryUpdateOne {
 	pmhuo.mutation.ClearUpdatedByID()
+	return pmhuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pmhuo *ProgramMembershipHistoryUpdateOne) SetUpdatedByUserID(s string) *ProgramMembershipHistoryUpdateOne {
+	pmhuo.mutation.SetUpdatedByUserID(s)
+	return pmhuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pmhuo *ProgramMembershipHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *ProgramMembershipHistoryUpdateOne {
+	if s != nil {
+		pmhuo.SetUpdatedByUserID(*s)
+	}
+	return pmhuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (pmhuo *ProgramMembershipHistoryUpdateOne) ClearUpdatedByUserID() *ProgramMembershipHistoryUpdateOne {
+	pmhuo.mutation.ClearUpdatedByUserID()
+	return pmhuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pmhuo *ProgramMembershipHistoryUpdateOne) SetUpdatedByServiceID(s string) *ProgramMembershipHistoryUpdateOne {
+	pmhuo.mutation.SetUpdatedByServiceID(s)
+	return pmhuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pmhuo *ProgramMembershipHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *ProgramMembershipHistoryUpdateOne {
+	if s != nil {
+		pmhuo.SetUpdatedByServiceID(*s)
+	}
+	return pmhuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (pmhuo *ProgramMembershipHistoryUpdateOne) ClearUpdatedByServiceID() *ProgramMembershipHistoryUpdateOne {
+	pmhuo.mutation.ClearUpdatedByServiceID()
 	return pmhuo
 }
 
@@ -384,6 +482,24 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_n
 	}
 	if pmhuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(programmembershiphistory.FieldUpdatedByID, field.TypeString)
+	}
+	if pmhuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(programmembershiphistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := pmhuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(programmembershiphistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if pmhuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(programmembershiphistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if pmhuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(programmembershiphistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := pmhuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(programmembershiphistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if pmhuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(programmembershiphistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if pmhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(programmembershiphistory.FieldDeletedAt, field.TypeTime)

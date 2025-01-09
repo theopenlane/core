@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -90,6 +89,46 @@ func (ou *OrganizationUpdate) SetNillableUpdatedByID(s *string) *OrganizationUpd
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (ou *OrganizationUpdate) ClearUpdatedByID() *OrganizationUpdate {
 	ou.mutation.ClearUpdatedByID()
+	return ou
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ou *OrganizationUpdate) SetUpdatedByUserID(s string) *OrganizationUpdate {
+	ou.mutation.SetUpdatedByUserID(s)
+	return ou
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableUpdatedByUserID(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetUpdatedByUserID(*s)
+	}
+	return ou
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ou *OrganizationUpdate) ClearUpdatedByUserID() *OrganizationUpdate {
+	ou.mutation.ClearUpdatedByUserID()
+	return ou
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ou *OrganizationUpdate) SetUpdatedByServiceID(s string) *OrganizationUpdate {
+	ou.mutation.SetUpdatedByServiceID(s)
+	return ou
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableUpdatedByServiceID(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetUpdatedByServiceID(*s)
+	}
+	return ou
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ou *OrganizationUpdate) ClearUpdatedByServiceID() *OrganizationUpdate {
+	ou.mutation.ClearUpdatedByServiceID()
 	return ou
 }
 
@@ -193,9 +232,14 @@ func (ou *OrganizationUpdate) SetNillableDedicatedDb(b *bool) *OrganizationUpdat
 	return ou
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ou *OrganizationUpdate) SetUpdatedBy(c *ChangeActor) *OrganizationUpdate {
-	return ou.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ou *OrganizationUpdate) SetUpdatedByUser(u *User) *OrganizationUpdate {
+	return ou.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ou *OrganizationUpdate) SetUpdatedByService(a *APIToken) *OrganizationUpdate {
+	return ou.SetUpdatedByServiceID(a.ID)
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
@@ -777,9 +821,15 @@ func (ou *OrganizationUpdate) Mutation() *OrganizationMutation {
 	return ou.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (ou *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
-	ou.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (ou *OrganizationUpdate) ClearUpdatedByUser() *OrganizationUpdate {
+	ou.mutation.ClearUpdatedByUser()
+	return ou
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (ou *OrganizationUpdate) ClearUpdatedByService() *OrganizationUpdate {
+	ou.mutation.ClearUpdatedByService()
 	return ou
 }
 
@@ -1655,6 +1705,15 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ou.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organization.FieldUpdatedAt, field.TypeTime)
 	}
+	if ou.mutation.CreatedByIDCleared() {
+		_spec.ClearField(organization.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := ou.mutation.UpdatedByID(); ok {
+		_spec.SetField(organization.FieldUpdatedByID, field.TypeString, value)
+	}
+	if ou.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(organization.FieldUpdatedByID, field.TypeString)
+	}
 	if value, ok := ou.mutation.Tags(); ok {
 		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
 	}
@@ -1696,29 +1755,60 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ou.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 	}
-	if ou.mutation.UpdatedByCleared() {
+	if ou.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organization.UpdatedByTable,
-			Columns: []string{organization.UpdatedByColumn},
+			Table:   organization.UpdatedByUserTable,
+			Columns: []string{organization.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ou.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ou.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organization.UpdatedByTable,
-			Columns: []string{organization.UpdatedByColumn},
+			Table:   organization.UpdatedByUserTable,
+			Columns: []string{organization.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Organization
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.UpdatedByServiceTable,
+			Columns: []string{organization.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Organization
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.UpdatedByServiceTable,
+			Columns: []string{organization.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ou.schemaConfig.Organization
@@ -3611,6 +3701,46 @@ func (ouo *OrganizationUpdateOne) ClearUpdatedByID() *OrganizationUpdateOne {
 	return ouo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ouo *OrganizationUpdateOne) SetUpdatedByUserID(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetUpdatedByUserID(s)
+	return ouo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableUpdatedByUserID(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetUpdatedByUserID(*s)
+	}
+	return ouo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ouo *OrganizationUpdateOne) ClearUpdatedByUserID() *OrganizationUpdateOne {
+	ouo.mutation.ClearUpdatedByUserID()
+	return ouo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ouo *OrganizationUpdateOne) SetUpdatedByServiceID(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetUpdatedByServiceID(s)
+	return ouo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableUpdatedByServiceID(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetUpdatedByServiceID(*s)
+	}
+	return ouo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ouo *OrganizationUpdateOne) ClearUpdatedByServiceID() *OrganizationUpdateOne {
+	ouo.mutation.ClearUpdatedByServiceID()
+	return ouo
+}
+
 // SetTags sets the "tags" field.
 func (ouo *OrganizationUpdateOne) SetTags(s []string) *OrganizationUpdateOne {
 	ouo.mutation.SetTags(s)
@@ -3711,9 +3841,14 @@ func (ouo *OrganizationUpdateOne) SetNillableDedicatedDb(b *bool) *OrganizationU
 	return ouo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ouo *OrganizationUpdateOne) SetUpdatedBy(c *ChangeActor) *OrganizationUpdateOne {
-	return ouo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ouo *OrganizationUpdateOne) SetUpdatedByUser(u *User) *OrganizationUpdateOne {
+	return ouo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ouo *OrganizationUpdateOne) SetUpdatedByService(a *APIToken) *OrganizationUpdateOne {
+	return ouo.SetUpdatedByServiceID(a.ID)
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
@@ -4295,9 +4430,15 @@ func (ouo *OrganizationUpdateOne) Mutation() *OrganizationMutation {
 	return ouo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (ouo *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
-	ouo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (ouo *OrganizationUpdateOne) ClearUpdatedByUser() *OrganizationUpdateOne {
+	ouo.mutation.ClearUpdatedByUser()
+	return ouo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (ouo *OrganizationUpdateOne) ClearUpdatedByService() *OrganizationUpdateOne {
+	ouo.mutation.ClearUpdatedByService()
 	return ouo
 }
 
@@ -5203,6 +5344,15 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	if ouo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organization.FieldUpdatedAt, field.TypeTime)
 	}
+	if ouo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(organization.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := ouo.mutation.UpdatedByID(); ok {
+		_spec.SetField(organization.FieldUpdatedByID, field.TypeString, value)
+	}
+	if ouo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(organization.FieldUpdatedByID, field.TypeString)
+	}
 	if value, ok := ouo.mutation.Tags(); ok {
 		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
 	}
@@ -5244,29 +5394,60 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	if value, ok := ouo.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 	}
-	if ouo.mutation.UpdatedByCleared() {
+	if ouo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organization.UpdatedByTable,
-			Columns: []string{organization.UpdatedByColumn},
+			Table:   organization.UpdatedByUserTable,
+			Columns: []string{organization.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ouo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organization.UpdatedByTable,
-			Columns: []string{organization.UpdatedByColumn},
+			Table:   organization.UpdatedByUserTable,
+			Columns: []string{organization.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Organization
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.UpdatedByServiceTable,
+			Columns: []string{organization.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Organization
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organization.UpdatedByServiceTable,
+			Columns: []string{organization.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Organization

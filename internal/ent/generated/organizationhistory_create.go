@@ -125,6 +125,62 @@ func (ohc *OrganizationHistoryCreate) SetNillableUpdatedByID(s *string) *Organiz
 	return ohc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ohc *OrganizationHistoryCreate) SetCreatedByUserID(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetCreatedByUserID(s)
+	return ohc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableCreatedByUserID(s *string) *OrganizationHistoryCreate {
+	if s != nil {
+		ohc.SetCreatedByUserID(*s)
+	}
+	return ohc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ohc *OrganizationHistoryCreate) SetUpdatedByUserID(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetUpdatedByUserID(s)
+	return ohc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableUpdatedByUserID(s *string) *OrganizationHistoryCreate {
+	if s != nil {
+		ohc.SetUpdatedByUserID(*s)
+	}
+	return ohc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ohc *OrganizationHistoryCreate) SetCreatedByServiceID(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetCreatedByServiceID(s)
+	return ohc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableCreatedByServiceID(s *string) *OrganizationHistoryCreate {
+	if s != nil {
+		ohc.SetCreatedByServiceID(*s)
+	}
+	return ohc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ohc *OrganizationHistoryCreate) SetUpdatedByServiceID(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetUpdatedByServiceID(s)
+	return ohc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableUpdatedByServiceID(s *string) *OrganizationHistoryCreate {
+	if s != nil {
+		ohc.SetUpdatedByServiceID(*s)
+	}
+	return ohc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (ohc *OrganizationHistoryCreate) SetMappingID(s string) *OrganizationHistoryCreate {
 	ohc.mutation.SetMappingID(s)
@@ -460,6 +516,22 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 	if value, ok := ohc.mutation.UpdatedByID(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := ohc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(organizationhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := ohc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := ohc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(organizationhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := ohc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := ohc.mutation.MappingID(); ok {
 		_spec.SetField(organizationhistory.FieldMappingID, field.TypeString, value)

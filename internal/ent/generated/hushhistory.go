@@ -34,6 +34,14 @@ type HushHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -60,7 +68,7 @@ func (*HushHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case hushhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case hushhistory.FieldID, hushhistory.FieldRef, hushhistory.FieldUpdatedBy, hushhistory.FieldCreatedByID, hushhistory.FieldUpdatedByID, hushhistory.FieldMappingID, hushhistory.FieldDeletedByID, hushhistory.FieldName, hushhistory.FieldDescription, hushhistory.FieldKind, hushhistory.FieldSecretName, hushhistory.FieldSecretValue:
+		case hushhistory.FieldID, hushhistory.FieldRef, hushhistory.FieldUpdatedBy, hushhistory.FieldCreatedByID, hushhistory.FieldUpdatedByID, hushhistory.FieldCreatedByUserID, hushhistory.FieldUpdatedByUserID, hushhistory.FieldCreatedByServiceID, hushhistory.FieldUpdatedByServiceID, hushhistory.FieldMappingID, hushhistory.FieldDeletedByID, hushhistory.FieldName, hushhistory.FieldDescription, hushhistory.FieldKind, hushhistory.FieldSecretName, hushhistory.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hushhistory.FieldHistoryTime, hushhistory.FieldCreatedAt, hushhistory.FieldUpdatedAt, hushhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -133,6 +141,30 @@ func (hh *HushHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				hh.UpdatedByID = value.String
+			}
+		case hushhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				hh.CreatedByUserID = value.String
+			}
+		case hushhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				hh.UpdatedByUserID = value.String
+			}
+		case hushhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				hh.CreatedByServiceID = value.String
+			}
+		case hushhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				hh.UpdatedByServiceID = value.String
 			}
 		case hushhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -243,6 +275,18 @@ func (hh *HushHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(hh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(hh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(hh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(hh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(hh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(hh.MappingID)

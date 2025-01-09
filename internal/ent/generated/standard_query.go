@@ -13,13 +13,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -31,8 +32,10 @@ type StandardQuery struct {
 	order                      []standard.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.Standard
-	withCreatedBy              *ChangeActorQuery
-	withUpdatedBy              *ChangeActorQuery
+	withCreatedByUser          *UserQuery
+	withUpdatedByUser          *UserQuery
+	withCreatedByService       *APITokenQuery
+	withUpdatedByService       *APITokenQuery
 	withControlObjectives      *ControlObjectiveQuery
 	withControls               *ControlQuery
 	withProcedures             *ProcedureQuery
@@ -81,9 +84,9 @@ func (sq *StandardQuery) Order(o ...standard.OrderOption) *StandardQuery {
 	return sq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (sq *StandardQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: sq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (sq *StandardQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -94,11 +97,11 @@ func (sq *StandardQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, standard.CreatedByTable, standard.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.CreatedByUserTable, standard.CreatedByUserColumn),
 		)
 		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Standard
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -106,9 +109,9 @@ func (sq *StandardQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (sq *StandardQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: sq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (sq *StandardQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -119,11 +122,61 @@ func (sq *StandardQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(standard.Table, standard.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, standard.UpdatedByTable, standard.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.UpdatedByUserTable, standard.UpdatedByUserColumn),
 		)
 		schemaConfig := sq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Standard
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (sq *StandardQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.CreatedByServiceTable, standard.CreatedByServiceColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Standard
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (sq *StandardQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.UpdatedByServiceTable, standard.UpdatedByServiceColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Standard
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -448,8 +501,10 @@ func (sq *StandardQuery) Clone() *StandardQuery {
 		order:                 append([]standard.OrderOption{}, sq.order...),
 		inters:                append([]Interceptor{}, sq.inters...),
 		predicates:            append([]predicate.Standard{}, sq.predicates...),
-		withCreatedBy:         sq.withCreatedBy.Clone(),
-		withUpdatedBy:         sq.withUpdatedBy.Clone(),
+		withCreatedByUser:     sq.withCreatedByUser.Clone(),
+		withUpdatedByUser:     sq.withUpdatedByUser.Clone(),
+		withCreatedByService:  sq.withCreatedByService.Clone(),
+		withUpdatedByService:  sq.withUpdatedByService.Clone(),
 		withControlObjectives: sq.withControlObjectives.Clone(),
 		withControls:          sq.withControls.Clone(),
 		withProcedures:        sq.withProcedures.Clone(),
@@ -462,25 +517,47 @@ func (sq *StandardQuery) Clone() *StandardQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *StandardQuery {
-	query := (&ChangeActorClient{config: sq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithCreatedByUser(opts ...func(*UserQuery)) *StandardQuery {
+	query := (&UserClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withCreatedBy = query
+	sq.withCreatedByUser = query
 	return sq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *StandardQuery {
-	query := (&ChangeActorClient{config: sq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *StandardQuery {
+	query := (&UserClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withUpdatedBy = query
+	sq.withUpdatedByUser = query
+	return sq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *StandardQuery {
+	query := (&APITokenClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withCreatedByService = query
+	return sq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *StandardQuery {
+	query := (&APITokenClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withUpdatedByService = query
 	return sq
 }
 
@@ -617,9 +694,11 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	var (
 		nodes       = []*Standard{}
 		_spec       = sq.querySpec()
-		loadedTypes = [7]bool{
-			sq.withCreatedBy != nil,
-			sq.withUpdatedBy != nil,
+		loadedTypes = [9]bool{
+			sq.withCreatedByUser != nil,
+			sq.withUpdatedByUser != nil,
+			sq.withCreatedByService != nil,
+			sq.withUpdatedByService != nil,
 			sq.withControlObjectives != nil,
 			sq.withControls != nil,
 			sq.withProcedures != nil,
@@ -650,15 +729,27 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withCreatedBy; query != nil {
-		if err := sq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Standard, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := sq.withCreatedByUser; query != nil {
+		if err := sq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Standard, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withUpdatedBy; query != nil {
-		if err := sq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Standard, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := sq.withUpdatedByUser; query != nil {
+		if err := sq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Standard, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withCreatedByService; query != nil {
+		if err := sq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Standard, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withUpdatedByService; query != nil {
+		if err := sq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Standard, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -742,11 +833,11 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	return nodes, nil
 }
 
-func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *ChangeActor)) error {
+func (sq *StandardQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Standard)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -755,7 +846,7 @@ func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQu
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -763,7 +854,7 @@ func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQu
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -771,11 +862,11 @@ func (sq *StandardQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQu
 	}
 	return nil
 }
-func (sq *StandardQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *ChangeActor)) error {
+func (sq *StandardQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Standard)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -784,7 +875,7 @@ func (sq *StandardQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQu
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -792,7 +883,65 @@ func (sq *StandardQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQu
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *StandardQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Standard)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *StandardQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Standard)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1110,11 +1259,17 @@ func (sq *StandardQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if sq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(standard.FieldCreatedByID)
+		if sq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(standard.FieldCreatedByUserID)
 		}
-		if sq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(standard.FieldUpdatedByID)
+		if sq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(standard.FieldUpdatedByUserID)
+		}
+		if sq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(standard.FieldCreatedByServiceID)
+		}
+		if sq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(standard.FieldUpdatedByServiceID)
 		}
 	}
 	if ps := sq.predicates; len(ps) > 0 {

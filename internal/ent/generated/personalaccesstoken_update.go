@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
@@ -65,6 +65,46 @@ func (patu *PersonalAccessTokenUpdate) SetNillableUpdatedByID(s *string) *Person
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (patu *PersonalAccessTokenUpdate) ClearUpdatedByID() *PersonalAccessTokenUpdate {
 	patu.mutation.ClearUpdatedByID()
+	return patu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (patu *PersonalAccessTokenUpdate) SetUpdatedByUserID(s string) *PersonalAccessTokenUpdate {
+	patu.mutation.SetUpdatedByUserID(s)
+	return patu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (patu *PersonalAccessTokenUpdate) SetNillableUpdatedByUserID(s *string) *PersonalAccessTokenUpdate {
+	if s != nil {
+		patu.SetUpdatedByUserID(*s)
+	}
+	return patu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (patu *PersonalAccessTokenUpdate) ClearUpdatedByUserID() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearUpdatedByUserID()
+	return patu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (patu *PersonalAccessTokenUpdate) SetUpdatedByServiceID(s string) *PersonalAccessTokenUpdate {
+	patu.mutation.SetUpdatedByServiceID(s)
+	return patu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (patu *PersonalAccessTokenUpdate) SetNillableUpdatedByServiceID(s *string) *PersonalAccessTokenUpdate {
+	if s != nil {
+		patu.SetUpdatedByServiceID(*s)
+	}
+	return patu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (patu *PersonalAccessTokenUpdate) ClearUpdatedByServiceID() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearUpdatedByServiceID()
 	return patu
 }
 
@@ -192,9 +232,14 @@ func (patu *PersonalAccessTokenUpdate) ClearLastUsedAt() *PersonalAccessTokenUpd
 	return patu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (patu *PersonalAccessTokenUpdate) SetUpdatedBy(c *ChangeActor) *PersonalAccessTokenUpdate {
-	return patu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (patu *PersonalAccessTokenUpdate) SetUpdatedByUser(u *User) *PersonalAccessTokenUpdate {
+	return patu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (patu *PersonalAccessTokenUpdate) SetUpdatedByService(a *APIToken) *PersonalAccessTokenUpdate {
+	return patu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -237,9 +282,15 @@ func (patu *PersonalAccessTokenUpdate) Mutation() *PersonalAccessTokenMutation {
 	return patu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (patu *PersonalAccessTokenUpdate) ClearUpdatedBy() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (patu *PersonalAccessTokenUpdate) ClearUpdatedByUser() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearUpdatedByUser()
+	return patu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (patu *PersonalAccessTokenUpdate) ClearUpdatedByService() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearUpdatedByService()
 	return patu
 }
 
@@ -373,6 +424,15 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 	if patu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedAt, field.TypeTime)
 	}
+	if patu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := patu.mutation.UpdatedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldUpdatedByID, field.TypeString, value)
+	}
+	if patu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldUpdatedByID, field.TypeString)
+	}
 	if patu.mutation.DeletedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDeletedAt, field.TypeTime)
 	}
@@ -422,29 +482,60 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 	if patu.mutation.LastUsedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if patu.mutation.UpdatedByCleared() {
+	if patu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   personalaccesstoken.UpdatedByTable,
-			Columns: []string{personalaccesstoken.UpdatedByColumn},
+			Table:   personalaccesstoken.UpdatedByUserTable,
+			Columns: []string{personalaccesstoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patu.schemaConfig.PersonalAccessToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := patu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   personalaccesstoken.UpdatedByTable,
-			Columns: []string{personalaccesstoken.UpdatedByColumn},
+			Table:   personalaccesstoken.UpdatedByUserTable,
+			Columns: []string{personalaccesstoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = patu.schemaConfig.PersonalAccessToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if patu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.UpdatedByServiceTable,
+			Columns: []string{personalaccesstoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = patu.schemaConfig.PersonalAccessToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := patu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.UpdatedByServiceTable,
+			Columns: []string{personalaccesstoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patu.schemaConfig.PersonalAccessToken
@@ -636,6 +727,46 @@ func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedByID() *PersonalAccessTok
 	return patuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedByUserID(s string) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetUpdatedByUserID(s)
+	return patuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (patuo *PersonalAccessTokenUpdateOne) SetNillableUpdatedByUserID(s *string) *PersonalAccessTokenUpdateOne {
+	if s != nil {
+		patuo.SetUpdatedByUserID(*s)
+	}
+	return patuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedByUserID() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearUpdatedByUserID()
+	return patuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedByServiceID(s string) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetUpdatedByServiceID(s)
+	return patuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (patuo *PersonalAccessTokenUpdateOne) SetNillableUpdatedByServiceID(s *string) *PersonalAccessTokenUpdateOne {
+	if s != nil {
+		patuo.SetUpdatedByServiceID(*s)
+	}
+	return patuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedByServiceID() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearUpdatedByServiceID()
+	return patuo
+}
+
 // SetTags sets the "tags" field.
 func (patuo *PersonalAccessTokenUpdateOne) SetTags(s []string) *PersonalAccessTokenUpdateOne {
 	patuo.mutation.SetTags(s)
@@ -760,9 +891,14 @@ func (patuo *PersonalAccessTokenUpdateOne) ClearLastUsedAt() *PersonalAccessToke
 	return patuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedBy(c *ChangeActor) *PersonalAccessTokenUpdateOne {
-	return patuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedByUser(u *User) *PersonalAccessTokenUpdateOne {
+	return patuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedByService(a *APIToken) *PersonalAccessTokenUpdateOne {
+	return patuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -805,9 +941,15 @@ func (patuo *PersonalAccessTokenUpdateOne) Mutation() *PersonalAccessTokenMutati
 	return patuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedBy() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedByUser() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearUpdatedByUser()
+	return patuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedByService() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearUpdatedByService()
 	return patuo
 }
 
@@ -971,6 +1113,15 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 	if patuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedAt, field.TypeTime)
 	}
+	if patuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := patuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldUpdatedByID, field.TypeString, value)
+	}
+	if patuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldUpdatedByID, field.TypeString)
+	}
 	if patuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDeletedAt, field.TypeTime)
 	}
@@ -1020,29 +1171,60 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 	if patuo.mutation.LastUsedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if patuo.mutation.UpdatedByCleared() {
+	if patuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   personalaccesstoken.UpdatedByTable,
-			Columns: []string{personalaccesstoken.UpdatedByColumn},
+			Table:   personalaccesstoken.UpdatedByUserTable,
+			Columns: []string{personalaccesstoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patuo.schemaConfig.PersonalAccessToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := patuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   personalaccesstoken.UpdatedByTable,
-			Columns: []string{personalaccesstoken.UpdatedByColumn},
+			Table:   personalaccesstoken.UpdatedByUserTable,
+			Columns: []string{personalaccesstoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = patuo.schemaConfig.PersonalAccessToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if patuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.UpdatedByServiceTable,
+			Columns: []string{personalaccesstoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = patuo.schemaConfig.PersonalAccessToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := patuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.UpdatedByServiceTable,
+			Columns: []string{personalaccesstoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patuo.schemaConfig.PersonalAccessToken

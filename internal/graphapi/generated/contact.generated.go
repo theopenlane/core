@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 				return ec.fieldContext_Contact_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Contact_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Contact_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Contact_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Contact_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Contact_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Contact_deletedAt(ctx, field)
 			case "deletedByID":
@@ -97,10 +105,14 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 				return ec.fieldContext_Contact_address(ctx, field)
 			case "status":
 				return ec.fieldContext_Contact_status(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Contact_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Contact_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Contact_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Contact_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
@@ -163,6 +175,14 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 				return ec.fieldContext_Contact_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Contact_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Contact_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Contact_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Contact_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Contact_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Contact_deletedAt(ctx, field)
 			case "deletedByID":
@@ -185,10 +205,14 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 				return ec.fieldContext_Contact_address(ctx, field)
 			case "status":
 				return ec.fieldContext_Contact_status(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Contact_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Contact_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Contact_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Contact_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
@@ -295,6 +319,14 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 				return ec.fieldContext_Contact_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Contact_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Contact_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Contact_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Contact_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Contact_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Contact_deletedAt(ctx, field)
 			case "deletedByID":
@@ -317,10 +349,14 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 				return ec.fieldContext_Contact_address(ctx, field)
 			case "status":
 				return ec.fieldContext_Contact_status(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Contact_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Contact_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Contact_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Contact_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":

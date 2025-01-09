@@ -10,9 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrgSubscription is the model entity for the OrgSubscription schema.
@@ -28,6 +30,14 @@ type OrgSubscription struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -58,43 +68,74 @@ type OrgSubscription struct {
 	// The values are being populated by the OrgSubscriptionQuery when eager-loading is set.
 	Edges        OrgSubscriptionEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // OrgSubscriptionEdges holds the relations/edges for other nodes in the graph.
 type OrgSubscriptionEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrgSubscriptionEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e OrgSubscriptionEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e OrgSubscriptionEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e OrgSubscriptionEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrgSubscriptionEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrgSubscriptionEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -102,7 +143,7 @@ func (e OrgSubscriptionEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e OrgSubscriptionEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -117,7 +158,7 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case orgsubscription.FieldActive:
 			values[i] = new(sql.NullBool)
-		case orgsubscription.FieldID, orgsubscription.FieldCreatedByID, orgsubscription.FieldUpdatedByID, orgsubscription.FieldMappingID, orgsubscription.FieldDeletedByID, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID:
+		case orgsubscription.FieldID, orgsubscription.FieldCreatedByID, orgsubscription.FieldUpdatedByID, orgsubscription.FieldCreatedByUserID, orgsubscription.FieldUpdatedByUserID, orgsubscription.FieldCreatedByServiceID, orgsubscription.FieldUpdatedByServiceID, orgsubscription.FieldMappingID, orgsubscription.FieldDeletedByID, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID:
 			values[i] = new(sql.NullString)
 		case orgsubscription.FieldCreatedAt, orgsubscription.FieldUpdatedAt, orgsubscription.FieldDeletedAt, orgsubscription.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
@@ -165,6 +206,30 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				os.UpdatedByID = value.String
+			}
+		case orgsubscription.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				os.CreatedByUserID = value.String
+			}
+		case orgsubscription.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				os.UpdatedByUserID = value.String
+			}
+		case orgsubscription.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				os.CreatedByServiceID = value.String
+			}
+		case orgsubscription.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				os.UpdatedByServiceID = value.String
 			}
 		case orgsubscription.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -262,14 +327,24 @@ func (os *OrgSubscription) Value(name string) (ent.Value, error) {
 	return os.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the OrgSubscription entity.
-func (os *OrgSubscription) QueryCreatedBy() *ChangeActorQuery {
-	return NewOrgSubscriptionClient(os.config).QueryCreatedBy(os)
+// QueryCreatedByUser queries the "created_by_user" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryCreatedByUser() *UserQuery {
+	return NewOrgSubscriptionClient(os.config).QueryCreatedByUser(os)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the OrgSubscription entity.
-func (os *OrgSubscription) QueryUpdatedBy() *ChangeActorQuery {
-	return NewOrgSubscriptionClient(os.config).QueryUpdatedBy(os)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryUpdatedByUser() *UserQuery {
+	return NewOrgSubscriptionClient(os.config).QueryUpdatedByUser(os)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryCreatedByService() *APITokenQuery {
+	return NewOrgSubscriptionClient(os.config).QueryCreatedByService(os)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryUpdatedByService() *APITokenQuery {
+	return NewOrgSubscriptionClient(os.config).QueryUpdatedByService(os)
 }
 
 // QueryOwner queries the "owner" edge of the OrgSubscription entity.
@@ -311,6 +386,18 @@ func (os *OrgSubscription) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(os.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(os.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(os.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(os.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(os.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(os.MappingID)

@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_EntityTypeBulkCreatePayload_entityTypes
 				return ec.fieldContext_EntityType_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_EntityType_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_EntityType_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_EntityType_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_EntityType_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_EntityType_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_EntityType_deletedAt(ctx, field)
 			case "deletedByID":
@@ -85,10 +93,14 @@ func (ec *executionContext) fieldContext_EntityTypeBulkCreatePayload_entityTypes
 				return ec.fieldContext_EntityType_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_EntityType_name(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_EntityType_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_EntityType_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_EntityType_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_EntityType_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_EntityType_owner(ctx, field)
 			case "entities":
@@ -149,6 +161,14 @@ func (ec *executionContext) fieldContext_EntityTypeCreatePayload_entityType(_ co
 				return ec.fieldContext_EntityType_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_EntityType_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_EntityType_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_EntityType_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_EntityType_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_EntityType_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_EntityType_deletedAt(ctx, field)
 			case "deletedByID":
@@ -159,10 +179,14 @@ func (ec *executionContext) fieldContext_EntityTypeCreatePayload_entityType(_ co
 				return ec.fieldContext_EntityType_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_EntityType_name(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_EntityType_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_EntityType_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_EntityType_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_EntityType_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_EntityType_owner(ctx, field)
 			case "entities":
@@ -267,6 +291,14 @@ func (ec *executionContext) fieldContext_EntityTypeUpdatePayload_entityType(_ co
 				return ec.fieldContext_EntityType_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_EntityType_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_EntityType_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_EntityType_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_EntityType_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_EntityType_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_EntityType_deletedAt(ctx, field)
 			case "deletedByID":
@@ -277,10 +309,14 @@ func (ec *executionContext) fieldContext_EntityTypeUpdatePayload_entityType(_ co
 				return ec.fieldContext_EntityType_ownerID(ctx, field)
 			case "name":
 				return ec.fieldContext_EntityType_name(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_EntityType_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_EntityType_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_EntityType_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_EntityType_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_EntityType_owner(ctx, field)
 			case "entities":

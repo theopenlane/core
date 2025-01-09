@@ -65,6 +65,46 @@ func (ddhu *DocumentDataHistoryUpdate) ClearUpdatedByID() *DocumentDataHistoryUp
 	return ddhu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ddhu *DocumentDataHistoryUpdate) SetUpdatedByUserID(s string) *DocumentDataHistoryUpdate {
+	ddhu.mutation.SetUpdatedByUserID(s)
+	return ddhu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ddhu *DocumentDataHistoryUpdate) SetNillableUpdatedByUserID(s *string) *DocumentDataHistoryUpdate {
+	if s != nil {
+		ddhu.SetUpdatedByUserID(*s)
+	}
+	return ddhu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ddhu *DocumentDataHistoryUpdate) ClearUpdatedByUserID() *DocumentDataHistoryUpdate {
+	ddhu.mutation.ClearUpdatedByUserID()
+	return ddhu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ddhu *DocumentDataHistoryUpdate) SetUpdatedByServiceID(s string) *DocumentDataHistoryUpdate {
+	ddhu.mutation.SetUpdatedByServiceID(s)
+	return ddhu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ddhu *DocumentDataHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *DocumentDataHistoryUpdate {
+	if s != nil {
+		ddhu.SetUpdatedByServiceID(*s)
+	}
+	return ddhu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ddhu *DocumentDataHistoryUpdate) ClearUpdatedByServiceID() *DocumentDataHistoryUpdate {
+	ddhu.mutation.ClearUpdatedByServiceID()
+	return ddhu
+}
+
 // SetTags sets the "tags" field.
 func (ddhu *DocumentDataHistoryUpdate) SetTags(s []string) *DocumentDataHistoryUpdate {
 	ddhu.mutation.SetTags(s)
@@ -209,6 +249,24 @@ func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if ddhu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedByID, field.TypeString)
 	}
+	if ddhu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := ddhu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if ddhu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if ddhu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := ddhu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if ddhu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if value, ok := ddhu.mutation.Tags(); ok {
 		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
 	}
@@ -291,6 +349,46 @@ func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Do
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (ddhuo *DocumentDataHistoryUpdateOne) ClearUpdatedByID() *DocumentDataHistoryUpdateOne {
 	ddhuo.mutation.ClearUpdatedByID()
+	return ddhuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) SetUpdatedByUserID(s string) *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.SetUpdatedByUserID(s)
+	return ddhuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *DocumentDataHistoryUpdateOne {
+	if s != nil {
+		ddhuo.SetUpdatedByUserID(*s)
+	}
+	return ddhuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) ClearUpdatedByUserID() *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.ClearUpdatedByUserID()
+	return ddhuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) SetUpdatedByServiceID(s string) *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.SetUpdatedByServiceID(s)
+	return ddhuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ddhuo *DocumentDataHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *DocumentDataHistoryUpdateOne {
+	if s != nil {
+		ddhuo.SetUpdatedByServiceID(*s)
+	}
+	return ddhuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ddhuo *DocumentDataHistoryUpdateOne) ClearUpdatedByServiceID() *DocumentDataHistoryUpdateOne {
+	ddhuo.mutation.ClearUpdatedByServiceID()
 	return ddhuo
 }
 
@@ -467,6 +565,24 @@ func (ddhuo *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if ddhuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedByID, field.TypeString)
+	}
+	if ddhuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := ddhuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if ddhuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if ddhuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := ddhuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(documentdatahistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if ddhuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if value, ok := ddhuo.mutation.Tags(); ok {
 		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)

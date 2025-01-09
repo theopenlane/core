@@ -94,6 +94,62 @@ func (uc *UserCreate) SetNillableUpdatedByID(s *string) *UserCreate {
 	return uc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (uc *UserCreate) SetCreatedByUserID(s string) *UserCreate {
+	uc.mutation.SetCreatedByUserID(s)
+	return uc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCreatedByUserID(s *string) *UserCreate {
+	if s != nil {
+		uc.SetCreatedByUserID(*s)
+	}
+	return uc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (uc *UserCreate) SetUpdatedByUserID(s string) *UserCreate {
+	uc.mutation.SetUpdatedByUserID(s)
+	return uc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableUpdatedByUserID(s *string) *UserCreate {
+	if s != nil {
+		uc.SetUpdatedByUserID(*s)
+	}
+	return uc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (uc *UserCreate) SetCreatedByServiceID(s string) *UserCreate {
+	uc.mutation.SetCreatedByServiceID(s)
+	return uc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCreatedByServiceID(s *string) *UserCreate {
+	if s != nil {
+		uc.SetCreatedByServiceID(*s)
+	}
+	return uc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (uc *UserCreate) SetUpdatedByServiceID(s string) *UserCreate {
+	uc.mutation.SetUpdatedByServiceID(s)
+	return uc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableUpdatedByServiceID(s *string) *UserCreate {
+	if s != nil {
+		uc.SetUpdatedByServiceID(*s)
+	}
+	return uc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (uc *UserCreate) SetDeletedAt(t time.Time) *UserCreate {
 	uc.mutation.SetDeletedAt(t)
@@ -795,6 +851,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.UpdatedByID(); ok {
 		_spec.SetField(user.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := uc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(user.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := uc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(user.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := uc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(user.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := uc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(user.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := uc.mutation.DeletedAt(); ok {
 		_spec.SetField(user.FieldDeletedAt, field.TypeTime, value)

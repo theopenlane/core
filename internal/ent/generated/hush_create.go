@@ -10,11 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // HushCreate is the builder for creating a Hush entity.
@@ -76,6 +77,62 @@ func (hc *HushCreate) SetUpdatedByID(s string) *HushCreate {
 func (hc *HushCreate) SetNillableUpdatedByID(s *string) *HushCreate {
 	if s != nil {
 		hc.SetUpdatedByID(*s)
+	}
+	return hc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (hc *HushCreate) SetCreatedByUserID(s string) *HushCreate {
+	hc.mutation.SetCreatedByUserID(s)
+	return hc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (hc *HushCreate) SetNillableCreatedByUserID(s *string) *HushCreate {
+	if s != nil {
+		hc.SetCreatedByUserID(*s)
+	}
+	return hc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (hc *HushCreate) SetUpdatedByUserID(s string) *HushCreate {
+	hc.mutation.SetUpdatedByUserID(s)
+	return hc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (hc *HushCreate) SetNillableUpdatedByUserID(s *string) *HushCreate {
+	if s != nil {
+		hc.SetUpdatedByUserID(*s)
+	}
+	return hc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (hc *HushCreate) SetCreatedByServiceID(s string) *HushCreate {
+	hc.mutation.SetCreatedByServiceID(s)
+	return hc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (hc *HushCreate) SetNillableCreatedByServiceID(s *string) *HushCreate {
+	if s != nil {
+		hc.SetCreatedByServiceID(*s)
+	}
+	return hc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (hc *HushCreate) SetUpdatedByServiceID(s string) *HushCreate {
+	hc.mutation.SetUpdatedByServiceID(s)
+	return hc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (hc *HushCreate) SetNillableUpdatedByServiceID(s *string) *HushCreate {
+	if s != nil {
+		hc.SetUpdatedByServiceID(*s)
 	}
 	return hc
 }
@@ -198,14 +255,24 @@ func (hc *HushCreate) SetNillableID(s *string) *HushCreate {
 	return hc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (hc *HushCreate) SetCreatedBy(c *ChangeActor) *HushCreate {
-	return hc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (hc *HushCreate) SetCreatedByUser(u *User) *HushCreate {
+	return hc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (hc *HushCreate) SetUpdatedBy(c *ChangeActor) *HushCreate {
-	return hc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (hc *HushCreate) SetUpdatedByUser(u *User) *HushCreate {
+	return hc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (hc *HushCreate) SetCreatedByService(a *APIToken) *HushCreate {
+	return hc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (hc *HushCreate) SetUpdatedByService(a *APIToken) *HushCreate {
+	return hc.SetUpdatedByServiceID(a.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -378,6 +445,14 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 		_spec.SetField(hush.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := hc.mutation.CreatedByID(); ok {
+		_spec.SetField(hush.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := hc.mutation.UpdatedByID(); ok {
+		_spec.SetField(hush.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := hc.mutation.MappingID(); ok {
 		_spec.SetField(hush.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -410,40 +485,76 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 		_spec.SetField(hush.FieldSecretValue, field.TypeString, value)
 		_node.SecretValue = value
 	}
-	if nodes := hc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := hc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   hush.CreatedByTable,
-			Columns: []string{hush.CreatedByColumn},
+			Table:   hush.CreatedByUserTable,
+			Columns: []string{hush.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = hc.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := hc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := hc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   hush.UpdatedByTable,
-			Columns: []string{hush.UpdatedByColumn},
+			Table:   hush.UpdatedByUserTable,
+			Columns: []string{hush.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = hc.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := hc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.CreatedByServiceTable,
+			Columns: []string{hush.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hc.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := hc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByServiceTable,
+			Columns: []string{hush.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hc.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := hc.mutation.IntegrationsIDs(); len(nodes) > 0 {

@@ -11,7 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ActionPlan is the model entity for the ActionPlan schema.
@@ -27,6 +29,14 @@ type ActionPlan struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -53,14 +63,23 @@ type ActionPlan struct {
 	// The values are being populated by the ActionPlanQuery when eager-loading is set.
 	Edges        ActionPlanEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // ActionPlanEdges holds the relations/edges for other nodes in the graph.
 type ActionPlanEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Standard holds the value of the standard edge.
 	Standard []*Standard `json:"standard,omitempty"`
 	// Risk holds the value of the risk edge.
@@ -73,9 +92,9 @@ type ActionPlanEdges struct {
 	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [9]map[string]int
 
 	namedStandard map[string][]*Standard
 	namedRisk     map[string][]*Risk
@@ -84,32 +103,54 @@ type ActionPlanEdges struct {
 	namedProgram  map[string][]*Program
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ActionPlanEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e ActionPlanEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ActionPlanEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e ActionPlanEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActionPlanEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // StandardOrErr returns the Standard value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) StandardOrErr() ([]*Standard, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Standard, nil
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -118,7 +159,7 @@ func (e ActionPlanEdges) StandardOrErr() ([]*Standard, error) {
 // RiskOrErr returns the Risk value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RiskOrErr() ([]*Risk, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Risk, nil
 	}
 	return nil, &NotLoadedError{edge: "risk"}
@@ -127,7 +168,7 @@ func (e ActionPlanEdges) RiskOrErr() ([]*Risk, error) {
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -136,7 +177,7 @@ func (e ActionPlanEdges) ControlOrErr() ([]*Control, error) {
 // UserOrErr returns the User value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.User, nil
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -145,7 +186,7 @@ func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -158,7 +199,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case actionplan.FieldTags, actionplan.FieldDetails:
 			values[i] = new([]byte)
-		case actionplan.FieldID, actionplan.FieldCreatedByID, actionplan.FieldUpdatedByID, actionplan.FieldDeletedByID, actionplan.FieldMappingID, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedByID, actionplan.FieldUpdatedByID, actionplan.FieldCreatedByUserID, actionplan.FieldUpdatedByUserID, actionplan.FieldCreatedByServiceID, actionplan.FieldUpdatedByServiceID, actionplan.FieldDeletedByID, actionplan.FieldMappingID, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldPriority, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -206,6 +247,30 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				ap.UpdatedByID = value.String
+			}
+		case actionplan.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				ap.CreatedByUserID = value.String
+			}
+		case actionplan.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				ap.UpdatedByUserID = value.String
+			}
+		case actionplan.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				ap.CreatedByServiceID = value.String
+			}
+		case actionplan.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				ap.UpdatedByServiceID = value.String
 			}
 		case actionplan.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -290,14 +355,24 @@ func (ap *ActionPlan) Value(name string) (ent.Value, error) {
 	return ap.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryCreatedBy() *ChangeActorQuery {
-	return NewActionPlanClient(ap.config).QueryCreatedBy(ap)
+// QueryCreatedByUser queries the "created_by_user" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryCreatedByUser() *UserQuery {
+	return NewActionPlanClient(ap.config).QueryCreatedByUser(ap)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryUpdatedBy() *ChangeActorQuery {
-	return NewActionPlanClient(ap.config).QueryUpdatedBy(ap)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryUpdatedByUser() *UserQuery {
+	return NewActionPlanClient(ap.config).QueryUpdatedByUser(ap)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryCreatedByService() *APITokenQuery {
+	return NewActionPlanClient(ap.config).QueryCreatedByService(ap)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryUpdatedByService() *APITokenQuery {
+	return NewActionPlanClient(ap.config).QueryUpdatedByService(ap)
 }
 
 // QueryStandard queries the "standard" edge of the ActionPlan entity.
@@ -359,6 +434,18 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(ap.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(ap.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(ap.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(ap.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(ap.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ap.DeletedAt.Format(time.ANSIC))

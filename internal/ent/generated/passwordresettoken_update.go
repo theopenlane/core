@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -62,6 +62,46 @@ func (prtu *PasswordResetTokenUpdate) SetNillableUpdatedByID(s *string) *Passwor
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (prtu *PasswordResetTokenUpdate) ClearUpdatedByID() *PasswordResetTokenUpdate {
 	prtu.mutation.ClearUpdatedByID()
+	return prtu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (prtu *PasswordResetTokenUpdate) SetUpdatedByUserID(s string) *PasswordResetTokenUpdate {
+	prtu.mutation.SetUpdatedByUserID(s)
+	return prtu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (prtu *PasswordResetTokenUpdate) SetNillableUpdatedByUserID(s *string) *PasswordResetTokenUpdate {
+	if s != nil {
+		prtu.SetUpdatedByUserID(*s)
+	}
+	return prtu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (prtu *PasswordResetTokenUpdate) ClearUpdatedByUserID() *PasswordResetTokenUpdate {
+	prtu.mutation.ClearUpdatedByUserID()
+	return prtu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (prtu *PasswordResetTokenUpdate) SetUpdatedByServiceID(s string) *PasswordResetTokenUpdate {
+	prtu.mutation.SetUpdatedByServiceID(s)
+	return prtu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (prtu *PasswordResetTokenUpdate) SetNillableUpdatedByServiceID(s *string) *PasswordResetTokenUpdate {
+	if s != nil {
+		prtu.SetUpdatedByServiceID(*s)
+	}
+	return prtu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (prtu *PasswordResetTokenUpdate) ClearUpdatedByServiceID() *PasswordResetTokenUpdate {
+	prtu.mutation.ClearUpdatedByServiceID()
 	return prtu
 }
 
@@ -127,9 +167,14 @@ func (prtu *PasswordResetTokenUpdate) SetSecret(b []byte) *PasswordResetTokenUpd
 	return prtu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (prtu *PasswordResetTokenUpdate) SetUpdatedBy(c *ChangeActor) *PasswordResetTokenUpdate {
-	return prtu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (prtu *PasswordResetTokenUpdate) SetUpdatedByUser(u *User) *PasswordResetTokenUpdate {
+	return prtu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (prtu *PasswordResetTokenUpdate) SetUpdatedByService(a *APIToken) *PasswordResetTokenUpdate {
+	return prtu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -142,9 +187,15 @@ func (prtu *PasswordResetTokenUpdate) Mutation() *PasswordResetTokenMutation {
 	return prtu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (prtu *PasswordResetTokenUpdate) ClearUpdatedBy() *PasswordResetTokenUpdate {
-	prtu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (prtu *PasswordResetTokenUpdate) ClearUpdatedByUser() *PasswordResetTokenUpdate {
+	prtu.mutation.ClearUpdatedByUser()
+	return prtu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (prtu *PasswordResetTokenUpdate) ClearUpdatedByService() *PasswordResetTokenUpdate {
+	prtu.mutation.ClearUpdatedByService()
 	return prtu
 }
 
@@ -246,6 +297,15 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 	if prtu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldUpdatedAt, field.TypeTime)
 	}
+	if prtu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := prtu.mutation.UpdatedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldUpdatedByID, field.TypeString, value)
+	}
+	if prtu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldUpdatedByID, field.TypeString)
+	}
 	if prtu.mutation.DeletedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldDeletedAt, field.TypeTime)
 	}
@@ -264,29 +324,60 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 	if value, ok := prtu.mutation.Secret(); ok {
 		_spec.SetField(passwordresettoken.FieldSecret, field.TypeBytes, value)
 	}
-	if prtu.mutation.UpdatedByCleared() {
+	if prtu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   passwordresettoken.UpdatedByTable,
-			Columns: []string{passwordresettoken.UpdatedByColumn},
+			Table:   passwordresettoken.UpdatedByUserTable,
+			Columns: []string{passwordresettoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtu.schemaConfig.PasswordResetToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := prtu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := prtu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   passwordresettoken.UpdatedByTable,
-			Columns: []string{passwordresettoken.UpdatedByColumn},
+			Table:   passwordresettoken.UpdatedByUserTable,
+			Columns: []string{passwordresettoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = prtu.schemaConfig.PasswordResetToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if prtu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.UpdatedByServiceTable,
+			Columns: []string{passwordresettoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = prtu.schemaConfig.PasswordResetToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := prtu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.UpdatedByServiceTable,
+			Columns: []string{passwordresettoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtu.schemaConfig.PasswordResetToken
@@ -382,6 +473,46 @@ func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedByID() *PasswordResetToken
 	return prtuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedByUserID(s string) *PasswordResetTokenUpdateOne {
+	prtuo.mutation.SetUpdatedByUserID(s)
+	return prtuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (prtuo *PasswordResetTokenUpdateOne) SetNillableUpdatedByUserID(s *string) *PasswordResetTokenUpdateOne {
+	if s != nil {
+		prtuo.SetUpdatedByUserID(*s)
+	}
+	return prtuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedByUserID() *PasswordResetTokenUpdateOne {
+	prtuo.mutation.ClearUpdatedByUserID()
+	return prtuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedByServiceID(s string) *PasswordResetTokenUpdateOne {
+	prtuo.mutation.SetUpdatedByServiceID(s)
+	return prtuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (prtuo *PasswordResetTokenUpdateOne) SetNillableUpdatedByServiceID(s *string) *PasswordResetTokenUpdateOne {
+	if s != nil {
+		prtuo.SetUpdatedByServiceID(*s)
+	}
+	return prtuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedByServiceID() *PasswordResetTokenUpdateOne {
+	prtuo.mutation.ClearUpdatedByServiceID()
+	return prtuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (prtuo *PasswordResetTokenUpdateOne) SetOwnerID(s string) *PasswordResetTokenUpdateOne {
 	prtuo.mutation.SetOwnerID(s)
@@ -444,9 +575,14 @@ func (prtuo *PasswordResetTokenUpdateOne) SetSecret(b []byte) *PasswordResetToke
 	return prtuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedBy(c *ChangeActor) *PasswordResetTokenUpdateOne {
-	return prtuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedByUser(u *User) *PasswordResetTokenUpdateOne {
+	return prtuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedByService(a *APIToken) *PasswordResetTokenUpdateOne {
+	return prtuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -459,9 +595,15 @@ func (prtuo *PasswordResetTokenUpdateOne) Mutation() *PasswordResetTokenMutation
 	return prtuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedBy() *PasswordResetTokenUpdateOne {
-	prtuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedByUser() *PasswordResetTokenUpdateOne {
+	prtuo.mutation.ClearUpdatedByUser()
+	return prtuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedByService() *PasswordResetTokenUpdateOne {
+	prtuo.mutation.ClearUpdatedByService()
 	return prtuo
 }
 
@@ -593,6 +735,15 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 	if prtuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldUpdatedAt, field.TypeTime)
 	}
+	if prtuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := prtuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldUpdatedByID, field.TypeString, value)
+	}
+	if prtuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldUpdatedByID, field.TypeString)
+	}
 	if prtuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldDeletedAt, field.TypeTime)
 	}
@@ -611,29 +762,60 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 	if value, ok := prtuo.mutation.Secret(); ok {
 		_spec.SetField(passwordresettoken.FieldSecret, field.TypeBytes, value)
 	}
-	if prtuo.mutation.UpdatedByCleared() {
+	if prtuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   passwordresettoken.UpdatedByTable,
-			Columns: []string{passwordresettoken.UpdatedByColumn},
+			Table:   passwordresettoken.UpdatedByUserTable,
+			Columns: []string{passwordresettoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtuo.schemaConfig.PasswordResetToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := prtuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := prtuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   passwordresettoken.UpdatedByTable,
-			Columns: []string{passwordresettoken.UpdatedByColumn},
+			Table:   passwordresettoken.UpdatedByUserTable,
+			Columns: []string{passwordresettoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = prtuo.schemaConfig.PasswordResetToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if prtuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.UpdatedByServiceTable,
+			Columns: []string{passwordresettoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = prtuo.schemaConfig.PasswordResetToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := prtuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passwordresettoken.UpdatedByServiceTable,
+			Columns: []string{passwordresettoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = prtuo.schemaConfig.PasswordResetToken

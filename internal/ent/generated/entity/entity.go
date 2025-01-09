@@ -23,6 +23,14 @@ const (
 	FieldCreatedByID = "created_by_id"
 	// FieldUpdatedByID holds the string denoting the updated_by_id field in the database.
 	FieldUpdatedByID = "updated_by_id"
+	// FieldCreatedByUserID holds the string denoting the created_by_user_id field in the database.
+	FieldCreatedByUserID = "created_by_user_id"
+	// FieldUpdatedByUserID holds the string denoting the updated_by_user_id field in the database.
+	FieldUpdatedByUserID = "updated_by_user_id"
+	// FieldCreatedByServiceID holds the string denoting the created_by_service_id field in the database.
+	FieldCreatedByServiceID = "created_by_service_id"
+	// FieldUpdatedByServiceID holds the string denoting the updated_by_service_id field in the database.
+	FieldUpdatedByServiceID = "updated_by_service_id"
 	// FieldMappingID holds the string denoting the mapping_id field in the database.
 	FieldMappingID = "mapping_id"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
@@ -45,10 +53,14 @@ const (
 	FieldEntityTypeID = "entity_type_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// EdgeCreatedBy holds the string denoting the created_by edge name in mutations.
-	EdgeCreatedBy = "created_by"
-	// EdgeUpdatedBy holds the string denoting the updated_by edge name in mutations.
-	EdgeUpdatedBy = "updated_by"
+	// EdgeCreatedByUser holds the string denoting the created_by_user edge name in mutations.
+	EdgeCreatedByUser = "created_by_user"
+	// EdgeUpdatedByUser holds the string denoting the updated_by_user edge name in mutations.
+	EdgeUpdatedByUser = "updated_by_user"
+	// EdgeCreatedByService holds the string denoting the created_by_service edge name in mutations.
+	EdgeCreatedByService = "created_by_service"
+	// EdgeUpdatedByService holds the string denoting the updated_by_service edge name in mutations.
+	EdgeUpdatedByService = "updated_by_service"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeContacts holds the string denoting the contacts edge name in mutations.
@@ -63,20 +75,34 @@ const (
 	EdgeEntityType = "entity_type"
 	// Table holds the table name of the entity in the database.
 	Table = "entities"
-	// CreatedByTable is the table that holds the created_by relation/edge.
-	CreatedByTable = "entities"
-	// CreatedByInverseTable is the table name for the ChangeActor entity.
-	// It exists in this package in order to avoid circular dependency with the "changeactor" package.
-	CreatedByInverseTable = "change_actors"
-	// CreatedByColumn is the table column denoting the created_by relation/edge.
-	CreatedByColumn = "created_by_id"
-	// UpdatedByTable is the table that holds the updated_by relation/edge.
-	UpdatedByTable = "entities"
-	// UpdatedByInverseTable is the table name for the ChangeActor entity.
-	// It exists in this package in order to avoid circular dependency with the "changeactor" package.
-	UpdatedByInverseTable = "change_actors"
-	// UpdatedByColumn is the table column denoting the updated_by relation/edge.
-	UpdatedByColumn = "updated_by_id"
+	// CreatedByUserTable is the table that holds the created_by_user relation/edge.
+	CreatedByUserTable = "entities"
+	// CreatedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	CreatedByUserInverseTable = "users"
+	// CreatedByUserColumn is the table column denoting the created_by_user relation/edge.
+	CreatedByUserColumn = "created_by_user_id"
+	// UpdatedByUserTable is the table that holds the updated_by_user relation/edge.
+	UpdatedByUserTable = "entities"
+	// UpdatedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UpdatedByUserInverseTable = "users"
+	// UpdatedByUserColumn is the table column denoting the updated_by_user relation/edge.
+	UpdatedByUserColumn = "updated_by_user_id"
+	// CreatedByServiceTable is the table that holds the created_by_service relation/edge.
+	CreatedByServiceTable = "entities"
+	// CreatedByServiceInverseTable is the table name for the APIToken entity.
+	// It exists in this package in order to avoid circular dependency with the "apitoken" package.
+	CreatedByServiceInverseTable = "api_tokens"
+	// CreatedByServiceColumn is the table column denoting the created_by_service relation/edge.
+	CreatedByServiceColumn = "created_by_service_id"
+	// UpdatedByServiceTable is the table that holds the updated_by_service relation/edge.
+	UpdatedByServiceTable = "entities"
+	// UpdatedByServiceInverseTable is the table name for the APIToken entity.
+	// It exists in this package in order to avoid circular dependency with the "apitoken" package.
+	UpdatedByServiceInverseTable = "api_tokens"
+	// UpdatedByServiceColumn is the table column denoting the updated_by_service relation/edge.
+	UpdatedByServiceColumn = "updated_by_service_id"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "entities"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -122,6 +148,10 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedByID,
 	FieldUpdatedByID,
+	FieldCreatedByUserID,
+	FieldUpdatedByUserID,
+	FieldCreatedByServiceID,
+	FieldUpdatedByServiceID,
 	FieldMappingID,
 	FieldDeletedAt,
 	FieldDeletedByID,
@@ -175,7 +205,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
 	Hooks        [5]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -229,6 +259,26 @@ func ByUpdatedByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedByID, opts...).ToFunc()
 }
 
+// ByCreatedByUserID orders the results by the created_by_user_id field.
+func ByCreatedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedByUserID, opts...).ToFunc()
+}
+
+// ByUpdatedByUserID orders the results by the updated_by_user_id field.
+func ByUpdatedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByUserID, opts...).ToFunc()
+}
+
+// ByCreatedByServiceID orders the results by the created_by_service_id field.
+func ByCreatedByServiceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedByServiceID, opts...).ToFunc()
+}
+
+// ByUpdatedByServiceID orders the results by the updated_by_service_id field.
+func ByUpdatedByServiceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByServiceID, opts...).ToFunc()
+}
+
 // ByMappingID orders the results by the mapping_id field.
 func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
@@ -274,17 +324,31 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByCreatedByField orders the results by created_by field.
-func ByCreatedByField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByCreatedByUserField orders the results by created_by_user field.
+func ByCreatedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newCreatedByStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newCreatedByUserStep(), sql.OrderByField(field, opts...))
 	}
 }
 
-// ByUpdatedByField orders the results by updated_by field.
-func ByUpdatedByField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByUpdatedByUserField orders the results by updated_by_user field.
+func ByUpdatedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUpdatedByStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newUpdatedByUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCreatedByServiceField orders the results by created_by_service field.
+func ByCreatedByServiceField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCreatedByServiceStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByUpdatedByServiceField orders the results by updated_by_service field.
+func ByUpdatedByServiceField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUpdatedByServiceStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -357,18 +421,32 @@ func ByEntityTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEntityTypeStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newCreatedByStep() *sqlgraph.Step {
+func newCreatedByUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(CreatedByInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, CreatedByTable, CreatedByColumn),
+		sqlgraph.To(CreatedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CreatedByUserTable, CreatedByUserColumn),
 	)
 }
-func newUpdatedByStep() *sqlgraph.Step {
+func newUpdatedByUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UpdatedByInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByTable, UpdatedByColumn),
+		sqlgraph.To(UpdatedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByUserTable, UpdatedByUserColumn),
+	)
+}
+func newCreatedByServiceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CreatedByServiceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CreatedByServiceTable, CreatedByServiceColumn),
+	)
+}
+func newUpdatedByServiceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UpdatedByServiceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByServiceTable, UpdatedByServiceColumn),
 	)
 }
 func newOwnerStep() *sqlgraph.Step {

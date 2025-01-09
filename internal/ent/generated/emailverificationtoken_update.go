@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -62,6 +62,46 @@ func (evtu *EmailVerificationTokenUpdate) SetNillableUpdatedByID(s *string) *Ema
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (evtu *EmailVerificationTokenUpdate) ClearUpdatedByID() *EmailVerificationTokenUpdate {
 	evtu.mutation.ClearUpdatedByID()
+	return evtu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (evtu *EmailVerificationTokenUpdate) SetUpdatedByUserID(s string) *EmailVerificationTokenUpdate {
+	evtu.mutation.SetUpdatedByUserID(s)
+	return evtu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (evtu *EmailVerificationTokenUpdate) SetNillableUpdatedByUserID(s *string) *EmailVerificationTokenUpdate {
+	if s != nil {
+		evtu.SetUpdatedByUserID(*s)
+	}
+	return evtu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (evtu *EmailVerificationTokenUpdate) ClearUpdatedByUserID() *EmailVerificationTokenUpdate {
+	evtu.mutation.ClearUpdatedByUserID()
+	return evtu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (evtu *EmailVerificationTokenUpdate) SetUpdatedByServiceID(s string) *EmailVerificationTokenUpdate {
+	evtu.mutation.SetUpdatedByServiceID(s)
+	return evtu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (evtu *EmailVerificationTokenUpdate) SetNillableUpdatedByServiceID(s *string) *EmailVerificationTokenUpdate {
+	if s != nil {
+		evtu.SetUpdatedByServiceID(*s)
+	}
+	return evtu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (evtu *EmailVerificationTokenUpdate) ClearUpdatedByServiceID() *EmailVerificationTokenUpdate {
+	evtu.mutation.ClearUpdatedByServiceID()
 	return evtu
 }
 
@@ -127,9 +167,14 @@ func (evtu *EmailVerificationTokenUpdate) SetSecret(b []byte) *EmailVerification
 	return evtu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (evtu *EmailVerificationTokenUpdate) SetUpdatedBy(c *ChangeActor) *EmailVerificationTokenUpdate {
-	return evtu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (evtu *EmailVerificationTokenUpdate) SetUpdatedByUser(u *User) *EmailVerificationTokenUpdate {
+	return evtu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (evtu *EmailVerificationTokenUpdate) SetUpdatedByService(a *APIToken) *EmailVerificationTokenUpdate {
+	return evtu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -142,9 +187,15 @@ func (evtu *EmailVerificationTokenUpdate) Mutation() *EmailVerificationTokenMuta
 	return evtu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (evtu *EmailVerificationTokenUpdate) ClearUpdatedBy() *EmailVerificationTokenUpdate {
-	evtu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (evtu *EmailVerificationTokenUpdate) ClearUpdatedByUser() *EmailVerificationTokenUpdate {
+	evtu.mutation.ClearUpdatedByUser()
+	return evtu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (evtu *EmailVerificationTokenUpdate) ClearUpdatedByService() *EmailVerificationTokenUpdate {
+	evtu.mutation.ClearUpdatedByService()
 	return evtu
 }
 
@@ -246,6 +297,15 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 	if evtu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldUpdatedAt, field.TypeTime)
 	}
+	if evtu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := evtu.mutation.UpdatedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldUpdatedByID, field.TypeString, value)
+	}
+	if evtu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldUpdatedByID, field.TypeString)
+	}
 	if evtu.mutation.DeletedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldDeletedAt, field.TypeTime)
 	}
@@ -264,29 +324,60 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 	if value, ok := evtu.mutation.Secret(); ok {
 		_spec.SetField(emailverificationtoken.FieldSecret, field.TypeBytes, value)
 	}
-	if evtu.mutation.UpdatedByCleared() {
+	if evtu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   emailverificationtoken.UpdatedByTable,
-			Columns: []string{emailverificationtoken.UpdatedByColumn},
+			Table:   emailverificationtoken.UpdatedByUserTable,
+			Columns: []string{emailverificationtoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtu.schemaConfig.EmailVerificationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := evtu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := evtu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   emailverificationtoken.UpdatedByTable,
-			Columns: []string{emailverificationtoken.UpdatedByColumn},
+			Table:   emailverificationtoken.UpdatedByUserTable,
+			Columns: []string{emailverificationtoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = evtu.schemaConfig.EmailVerificationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if evtu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   emailverificationtoken.UpdatedByServiceTable,
+			Columns: []string{emailverificationtoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = evtu.schemaConfig.EmailVerificationToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := evtu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   emailverificationtoken.UpdatedByServiceTable,
+			Columns: []string{emailverificationtoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtu.schemaConfig.EmailVerificationToken
@@ -382,6 +473,46 @@ func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedByID() *EmailVerificat
 	return evtuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedByUserID(s string) *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.SetUpdatedByUserID(s)
+	return evtuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (evtuo *EmailVerificationTokenUpdateOne) SetNillableUpdatedByUserID(s *string) *EmailVerificationTokenUpdateOne {
+	if s != nil {
+		evtuo.SetUpdatedByUserID(*s)
+	}
+	return evtuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedByUserID() *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.ClearUpdatedByUserID()
+	return evtuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedByServiceID(s string) *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.SetUpdatedByServiceID(s)
+	return evtuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (evtuo *EmailVerificationTokenUpdateOne) SetNillableUpdatedByServiceID(s *string) *EmailVerificationTokenUpdateOne {
+	if s != nil {
+		evtuo.SetUpdatedByServiceID(*s)
+	}
+	return evtuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedByServiceID() *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.ClearUpdatedByServiceID()
+	return evtuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (evtuo *EmailVerificationTokenUpdateOne) SetOwnerID(s string) *EmailVerificationTokenUpdateOne {
 	evtuo.mutation.SetOwnerID(s)
@@ -444,9 +575,14 @@ func (evtuo *EmailVerificationTokenUpdateOne) SetSecret(b []byte) *EmailVerifica
 	return evtuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedBy(c *ChangeActor) *EmailVerificationTokenUpdateOne {
-	return evtuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedByUser(u *User) *EmailVerificationTokenUpdateOne {
+	return evtuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedByService(a *APIToken) *EmailVerificationTokenUpdateOne {
+	return evtuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -459,9 +595,15 @@ func (evtuo *EmailVerificationTokenUpdateOne) Mutation() *EmailVerificationToken
 	return evtuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedBy() *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedByUser() *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.ClearUpdatedByUser()
+	return evtuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedByService() *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.ClearUpdatedByService()
 	return evtuo
 }
 
@@ -593,6 +735,15 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 	if evtuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldUpdatedAt, field.TypeTime)
 	}
+	if evtuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := evtuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldUpdatedByID, field.TypeString, value)
+	}
+	if evtuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldUpdatedByID, field.TypeString)
+	}
 	if evtuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldDeletedAt, field.TypeTime)
 	}
@@ -611,29 +762,60 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 	if value, ok := evtuo.mutation.Secret(); ok {
 		_spec.SetField(emailverificationtoken.FieldSecret, field.TypeBytes, value)
 	}
-	if evtuo.mutation.UpdatedByCleared() {
+	if evtuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   emailverificationtoken.UpdatedByTable,
-			Columns: []string{emailverificationtoken.UpdatedByColumn},
+			Table:   emailverificationtoken.UpdatedByUserTable,
+			Columns: []string{emailverificationtoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtuo.schemaConfig.EmailVerificationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := evtuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := evtuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   emailverificationtoken.UpdatedByTable,
-			Columns: []string{emailverificationtoken.UpdatedByColumn},
+			Table:   emailverificationtoken.UpdatedByUserTable,
+			Columns: []string{emailverificationtoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = evtuo.schemaConfig.EmailVerificationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if evtuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   emailverificationtoken.UpdatedByServiceTable,
+			Columns: []string{emailverificationtoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = evtuo.schemaConfig.EmailVerificationToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := evtuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   emailverificationtoken.UpdatedByServiceTable,
+			Columns: []string{emailverificationtoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtuo.schemaConfig.EmailVerificationToken

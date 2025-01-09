@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_GroupMembershipBulkCreatePayload_groupM
 				return ec.fieldContext_GroupMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_GroupMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_GroupMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_GroupMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_GroupMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_GroupMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -85,10 +93,14 @@ func (ec *executionContext) fieldContext_GroupMembershipBulkCreatePayload_groupM
 				return ec.fieldContext_GroupMembership_groupID(ctx, field)
 			case "userID":
 				return ec.fieldContext_GroupMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_GroupMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_GroupMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_GroupMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_GroupMembership_updatedByService(ctx, field)
 			case "group":
 				return ec.fieldContext_GroupMembership_group(ctx, field)
 			case "user":
@@ -151,6 +163,14 @@ func (ec *executionContext) fieldContext_GroupMembershipCreatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_GroupMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_GroupMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_GroupMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_GroupMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_GroupMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -161,10 +181,14 @@ func (ec *executionContext) fieldContext_GroupMembershipCreatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_groupID(ctx, field)
 			case "userID":
 				return ec.fieldContext_GroupMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_GroupMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_GroupMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_GroupMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_GroupMembership_updatedByService(ctx, field)
 			case "group":
 				return ec.fieldContext_GroupMembership_group(ctx, field)
 			case "user":
@@ -271,6 +295,14 @@ func (ec *executionContext) fieldContext_GroupMembershipUpdatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_GroupMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_GroupMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_GroupMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_GroupMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_GroupMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -281,10 +313,14 @@ func (ec *executionContext) fieldContext_GroupMembershipUpdatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_groupID(ctx, field)
 			case "userID":
 				return ec.fieldContext_GroupMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_GroupMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_GroupMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_GroupMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_GroupMembership_updatedByService(ctx, field)
 			case "group":
 				return ec.fieldContext_GroupMembership_group(ctx, field)
 			case "user":

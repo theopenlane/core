@@ -58,8 +58,6 @@ query GetAllTemplates {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
         owner {
           id
@@ -93,8 +91,6 @@ mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       id

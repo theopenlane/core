@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Hush_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Hush_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Hush_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Hush_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Hush_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
 			case "deletedByID":
@@ -87,10 +95,14 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Hush_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Hush_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Hush_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Hush_updatedByService(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
 			case "organization":
@@ -153,6 +165,14 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Hush_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Hush_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Hush_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Hush_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Hush_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
 			case "deletedByID":
@@ -165,10 +185,14 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Hush_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Hush_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Hush_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Hush_updatedByService(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
 			case "organization":
@@ -275,6 +299,14 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Hush_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Hush_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Hush_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Hush_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Hush_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Hush_deletedAt(ctx, field)
 			case "deletedByID":
@@ -287,10 +319,14 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Hush_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Hush_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Hush_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Hush_updatedByService(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
 			case "organization":

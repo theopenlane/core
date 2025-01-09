@@ -125,6 +125,62 @@ func (ghc *GroupHistoryCreate) SetNillableUpdatedByID(s *string) *GroupHistoryCr
 	return ghc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ghc *GroupHistoryCreate) SetCreatedByUserID(s string) *GroupHistoryCreate {
+	ghc.mutation.SetCreatedByUserID(s)
+	return ghc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableCreatedByUserID(s *string) *GroupHistoryCreate {
+	if s != nil {
+		ghc.SetCreatedByUserID(*s)
+	}
+	return ghc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ghc *GroupHistoryCreate) SetUpdatedByUserID(s string) *GroupHistoryCreate {
+	ghc.mutation.SetUpdatedByUserID(s)
+	return ghc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableUpdatedByUserID(s *string) *GroupHistoryCreate {
+	if s != nil {
+		ghc.SetUpdatedByUserID(*s)
+	}
+	return ghc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ghc *GroupHistoryCreate) SetCreatedByServiceID(s string) *GroupHistoryCreate {
+	ghc.mutation.SetCreatedByServiceID(s)
+	return ghc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableCreatedByServiceID(s *string) *GroupHistoryCreate {
+	if s != nil {
+		ghc.SetCreatedByServiceID(*s)
+	}
+	return ghc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ghc *GroupHistoryCreate) SetUpdatedByServiceID(s string) *GroupHistoryCreate {
+	ghc.mutation.SetUpdatedByServiceID(s)
+	return ghc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableUpdatedByServiceID(s *string) *GroupHistoryCreate {
+	if s != nil {
+		ghc.SetUpdatedByServiceID(*s)
+	}
+	return ghc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (ghc *GroupHistoryCreate) SetDeletedAt(t time.Time) *GroupHistoryCreate {
 	ghc.mutation.SetDeletedAt(t)
@@ -435,6 +491,22 @@ func (ghc *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec
 	if value, ok := ghc.mutation.UpdatedByID(); ok {
 		_spec.SetField(grouphistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := ghc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(grouphistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := ghc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(grouphistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := ghc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(grouphistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := ghc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(grouphistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := ghc.mutation.DeletedAt(); ok {
 		_spec.SetField(grouphistory.FieldDeletedAt, field.TypeTime, value)

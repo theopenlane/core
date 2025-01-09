@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -72,6 +72,46 @@ func (tu *TaskUpdate) SetNillableUpdatedByID(s *string) *TaskUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (tu *TaskUpdate) ClearUpdatedByID() *TaskUpdate {
 	tu.mutation.ClearUpdatedByID()
+	return tu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (tu *TaskUpdate) SetUpdatedByUserID(s string) *TaskUpdate {
+	tu.mutation.SetUpdatedByUserID(s)
+	return tu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableUpdatedByUserID(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetUpdatedByUserID(*s)
+	}
+	return tu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (tu *TaskUpdate) ClearUpdatedByUserID() *TaskUpdate {
+	tu.mutation.ClearUpdatedByUserID()
+	return tu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (tu *TaskUpdate) SetUpdatedByServiceID(s string) *TaskUpdate {
+	tu.mutation.SetUpdatedByServiceID(s)
+	return tu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableUpdatedByServiceID(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetUpdatedByServiceID(*s)
+	}
+	return tu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (tu *TaskUpdate) ClearUpdatedByServiceID() *TaskUpdate {
+	tu.mutation.ClearUpdatedByServiceID()
 	return tu
 }
 
@@ -193,9 +233,14 @@ func (tu *TaskUpdate) ClearCompleted() *TaskUpdate {
 	return tu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (tu *TaskUpdate) SetUpdatedBy(c *ChangeActor) *TaskUpdate {
-	return tu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (tu *TaskUpdate) SetUpdatedByUser(u *User) *TaskUpdate {
+	return tu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (tu *TaskUpdate) SetUpdatedByService(a *APIToken) *TaskUpdate {
+	return tu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetAssignerID sets the "assigner" edge to the User entity by ID.
@@ -353,9 +398,15 @@ func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (tu *TaskUpdate) ClearUpdatedBy() *TaskUpdate {
-	tu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (tu *TaskUpdate) ClearUpdatedByUser() *TaskUpdate {
+	tu.mutation.ClearUpdatedByUser()
+	return tu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (tu *TaskUpdate) ClearUpdatedByService() *TaskUpdate {
+	tu.mutation.ClearUpdatedByService()
 	return tu
 }
 
@@ -626,6 +677,15 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(task.FieldUpdatedAt, field.TypeTime)
 	}
+	if tu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(task.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := tu.mutation.UpdatedByID(); ok {
+		_spec.SetField(task.FieldUpdatedByID, field.TypeString, value)
+	}
+	if tu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(task.FieldUpdatedByID, field.TypeString)
+	}
 	if tu.mutation.DeletedAtCleared() {
 		_spec.ClearField(task.FieldDeletedAt, field.TypeTime)
 	}
@@ -673,29 +733,60 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
 	}
-	if tu.mutation.UpdatedByCleared() {
+	if tu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   task.UpdatedByTable,
-			Columns: []string{task.UpdatedByColumn},
+			Table:   task.UpdatedByUserTable,
+			Columns: []string{task.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tu.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   task.UpdatedByTable,
-			Columns: []string{task.UpdatedByColumn},
+			Table:   task.UpdatedByUserTable,
+			Columns: []string{task.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByServiceTable,
+			Columns: []string{task.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByServiceTable,
+			Columns: []string{task.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tu.schemaConfig.Task
@@ -1206,6 +1297,46 @@ func (tuo *TaskUpdateOne) ClearUpdatedByID() *TaskUpdateOne {
 	return tuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (tuo *TaskUpdateOne) SetUpdatedByUserID(s string) *TaskUpdateOne {
+	tuo.mutation.SetUpdatedByUserID(s)
+	return tuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableUpdatedByUserID(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetUpdatedByUserID(*s)
+	}
+	return tuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (tuo *TaskUpdateOne) ClearUpdatedByUserID() *TaskUpdateOne {
+	tuo.mutation.ClearUpdatedByUserID()
+	return tuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (tuo *TaskUpdateOne) SetUpdatedByServiceID(s string) *TaskUpdateOne {
+	tuo.mutation.SetUpdatedByServiceID(s)
+	return tuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableUpdatedByServiceID(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetUpdatedByServiceID(*s)
+	}
+	return tuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (tuo *TaskUpdateOne) ClearUpdatedByServiceID() *TaskUpdateOne {
+	tuo.mutation.ClearUpdatedByServiceID()
+	return tuo
+}
+
 // SetTags sets the "tags" field.
 func (tuo *TaskUpdateOne) SetTags(s []string) *TaskUpdateOne {
 	tuo.mutation.SetTags(s)
@@ -1324,9 +1455,14 @@ func (tuo *TaskUpdateOne) ClearCompleted() *TaskUpdateOne {
 	return tuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (tuo *TaskUpdateOne) SetUpdatedBy(c *ChangeActor) *TaskUpdateOne {
-	return tuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (tuo *TaskUpdateOne) SetUpdatedByUser(u *User) *TaskUpdateOne {
+	return tuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (tuo *TaskUpdateOne) SetUpdatedByService(a *APIToken) *TaskUpdateOne {
+	return tuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetAssignerID sets the "assigner" edge to the User entity by ID.
@@ -1484,9 +1620,15 @@ func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
 	return tuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (tuo *TaskUpdateOne) ClearUpdatedBy() *TaskUpdateOne {
-	tuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (tuo *TaskUpdateOne) ClearUpdatedByUser() *TaskUpdateOne {
+	tuo.mutation.ClearUpdatedByUser()
+	return tuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (tuo *TaskUpdateOne) ClearUpdatedByService() *TaskUpdateOne {
+	tuo.mutation.ClearUpdatedByService()
 	return tuo
 }
 
@@ -1787,6 +1929,15 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if tuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(task.FieldUpdatedAt, field.TypeTime)
 	}
+	if tuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(task.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := tuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(task.FieldUpdatedByID, field.TypeString, value)
+	}
+	if tuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(task.FieldUpdatedByID, field.TypeString)
+	}
 	if tuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(task.FieldDeletedAt, field.TypeTime)
 	}
@@ -1834,29 +1985,60 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if tuo.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
 	}
-	if tuo.mutation.UpdatedByCleared() {
+	if tuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   task.UpdatedByTable,
-			Columns: []string{task.UpdatedByColumn},
+			Table:   task.UpdatedByUserTable,
+			Columns: []string{task.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tuo.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   task.UpdatedByTable,
-			Columns: []string{task.UpdatedByColumn},
+			Table:   task.UpdatedByUserTable,
+			Columns: []string{task.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByServiceTable,
+			Columns: []string{task.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByServiceTable,
+			Columns: []string{task.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tuo.schemaConfig.Task

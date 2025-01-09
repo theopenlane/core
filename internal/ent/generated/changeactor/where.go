@@ -67,11 +67,6 @@ func Name(v string) predicate.ChangeActor {
 	return predicate.ChangeActor(sql.FieldEQ(FieldName, v))
 }
 
-// ActorType applies equality check predicate on the "actor_type" field. It's identical to ActorTypeEQ.
-func ActorType(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldEQ(FieldActorType, v))
-}
-
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.ChangeActor {
 	return predicate.ChangeActor(sql.FieldEQ(FieldName, v))
@@ -138,68 +133,23 @@ func NameContainsFold(v string) predicate.ChangeActor {
 }
 
 // ActorTypeEQ applies the EQ predicate on the "actor_type" field.
-func ActorTypeEQ(v string) predicate.ChangeActor {
+func ActorTypeEQ(v ActorType) predicate.ChangeActor {
 	return predicate.ChangeActor(sql.FieldEQ(FieldActorType, v))
 }
 
 // ActorTypeNEQ applies the NEQ predicate on the "actor_type" field.
-func ActorTypeNEQ(v string) predicate.ChangeActor {
+func ActorTypeNEQ(v ActorType) predicate.ChangeActor {
 	return predicate.ChangeActor(sql.FieldNEQ(FieldActorType, v))
 }
 
 // ActorTypeIn applies the In predicate on the "actor_type" field.
-func ActorTypeIn(vs ...string) predicate.ChangeActor {
+func ActorTypeIn(vs ...ActorType) predicate.ChangeActor {
 	return predicate.ChangeActor(sql.FieldIn(FieldActorType, vs...))
 }
 
 // ActorTypeNotIn applies the NotIn predicate on the "actor_type" field.
-func ActorTypeNotIn(vs ...string) predicate.ChangeActor {
+func ActorTypeNotIn(vs ...ActorType) predicate.ChangeActor {
 	return predicate.ChangeActor(sql.FieldNotIn(FieldActorType, vs...))
-}
-
-// ActorTypeGT applies the GT predicate on the "actor_type" field.
-func ActorTypeGT(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldGT(FieldActorType, v))
-}
-
-// ActorTypeGTE applies the GTE predicate on the "actor_type" field.
-func ActorTypeGTE(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldGTE(FieldActorType, v))
-}
-
-// ActorTypeLT applies the LT predicate on the "actor_type" field.
-func ActorTypeLT(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldLT(FieldActorType, v))
-}
-
-// ActorTypeLTE applies the LTE predicate on the "actor_type" field.
-func ActorTypeLTE(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldLTE(FieldActorType, v))
-}
-
-// ActorTypeContains applies the Contains predicate on the "actor_type" field.
-func ActorTypeContains(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldContains(FieldActorType, v))
-}
-
-// ActorTypeHasPrefix applies the HasPrefix predicate on the "actor_type" field.
-func ActorTypeHasPrefix(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldHasPrefix(FieldActorType, v))
-}
-
-// ActorTypeHasSuffix applies the HasSuffix predicate on the "actor_type" field.
-func ActorTypeHasSuffix(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldHasSuffix(FieldActorType, v))
-}
-
-// ActorTypeEqualFold applies the EqualFold predicate on the "actor_type" field.
-func ActorTypeEqualFold(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldEqualFold(FieldActorType, v))
-}
-
-// ActorTypeContainsFold applies the ContainsFold predicate on the "actor_type" field.
-func ActorTypeContainsFold(v string) predicate.ChangeActor {
-	return predicate.ChangeActor(sql.FieldContainsFold(FieldActorType, v))
 }
 
 // And groups predicates with the AND operator between them.

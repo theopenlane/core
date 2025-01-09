@@ -66,6 +66,46 @@ func (thu *TemplateHistoryUpdate) ClearUpdatedByID() *TemplateHistoryUpdate {
 	return thu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (thu *TemplateHistoryUpdate) SetUpdatedByUserID(s string) *TemplateHistoryUpdate {
+	thu.mutation.SetUpdatedByUserID(s)
+	return thu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (thu *TemplateHistoryUpdate) SetNillableUpdatedByUserID(s *string) *TemplateHistoryUpdate {
+	if s != nil {
+		thu.SetUpdatedByUserID(*s)
+	}
+	return thu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (thu *TemplateHistoryUpdate) ClearUpdatedByUserID() *TemplateHistoryUpdate {
+	thu.mutation.ClearUpdatedByUserID()
+	return thu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (thu *TemplateHistoryUpdate) SetUpdatedByServiceID(s string) *TemplateHistoryUpdate {
+	thu.mutation.SetUpdatedByServiceID(s)
+	return thu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (thu *TemplateHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *TemplateHistoryUpdate {
+	if s != nil {
+		thu.SetUpdatedByServiceID(*s)
+	}
+	return thu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (thu *TemplateHistoryUpdate) ClearUpdatedByServiceID() *TemplateHistoryUpdate {
+	thu.mutation.ClearUpdatedByServiceID()
+	return thu
+}
+
 // SetTags sets the "tags" field.
 func (thu *TemplateHistoryUpdate) SetTags(s []string) *TemplateHistoryUpdate {
 	thu.mutation.SetTags(s)
@@ -269,6 +309,24 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if thu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedByID, field.TypeString)
 	}
+	if thu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(templatehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := thu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(templatehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if thu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(templatehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if thu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(templatehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := thu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(templatehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if thu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(templatehistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if thu.mutation.DeletedAtCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -366,6 +424,46 @@ func (thuo *TemplateHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Templat
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (thuo *TemplateHistoryUpdateOne) ClearUpdatedByID() *TemplateHistoryUpdateOne {
 	thuo.mutation.ClearUpdatedByID()
+	return thuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (thuo *TemplateHistoryUpdateOne) SetUpdatedByUserID(s string) *TemplateHistoryUpdateOne {
+	thuo.mutation.SetUpdatedByUserID(s)
+	return thuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (thuo *TemplateHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *TemplateHistoryUpdateOne {
+	if s != nil {
+		thuo.SetUpdatedByUserID(*s)
+	}
+	return thuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (thuo *TemplateHistoryUpdateOne) ClearUpdatedByUserID() *TemplateHistoryUpdateOne {
+	thuo.mutation.ClearUpdatedByUserID()
+	return thuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (thuo *TemplateHistoryUpdateOne) SetUpdatedByServiceID(s string) *TemplateHistoryUpdateOne {
+	thuo.mutation.SetUpdatedByServiceID(s)
+	return thuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (thuo *TemplateHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *TemplateHistoryUpdateOne {
+	if s != nil {
+		thuo.SetUpdatedByServiceID(*s)
+	}
+	return thuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (thuo *TemplateHistoryUpdateOne) ClearUpdatedByServiceID() *TemplateHistoryUpdateOne {
+	thuo.mutation.ClearUpdatedByServiceID()
 	return thuo
 }
 
@@ -601,6 +699,24 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 	}
 	if thuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedByID, field.TypeString)
+	}
+	if thuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(templatehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := thuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(templatehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if thuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(templatehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if thuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(templatehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := thuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(templatehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if thuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(templatehistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if thuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedAt, field.TypeTime)

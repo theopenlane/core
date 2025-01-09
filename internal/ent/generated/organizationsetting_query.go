@@ -13,11 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -25,17 +26,19 @@ import (
 // OrganizationSettingQuery is the builder for querying OrganizationSetting entities.
 type OrganizationSettingQuery struct {
 	config
-	ctx              *QueryContext
-	order            []organizationsetting.OrderOption
-	inters           []Interceptor
-	predicates       []predicate.OrganizationSetting
-	withCreatedBy    *ChangeActorQuery
-	withUpdatedBy    *ChangeActorQuery
-	withOrganization *OrganizationQuery
-	withFiles        *FileQuery
-	loadTotal        []func(context.Context, []*OrganizationSetting) error
-	modifiers        []func(*sql.Selector)
-	withNamedFiles   map[string]*FileQuery
+	ctx                  *QueryContext
+	order                []organizationsetting.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.OrganizationSetting
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOrganization     *OrganizationQuery
+	withFiles            *FileQuery
+	loadTotal            []func(context.Context, []*OrganizationSetting) error
+	modifiers            []func(*sql.Selector)
+	withNamedFiles       map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -72,9 +75,9 @@ func (osq *OrganizationSettingQuery) Order(o ...organizationsetting.OrderOption)
 	return osq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (osq *OrganizationSettingQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: osq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (osq *OrganizationSettingQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: osq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := osq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -85,11 +88,11 @@ func (osq *OrganizationSettingQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.CreatedByTable, organizationsetting.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.CreatedByUserTable, organizationsetting.CreatedByUserColumn),
 		)
 		schemaConfig := osq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrganizationSetting
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
@@ -97,9 +100,9 @@ func (osq *OrganizationSettingQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (osq *OrganizationSettingQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: osq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (osq *OrganizationSettingQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: osq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := osq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -110,11 +113,61 @@ func (osq *OrganizationSettingQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.UpdatedByTable, organizationsetting.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.UpdatedByUserTable, organizationsetting.UpdatedByUserColumn),
 		)
 		schemaConfig := osq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.OrganizationSetting
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (osq *OrganizationSettingQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.CreatedByServiceTable, organizationsetting.CreatedByServiceColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.OrganizationSetting
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (osq *OrganizationSettingQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationsetting.UpdatedByServiceTable, organizationsetting.UpdatedByServiceColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.OrganizationSetting
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
@@ -359,15 +412,17 @@ func (osq *OrganizationSettingQuery) Clone() *OrganizationSettingQuery {
 		return nil
 	}
 	return &OrganizationSettingQuery{
-		config:           osq.config,
-		ctx:              osq.ctx.Clone(),
-		order:            append([]organizationsetting.OrderOption{}, osq.order...),
-		inters:           append([]Interceptor{}, osq.inters...),
-		predicates:       append([]predicate.OrganizationSetting{}, osq.predicates...),
-		withCreatedBy:    osq.withCreatedBy.Clone(),
-		withUpdatedBy:    osq.withUpdatedBy.Clone(),
-		withOrganization: osq.withOrganization.Clone(),
-		withFiles:        osq.withFiles.Clone(),
+		config:               osq.config,
+		ctx:                  osq.ctx.Clone(),
+		order:                append([]organizationsetting.OrderOption{}, osq.order...),
+		inters:               append([]Interceptor{}, osq.inters...),
+		predicates:           append([]predicate.OrganizationSetting{}, osq.predicates...),
+		withCreatedByUser:    osq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    osq.withUpdatedByUser.Clone(),
+		withCreatedByService: osq.withCreatedByService.Clone(),
+		withUpdatedByService: osq.withUpdatedByService.Clone(),
+		withOrganization:     osq.withOrganization.Clone(),
+		withFiles:            osq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       osq.sql.Clone(),
 		path:      osq.path,
@@ -375,25 +430,47 @@ func (osq *OrganizationSettingQuery) Clone() *OrganizationSettingQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (osq *OrganizationSettingQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *OrganizationSettingQuery {
-	query := (&ChangeActorClient{config: osq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrganizationSettingQuery) WithCreatedByUser(opts ...func(*UserQuery)) *OrganizationSettingQuery {
+	query := (&UserClient{config: osq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	osq.withCreatedBy = query
+	osq.withCreatedByUser = query
 	return osq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (osq *OrganizationSettingQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *OrganizationSettingQuery {
-	query := (&ChangeActorClient{config: osq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrganizationSettingQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *OrganizationSettingQuery {
+	query := (&UserClient{config: osq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	osq.withUpdatedBy = query
+	osq.withUpdatedByUser = query
+	return osq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrganizationSettingQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *OrganizationSettingQuery {
+	query := (&APITokenClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withCreatedByService = query
+	return osq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrganizationSettingQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *OrganizationSettingQuery {
+	query := (&APITokenClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withUpdatedByService = query
 	return osq
 }
 
@@ -503,9 +580,11 @@ func (osq *OrganizationSettingQuery) sqlAll(ctx context.Context, hooks ...queryH
 	var (
 		nodes       = []*OrganizationSetting{}
 		_spec       = osq.querySpec()
-		loadedTypes = [4]bool{
-			osq.withCreatedBy != nil,
-			osq.withUpdatedBy != nil,
+		loadedTypes = [6]bool{
+			osq.withCreatedByUser != nil,
+			osq.withUpdatedByUser != nil,
+			osq.withCreatedByService != nil,
+			osq.withUpdatedByService != nil,
 			osq.withOrganization != nil,
 			osq.withFiles != nil,
 		}
@@ -533,15 +612,27 @@ func (osq *OrganizationSettingQuery) sqlAll(ctx context.Context, hooks ...queryH
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := osq.withCreatedBy; query != nil {
-		if err := osq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *OrganizationSetting, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := osq.withCreatedByUser; query != nil {
+		if err := osq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *OrganizationSetting, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := osq.withUpdatedBy; query != nil {
-		if err := osq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *OrganizationSetting, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := osq.withUpdatedByUser; query != nil {
+		if err := osq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *OrganizationSetting, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := osq.withCreatedByService; query != nil {
+		if err := osq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *OrganizationSetting, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := osq.withUpdatedByService; query != nil {
+		if err := osq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *OrganizationSetting, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -573,11 +664,11 @@ func (osq *OrganizationSettingQuery) sqlAll(ctx context.Context, hooks ...queryH
 	return nodes, nil
 }
 
-func (osq *OrganizationSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *ChangeActor)) error {
+func (osq *OrganizationSettingQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrganizationSetting)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -586,7 +677,7 @@ func (osq *OrganizationSettingQuery) loadCreatedBy(ctx context.Context, query *C
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -594,7 +685,7 @@ func (osq *OrganizationSettingQuery) loadCreatedBy(ctx context.Context, query *C
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -602,11 +693,11 @@ func (osq *OrganizationSettingQuery) loadCreatedBy(ctx context.Context, query *C
 	}
 	return nil
 }
-func (osq *OrganizationSettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *ChangeActor)) error {
+func (osq *OrganizationSettingQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrganizationSetting)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -615,7 +706,7 @@ func (osq *OrganizationSettingQuery) loadUpdatedBy(ctx context.Context, query *C
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -623,7 +714,65 @@ func (osq *OrganizationSettingQuery) loadUpdatedBy(ctx context.Context, query *C
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (osq *OrganizationSettingQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*OrganizationSetting)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (osq *OrganizationSettingQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*OrganizationSetting)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -753,11 +902,17 @@ func (osq *OrganizationSettingQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if osq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(organizationsetting.FieldCreatedByID)
+		if osq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(organizationsetting.FieldCreatedByUserID)
 		}
-		if osq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(organizationsetting.FieldUpdatedByID)
+		if osq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(organizationsetting.FieldUpdatedByUserID)
+		}
+		if osq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(organizationsetting.FieldCreatedByServiceID)
+		}
+		if osq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(organizationsetting.FieldUpdatedByServiceID)
 		}
 		if osq.withOrganization != nil {
 			_spec.Node.AddColumnOnce(organizationsetting.FieldOrganizationID)

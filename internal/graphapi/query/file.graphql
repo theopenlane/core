@@ -28,8 +28,7 @@ query GetAllFiles {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         uri
       }
@@ -85,8 +84,7 @@ query GetFiles($where: FileWhereInput) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         uri
       }

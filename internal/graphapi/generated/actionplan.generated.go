@@ -6594,6 +6594,14 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_ActionPlan_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_ActionPlan_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_ActionPlan_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_ActionPlan_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_ActionPlan_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
 			case "deletedByID":
@@ -6614,10 +6622,14 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_source(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_ActionPlan_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_ActionPlan_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_ActionPlan_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_ActionPlan_updatedByService(ctx, field)
 			case "standard":
 				return ec.fieldContext_ActionPlan_standard(ctx, field)
 			case "risk":
@@ -6684,6 +6696,14 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_ActionPlan_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_ActionPlan_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_ActionPlan_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_ActionPlan_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_ActionPlan_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
 			case "deletedByID":
@@ -6704,10 +6724,14 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_source(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_ActionPlan_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_ActionPlan_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_ActionPlan_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_ActionPlan_updatedByService(ctx, field)
 			case "standard":
 				return ec.fieldContext_ActionPlan_standard(ctx, field)
 			case "risk":
@@ -6818,6 +6842,14 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_ActionPlan_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_ActionPlan_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_ActionPlan_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_ActionPlan_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_ActionPlan_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
 			case "deletedByID":
@@ -6838,10 +6870,14 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_source(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_ActionPlan_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_ActionPlan_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_ActionPlan_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_ActionPlan_updatedByService(ctx, field)
 			case "standard":
 				return ec.fieldContext_ActionPlan_standard(ctx, field)
 			case "risk":

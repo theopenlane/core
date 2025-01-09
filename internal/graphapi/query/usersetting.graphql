@@ -22,8 +22,6 @@ query GetAllUserSettings {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
       }
     }
@@ -77,8 +75,6 @@ query GetUserSettings($where: UserSettingWhereInput!) {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
       }
     }
@@ -104,8 +100,6 @@ mutation UpdateUserSetting($updateUserSettingId: ID!, $input: UpdateUserSettingI
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       deletedAt
       deletedByID

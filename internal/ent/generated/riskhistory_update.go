@@ -65,6 +65,46 @@ func (rhu *RiskHistoryUpdate) ClearUpdatedByID() *RiskHistoryUpdate {
 	return rhu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (rhu *RiskHistoryUpdate) SetUpdatedByUserID(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetUpdatedByUserID(s)
+	return rhu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableUpdatedByUserID(s *string) *RiskHistoryUpdate {
+	if s != nil {
+		rhu.SetUpdatedByUserID(*s)
+	}
+	return rhu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (rhu *RiskHistoryUpdate) ClearUpdatedByUserID() *RiskHistoryUpdate {
+	rhu.mutation.ClearUpdatedByUserID()
+	return rhu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (rhu *RiskHistoryUpdate) SetUpdatedByServiceID(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetUpdatedByServiceID(s)
+	return rhu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *RiskHistoryUpdate {
+	if s != nil {
+		rhu.SetUpdatedByServiceID(*s)
+	}
+	return rhu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (rhu *RiskHistoryUpdate) ClearUpdatedByServiceID() *RiskHistoryUpdate {
+	rhu.mutation.ClearUpdatedByServiceID()
+	return rhu
+}
+
 // SetTags sets the "tags" field.
 func (rhu *RiskHistoryUpdate) SetTags(s []string) *RiskHistoryUpdate {
 	rhu.mutation.SetTags(s)
@@ -387,6 +427,24 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if rhu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if rhu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(riskhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := rhu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if rhu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if rhu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(riskhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := rhu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if rhu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if rhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(riskhistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -517,6 +575,46 @@ func (rhuo *RiskHistoryUpdateOne) SetNillableUpdatedByID(s *string) *RiskHistory
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (rhuo *RiskHistoryUpdateOne) ClearUpdatedByID() *RiskHistoryUpdateOne {
 	rhuo.mutation.ClearUpdatedByID()
+	return rhuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (rhuo *RiskHistoryUpdateOne) SetUpdatedByUserID(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetUpdatedByUserID(s)
+	return rhuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *RiskHistoryUpdateOne {
+	if s != nil {
+		rhuo.SetUpdatedByUserID(*s)
+	}
+	return rhuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (rhuo *RiskHistoryUpdateOne) ClearUpdatedByUserID() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearUpdatedByUserID()
+	return rhuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (rhuo *RiskHistoryUpdateOne) SetUpdatedByServiceID(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetUpdatedByServiceID(s)
+	return rhuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *RiskHistoryUpdateOne {
+	if s != nil {
+		rhuo.SetUpdatedByServiceID(*s)
+	}
+	return rhuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (rhuo *RiskHistoryUpdateOne) ClearUpdatedByServiceID() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearUpdatedByServiceID()
 	return rhuo
 }
 
@@ -871,6 +969,24 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	}
 	if rhuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if rhuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(riskhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := rhuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if rhuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if rhuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(riskhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := rhuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if rhuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if rhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(riskhistory.FieldDeletedAt, field.TypeTime)

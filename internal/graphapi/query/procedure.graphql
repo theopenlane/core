@@ -6,8 +6,6 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -22,8 +20,6 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
       updatedByID
       updatedBy {
         id
-        name
-        actorType
       }
       version
     }
@@ -38,8 +34,6 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -54,8 +48,6 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
       updatedByID
       updatedBy {
         id
-        name
-        actorType
       }
       version
     }
@@ -70,8 +62,6 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -86,8 +76,6 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       updatedByID
       updatedBy {
         id
-        name
-        actorType
       }
       version
       editors {
@@ -128,13 +116,9 @@ query GetAllProcedures {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
         createdBy {
           id
-          name
-          actorType
         }
         version
         editors {
@@ -168,13 +152,9 @@ query GetProcedureByID($procedureId: ID!) {
     updatedByID
     updatedBy {
       id
-      name
-      actorType
     }
     createdBy {
       id
-      name
-      actorType
     }
     version
     editors {
@@ -208,13 +188,9 @@ query GetProcedures($where: ProcedureWhereInput) {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
         createdBy {
           id
-          name
-          actorType
         }
         version
         editors {
@@ -238,8 +214,6 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details

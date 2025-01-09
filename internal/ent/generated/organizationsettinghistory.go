@@ -36,6 +36,14 @@ type OrganizationSettingHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -74,7 +82,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldCreatedByID, organizationsettinghistory.FieldUpdatedByID, organizationsettinghistory.FieldMappingID, organizationsettinghistory.FieldDeletedByID, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldBillingAddress, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldStripeID:
+		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldCreatedByID, organizationsettinghistory.FieldUpdatedByID, organizationsettinghistory.FieldCreatedByUserID, organizationsettinghistory.FieldUpdatedByUserID, organizationsettinghistory.FieldCreatedByServiceID, organizationsettinghistory.FieldUpdatedByServiceID, organizationsettinghistory.FieldMappingID, organizationsettinghistory.FieldDeletedByID, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldBillingAddress, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldStripeID:
 			values[i] = new(sql.NullString)
 		case organizationsettinghistory.FieldHistoryTime, organizationsettinghistory.FieldCreatedAt, organizationsettinghistory.FieldUpdatedAt, organizationsettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -147,6 +155,30 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				osh.UpdatedByID = value.String
+			}
+		case organizationsettinghistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				osh.CreatedByUserID = value.String
+			}
+		case organizationsettinghistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				osh.UpdatedByUserID = value.String
+			}
+		case organizationsettinghistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				osh.CreatedByServiceID = value.String
+			}
+		case organizationsettinghistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				osh.UpdatedByServiceID = value.String
 			}
 		case organizationsettinghistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -291,6 +323,18 @@ func (osh *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(osh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(osh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(osh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(osh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(osh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(osh.MappingID)

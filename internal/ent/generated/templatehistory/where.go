@@ -101,6 +101,26 @@ func UpdatedByID(v string) predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
+// CreatedByUserID applies equality check predicate on the "created_by_user_id" field. It's identical to CreatedByUserIDEQ.
+func CreatedByUserID(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEQ(FieldCreatedByUserID, v))
+}
+
+// UpdatedByUserID applies equality check predicate on the "updated_by_user_id" field. It's identical to UpdatedByUserIDEQ.
+func UpdatedByUserID(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEQ(FieldUpdatedByUserID, v))
+}
+
+// CreatedByServiceID applies equality check predicate on the "created_by_service_id" field. It's identical to CreatedByServiceIDEQ.
+func CreatedByServiceID(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEQ(FieldCreatedByServiceID, v))
+}
+
+// UpdatedByServiceID applies equality check predicate on the "updated_by_service_id" field. It's identical to UpdatedByServiceIDEQ.
+func UpdatedByServiceID(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEQ(FieldUpdatedByServiceID, v))
+}
+
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -589,6 +609,306 @@ func UpdatedByIDEqualFold(v string) predicate.TemplateHistory {
 // UpdatedByIDContainsFold applies the ContainsFold predicate on the "updated_by_id" field.
 func UpdatedByIDContainsFold(v string) predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.FieldContainsFold(FieldUpdatedByID, v))
+}
+
+// CreatedByUserIDEQ applies the EQ predicate on the "created_by_user_id" field.
+func CreatedByUserIDEQ(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEQ(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDNEQ applies the NEQ predicate on the "created_by_user_id" field.
+func CreatedByUserIDNEQ(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNEQ(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDIn applies the In predicate on the "created_by_user_id" field.
+func CreatedByUserIDIn(vs ...string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIn(FieldCreatedByUserID, vs...))
+}
+
+// CreatedByUserIDNotIn applies the NotIn predicate on the "created_by_user_id" field.
+func CreatedByUserIDNotIn(vs ...string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotIn(FieldCreatedByUserID, vs...))
+}
+
+// CreatedByUserIDGT applies the GT predicate on the "created_by_user_id" field.
+func CreatedByUserIDGT(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldGT(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDGTE applies the GTE predicate on the "created_by_user_id" field.
+func CreatedByUserIDGTE(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldGTE(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDLT applies the LT predicate on the "created_by_user_id" field.
+func CreatedByUserIDLT(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldLT(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDLTE applies the LTE predicate on the "created_by_user_id" field.
+func CreatedByUserIDLTE(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldLTE(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDContains applies the Contains predicate on the "created_by_user_id" field.
+func CreatedByUserIDContains(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldContains(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDHasPrefix applies the HasPrefix predicate on the "created_by_user_id" field.
+func CreatedByUserIDHasPrefix(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldHasPrefix(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDHasSuffix applies the HasSuffix predicate on the "created_by_user_id" field.
+func CreatedByUserIDHasSuffix(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldHasSuffix(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDIsNil applies the IsNil predicate on the "created_by_user_id" field.
+func CreatedByUserIDIsNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIsNull(FieldCreatedByUserID))
+}
+
+// CreatedByUserIDNotNil applies the NotNil predicate on the "created_by_user_id" field.
+func CreatedByUserIDNotNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotNull(FieldCreatedByUserID))
+}
+
+// CreatedByUserIDEqualFold applies the EqualFold predicate on the "created_by_user_id" field.
+func CreatedByUserIDEqualFold(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEqualFold(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDContainsFold applies the ContainsFold predicate on the "created_by_user_id" field.
+func CreatedByUserIDContainsFold(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldContainsFold(FieldCreatedByUserID, v))
+}
+
+// UpdatedByUserIDEQ applies the EQ predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDEQ(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEQ(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDNEQ applies the NEQ predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDNEQ(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNEQ(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDIn applies the In predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDIn(vs ...string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIn(FieldUpdatedByUserID, vs...))
+}
+
+// UpdatedByUserIDNotIn applies the NotIn predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDNotIn(vs ...string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotIn(FieldUpdatedByUserID, vs...))
+}
+
+// UpdatedByUserIDGT applies the GT predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDGT(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldGT(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDGTE applies the GTE predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDGTE(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldGTE(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDLT applies the LT predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDLT(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldLT(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDLTE applies the LTE predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDLTE(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldLTE(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDContains applies the Contains predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDContains(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldContains(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDHasPrefix applies the HasPrefix predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDHasPrefix(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldHasPrefix(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDHasSuffix applies the HasSuffix predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDHasSuffix(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldHasSuffix(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDIsNil applies the IsNil predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDIsNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIsNull(FieldUpdatedByUserID))
+}
+
+// UpdatedByUserIDNotNil applies the NotNil predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDNotNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotNull(FieldUpdatedByUserID))
+}
+
+// UpdatedByUserIDEqualFold applies the EqualFold predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDEqualFold(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEqualFold(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDContainsFold applies the ContainsFold predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDContainsFold(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldContainsFold(FieldUpdatedByUserID, v))
+}
+
+// CreatedByServiceIDEQ applies the EQ predicate on the "created_by_service_id" field.
+func CreatedByServiceIDEQ(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEQ(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDNEQ applies the NEQ predicate on the "created_by_service_id" field.
+func CreatedByServiceIDNEQ(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNEQ(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDIn applies the In predicate on the "created_by_service_id" field.
+func CreatedByServiceIDIn(vs ...string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIn(FieldCreatedByServiceID, vs...))
+}
+
+// CreatedByServiceIDNotIn applies the NotIn predicate on the "created_by_service_id" field.
+func CreatedByServiceIDNotIn(vs ...string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotIn(FieldCreatedByServiceID, vs...))
+}
+
+// CreatedByServiceIDGT applies the GT predicate on the "created_by_service_id" field.
+func CreatedByServiceIDGT(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldGT(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDGTE applies the GTE predicate on the "created_by_service_id" field.
+func CreatedByServiceIDGTE(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldGTE(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDLT applies the LT predicate on the "created_by_service_id" field.
+func CreatedByServiceIDLT(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldLT(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDLTE applies the LTE predicate on the "created_by_service_id" field.
+func CreatedByServiceIDLTE(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldLTE(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDContains applies the Contains predicate on the "created_by_service_id" field.
+func CreatedByServiceIDContains(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldContains(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDHasPrefix applies the HasPrefix predicate on the "created_by_service_id" field.
+func CreatedByServiceIDHasPrefix(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldHasPrefix(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDHasSuffix applies the HasSuffix predicate on the "created_by_service_id" field.
+func CreatedByServiceIDHasSuffix(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldHasSuffix(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDIsNil applies the IsNil predicate on the "created_by_service_id" field.
+func CreatedByServiceIDIsNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIsNull(FieldCreatedByServiceID))
+}
+
+// CreatedByServiceIDNotNil applies the NotNil predicate on the "created_by_service_id" field.
+func CreatedByServiceIDNotNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotNull(FieldCreatedByServiceID))
+}
+
+// CreatedByServiceIDEqualFold applies the EqualFold predicate on the "created_by_service_id" field.
+func CreatedByServiceIDEqualFold(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEqualFold(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDContainsFold applies the ContainsFold predicate on the "created_by_service_id" field.
+func CreatedByServiceIDContainsFold(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldContainsFold(FieldCreatedByServiceID, v))
+}
+
+// UpdatedByServiceIDEQ applies the EQ predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDEQ(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEQ(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDNEQ applies the NEQ predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDNEQ(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNEQ(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDIn applies the In predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDIn(vs ...string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIn(FieldUpdatedByServiceID, vs...))
+}
+
+// UpdatedByServiceIDNotIn applies the NotIn predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDNotIn(vs ...string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotIn(FieldUpdatedByServiceID, vs...))
+}
+
+// UpdatedByServiceIDGT applies the GT predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDGT(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldGT(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDGTE applies the GTE predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDGTE(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldGTE(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDLT applies the LT predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDLT(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldLT(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDLTE applies the LTE predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDLTE(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldLTE(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDContains applies the Contains predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDContains(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldContains(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDHasPrefix applies the HasPrefix predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDHasPrefix(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldHasPrefix(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDHasSuffix applies the HasSuffix predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDHasSuffix(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldHasSuffix(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDIsNil applies the IsNil predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDIsNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIsNull(FieldUpdatedByServiceID))
+}
+
+// UpdatedByServiceIDNotNil applies the NotNil predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDNotNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotNull(FieldUpdatedByServiceID))
+}
+
+// UpdatedByServiceIDEqualFold applies the EqualFold predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDEqualFold(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldEqualFold(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDContainsFold applies the ContainsFold predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDContainsFold(v string) predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldContainsFold(FieldUpdatedByServiceID, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.

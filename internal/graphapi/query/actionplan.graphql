@@ -6,8 +6,7 @@ mutation CreateBulkCSVActionPlan($input: Upload!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -31,8 +30,7 @@ mutation CreateBulkActionPlan($input: [CreateActionPlanInput!]) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -56,8 +54,7 @@ mutation CreateActionPlan($input: CreateActionPlanInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -99,8 +96,7 @@ query GetAllActionPlans {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -143,8 +139,7 @@ query GetActionPlans($where: ActionPlanWhereInput) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -157,8 +152,7 @@ mutation UpdateActionPlan($updateActionPlanId: ID!, $input: UpdateActionPlanInpu
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details

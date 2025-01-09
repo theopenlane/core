@@ -6,8 +6,7 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -32,8 +31,7 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -58,8 +56,7 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -109,8 +106,7 @@ query GetAllInternalPolicies {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         version
         editors {
@@ -145,8 +141,7 @@ query GetInternalPolicies($where: InternalPolicyWhereInput) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         version
         editors {
@@ -197,8 +192,7 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details

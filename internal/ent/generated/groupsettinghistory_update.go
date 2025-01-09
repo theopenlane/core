@@ -65,6 +65,46 @@ func (gshu *GroupSettingHistoryUpdate) ClearUpdatedByID() *GroupSettingHistoryUp
 	return gshu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gshu *GroupSettingHistoryUpdate) SetUpdatedByUserID(s string) *GroupSettingHistoryUpdate {
+	gshu.mutation.SetUpdatedByUserID(s)
+	return gshu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gshu *GroupSettingHistoryUpdate) SetNillableUpdatedByUserID(s *string) *GroupSettingHistoryUpdate {
+	if s != nil {
+		gshu.SetUpdatedByUserID(*s)
+	}
+	return gshu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (gshu *GroupSettingHistoryUpdate) ClearUpdatedByUserID() *GroupSettingHistoryUpdate {
+	gshu.mutation.ClearUpdatedByUserID()
+	return gshu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gshu *GroupSettingHistoryUpdate) SetUpdatedByServiceID(s string) *GroupSettingHistoryUpdate {
+	gshu.mutation.SetUpdatedByServiceID(s)
+	return gshu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gshu *GroupSettingHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *GroupSettingHistoryUpdate {
+	if s != nil {
+		gshu.SetUpdatedByServiceID(*s)
+	}
+	return gshu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (gshu *GroupSettingHistoryUpdate) ClearUpdatedByServiceID() *GroupSettingHistoryUpdate {
+	gshu.mutation.ClearUpdatedByServiceID()
+	return gshu
+}
+
 // SetTags sets the "tags" field.
 func (gshu *GroupSettingHistoryUpdate) SetTags(s []string) *GroupSettingHistoryUpdate {
 	gshu.mutation.SetTags(s)
@@ -275,6 +315,24 @@ func (gshu *GroupSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if gshu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(groupsettinghistory.FieldUpdatedByID, field.TypeString)
 	}
+	if gshu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := gshu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(groupsettinghistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if gshu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if gshu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := gshu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(groupsettinghistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if gshu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if value, ok := gshu.mutation.Tags(); ok {
 		_spec.SetField(groupsettinghistory.FieldTags, field.TypeJSON, value)
 	}
@@ -369,6 +427,46 @@ func (gshuo *GroupSettingHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Gr
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (gshuo *GroupSettingHistoryUpdateOne) ClearUpdatedByID() *GroupSettingHistoryUpdateOne {
 	gshuo.mutation.ClearUpdatedByID()
+	return gshuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gshuo *GroupSettingHistoryUpdateOne) SetUpdatedByUserID(s string) *GroupSettingHistoryUpdateOne {
+	gshuo.mutation.SetUpdatedByUserID(s)
+	return gshuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gshuo *GroupSettingHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *GroupSettingHistoryUpdateOne {
+	if s != nil {
+		gshuo.SetUpdatedByUserID(*s)
+	}
+	return gshuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (gshuo *GroupSettingHistoryUpdateOne) ClearUpdatedByUserID() *GroupSettingHistoryUpdateOne {
+	gshuo.mutation.ClearUpdatedByUserID()
+	return gshuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gshuo *GroupSettingHistoryUpdateOne) SetUpdatedByServiceID(s string) *GroupSettingHistoryUpdateOne {
+	gshuo.mutation.SetUpdatedByServiceID(s)
+	return gshuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gshuo *GroupSettingHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *GroupSettingHistoryUpdateOne {
+	if s != nil {
+		gshuo.SetUpdatedByServiceID(*s)
+	}
+	return gshuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (gshuo *GroupSettingHistoryUpdateOne) ClearUpdatedByServiceID() *GroupSettingHistoryUpdateOne {
+	gshuo.mutation.ClearUpdatedByServiceID()
 	return gshuo
 }
 
@@ -611,6 +709,24 @@ func (gshuo *GroupSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if gshuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(groupsettinghistory.FieldUpdatedByID, field.TypeString)
+	}
+	if gshuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := gshuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(groupsettinghistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if gshuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if gshuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := gshuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(groupsettinghistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if gshuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(groupsettinghistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if value, ok := gshuo.mutation.Tags(); ok {
 		_spec.SetField(groupsettinghistory.FieldTags, field.TypeJSON, value)

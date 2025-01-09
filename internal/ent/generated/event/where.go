@@ -87,6 +87,26 @@ func UpdatedByID(v string) predicate.Event {
 	return predicate.Event(sql.FieldEQ(FieldUpdatedByID, v))
 }
 
+// CreatedByUserID applies equality check predicate on the "created_by_user_id" field. It's identical to CreatedByUserIDEQ.
+func CreatedByUserID(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldCreatedByUserID, v))
+}
+
+// UpdatedByUserID applies equality check predicate on the "updated_by_user_id" field. It's identical to UpdatedByUserIDEQ.
+func UpdatedByUserID(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldUpdatedByUserID, v))
+}
+
+// CreatedByServiceID applies equality check predicate on the "created_by_service_id" field. It's identical to CreatedByServiceIDEQ.
+func CreatedByServiceID(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldCreatedByServiceID, v))
+}
+
+// UpdatedByServiceID applies equality check predicate on the "updated_by_service_id" field. It's identical to UpdatedByServiceIDEQ.
+func UpdatedByServiceID(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldUpdatedByServiceID, v))
+}
+
 // MappingID applies equality check predicate on the "mapping_id" field. It's identical to MappingIDEQ.
 func MappingID(v string) predicate.Event {
 	return predicate.Event(sql.FieldEQ(FieldMappingID, v))
@@ -355,6 +375,306 @@ func UpdatedByIDEqualFold(v string) predicate.Event {
 // UpdatedByIDContainsFold applies the ContainsFold predicate on the "updated_by_id" field.
 func UpdatedByIDContainsFold(v string) predicate.Event {
 	return predicate.Event(sql.FieldContainsFold(FieldUpdatedByID, v))
+}
+
+// CreatedByUserIDEQ applies the EQ predicate on the "created_by_user_id" field.
+func CreatedByUserIDEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDNEQ applies the NEQ predicate on the "created_by_user_id" field.
+func CreatedByUserIDNEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldNEQ(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDIn applies the In predicate on the "created_by_user_id" field.
+func CreatedByUserIDIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldIn(FieldCreatedByUserID, vs...))
+}
+
+// CreatedByUserIDNotIn applies the NotIn predicate on the "created_by_user_id" field.
+func CreatedByUserIDNotIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldNotIn(FieldCreatedByUserID, vs...))
+}
+
+// CreatedByUserIDGT applies the GT predicate on the "created_by_user_id" field.
+func CreatedByUserIDGT(v string) predicate.Event {
+	return predicate.Event(sql.FieldGT(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDGTE applies the GTE predicate on the "created_by_user_id" field.
+func CreatedByUserIDGTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldGTE(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDLT applies the LT predicate on the "created_by_user_id" field.
+func CreatedByUserIDLT(v string) predicate.Event {
+	return predicate.Event(sql.FieldLT(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDLTE applies the LTE predicate on the "created_by_user_id" field.
+func CreatedByUserIDLTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldLTE(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDContains applies the Contains predicate on the "created_by_user_id" field.
+func CreatedByUserIDContains(v string) predicate.Event {
+	return predicate.Event(sql.FieldContains(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDHasPrefix applies the HasPrefix predicate on the "created_by_user_id" field.
+func CreatedByUserIDHasPrefix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasPrefix(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDHasSuffix applies the HasSuffix predicate on the "created_by_user_id" field.
+func CreatedByUserIDHasSuffix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasSuffix(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDIsNil applies the IsNil predicate on the "created_by_user_id" field.
+func CreatedByUserIDIsNil() predicate.Event {
+	return predicate.Event(sql.FieldIsNull(FieldCreatedByUserID))
+}
+
+// CreatedByUserIDNotNil applies the NotNil predicate on the "created_by_user_id" field.
+func CreatedByUserIDNotNil() predicate.Event {
+	return predicate.Event(sql.FieldNotNull(FieldCreatedByUserID))
+}
+
+// CreatedByUserIDEqualFold applies the EqualFold predicate on the "created_by_user_id" field.
+func CreatedByUserIDEqualFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldEqualFold(FieldCreatedByUserID, v))
+}
+
+// CreatedByUserIDContainsFold applies the ContainsFold predicate on the "created_by_user_id" field.
+func CreatedByUserIDContainsFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldContainsFold(FieldCreatedByUserID, v))
+}
+
+// UpdatedByUserIDEQ applies the EQ predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDNEQ applies the NEQ predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDNEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldNEQ(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDIn applies the In predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldIn(FieldUpdatedByUserID, vs...))
+}
+
+// UpdatedByUserIDNotIn applies the NotIn predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDNotIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldNotIn(FieldUpdatedByUserID, vs...))
+}
+
+// UpdatedByUserIDGT applies the GT predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDGT(v string) predicate.Event {
+	return predicate.Event(sql.FieldGT(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDGTE applies the GTE predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDGTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldGTE(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDLT applies the LT predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDLT(v string) predicate.Event {
+	return predicate.Event(sql.FieldLT(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDLTE applies the LTE predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDLTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldLTE(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDContains applies the Contains predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDContains(v string) predicate.Event {
+	return predicate.Event(sql.FieldContains(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDHasPrefix applies the HasPrefix predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDHasPrefix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasPrefix(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDHasSuffix applies the HasSuffix predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDHasSuffix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasSuffix(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDIsNil applies the IsNil predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDIsNil() predicate.Event {
+	return predicate.Event(sql.FieldIsNull(FieldUpdatedByUserID))
+}
+
+// UpdatedByUserIDNotNil applies the NotNil predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDNotNil() predicate.Event {
+	return predicate.Event(sql.FieldNotNull(FieldUpdatedByUserID))
+}
+
+// UpdatedByUserIDEqualFold applies the EqualFold predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDEqualFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldEqualFold(FieldUpdatedByUserID, v))
+}
+
+// UpdatedByUserIDContainsFold applies the ContainsFold predicate on the "updated_by_user_id" field.
+func UpdatedByUserIDContainsFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldContainsFold(FieldUpdatedByUserID, v))
+}
+
+// CreatedByServiceIDEQ applies the EQ predicate on the "created_by_service_id" field.
+func CreatedByServiceIDEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDNEQ applies the NEQ predicate on the "created_by_service_id" field.
+func CreatedByServiceIDNEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldNEQ(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDIn applies the In predicate on the "created_by_service_id" field.
+func CreatedByServiceIDIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldIn(FieldCreatedByServiceID, vs...))
+}
+
+// CreatedByServiceIDNotIn applies the NotIn predicate on the "created_by_service_id" field.
+func CreatedByServiceIDNotIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldNotIn(FieldCreatedByServiceID, vs...))
+}
+
+// CreatedByServiceIDGT applies the GT predicate on the "created_by_service_id" field.
+func CreatedByServiceIDGT(v string) predicate.Event {
+	return predicate.Event(sql.FieldGT(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDGTE applies the GTE predicate on the "created_by_service_id" field.
+func CreatedByServiceIDGTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldGTE(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDLT applies the LT predicate on the "created_by_service_id" field.
+func CreatedByServiceIDLT(v string) predicate.Event {
+	return predicate.Event(sql.FieldLT(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDLTE applies the LTE predicate on the "created_by_service_id" field.
+func CreatedByServiceIDLTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldLTE(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDContains applies the Contains predicate on the "created_by_service_id" field.
+func CreatedByServiceIDContains(v string) predicate.Event {
+	return predicate.Event(sql.FieldContains(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDHasPrefix applies the HasPrefix predicate on the "created_by_service_id" field.
+func CreatedByServiceIDHasPrefix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasPrefix(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDHasSuffix applies the HasSuffix predicate on the "created_by_service_id" field.
+func CreatedByServiceIDHasSuffix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasSuffix(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDIsNil applies the IsNil predicate on the "created_by_service_id" field.
+func CreatedByServiceIDIsNil() predicate.Event {
+	return predicate.Event(sql.FieldIsNull(FieldCreatedByServiceID))
+}
+
+// CreatedByServiceIDNotNil applies the NotNil predicate on the "created_by_service_id" field.
+func CreatedByServiceIDNotNil() predicate.Event {
+	return predicate.Event(sql.FieldNotNull(FieldCreatedByServiceID))
+}
+
+// CreatedByServiceIDEqualFold applies the EqualFold predicate on the "created_by_service_id" field.
+func CreatedByServiceIDEqualFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldEqualFold(FieldCreatedByServiceID, v))
+}
+
+// CreatedByServiceIDContainsFold applies the ContainsFold predicate on the "created_by_service_id" field.
+func CreatedByServiceIDContainsFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldContainsFold(FieldCreatedByServiceID, v))
+}
+
+// UpdatedByServiceIDEQ applies the EQ predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldEQ(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDNEQ applies the NEQ predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDNEQ(v string) predicate.Event {
+	return predicate.Event(sql.FieldNEQ(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDIn applies the In predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldIn(FieldUpdatedByServiceID, vs...))
+}
+
+// UpdatedByServiceIDNotIn applies the NotIn predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDNotIn(vs ...string) predicate.Event {
+	return predicate.Event(sql.FieldNotIn(FieldUpdatedByServiceID, vs...))
+}
+
+// UpdatedByServiceIDGT applies the GT predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDGT(v string) predicate.Event {
+	return predicate.Event(sql.FieldGT(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDGTE applies the GTE predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDGTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldGTE(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDLT applies the LT predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDLT(v string) predicate.Event {
+	return predicate.Event(sql.FieldLT(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDLTE applies the LTE predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDLTE(v string) predicate.Event {
+	return predicate.Event(sql.FieldLTE(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDContains applies the Contains predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDContains(v string) predicate.Event {
+	return predicate.Event(sql.FieldContains(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDHasPrefix applies the HasPrefix predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDHasPrefix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasPrefix(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDHasSuffix applies the HasSuffix predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDHasSuffix(v string) predicate.Event {
+	return predicate.Event(sql.FieldHasSuffix(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDIsNil applies the IsNil predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDIsNil() predicate.Event {
+	return predicate.Event(sql.FieldIsNull(FieldUpdatedByServiceID))
+}
+
+// UpdatedByServiceIDNotNil applies the NotNil predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDNotNil() predicate.Event {
+	return predicate.Event(sql.FieldNotNull(FieldUpdatedByServiceID))
+}
+
+// UpdatedByServiceIDEqualFold applies the EqualFold predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDEqualFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldEqualFold(FieldUpdatedByServiceID, v))
+}
+
+// UpdatedByServiceIDContainsFold applies the ContainsFold predicate on the "updated_by_service_id" field.
+func UpdatedByServiceIDContainsFold(v string) predicate.Event {
+	return predicate.Event(sql.FieldContainsFold(FieldUpdatedByServiceID, v))
 }
 
 // MappingIDEQ applies the EQ predicate on the "mapping_id" field.
@@ -657,26 +977,26 @@ func MetadataNotNil() predicate.Event {
 	return predicate.Event(sql.FieldNotNull(FieldMetadata))
 }
 
-// HasCreatedBy applies the HasEdge predicate on the "created_by" edge.
-func HasCreatedBy() predicate.Event {
+// HasCreatedByUser applies the HasEdge predicate on the "created_by_user" edge.
+func HasCreatedByUser() predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, CreatedByTable, CreatedByColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, CreatedByUserTable, CreatedByUserColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Event
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasCreatedByWith applies the HasEdge predicate on the "created_by" edge with a given conditions (other predicates).
-func HasCreatedByWith(preds ...predicate.ChangeActor) predicate.Event {
+// HasCreatedByUserWith applies the HasEdge predicate on the "created_by_user" edge with a given conditions (other predicates).
+func HasCreatedByUserWith(preds ...predicate.User) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
-		step := newCreatedByStep()
+		step := newCreatedByUserStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Event
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -686,26 +1006,84 @@ func HasCreatedByWith(preds ...predicate.ChangeActor) predicate.Event {
 	})
 }
 
-// HasUpdatedBy applies the HasEdge predicate on the "updated_by" edge.
-func HasUpdatedBy() predicate.Event {
+// HasUpdatedByUser applies the HasEdge predicate on the "updated_by_user" edge.
+func HasUpdatedByUser() predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByTable, UpdatedByColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByUserTable, UpdatedByUserColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Event
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasUpdatedByWith applies the HasEdge predicate on the "updated_by" edge with a given conditions (other predicates).
-func HasUpdatedByWith(preds ...predicate.ChangeActor) predicate.Event {
+// HasUpdatedByUserWith applies the HasEdge predicate on the "updated_by_user" edge with a given conditions (other predicates).
+func HasUpdatedByUserWith(preds ...predicate.User) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
-		step := newUpdatedByStep()
+		step := newUpdatedByUserStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Event
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCreatedByService applies the HasEdge predicate on the "created_by_service" edge.
+func HasCreatedByService() predicate.Event {
+	return predicate.Event(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, CreatedByServiceTable, CreatedByServiceColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Event
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCreatedByServiceWith applies the HasEdge predicate on the "created_by_service" edge with a given conditions (other predicates).
+func HasCreatedByServiceWith(preds ...predicate.APIToken) predicate.Event {
+	return predicate.Event(func(s *sql.Selector) {
+		step := newCreatedByServiceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Event
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUpdatedByService applies the HasEdge predicate on the "updated_by_service" edge.
+func HasUpdatedByService() predicate.Event {
+	return predicate.Event(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, UpdatedByServiceTable, UpdatedByServiceColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Event
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUpdatedByServiceWith applies the HasEdge predicate on the "updated_by_service" edge with a given conditions (other predicates).
+func HasUpdatedByServiceWith(preds ...predicate.APIToken) predicate.Event {
+	return predicate.Event(func(s *sql.Selector) {
+		step := newUpdatedByServiceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Event
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

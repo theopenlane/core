@@ -12,11 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -64,6 +65,46 @@ func (etu *EntityTypeUpdate) SetNillableUpdatedByID(s *string) *EntityTypeUpdate
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (etu *EntityTypeUpdate) ClearUpdatedByID() *EntityTypeUpdate {
 	etu.mutation.ClearUpdatedByID()
+	return etu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (etu *EntityTypeUpdate) SetUpdatedByUserID(s string) *EntityTypeUpdate {
+	etu.mutation.SetUpdatedByUserID(s)
+	return etu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (etu *EntityTypeUpdate) SetNillableUpdatedByUserID(s *string) *EntityTypeUpdate {
+	if s != nil {
+		etu.SetUpdatedByUserID(*s)
+	}
+	return etu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (etu *EntityTypeUpdate) ClearUpdatedByUserID() *EntityTypeUpdate {
+	etu.mutation.ClearUpdatedByUserID()
+	return etu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (etu *EntityTypeUpdate) SetUpdatedByServiceID(s string) *EntityTypeUpdate {
+	etu.mutation.SetUpdatedByServiceID(s)
+	return etu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (etu *EntityTypeUpdate) SetNillableUpdatedByServiceID(s *string) *EntityTypeUpdate {
+	if s != nil {
+		etu.SetUpdatedByServiceID(*s)
+	}
+	return etu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (etu *EntityTypeUpdate) ClearUpdatedByServiceID() *EntityTypeUpdate {
+	etu.mutation.ClearUpdatedByServiceID()
 	return etu
 }
 
@@ -119,9 +160,14 @@ func (etu *EntityTypeUpdate) SetNillableName(s *string) *EntityTypeUpdate {
 	return etu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (etu *EntityTypeUpdate) SetUpdatedBy(c *ChangeActor) *EntityTypeUpdate {
-	return etu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (etu *EntityTypeUpdate) SetUpdatedByUser(u *User) *EntityTypeUpdate {
+	return etu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (etu *EntityTypeUpdate) SetUpdatedByService(a *APIToken) *EntityTypeUpdate {
+	return etu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -149,9 +195,15 @@ func (etu *EntityTypeUpdate) Mutation() *EntityTypeMutation {
 	return etu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (etu *EntityTypeUpdate) ClearUpdatedBy() *EntityTypeUpdate {
-	etu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (etu *EntityTypeUpdate) ClearUpdatedByUser() *EntityTypeUpdate {
+	etu.mutation.ClearUpdatedByUser()
+	return etu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (etu *EntityTypeUpdate) ClearUpdatedByService() *EntityTypeUpdate {
+	etu.mutation.ClearUpdatedByService()
 	return etu
 }
 
@@ -266,6 +318,15 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if etu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entitytype.FieldUpdatedAt, field.TypeTime)
 	}
+	if etu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(entitytype.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := etu.mutation.UpdatedByID(); ok {
+		_spec.SetField(entitytype.FieldUpdatedByID, field.TypeString, value)
+	}
+	if etu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(entitytype.FieldUpdatedByID, field.TypeString)
+	}
 	if etu.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytype.FieldDeletedAt, field.TypeTime)
 	}
@@ -286,29 +347,60 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := etu.mutation.Name(); ok {
 		_spec.SetField(entitytype.FieldName, field.TypeString, value)
 	}
-	if etu.mutation.UpdatedByCleared() {
+	if etu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entitytype.UpdatedByTable,
-			Columns: []string{entitytype.UpdatedByColumn},
+			Table:   entitytype.UpdatedByUserTable,
+			Columns: []string{entitytype.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = etu.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := etu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := etu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entitytype.UpdatedByTable,
-			Columns: []string{entitytype.UpdatedByColumn},
+			Table:   entitytype.UpdatedByUserTable,
+			Columns: []string{entitytype.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = etu.schemaConfig.EntityType
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if etu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entitytype.UpdatedByServiceTable,
+			Columns: []string{entitytype.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = etu.schemaConfig.EntityType
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := etu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entitytype.UpdatedByServiceTable,
+			Columns: []string{entitytype.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = etu.schemaConfig.EntityType
@@ -452,6 +544,46 @@ func (etuo *EntityTypeUpdateOne) ClearUpdatedByID() *EntityTypeUpdateOne {
 	return etuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (etuo *EntityTypeUpdateOne) SetUpdatedByUserID(s string) *EntityTypeUpdateOne {
+	etuo.mutation.SetUpdatedByUserID(s)
+	return etuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (etuo *EntityTypeUpdateOne) SetNillableUpdatedByUserID(s *string) *EntityTypeUpdateOne {
+	if s != nil {
+		etuo.SetUpdatedByUserID(*s)
+	}
+	return etuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (etuo *EntityTypeUpdateOne) ClearUpdatedByUserID() *EntityTypeUpdateOne {
+	etuo.mutation.ClearUpdatedByUserID()
+	return etuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (etuo *EntityTypeUpdateOne) SetUpdatedByServiceID(s string) *EntityTypeUpdateOne {
+	etuo.mutation.SetUpdatedByServiceID(s)
+	return etuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (etuo *EntityTypeUpdateOne) SetNillableUpdatedByServiceID(s *string) *EntityTypeUpdateOne {
+	if s != nil {
+		etuo.SetUpdatedByServiceID(*s)
+	}
+	return etuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (etuo *EntityTypeUpdateOne) ClearUpdatedByServiceID() *EntityTypeUpdateOne {
+	etuo.mutation.ClearUpdatedByServiceID()
+	return etuo
+}
+
 // SetTags sets the "tags" field.
 func (etuo *EntityTypeUpdateOne) SetTags(s []string) *EntityTypeUpdateOne {
 	etuo.mutation.SetTags(s)
@@ -504,9 +636,14 @@ func (etuo *EntityTypeUpdateOne) SetNillableName(s *string) *EntityTypeUpdateOne
 	return etuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (etuo *EntityTypeUpdateOne) SetUpdatedBy(c *ChangeActor) *EntityTypeUpdateOne {
-	return etuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (etuo *EntityTypeUpdateOne) SetUpdatedByUser(u *User) *EntityTypeUpdateOne {
+	return etuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (etuo *EntityTypeUpdateOne) SetUpdatedByService(a *APIToken) *EntityTypeUpdateOne {
+	return etuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -534,9 +671,15 @@ func (etuo *EntityTypeUpdateOne) Mutation() *EntityTypeMutation {
 	return etuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (etuo *EntityTypeUpdateOne) ClearUpdatedBy() *EntityTypeUpdateOne {
-	etuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (etuo *EntityTypeUpdateOne) ClearUpdatedByUser() *EntityTypeUpdateOne {
+	etuo.mutation.ClearUpdatedByUser()
+	return etuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (etuo *EntityTypeUpdateOne) ClearUpdatedByService() *EntityTypeUpdateOne {
+	etuo.mutation.ClearUpdatedByService()
 	return etuo
 }
 
@@ -681,6 +824,15 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 	if etuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entitytype.FieldUpdatedAt, field.TypeTime)
 	}
+	if etuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(entitytype.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := etuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(entitytype.FieldUpdatedByID, field.TypeString, value)
+	}
+	if etuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(entitytype.FieldUpdatedByID, field.TypeString)
+	}
 	if etuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytype.FieldDeletedAt, field.TypeTime)
 	}
@@ -701,29 +853,60 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 	if value, ok := etuo.mutation.Name(); ok {
 		_spec.SetField(entitytype.FieldName, field.TypeString, value)
 	}
-	if etuo.mutation.UpdatedByCleared() {
+	if etuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entitytype.UpdatedByTable,
-			Columns: []string{entitytype.UpdatedByColumn},
+			Table:   entitytype.UpdatedByUserTable,
+			Columns: []string{entitytype.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = etuo.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := etuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := etuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entitytype.UpdatedByTable,
-			Columns: []string{entitytype.UpdatedByColumn},
+			Table:   entitytype.UpdatedByUserTable,
+			Columns: []string{entitytype.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = etuo.schemaConfig.EntityType
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if etuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entitytype.UpdatedByServiceTable,
+			Columns: []string{entitytype.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = etuo.schemaConfig.EntityType
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := etuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entitytype.UpdatedByServiceTable,
+			Columns: []string{entitytype.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = etuo.schemaConfig.EntityType

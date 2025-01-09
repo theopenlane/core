@@ -65,6 +65,46 @@ func (phu *ProgramHistoryUpdate) ClearUpdatedByID() *ProgramHistoryUpdate {
 	return phu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (phu *ProgramHistoryUpdate) SetUpdatedByUserID(s string) *ProgramHistoryUpdate {
+	phu.mutation.SetUpdatedByUserID(s)
+	return phu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableUpdatedByUserID(s *string) *ProgramHistoryUpdate {
+	if s != nil {
+		phu.SetUpdatedByUserID(*s)
+	}
+	return phu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (phu *ProgramHistoryUpdate) ClearUpdatedByUserID() *ProgramHistoryUpdate {
+	phu.mutation.ClearUpdatedByUserID()
+	return phu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (phu *ProgramHistoryUpdate) SetUpdatedByServiceID(s string) *ProgramHistoryUpdate {
+	phu.mutation.SetUpdatedByServiceID(s)
+	return phu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *ProgramHistoryUpdate {
+	if s != nil {
+		phu.SetUpdatedByServiceID(*s)
+	}
+	return phu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (phu *ProgramHistoryUpdate) ClearUpdatedByServiceID() *ProgramHistoryUpdate {
+	phu.mutation.ClearUpdatedByServiceID()
+	return phu
+}
+
 // SetTags sets the "tags" field.
 func (phu *ProgramHistoryUpdate) SetTags(s []string) *ProgramHistoryUpdate {
 	phu.mutation.SetTags(s)
@@ -332,6 +372,24 @@ func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if phu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(programhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if phu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(programhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := phu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if phu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(programhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if phu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(programhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := phu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if phu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(programhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if phu.mutation.DeletedAtCleared() {
 		_spec.ClearField(programhistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -441,6 +499,46 @@ func (phuo *ProgramHistoryUpdateOne) SetNillableUpdatedByID(s *string) *ProgramH
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (phuo *ProgramHistoryUpdateOne) ClearUpdatedByID() *ProgramHistoryUpdateOne {
 	phuo.mutation.ClearUpdatedByID()
+	return phuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (phuo *ProgramHistoryUpdateOne) SetUpdatedByUserID(s string) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetUpdatedByUserID(s)
+	return phuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *ProgramHistoryUpdateOne {
+	if s != nil {
+		phuo.SetUpdatedByUserID(*s)
+	}
+	return phuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (phuo *ProgramHistoryUpdateOne) ClearUpdatedByUserID() *ProgramHistoryUpdateOne {
+	phuo.mutation.ClearUpdatedByUserID()
+	return phuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (phuo *ProgramHistoryUpdateOne) SetUpdatedByServiceID(s string) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetUpdatedByServiceID(s)
+	return phuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *ProgramHistoryUpdateOne {
+	if s != nil {
+		phuo.SetUpdatedByServiceID(*s)
+	}
+	return phuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (phuo *ProgramHistoryUpdateOne) ClearUpdatedByServiceID() *ProgramHistoryUpdateOne {
+	phuo.mutation.ClearUpdatedByServiceID()
 	return phuo
 }
 
@@ -740,6 +838,24 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 	}
 	if phuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(programhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if phuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(programhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := phuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if phuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(programhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if phuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(programhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := phuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if phuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(programhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if phuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(programhistory.FieldDeletedAt, field.TypeTime)

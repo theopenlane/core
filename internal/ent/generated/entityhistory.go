@@ -35,6 +35,14 @@ type EntityHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -69,7 +77,7 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case entityhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldUpdatedBy, entityhistory.FieldCreatedByID, entityhistory.FieldUpdatedByID, entityhistory.FieldMappingID, entityhistory.FieldDeletedByID, entityhistory.FieldOwnerID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus:
+		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldUpdatedBy, entityhistory.FieldCreatedByID, entityhistory.FieldUpdatedByID, entityhistory.FieldCreatedByUserID, entityhistory.FieldUpdatedByUserID, entityhistory.FieldCreatedByServiceID, entityhistory.FieldUpdatedByServiceID, entityhistory.FieldMappingID, entityhistory.FieldDeletedByID, entityhistory.FieldOwnerID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case entityhistory.FieldHistoryTime, entityhistory.FieldCreatedAt, entityhistory.FieldUpdatedAt, entityhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -142,6 +150,30 @@ func (eh *EntityHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				eh.UpdatedByID = value.String
+			}
+		case entityhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				eh.CreatedByUserID = value.String
+			}
+		case entityhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				eh.UpdatedByUserID = value.String
+			}
+		case entityhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				eh.CreatedByServiceID = value.String
+			}
+		case entityhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				eh.UpdatedByServiceID = value.String
 			}
 		case entityhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -274,6 +306,18 @@ func (eh *EntityHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(eh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(eh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(eh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(eh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(eh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(eh.MappingID)

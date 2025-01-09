@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -79,6 +79,46 @@ func (pu *ProgramUpdate) SetNillableUpdatedByID(s *string) *ProgramUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (pu *ProgramUpdate) ClearUpdatedByID() *ProgramUpdate {
 	pu.mutation.ClearUpdatedByID()
+	return pu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pu *ProgramUpdate) SetUpdatedByUserID(s string) *ProgramUpdate {
+	pu.mutation.SetUpdatedByUserID(s)
+	return pu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableUpdatedByUserID(s *string) *ProgramUpdate {
+	if s != nil {
+		pu.SetUpdatedByUserID(*s)
+	}
+	return pu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (pu *ProgramUpdate) ClearUpdatedByUserID() *ProgramUpdate {
+	pu.mutation.ClearUpdatedByUserID()
+	return pu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pu *ProgramUpdate) SetUpdatedByServiceID(s string) *ProgramUpdate {
+	pu.mutation.SetUpdatedByServiceID(s)
+	return pu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableUpdatedByServiceID(s *string) *ProgramUpdate {
+	if s != nil {
+		pu.SetUpdatedByServiceID(*s)
+	}
+	return pu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (pu *ProgramUpdate) ClearUpdatedByServiceID() *ProgramUpdate {
+	pu.mutation.ClearUpdatedByServiceID()
 	return pu
 }
 
@@ -250,9 +290,14 @@ func (pu *ProgramUpdate) SetNillableAuditorReadComments(b *bool) *ProgramUpdate 
 	return pu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (pu *ProgramUpdate) SetUpdatedBy(c *ChangeActor) *ProgramUpdate {
-	return pu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (pu *ProgramUpdate) SetUpdatedByUser(u *User) *ProgramUpdate {
+	return pu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (pu *ProgramUpdate) SetUpdatedByService(a *APIToken) *ProgramUpdate {
+	return pu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -520,9 +565,15 @@ func (pu *ProgramUpdate) Mutation() *ProgramMutation {
 	return pu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (pu *ProgramUpdate) ClearUpdatedBy() *ProgramUpdate {
-	pu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (pu *ProgramUpdate) ClearUpdatedByUser() *ProgramUpdate {
+	pu.mutation.ClearUpdatedByUser()
+	return pu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (pu *ProgramUpdate) ClearUpdatedByService() *ProgramUpdate {
+	pu.mutation.ClearUpdatedByService()
 	return pu
 }
 
@@ -978,6 +1029,15 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(program.FieldUpdatedAt, field.TypeTime)
 	}
+	if pu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(program.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := pu.mutation.UpdatedByID(); ok {
+		_spec.SetField(program.FieldUpdatedByID, field.TypeString, value)
+	}
+	if pu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(program.FieldUpdatedByID, field.TypeString)
+	}
 	if pu.mutation.DeletedAtCleared() {
 		_spec.ClearField(program.FieldDeletedAt, field.TypeTime)
 	}
@@ -1028,29 +1088,60 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 	}
-	if pu.mutation.UpdatedByCleared() {
+	if pu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   program.UpdatedByTable,
-			Columns: []string{program.UpdatedByColumn},
+			Table:   program.UpdatedByUserTable,
+			Columns: []string{program.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pu.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   program.UpdatedByTable,
-			Columns: []string{program.UpdatedByColumn},
+			Table:   program.UpdatedByUserTable,
+			Columns: []string{program.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByServiceTable,
+			Columns: []string{program.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByServiceTable,
+			Columns: []string{program.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pu.schemaConfig.Program
@@ -1983,6 +2074,46 @@ func (puo *ProgramUpdateOne) ClearUpdatedByID() *ProgramUpdateOne {
 	return puo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (puo *ProgramUpdateOne) SetUpdatedByUserID(s string) *ProgramUpdateOne {
+	puo.mutation.SetUpdatedByUserID(s)
+	return puo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableUpdatedByUserID(s *string) *ProgramUpdateOne {
+	if s != nil {
+		puo.SetUpdatedByUserID(*s)
+	}
+	return puo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (puo *ProgramUpdateOne) ClearUpdatedByUserID() *ProgramUpdateOne {
+	puo.mutation.ClearUpdatedByUserID()
+	return puo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (puo *ProgramUpdateOne) SetUpdatedByServiceID(s string) *ProgramUpdateOne {
+	puo.mutation.SetUpdatedByServiceID(s)
+	return puo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableUpdatedByServiceID(s *string) *ProgramUpdateOne {
+	if s != nil {
+		puo.SetUpdatedByServiceID(*s)
+	}
+	return puo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (puo *ProgramUpdateOne) ClearUpdatedByServiceID() *ProgramUpdateOne {
+	puo.mutation.ClearUpdatedByServiceID()
+	return puo
+}
+
 // SetTags sets the "tags" field.
 func (puo *ProgramUpdateOne) SetTags(s []string) *ProgramUpdateOne {
 	puo.mutation.SetTags(s)
@@ -2151,9 +2282,14 @@ func (puo *ProgramUpdateOne) SetNillableAuditorReadComments(b *bool) *ProgramUpd
 	return puo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (puo *ProgramUpdateOne) SetUpdatedBy(c *ChangeActor) *ProgramUpdateOne {
-	return puo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (puo *ProgramUpdateOne) SetUpdatedByUser(u *User) *ProgramUpdateOne {
+	return puo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (puo *ProgramUpdateOne) SetUpdatedByService(a *APIToken) *ProgramUpdateOne {
+	return puo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -2421,9 +2557,15 @@ func (puo *ProgramUpdateOne) Mutation() *ProgramMutation {
 	return puo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (puo *ProgramUpdateOne) ClearUpdatedBy() *ProgramUpdateOne {
-	puo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (puo *ProgramUpdateOne) ClearUpdatedByUser() *ProgramUpdateOne {
+	puo.mutation.ClearUpdatedByUser()
+	return puo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (puo *ProgramUpdateOne) ClearUpdatedByService() *ProgramUpdateOne {
+	puo.mutation.ClearUpdatedByService()
 	return puo
 }
 
@@ -2909,6 +3051,15 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	if puo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(program.FieldUpdatedAt, field.TypeTime)
 	}
+	if puo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(program.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := puo.mutation.UpdatedByID(); ok {
+		_spec.SetField(program.FieldUpdatedByID, field.TypeString, value)
+	}
+	if puo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(program.FieldUpdatedByID, field.TypeString)
+	}
 	if puo.mutation.DeletedAtCleared() {
 		_spec.ClearField(program.FieldDeletedAt, field.TypeTime)
 	}
@@ -2959,29 +3110,60 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	if value, ok := puo.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 	}
-	if puo.mutation.UpdatedByCleared() {
+	if puo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   program.UpdatedByTable,
-			Columns: []string{program.UpdatedByColumn},
+			Table:   program.UpdatedByUserTable,
+			Columns: []string{program.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = puo.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   program.UpdatedByTable,
-			Columns: []string{program.UpdatedByColumn},
+			Table:   program.UpdatedByUserTable,
+			Columns: []string{program.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByServiceTable,
+			Columns: []string{program.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Program
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByServiceTable,
+			Columns: []string{program.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = puo.schemaConfig.Program

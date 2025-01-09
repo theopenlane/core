@@ -10,10 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Task is the model entity for the Task schema.
@@ -29,6 +30,14 @@ type Task struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -55,14 +64,23 @@ type Task struct {
 	user_assigner_tasks *string
 	user_assignee_tasks *string
 	selectValues        sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // TaskEdges holds the relations/edges for other nodes in the graph.
 type TaskEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Assigner holds the value of the assigner edge.
 	Assigner *User `json:"assigner,omitempty"`
 	// Assignee holds the value of the assignee edge.
@@ -85,9 +103,9 @@ type TaskEdges struct {
 	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [14]map[string]int
 
 	namedOrganization     map[string][]*Organization
 	namedGroup            map[string][]*Group
@@ -99,26 +117,48 @@ type TaskEdges struct {
 	namedProgram          map[string][]*Program
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TaskEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e TaskEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TaskEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e TaskEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TaskEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TaskEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // AssignerOrErr returns the Assigner value or an error if the edge
@@ -126,7 +166,7 @@ func (e TaskEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e TaskEdges) AssignerOrErr() (*User, error) {
 	if e.Assigner != nil {
 		return e.Assigner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigner"}
@@ -137,7 +177,7 @@ func (e TaskEdges) AssignerOrErr() (*User, error) {
 func (e TaskEdges) AssigneeOrErr() (*User, error) {
 	if e.Assignee != nil {
 		return e.Assignee, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assignee"}
@@ -146,7 +186,7 @@ func (e TaskEdges) AssigneeOrErr() (*User, error) {
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -155,7 +195,7 @@ func (e TaskEdges) OrganizationOrErr() ([]*Organization, error) {
 // GroupOrErr returns the Group value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) GroupOrErr() ([]*Group, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Group, nil
 	}
 	return nil, &NotLoadedError{edge: "group"}
@@ -164,7 +204,7 @@ func (e TaskEdges) GroupOrErr() ([]*Group, error) {
 // InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.InternalPolicy, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy"}
@@ -173,7 +213,7 @@ func (e TaskEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
 // ProcedureOrErr returns the Procedure value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Procedure, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure"}
@@ -182,7 +222,7 @@ func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -191,7 +231,7 @@ func (e TaskEdges) ControlOrErr() ([]*Control, error) {
 // ControlObjectiveOrErr returns the ControlObjective value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.ControlObjective, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective"}
@@ -200,7 +240,7 @@ func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
 // SubcontrolOrErr returns the Subcontrol value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) SubcontrolOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Subcontrol, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrol"}
@@ -209,7 +249,7 @@ func (e TaskEdges) SubcontrolOrErr() ([]*Subcontrol, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -222,7 +262,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldTags, task.FieldDetails:
 			values[i] = new([]byte)
-		case task.FieldID, task.FieldCreatedByID, task.FieldUpdatedByID, task.FieldMappingID, task.FieldDeletedByID, task.FieldTitle, task.FieldDescription, task.FieldStatus:
+		case task.FieldID, task.FieldCreatedByID, task.FieldUpdatedByID, task.FieldCreatedByUserID, task.FieldUpdatedByUserID, task.FieldCreatedByServiceID, task.FieldUpdatedByServiceID, task.FieldMappingID, task.FieldDeletedByID, task.FieldTitle, task.FieldDescription, task.FieldStatus:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt, task.FieldDue, task.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -274,6 +314,30 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				t.UpdatedByID = value.String
+			}
+		case task.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				t.CreatedByUserID = value.String
+			}
+		case task.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				t.UpdatedByUserID = value.String
+			}
+		case task.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				t.CreatedByServiceID = value.String
+			}
+		case task.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				t.UpdatedByServiceID = value.String
 			}
 		case task.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -366,14 +430,24 @@ func (t *Task) Value(name string) (ent.Value, error) {
 	return t.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the Task entity.
-func (t *Task) QueryCreatedBy() *ChangeActorQuery {
-	return NewTaskClient(t.config).QueryCreatedBy(t)
+// QueryCreatedByUser queries the "created_by_user" edge of the Task entity.
+func (t *Task) QueryCreatedByUser() *UserQuery {
+	return NewTaskClient(t.config).QueryCreatedByUser(t)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the Task entity.
-func (t *Task) QueryUpdatedBy() *ChangeActorQuery {
-	return NewTaskClient(t.config).QueryUpdatedBy(t)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the Task entity.
+func (t *Task) QueryUpdatedByUser() *UserQuery {
+	return NewTaskClient(t.config).QueryUpdatedByUser(t)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the Task entity.
+func (t *Task) QueryCreatedByService() *APITokenQuery {
+	return NewTaskClient(t.config).QueryCreatedByService(t)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the Task entity.
+func (t *Task) QueryUpdatedByService() *APITokenQuery {
+	return NewTaskClient(t.config).QueryUpdatedByService(t)
 }
 
 // QueryAssigner queries the "assigner" edge of the Task entity.
@@ -460,6 +534,18 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(t.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(t.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(t.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(t.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(t.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(t.MappingID)

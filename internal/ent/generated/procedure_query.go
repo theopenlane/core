@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -35,8 +36,10 @@ type ProcedureQuery struct {
 	order                     []procedure.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.Procedure
-	withCreatedBy             *ChangeActorQuery
-	withUpdatedBy             *ChangeActorQuery
+	withCreatedByUser         *UserQuery
+	withUpdatedByUser         *UserQuery
+	withCreatedByService      *APITokenQuery
+	withUpdatedByService      *APITokenQuery
 	withOwner                 *OrganizationQuery
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
@@ -93,9 +96,9 @@ func (pq *ProcedureQuery) Order(o ...procedure.OrderOption) *ProcedureQuery {
 	return pq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (pq *ProcedureQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: pq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (pq *ProcedureQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -106,11 +109,11 @@ func (pq *ProcedureQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, procedure.CreatedByTable, procedure.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.CreatedByUserTable, procedure.CreatedByUserColumn),
 		)
 		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -118,9 +121,9 @@ func (pq *ProcedureQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (pq *ProcedureQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: pq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (pq *ProcedureQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -131,11 +134,61 @@ func (pq *ProcedureQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, procedure.UpdatedByTable, procedure.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.UpdatedByUserTable, procedure.UpdatedByUserColumn),
 		)
 		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (pq *ProcedureQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.CreatedByServiceTable, procedure.CreatedByServiceColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (pq *ProcedureQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.UpdatedByServiceTable, procedure.UpdatedByServiceColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -560,8 +613,10 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 		order:                append([]procedure.OrderOption{}, pq.order...),
 		inters:               append([]Interceptor{}, pq.inters...),
 		predicates:           append([]predicate.Procedure{}, pq.predicates...),
-		withCreatedBy:        pq.withCreatedBy.Clone(),
-		withUpdatedBy:        pq.withUpdatedBy.Clone(),
+		withCreatedByUser:    pq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    pq.withUpdatedByUser.Clone(),
+		withCreatedByService: pq.withCreatedByService.Clone(),
+		withUpdatedByService: pq.withUpdatedByService.Clone(),
 		withOwner:            pq.withOwner.Clone(),
 		withBlockedGroups:    pq.withBlockedGroups.Clone(),
 		withEditors:          pq.withEditors.Clone(),
@@ -578,25 +633,47 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ProcedureQuery {
-	query := (&ChangeActorClient{config: pq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithCreatedByUser(opts ...func(*UserQuery)) *ProcedureQuery {
+	query := (&UserClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withCreatedBy = query
+	pq.withCreatedByUser = query
 	return pq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ProcedureQuery {
-	query := (&ChangeActorClient{config: pq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *ProcedureQuery {
+	query := (&UserClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withUpdatedBy = query
+	pq.withUpdatedByUser = query
+	return pq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *ProcedureQuery {
+	query := (&APITokenClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withCreatedByService = query
+	return pq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *ProcedureQuery {
+	query := (&APITokenClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withUpdatedByService = query
 	return pq
 }
 
@@ -784,9 +861,11 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [11]bool{
-			pq.withCreatedBy != nil,
-			pq.withUpdatedBy != nil,
+		loadedTypes = [13]bool{
+			pq.withCreatedByUser != nil,
+			pq.withUpdatedByUser != nil,
+			pq.withCreatedByService != nil,
+			pq.withUpdatedByService != nil,
 			pq.withOwner != nil,
 			pq.withBlockedGroups != nil,
 			pq.withEditors != nil,
@@ -824,15 +903,27 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pq.withCreatedBy; query != nil {
-		if err := pq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Procedure, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := pq.withCreatedByUser; query != nil {
+		if err := pq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Procedure, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withUpdatedBy; query != nil {
-		if err := pq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Procedure, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := pq.withUpdatedByUser; query != nil {
+		if err := pq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Procedure, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withCreatedByService; query != nil {
+		if err := pq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Procedure, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withUpdatedByService; query != nil {
+		if err := pq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Procedure, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -962,11 +1053,11 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 	return nodes, nil
 }
 
-func (pq *ProcedureQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *ChangeActor)) error {
+func (pq *ProcedureQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -975,7 +1066,7 @@ func (pq *ProcedureQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQ
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -983,7 +1074,7 @@ func (pq *ProcedureQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQ
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -991,11 +1082,11 @@ func (pq *ProcedureQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQ
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *ChangeActor)) error {
+func (pq *ProcedureQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1004,7 +1095,7 @@ func (pq *ProcedureQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQ
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1012,7 +1103,65 @@ func (pq *ProcedureQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQ
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *ProcedureQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *ProcedureQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1576,11 +1725,17 @@ func (pq *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if pq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(procedure.FieldCreatedByID)
+		if pq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldCreatedByUserID)
 		}
-		if pq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(procedure.FieldUpdatedByID)
+		if pq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldUpdatedByUserID)
+		}
+		if pq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldCreatedByServiceID)
+		}
+		if pq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldUpdatedByServiceID)
 		}
 		if pq.withOwner != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldOwnerID)

@@ -35,6 +35,14 @@ type ProcedureHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -75,7 +83,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedurehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldUpdatedBy, procedurehistory.FieldCreatedByID, procedurehistory.FieldUpdatedByID, procedurehistory.FieldDeletedByID, procedurehistory.FieldMappingID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldDescription, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldVersion, procedurehistory.FieldPurposeAndScope, procedurehistory.FieldBackground, procedurehistory.FieldSatisfies:
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldUpdatedBy, procedurehistory.FieldCreatedByID, procedurehistory.FieldUpdatedByID, procedurehistory.FieldCreatedByUserID, procedurehistory.FieldUpdatedByUserID, procedurehistory.FieldCreatedByServiceID, procedurehistory.FieldUpdatedByServiceID, procedurehistory.FieldDeletedByID, procedurehistory.FieldMappingID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldDescription, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldVersion, procedurehistory.FieldPurposeAndScope, procedurehistory.FieldBackground, procedurehistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -148,6 +156,30 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				ph.UpdatedByID = value.String
+			}
+		case procedurehistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				ph.CreatedByUserID = value.String
+			}
+		case procedurehistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				ph.UpdatedByUserID = value.String
+			}
+		case procedurehistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				ph.CreatedByServiceID = value.String
+			}
+		case procedurehistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				ph.UpdatedByServiceID = value.String
 			}
 		case procedurehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -298,6 +330,18 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(ph.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(ph.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(ph.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(ph.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(ph.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ph.DeletedAt.Format(time.ANSIC))

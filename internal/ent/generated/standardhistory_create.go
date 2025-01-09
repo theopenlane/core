@@ -125,6 +125,62 @@ func (shc *StandardHistoryCreate) SetNillableUpdatedByID(s *string) *StandardHis
 	return shc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (shc *StandardHistoryCreate) SetCreatedByUserID(s string) *StandardHistoryCreate {
+	shc.mutation.SetCreatedByUserID(s)
+	return shc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableCreatedByUserID(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetCreatedByUserID(*s)
+	}
+	return shc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (shc *StandardHistoryCreate) SetUpdatedByUserID(s string) *StandardHistoryCreate {
+	shc.mutation.SetUpdatedByUserID(s)
+	return shc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableUpdatedByUserID(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetUpdatedByUserID(*s)
+	}
+	return shc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (shc *StandardHistoryCreate) SetCreatedByServiceID(s string) *StandardHistoryCreate {
+	shc.mutation.SetCreatedByServiceID(s)
+	return shc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableCreatedByServiceID(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetCreatedByServiceID(*s)
+	}
+	return shc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (shc *StandardHistoryCreate) SetUpdatedByServiceID(s string) *StandardHistoryCreate {
+	shc.mutation.SetUpdatedByServiceID(s)
+	return shc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (shc *StandardHistoryCreate) SetNillableUpdatedByServiceID(s *string) *StandardHistoryCreate {
+	if s != nil {
+		shc.SetUpdatedByServiceID(*s)
+	}
+	return shc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (shc *StandardHistoryCreate) SetDeletedAt(t time.Time) *StandardHistoryCreate {
 	shc.mutation.SetDeletedAt(t)
@@ -458,6 +514,22 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 	if value, ok := shc.mutation.UpdatedByID(); ok {
 		_spec.SetField(standardhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := shc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(standardhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := shc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(standardhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := shc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(standardhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := shc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(standardhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := shc.mutation.DeletedAt(); ok {
 		_spec.SetField(standardhistory.FieldDeletedAt, field.TypeTime, value)

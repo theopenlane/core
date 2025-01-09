@@ -64,6 +64,46 @@ func (gmhu *GroupMembershipHistoryUpdate) ClearUpdatedByID() *GroupMembershipHis
 	return gmhu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gmhu *GroupMembershipHistoryUpdate) SetUpdatedByUserID(s string) *GroupMembershipHistoryUpdate {
+	gmhu.mutation.SetUpdatedByUserID(s)
+	return gmhu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gmhu *GroupMembershipHistoryUpdate) SetNillableUpdatedByUserID(s *string) *GroupMembershipHistoryUpdate {
+	if s != nil {
+		gmhu.SetUpdatedByUserID(*s)
+	}
+	return gmhu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (gmhu *GroupMembershipHistoryUpdate) ClearUpdatedByUserID() *GroupMembershipHistoryUpdate {
+	gmhu.mutation.ClearUpdatedByUserID()
+	return gmhu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gmhu *GroupMembershipHistoryUpdate) SetUpdatedByServiceID(s string) *GroupMembershipHistoryUpdate {
+	gmhu.mutation.SetUpdatedByServiceID(s)
+	return gmhu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gmhu *GroupMembershipHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *GroupMembershipHistoryUpdate {
+	if s != nil {
+		gmhu.SetUpdatedByServiceID(*s)
+	}
+	return gmhu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (gmhu *GroupMembershipHistoryUpdate) ClearUpdatedByServiceID() *GroupMembershipHistoryUpdate {
+	gmhu.mutation.ClearUpdatedByServiceID()
+	return gmhu
+}
+
 // SetRole sets the "role" field.
 func (gmhu *GroupMembershipHistoryUpdate) SetRole(e enums.Role) *GroupMembershipHistoryUpdate {
 	gmhu.mutation.SetRole(e)
@@ -177,6 +217,24 @@ func (gmhu *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	if gmhu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedByID, field.TypeString)
 	}
+	if gmhu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := gmhu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if gmhu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if gmhu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := gmhu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if gmhu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if gmhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -239,6 +297,46 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) SetNillableUpdatedByID(s *string) 
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (gmhuo *GroupMembershipHistoryUpdateOne) ClearUpdatedByID() *GroupMembershipHistoryUpdateOne {
 	gmhuo.mutation.ClearUpdatedByID()
+	return gmhuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gmhuo *GroupMembershipHistoryUpdateOne) SetUpdatedByUserID(s string) *GroupMembershipHistoryUpdateOne {
+	gmhuo.mutation.SetUpdatedByUserID(s)
+	return gmhuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gmhuo *GroupMembershipHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *GroupMembershipHistoryUpdateOne {
+	if s != nil {
+		gmhuo.SetUpdatedByUserID(*s)
+	}
+	return gmhuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (gmhuo *GroupMembershipHistoryUpdateOne) ClearUpdatedByUserID() *GroupMembershipHistoryUpdateOne {
+	gmhuo.mutation.ClearUpdatedByUserID()
+	return gmhuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gmhuo *GroupMembershipHistoryUpdateOne) SetUpdatedByServiceID(s string) *GroupMembershipHistoryUpdateOne {
+	gmhuo.mutation.SetUpdatedByServiceID(s)
+	return gmhuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gmhuo *GroupMembershipHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *GroupMembershipHistoryUpdateOne {
+	if s != nil {
+		gmhuo.SetUpdatedByServiceID(*s)
+	}
+	return gmhuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (gmhuo *GroupMembershipHistoryUpdateOne) ClearUpdatedByServiceID() *GroupMembershipHistoryUpdateOne {
+	gmhuo.mutation.ClearUpdatedByServiceID()
 	return gmhuo
 }
 
@@ -384,6 +482,24 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if gmhuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedByID, field.TypeString)
+	}
+	if gmhuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := gmhuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if gmhuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if gmhuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := gmhuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if gmhuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if gmhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldDeletedAt, field.TypeTime)

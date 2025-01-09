@@ -28,8 +28,7 @@ mutation CreateSubscriber($input: CreateSubscriberInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       email
       id
@@ -95,8 +94,7 @@ mutation UpdateSubscriber($email: String!, $input: UpdateSubscriberInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       email
       id

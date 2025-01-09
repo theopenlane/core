@@ -11,12 +11,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/customtypes"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // DocumentDataCreate is the builder for creating a DocumentData entity.
@@ -78,6 +79,62 @@ func (ddc *DocumentDataCreate) SetUpdatedByID(s string) *DocumentDataCreate {
 func (ddc *DocumentDataCreate) SetNillableUpdatedByID(s *string) *DocumentDataCreate {
 	if s != nil {
 		ddc.SetUpdatedByID(*s)
+	}
+	return ddc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ddc *DocumentDataCreate) SetCreatedByUserID(s string) *DocumentDataCreate {
+	ddc.mutation.SetCreatedByUserID(s)
+	return ddc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ddc *DocumentDataCreate) SetNillableCreatedByUserID(s *string) *DocumentDataCreate {
+	if s != nil {
+		ddc.SetCreatedByUserID(*s)
+	}
+	return ddc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ddc *DocumentDataCreate) SetUpdatedByUserID(s string) *DocumentDataCreate {
+	ddc.mutation.SetUpdatedByUserID(s)
+	return ddc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ddc *DocumentDataCreate) SetNillableUpdatedByUserID(s *string) *DocumentDataCreate {
+	if s != nil {
+		ddc.SetUpdatedByUserID(*s)
+	}
+	return ddc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ddc *DocumentDataCreate) SetCreatedByServiceID(s string) *DocumentDataCreate {
+	ddc.mutation.SetCreatedByServiceID(s)
+	return ddc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ddc *DocumentDataCreate) SetNillableCreatedByServiceID(s *string) *DocumentDataCreate {
+	if s != nil {
+		ddc.SetCreatedByServiceID(*s)
+	}
+	return ddc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ddc *DocumentDataCreate) SetUpdatedByServiceID(s string) *DocumentDataCreate {
+	ddc.mutation.SetUpdatedByServiceID(s)
+	return ddc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ddc *DocumentDataCreate) SetNillableUpdatedByServiceID(s *string) *DocumentDataCreate {
+	if s != nil {
+		ddc.SetUpdatedByServiceID(*s)
 	}
 	return ddc
 }
@@ -170,14 +227,24 @@ func (ddc *DocumentDataCreate) SetNillableID(s *string) *DocumentDataCreate {
 	return ddc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (ddc *DocumentDataCreate) SetCreatedBy(c *ChangeActor) *DocumentDataCreate {
-	return ddc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (ddc *DocumentDataCreate) SetCreatedByUser(u *User) *DocumentDataCreate {
+	return ddc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ddc *DocumentDataCreate) SetUpdatedBy(c *ChangeActor) *DocumentDataCreate {
-	return ddc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ddc *DocumentDataCreate) SetUpdatedByUser(u *User) *DocumentDataCreate {
+	return ddc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (ddc *DocumentDataCreate) SetCreatedByService(a *APIToken) *DocumentDataCreate {
+	return ddc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ddc *DocumentDataCreate) SetUpdatedByService(a *APIToken) *DocumentDataCreate {
+	return ddc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -355,6 +422,14 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 		_spec.SetField(documentdata.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := ddc.mutation.CreatedByID(); ok {
+		_spec.SetField(documentdata.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := ddc.mutation.UpdatedByID(); ok {
+		_spec.SetField(documentdata.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := ddc.mutation.MappingID(); ok {
 		_spec.SetField(documentdata.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -375,40 +450,76 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
 		_node.Data = value
 	}
-	if nodes := ddc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := ddc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   documentdata.CreatedByTable,
-			Columns: []string{documentdata.CreatedByColumn},
+			Table:   documentdata.CreatedByUserTable,
+			Columns: []string{documentdata.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ddc.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ddc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ddc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   documentdata.UpdatedByTable,
-			Columns: []string{documentdata.UpdatedByColumn},
+			Table:   documentdata.UpdatedByUserTable,
+			Columns: []string{documentdata.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ddc.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ddc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.CreatedByServiceTable,
+			Columns: []string{documentdata.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ddc.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ddc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.UpdatedByServiceTable,
+			Columns: []string{documentdata.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ddc.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ddc.mutation.OwnerIDs(); len(nodes) > 0 {

@@ -64,6 +64,46 @@ func (nhu *NoteHistoryUpdate) ClearUpdatedByID() *NoteHistoryUpdate {
 	return nhu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nhu *NoteHistoryUpdate) SetUpdatedByUserID(s string) *NoteHistoryUpdate {
+	nhu.mutation.SetUpdatedByUserID(s)
+	return nhu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nhu *NoteHistoryUpdate) SetNillableUpdatedByUserID(s *string) *NoteHistoryUpdate {
+	if s != nil {
+		nhu.SetUpdatedByUserID(*s)
+	}
+	return nhu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (nhu *NoteHistoryUpdate) ClearUpdatedByUserID() *NoteHistoryUpdate {
+	nhu.mutation.ClearUpdatedByUserID()
+	return nhu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nhu *NoteHistoryUpdate) SetUpdatedByServiceID(s string) *NoteHistoryUpdate {
+	nhu.mutation.SetUpdatedByServiceID(s)
+	return nhu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nhu *NoteHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *NoteHistoryUpdate {
+	if s != nil {
+		nhu.SetUpdatedByServiceID(*s)
+	}
+	return nhu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (nhu *NoteHistoryUpdate) ClearUpdatedByServiceID() *NoteHistoryUpdate {
+	nhu.mutation.ClearUpdatedByServiceID()
+	return nhu
+}
+
 // SetTags sets the "tags" field.
 func (nhu *NoteHistoryUpdate) SetTags(s []string) *NoteHistoryUpdate {
 	nhu.mutation.SetTags(s)
@@ -202,6 +242,24 @@ func (nhu *NoteHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nhu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedByID, field.TypeString)
 	}
+	if nhu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(notehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := nhu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(notehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if nhu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(notehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if nhu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(notehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := nhu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(notehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if nhu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(notehistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if nhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(notehistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -281,6 +339,46 @@ func (nhuo *NoteHistoryUpdateOne) SetNillableUpdatedByID(s *string) *NoteHistory
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (nhuo *NoteHistoryUpdateOne) ClearUpdatedByID() *NoteHistoryUpdateOne {
 	nhuo.mutation.ClearUpdatedByID()
+	return nhuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nhuo *NoteHistoryUpdateOne) SetUpdatedByUserID(s string) *NoteHistoryUpdateOne {
+	nhuo.mutation.SetUpdatedByUserID(s)
+	return nhuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nhuo *NoteHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *NoteHistoryUpdateOne {
+	if s != nil {
+		nhuo.SetUpdatedByUserID(*s)
+	}
+	return nhuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (nhuo *NoteHistoryUpdateOne) ClearUpdatedByUserID() *NoteHistoryUpdateOne {
+	nhuo.mutation.ClearUpdatedByUserID()
+	return nhuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nhuo *NoteHistoryUpdateOne) SetUpdatedByServiceID(s string) *NoteHistoryUpdateOne {
+	nhuo.mutation.SetUpdatedByServiceID(s)
+	return nhuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nhuo *NoteHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *NoteHistoryUpdateOne {
+	if s != nil {
+		nhuo.SetUpdatedByServiceID(*s)
+	}
+	return nhuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (nhuo *NoteHistoryUpdateOne) ClearUpdatedByServiceID() *NoteHistoryUpdateOne {
+	nhuo.mutation.ClearUpdatedByServiceID()
 	return nhuo
 }
 
@@ -451,6 +549,24 @@ func (nhuo *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHisto
 	}
 	if nhuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedByID, field.TypeString)
+	}
+	if nhuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(notehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := nhuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(notehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if nhuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(notehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if nhuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(notehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := nhuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(notehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if nhuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(notehistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if nhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(notehistory.FieldDeletedAt, field.TypeTime)

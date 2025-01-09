@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 				return ec.fieldContext_APIToken_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_APIToken_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_APIToken_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_APIToken_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_APIToken_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_APIToken_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_APIToken_deletedAt(ctx, field)
 			case "deletedByID":
@@ -95,10 +103,14 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_APIToken_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_APIToken_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_APIToken_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_APIToken_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -157,6 +169,14 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_APIToken_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_APIToken_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_APIToken_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_APIToken_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_APIToken_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_APIToken_deletedAt(ctx, field)
 			case "deletedByID":
@@ -177,10 +197,14 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_APIToken_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_APIToken_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_APIToken_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_APIToken_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -283,6 +307,14 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_APIToken_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_APIToken_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_APIToken_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_APIToken_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_APIToken_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_APIToken_deletedAt(ctx, field)
 			case "deletedByID":
@@ -303,10 +335,14 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_scopes(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_APIToken_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_APIToken_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_APIToken_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_APIToken_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}

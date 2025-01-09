@@ -13,13 +13,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -31,8 +32,10 @@ type NoteQuery struct {
 	order                []note.OrderOption
 	inters               []Interceptor
 	predicates           []predicate.Note
-	withCreatedBy        *ChangeActorQuery
-	withUpdatedBy        *ChangeActorQuery
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
 	withOwner            *OrganizationQuery
 	withEntity           *EntityQuery
 	withSubcontrols      *SubcontrolQuery
@@ -78,9 +81,9 @@ func (nq *NoteQuery) Order(o ...note.OrderOption) *NoteQuery {
 	return nq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (nq *NoteQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: nq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (nq *NoteQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -91,11 +94,11 @@ func (nq *NoteQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, note.CreatedByTable, note.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.CreatedByUserTable, note.CreatedByUserColumn),
 		)
 		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
@@ -103,9 +106,9 @@ func (nq *NoteQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (nq *NoteQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: nq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (nq *NoteQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -116,11 +119,61 @@ func (nq *NoteQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, note.UpdatedByTable, note.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.UpdatedByUserTable, note.UpdatedByUserColumn),
 		)
 		schemaConfig := nq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (nq *NoteQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.CreatedByServiceTable, note.CreatedByServiceColumn),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (nq *NoteQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, note.UpdatedByServiceTable, note.UpdatedByServiceColumn),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
@@ -415,17 +468,19 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 		return nil
 	}
 	return &NoteQuery{
-		config:          nq.config,
-		ctx:             nq.ctx.Clone(),
-		order:           append([]note.OrderOption{}, nq.order...),
-		inters:          append([]Interceptor{}, nq.inters...),
-		predicates:      append([]predicate.Note{}, nq.predicates...),
-		withCreatedBy:   nq.withCreatedBy.Clone(),
-		withUpdatedBy:   nq.withUpdatedBy.Clone(),
-		withOwner:       nq.withOwner.Clone(),
-		withEntity:      nq.withEntity.Clone(),
-		withSubcontrols: nq.withSubcontrols.Clone(),
-		withProgram:     nq.withProgram.Clone(),
+		config:               nq.config,
+		ctx:                  nq.ctx.Clone(),
+		order:                append([]note.OrderOption{}, nq.order...),
+		inters:               append([]Interceptor{}, nq.inters...),
+		predicates:           append([]predicate.Note{}, nq.predicates...),
+		withCreatedByUser:    nq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    nq.withUpdatedByUser.Clone(),
+		withCreatedByService: nq.withCreatedByService.Clone(),
+		withUpdatedByService: nq.withUpdatedByService.Clone(),
+		withOwner:            nq.withOwner.Clone(),
+		withEntity:           nq.withEntity.Clone(),
+		withSubcontrols:      nq.withSubcontrols.Clone(),
+		withProgram:          nq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       nq.sql.Clone(),
 		path:      nq.path,
@@ -433,25 +488,47 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *NoteQuery {
-	query := (&ChangeActorClient{config: nq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithCreatedByUser(opts ...func(*UserQuery)) *NoteQuery {
+	query := (&UserClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withCreatedBy = query
+	nq.withCreatedByUser = query
 	return nq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *NoteQuery {
-	query := (&ChangeActorClient{config: nq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *NoteQuery {
+	query := (&UserClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withUpdatedBy = query
+	nq.withUpdatedByUser = query
+	return nq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *NoteQuery {
+	query := (&APITokenClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withCreatedByService = query
+	return nq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NoteQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *NoteQuery {
+	query := (&APITokenClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withUpdatedByService = query
 	return nq
 }
 
@@ -584,9 +661,11 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = nq.withFKs
 		_spec       = nq.querySpec()
-		loadedTypes = [6]bool{
-			nq.withCreatedBy != nil,
-			nq.withUpdatedBy != nil,
+		loadedTypes = [8]bool{
+			nq.withCreatedByUser != nil,
+			nq.withUpdatedByUser != nil,
+			nq.withCreatedByService != nil,
+			nq.withUpdatedByService != nil,
 			nq.withOwner != nil,
 			nq.withEntity != nil,
 			nq.withSubcontrols != nil,
@@ -622,15 +701,27 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := nq.withCreatedBy; query != nil {
-		if err := nq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Note, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := nq.withCreatedByUser; query != nil {
+		if err := nq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Note, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withUpdatedBy; query != nil {
-		if err := nq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Note, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := nq.withUpdatedByUser; query != nil {
+		if err := nq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Note, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withCreatedByService; query != nil {
+		if err := nq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Note, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withUpdatedByService; query != nil {
+		if err := nq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Note, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -682,11 +773,11 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	return nodes, nil
 }
 
-func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Note, init func(*Note), assign func(*Note, *ChangeActor)) error {
+func (nq *NoteQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Note, init func(*Note), assign func(*Note, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -695,7 +786,7 @@ func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -703,7 +794,7 @@ func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -711,11 +802,11 @@ func (nq *NoteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery,
 	}
 	return nil
 }
-func (nq *NoteQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Note, init func(*Note), assign func(*Note, *ChangeActor)) error {
+func (nq *NoteQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Note, init func(*Note), assign func(*Note, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -724,7 +815,7 @@ func (nq *NoteQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -732,7 +823,65 @@ func (nq *NoteQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (nq *NoteQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Note, init func(*Note), assign func(*Note, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (nq *NoteQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Note, init func(*Note), assign func(*Note, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -925,11 +1074,17 @@ func (nq *NoteQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if nq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(note.FieldCreatedByID)
+		if nq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(note.FieldCreatedByUserID)
 		}
-		if nq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(note.FieldUpdatedByID)
+		if nq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(note.FieldUpdatedByUserID)
+		}
+		if nq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(note.FieldCreatedByServiceID)
+		}
+		if nq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(note.FieldUpdatedByServiceID)
 		}
 		if nq.withOwner != nil {
 			_spec.Node.AddColumnOnce(note.FieldOwnerID)

@@ -33,6 +33,14 @@ const (
 	FieldCreatedByID = "created_by_id"
 	// FieldUpdatedByID holds the string denoting the updated_by_id field in the database.
 	FieldUpdatedByID = "updated_by_id"
+	// FieldCreatedByUserID holds the string denoting the created_by_user_id field in the database.
+	FieldCreatedByUserID = "created_by_user_id"
+	// FieldUpdatedByUserID holds the string denoting the updated_by_user_id field in the database.
+	FieldUpdatedByUserID = "updated_by_user_id"
+	// FieldCreatedByServiceID holds the string denoting the created_by_service_id field in the database.
+	FieldCreatedByServiceID = "created_by_service_id"
+	// FieldUpdatedByServiceID holds the string denoting the updated_by_service_id field in the database.
+	FieldUpdatedByServiceID = "updated_by_service_id"
 	// FieldMappingID holds the string denoting the mapping_id field in the database.
 	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
@@ -70,6 +78,10 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedByID,
 	FieldUpdatedByID,
+	FieldCreatedByUserID,
+	FieldUpdatedByUserID,
+	FieldCreatedByServiceID,
+	FieldUpdatedByServiceID,
 	FieldMappingID,
 	FieldTags,
 	FieldDeletedAt,
@@ -180,6 +192,26 @@ func ByCreatedByID(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedByID orders the results by the updated_by_id field.
 func ByUpdatedByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedByID, opts...).ToFunc()
+}
+
+// ByCreatedByUserID orders the results by the created_by_user_id field.
+func ByCreatedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedByUserID, opts...).ToFunc()
+}
+
+// ByUpdatedByUserID orders the results by the updated_by_user_id field.
+func ByUpdatedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByUserID, opts...).ToFunc()
+}
+
+// ByCreatedByServiceID orders the results by the created_by_service_id field.
+func ByCreatedByServiceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedByServiceID, opts...).ToFunc()
+}
+
+// ByUpdatedByServiceID orders the results by the updated_by_service_id field.
+func ByUpdatedByServiceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByServiceID, opts...).ToFunc()
 }
 
 // ByMappingID orders the results by the mapping_id field.

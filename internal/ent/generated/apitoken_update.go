@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -63,6 +63,46 @@ func (atu *APITokenUpdate) SetNillableUpdatedByID(s *string) *APITokenUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (atu *APITokenUpdate) ClearUpdatedByID() *APITokenUpdate {
 	atu.mutation.ClearUpdatedByID()
+	return atu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (atu *APITokenUpdate) SetUpdatedByUserID(s string) *APITokenUpdate {
+	atu.mutation.SetUpdatedByUserID(s)
+	return atu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (atu *APITokenUpdate) SetNillableUpdatedByUserID(s *string) *APITokenUpdate {
+	if s != nil {
+		atu.SetUpdatedByUserID(*s)
+	}
+	return atu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (atu *APITokenUpdate) ClearUpdatedByUserID() *APITokenUpdate {
+	atu.mutation.ClearUpdatedByUserID()
+	return atu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (atu *APITokenUpdate) SetUpdatedByServiceID(s string) *APITokenUpdate {
+	atu.mutation.SetUpdatedByServiceID(s)
+	return atu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (atu *APITokenUpdate) SetNillableUpdatedByServiceID(s *string) *APITokenUpdate {
+	if s != nil {
+		atu.SetUpdatedByServiceID(*s)
+	}
+	return atu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (atu *APITokenUpdate) ClearUpdatedByServiceID() *APITokenUpdate {
+	atu.mutation.ClearUpdatedByServiceID()
 	return atu
 }
 
@@ -196,9 +236,14 @@ func (atu *APITokenUpdate) ClearLastUsedAt() *APITokenUpdate {
 	return atu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (atu *APITokenUpdate) SetUpdatedBy(c *ChangeActor) *APITokenUpdate {
-	return atu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (atu *APITokenUpdate) SetUpdatedByUser(u *User) *APITokenUpdate {
+	return atu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (atu *APITokenUpdate) SetUpdatedByService(a *APIToken) *APITokenUpdate {
+	return atu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -211,9 +256,15 @@ func (atu *APITokenUpdate) Mutation() *APITokenMutation {
 	return atu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (atu *APITokenUpdate) ClearUpdatedBy() *APITokenUpdate {
-	atu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (atu *APITokenUpdate) ClearUpdatedByUser() *APITokenUpdate {
+	atu.mutation.ClearUpdatedByUser()
+	return atu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (atu *APITokenUpdate) ClearUpdatedByService() *APITokenUpdate {
+	atu.mutation.ClearUpdatedByService()
 	return atu
 }
 
@@ -307,6 +358,15 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if atu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedAt, field.TypeTime)
 	}
+	if atu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(apitoken.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := atu.mutation.UpdatedByID(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByID, field.TypeString, value)
+	}
+	if atu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(apitoken.FieldUpdatedByID, field.TypeString)
+	}
 	if atu.mutation.DeletedAtCleared() {
 		_spec.ClearField(apitoken.FieldDeletedAt, field.TypeTime)
 	}
@@ -356,29 +416,60 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if atu.mutation.LastUsedAtCleared() {
 		_spec.ClearField(apitoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if atu.mutation.UpdatedByCleared() {
+	if atu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   apitoken.UpdatedByTable,
-			Columns: []string{apitoken.UpdatedByColumn},
+			Table:   apitoken.UpdatedByUserTable,
+			Columns: []string{apitoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atu.schemaConfig.APIToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := atu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := atu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   apitoken.UpdatedByTable,
-			Columns: []string{apitoken.UpdatedByColumn},
+			Table:   apitoken.UpdatedByUserTable,
+			Columns: []string{apitoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = atu.schemaConfig.APIToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if atu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   apitoken.UpdatedByServiceTable,
+			Columns: []string{apitoken.UpdatedByServiceColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = atu.schemaConfig.APIToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := atu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   apitoken.UpdatedByServiceTable,
+			Columns: []string{apitoken.UpdatedByServiceColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atu.schemaConfig.APIToken
@@ -471,6 +562,46 @@ func (atuo *APITokenUpdateOne) SetNillableUpdatedByID(s *string) *APITokenUpdate
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (atuo *APITokenUpdateOne) ClearUpdatedByID() *APITokenUpdateOne {
 	atuo.mutation.ClearUpdatedByID()
+	return atuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (atuo *APITokenUpdateOne) SetUpdatedByUserID(s string) *APITokenUpdateOne {
+	atuo.mutation.SetUpdatedByUserID(s)
+	return atuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (atuo *APITokenUpdateOne) SetNillableUpdatedByUserID(s *string) *APITokenUpdateOne {
+	if s != nil {
+		atuo.SetUpdatedByUserID(*s)
+	}
+	return atuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (atuo *APITokenUpdateOne) ClearUpdatedByUserID() *APITokenUpdateOne {
+	atuo.mutation.ClearUpdatedByUserID()
+	return atuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (atuo *APITokenUpdateOne) SetUpdatedByServiceID(s string) *APITokenUpdateOne {
+	atuo.mutation.SetUpdatedByServiceID(s)
+	return atuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (atuo *APITokenUpdateOne) SetNillableUpdatedByServiceID(s *string) *APITokenUpdateOne {
+	if s != nil {
+		atuo.SetUpdatedByServiceID(*s)
+	}
+	return atuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (atuo *APITokenUpdateOne) ClearUpdatedByServiceID() *APITokenUpdateOne {
+	atuo.mutation.ClearUpdatedByServiceID()
 	return atuo
 }
 
@@ -604,9 +735,14 @@ func (atuo *APITokenUpdateOne) ClearLastUsedAt() *APITokenUpdateOne {
 	return atuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (atuo *APITokenUpdateOne) SetUpdatedBy(c *ChangeActor) *APITokenUpdateOne {
-	return atuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (atuo *APITokenUpdateOne) SetUpdatedByUser(u *User) *APITokenUpdateOne {
+	return atuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (atuo *APITokenUpdateOne) SetUpdatedByService(a *APIToken) *APITokenUpdateOne {
+	return atuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -619,9 +755,15 @@ func (atuo *APITokenUpdateOne) Mutation() *APITokenMutation {
 	return atuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (atuo *APITokenUpdateOne) ClearUpdatedBy() *APITokenUpdateOne {
-	atuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (atuo *APITokenUpdateOne) ClearUpdatedByUser() *APITokenUpdateOne {
+	atuo.mutation.ClearUpdatedByUser()
+	return atuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (atuo *APITokenUpdateOne) ClearUpdatedByService() *APITokenUpdateOne {
+	atuo.mutation.ClearUpdatedByService()
 	return atuo
 }
 
@@ -745,6 +887,15 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 	if atuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedAt, field.TypeTime)
 	}
+	if atuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(apitoken.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := atuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByID, field.TypeString, value)
+	}
+	if atuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(apitoken.FieldUpdatedByID, field.TypeString)
+	}
 	if atuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(apitoken.FieldDeletedAt, field.TypeTime)
 	}
@@ -794,29 +945,60 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 	if atuo.mutation.LastUsedAtCleared() {
 		_spec.ClearField(apitoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if atuo.mutation.UpdatedByCleared() {
+	if atuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   apitoken.UpdatedByTable,
-			Columns: []string{apitoken.UpdatedByColumn},
+			Table:   apitoken.UpdatedByUserTable,
+			Columns: []string{apitoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atuo.schemaConfig.APIToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := atuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := atuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   apitoken.UpdatedByTable,
-			Columns: []string{apitoken.UpdatedByColumn},
+			Table:   apitoken.UpdatedByUserTable,
+			Columns: []string{apitoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = atuo.schemaConfig.APIToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if atuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   apitoken.UpdatedByServiceTable,
+			Columns: []string{apitoken.UpdatedByServiceColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = atuo.schemaConfig.APIToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := atuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   apitoken.UpdatedByServiceTable,
+			Columns: []string{apitoken.UpdatedByServiceColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atuo.schemaConfig.APIToken

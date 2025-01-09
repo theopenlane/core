@@ -125,6 +125,62 @@ func (chc *ControlHistoryCreate) SetNillableUpdatedByID(s *string) *ControlHisto
 	return chc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (chc *ControlHistoryCreate) SetCreatedByUserID(s string) *ControlHistoryCreate {
+	chc.mutation.SetCreatedByUserID(s)
+	return chc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableCreatedByUserID(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetCreatedByUserID(*s)
+	}
+	return chc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (chc *ControlHistoryCreate) SetUpdatedByUserID(s string) *ControlHistoryCreate {
+	chc.mutation.SetUpdatedByUserID(s)
+	return chc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableUpdatedByUserID(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetUpdatedByUserID(*s)
+	}
+	return chc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (chc *ControlHistoryCreate) SetCreatedByServiceID(s string) *ControlHistoryCreate {
+	chc.mutation.SetCreatedByServiceID(s)
+	return chc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableCreatedByServiceID(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetCreatedByServiceID(*s)
+	}
+	return chc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (chc *ControlHistoryCreate) SetUpdatedByServiceID(s string) *ControlHistoryCreate {
+	chc.mutation.SetUpdatedByServiceID(s)
+	return chc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableUpdatedByServiceID(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetUpdatedByServiceID(*s)
+	}
+	return chc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (chc *ControlHistoryCreate) SetDeletedAt(t time.Time) *ControlHistoryCreate {
 	chc.mutation.SetDeletedAt(t)
@@ -513,6 +569,22 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 	if value, ok := chc.mutation.UpdatedByID(); ok {
 		_spec.SetField(controlhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := chc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(controlhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := chc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(controlhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := chc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(controlhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := chc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(controlhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := chc.mutation.DeletedAt(); ok {
 		_spec.SetField(controlhistory.FieldDeletedAt, field.TypeTime, value)

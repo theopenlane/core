@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -74,6 +74,62 @@ func (tsc *TFASettingCreate) SetUpdatedByID(s string) *TFASettingCreate {
 func (tsc *TFASettingCreate) SetNillableUpdatedByID(s *string) *TFASettingCreate {
 	if s != nil {
 		tsc.SetUpdatedByID(*s)
+	}
+	return tsc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (tsc *TFASettingCreate) SetCreatedByUserID(s string) *TFASettingCreate {
+	tsc.mutation.SetCreatedByUserID(s)
+	return tsc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (tsc *TFASettingCreate) SetNillableCreatedByUserID(s *string) *TFASettingCreate {
+	if s != nil {
+		tsc.SetCreatedByUserID(*s)
+	}
+	return tsc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (tsc *TFASettingCreate) SetUpdatedByUserID(s string) *TFASettingCreate {
+	tsc.mutation.SetUpdatedByUserID(s)
+	return tsc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (tsc *TFASettingCreate) SetNillableUpdatedByUserID(s *string) *TFASettingCreate {
+	if s != nil {
+		tsc.SetUpdatedByUserID(*s)
+	}
+	return tsc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (tsc *TFASettingCreate) SetCreatedByServiceID(s string) *TFASettingCreate {
+	tsc.mutation.SetCreatedByServiceID(s)
+	return tsc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (tsc *TFASettingCreate) SetNillableCreatedByServiceID(s *string) *TFASettingCreate {
+	if s != nil {
+		tsc.SetCreatedByServiceID(*s)
+	}
+	return tsc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (tsc *TFASettingCreate) SetUpdatedByServiceID(s string) *TFASettingCreate {
+	tsc.mutation.SetUpdatedByServiceID(s)
+	return tsc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (tsc *TFASettingCreate) SetNillableUpdatedByServiceID(s *string) *TFASettingCreate {
+	if s != nil {
+		tsc.SetUpdatedByServiceID(*s)
 	}
 	return tsc
 }
@@ -230,14 +286,24 @@ func (tsc *TFASettingCreate) SetNillableID(s *string) *TFASettingCreate {
 	return tsc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (tsc *TFASettingCreate) SetCreatedBy(c *ChangeActor) *TFASettingCreate {
-	return tsc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (tsc *TFASettingCreate) SetCreatedByUser(u *User) *TFASettingCreate {
+	return tsc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (tsc *TFASettingCreate) SetUpdatedBy(c *ChangeActor) *TFASettingCreate {
-	return tsc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (tsc *TFASettingCreate) SetUpdatedByUser(u *User) *TFASettingCreate {
+	return tsc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (tsc *TFASettingCreate) SetCreatedByService(a *APIToken) *TFASettingCreate {
+	return tsc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (tsc *TFASettingCreate) SetUpdatedByService(a *APIToken) *TFASettingCreate {
+	return tsc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -385,6 +451,14 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 		_spec.SetField(tfasetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := tsc.mutation.CreatedByID(); ok {
+		_spec.SetField(tfasetting.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := tsc.mutation.UpdatedByID(); ok {
+		_spec.SetField(tfasetting.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := tsc.mutation.MappingID(); ok {
 		_spec.SetField(tfasetting.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -425,40 +499,76 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 		_spec.SetField(tfasetting.FieldTotpAllowed, field.TypeBool, value)
 		_node.TotpAllowed = value
 	}
-	if nodes := tsc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := tsc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   tfasetting.CreatedByTable,
-			Columns: []string{tfasetting.CreatedByColumn},
+			Table:   tfasetting.CreatedByUserTable,
+			Columns: []string{tfasetting.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsc.schemaConfig.TFASetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tsc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := tsc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   tfasetting.UpdatedByTable,
-			Columns: []string{tfasetting.UpdatedByColumn},
+			Table:   tfasetting.UpdatedByUserTable,
+			Columns: []string{tfasetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsc.schemaConfig.TFASetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tsc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.CreatedByServiceTable,
+			Columns: []string{tfasetting.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsc.schemaConfig.TFASetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tsc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByServiceTable,
+			Columns: []string{tfasetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsc.schemaConfig.TFASetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tsc.mutation.OwnerIDs(); len(nodes) > 0 {

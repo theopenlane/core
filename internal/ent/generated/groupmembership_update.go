@@ -11,10 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -66,6 +67,46 @@ func (gmu *GroupMembershipUpdate) ClearUpdatedByID() *GroupMembershipUpdate {
 	return gmu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gmu *GroupMembershipUpdate) SetUpdatedByUserID(s string) *GroupMembershipUpdate {
+	gmu.mutation.SetUpdatedByUserID(s)
+	return gmu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gmu *GroupMembershipUpdate) SetNillableUpdatedByUserID(s *string) *GroupMembershipUpdate {
+	if s != nil {
+		gmu.SetUpdatedByUserID(*s)
+	}
+	return gmu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (gmu *GroupMembershipUpdate) ClearUpdatedByUserID() *GroupMembershipUpdate {
+	gmu.mutation.ClearUpdatedByUserID()
+	return gmu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gmu *GroupMembershipUpdate) SetUpdatedByServiceID(s string) *GroupMembershipUpdate {
+	gmu.mutation.SetUpdatedByServiceID(s)
+	return gmu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gmu *GroupMembershipUpdate) SetNillableUpdatedByServiceID(s *string) *GroupMembershipUpdate {
+	if s != nil {
+		gmu.SetUpdatedByServiceID(*s)
+	}
+	return gmu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (gmu *GroupMembershipUpdate) ClearUpdatedByServiceID() *GroupMembershipUpdate {
+	gmu.mutation.ClearUpdatedByServiceID()
+	return gmu
+}
+
 // SetRole sets the "role" field.
 func (gmu *GroupMembershipUpdate) SetRole(e enums.Role) *GroupMembershipUpdate {
 	gmu.mutation.SetRole(e)
@@ -80,9 +121,14 @@ func (gmu *GroupMembershipUpdate) SetNillableRole(e *enums.Role) *GroupMembershi
 	return gmu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (gmu *GroupMembershipUpdate) SetUpdatedBy(c *ChangeActor) *GroupMembershipUpdate {
-	return gmu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (gmu *GroupMembershipUpdate) SetUpdatedByUser(u *User) *GroupMembershipUpdate {
+	return gmu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (gmu *GroupMembershipUpdate) SetUpdatedByService(a *APIToken) *GroupMembershipUpdate {
+	return gmu.SetUpdatedByServiceID(a.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -105,9 +151,15 @@ func (gmu *GroupMembershipUpdate) Mutation() *GroupMembershipMutation {
 	return gmu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (gmu *GroupMembershipUpdate) ClearUpdatedBy() *GroupMembershipUpdate {
-	gmu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (gmu *GroupMembershipUpdate) ClearUpdatedByUser() *GroupMembershipUpdate {
+	gmu.mutation.ClearUpdatedByUser()
+	return gmu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (gmu *GroupMembershipUpdate) ClearUpdatedByService() *GroupMembershipUpdate {
+	gmu.mutation.ClearUpdatedByService()
 	return gmu
 }
 
@@ -217,6 +269,15 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 	if gmu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembership.FieldUpdatedAt, field.TypeTime)
 	}
+	if gmu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := gmu.mutation.UpdatedByID(); ok {
+		_spec.SetField(groupmembership.FieldUpdatedByID, field.TypeString, value)
+	}
+	if gmu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldUpdatedByID, field.TypeString)
+	}
 	if gmu.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupmembership.FieldDeletedAt, field.TypeTime)
 	}
@@ -226,29 +287,60 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 	if value, ok := gmu.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)
 	}
-	if gmu.mutation.UpdatedByCleared() {
+	if gmu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   groupmembership.UpdatedByTable,
-			Columns: []string{groupmembership.UpdatedByColumn},
+			Table:   groupmembership.UpdatedByUserTable,
+			Columns: []string{groupmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmu.schemaConfig.GroupMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := gmu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := gmu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   groupmembership.UpdatedByTable,
-			Columns: []string{groupmembership.UpdatedByColumn},
+			Table:   groupmembership.UpdatedByUserTable,
+			Columns: []string{groupmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmu.schemaConfig.GroupMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gmu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByServiceTable,
+			Columns: []string{groupmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmu.schemaConfig.GroupMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gmu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByServiceTable,
+			Columns: []string{groupmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmu.schemaConfig.GroupMembership
@@ -361,6 +453,46 @@ func (gmuo *GroupMembershipUpdateOne) ClearUpdatedByID() *GroupMembershipUpdateO
 	return gmuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gmuo *GroupMembershipUpdateOne) SetUpdatedByUserID(s string) *GroupMembershipUpdateOne {
+	gmuo.mutation.SetUpdatedByUserID(s)
+	return gmuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gmuo *GroupMembershipUpdateOne) SetNillableUpdatedByUserID(s *string) *GroupMembershipUpdateOne {
+	if s != nil {
+		gmuo.SetUpdatedByUserID(*s)
+	}
+	return gmuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (gmuo *GroupMembershipUpdateOne) ClearUpdatedByUserID() *GroupMembershipUpdateOne {
+	gmuo.mutation.ClearUpdatedByUserID()
+	return gmuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gmuo *GroupMembershipUpdateOne) SetUpdatedByServiceID(s string) *GroupMembershipUpdateOne {
+	gmuo.mutation.SetUpdatedByServiceID(s)
+	return gmuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gmuo *GroupMembershipUpdateOne) SetNillableUpdatedByServiceID(s *string) *GroupMembershipUpdateOne {
+	if s != nil {
+		gmuo.SetUpdatedByServiceID(*s)
+	}
+	return gmuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (gmuo *GroupMembershipUpdateOne) ClearUpdatedByServiceID() *GroupMembershipUpdateOne {
+	gmuo.mutation.ClearUpdatedByServiceID()
+	return gmuo
+}
+
 // SetRole sets the "role" field.
 func (gmuo *GroupMembershipUpdateOne) SetRole(e enums.Role) *GroupMembershipUpdateOne {
 	gmuo.mutation.SetRole(e)
@@ -375,9 +507,14 @@ func (gmuo *GroupMembershipUpdateOne) SetNillableRole(e *enums.Role) *GroupMembe
 	return gmuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (gmuo *GroupMembershipUpdateOne) SetUpdatedBy(c *ChangeActor) *GroupMembershipUpdateOne {
-	return gmuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (gmuo *GroupMembershipUpdateOne) SetUpdatedByUser(u *User) *GroupMembershipUpdateOne {
+	return gmuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (gmuo *GroupMembershipUpdateOne) SetUpdatedByService(a *APIToken) *GroupMembershipUpdateOne {
+	return gmuo.SetUpdatedByServiceID(a.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -400,9 +537,15 @@ func (gmuo *GroupMembershipUpdateOne) Mutation() *GroupMembershipMutation {
 	return gmuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (gmuo *GroupMembershipUpdateOne) ClearUpdatedBy() *GroupMembershipUpdateOne {
-	gmuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (gmuo *GroupMembershipUpdateOne) ClearUpdatedByUser() *GroupMembershipUpdateOne {
+	gmuo.mutation.ClearUpdatedByUser()
+	return gmuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (gmuo *GroupMembershipUpdateOne) ClearUpdatedByService() *GroupMembershipUpdateOne {
+	gmuo.mutation.ClearUpdatedByService()
 	return gmuo
 }
 
@@ -542,6 +685,15 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 	if gmuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembership.FieldUpdatedAt, field.TypeTime)
 	}
+	if gmuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := gmuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(groupmembership.FieldUpdatedByID, field.TypeString, value)
+	}
+	if gmuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldUpdatedByID, field.TypeString)
+	}
 	if gmuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupmembership.FieldDeletedAt, field.TypeTime)
 	}
@@ -551,29 +703,60 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 	if value, ok := gmuo.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)
 	}
-	if gmuo.mutation.UpdatedByCleared() {
+	if gmuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   groupmembership.UpdatedByTable,
-			Columns: []string{groupmembership.UpdatedByColumn},
+			Table:   groupmembership.UpdatedByUserTable,
+			Columns: []string{groupmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmuo.schemaConfig.GroupMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := gmuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := gmuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   groupmembership.UpdatedByTable,
-			Columns: []string{groupmembership.UpdatedByColumn},
+			Table:   groupmembership.UpdatedByUserTable,
+			Columns: []string{groupmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmuo.schemaConfig.GroupMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gmuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByServiceTable,
+			Columns: []string{groupmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gmuo.schemaConfig.GroupMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gmuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   groupmembership.UpdatedByServiceTable,
+			Columns: []string{groupmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gmuo.schemaConfig.GroupMembership

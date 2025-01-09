@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -79,6 +79,62 @@ func (sc *SubcontrolCreate) SetUpdatedByID(s string) *SubcontrolCreate {
 func (sc *SubcontrolCreate) SetNillableUpdatedByID(s *string) *SubcontrolCreate {
 	if s != nil {
 		sc.SetUpdatedByID(*s)
+	}
+	return sc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (sc *SubcontrolCreate) SetCreatedByUserID(s string) *SubcontrolCreate {
+	sc.mutation.SetCreatedByUserID(s)
+	return sc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableCreatedByUserID(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetCreatedByUserID(*s)
+	}
+	return sc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (sc *SubcontrolCreate) SetUpdatedByUserID(s string) *SubcontrolCreate {
+	sc.mutation.SetUpdatedByUserID(s)
+	return sc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableUpdatedByUserID(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetUpdatedByUserID(*s)
+	}
+	return sc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (sc *SubcontrolCreate) SetCreatedByServiceID(s string) *SubcontrolCreate {
+	sc.mutation.SetCreatedByServiceID(s)
+	return sc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableCreatedByServiceID(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetCreatedByServiceID(*s)
+	}
+	return sc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (sc *SubcontrolCreate) SetUpdatedByServiceID(s string) *SubcontrolCreate {
+	sc.mutation.SetUpdatedByServiceID(s)
+	return sc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableUpdatedByServiceID(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetUpdatedByServiceID(*s)
 	}
 	return sc
 }
@@ -359,14 +415,24 @@ func (sc *SubcontrolCreate) SetNillableID(s *string) *SubcontrolCreate {
 	return sc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (sc *SubcontrolCreate) SetCreatedBy(c *ChangeActor) *SubcontrolCreate {
-	return sc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (sc *SubcontrolCreate) SetCreatedByUser(u *User) *SubcontrolCreate {
+	return sc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (sc *SubcontrolCreate) SetUpdatedBy(c *ChangeActor) *SubcontrolCreate {
-	return sc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (sc *SubcontrolCreate) SetUpdatedByUser(u *User) *SubcontrolCreate {
+	return sc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (sc *SubcontrolCreate) SetCreatedByService(a *APIToken) *SubcontrolCreate {
+	return sc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (sc *SubcontrolCreate) SetUpdatedByService(a *APIToken) *SubcontrolCreate {
+	return sc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -596,6 +662,14 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := sc.mutation.CreatedByID(); ok {
+		_spec.SetField(subcontrol.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := sc.mutation.UpdatedByID(); ok {
+		_spec.SetField(subcontrol.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := sc.mutation.DeletedAt(); ok {
 		_spec.SetField(subcontrol.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -676,40 +750,76 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
-	if nodes := sc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   subcontrol.CreatedByTable,
-			Columns: []string{subcontrol.CreatedByColumn},
+			Table:   subcontrol.CreatedByUserTable,
+			Columns: []string{subcontrol.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   subcontrol.UpdatedByTable,
-			Columns: []string{subcontrol.UpdatedByColumn},
+			Table:   subcontrol.UpdatedByUserTable,
+			Columns: []string{subcontrol.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sc.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.CreatedByServiceTable,
+			Columns: []string{subcontrol.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.UpdatedByServiceTable,
+			Columns: []string{subcontrol.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {

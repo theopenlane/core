@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Control_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Control_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Control_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Control_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Control_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Control_deletedAt(ctx, field)
 			case "deletedByID":
@@ -107,10 +115,14 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_Control_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Control_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Control_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Control_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Control_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -193,6 +205,14 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Control_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Control_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Control_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Control_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Control_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Control_deletedAt(ctx, field)
 			case "deletedByID":
@@ -225,10 +245,14 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_Control_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Control_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Control_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Control_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Control_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":
@@ -355,6 +379,14 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Control_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Control_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Control_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Control_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Control_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Control_deletedAt(ctx, field)
 			case "deletedByID":
@@ -387,10 +419,14 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_mappedFrameworks(ctx, field)
 			case "details":
 				return ec.fieldContext_Control_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Control_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Control_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Control_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Control_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Control_owner(ctx, field)
 			case "blockedGroups":

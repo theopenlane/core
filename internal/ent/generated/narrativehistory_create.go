@@ -125,6 +125,62 @@ func (nhc *NarrativeHistoryCreate) SetNillableUpdatedByID(s *string) *NarrativeH
 	return nhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (nhc *NarrativeHistoryCreate) SetCreatedByUserID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetCreatedByUserID(s)
+	return nhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableCreatedByUserID(s *string) *NarrativeHistoryCreate {
+	if s != nil {
+		nhc.SetCreatedByUserID(*s)
+	}
+	return nhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nhc *NarrativeHistoryCreate) SetUpdatedByUserID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetUpdatedByUserID(s)
+	return nhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableUpdatedByUserID(s *string) *NarrativeHistoryCreate {
+	if s != nil {
+		nhc.SetUpdatedByUserID(*s)
+	}
+	return nhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (nhc *NarrativeHistoryCreate) SetCreatedByServiceID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetCreatedByServiceID(s)
+	return nhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableCreatedByServiceID(s *string) *NarrativeHistoryCreate {
+	if s != nil {
+		nhc.SetCreatedByServiceID(*s)
+	}
+	return nhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nhc *NarrativeHistoryCreate) SetUpdatedByServiceID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetUpdatedByServiceID(s)
+	return nhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableUpdatedByServiceID(s *string) *NarrativeHistoryCreate {
+	if s != nil {
+		nhc.SetUpdatedByServiceID(*s)
+	}
+	return nhc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (nhc *NarrativeHistoryCreate) SetDeletedAt(t time.Time) *NarrativeHistoryCreate {
 	nhc.mutation.SetDeletedAt(t)
@@ -401,6 +457,22 @@ func (nhc *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cr
 	if value, ok := nhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(narrativehistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := nhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(narrativehistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := nhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := nhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(narrativehistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := nhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := nhc.mutation.DeletedAt(); ok {
 		_spec.SetField(narrativehistory.FieldDeletedAt, field.TypeTime, value)

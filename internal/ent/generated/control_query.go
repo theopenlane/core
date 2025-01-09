@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -38,8 +39,10 @@ type ControlQuery struct {
 	order                      []control.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.Control
-	withCreatedBy              *ChangeActorQuery
-	withUpdatedBy              *ChangeActorQuery
+	withCreatedByUser          *UserQuery
+	withUpdatedByUser          *UserQuery
+	withCreatedByService       *APITokenQuery
+	withUpdatedByService       *APITokenQuery
 	withOwner                  *OrganizationQuery
 	withBlockedGroups          *GroupQuery
 	withEditors                *GroupQuery
@@ -104,9 +107,9 @@ func (cq *ControlQuery) Order(o ...control.OrderOption) *ControlQuery {
 	return cq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (cq *ControlQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: cq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (cq *ControlQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: cq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := cq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -117,11 +120,11 @@ func (cq *ControlQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, control.CreatedByTable, control.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.CreatedByUserTable, control.CreatedByUserColumn),
 		)
 		schemaConfig := cq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -129,9 +132,9 @@ func (cq *ControlQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (cq *ControlQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: cq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (cq *ControlQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: cq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := cq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -142,11 +145,61 @@ func (cq *ControlQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, control.UpdatedByTable, control.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.UpdatedByUserTable, control.UpdatedByUserColumn),
 		)
 		schemaConfig := cq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Control
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (cq *ControlQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.CreatedByServiceTable, control.CreatedByServiceColumn),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Control
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (cq *ControlQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.UpdatedByServiceTable, control.UpdatedByServiceColumn),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -671,8 +724,10 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		order:                 append([]control.OrderOption{}, cq.order...),
 		inters:                append([]Interceptor{}, cq.inters...),
 		predicates:            append([]predicate.Control{}, cq.predicates...),
-		withCreatedBy:         cq.withCreatedBy.Clone(),
-		withUpdatedBy:         cq.withUpdatedBy.Clone(),
+		withCreatedByUser:     cq.withCreatedByUser.Clone(),
+		withUpdatedByUser:     cq.withUpdatedByUser.Clone(),
+		withCreatedByService:  cq.withCreatedByService.Clone(),
+		withUpdatedByService:  cq.withUpdatedByService.Clone(),
 		withOwner:             cq.withOwner.Clone(),
 		withBlockedGroups:     cq.withBlockedGroups.Clone(),
 		withEditors:           cq.withEditors.Clone(),
@@ -693,25 +748,47 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ControlQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ControlQuery {
-	query := (&ChangeActorClient{config: cq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithCreatedByUser(opts ...func(*UserQuery)) *ControlQuery {
+	query := (&UserClient{config: cq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withCreatedBy = query
+	cq.withCreatedByUser = query
 	return cq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ControlQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ControlQuery {
-	query := (&ChangeActorClient{config: cq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *ControlQuery {
+	query := (&UserClient{config: cq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withUpdatedBy = query
+	cq.withUpdatedByUser = query
+	return cq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *ControlQuery {
+	query := (&APITokenClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withCreatedByService = query
+	return cq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *ControlQuery {
+	query := (&APITokenClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withUpdatedByService = query
 	return cq
 }
 
@@ -943,9 +1020,11 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [15]bool{
-			cq.withCreatedBy != nil,
-			cq.withUpdatedBy != nil,
+		loadedTypes = [17]bool{
+			cq.withCreatedByUser != nil,
+			cq.withUpdatedByUser != nil,
+			cq.withCreatedByService != nil,
+			cq.withUpdatedByService != nil,
 			cq.withOwner != nil,
 			cq.withBlockedGroups != nil,
 			cq.withEditors != nil,
@@ -987,15 +1066,27 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := cq.withCreatedBy; query != nil {
-		if err := cq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Control, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := cq.withCreatedByUser; query != nil {
+		if err := cq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Control, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := cq.withUpdatedBy; query != nil {
-		if err := cq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Control, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := cq.withUpdatedByUser; query != nil {
+		if err := cq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Control, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withCreatedByService; query != nil {
+		if err := cq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Control, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withUpdatedByService; query != nil {
+		if err := cq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Control, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1183,11 +1274,11 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	return nodes, nil
 }
 
-func (cq *ControlQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Control, init func(*Control), assign func(*Control, *ChangeActor)) error {
+func (cq *ControlQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Control, init func(*Control), assign func(*Control, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Control)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1196,7 +1287,7 @@ func (cq *ControlQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQue
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1204,7 +1295,7 @@ func (cq *ControlQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQue
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1212,11 +1303,11 @@ func (cq *ControlQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQue
 	}
 	return nil
 }
-func (cq *ControlQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Control, init func(*Control), assign func(*Control, *ChangeActor)) error {
+func (cq *ControlQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Control, init func(*Control), assign func(*Control, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Control)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1225,7 +1316,7 @@ func (cq *ControlQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQue
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1233,7 +1324,65 @@ func (cq *ControlQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQue
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (cq *ControlQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Control, init func(*Control), assign func(*Control, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Control)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (cq *ControlQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Control, init func(*Control), assign func(*Control, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Control)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2014,11 +2163,17 @@ func (cq *ControlQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if cq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(control.FieldCreatedByID)
+		if cq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(control.FieldCreatedByUserID)
 		}
-		if cq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(control.FieldUpdatedByID)
+		if cq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(control.FieldUpdatedByUserID)
+		}
+		if cq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(control.FieldCreatedByServiceID)
+		}
+		if cq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(control.FieldUpdatedByServiceID)
 		}
 		if cq.withOwner != nil {
 			_spec.Node.AddColumnOnce(control.FieldOwnerID)

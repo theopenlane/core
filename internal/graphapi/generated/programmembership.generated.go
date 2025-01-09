@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_prog
 				return ec.fieldContext_ProgramMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_ProgramMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_ProgramMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_ProgramMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_ProgramMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_ProgramMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -85,10 +93,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_prog
 				return ec.fieldContext_ProgramMembership_programID(ctx, field)
 			case "userID":
 				return ec.fieldContext_ProgramMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_ProgramMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_ProgramMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_ProgramMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_ProgramMembership_updatedByService(ctx, field)
 			case "program":
 				return ec.fieldContext_ProgramMembership_program(ctx, field)
 			case "user":
@@ -149,6 +161,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programM
 				return ec.fieldContext_ProgramMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_ProgramMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_ProgramMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_ProgramMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_ProgramMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_ProgramMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -159,10 +179,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programM
 				return ec.fieldContext_ProgramMembership_programID(ctx, field)
 			case "userID":
 				return ec.fieldContext_ProgramMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_ProgramMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_ProgramMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_ProgramMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_ProgramMembership_updatedByService(ctx, field)
 			case "program":
 				return ec.fieldContext_ProgramMembership_program(ctx, field)
 			case "user":
@@ -267,6 +291,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipUpdatePayload_programM
 				return ec.fieldContext_ProgramMembership_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_ProgramMembership_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_ProgramMembership_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_ProgramMembership_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_ProgramMembership_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_ProgramMembership_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
 			case "deletedByID":
@@ -277,10 +309,14 @@ func (ec *executionContext) fieldContext_ProgramMembershipUpdatePayload_programM
 				return ec.fieldContext_ProgramMembership_programID(ctx, field)
 			case "userID":
 				return ec.fieldContext_ProgramMembership_userID(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_ProgramMembership_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_ProgramMembership_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_ProgramMembership_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_ProgramMembership_updatedByService(ctx, field)
 			case "program":
 				return ec.fieldContext_ProgramMembership_program(ctx, field)
 			case "user":

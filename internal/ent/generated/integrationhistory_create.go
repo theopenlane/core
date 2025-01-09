@@ -125,6 +125,62 @@ func (ihc *IntegrationHistoryCreate) SetNillableUpdatedByID(s *string) *Integrat
 	return ihc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ihc *IntegrationHistoryCreate) SetCreatedByUserID(s string) *IntegrationHistoryCreate {
+	ihc.mutation.SetCreatedByUserID(s)
+	return ihc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ihc *IntegrationHistoryCreate) SetNillableCreatedByUserID(s *string) *IntegrationHistoryCreate {
+	if s != nil {
+		ihc.SetCreatedByUserID(*s)
+	}
+	return ihc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ihc *IntegrationHistoryCreate) SetUpdatedByUserID(s string) *IntegrationHistoryCreate {
+	ihc.mutation.SetUpdatedByUserID(s)
+	return ihc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ihc *IntegrationHistoryCreate) SetNillableUpdatedByUserID(s *string) *IntegrationHistoryCreate {
+	if s != nil {
+		ihc.SetUpdatedByUserID(*s)
+	}
+	return ihc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ihc *IntegrationHistoryCreate) SetCreatedByServiceID(s string) *IntegrationHistoryCreate {
+	ihc.mutation.SetCreatedByServiceID(s)
+	return ihc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ihc *IntegrationHistoryCreate) SetNillableCreatedByServiceID(s *string) *IntegrationHistoryCreate {
+	if s != nil {
+		ihc.SetCreatedByServiceID(*s)
+	}
+	return ihc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ihc *IntegrationHistoryCreate) SetUpdatedByServiceID(s string) *IntegrationHistoryCreate {
+	ihc.mutation.SetUpdatedByServiceID(s)
+	return ihc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ihc *IntegrationHistoryCreate) SetNillableUpdatedByServiceID(s *string) *IntegrationHistoryCreate {
+	if s != nil {
+		ihc.SetUpdatedByServiceID(*s)
+	}
+	return ihc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (ihc *IntegrationHistoryCreate) SetMappingID(s string) *IntegrationHistoryCreate {
 	ihc.mutation.SetMappingID(s)
@@ -400,6 +456,22 @@ func (ihc *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgrap
 	if value, ok := ihc.mutation.UpdatedByID(); ok {
 		_spec.SetField(integrationhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := ihc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(integrationhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := ihc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := ihc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(integrationhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := ihc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := ihc.mutation.MappingID(); ok {
 		_spec.SetField(integrationhistory.FieldMappingID, field.TypeString, value)

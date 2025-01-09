@@ -6,8 +6,6 @@ mutation CreateBulkCSVRisk($input: Upload!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -34,8 +32,6 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -62,8 +58,6 @@ mutation CreateRisk($input: CreateRiskInput!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -126,8 +120,6 @@ query GetAllRisks {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
         programs {
           id
@@ -209,8 +201,6 @@ query GetRisks($where: RiskWhereInput) {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
         programs {
           id
@@ -241,8 +231,6 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details

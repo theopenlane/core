@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // ProcedureCreate is the builder for creating a Procedure entity.
@@ -81,6 +82,62 @@ func (pc *ProcedureCreate) SetUpdatedByID(s string) *ProcedureCreate {
 func (pc *ProcedureCreate) SetNillableUpdatedByID(s *string) *ProcedureCreate {
 	if s != nil {
 		pc.SetUpdatedByID(*s)
+	}
+	return pc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (pc *ProcedureCreate) SetCreatedByUserID(s string) *ProcedureCreate {
+	pc.mutation.SetCreatedByUserID(s)
+	return pc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableCreatedByUserID(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetCreatedByUserID(*s)
+	}
+	return pc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pc *ProcedureCreate) SetUpdatedByUserID(s string) *ProcedureCreate {
+	pc.mutation.SetUpdatedByUserID(s)
+	return pc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableUpdatedByUserID(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetUpdatedByUserID(*s)
+	}
+	return pc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (pc *ProcedureCreate) SetCreatedByServiceID(s string) *ProcedureCreate {
+	pc.mutation.SetCreatedByServiceID(s)
+	return pc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableCreatedByServiceID(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetCreatedByServiceID(*s)
+	}
+	return pc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pc *ProcedureCreate) SetUpdatedByServiceID(s string) *ProcedureCreate {
+	pc.mutation.SetUpdatedByServiceID(s)
+	return pc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableUpdatedByServiceID(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetUpdatedByServiceID(*s)
 	}
 	return pc
 }
@@ -271,14 +328,24 @@ func (pc *ProcedureCreate) SetNillableID(s *string) *ProcedureCreate {
 	return pc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (pc *ProcedureCreate) SetCreatedBy(c *ChangeActor) *ProcedureCreate {
-	return pc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (pc *ProcedureCreate) SetCreatedByUser(u *User) *ProcedureCreate {
+	return pc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (pc *ProcedureCreate) SetUpdatedBy(c *ChangeActor) *ProcedureCreate {
-	return pc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (pc *ProcedureCreate) SetUpdatedByUser(u *User) *ProcedureCreate {
+	return pc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (pc *ProcedureCreate) SetCreatedByService(a *APIToken) *ProcedureCreate {
+	return pc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (pc *ProcedureCreate) SetUpdatedByService(a *APIToken) *ProcedureCreate {
+	return pc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -540,6 +607,14 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := pc.mutation.CreatedByID(); ok {
+		_spec.SetField(procedure.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := pc.mutation.UpdatedByID(); ok {
+		_spec.SetField(procedure.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := pc.mutation.DeletedAt(); ok {
 		_spec.SetField(procedure.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -592,40 +667,76 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
-	if nodes := pc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   procedure.CreatedByTable,
-			Columns: []string{procedure.CreatedByColumn},
+			Table:   procedure.CreatedByUserTable,
+			Columns: []string{procedure.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pc.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   procedure.UpdatedByTable,
-			Columns: []string{procedure.UpdatedByColumn},
+			Table:   procedure.UpdatedByUserTable,
+			Columns: []string{procedure.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pc.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.CreatedByServiceTable,
+			Columns: []string{procedure.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.UpdatedByServiceTable,
+			Columns: []string{procedure.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {

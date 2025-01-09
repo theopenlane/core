@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -83,6 +83,62 @@ func (tc *TaskCreate) SetUpdatedByID(s string) *TaskCreate {
 func (tc *TaskCreate) SetNillableUpdatedByID(s *string) *TaskCreate {
 	if s != nil {
 		tc.SetUpdatedByID(*s)
+	}
+	return tc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (tc *TaskCreate) SetCreatedByUserID(s string) *TaskCreate {
+	tc.mutation.SetCreatedByUserID(s)
+	return tc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableCreatedByUserID(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetCreatedByUserID(*s)
+	}
+	return tc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (tc *TaskCreate) SetUpdatedByUserID(s string) *TaskCreate {
+	tc.mutation.SetUpdatedByUserID(s)
+	return tc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableUpdatedByUserID(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetUpdatedByUserID(*s)
+	}
+	return tc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (tc *TaskCreate) SetCreatedByServiceID(s string) *TaskCreate {
+	tc.mutation.SetCreatedByServiceID(s)
+	return tc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableCreatedByServiceID(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetCreatedByServiceID(*s)
+	}
+	return tc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (tc *TaskCreate) SetUpdatedByServiceID(s string) *TaskCreate {
+	tc.mutation.SetUpdatedByServiceID(s)
+	return tc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableUpdatedByServiceID(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetUpdatedByServiceID(*s)
 	}
 	return tc
 }
@@ -217,14 +273,24 @@ func (tc *TaskCreate) SetNillableID(s *string) *TaskCreate {
 	return tc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (tc *TaskCreate) SetCreatedBy(c *ChangeActor) *TaskCreate {
-	return tc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (tc *TaskCreate) SetCreatedByUser(u *User) *TaskCreate {
+	return tc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (tc *TaskCreate) SetUpdatedBy(c *ChangeActor) *TaskCreate {
-	return tc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (tc *TaskCreate) SetUpdatedByUser(u *User) *TaskCreate {
+	return tc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (tc *TaskCreate) SetCreatedByService(a *APIToken) *TaskCreate {
+	return tc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (tc *TaskCreate) SetUpdatedByService(a *APIToken) *TaskCreate {
+	return tc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetAssignerID sets the "assigner" edge to the User entity by ID.
@@ -521,6 +587,14 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := tc.mutation.CreatedByID(); ok {
+		_spec.SetField(task.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := tc.mutation.UpdatedByID(); ok {
+		_spec.SetField(task.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := tc.mutation.MappingID(); ok {
 		_spec.SetField(task.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -561,40 +635,76 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldCompleted, field.TypeTime, value)
 		_node.Completed = value
 	}
-	if nodes := tc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   task.CreatedByTable,
-			Columns: []string{task.CreatedByColumn},
+			Table:   task.CreatedByUserTable,
+			Columns: []string{task.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tc.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   task.UpdatedByTable,
-			Columns: []string{task.UpdatedByColumn},
+			Table:   task.UpdatedByUserTable,
+			Columns: []string{task.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tc.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.CreatedByServiceTable,
+			Columns: []string{task.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   task.UpdatedByServiceTable,
+			Columns: []string{task.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tc.mutation.AssignerIDs(); len(nodes) > 0 {

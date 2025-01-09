@@ -126,6 +126,62 @@ func (gshc *GroupSettingHistoryCreate) SetNillableUpdatedByID(s *string) *GroupS
 	return gshc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (gshc *GroupSettingHistoryCreate) SetCreatedByUserID(s string) *GroupSettingHistoryCreate {
+	gshc.mutation.SetCreatedByUserID(s)
+	return gshc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (gshc *GroupSettingHistoryCreate) SetNillableCreatedByUserID(s *string) *GroupSettingHistoryCreate {
+	if s != nil {
+		gshc.SetCreatedByUserID(*s)
+	}
+	return gshc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gshc *GroupSettingHistoryCreate) SetUpdatedByUserID(s string) *GroupSettingHistoryCreate {
+	gshc.mutation.SetUpdatedByUserID(s)
+	return gshc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gshc *GroupSettingHistoryCreate) SetNillableUpdatedByUserID(s *string) *GroupSettingHistoryCreate {
+	if s != nil {
+		gshc.SetUpdatedByUserID(*s)
+	}
+	return gshc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (gshc *GroupSettingHistoryCreate) SetCreatedByServiceID(s string) *GroupSettingHistoryCreate {
+	gshc.mutation.SetCreatedByServiceID(s)
+	return gshc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (gshc *GroupSettingHistoryCreate) SetNillableCreatedByServiceID(s *string) *GroupSettingHistoryCreate {
+	if s != nil {
+		gshc.SetCreatedByServiceID(*s)
+	}
+	return gshc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gshc *GroupSettingHistoryCreate) SetUpdatedByServiceID(s string) *GroupSettingHistoryCreate {
+	gshc.mutation.SetUpdatedByServiceID(s)
+	return gshc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gshc *GroupSettingHistoryCreate) SetNillableUpdatedByServiceID(s *string) *GroupSettingHistoryCreate {
+	if s != nil {
+		gshc.SetUpdatedByServiceID(*s)
+	}
+	return gshc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (gshc *GroupSettingHistoryCreate) SetMappingID(s string) *GroupSettingHistoryCreate {
 	gshc.mutation.SetMappingID(s)
@@ -452,6 +508,22 @@ func (gshc *GroupSettingHistoryCreate) createSpec() (*GroupSettingHistory, *sqlg
 	if value, ok := gshc.mutation.UpdatedByID(); ok {
 		_spec.SetField(groupsettinghistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := gshc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(groupsettinghistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := gshc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(groupsettinghistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := gshc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(groupsettinghistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := gshc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(groupsettinghistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := gshc.mutation.MappingID(); ok {
 		_spec.SetField(groupsettinghistory.FieldMappingID, field.TypeString, value)

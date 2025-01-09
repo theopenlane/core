@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // APITokenCreate is the builder for creating a APIToken entity.
@@ -74,6 +74,62 @@ func (atc *APITokenCreate) SetUpdatedByID(s string) *APITokenCreate {
 func (atc *APITokenCreate) SetNillableUpdatedByID(s *string) *APITokenCreate {
 	if s != nil {
 		atc.SetUpdatedByID(*s)
+	}
+	return atc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (atc *APITokenCreate) SetCreatedByUserID(s string) *APITokenCreate {
+	atc.mutation.SetCreatedByUserID(s)
+	return atc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableCreatedByUserID(s *string) *APITokenCreate {
+	if s != nil {
+		atc.SetCreatedByUserID(*s)
+	}
+	return atc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (atc *APITokenCreate) SetUpdatedByUserID(s string) *APITokenCreate {
+	atc.mutation.SetUpdatedByUserID(s)
+	return atc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableUpdatedByUserID(s *string) *APITokenCreate {
+	if s != nil {
+		atc.SetUpdatedByUserID(*s)
+	}
+	return atc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (atc *APITokenCreate) SetCreatedByServiceID(s string) *APITokenCreate {
+	atc.mutation.SetCreatedByServiceID(s)
+	return atc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableCreatedByServiceID(s *string) *APITokenCreate {
+	if s != nil {
+		atc.SetCreatedByServiceID(*s)
+	}
+	return atc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (atc *APITokenCreate) SetUpdatedByServiceID(s string) *APITokenCreate {
+	atc.mutation.SetUpdatedByServiceID(s)
+	return atc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (atc *APITokenCreate) SetNillableUpdatedByServiceID(s *string) *APITokenCreate {
+	if s != nil {
+		atc.SetUpdatedByServiceID(*s)
 	}
 	return atc
 }
@@ -222,14 +278,24 @@ func (atc *APITokenCreate) SetNillableID(s *string) *APITokenCreate {
 	return atc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (atc *APITokenCreate) SetCreatedBy(c *ChangeActor) *APITokenCreate {
-	return atc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (atc *APITokenCreate) SetCreatedByUser(u *User) *APITokenCreate {
+	return atc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (atc *APITokenCreate) SetUpdatedBy(c *ChangeActor) *APITokenCreate {
-	return atc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (atc *APITokenCreate) SetUpdatedByUser(u *User) *APITokenCreate {
+	return atc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (atc *APITokenCreate) SetCreatedByService(a *APIToken) *APITokenCreate {
+	return atc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (atc *APITokenCreate) SetUpdatedByService(a *APIToken) *APITokenCreate {
+	return atc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -381,6 +447,14 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 		_spec.SetField(apitoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := atc.mutation.CreatedByID(); ok {
+		_spec.SetField(apitoken.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := atc.mutation.UpdatedByID(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := atc.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -421,40 +495,76 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 		_spec.SetField(apitoken.FieldLastUsedAt, field.TypeTime, value)
 		_node.LastUsedAt = &value
 	}
-	if nodes := atc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := atc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   apitoken.CreatedByTable,
-			Columns: []string{apitoken.CreatedByColumn},
+			Table:   apitoken.CreatedByUserTable,
+			Columns: []string{apitoken.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atc.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := atc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := atc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   apitoken.UpdatedByTable,
-			Columns: []string{apitoken.UpdatedByColumn},
+			Table:   apitoken.UpdatedByUserTable,
+			Columns: []string{apitoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = atc.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := atc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   apitoken.CreatedByServiceTable,
+			Columns: []string{apitoken.CreatedByServiceColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = atc.schemaConfig.APIToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := atc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   apitoken.UpdatedByServiceTable,
+			Columns: []string{apitoken.UpdatedByServiceColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = atc.schemaConfig.APIToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := atc.mutation.OwnerIDs(); len(nodes) > 0 {

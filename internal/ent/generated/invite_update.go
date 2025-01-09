@@ -11,11 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -64,6 +65,46 @@ func (iu *InviteUpdate) SetNillableUpdatedByID(s *string) *InviteUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (iu *InviteUpdate) ClearUpdatedByID() *InviteUpdate {
 	iu.mutation.ClearUpdatedByID()
+	return iu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (iu *InviteUpdate) SetUpdatedByUserID(s string) *InviteUpdate {
+	iu.mutation.SetUpdatedByUserID(s)
+	return iu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (iu *InviteUpdate) SetNillableUpdatedByUserID(s *string) *InviteUpdate {
+	if s != nil {
+		iu.SetUpdatedByUserID(*s)
+	}
+	return iu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (iu *InviteUpdate) ClearUpdatedByUserID() *InviteUpdate {
+	iu.mutation.ClearUpdatedByUserID()
+	return iu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (iu *InviteUpdate) SetUpdatedByServiceID(s string) *InviteUpdate {
+	iu.mutation.SetUpdatedByServiceID(s)
+	return iu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (iu *InviteUpdate) SetNillableUpdatedByServiceID(s *string) *InviteUpdate {
+	if s != nil {
+		iu.SetUpdatedByServiceID(*s)
+	}
+	return iu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (iu *InviteUpdate) ClearUpdatedByServiceID() *InviteUpdate {
+	iu.mutation.ClearUpdatedByServiceID()
 	return iu
 }
 
@@ -176,9 +217,14 @@ func (iu *InviteUpdate) SetSecret(b []byte) *InviteUpdate {
 	return iu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (iu *InviteUpdate) SetUpdatedBy(c *ChangeActor) *InviteUpdate {
-	return iu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (iu *InviteUpdate) SetUpdatedByUser(u *User) *InviteUpdate {
+	return iu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (iu *InviteUpdate) SetUpdatedByService(a *APIToken) *InviteUpdate {
+	return iu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -206,9 +252,15 @@ func (iu *InviteUpdate) Mutation() *InviteMutation {
 	return iu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (iu *InviteUpdate) ClearUpdatedBy() *InviteUpdate {
-	iu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (iu *InviteUpdate) ClearUpdatedByUser() *InviteUpdate {
+	iu.mutation.ClearUpdatedByUser()
+	return iu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (iu *InviteUpdate) ClearUpdatedByService() *InviteUpdate {
+	iu.mutation.ClearUpdatedByService()
 	return iu
 }
 
@@ -338,6 +390,15 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if iu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(invite.FieldUpdatedAt, field.TypeTime)
 	}
+	if iu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(invite.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := iu.mutation.UpdatedByID(); ok {
+		_spec.SetField(invite.FieldUpdatedByID, field.TypeString, value)
+	}
+	if iu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(invite.FieldUpdatedByID, field.TypeString)
+	}
 	if iu.mutation.DeletedAtCleared() {
 		_spec.ClearField(invite.FieldDeletedAt, field.TypeTime)
 	}
@@ -371,29 +432,60 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := iu.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
 	}
-	if iu.mutation.UpdatedByCleared() {
+	if iu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   invite.UpdatedByTable,
-			Columns: []string{invite.UpdatedByColumn},
+			Table:   invite.UpdatedByUserTable,
+			Columns: []string{invite.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = iu.schemaConfig.Invite
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := iu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   invite.UpdatedByTable,
-			Columns: []string{invite.UpdatedByColumn},
+			Table:   invite.UpdatedByUserTable,
+			Columns: []string{invite.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if iu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByServiceTable,
+			Columns: []string{invite.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.Invite
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByServiceTable,
+			Columns: []string{invite.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = iu.schemaConfig.Invite
@@ -537,6 +629,46 @@ func (iuo *InviteUpdateOne) ClearUpdatedByID() *InviteUpdateOne {
 	return iuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (iuo *InviteUpdateOne) SetUpdatedByUserID(s string) *InviteUpdateOne {
+	iuo.mutation.SetUpdatedByUserID(s)
+	return iuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (iuo *InviteUpdateOne) SetNillableUpdatedByUserID(s *string) *InviteUpdateOne {
+	if s != nil {
+		iuo.SetUpdatedByUserID(*s)
+	}
+	return iuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (iuo *InviteUpdateOne) ClearUpdatedByUserID() *InviteUpdateOne {
+	iuo.mutation.ClearUpdatedByUserID()
+	return iuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (iuo *InviteUpdateOne) SetUpdatedByServiceID(s string) *InviteUpdateOne {
+	iuo.mutation.SetUpdatedByServiceID(s)
+	return iuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (iuo *InviteUpdateOne) SetNillableUpdatedByServiceID(s *string) *InviteUpdateOne {
+	if s != nil {
+		iuo.SetUpdatedByServiceID(*s)
+	}
+	return iuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (iuo *InviteUpdateOne) ClearUpdatedByServiceID() *InviteUpdateOne {
+	iuo.mutation.ClearUpdatedByServiceID()
+	return iuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (iuo *InviteUpdateOne) SetOwnerID(s string) *InviteUpdateOne {
 	iuo.mutation.SetOwnerID(s)
@@ -646,9 +778,14 @@ func (iuo *InviteUpdateOne) SetSecret(b []byte) *InviteUpdateOne {
 	return iuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (iuo *InviteUpdateOne) SetUpdatedBy(c *ChangeActor) *InviteUpdateOne {
-	return iuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (iuo *InviteUpdateOne) SetUpdatedByUser(u *User) *InviteUpdateOne {
+	return iuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (iuo *InviteUpdateOne) SetUpdatedByService(a *APIToken) *InviteUpdateOne {
+	return iuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -676,9 +813,15 @@ func (iuo *InviteUpdateOne) Mutation() *InviteMutation {
 	return iuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (iuo *InviteUpdateOne) ClearUpdatedBy() *InviteUpdateOne {
-	iuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (iuo *InviteUpdateOne) ClearUpdatedByUser() *InviteUpdateOne {
+	iuo.mutation.ClearUpdatedByUser()
+	return iuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (iuo *InviteUpdateOne) ClearUpdatedByService() *InviteUpdateOne {
+	iuo.mutation.ClearUpdatedByService()
 	return iuo
 }
 
@@ -838,6 +981,15 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	if iuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(invite.FieldUpdatedAt, field.TypeTime)
 	}
+	if iuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(invite.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := iuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(invite.FieldUpdatedByID, field.TypeString, value)
+	}
+	if iuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(invite.FieldUpdatedByID, field.TypeString)
+	}
 	if iuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(invite.FieldDeletedAt, field.TypeTime)
 	}
@@ -871,29 +1023,60 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	if value, ok := iuo.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
 	}
-	if iuo.mutation.UpdatedByCleared() {
+	if iuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   invite.UpdatedByTable,
-			Columns: []string{invite.UpdatedByColumn},
+			Table:   invite.UpdatedByUserTable,
+			Columns: []string{invite.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = iuo.schemaConfig.Invite
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := iuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   invite.UpdatedByTable,
-			Columns: []string{invite.UpdatedByColumn},
+			Table:   invite.UpdatedByUserTable,
+			Columns: []string{invite.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.Invite
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if iuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByServiceTable,
+			Columns: []string{invite.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.Invite
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   invite.UpdatedByServiceTable,
+			Columns: []string{invite.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = iuo.schemaConfig.Invite

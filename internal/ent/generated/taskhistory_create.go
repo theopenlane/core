@@ -126,6 +126,62 @@ func (thc *TaskHistoryCreate) SetNillableUpdatedByID(s *string) *TaskHistoryCrea
 	return thc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (thc *TaskHistoryCreate) SetCreatedByUserID(s string) *TaskHistoryCreate {
+	thc.mutation.SetCreatedByUserID(s)
+	return thc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableCreatedByUserID(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetCreatedByUserID(*s)
+	}
+	return thc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (thc *TaskHistoryCreate) SetUpdatedByUserID(s string) *TaskHistoryCreate {
+	thc.mutation.SetUpdatedByUserID(s)
+	return thc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableUpdatedByUserID(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetUpdatedByUserID(*s)
+	}
+	return thc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (thc *TaskHistoryCreate) SetCreatedByServiceID(s string) *TaskHistoryCreate {
+	thc.mutation.SetCreatedByServiceID(s)
+	return thc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableCreatedByServiceID(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetCreatedByServiceID(*s)
+	}
+	return thc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (thc *TaskHistoryCreate) SetUpdatedByServiceID(s string) *TaskHistoryCreate {
+	thc.mutation.SetUpdatedByServiceID(s)
+	return thc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableUpdatedByServiceID(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetUpdatedByServiceID(*s)
+	}
+	return thc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (thc *TaskHistoryCreate) SetMappingID(s string) *TaskHistoryCreate {
 	thc.mutation.SetMappingID(s)
@@ -433,6 +489,22 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 	if value, ok := thc.mutation.UpdatedByID(); ok {
 		_spec.SetField(taskhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := thc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(taskhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := thc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(taskhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := thc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(taskhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := thc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(taskhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := thc.mutation.MappingID(); ok {
 		_spec.SetField(taskhistory.FieldMappingID, field.TypeString, value)

@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -69,6 +70,46 @@ func (nu *NarrativeUpdate) SetNillableUpdatedByID(s *string) *NarrativeUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (nu *NarrativeUpdate) ClearUpdatedByID() *NarrativeUpdate {
 	nu.mutation.ClearUpdatedByID()
+	return nu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nu *NarrativeUpdate) SetUpdatedByUserID(s string) *NarrativeUpdate {
+	nu.mutation.SetUpdatedByUserID(s)
+	return nu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nu *NarrativeUpdate) SetNillableUpdatedByUserID(s *string) *NarrativeUpdate {
+	if s != nil {
+		nu.SetUpdatedByUserID(*s)
+	}
+	return nu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (nu *NarrativeUpdate) ClearUpdatedByUserID() *NarrativeUpdate {
+	nu.mutation.ClearUpdatedByUserID()
+	return nu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nu *NarrativeUpdate) SetUpdatedByServiceID(s string) *NarrativeUpdate {
+	nu.mutation.SetUpdatedByServiceID(s)
+	return nu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nu *NarrativeUpdate) SetNillableUpdatedByServiceID(s *string) *NarrativeUpdate {
+	if s != nil {
+		nu.SetUpdatedByServiceID(*s)
+	}
+	return nu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (nu *NarrativeUpdate) ClearUpdatedByServiceID() *NarrativeUpdate {
+	nu.mutation.ClearUpdatedByServiceID()
 	return nu
 }
 
@@ -170,9 +211,14 @@ func (nu *NarrativeUpdate) ClearDetails() *NarrativeUpdate {
 	return nu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (nu *NarrativeUpdate) SetUpdatedBy(c *ChangeActor) *NarrativeUpdate {
-	return nu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (nu *NarrativeUpdate) SetUpdatedByUser(u *User) *NarrativeUpdate {
+	return nu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (nu *NarrativeUpdate) SetUpdatedByService(a *APIToken) *NarrativeUpdate {
+	return nu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -305,9 +351,15 @@ func (nu *NarrativeUpdate) Mutation() *NarrativeMutation {
 	return nu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (nu *NarrativeUpdate) ClearUpdatedBy() *NarrativeUpdate {
-	nu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (nu *NarrativeUpdate) ClearUpdatedByUser() *NarrativeUpdate {
+	nu.mutation.ClearUpdatedByUser()
+	return nu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (nu *NarrativeUpdate) ClearUpdatedByService() *NarrativeUpdate {
+	nu.mutation.ClearUpdatedByService()
 	return nu
 }
 
@@ -572,6 +624,15 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrative.FieldUpdatedAt, field.TypeTime)
 	}
+	if nu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(narrative.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := nu.mutation.UpdatedByID(); ok {
+		_spec.SetField(narrative.FieldUpdatedByID, field.TypeString, value)
+	}
+	if nu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(narrative.FieldUpdatedByID, field.TypeString)
+	}
 	if nu.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrative.FieldDeletedAt, field.TypeTime)
 	}
@@ -610,29 +671,60 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nu.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
 	}
-	if nu.mutation.UpdatedByCleared() {
+	if nu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   narrative.UpdatedByTable,
-			Columns: []string{narrative.UpdatedByColumn},
+			Table:   narrative.UpdatedByUserTable,
+			Columns: []string{narrative.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nu.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := nu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   narrative.UpdatedByTable,
-			Columns: []string{narrative.UpdatedByColumn},
+			Table:   narrative.UpdatedByUserTable,
+			Columns: []string{narrative.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByServiceTable,
+			Columns: []string{narrative.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Narrative
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByServiceTable,
+			Columns: []string{narrative.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nu.schemaConfig.Narrative
@@ -1112,6 +1204,46 @@ func (nuo *NarrativeUpdateOne) ClearUpdatedByID() *NarrativeUpdateOne {
 	return nuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nuo *NarrativeUpdateOne) SetUpdatedByUserID(s string) *NarrativeUpdateOne {
+	nuo.mutation.SetUpdatedByUserID(s)
+	return nuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nuo *NarrativeUpdateOne) SetNillableUpdatedByUserID(s *string) *NarrativeUpdateOne {
+	if s != nil {
+		nuo.SetUpdatedByUserID(*s)
+	}
+	return nuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (nuo *NarrativeUpdateOne) ClearUpdatedByUserID() *NarrativeUpdateOne {
+	nuo.mutation.ClearUpdatedByUserID()
+	return nuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nuo *NarrativeUpdateOne) SetUpdatedByServiceID(s string) *NarrativeUpdateOne {
+	nuo.mutation.SetUpdatedByServiceID(s)
+	return nuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nuo *NarrativeUpdateOne) SetNillableUpdatedByServiceID(s *string) *NarrativeUpdateOne {
+	if s != nil {
+		nuo.SetUpdatedByServiceID(*s)
+	}
+	return nuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (nuo *NarrativeUpdateOne) ClearUpdatedByServiceID() *NarrativeUpdateOne {
+	nuo.mutation.ClearUpdatedByServiceID()
+	return nuo
+}
+
 // SetTags sets the "tags" field.
 func (nuo *NarrativeUpdateOne) SetTags(s []string) *NarrativeUpdateOne {
 	nuo.mutation.SetTags(s)
@@ -1210,9 +1342,14 @@ func (nuo *NarrativeUpdateOne) ClearDetails() *NarrativeUpdateOne {
 	return nuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (nuo *NarrativeUpdateOne) SetUpdatedBy(c *ChangeActor) *NarrativeUpdateOne {
-	return nuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (nuo *NarrativeUpdateOne) SetUpdatedByUser(u *User) *NarrativeUpdateOne {
+	return nuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (nuo *NarrativeUpdateOne) SetUpdatedByService(a *APIToken) *NarrativeUpdateOne {
+	return nuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1345,9 +1482,15 @@ func (nuo *NarrativeUpdateOne) Mutation() *NarrativeMutation {
 	return nuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (nuo *NarrativeUpdateOne) ClearUpdatedBy() *NarrativeUpdateOne {
-	nuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (nuo *NarrativeUpdateOne) ClearUpdatedByUser() *NarrativeUpdateOne {
+	nuo.mutation.ClearUpdatedByUser()
+	return nuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (nuo *NarrativeUpdateOne) ClearUpdatedByService() *NarrativeUpdateOne {
+	nuo.mutation.ClearUpdatedByService()
 	return nuo
 }
 
@@ -1642,6 +1785,15 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 	if nuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrative.FieldUpdatedAt, field.TypeTime)
 	}
+	if nuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(narrative.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := nuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(narrative.FieldUpdatedByID, field.TypeString, value)
+	}
+	if nuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(narrative.FieldUpdatedByID, field.TypeString)
+	}
 	if nuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrative.FieldDeletedAt, field.TypeTime)
 	}
@@ -1680,29 +1832,60 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 	if nuo.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
 	}
-	if nuo.mutation.UpdatedByCleared() {
+	if nuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   narrative.UpdatedByTable,
-			Columns: []string{narrative.UpdatedByColumn},
+			Table:   narrative.UpdatedByUserTable,
+			Columns: []string{narrative.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := nuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   narrative.UpdatedByTable,
-			Columns: []string{narrative.UpdatedByColumn},
+			Table:   narrative.UpdatedByUserTable,
+			Columns: []string{narrative.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByServiceTable,
+			Columns: []string{narrative.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Narrative
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   narrative.UpdatedByServiceTable,
+			Columns: []string{narrative.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Narrative

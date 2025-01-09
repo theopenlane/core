@@ -12,11 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -65,6 +66,46 @@ func (osu *OrganizationSettingUpdate) SetNillableUpdatedByID(s *string) *Organiz
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (osu *OrganizationSettingUpdate) ClearUpdatedByID() *OrganizationSettingUpdate {
 	osu.mutation.ClearUpdatedByID()
+	return osu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (osu *OrganizationSettingUpdate) SetUpdatedByUserID(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetUpdatedByUserID(s)
+	return osu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableUpdatedByUserID(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetUpdatedByUserID(*s)
+	}
+	return osu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (osu *OrganizationSettingUpdate) ClearUpdatedByUserID() *OrganizationSettingUpdate {
+	osu.mutation.ClearUpdatedByUserID()
+	return osu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (osu *OrganizationSettingUpdate) SetUpdatedByServiceID(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetUpdatedByServiceID(s)
+	return osu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableUpdatedByServiceID(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetUpdatedByServiceID(*s)
+	}
+	return osu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (osu *OrganizationSettingUpdate) ClearUpdatedByServiceID() *OrganizationSettingUpdate {
+	osu.mutation.ClearUpdatedByServiceID()
 	return osu
 }
 
@@ -264,9 +305,14 @@ func (osu *OrganizationSettingUpdate) ClearStripeID() *OrganizationSettingUpdate
 	return osu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (osu *OrganizationSettingUpdate) SetUpdatedBy(c *ChangeActor) *OrganizationSettingUpdate {
-	return osu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (osu *OrganizationSettingUpdate) SetUpdatedByUser(u *User) *OrganizationSettingUpdate {
+	return osu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (osu *OrganizationSettingUpdate) SetUpdatedByService(a *APIToken) *OrganizationSettingUpdate {
+	return osu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
@@ -294,9 +340,15 @@ func (osu *OrganizationSettingUpdate) Mutation() *OrganizationSettingMutation {
 	return osu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (osu *OrganizationSettingUpdate) ClearUpdatedBy() *OrganizationSettingUpdate {
-	osu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (osu *OrganizationSettingUpdate) ClearUpdatedByUser() *OrganizationSettingUpdate {
+	osu.mutation.ClearUpdatedByUser()
+	return osu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (osu *OrganizationSettingUpdate) ClearUpdatedByService() *OrganizationSettingUpdate {
+	osu.mutation.ClearUpdatedByService()
 	return osu
 }
 
@@ -421,6 +473,15 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	if osu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationsetting.FieldUpdatedAt, field.TypeTime)
 	}
+	if osu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(organizationsetting.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := osu.mutation.UpdatedByID(); ok {
+		_spec.SetField(organizationsetting.FieldUpdatedByID, field.TypeString, value)
+	}
+	if osu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(organizationsetting.FieldUpdatedByID, field.TypeString)
+	}
 	if value, ok := osu.mutation.Tags(); ok {
 		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)
 	}
@@ -491,29 +552,60 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	if osu.mutation.StripeIDCleared() {
 		_spec.ClearField(organizationsetting.FieldStripeID, field.TypeString)
 	}
-	if osu.mutation.UpdatedByCleared() {
+	if osu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organizationsetting.UpdatedByTable,
-			Columns: []string{organizationsetting.UpdatedByColumn},
+			Table:   organizationsetting.UpdatedByUserTable,
+			Columns: []string{organizationsetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrganizationSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := osu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organizationsetting.UpdatedByTable,
-			Columns: []string{organizationsetting.UpdatedByColumn},
+			Table:   organizationsetting.UpdatedByUserTable,
+			Columns: []string{organizationsetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrganizationSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organizationsetting.UpdatedByServiceTable,
+			Columns: []string{organizationsetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrganizationSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organizationsetting.UpdatedByServiceTable,
+			Columns: []string{organizationsetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrganizationSetting
@@ -654,6 +746,46 @@ func (osuo *OrganizationSettingUpdateOne) SetNillableUpdatedByID(s *string) *Org
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (osuo *OrganizationSettingUpdateOne) ClearUpdatedByID() *OrganizationSettingUpdateOne {
 	osuo.mutation.ClearUpdatedByID()
+	return osuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (osuo *OrganizationSettingUpdateOne) SetUpdatedByUserID(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetUpdatedByUserID(s)
+	return osuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableUpdatedByUserID(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetUpdatedByUserID(*s)
+	}
+	return osuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (osuo *OrganizationSettingUpdateOne) ClearUpdatedByUserID() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearUpdatedByUserID()
+	return osuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (osuo *OrganizationSettingUpdateOne) SetUpdatedByServiceID(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetUpdatedByServiceID(s)
+	return osuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableUpdatedByServiceID(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetUpdatedByServiceID(*s)
+	}
+	return osuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (osuo *OrganizationSettingUpdateOne) ClearUpdatedByServiceID() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearUpdatedByServiceID()
 	return osuo
 }
 
@@ -853,9 +985,14 @@ func (osuo *OrganizationSettingUpdateOne) ClearStripeID() *OrganizationSettingUp
 	return osuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (osuo *OrganizationSettingUpdateOne) SetUpdatedBy(c *ChangeActor) *OrganizationSettingUpdateOne {
-	return osuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (osuo *OrganizationSettingUpdateOne) SetUpdatedByUser(u *User) *OrganizationSettingUpdateOne {
+	return osuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (osuo *OrganizationSettingUpdateOne) SetUpdatedByService(a *APIToken) *OrganizationSettingUpdateOne {
+	return osuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
@@ -883,9 +1020,15 @@ func (osuo *OrganizationSettingUpdateOne) Mutation() *OrganizationSettingMutatio
 	return osuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (osuo *OrganizationSettingUpdateOne) ClearUpdatedBy() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (osuo *OrganizationSettingUpdateOne) ClearUpdatedByUser() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearUpdatedByUser()
+	return osuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (osuo *OrganizationSettingUpdateOne) ClearUpdatedByService() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearUpdatedByService()
 	return osuo
 }
 
@@ -1040,6 +1183,15 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	if osuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationsetting.FieldUpdatedAt, field.TypeTime)
 	}
+	if osuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(organizationsetting.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := osuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(organizationsetting.FieldUpdatedByID, field.TypeString, value)
+	}
+	if osuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(organizationsetting.FieldUpdatedByID, field.TypeString)
+	}
 	if value, ok := osuo.mutation.Tags(); ok {
 		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)
 	}
@@ -1110,29 +1262,60 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	if osuo.mutation.StripeIDCleared() {
 		_spec.ClearField(organizationsetting.FieldStripeID, field.TypeString)
 	}
-	if osuo.mutation.UpdatedByCleared() {
+	if osuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organizationsetting.UpdatedByTable,
-			Columns: []string{organizationsetting.UpdatedByColumn},
+			Table:   organizationsetting.UpdatedByUserTable,
+			Columns: []string{organizationsetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrganizationSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := osuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   organizationsetting.UpdatedByTable,
-			Columns: []string{organizationsetting.UpdatedByColumn},
+			Table:   organizationsetting.UpdatedByUserTable,
+			Columns: []string{organizationsetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrganizationSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organizationsetting.UpdatedByServiceTable,
+			Columns: []string{organizationsetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrganizationSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   organizationsetting.UpdatedByServiceTable,
+			Columns: []string{organizationsetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrganizationSetting

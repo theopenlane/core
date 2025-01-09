@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ChangeActor is the model entity for the ChangeActor schema.
@@ -19,8 +20,13 @@ type ChangeActor struct {
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// ActorType holds the value of the "actor_type" field.
-	ActorType    string `json:"actor_type,omitempty"`
+	ActorType    changeactor.ActorType `json:"actor_type,omitempty"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -61,7 +67,7 @@ func (ca *ChangeActor) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field actor_type", values[i])
 			} else if value.Valid {
-				ca.ActorType = value.String
+				ca.ActorType = changeactor.ActorType(value.String)
 			}
 		default:
 			ca.selectValues.Set(columns[i], values[i])
@@ -103,7 +109,7 @@ func (ca *ChangeActor) String() string {
 	builder.WriteString(ca.Name)
 	builder.WriteString(", ")
 	builder.WriteString("actor_type=")
-	builder.WriteString(ca.ActorType)
+	builder.WriteString(fmt.Sprintf("%v", ca.ActorType))
 	builder.WriteByte(')')
 	return builder.String()
 }

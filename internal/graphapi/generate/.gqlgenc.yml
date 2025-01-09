@@ -14,6 +14,9 @@ models:
     model:
       - github.com/theopenlane/entx.RawMessage
       - github.com/theopenlane/core/internal/ent/customtypes.JSONObject
+  Actor:
+    model:
+      - github.com/theopenlane/core/pkg/models.Actor
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

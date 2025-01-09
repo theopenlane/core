@@ -11,11 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/customtypes"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -78,6 +79,62 @@ func (tc *TemplateCreate) SetUpdatedByID(s string) *TemplateCreate {
 func (tc *TemplateCreate) SetNillableUpdatedByID(s *string) *TemplateCreate {
 	if s != nil {
 		tc.SetUpdatedByID(*s)
+	}
+	return tc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (tc *TemplateCreate) SetCreatedByUserID(s string) *TemplateCreate {
+	tc.mutation.SetCreatedByUserID(s)
+	return tc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableCreatedByUserID(s *string) *TemplateCreate {
+	if s != nil {
+		tc.SetCreatedByUserID(*s)
+	}
+	return tc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (tc *TemplateCreate) SetUpdatedByUserID(s string) *TemplateCreate {
+	tc.mutation.SetUpdatedByUserID(s)
+	return tc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableUpdatedByUserID(s *string) *TemplateCreate {
+	if s != nil {
+		tc.SetUpdatedByUserID(*s)
+	}
+	return tc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (tc *TemplateCreate) SetCreatedByServiceID(s string) *TemplateCreate {
+	tc.mutation.SetCreatedByServiceID(s)
+	return tc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableCreatedByServiceID(s *string) *TemplateCreate {
+	if s != nil {
+		tc.SetCreatedByServiceID(*s)
+	}
+	return tc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (tc *TemplateCreate) SetUpdatedByServiceID(s string) *TemplateCreate {
+	tc.mutation.SetUpdatedByServiceID(s)
+	return tc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableUpdatedByServiceID(s *string) *TemplateCreate {
+	if s != nil {
+		tc.SetUpdatedByServiceID(*s)
 	}
 	return tc
 }
@@ -204,14 +261,24 @@ func (tc *TemplateCreate) SetNillableID(s *string) *TemplateCreate {
 	return tc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (tc *TemplateCreate) SetCreatedBy(c *ChangeActor) *TemplateCreate {
-	return tc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (tc *TemplateCreate) SetCreatedByUser(u *User) *TemplateCreate {
+	return tc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (tc *TemplateCreate) SetUpdatedBy(c *ChangeActor) *TemplateCreate {
-	return tc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (tc *TemplateCreate) SetUpdatedByUser(u *User) *TemplateCreate {
+	return tc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (tc *TemplateCreate) SetCreatedByService(a *APIToken) *TemplateCreate {
+	return tc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (tc *TemplateCreate) SetUpdatedByService(a *APIToken) *TemplateCreate {
+	return tc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -398,6 +465,14 @@ func (tc *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 		_spec.SetField(template.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := tc.mutation.CreatedByID(); ok {
+		_spec.SetField(template.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := tc.mutation.UpdatedByID(); ok {
+		_spec.SetField(template.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := tc.mutation.DeletedAt(); ok {
 		_spec.SetField(template.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -434,40 +509,76 @@ func (tc *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 		_spec.SetField(template.FieldUischema, field.TypeJSON, value)
 		_node.Uischema = value
 	}
-	if nodes := tc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   template.CreatedByTable,
-			Columns: []string{template.CreatedByColumn},
+			Table:   template.CreatedByUserTable,
+			Columns: []string{template.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tc.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   template.UpdatedByTable,
-			Columns: []string{template.UpdatedByColumn},
+			Table:   template.UpdatedByUserTable,
+			Columns: []string{template.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tc.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.CreatedByServiceTable,
+			Columns: []string{template.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   template.UpdatedByServiceTable,
+			Columns: []string{template.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tc.mutation.OwnerIDs(); len(nodes) > 0 {

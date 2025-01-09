@@ -10,9 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // PersonalAccessToken is the model entity for the PersonalAccessToken schema.
@@ -28,6 +29,14 @@ type PersonalAccessToken struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -54,14 +63,23 @@ type PersonalAccessToken struct {
 	// The values are being populated by the PersonalAccessTokenQuery when eager-loading is set.
 	Edges        PersonalAccessTokenEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // PersonalAccessTokenEdges holds the relations/edges for other nodes in the graph.
 type PersonalAccessTokenEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// the organization(s) the token is associated with
@@ -70,34 +88,56 @@ type PersonalAccessTokenEdges struct {
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [7]map[string]int
 
 	namedOrganizations map[string][]*Organization
 	namedEvents        map[string][]*Event
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e PersonalAccessTokenEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e PersonalAccessTokenEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e PersonalAccessTokenEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e PersonalAccessTokenEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PersonalAccessTokenEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PersonalAccessTokenEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -105,7 +145,7 @@ func (e PersonalAccessTokenEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e PersonalAccessTokenEdges) OwnerOrErr() (*User, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -114,7 +154,7 @@ func (e PersonalAccessTokenEdges) OwnerOrErr() (*User, error) {
 // OrganizationsOrErr returns the Organizations value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonalAccessTokenEdges) OrganizationsOrErr() ([]*Organization, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Organizations, nil
 	}
 	return nil, &NotLoadedError{edge: "organizations"}
@@ -123,7 +163,7 @@ func (e PersonalAccessTokenEdges) OrganizationsOrErr() ([]*Organization, error) 
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonalAccessTokenEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -136,7 +176,7 @@ func (*PersonalAccessToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case personalaccesstoken.FieldTags, personalaccesstoken.FieldScopes:
 			values[i] = new([]byte)
-		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedByID, personalaccesstoken.FieldUpdatedByID, personalaccesstoken.FieldDeletedByID, personalaccesstoken.FieldMappingID, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
+		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedByID, personalaccesstoken.FieldUpdatedByID, personalaccesstoken.FieldCreatedByUserID, personalaccesstoken.FieldUpdatedByUserID, personalaccesstoken.FieldCreatedByServiceID, personalaccesstoken.FieldUpdatedByServiceID, personalaccesstoken.FieldDeletedByID, personalaccesstoken.FieldMappingID, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
 			values[i] = new(sql.NullString)
 		case personalaccesstoken.FieldCreatedAt, personalaccesstoken.FieldUpdatedAt, personalaccesstoken.FieldDeletedAt, personalaccesstoken.FieldExpiresAt, personalaccesstoken.FieldLastUsedAt:
 			values[i] = new(sql.NullTime)
@@ -184,6 +224,30 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				pat.UpdatedByID = value.String
+			}
+		case personalaccesstoken.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				pat.CreatedByUserID = value.String
+			}
+		case personalaccesstoken.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				pat.UpdatedByUserID = value.String
+			}
+		case personalaccesstoken.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				pat.CreatedByServiceID = value.String
+			}
+		case personalaccesstoken.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				pat.UpdatedByServiceID = value.String
 			}
 		case personalaccesstoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -271,14 +335,24 @@ func (pat *PersonalAccessToken) Value(name string) (ent.Value, error) {
 	return pat.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the PersonalAccessToken entity.
-func (pat *PersonalAccessToken) QueryCreatedBy() *ChangeActorQuery {
-	return NewPersonalAccessTokenClient(pat.config).QueryCreatedBy(pat)
+// QueryCreatedByUser queries the "created_by_user" edge of the PersonalAccessToken entity.
+func (pat *PersonalAccessToken) QueryCreatedByUser() *UserQuery {
+	return NewPersonalAccessTokenClient(pat.config).QueryCreatedByUser(pat)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the PersonalAccessToken entity.
-func (pat *PersonalAccessToken) QueryUpdatedBy() *ChangeActorQuery {
-	return NewPersonalAccessTokenClient(pat.config).QueryUpdatedBy(pat)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the PersonalAccessToken entity.
+func (pat *PersonalAccessToken) QueryUpdatedByUser() *UserQuery {
+	return NewPersonalAccessTokenClient(pat.config).QueryUpdatedByUser(pat)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the PersonalAccessToken entity.
+func (pat *PersonalAccessToken) QueryCreatedByService() *APITokenQuery {
+	return NewPersonalAccessTokenClient(pat.config).QueryCreatedByService(pat)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the PersonalAccessToken entity.
+func (pat *PersonalAccessToken) QueryUpdatedByService() *APITokenQuery {
+	return NewPersonalAccessTokenClient(pat.config).QueryUpdatedByService(pat)
 }
 
 // QueryOwner queries the "owner" edge of the PersonalAccessToken entity.
@@ -330,6 +404,18 @@ func (pat *PersonalAccessToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(pat.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(pat.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(pat.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(pat.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(pat.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pat.DeletedAt.Format(time.ANSIC))

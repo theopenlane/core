@@ -9,9 +9,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // PasswordResetToken is the model entity for the PasswordResetToken schema.
@@ -27,6 +28,14 @@ type PasswordResetToken struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -47,43 +56,74 @@ type PasswordResetToken struct {
 	// The values are being populated by the PasswordResetTokenQuery when eager-loading is set.
 	Edges        PasswordResetTokenEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // PasswordResetTokenEdges holds the relations/edges for other nodes in the graph.
 type PasswordResetTokenEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e PasswordResetTokenEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e PasswordResetTokenEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e PasswordResetTokenEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e PasswordResetTokenEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PasswordResetTokenEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PasswordResetTokenEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -91,7 +131,7 @@ func (e PasswordResetTokenEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e PasswordResetTokenEdges) OwnerOrErr() (*User, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -104,7 +144,7 @@ func (*PasswordResetToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case passwordresettoken.FieldSecret:
 			values[i] = new([]byte)
-		case passwordresettoken.FieldID, passwordresettoken.FieldCreatedByID, passwordresettoken.FieldUpdatedByID, passwordresettoken.FieldMappingID, passwordresettoken.FieldDeletedByID, passwordresettoken.FieldOwnerID, passwordresettoken.FieldToken, passwordresettoken.FieldEmail:
+		case passwordresettoken.FieldID, passwordresettoken.FieldCreatedByID, passwordresettoken.FieldUpdatedByID, passwordresettoken.FieldCreatedByUserID, passwordresettoken.FieldUpdatedByUserID, passwordresettoken.FieldCreatedByServiceID, passwordresettoken.FieldUpdatedByServiceID, passwordresettoken.FieldMappingID, passwordresettoken.FieldDeletedByID, passwordresettoken.FieldOwnerID, passwordresettoken.FieldToken, passwordresettoken.FieldEmail:
 			values[i] = new(sql.NullString)
 		case passwordresettoken.FieldCreatedAt, passwordresettoken.FieldUpdatedAt, passwordresettoken.FieldDeletedAt, passwordresettoken.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -152,6 +192,30 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				prt.UpdatedByID = value.String
+			}
+		case passwordresettoken.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				prt.CreatedByUserID = value.String
+			}
+		case passwordresettoken.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				prt.UpdatedByUserID = value.String
+			}
+		case passwordresettoken.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				prt.CreatedByServiceID = value.String
+			}
+		case passwordresettoken.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				prt.UpdatedByServiceID = value.String
 			}
 		case passwordresettoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -215,14 +279,24 @@ func (prt *PasswordResetToken) Value(name string) (ent.Value, error) {
 	return prt.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the PasswordResetToken entity.
-func (prt *PasswordResetToken) QueryCreatedBy() *ChangeActorQuery {
-	return NewPasswordResetTokenClient(prt.config).QueryCreatedBy(prt)
+// QueryCreatedByUser queries the "created_by_user" edge of the PasswordResetToken entity.
+func (prt *PasswordResetToken) QueryCreatedByUser() *UserQuery {
+	return NewPasswordResetTokenClient(prt.config).QueryCreatedByUser(prt)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the PasswordResetToken entity.
-func (prt *PasswordResetToken) QueryUpdatedBy() *ChangeActorQuery {
-	return NewPasswordResetTokenClient(prt.config).QueryUpdatedBy(prt)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the PasswordResetToken entity.
+func (prt *PasswordResetToken) QueryUpdatedByUser() *UserQuery {
+	return NewPasswordResetTokenClient(prt.config).QueryUpdatedByUser(prt)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the PasswordResetToken entity.
+func (prt *PasswordResetToken) QueryCreatedByService() *APITokenQuery {
+	return NewPasswordResetTokenClient(prt.config).QueryCreatedByService(prt)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the PasswordResetToken entity.
+func (prt *PasswordResetToken) QueryUpdatedByService() *APITokenQuery {
+	return NewPasswordResetTokenClient(prt.config).QueryUpdatedByService(prt)
 }
 
 // QueryOwner queries the "owner" edge of the PasswordResetToken entity.
@@ -264,6 +338,18 @@ func (prt *PasswordResetToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(prt.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(prt.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(prt.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(prt.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(prt.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(prt.MappingID)

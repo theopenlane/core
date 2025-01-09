@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 				return ec.fieldContext_DocumentData_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_DocumentData_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_DocumentData_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_DocumentData_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_DocumentData_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_DocumentData_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
@@ -87,10 +95,14 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_DocumentData_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_DocumentData_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_DocumentData_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_DocumentData_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":
@@ -155,6 +167,14 @@ func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(
 				return ec.fieldContext_DocumentData_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_DocumentData_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_DocumentData_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_DocumentData_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_DocumentData_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_DocumentData_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
@@ -167,10 +187,14 @@ func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_DocumentData_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_DocumentData_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_DocumentData_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_DocumentData_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":
@@ -279,6 +303,14 @@ func (ec *executionContext) fieldContext_DocumentDataUpdatePayload_documentData(
 				return ec.fieldContext_DocumentData_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_DocumentData_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_DocumentData_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_DocumentData_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_DocumentData_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_DocumentData_updatedByServiceID(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
@@ -291,10 +323,14 @@ func (ec *executionContext) fieldContext_DocumentDataUpdatePayload_documentData(
 				return ec.fieldContext_DocumentData_templateID(ctx, field)
 			case "data":
 				return ec.fieldContext_DocumentData_data(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_DocumentData_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_DocumentData_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_DocumentData_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_DocumentData_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_DocumentData_owner(ctx, field)
 			case "template":

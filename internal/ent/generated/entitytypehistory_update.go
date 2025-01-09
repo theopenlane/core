@@ -64,6 +64,46 @@ func (ethu *EntityTypeHistoryUpdate) ClearUpdatedByID() *EntityTypeHistoryUpdate
 	return ethu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ethu *EntityTypeHistoryUpdate) SetUpdatedByUserID(s string) *EntityTypeHistoryUpdate {
+	ethu.mutation.SetUpdatedByUserID(s)
+	return ethu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ethu *EntityTypeHistoryUpdate) SetNillableUpdatedByUserID(s *string) *EntityTypeHistoryUpdate {
+	if s != nil {
+		ethu.SetUpdatedByUserID(*s)
+	}
+	return ethu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ethu *EntityTypeHistoryUpdate) ClearUpdatedByUserID() *EntityTypeHistoryUpdate {
+	ethu.mutation.ClearUpdatedByUserID()
+	return ethu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ethu *EntityTypeHistoryUpdate) SetUpdatedByServiceID(s string) *EntityTypeHistoryUpdate {
+	ethu.mutation.SetUpdatedByServiceID(s)
+	return ethu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ethu *EntityTypeHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *EntityTypeHistoryUpdate {
+	if s != nil {
+		ethu.SetUpdatedByServiceID(*s)
+	}
+	return ethu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ethu *EntityTypeHistoryUpdate) ClearUpdatedByServiceID() *EntityTypeHistoryUpdate {
+	ethu.mutation.ClearUpdatedByServiceID()
+	return ethu
+}
+
 // SetTags sets the "tags" field.
 func (ethu *EntityTypeHistoryUpdate) SetTags(s []string) *EntityTypeHistoryUpdate {
 	ethu.mutation.SetTags(s)
@@ -202,6 +242,24 @@ func (ethu *EntityTypeHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if ethu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(entitytypehistory.FieldUpdatedByID, field.TypeString)
 	}
+	if ethu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(entitytypehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := ethu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(entitytypehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if ethu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(entitytypehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if ethu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(entitytypehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := ethu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(entitytypehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if ethu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(entitytypehistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if ethu.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytypehistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -281,6 +339,46 @@ func (ethuo *EntityTypeHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Enti
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (ethuo *EntityTypeHistoryUpdateOne) ClearUpdatedByID() *EntityTypeHistoryUpdateOne {
 	ethuo.mutation.ClearUpdatedByID()
+	return ethuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ethuo *EntityTypeHistoryUpdateOne) SetUpdatedByUserID(s string) *EntityTypeHistoryUpdateOne {
+	ethuo.mutation.SetUpdatedByUserID(s)
+	return ethuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ethuo *EntityTypeHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *EntityTypeHistoryUpdateOne {
+	if s != nil {
+		ethuo.SetUpdatedByUserID(*s)
+	}
+	return ethuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ethuo *EntityTypeHistoryUpdateOne) ClearUpdatedByUserID() *EntityTypeHistoryUpdateOne {
+	ethuo.mutation.ClearUpdatedByUserID()
+	return ethuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ethuo *EntityTypeHistoryUpdateOne) SetUpdatedByServiceID(s string) *EntityTypeHistoryUpdateOne {
+	ethuo.mutation.SetUpdatedByServiceID(s)
+	return ethuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ethuo *EntityTypeHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *EntityTypeHistoryUpdateOne {
+	if s != nil {
+		ethuo.SetUpdatedByServiceID(*s)
+	}
+	return ethuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ethuo *EntityTypeHistoryUpdateOne) ClearUpdatedByServiceID() *EntityTypeHistoryUpdateOne {
+	ethuo.mutation.ClearUpdatedByServiceID()
 	return ethuo
 }
 
@@ -451,6 +549,24 @@ func (ethuo *EntityTypeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *En
 	}
 	if ethuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(entitytypehistory.FieldUpdatedByID, field.TypeString)
+	}
+	if ethuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(entitytypehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := ethuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(entitytypehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if ethuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(entitytypehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if ethuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(entitytypehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := ethuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(entitytypehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if ethuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(entitytypehistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if ethuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytypehistory.FieldDeletedAt, field.TypeTime)

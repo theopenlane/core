@@ -10,10 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // EntityTypeCreate is the builder for creating a EntityType entity.
@@ -75,6 +76,62 @@ func (etc *EntityTypeCreate) SetUpdatedByID(s string) *EntityTypeCreate {
 func (etc *EntityTypeCreate) SetNillableUpdatedByID(s *string) *EntityTypeCreate {
 	if s != nil {
 		etc.SetUpdatedByID(*s)
+	}
+	return etc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (etc *EntityTypeCreate) SetCreatedByUserID(s string) *EntityTypeCreate {
+	etc.mutation.SetCreatedByUserID(s)
+	return etc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (etc *EntityTypeCreate) SetNillableCreatedByUserID(s *string) *EntityTypeCreate {
+	if s != nil {
+		etc.SetCreatedByUserID(*s)
+	}
+	return etc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (etc *EntityTypeCreate) SetUpdatedByUserID(s string) *EntityTypeCreate {
+	etc.mutation.SetUpdatedByUserID(s)
+	return etc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (etc *EntityTypeCreate) SetNillableUpdatedByUserID(s *string) *EntityTypeCreate {
+	if s != nil {
+		etc.SetUpdatedByUserID(*s)
+	}
+	return etc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (etc *EntityTypeCreate) SetCreatedByServiceID(s string) *EntityTypeCreate {
+	etc.mutation.SetCreatedByServiceID(s)
+	return etc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (etc *EntityTypeCreate) SetNillableCreatedByServiceID(s *string) *EntityTypeCreate {
+	if s != nil {
+		etc.SetCreatedByServiceID(*s)
+	}
+	return etc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (etc *EntityTypeCreate) SetUpdatedByServiceID(s string) *EntityTypeCreate {
+	etc.mutation.SetUpdatedByServiceID(s)
+	return etc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (etc *EntityTypeCreate) SetNillableUpdatedByServiceID(s *string) *EntityTypeCreate {
+	if s != nil {
+		etc.SetUpdatedByServiceID(*s)
 	}
 	return etc
 }
@@ -161,14 +218,24 @@ func (etc *EntityTypeCreate) SetNillableID(s *string) *EntityTypeCreate {
 	return etc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (etc *EntityTypeCreate) SetCreatedBy(c *ChangeActor) *EntityTypeCreate {
-	return etc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (etc *EntityTypeCreate) SetCreatedByUser(u *User) *EntityTypeCreate {
+	return etc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (etc *EntityTypeCreate) SetUpdatedBy(c *ChangeActor) *EntityTypeCreate {
-	return etc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (etc *EntityTypeCreate) SetUpdatedByUser(u *User) *EntityTypeCreate {
+	return etc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (etc *EntityTypeCreate) SetCreatedByService(a *APIToken) *EntityTypeCreate {
+	return etc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (etc *EntityTypeCreate) SetUpdatedByService(a *APIToken) *EntityTypeCreate {
+	return etc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -325,6 +392,14 @@ func (etc *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 		_spec.SetField(entitytype.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := etc.mutation.CreatedByID(); ok {
+		_spec.SetField(entitytype.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := etc.mutation.UpdatedByID(); ok {
+		_spec.SetField(entitytype.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := etc.mutation.MappingID(); ok {
 		_spec.SetField(entitytype.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -345,40 +420,76 @@ func (etc *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 		_spec.SetField(entitytype.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if nodes := etc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := etc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entitytype.CreatedByTable,
-			Columns: []string{entitytype.CreatedByColumn},
+			Table:   entitytype.CreatedByUserTable,
+			Columns: []string{entitytype.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = etc.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := etc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := etc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   entitytype.UpdatedByTable,
-			Columns: []string{entitytype.UpdatedByColumn},
+			Table:   entitytype.UpdatedByUserTable,
+			Columns: []string{entitytype.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = etc.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := etc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entitytype.CreatedByServiceTable,
+			Columns: []string{entitytype.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = etc.schemaConfig.EntityType
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := etc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entitytype.UpdatedByServiceTable,
+			Columns: []string{entitytype.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = etc.schemaConfig.EntityType
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := etc.mutation.OwnerIDs(); len(nodes) > 0 {

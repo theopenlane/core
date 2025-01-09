@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -63,6 +63,46 @@ func (tsu *TFASettingUpdate) SetNillableUpdatedByID(s *string) *TFASettingUpdate
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (tsu *TFASettingUpdate) ClearUpdatedByID() *TFASettingUpdate {
 	tsu.mutation.ClearUpdatedByID()
+	return tsu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (tsu *TFASettingUpdate) SetUpdatedByUserID(s string) *TFASettingUpdate {
+	tsu.mutation.SetUpdatedByUserID(s)
+	return tsu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (tsu *TFASettingUpdate) SetNillableUpdatedByUserID(s *string) *TFASettingUpdate {
+	if s != nil {
+		tsu.SetUpdatedByUserID(*s)
+	}
+	return tsu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (tsu *TFASettingUpdate) ClearUpdatedByUserID() *TFASettingUpdate {
+	tsu.mutation.ClearUpdatedByUserID()
+	return tsu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (tsu *TFASettingUpdate) SetUpdatedByServiceID(s string) *TFASettingUpdate {
+	tsu.mutation.SetUpdatedByServiceID(s)
+	return tsu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (tsu *TFASettingUpdate) SetNillableUpdatedByServiceID(s *string) *TFASettingUpdate {
+	if s != nil {
+		tsu.SetUpdatedByServiceID(*s)
+	}
+	return tsu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (tsu *TFASettingUpdate) ClearUpdatedByServiceID() *TFASettingUpdate {
+	tsu.mutation.ClearUpdatedByServiceID()
 	return tsu
 }
 
@@ -216,9 +256,14 @@ func (tsu *TFASettingUpdate) ClearTotpAllowed() *TFASettingUpdate {
 	return tsu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (tsu *TFASettingUpdate) SetUpdatedBy(c *ChangeActor) *TFASettingUpdate {
-	return tsu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (tsu *TFASettingUpdate) SetUpdatedByUser(u *User) *TFASettingUpdate {
+	return tsu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (tsu *TFASettingUpdate) SetUpdatedByService(a *APIToken) *TFASettingUpdate {
+	return tsu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -231,9 +276,15 @@ func (tsu *TFASettingUpdate) Mutation() *TFASettingMutation {
 	return tsu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (tsu *TFASettingUpdate) ClearUpdatedBy() *TFASettingUpdate {
-	tsu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (tsu *TFASettingUpdate) ClearUpdatedByUser() *TFASettingUpdate {
+	tsu.mutation.ClearUpdatedByUser()
+	return tsu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (tsu *TFASettingUpdate) ClearUpdatedByService() *TFASettingUpdate {
+	tsu.mutation.ClearUpdatedByService()
 	return tsu
 }
 
@@ -309,6 +360,15 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tsu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(tfasetting.FieldUpdatedAt, field.TypeTime)
 	}
+	if tsu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := tsu.mutation.UpdatedByID(); ok {
+		_spec.SetField(tfasetting.FieldUpdatedByID, field.TypeString, value)
+	}
+	if tsu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldUpdatedByID, field.TypeString)
+	}
 	if tsu.mutation.DeletedAtCleared() {
 		_spec.ClearField(tfasetting.FieldDeletedAt, field.TypeTime)
 	}
@@ -364,29 +424,60 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tsu.mutation.TotpAllowedCleared() {
 		_spec.ClearField(tfasetting.FieldTotpAllowed, field.TypeBool)
 	}
-	if tsu.mutation.UpdatedByCleared() {
+	if tsu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   tfasetting.UpdatedByTable,
-			Columns: []string{tfasetting.UpdatedByColumn},
+			Table:   tfasetting.UpdatedByUserTable,
+			Columns: []string{tfasetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsu.schemaConfig.TFASetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tsu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := tsu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   tfasetting.UpdatedByTable,
-			Columns: []string{tfasetting.UpdatedByColumn},
+			Table:   tfasetting.UpdatedByUserTable,
+			Columns: []string{tfasetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsu.schemaConfig.TFASetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tsu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByServiceTable,
+			Columns: []string{tfasetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsu.schemaConfig.TFASetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tsu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByServiceTable,
+			Columns: []string{tfasetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsu.schemaConfig.TFASetting
@@ -479,6 +570,46 @@ func (tsuo *TFASettingUpdateOne) SetNillableUpdatedByID(s *string) *TFASettingUp
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (tsuo *TFASettingUpdateOne) ClearUpdatedByID() *TFASettingUpdateOne {
 	tsuo.mutation.ClearUpdatedByID()
+	return tsuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (tsuo *TFASettingUpdateOne) SetUpdatedByUserID(s string) *TFASettingUpdateOne {
+	tsuo.mutation.SetUpdatedByUserID(s)
+	return tsuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (tsuo *TFASettingUpdateOne) SetNillableUpdatedByUserID(s *string) *TFASettingUpdateOne {
+	if s != nil {
+		tsuo.SetUpdatedByUserID(*s)
+	}
+	return tsuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (tsuo *TFASettingUpdateOne) ClearUpdatedByUserID() *TFASettingUpdateOne {
+	tsuo.mutation.ClearUpdatedByUserID()
+	return tsuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (tsuo *TFASettingUpdateOne) SetUpdatedByServiceID(s string) *TFASettingUpdateOne {
+	tsuo.mutation.SetUpdatedByServiceID(s)
+	return tsuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (tsuo *TFASettingUpdateOne) SetNillableUpdatedByServiceID(s *string) *TFASettingUpdateOne {
+	if s != nil {
+		tsuo.SetUpdatedByServiceID(*s)
+	}
+	return tsuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (tsuo *TFASettingUpdateOne) ClearUpdatedByServiceID() *TFASettingUpdateOne {
+	tsuo.mutation.ClearUpdatedByServiceID()
 	return tsuo
 }
 
@@ -632,9 +763,14 @@ func (tsuo *TFASettingUpdateOne) ClearTotpAllowed() *TFASettingUpdateOne {
 	return tsuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (tsuo *TFASettingUpdateOne) SetUpdatedBy(c *ChangeActor) *TFASettingUpdateOne {
-	return tsuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (tsuo *TFASettingUpdateOne) SetUpdatedByUser(u *User) *TFASettingUpdateOne {
+	return tsuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (tsuo *TFASettingUpdateOne) SetUpdatedByService(a *APIToken) *TFASettingUpdateOne {
+	return tsuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -647,9 +783,15 @@ func (tsuo *TFASettingUpdateOne) Mutation() *TFASettingMutation {
 	return tsuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (tsuo *TFASettingUpdateOne) ClearUpdatedBy() *TFASettingUpdateOne {
-	tsuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (tsuo *TFASettingUpdateOne) ClearUpdatedByUser() *TFASettingUpdateOne {
+	tsuo.mutation.ClearUpdatedByUser()
+	return tsuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (tsuo *TFASettingUpdateOne) ClearUpdatedByService() *TFASettingUpdateOne {
+	tsuo.mutation.ClearUpdatedByService()
 	return tsuo
 }
 
@@ -755,6 +897,15 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 	if tsuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(tfasetting.FieldUpdatedAt, field.TypeTime)
 	}
+	if tsuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := tsuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(tfasetting.FieldUpdatedByID, field.TypeString, value)
+	}
+	if tsuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(tfasetting.FieldUpdatedByID, field.TypeString)
+	}
 	if tsuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(tfasetting.FieldDeletedAt, field.TypeTime)
 	}
@@ -810,29 +961,60 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 	if tsuo.mutation.TotpAllowedCleared() {
 		_spec.ClearField(tfasetting.FieldTotpAllowed, field.TypeBool)
 	}
-	if tsuo.mutation.UpdatedByCleared() {
+	if tsuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   tfasetting.UpdatedByTable,
-			Columns: []string{tfasetting.UpdatedByColumn},
+			Table:   tfasetting.UpdatedByUserTable,
+			Columns: []string{tfasetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsuo.schemaConfig.TFASetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tsuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := tsuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   tfasetting.UpdatedByTable,
-			Columns: []string{tfasetting.UpdatedByColumn},
+			Table:   tfasetting.UpdatedByUserTable,
+			Columns: []string{tfasetting.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsuo.schemaConfig.TFASetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tsuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByServiceTable,
+			Columns: []string{tfasetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tsuo.schemaConfig.TFASetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tsuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   tfasetting.UpdatedByServiceTable,
+			Columns: []string{tfasetting.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tsuo.schemaConfig.TFASetting

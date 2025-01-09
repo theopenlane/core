@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -27,24 +27,26 @@ import (
 // ActionPlanQuery is the builder for querying ActionPlan entities.
 type ActionPlanQuery struct {
 	config
-	ctx               *QueryContext
-	order             []actionplan.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.ActionPlan
-	withCreatedBy     *ChangeActorQuery
-	withUpdatedBy     *ChangeActorQuery
-	withStandard      *StandardQuery
-	withRisk          *RiskQuery
-	withControl       *ControlQuery
-	withUser          *UserQuery
-	withProgram       *ProgramQuery
-	loadTotal         []func(context.Context, []*ActionPlan) error
-	modifiers         []func(*sql.Selector)
-	withNamedStandard map[string]*StandardQuery
-	withNamedRisk     map[string]*RiskQuery
-	withNamedControl  map[string]*ControlQuery
-	withNamedUser     map[string]*UserQuery
-	withNamedProgram  map[string]*ProgramQuery
+	ctx                  *QueryContext
+	order                []actionplan.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.ActionPlan
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withStandard         *StandardQuery
+	withRisk             *RiskQuery
+	withControl          *ControlQuery
+	withUser             *UserQuery
+	withProgram          *ProgramQuery
+	loadTotal            []func(context.Context, []*ActionPlan) error
+	modifiers            []func(*sql.Selector)
+	withNamedStandard    map[string]*StandardQuery
+	withNamedRisk        map[string]*RiskQuery
+	withNamedControl     map[string]*ControlQuery
+	withNamedUser        map[string]*UserQuery
+	withNamedProgram     map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -81,9 +83,9 @@ func (apq *ActionPlanQuery) Order(o ...actionplan.OrderOption) *ActionPlanQuery 
 	return apq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (apq *ActionPlanQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: apq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (apq *ActionPlanQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: apq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := apq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -94,11 +96,11 @@ func (apq *ActionPlanQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.CreatedByTable, actionplan.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.CreatedByUserTable, actionplan.CreatedByUserColumn),
 		)
 		schemaConfig := apq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
@@ -106,9 +108,9 @@ func (apq *ActionPlanQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (apq *ActionPlanQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: apq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (apq *ActionPlanQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: apq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := apq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -119,11 +121,61 @@ func (apq *ActionPlanQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.UpdatedByTable, actionplan.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.UpdatedByUserTable, actionplan.UpdatedByUserColumn),
 		)
 		schemaConfig := apq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (apq *ActionPlanQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.CreatedByServiceTable, actionplan.CreatedByServiceColumn),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (apq *ActionPlanQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.UpdatedByServiceTable, actionplan.UpdatedByServiceColumn),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
@@ -443,18 +495,20 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 		return nil
 	}
 	return &ActionPlanQuery{
-		config:        apq.config,
-		ctx:           apq.ctx.Clone(),
-		order:         append([]actionplan.OrderOption{}, apq.order...),
-		inters:        append([]Interceptor{}, apq.inters...),
-		predicates:    append([]predicate.ActionPlan{}, apq.predicates...),
-		withCreatedBy: apq.withCreatedBy.Clone(),
-		withUpdatedBy: apq.withUpdatedBy.Clone(),
-		withStandard:  apq.withStandard.Clone(),
-		withRisk:      apq.withRisk.Clone(),
-		withControl:   apq.withControl.Clone(),
-		withUser:      apq.withUser.Clone(),
-		withProgram:   apq.withProgram.Clone(),
+		config:               apq.config,
+		ctx:                  apq.ctx.Clone(),
+		order:                append([]actionplan.OrderOption{}, apq.order...),
+		inters:               append([]Interceptor{}, apq.inters...),
+		predicates:           append([]predicate.ActionPlan{}, apq.predicates...),
+		withCreatedByUser:    apq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    apq.withUpdatedByUser.Clone(),
+		withCreatedByService: apq.withCreatedByService.Clone(),
+		withUpdatedByService: apq.withUpdatedByService.Clone(),
+		withStandard:         apq.withStandard.Clone(),
+		withRisk:             apq.withRisk.Clone(),
+		withControl:          apq.withControl.Clone(),
+		withUser:             apq.withUser.Clone(),
+		withProgram:          apq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       apq.sql.Clone(),
 		path:      apq.path,
@@ -462,25 +516,47 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ActionPlanQuery {
-	query := (&ChangeActorClient{config: apq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithCreatedByUser(opts ...func(*UserQuery)) *ActionPlanQuery {
+	query := (&UserClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	apq.withCreatedBy = query
+	apq.withCreatedByUser = query
 	return apq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (apq *ActionPlanQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ActionPlanQuery {
-	query := (&ChangeActorClient{config: apq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *ActionPlanQuery {
+	query := (&UserClient{config: apq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	apq.withUpdatedBy = query
+	apq.withUpdatedByUser = query
+	return apq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *ActionPlanQuery {
+	query := (&APITokenClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withCreatedByService = query
+	return apq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *ActionPlanQuery {
+	query := (&APITokenClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withUpdatedByService = query
 	return apq
 }
 
@@ -617,9 +693,11 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*ActionPlan{}
 		_spec       = apq.querySpec()
-		loadedTypes = [7]bool{
-			apq.withCreatedBy != nil,
-			apq.withUpdatedBy != nil,
+		loadedTypes = [9]bool{
+			apq.withCreatedByUser != nil,
+			apq.withUpdatedByUser != nil,
+			apq.withCreatedByService != nil,
+			apq.withUpdatedByService != nil,
 			apq.withStandard != nil,
 			apq.withRisk != nil,
 			apq.withControl != nil,
@@ -650,15 +728,27 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := apq.withCreatedBy; query != nil {
-		if err := apq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *ActionPlan, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := apq.withCreatedByUser; query != nil {
+		if err := apq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := apq.withUpdatedBy; query != nil {
-		if err := apq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *ActionPlan, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := apq.withUpdatedByUser; query != nil {
+		if err := apq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := apq.withCreatedByService; query != nil {
+		if err := apq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := apq.withUpdatedByService; query != nil {
+		if err := apq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -740,11 +830,11 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *ChangeActor)) error {
+func (apq *ActionPlanQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ActionPlan)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -753,7 +843,7 @@ func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -761,7 +851,7 @@ func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -769,11 +859,11 @@ func (apq *ActionPlanQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	}
 	return nil
 }
-func (apq *ActionPlanQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *ChangeActor)) error {
+func (apq *ActionPlanQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ActionPlan)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -782,7 +872,7 @@ func (apq *ActionPlanQuery) loadUpdatedBy(ctx context.Context, query *ChangeActo
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -790,7 +880,65 @@ func (apq *ActionPlanQuery) loadUpdatedBy(ctx context.Context, query *ChangeActo
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (apq *ActionPlanQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (apq *ActionPlanQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1139,11 +1287,17 @@ func (apq *ActionPlanQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if apq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(actionplan.FieldCreatedByID)
+		if apq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldCreatedByUserID)
 		}
-		if apq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(actionplan.FieldUpdatedByID)
+		if apq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldUpdatedByUserID)
+		}
+		if apq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldCreatedByServiceID)
+		}
+		if apq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldUpdatedByServiceID)
 		}
 	}
 	if ps := apq.predicates; len(ps) > 0 {

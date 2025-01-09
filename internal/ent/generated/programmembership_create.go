@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -76,6 +76,62 @@ func (pmc *ProgramMembershipCreate) SetUpdatedByID(s string) *ProgramMembershipC
 func (pmc *ProgramMembershipCreate) SetNillableUpdatedByID(s *string) *ProgramMembershipCreate {
 	if s != nil {
 		pmc.SetUpdatedByID(*s)
+	}
+	return pmc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (pmc *ProgramMembershipCreate) SetCreatedByUserID(s string) *ProgramMembershipCreate {
+	pmc.mutation.SetCreatedByUserID(s)
+	return pmc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (pmc *ProgramMembershipCreate) SetNillableCreatedByUserID(s *string) *ProgramMembershipCreate {
+	if s != nil {
+		pmc.SetCreatedByUserID(*s)
+	}
+	return pmc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pmc *ProgramMembershipCreate) SetUpdatedByUserID(s string) *ProgramMembershipCreate {
+	pmc.mutation.SetUpdatedByUserID(s)
+	return pmc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pmc *ProgramMembershipCreate) SetNillableUpdatedByUserID(s *string) *ProgramMembershipCreate {
+	if s != nil {
+		pmc.SetUpdatedByUserID(*s)
+	}
+	return pmc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (pmc *ProgramMembershipCreate) SetCreatedByServiceID(s string) *ProgramMembershipCreate {
+	pmc.mutation.SetCreatedByServiceID(s)
+	return pmc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (pmc *ProgramMembershipCreate) SetNillableCreatedByServiceID(s *string) *ProgramMembershipCreate {
+	if s != nil {
+		pmc.SetCreatedByServiceID(*s)
+	}
+	return pmc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pmc *ProgramMembershipCreate) SetUpdatedByServiceID(s string) *ProgramMembershipCreate {
+	pmc.mutation.SetUpdatedByServiceID(s)
+	return pmc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pmc *ProgramMembershipCreate) SetNillableUpdatedByServiceID(s *string) *ProgramMembershipCreate {
+	if s != nil {
+		pmc.SetUpdatedByServiceID(*s)
 	}
 	return pmc
 }
@@ -162,14 +218,24 @@ func (pmc *ProgramMembershipCreate) SetNillableID(s *string) *ProgramMembershipC
 	return pmc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (pmc *ProgramMembershipCreate) SetCreatedBy(c *ChangeActor) *ProgramMembershipCreate {
-	return pmc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (pmc *ProgramMembershipCreate) SetCreatedByUser(u *User) *ProgramMembershipCreate {
+	return pmc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (pmc *ProgramMembershipCreate) SetUpdatedBy(c *ChangeActor) *ProgramMembershipCreate {
-	return pmc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (pmc *ProgramMembershipCreate) SetUpdatedByUser(u *User) *ProgramMembershipCreate {
+	return pmc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (pmc *ProgramMembershipCreate) SetCreatedByService(a *APIToken) *ProgramMembershipCreate {
+	return pmc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (pmc *ProgramMembershipCreate) SetUpdatedByService(a *APIToken) *ProgramMembershipCreate {
+	return pmc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetProgram sets the "program" edge to the Program entity.
@@ -323,6 +389,14 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 		_spec.SetField(programmembership.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := pmc.mutation.CreatedByID(); ok {
+		_spec.SetField(programmembership.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := pmc.mutation.UpdatedByID(); ok {
+		_spec.SetField(programmembership.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := pmc.mutation.MappingID(); ok {
 		_spec.SetField(programmembership.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -339,40 +413,76 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if nodes := pmc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := pmc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   programmembership.CreatedByTable,
-			Columns: []string{programmembership.CreatedByColumn},
+			Table:   programmembership.CreatedByUserTable,
+			Columns: []string{programmembership.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmc.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pmc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := pmc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   programmembership.UpdatedByTable,
-			Columns: []string{programmembership.UpdatedByColumn},
+			Table:   programmembership.UpdatedByUserTable,
+			Columns: []string{programmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pmc.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pmc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.CreatedByServiceTable,
+			Columns: []string{programmembership.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmc.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pmc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   programmembership.UpdatedByServiceTable,
+			Columns: []string{programmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pmc.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pmc.mutation.ProgramIDs(); len(nodes) > 0 {

@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -74,6 +74,62 @@ func (evtc *EmailVerificationTokenCreate) SetUpdatedByID(s string) *EmailVerific
 func (evtc *EmailVerificationTokenCreate) SetNillableUpdatedByID(s *string) *EmailVerificationTokenCreate {
 	if s != nil {
 		evtc.SetUpdatedByID(*s)
+	}
+	return evtc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (evtc *EmailVerificationTokenCreate) SetCreatedByUserID(s string) *EmailVerificationTokenCreate {
+	evtc.mutation.SetCreatedByUserID(s)
+	return evtc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (evtc *EmailVerificationTokenCreate) SetNillableCreatedByUserID(s *string) *EmailVerificationTokenCreate {
+	if s != nil {
+		evtc.SetCreatedByUserID(*s)
+	}
+	return evtc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (evtc *EmailVerificationTokenCreate) SetUpdatedByUserID(s string) *EmailVerificationTokenCreate {
+	evtc.mutation.SetUpdatedByUserID(s)
+	return evtc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (evtc *EmailVerificationTokenCreate) SetNillableUpdatedByUserID(s *string) *EmailVerificationTokenCreate {
+	if s != nil {
+		evtc.SetUpdatedByUserID(*s)
+	}
+	return evtc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (evtc *EmailVerificationTokenCreate) SetCreatedByServiceID(s string) *EmailVerificationTokenCreate {
+	evtc.mutation.SetCreatedByServiceID(s)
+	return evtc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (evtc *EmailVerificationTokenCreate) SetNillableCreatedByServiceID(s *string) *EmailVerificationTokenCreate {
+	if s != nil {
+		evtc.SetCreatedByServiceID(*s)
+	}
+	return evtc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (evtc *EmailVerificationTokenCreate) SetUpdatedByServiceID(s string) *EmailVerificationTokenCreate {
+	evtc.mutation.SetUpdatedByServiceID(s)
+	return evtc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (evtc *EmailVerificationTokenCreate) SetNillableUpdatedByServiceID(s *string) *EmailVerificationTokenCreate {
+	if s != nil {
+		evtc.SetUpdatedByServiceID(*s)
 	}
 	return evtc
 }
@@ -164,14 +220,24 @@ func (evtc *EmailVerificationTokenCreate) SetNillableID(s *string) *EmailVerific
 	return evtc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (evtc *EmailVerificationTokenCreate) SetCreatedBy(c *ChangeActor) *EmailVerificationTokenCreate {
-	return evtc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (evtc *EmailVerificationTokenCreate) SetCreatedByUser(u *User) *EmailVerificationTokenCreate {
+	return evtc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (evtc *EmailVerificationTokenCreate) SetUpdatedBy(c *ChangeActor) *EmailVerificationTokenCreate {
-	return evtc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (evtc *EmailVerificationTokenCreate) SetUpdatedByUser(u *User) *EmailVerificationTokenCreate {
+	return evtc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (evtc *EmailVerificationTokenCreate) SetCreatedByService(a *APIToken) *EmailVerificationTokenCreate {
+	return evtc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (evtc *EmailVerificationTokenCreate) SetUpdatedByService(a *APIToken) *EmailVerificationTokenCreate {
+	return evtc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -329,6 +395,14 @@ func (evtc *EmailVerificationTokenCreate) createSpec() (*EmailVerificationToken,
 		_spec.SetField(emailverificationtoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := evtc.mutation.CreatedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := evtc.mutation.UpdatedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := evtc.mutation.MappingID(); ok {
 		_spec.SetField(emailverificationtoken.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -357,40 +431,76 @@ func (evtc *EmailVerificationTokenCreate) createSpec() (*EmailVerificationToken,
 		_spec.SetField(emailverificationtoken.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
 	}
-	if nodes := evtc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := evtc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   emailverificationtoken.CreatedByTable,
-			Columns: []string{emailverificationtoken.CreatedByColumn},
+			Table:   emailverificationtoken.CreatedByUserTable,
+			Columns: []string{emailverificationtoken.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtc.schemaConfig.EmailVerificationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := evtc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := evtc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   emailverificationtoken.UpdatedByTable,
-			Columns: []string{emailverificationtoken.UpdatedByColumn},
+			Table:   emailverificationtoken.UpdatedByUserTable,
+			Columns: []string{emailverificationtoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = evtc.schemaConfig.EmailVerificationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := evtc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   emailverificationtoken.CreatedByServiceTable,
+			Columns: []string{emailverificationtoken.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = evtc.schemaConfig.EmailVerificationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := evtc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   emailverificationtoken.UpdatedByServiceTable,
+			Columns: []string{emailverificationtoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = evtc.schemaConfig.EmailVerificationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := evtc.mutation.OwnerIDs(); len(nodes) > 0 {

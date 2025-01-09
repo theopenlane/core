@@ -11,12 +11,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -64,6 +65,46 @@ func (hu *HushUpdate) SetNillableUpdatedByID(s *string) *HushUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (hu *HushUpdate) ClearUpdatedByID() *HushUpdate {
 	hu.mutation.ClearUpdatedByID()
+	return hu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (hu *HushUpdate) SetUpdatedByUserID(s string) *HushUpdate {
+	hu.mutation.SetUpdatedByUserID(s)
+	return hu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (hu *HushUpdate) SetNillableUpdatedByUserID(s *string) *HushUpdate {
+	if s != nil {
+		hu.SetUpdatedByUserID(*s)
+	}
+	return hu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (hu *HushUpdate) ClearUpdatedByUserID() *HushUpdate {
+	hu.mutation.ClearUpdatedByUserID()
+	return hu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (hu *HushUpdate) SetUpdatedByServiceID(s string) *HushUpdate {
+	hu.mutation.SetUpdatedByServiceID(s)
+	return hu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (hu *HushUpdate) SetNillableUpdatedByServiceID(s *string) *HushUpdate {
+	if s != nil {
+		hu.SetUpdatedByServiceID(*s)
+	}
+	return hu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (hu *HushUpdate) ClearUpdatedByServiceID() *HushUpdate {
+	hu.mutation.ClearUpdatedByServiceID()
 	return hu
 }
 
@@ -121,9 +162,14 @@ func (hu *HushUpdate) ClearKind() *HushUpdate {
 	return hu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (hu *HushUpdate) SetUpdatedBy(c *ChangeActor) *HushUpdate {
-	return hu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (hu *HushUpdate) SetUpdatedByUser(u *User) *HushUpdate {
+	return hu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (hu *HushUpdate) SetUpdatedByService(a *APIToken) *HushUpdate {
+	return hu.SetUpdatedByServiceID(a.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -176,9 +222,15 @@ func (hu *HushUpdate) Mutation() *HushMutation {
 	return hu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (hu *HushUpdate) ClearUpdatedBy() *HushUpdate {
-	hu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (hu *HushUpdate) ClearUpdatedByUser() *HushUpdate {
+	hu.mutation.ClearUpdatedByUser()
+	return hu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (hu *HushUpdate) ClearUpdatedByService() *HushUpdate {
+	hu.mutation.ClearUpdatedByService()
 	return hu
 }
 
@@ -324,6 +376,15 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(hush.FieldUpdatedAt, field.TypeTime)
 	}
+	if hu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(hush.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := hu.mutation.UpdatedByID(); ok {
+		_spec.SetField(hush.FieldUpdatedByID, field.TypeString, value)
+	}
+	if hu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(hush.FieldUpdatedByID, field.TypeString)
+	}
 	if hu.mutation.DeletedAtCleared() {
 		_spec.ClearField(hush.FieldDeletedAt, field.TypeTime)
 	}
@@ -351,29 +412,60 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hu.mutation.SecretValueCleared() {
 		_spec.ClearField(hush.FieldSecretValue, field.TypeString)
 	}
-	if hu.mutation.UpdatedByCleared() {
+	if hu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   hush.UpdatedByTable,
-			Columns: []string{hush.UpdatedByColumn},
+			Table:   hush.UpdatedByUserTable,
+			Columns: []string{hush.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = hu.schemaConfig.Hush
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := hu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := hu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   hush.UpdatedByTable,
-			Columns: []string{hush.UpdatedByColumn},
+			Table:   hush.UpdatedByUserTable,
+			Columns: []string{hush.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hu.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if hu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByServiceTable,
+			Columns: []string{hush.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = hu.schemaConfig.Hush
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := hu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByServiceTable,
+			Columns: []string{hush.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = hu.schemaConfig.Hush
@@ -582,6 +674,46 @@ func (huo *HushUpdateOne) ClearUpdatedByID() *HushUpdateOne {
 	return huo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (huo *HushUpdateOne) SetUpdatedByUserID(s string) *HushUpdateOne {
+	huo.mutation.SetUpdatedByUserID(s)
+	return huo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (huo *HushUpdateOne) SetNillableUpdatedByUserID(s *string) *HushUpdateOne {
+	if s != nil {
+		huo.SetUpdatedByUserID(*s)
+	}
+	return huo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (huo *HushUpdateOne) ClearUpdatedByUserID() *HushUpdateOne {
+	huo.mutation.ClearUpdatedByUserID()
+	return huo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (huo *HushUpdateOne) SetUpdatedByServiceID(s string) *HushUpdateOne {
+	huo.mutation.SetUpdatedByServiceID(s)
+	return huo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (huo *HushUpdateOne) SetNillableUpdatedByServiceID(s *string) *HushUpdateOne {
+	if s != nil {
+		huo.SetUpdatedByServiceID(*s)
+	}
+	return huo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (huo *HushUpdateOne) ClearUpdatedByServiceID() *HushUpdateOne {
+	huo.mutation.ClearUpdatedByServiceID()
+	return huo
+}
+
 // SetName sets the "name" field.
 func (huo *HushUpdateOne) SetName(s string) *HushUpdateOne {
 	huo.mutation.SetName(s)
@@ -636,9 +768,14 @@ func (huo *HushUpdateOne) ClearKind() *HushUpdateOne {
 	return huo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (huo *HushUpdateOne) SetUpdatedBy(c *ChangeActor) *HushUpdateOne {
-	return huo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (huo *HushUpdateOne) SetUpdatedByUser(u *User) *HushUpdateOne {
+	return huo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (huo *HushUpdateOne) SetUpdatedByService(a *APIToken) *HushUpdateOne {
+	return huo.SetUpdatedByServiceID(a.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -691,9 +828,15 @@ func (huo *HushUpdateOne) Mutation() *HushMutation {
 	return huo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (huo *HushUpdateOne) ClearUpdatedBy() *HushUpdateOne {
-	huo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (huo *HushUpdateOne) ClearUpdatedByUser() *HushUpdateOne {
+	huo.mutation.ClearUpdatedByUser()
+	return huo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (huo *HushUpdateOne) ClearUpdatedByService() *HushUpdateOne {
+	huo.mutation.ClearUpdatedByService()
 	return huo
 }
 
@@ -869,6 +1012,15 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 	if huo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(hush.FieldUpdatedAt, field.TypeTime)
 	}
+	if huo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(hush.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := huo.mutation.UpdatedByID(); ok {
+		_spec.SetField(hush.FieldUpdatedByID, field.TypeString, value)
+	}
+	if huo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(hush.FieldUpdatedByID, field.TypeString)
+	}
 	if huo.mutation.DeletedAtCleared() {
 		_spec.ClearField(hush.FieldDeletedAt, field.TypeTime)
 	}
@@ -896,29 +1048,60 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 	if huo.mutation.SecretValueCleared() {
 		_spec.ClearField(hush.FieldSecretValue, field.TypeString)
 	}
-	if huo.mutation.UpdatedByCleared() {
+	if huo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   hush.UpdatedByTable,
-			Columns: []string{hush.UpdatedByColumn},
+			Table:   hush.UpdatedByUserTable,
+			Columns: []string{hush.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = huo.schemaConfig.Hush
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := huo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := huo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   hush.UpdatedByTable,
-			Columns: []string{hush.UpdatedByColumn},
+			Table:   hush.UpdatedByUserTable,
+			Columns: []string{hush.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = huo.schemaConfig.Hush
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if huo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByServiceTable,
+			Columns: []string{hush.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = huo.schemaConfig.Hush
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := huo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   hush.UpdatedByServiceTable,
+			Columns: []string{hush.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = huo.schemaConfig.Hush

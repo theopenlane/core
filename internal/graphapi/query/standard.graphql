@@ -6,8 +6,6 @@ mutation CreateBulkCSVStandard($input: Upload!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -34,8 +32,6 @@ mutation CreateBulkStandard($input: [CreateStandardInput!]) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -62,8 +58,6 @@ mutation CreateStandard($input: CreateStandardInput!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details
@@ -109,8 +103,6 @@ query GetAllStandards {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
         version
       }
@@ -160,8 +152,6 @@ query GetStandards($where: StandardWhereInput) {
         updatedByID
         updatedBy {
           id
-          name
-          actorType
         }
         version
       }
@@ -177,8 +167,6 @@ mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
       createdByID
       createdBy {
         id
-        name
-        actorType
       }
       description
       details

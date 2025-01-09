@@ -12,12 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -66,6 +67,46 @@ func (cu *ContactUpdate) SetNillableUpdatedByID(s *string) *ContactUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (cu *ContactUpdate) ClearUpdatedByID() *ContactUpdate {
 	cu.mutation.ClearUpdatedByID()
+	return cu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (cu *ContactUpdate) SetUpdatedByUserID(s string) *ContactUpdate {
+	cu.mutation.SetUpdatedByUserID(s)
+	return cu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableUpdatedByUserID(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetUpdatedByUserID(*s)
+	}
+	return cu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (cu *ContactUpdate) ClearUpdatedByUserID() *ContactUpdate {
+	cu.mutation.ClearUpdatedByUserID()
+	return cu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (cu *ContactUpdate) SetUpdatedByServiceID(s string) *ContactUpdate {
+	cu.mutation.SetUpdatedByServiceID(s)
+	return cu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableUpdatedByServiceID(s *string) *ContactUpdate {
+	if s != nil {
+		cu.SetUpdatedByServiceID(*s)
+	}
+	return cu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (cu *ContactUpdate) ClearUpdatedByServiceID() *ContactUpdate {
+	cu.mutation.ClearUpdatedByServiceID()
 	return cu
 }
 
@@ -235,9 +276,14 @@ func (cu *ContactUpdate) SetNillableStatus(es *enums.UserStatus) *ContactUpdate 
 	return cu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (cu *ContactUpdate) SetUpdatedBy(c *ChangeActor) *ContactUpdate {
-	return cu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (cu *ContactUpdate) SetUpdatedByUser(u *User) *ContactUpdate {
+	return cu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (cu *ContactUpdate) SetUpdatedByService(a *APIToken) *ContactUpdate {
+	return cu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -280,9 +326,15 @@ func (cu *ContactUpdate) Mutation() *ContactMutation {
 	return cu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (cu *ContactUpdate) ClearUpdatedBy() *ContactUpdate {
-	cu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (cu *ContactUpdate) ClearUpdatedByUser() *ContactUpdate {
+	cu.mutation.ClearUpdatedByUser()
+	return cu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (cu *ContactUpdate) ClearUpdatedByService() *ContactUpdate {
+	cu.mutation.ClearUpdatedByService()
 	return cu
 }
 
@@ -433,6 +485,15 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contact.FieldUpdatedAt, field.TypeTime)
 	}
+	if cu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(contact.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := cu.mutation.UpdatedByID(); ok {
+		_spec.SetField(contact.FieldUpdatedByID, field.TypeString, value)
+	}
+	if cu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(contact.FieldUpdatedByID, field.TypeString)
+	}
 	if cu.mutation.DeletedAtCleared() {
 		_spec.ClearField(contact.FieldDeletedAt, field.TypeTime)
 	}
@@ -486,29 +547,60 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := cu.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
 	}
-	if cu.mutation.UpdatedByCleared() {
+	if cu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   contact.UpdatedByTable,
-			Columns: []string{contact.UpdatedByColumn},
+			Table:   contact.UpdatedByUserTable,
+			Columns: []string{contact.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cu.schemaConfig.Contact
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := cu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   contact.UpdatedByTable,
-			Columns: []string{contact.UpdatedByColumn},
+			Table:   contact.UpdatedByUserTable,
+			Columns: []string{contact.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.UpdatedByServiceTable,
+			Columns: []string{contact.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.Contact
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.UpdatedByServiceTable,
+			Columns: []string{contact.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cu.schemaConfig.Contact
@@ -700,6 +792,46 @@ func (cuo *ContactUpdateOne) ClearUpdatedByID() *ContactUpdateOne {
 	return cuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (cuo *ContactUpdateOne) SetUpdatedByUserID(s string) *ContactUpdateOne {
+	cuo.mutation.SetUpdatedByUserID(s)
+	return cuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableUpdatedByUserID(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetUpdatedByUserID(*s)
+	}
+	return cuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (cuo *ContactUpdateOne) ClearUpdatedByUserID() *ContactUpdateOne {
+	cuo.mutation.ClearUpdatedByUserID()
+	return cuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (cuo *ContactUpdateOne) SetUpdatedByServiceID(s string) *ContactUpdateOne {
+	cuo.mutation.SetUpdatedByServiceID(s)
+	return cuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableUpdatedByServiceID(s *string) *ContactUpdateOne {
+	if s != nil {
+		cuo.SetUpdatedByServiceID(*s)
+	}
+	return cuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (cuo *ContactUpdateOne) ClearUpdatedByServiceID() *ContactUpdateOne {
+	cuo.mutation.ClearUpdatedByServiceID()
+	return cuo
+}
+
 // SetTags sets the "tags" field.
 func (cuo *ContactUpdateOne) SetTags(s []string) *ContactUpdateOne {
 	cuo.mutation.SetTags(s)
@@ -866,9 +998,14 @@ func (cuo *ContactUpdateOne) SetNillableStatus(es *enums.UserStatus) *ContactUpd
 	return cuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (cuo *ContactUpdateOne) SetUpdatedBy(c *ChangeActor) *ContactUpdateOne {
-	return cuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (cuo *ContactUpdateOne) SetUpdatedByUser(u *User) *ContactUpdateOne {
+	return cuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (cuo *ContactUpdateOne) SetUpdatedByService(a *APIToken) *ContactUpdateOne {
+	return cuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -911,9 +1048,15 @@ func (cuo *ContactUpdateOne) Mutation() *ContactMutation {
 	return cuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (cuo *ContactUpdateOne) ClearUpdatedBy() *ContactUpdateOne {
-	cuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (cuo *ContactUpdateOne) ClearUpdatedByUser() *ContactUpdateOne {
+	cuo.mutation.ClearUpdatedByUser()
+	return cuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (cuo *ContactUpdateOne) ClearUpdatedByService() *ContactUpdateOne {
+	cuo.mutation.ClearUpdatedByService()
 	return cuo
 }
 
@@ -1094,6 +1237,15 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 	if cuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contact.FieldUpdatedAt, field.TypeTime)
 	}
+	if cuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(contact.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := cuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(contact.FieldUpdatedByID, field.TypeString, value)
+	}
+	if cuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(contact.FieldUpdatedByID, field.TypeString)
+	}
 	if cuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(contact.FieldDeletedAt, field.TypeTime)
 	}
@@ -1147,29 +1299,60 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 	if value, ok := cuo.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
 	}
-	if cuo.mutation.UpdatedByCleared() {
+	if cuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   contact.UpdatedByTable,
-			Columns: []string{contact.UpdatedByColumn},
+			Table:   contact.UpdatedByUserTable,
+			Columns: []string{contact.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cuo.schemaConfig.Contact
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := cuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   contact.UpdatedByTable,
-			Columns: []string{contact.UpdatedByColumn},
+			Table:   contact.UpdatedByUserTable,
+			Columns: []string{contact.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.UpdatedByServiceTable,
+			Columns: []string{contact.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.Contact
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   contact.UpdatedByServiceTable,
+			Columns: []string{contact.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cuo.schemaConfig.Contact

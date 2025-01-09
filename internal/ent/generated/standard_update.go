@@ -13,13 +13,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -67,6 +68,46 @@ func (su *StandardUpdate) SetNillableUpdatedByID(s *string) *StandardUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (su *StandardUpdate) ClearUpdatedByID() *StandardUpdate {
 	su.mutation.ClearUpdatedByID()
+	return su
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (su *StandardUpdate) SetUpdatedByUserID(s string) *StandardUpdate {
+	su.mutation.SetUpdatedByUserID(s)
+	return su
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableUpdatedByUserID(s *string) *StandardUpdate {
+	if s != nil {
+		su.SetUpdatedByUserID(*s)
+	}
+	return su
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (su *StandardUpdate) ClearUpdatedByUserID() *StandardUpdate {
+	su.mutation.ClearUpdatedByUserID()
+	return su
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (su *StandardUpdate) SetUpdatedByServiceID(s string) *StandardUpdate {
+	su.mutation.SetUpdatedByServiceID(s)
+	return su
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (su *StandardUpdate) SetNillableUpdatedByServiceID(s *string) *StandardUpdate {
+	if s != nil {
+		su.SetUpdatedByServiceID(*s)
+	}
+	return su
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (su *StandardUpdate) ClearUpdatedByServiceID() *StandardUpdate {
+	su.mutation.ClearUpdatedByServiceID()
 	return su
 }
 
@@ -274,9 +315,14 @@ func (su *StandardUpdate) ClearDetails() *StandardUpdate {
 	return su
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (su *StandardUpdate) SetUpdatedBy(c *ChangeActor) *StandardUpdate {
-	return su.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (su *StandardUpdate) SetUpdatedByUser(u *User) *StandardUpdate {
+	return su.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (su *StandardUpdate) SetUpdatedByService(a *APIToken) *StandardUpdate {
+	return su.SetUpdatedByServiceID(a.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -359,9 +405,15 @@ func (su *StandardUpdate) Mutation() *StandardMutation {
 	return su.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (su *StandardUpdate) ClearUpdatedBy() *StandardUpdate {
-	su.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (su *StandardUpdate) ClearUpdatedByUser() *StandardUpdate {
+	su.mutation.ClearUpdatedByUser()
+	return su
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (su *StandardUpdate) ClearUpdatedByService() *StandardUpdate {
+	su.mutation.ClearUpdatedByService()
 	return su
 }
 
@@ -549,6 +601,15 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standard.FieldUpdatedAt, field.TypeTime)
 	}
+	if su.mutation.CreatedByIDCleared() {
+		_spec.ClearField(standard.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := su.mutation.UpdatedByID(); ok {
+		_spec.SetField(standard.FieldUpdatedByID, field.TypeString, value)
+	}
+	if su.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(standard.FieldUpdatedByID, field.TypeString)
+	}
 	if su.mutation.DeletedAtCleared() {
 		_spec.ClearField(standard.FieldDeletedAt, field.TypeTime)
 	}
@@ -623,29 +684,60 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.DetailsCleared() {
 		_spec.ClearField(standard.FieldDetails, field.TypeJSON)
 	}
-	if su.mutation.UpdatedByCleared() {
+	if su.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   standard.UpdatedByTable,
-			Columns: []string{standard.UpdatedByColumn},
+			Table:   standard.UpdatedByUserTable,
+			Columns: []string{standard.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = su.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := su.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   standard.UpdatedByTable,
-			Columns: []string{standard.UpdatedByColumn},
+			Table:   standard.UpdatedByUserTable,
+			Columns: []string{standard.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.UpdatedByServiceTable,
+			Columns: []string{standard.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.UpdatedByServiceTable,
+			Columns: []string{standard.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = su.schemaConfig.Standard
@@ -950,6 +1042,46 @@ func (suo *StandardUpdateOne) ClearUpdatedByID() *StandardUpdateOne {
 	return suo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (suo *StandardUpdateOne) SetUpdatedByUserID(s string) *StandardUpdateOne {
+	suo.mutation.SetUpdatedByUserID(s)
+	return suo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableUpdatedByUserID(s *string) *StandardUpdateOne {
+	if s != nil {
+		suo.SetUpdatedByUserID(*s)
+	}
+	return suo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (suo *StandardUpdateOne) ClearUpdatedByUserID() *StandardUpdateOne {
+	suo.mutation.ClearUpdatedByUserID()
+	return suo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (suo *StandardUpdateOne) SetUpdatedByServiceID(s string) *StandardUpdateOne {
+	suo.mutation.SetUpdatedByServiceID(s)
+	return suo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (suo *StandardUpdateOne) SetNillableUpdatedByServiceID(s *string) *StandardUpdateOne {
+	if s != nil {
+		suo.SetUpdatedByServiceID(*s)
+	}
+	return suo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (suo *StandardUpdateOne) ClearUpdatedByServiceID() *StandardUpdateOne {
+	suo.mutation.ClearUpdatedByServiceID()
+	return suo
+}
+
 // SetTags sets the "tags" field.
 func (suo *StandardUpdateOne) SetTags(s []string) *StandardUpdateOne {
 	suo.mutation.SetTags(s)
@@ -1154,9 +1286,14 @@ func (suo *StandardUpdateOne) ClearDetails() *StandardUpdateOne {
 	return suo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (suo *StandardUpdateOne) SetUpdatedBy(c *ChangeActor) *StandardUpdateOne {
-	return suo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (suo *StandardUpdateOne) SetUpdatedByUser(u *User) *StandardUpdateOne {
+	return suo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (suo *StandardUpdateOne) SetUpdatedByService(a *APIToken) *StandardUpdateOne {
+	return suo.SetUpdatedByServiceID(a.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -1239,9 +1376,15 @@ func (suo *StandardUpdateOne) Mutation() *StandardMutation {
 	return suo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (suo *StandardUpdateOne) ClearUpdatedBy() *StandardUpdateOne {
-	suo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (suo *StandardUpdateOne) ClearUpdatedByUser() *StandardUpdateOne {
+	suo.mutation.ClearUpdatedByUser()
+	return suo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (suo *StandardUpdateOne) ClearUpdatedByService() *StandardUpdateOne {
+	suo.mutation.ClearUpdatedByService()
 	return suo
 }
 
@@ -1459,6 +1602,15 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if suo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standard.FieldUpdatedAt, field.TypeTime)
 	}
+	if suo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(standard.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := suo.mutation.UpdatedByID(); ok {
+		_spec.SetField(standard.FieldUpdatedByID, field.TypeString, value)
+	}
+	if suo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(standard.FieldUpdatedByID, field.TypeString)
+	}
 	if suo.mutation.DeletedAtCleared() {
 		_spec.ClearField(standard.FieldDeletedAt, field.TypeTime)
 	}
@@ -1533,29 +1685,60 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if suo.mutation.DetailsCleared() {
 		_spec.ClearField(standard.FieldDetails, field.TypeJSON)
 	}
-	if suo.mutation.UpdatedByCleared() {
+	if suo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   standard.UpdatedByTable,
-			Columns: []string{standard.UpdatedByColumn},
+			Table:   standard.UpdatedByUserTable,
+			Columns: []string{standard.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = suo.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := suo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   standard.UpdatedByTable,
-			Columns: []string{standard.UpdatedByColumn},
+			Table:   standard.UpdatedByUserTable,
+			Columns: []string{standard.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.UpdatedByServiceTable,
+			Columns: []string{standard.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.UpdatedByServiceTable,
+			Columns: []string{standard.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = suo.schemaConfig.Standard

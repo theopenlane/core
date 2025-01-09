@@ -64,6 +64,46 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearUpdatedByID() *ControlObjectiveH
 	return cohu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetUpdatedByUserID(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetUpdatedByUserID(s)
+	return cohu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableUpdatedByUserID(s *string) *ControlObjectiveHistoryUpdate {
+	if s != nil {
+		cohu.SetUpdatedByUserID(*s)
+	}
+	return cohu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearUpdatedByUserID() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearUpdatedByUserID()
+	return cohu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetUpdatedByServiceID(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetUpdatedByServiceID(s)
+	return cohu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *ControlObjectiveHistoryUpdate {
+	if s != nil {
+		cohu.SetUpdatedByServiceID(*s)
+	}
+	return cohu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearUpdatedByServiceID() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearUpdatedByServiceID()
+	return cohu
+}
+
 // SetTags sets the "tags" field.
 func (cohu *ControlObjectiveHistoryUpdate) SetTags(s []string) *ControlObjectiveHistoryUpdate {
 	cohu.mutation.SetTags(s)
@@ -388,6 +428,24 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldUpdatedByID, field.TypeString)
 	}
+	if cohu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := cohu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if cohu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if cohu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := cohu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if cohu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if cohu.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -524,6 +582,46 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableUpdatedByID(s *string)
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) ClearUpdatedByID() *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.ClearUpdatedByID()
+	return cohuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetUpdatedByUserID(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetUpdatedByUserID(s)
+	return cohuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *ControlObjectiveHistoryUpdateOne {
+	if s != nil {
+		cohuo.SetUpdatedByUserID(*s)
+	}
+	return cohuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearUpdatedByUserID() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearUpdatedByUserID()
+	return cohuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetUpdatedByServiceID(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetUpdatedByServiceID(s)
+	return cohuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *ControlObjectiveHistoryUpdateOne {
+	if s != nil {
+		cohuo.SetUpdatedByServiceID(*s)
+	}
+	return cohuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearUpdatedByServiceID() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearUpdatedByServiceID()
 	return cohuo
 }
 
@@ -880,6 +978,24 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if cohuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldUpdatedByID, field.TypeString)
+	}
+	if cohuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := cohuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if cohuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if cohuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := cohuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if cohuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if cohuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDeletedAt, field.TypeTime)

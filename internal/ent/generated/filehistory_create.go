@@ -125,6 +125,62 @@ func (fhc *FileHistoryCreate) SetNillableUpdatedByID(s *string) *FileHistoryCrea
 	return fhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (fhc *FileHistoryCreate) SetCreatedByUserID(s string) *FileHistoryCreate {
+	fhc.mutation.SetCreatedByUserID(s)
+	return fhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableCreatedByUserID(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetCreatedByUserID(*s)
+	}
+	return fhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (fhc *FileHistoryCreate) SetUpdatedByUserID(s string) *FileHistoryCreate {
+	fhc.mutation.SetUpdatedByUserID(s)
+	return fhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableUpdatedByUserID(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetUpdatedByUserID(*s)
+	}
+	return fhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (fhc *FileHistoryCreate) SetCreatedByServiceID(s string) *FileHistoryCreate {
+	fhc.mutation.SetCreatedByServiceID(s)
+	return fhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableCreatedByServiceID(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetCreatedByServiceID(*s)
+	}
+	return fhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (fhc *FileHistoryCreate) SetUpdatedByServiceID(s string) *FileHistoryCreate {
+	fhc.mutation.SetUpdatedByServiceID(s)
+	return fhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableUpdatedByServiceID(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetUpdatedByServiceID(*s)
+	}
+	return fhc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (fhc *FileHistoryCreate) SetDeletedAt(t time.Time) *FileHistoryCreate {
 	fhc.mutation.SetDeletedAt(t)
@@ -522,6 +578,22 @@ func (fhc *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) 
 	if value, ok := fhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(filehistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := fhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(filehistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := fhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := fhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(filehistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := fhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(filehistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := fhc.mutation.DeletedAt(); ok {
 		_spec.SetField(filehistory.FieldDeletedAt, field.TypeTime, value)

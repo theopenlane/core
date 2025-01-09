@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -77,6 +77,62 @@ func (omc *OrgMembershipCreate) SetUpdatedByID(s string) *OrgMembershipCreate {
 func (omc *OrgMembershipCreate) SetNillableUpdatedByID(s *string) *OrgMembershipCreate {
 	if s != nil {
 		omc.SetUpdatedByID(*s)
+	}
+	return omc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (omc *OrgMembershipCreate) SetCreatedByUserID(s string) *OrgMembershipCreate {
+	omc.mutation.SetCreatedByUserID(s)
+	return omc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (omc *OrgMembershipCreate) SetNillableCreatedByUserID(s *string) *OrgMembershipCreate {
+	if s != nil {
+		omc.SetCreatedByUserID(*s)
+	}
+	return omc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (omc *OrgMembershipCreate) SetUpdatedByUserID(s string) *OrgMembershipCreate {
+	omc.mutation.SetUpdatedByUserID(s)
+	return omc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (omc *OrgMembershipCreate) SetNillableUpdatedByUserID(s *string) *OrgMembershipCreate {
+	if s != nil {
+		omc.SetUpdatedByUserID(*s)
+	}
+	return omc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (omc *OrgMembershipCreate) SetCreatedByServiceID(s string) *OrgMembershipCreate {
+	omc.mutation.SetCreatedByServiceID(s)
+	return omc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (omc *OrgMembershipCreate) SetNillableCreatedByServiceID(s *string) *OrgMembershipCreate {
+	if s != nil {
+		omc.SetCreatedByServiceID(*s)
+	}
+	return omc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (omc *OrgMembershipCreate) SetUpdatedByServiceID(s string) *OrgMembershipCreate {
+	omc.mutation.SetUpdatedByServiceID(s)
+	return omc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (omc *OrgMembershipCreate) SetNillableUpdatedByServiceID(s *string) *OrgMembershipCreate {
+	if s != nil {
+		omc.SetUpdatedByServiceID(*s)
 	}
 	return omc
 }
@@ -163,14 +219,24 @@ func (omc *OrgMembershipCreate) SetNillableID(s *string) *OrgMembershipCreate {
 	return omc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (omc *OrgMembershipCreate) SetCreatedBy(c *ChangeActor) *OrgMembershipCreate {
-	return omc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (omc *OrgMembershipCreate) SetCreatedByUser(u *User) *OrgMembershipCreate {
+	return omc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (omc *OrgMembershipCreate) SetUpdatedBy(c *ChangeActor) *OrgMembershipCreate {
-	return omc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (omc *OrgMembershipCreate) SetUpdatedByUser(u *User) *OrgMembershipCreate {
+	return omc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (omc *OrgMembershipCreate) SetCreatedByService(a *APIToken) *OrgMembershipCreate {
+	return omc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (omc *OrgMembershipCreate) SetUpdatedByService(a *APIToken) *OrgMembershipCreate {
+	return omc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
@@ -339,6 +405,14 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 		_spec.SetField(orgmembership.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := omc.mutation.CreatedByID(); ok {
+		_spec.SetField(orgmembership.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := omc.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgmembership.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := omc.mutation.MappingID(); ok {
 		_spec.SetField(orgmembership.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -355,40 +429,76 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if nodes := omc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := omc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   orgmembership.CreatedByTable,
-			Columns: []string{orgmembership.CreatedByColumn},
+			Table:   orgmembership.CreatedByUserTable,
+			Columns: []string{orgmembership.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = omc.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := omc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := omc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   orgmembership.UpdatedByTable,
-			Columns: []string{orgmembership.UpdatedByColumn},
+			Table:   orgmembership.UpdatedByUserTable,
+			Columns: []string{orgmembership.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = omc.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := omc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgmembership.CreatedByServiceTable,
+			Columns: []string{orgmembership.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = omc.schemaConfig.OrgMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := omc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   orgmembership.UpdatedByServiceTable,
+			Columns: []string{orgmembership.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = omc.schemaConfig.OrgMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := omc.mutation.OrganizationIDs(); len(nodes) > 0 {

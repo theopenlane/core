@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -22,15 +22,17 @@ import (
 // TFASettingQuery is the builder for querying TFASetting entities.
 type TFASettingQuery struct {
 	config
-	ctx           *QueryContext
-	order         []tfasetting.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.TFASetting
-	withCreatedBy *ChangeActorQuery
-	withUpdatedBy *ChangeActorQuery
-	withOwner     *UserQuery
-	loadTotal     []func(context.Context, []*TFASetting) error
-	modifiers     []func(*sql.Selector)
+	ctx                  *QueryContext
+	order                []tfasetting.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.TFASetting
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOwner            *UserQuery
+	loadTotal            []func(context.Context, []*TFASetting) error
+	modifiers            []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -67,9 +69,9 @@ func (tsq *TFASettingQuery) Order(o ...tfasetting.OrderOption) *TFASettingQuery 
 	return tsq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (tsq *TFASettingQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: tsq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (tsq *TFASettingQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: tsq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tsq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -80,11 +82,11 @@ func (tsq *TFASettingQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tfasetting.Table, tfasetting.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.CreatedByTable, tfasetting.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.CreatedByUserTable, tfasetting.CreatedByUserColumn),
 		)
 		schemaConfig := tsq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.TFASetting
 		fromU = sqlgraph.SetNeighbors(tsq.driver.Dialect(), step)
 		return fromU, nil
@@ -92,9 +94,9 @@ func (tsq *TFASettingQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (tsq *TFASettingQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: tsq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (tsq *TFASettingQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: tsq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tsq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -105,11 +107,61 @@ func (tsq *TFASettingQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tfasetting.Table, tfasetting.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.UpdatedByTable, tfasetting.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.UpdatedByUserTable, tfasetting.UpdatedByUserColumn),
 		)
 		schemaConfig := tsq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.TFASetting
+		fromU = sqlgraph.SetNeighbors(tsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (tsq *TFASettingQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: tsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tfasetting.Table, tfasetting.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.CreatedByServiceTable, tfasetting.CreatedByServiceColumn),
+		)
+		schemaConfig := tsq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.TFASetting
+		fromU = sqlgraph.SetNeighbors(tsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (tsq *TFASettingQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: tsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tfasetting.Table, tfasetting.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, tfasetting.UpdatedByServiceTable, tfasetting.UpdatedByServiceColumn),
+		)
+		schemaConfig := tsq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.TFASetting
 		fromU = sqlgraph.SetNeighbors(tsq.driver.Dialect(), step)
 		return fromU, nil
@@ -329,14 +381,16 @@ func (tsq *TFASettingQuery) Clone() *TFASettingQuery {
 		return nil
 	}
 	return &TFASettingQuery{
-		config:        tsq.config,
-		ctx:           tsq.ctx.Clone(),
-		order:         append([]tfasetting.OrderOption{}, tsq.order...),
-		inters:        append([]Interceptor{}, tsq.inters...),
-		predicates:    append([]predicate.TFASetting{}, tsq.predicates...),
-		withCreatedBy: tsq.withCreatedBy.Clone(),
-		withUpdatedBy: tsq.withUpdatedBy.Clone(),
-		withOwner:     tsq.withOwner.Clone(),
+		config:               tsq.config,
+		ctx:                  tsq.ctx.Clone(),
+		order:                append([]tfasetting.OrderOption{}, tsq.order...),
+		inters:               append([]Interceptor{}, tsq.inters...),
+		predicates:           append([]predicate.TFASetting{}, tsq.predicates...),
+		withCreatedByUser:    tsq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    tsq.withUpdatedByUser.Clone(),
+		withCreatedByService: tsq.withCreatedByService.Clone(),
+		withUpdatedByService: tsq.withUpdatedByService.Clone(),
+		withOwner:            tsq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       tsq.sql.Clone(),
 		path:      tsq.path,
@@ -344,25 +398,47 @@ func (tsq *TFASettingQuery) Clone() *TFASettingQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (tsq *TFASettingQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *TFASettingQuery {
-	query := (&ChangeActorClient{config: tsq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (tsq *TFASettingQuery) WithCreatedByUser(opts ...func(*UserQuery)) *TFASettingQuery {
+	query := (&UserClient{config: tsq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tsq.withCreatedBy = query
+	tsq.withCreatedByUser = query
 	return tsq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (tsq *TFASettingQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *TFASettingQuery {
-	query := (&ChangeActorClient{config: tsq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (tsq *TFASettingQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *TFASettingQuery {
+	query := (&UserClient{config: tsq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tsq.withUpdatedBy = query
+	tsq.withUpdatedByUser = query
+	return tsq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (tsq *TFASettingQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *TFASettingQuery {
+	query := (&APITokenClient{config: tsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tsq.withCreatedByService = query
+	return tsq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (tsq *TFASettingQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *TFASettingQuery {
+	query := (&APITokenClient{config: tsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tsq.withUpdatedByService = query
 	return tsq
 }
 
@@ -455,9 +531,11 @@ func (tsq *TFASettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*TFASetting{}
 		_spec       = tsq.querySpec()
-		loadedTypes = [3]bool{
-			tsq.withCreatedBy != nil,
-			tsq.withUpdatedBy != nil,
+		loadedTypes = [5]bool{
+			tsq.withCreatedByUser != nil,
+			tsq.withUpdatedByUser != nil,
+			tsq.withCreatedByService != nil,
+			tsq.withUpdatedByService != nil,
 			tsq.withOwner != nil,
 		}
 	)
@@ -484,15 +562,27 @@ func (tsq *TFASettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tsq.withCreatedBy; query != nil {
-		if err := tsq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *TFASetting, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := tsq.withCreatedByUser; query != nil {
+		if err := tsq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *TFASetting, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tsq.withUpdatedBy; query != nil {
-		if err := tsq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *TFASetting, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := tsq.withUpdatedByUser; query != nil {
+		if err := tsq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *TFASetting, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tsq.withCreatedByService; query != nil {
+		if err := tsq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *TFASetting, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tsq.withUpdatedByService; query != nil {
+		if err := tsq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *TFASetting, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -510,11 +600,11 @@ func (tsq *TFASettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (tsq *TFASettingQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*TFASetting, init func(*TFASetting), assign func(*TFASetting, *ChangeActor)) error {
+func (tsq *TFASettingQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*TFASetting, init func(*TFASetting), assign func(*TFASetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TFASetting)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -523,7 +613,7 @@ func (tsq *TFASettingQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -531,7 +621,7 @@ func (tsq *TFASettingQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -539,11 +629,11 @@ func (tsq *TFASettingQuery) loadCreatedBy(ctx context.Context, query *ChangeActo
 	}
 	return nil
 }
-func (tsq *TFASettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*TFASetting, init func(*TFASetting), assign func(*TFASetting, *ChangeActor)) error {
+func (tsq *TFASettingQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*TFASetting, init func(*TFASetting), assign func(*TFASetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TFASetting)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -552,7 +642,7 @@ func (tsq *TFASettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeActo
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -560,7 +650,65 @@ func (tsq *TFASettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeActo
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tsq *TFASettingQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*TFASetting, init func(*TFASetting), assign func(*TFASetting, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TFASetting)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tsq *TFASettingQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*TFASetting, init func(*TFASetting), assign func(*TFASetting, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TFASetting)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -628,11 +776,17 @@ func (tsq *TFASettingQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if tsq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(tfasetting.FieldCreatedByID)
+		if tsq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(tfasetting.FieldCreatedByUserID)
 		}
-		if tsq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(tfasetting.FieldUpdatedByID)
+		if tsq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(tfasetting.FieldUpdatedByUserID)
+		}
+		if tsq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(tfasetting.FieldCreatedByServiceID)
+		}
+		if tsq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(tfasetting.FieldUpdatedByServiceID)
 		}
 		if tsq.withOwner != nil {
 			_spec.Node.AddColumnOnce(tfasetting.FieldOwnerID)

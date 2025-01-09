@@ -64,6 +64,46 @@ func (ohu *OrganizationHistoryUpdate) ClearUpdatedByID() *OrganizationHistoryUpd
 	return ohu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ohu *OrganizationHistoryUpdate) SetUpdatedByUserID(s string) *OrganizationHistoryUpdate {
+	ohu.mutation.SetUpdatedByUserID(s)
+	return ohu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ohu *OrganizationHistoryUpdate) SetNillableUpdatedByUserID(s *string) *OrganizationHistoryUpdate {
+	if s != nil {
+		ohu.SetUpdatedByUserID(*s)
+	}
+	return ohu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ohu *OrganizationHistoryUpdate) ClearUpdatedByUserID() *OrganizationHistoryUpdate {
+	ohu.mutation.ClearUpdatedByUserID()
+	return ohu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ohu *OrganizationHistoryUpdate) SetUpdatedByServiceID(s string) *OrganizationHistoryUpdate {
+	ohu.mutation.SetUpdatedByServiceID(s)
+	return ohu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ohu *OrganizationHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *OrganizationHistoryUpdate {
+	if s != nil {
+		ohu.SetUpdatedByServiceID(*s)
+	}
+	return ohu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ohu *OrganizationHistoryUpdate) ClearUpdatedByServiceID() *OrganizationHistoryUpdate {
+	ohu.mutation.ClearUpdatedByServiceID()
+	return ohu
+}
+
 // SetTags sets the "tags" field.
 func (ohu *OrganizationHistoryUpdate) SetTags(s []string) *OrganizationHistoryUpdate {
 	ohu.mutation.SetTags(s)
@@ -250,6 +290,24 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	if ohu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if ohu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(organizationhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := ohu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if ohu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if ohu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(organizationhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := ohu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if ohu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if value, ok := ohu.mutation.Tags(); ok {
 		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)
 	}
@@ -347,6 +405,46 @@ func (ohuo *OrganizationHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Org
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (ohuo *OrganizationHistoryUpdateOne) ClearUpdatedByID() *OrganizationHistoryUpdateOne {
 	ohuo.mutation.ClearUpdatedByID()
+	return ohuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ohuo *OrganizationHistoryUpdateOne) SetUpdatedByUserID(s string) *OrganizationHistoryUpdateOne {
+	ohuo.mutation.SetUpdatedByUserID(s)
+	return ohuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ohuo *OrganizationHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *OrganizationHistoryUpdateOne {
+	if s != nil {
+		ohuo.SetUpdatedByUserID(*s)
+	}
+	return ohuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ohuo *OrganizationHistoryUpdateOne) ClearUpdatedByUserID() *OrganizationHistoryUpdateOne {
+	ohuo.mutation.ClearUpdatedByUserID()
+	return ohuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ohuo *OrganizationHistoryUpdateOne) SetUpdatedByServiceID(s string) *OrganizationHistoryUpdateOne {
+	ohuo.mutation.SetUpdatedByServiceID(s)
+	return ohuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ohuo *OrganizationHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *OrganizationHistoryUpdateOne {
+	if s != nil {
+		ohuo.SetUpdatedByServiceID(*s)
+	}
+	return ohuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ohuo *OrganizationHistoryUpdateOne) ClearUpdatedByServiceID() *OrganizationHistoryUpdateOne {
+	ohuo.mutation.ClearUpdatedByServiceID()
 	return ohuo
 }
 
@@ -565,6 +663,24 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if ohuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if ohuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(organizationhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := ohuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if ohuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if ohuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(organizationhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := ohuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if ohuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if value, ok := ohuo.mutation.Tags(); ok {
 		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)

@@ -26,8 +26,8 @@ func (cac *ChangeActorCreate) SetName(s string) *ChangeActorCreate {
 }
 
 // SetActorType sets the "actor_type" field.
-func (cac *ChangeActorCreate) SetActorType(s string) *ChangeActorCreate {
-	cac.mutation.SetActorType(s)
+func (cac *ChangeActorCreate) SetActorType(ct changeactor.ActorType) *ChangeActorCreate {
+	cac.mutation.SetActorType(ct)
 	return cac
 }
 
@@ -77,6 +77,11 @@ func (cac *ChangeActorCreate) check() error {
 	if _, ok := cac.mutation.ActorType(); !ok {
 		return &ValidationError{Name: "actor_type", err: errors.New(`generated: missing required field "ChangeActor.actor_type"`)}
 	}
+	if v, ok := cac.mutation.ActorType(); ok {
+		if err := changeactor.ActorTypeValidator(v); err != nil {
+			return &ValidationError{Name: "actor_type", err: fmt.Errorf(`generated: validator failed for field "ChangeActor.actor_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -118,7 +123,7 @@ func (cac *ChangeActorCreate) createSpec() (*ChangeActor, *sqlgraph.CreateSpec) 
 		_node.Name = value
 	}
 	if value, ok := cac.mutation.ActorType(); ok {
-		_spec.SetField(changeactor.FieldActorType, field.TypeString, value)
+		_spec.SetField(changeactor.FieldActorType, field.TypeEnum, value)
 		_node.ActorType = value
 	}
 	return _node, _spec

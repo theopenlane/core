@@ -8,8 +8,7 @@ mutation CreateBulkCSVProgram($input: Upload!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       endDate
@@ -35,8 +34,7 @@ mutation CreateBulkProgram($input: [CreateProgramInput!]) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       endDate
@@ -111,8 +109,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       endDate
@@ -141,8 +138,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         version
       }
@@ -162,8 +158,7 @@ mutation CreateProgram($input: CreateProgramInput!) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         version
       }
@@ -227,8 +222,7 @@ query GetAllPrograms {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         procedures {
           background
@@ -303,8 +297,7 @@ query GetProgramByID($programId: ID!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -325,8 +318,7 @@ query GetProgramByID($programId: ID!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       details
@@ -376,8 +368,7 @@ query GetPrograms($where: ProgramWhereInput) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         procedures {
           background
@@ -439,8 +430,7 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       description
       endDate
@@ -469,8 +459,7 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         version
       }
@@ -490,8 +479,7 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
         version
       }

@@ -125,6 +125,62 @@ func (shc *SubcontrolHistoryCreate) SetNillableUpdatedByID(s *string) *Subcontro
 	return shc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (shc *SubcontrolHistoryCreate) SetCreatedByUserID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetCreatedByUserID(s)
+	return shc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableCreatedByUserID(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetCreatedByUserID(*s)
+	}
+	return shc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (shc *SubcontrolHistoryCreate) SetUpdatedByUserID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetUpdatedByUserID(s)
+	return shc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableUpdatedByUserID(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetUpdatedByUserID(*s)
+	}
+	return shc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (shc *SubcontrolHistoryCreate) SetCreatedByServiceID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetCreatedByServiceID(s)
+	return shc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableCreatedByServiceID(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetCreatedByServiceID(*s)
+	}
+	return shc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (shc *SubcontrolHistoryCreate) SetUpdatedByServiceID(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetUpdatedByServiceID(s)
+	return shc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableUpdatedByServiceID(s *string) *SubcontrolHistoryCreate {
+	if s != nil {
+		shc.SetUpdatedByServiceID(*s)
+	}
+	return shc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (shc *SubcontrolHistoryCreate) SetDeletedAt(t time.Time) *SubcontrolHistoryCreate {
 	shc.mutation.SetDeletedAt(t)
@@ -569,6 +625,22 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 	if value, ok := shc.mutation.UpdatedByID(); ok {
 		_spec.SetField(subcontrolhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := shc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(subcontrolhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := shc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := shc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := shc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := shc.mutation.DeletedAt(); ok {
 		_spec.SetField(subcontrolhistory.FieldDeletedAt, field.TypeTime, value)

@@ -13,11 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -25,17 +26,19 @@ import (
 // InviteQuery is the builder for querying Invite entities.
 type InviteQuery struct {
 	config
-	ctx             *QueryContext
-	order           []invite.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.Invite
-	withCreatedBy   *ChangeActorQuery
-	withUpdatedBy   *ChangeActorQuery
-	withOwner       *OrganizationQuery
-	withEvents      *EventQuery
-	loadTotal       []func(context.Context, []*Invite) error
-	modifiers       []func(*sql.Selector)
-	withNamedEvents map[string]*EventQuery
+	ctx                  *QueryContext
+	order                []invite.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Invite
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOwner            *OrganizationQuery
+	withEvents           *EventQuery
+	loadTotal            []func(context.Context, []*Invite) error
+	modifiers            []func(*sql.Selector)
+	withNamedEvents      map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -72,9 +75,9 @@ func (iq *InviteQuery) Order(o ...invite.OrderOption) *InviteQuery {
 	return iq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (iq *InviteQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: iq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (iq *InviteQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: iq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := iq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -85,11 +88,11 @@ func (iq *InviteQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(invite.Table, invite.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, invite.CreatedByTable, invite.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, invite.CreatedByUserTable, invite.CreatedByUserColumn),
 		)
 		schemaConfig := iq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Invite
 		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
 		return fromU, nil
@@ -97,9 +100,9 @@ func (iq *InviteQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (iq *InviteQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: iq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (iq *InviteQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: iq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := iq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -110,11 +113,61 @@ func (iq *InviteQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(invite.Table, invite.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, invite.UpdatedByTable, invite.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, invite.UpdatedByUserTable, invite.UpdatedByUserColumn),
 		)
 		schemaConfig := iq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Invite
+		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (iq *InviteQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: iq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := iq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := iq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(invite.Table, invite.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, invite.CreatedByServiceTable, invite.CreatedByServiceColumn),
+		)
+		schemaConfig := iq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Invite
+		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (iq *InviteQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: iq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := iq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := iq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(invite.Table, invite.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, invite.UpdatedByServiceTable, invite.UpdatedByServiceColumn),
+		)
+		schemaConfig := iq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Invite
 		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
 		return fromU, nil
@@ -359,15 +412,17 @@ func (iq *InviteQuery) Clone() *InviteQuery {
 		return nil
 	}
 	return &InviteQuery{
-		config:        iq.config,
-		ctx:           iq.ctx.Clone(),
-		order:         append([]invite.OrderOption{}, iq.order...),
-		inters:        append([]Interceptor{}, iq.inters...),
-		predicates:    append([]predicate.Invite{}, iq.predicates...),
-		withCreatedBy: iq.withCreatedBy.Clone(),
-		withUpdatedBy: iq.withUpdatedBy.Clone(),
-		withOwner:     iq.withOwner.Clone(),
-		withEvents:    iq.withEvents.Clone(),
+		config:               iq.config,
+		ctx:                  iq.ctx.Clone(),
+		order:                append([]invite.OrderOption{}, iq.order...),
+		inters:               append([]Interceptor{}, iq.inters...),
+		predicates:           append([]predicate.Invite{}, iq.predicates...),
+		withCreatedByUser:    iq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    iq.withUpdatedByUser.Clone(),
+		withCreatedByService: iq.withCreatedByService.Clone(),
+		withUpdatedByService: iq.withUpdatedByService.Clone(),
+		withOwner:            iq.withOwner.Clone(),
+		withEvents:           iq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       iq.sql.Clone(),
 		path:      iq.path,
@@ -375,25 +430,47 @@ func (iq *InviteQuery) Clone() *InviteQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (iq *InviteQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *InviteQuery {
-	query := (&ChangeActorClient{config: iq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *InviteQuery) WithCreatedByUser(opts ...func(*UserQuery)) *InviteQuery {
+	query := (&UserClient{config: iq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	iq.withCreatedBy = query
+	iq.withCreatedByUser = query
 	return iq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (iq *InviteQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *InviteQuery {
-	query := (&ChangeActorClient{config: iq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *InviteQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *InviteQuery {
+	query := (&UserClient{config: iq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	iq.withUpdatedBy = query
+	iq.withUpdatedByUser = query
+	return iq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *InviteQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *InviteQuery {
+	query := (&APITokenClient{config: iq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	iq.withCreatedByService = query
+	return iq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *InviteQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *InviteQuery {
+	query := (&APITokenClient{config: iq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	iq.withUpdatedByService = query
 	return iq
 }
 
@@ -503,9 +580,11 @@ func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 	var (
 		nodes       = []*Invite{}
 		_spec       = iq.querySpec()
-		loadedTypes = [4]bool{
-			iq.withCreatedBy != nil,
-			iq.withUpdatedBy != nil,
+		loadedTypes = [6]bool{
+			iq.withCreatedByUser != nil,
+			iq.withUpdatedByUser != nil,
+			iq.withCreatedByService != nil,
+			iq.withUpdatedByService != nil,
 			iq.withOwner != nil,
 			iq.withEvents != nil,
 		}
@@ -533,15 +612,27 @@ func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := iq.withCreatedBy; query != nil {
-		if err := iq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Invite, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := iq.withCreatedByUser; query != nil {
+		if err := iq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Invite, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := iq.withUpdatedBy; query != nil {
-		if err := iq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Invite, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := iq.withUpdatedByUser; query != nil {
+		if err := iq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Invite, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := iq.withCreatedByService; query != nil {
+		if err := iq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Invite, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := iq.withUpdatedByService; query != nil {
+		if err := iq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Invite, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -573,11 +664,11 @@ func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 	return nodes, nil
 }
 
-func (iq *InviteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *ChangeActor)) error {
+func (iq *InviteQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Invite)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -586,7 +677,7 @@ func (iq *InviteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuer
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -594,7 +685,7 @@ func (iq *InviteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuer
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -602,11 +693,11 @@ func (iq *InviteQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuer
 	}
 	return nil
 }
-func (iq *InviteQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *ChangeActor)) error {
+func (iq *InviteQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Invite)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -615,7 +706,7 @@ func (iq *InviteQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuer
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -623,7 +714,65 @@ func (iq *InviteQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuer
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (iq *InviteQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Invite)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (iq *InviteQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Invite)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -753,11 +902,17 @@ func (iq *InviteQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if iq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(invite.FieldCreatedByID)
+		if iq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(invite.FieldCreatedByUserID)
 		}
-		if iq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(invite.FieldUpdatedByID)
+		if iq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(invite.FieldUpdatedByUserID)
+		}
+		if iq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(invite.FieldCreatedByServiceID)
+		}
+		if iq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(invite.FieldUpdatedByServiceID)
 		}
 		if iq.withOwner != nil {
 			_spec.Node.AddColumnOnce(invite.FieldOwnerID)

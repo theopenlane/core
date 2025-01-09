@@ -16,7 +16,8 @@ func (ChangeActor) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id"),
 		field.String("name"),
-		field.String("actor_type"),
+		field.Enum("actor_type").
+			Values("user", "service"),
 	}
 }
 

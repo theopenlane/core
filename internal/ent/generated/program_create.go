@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -90,6 +90,62 @@ func (pc *ProgramCreate) SetUpdatedByID(s string) *ProgramCreate {
 func (pc *ProgramCreate) SetNillableUpdatedByID(s *string) *ProgramCreate {
 	if s != nil {
 		pc.SetUpdatedByID(*s)
+	}
+	return pc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (pc *ProgramCreate) SetCreatedByUserID(s string) *ProgramCreate {
+	pc.mutation.SetCreatedByUserID(s)
+	return pc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableCreatedByUserID(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetCreatedByUserID(*s)
+	}
+	return pc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (pc *ProgramCreate) SetUpdatedByUserID(s string) *ProgramCreate {
+	pc.mutation.SetUpdatedByUserID(s)
+	return pc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableUpdatedByUserID(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetUpdatedByUserID(*s)
+	}
+	return pc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (pc *ProgramCreate) SetCreatedByServiceID(s string) *ProgramCreate {
+	pc.mutation.SetCreatedByServiceID(s)
+	return pc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableCreatedByServiceID(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetCreatedByServiceID(*s)
+	}
+	return pc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (pc *ProgramCreate) SetUpdatedByServiceID(s string) *ProgramCreate {
+	pc.mutation.SetUpdatedByServiceID(s)
+	return pc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableUpdatedByServiceID(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetUpdatedByServiceID(*s)
 	}
 	return pc
 }
@@ -274,14 +330,24 @@ func (pc *ProgramCreate) SetNillableID(s *string) *ProgramCreate {
 	return pc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (pc *ProgramCreate) SetCreatedBy(c *ChangeActor) *ProgramCreate {
-	return pc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (pc *ProgramCreate) SetCreatedByUser(u *User) *ProgramCreate {
+	return pc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (pc *ProgramCreate) SetUpdatedBy(c *ChangeActor) *ProgramCreate {
-	return pc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (pc *ProgramCreate) SetUpdatedByUser(u *User) *ProgramCreate {
+	return pc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (pc *ProgramCreate) SetCreatedByService(a *APIToken) *ProgramCreate {
+	return pc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (pc *ProgramCreate) SetUpdatedByService(a *APIToken) *ProgramCreate {
+	return pc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -711,6 +777,14 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		_spec.SetField(program.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := pc.mutation.CreatedByID(); ok {
+		_spec.SetField(program.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := pc.mutation.UpdatedByID(); ok {
+		_spec.SetField(program.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := pc.mutation.MappingID(); ok {
 		_spec.SetField(program.FieldMappingID, field.TypeString, value)
 		_node.MappingID = value
@@ -759,40 +833,76 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
 	}
-	if nodes := pc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   program.CreatedByTable,
-			Columns: []string{program.CreatedByColumn},
+			Table:   program.CreatedByUserTable,
+			Columns: []string{program.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pc.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   program.UpdatedByTable,
-			Columns: []string{program.UpdatedByColumn},
+			Table:   program.UpdatedByUserTable,
+			Columns: []string{program.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = pc.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.CreatedByServiceTable,
+			Columns: []string{program.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   program.UpdatedByServiceTable,
+			Columns: []string{program.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {

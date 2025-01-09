@@ -64,6 +64,46 @@ func (shu *StandardHistoryUpdate) ClearUpdatedByID() *StandardHistoryUpdate {
 	return shu
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (shu *StandardHistoryUpdate) SetUpdatedByUserID(s string) *StandardHistoryUpdate {
+	shu.mutation.SetUpdatedByUserID(s)
+	return shu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (shu *StandardHistoryUpdate) SetNillableUpdatedByUserID(s *string) *StandardHistoryUpdate {
+	if s != nil {
+		shu.SetUpdatedByUserID(*s)
+	}
+	return shu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (shu *StandardHistoryUpdate) ClearUpdatedByUserID() *StandardHistoryUpdate {
+	shu.mutation.ClearUpdatedByUserID()
+	return shu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (shu *StandardHistoryUpdate) SetUpdatedByServiceID(s string) *StandardHistoryUpdate {
+	shu.mutation.SetUpdatedByServiceID(s)
+	return shu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (shu *StandardHistoryUpdate) SetNillableUpdatedByServiceID(s *string) *StandardHistoryUpdate {
+	if s != nil {
+		shu.SetUpdatedByServiceID(*s)
+	}
+	return shu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (shu *StandardHistoryUpdate) ClearUpdatedByServiceID() *StandardHistoryUpdate {
+	shu.mutation.ClearUpdatedByServiceID()
+	return shu
+}
+
 // SetTags sets the "tags" field.
 func (shu *StandardHistoryUpdate) SetTags(s []string) *StandardHistoryUpdate {
 	shu.mutation.SetTags(s)
@@ -348,6 +388,24 @@ func (shu *StandardHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if shu.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(standardhistory.FieldUpdatedByID, field.TypeString)
 	}
+	if shu.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(standardhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := shu.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(standardhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if shu.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(standardhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if shu.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(standardhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := shu.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(standardhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if shu.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(standardhistory.FieldUpdatedByServiceID, field.TypeString)
+	}
 	if shu.mutation.DeletedAtCleared() {
 		_spec.ClearField(standardhistory.FieldDeletedAt, field.TypeTime)
 	}
@@ -475,6 +533,46 @@ func (shuo *StandardHistoryUpdateOne) SetNillableUpdatedByID(s *string) *Standar
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (shuo *StandardHistoryUpdateOne) ClearUpdatedByID() *StandardHistoryUpdateOne {
 	shuo.mutation.ClearUpdatedByID()
+	return shuo
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (shuo *StandardHistoryUpdateOne) SetUpdatedByUserID(s string) *StandardHistoryUpdateOne {
+	shuo.mutation.SetUpdatedByUserID(s)
+	return shuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (shuo *StandardHistoryUpdateOne) SetNillableUpdatedByUserID(s *string) *StandardHistoryUpdateOne {
+	if s != nil {
+		shuo.SetUpdatedByUserID(*s)
+	}
+	return shuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (shuo *StandardHistoryUpdateOne) ClearUpdatedByUserID() *StandardHistoryUpdateOne {
+	shuo.mutation.ClearUpdatedByUserID()
+	return shuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (shuo *StandardHistoryUpdateOne) SetUpdatedByServiceID(s string) *StandardHistoryUpdateOne {
+	shuo.mutation.SetUpdatedByServiceID(s)
+	return shuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (shuo *StandardHistoryUpdateOne) SetNillableUpdatedByServiceID(s *string) *StandardHistoryUpdateOne {
+	if s != nil {
+		shuo.SetUpdatedByServiceID(*s)
+	}
+	return shuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (shuo *StandardHistoryUpdateOne) ClearUpdatedByServiceID() *StandardHistoryUpdateOne {
+	shuo.mutation.ClearUpdatedByServiceID()
 	return shuo
 }
 
@@ -791,6 +889,24 @@ func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Stand
 	}
 	if shuo.mutation.UpdatedByIDCleared() {
 		_spec.ClearField(standardhistory.FieldUpdatedByID, field.TypeString)
+	}
+	if shuo.mutation.CreatedByUserIDCleared() {
+		_spec.ClearField(standardhistory.FieldCreatedByUserID, field.TypeString)
+	}
+	if value, ok := shuo.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(standardhistory.FieldUpdatedByUserID, field.TypeString, value)
+	}
+	if shuo.mutation.UpdatedByUserIDCleared() {
+		_spec.ClearField(standardhistory.FieldUpdatedByUserID, field.TypeString)
+	}
+	if shuo.mutation.CreatedByServiceIDCleared() {
+		_spec.ClearField(standardhistory.FieldCreatedByServiceID, field.TypeString)
+	}
+	if value, ok := shuo.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(standardhistory.FieldUpdatedByServiceID, field.TypeString, value)
+	}
+	if shuo.mutation.UpdatedByServiceIDCleared() {
+		_spec.ClearField(standardhistory.FieldUpdatedByServiceID, field.TypeString)
 	}
 	if shuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(standardhistory.FieldDeletedAt, field.TypeTime)

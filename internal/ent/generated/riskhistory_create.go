@@ -126,6 +126,62 @@ func (rhc *RiskHistoryCreate) SetNillableUpdatedByID(s *string) *RiskHistoryCrea
 	return rhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (rhc *RiskHistoryCreate) SetCreatedByUserID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetCreatedByUserID(s)
+	return rhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableCreatedByUserID(s *string) *RiskHistoryCreate {
+	if s != nil {
+		rhc.SetCreatedByUserID(*s)
+	}
+	return rhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (rhc *RiskHistoryCreate) SetUpdatedByUserID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetUpdatedByUserID(s)
+	return rhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableUpdatedByUserID(s *string) *RiskHistoryCreate {
+	if s != nil {
+		rhc.SetUpdatedByUserID(*s)
+	}
+	return rhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (rhc *RiskHistoryCreate) SetCreatedByServiceID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetCreatedByServiceID(s)
+	return rhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableCreatedByServiceID(s *string) *RiskHistoryCreate {
+	if s != nil {
+		rhc.SetCreatedByServiceID(*s)
+	}
+	return rhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (rhc *RiskHistoryCreate) SetUpdatedByServiceID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetUpdatedByServiceID(s)
+	return rhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (rhc *RiskHistoryCreate) SetNillableUpdatedByServiceID(s *string) *RiskHistoryCreate {
+	if s != nil {
+		rhc.SetUpdatedByServiceID(*s)
+	}
+	return rhc
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (rhc *RiskHistoryCreate) SetDeletedAt(t time.Time) *RiskHistoryCreate {
 	rhc.mutation.SetDeletedAt(t)
@@ -504,6 +560,22 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 	if value, ok := rhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(riskhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := rhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(riskhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := rhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := rhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(riskhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := rhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := rhc.mutation.DeletedAt(); ok {
 		_spec.SetField(riskhistory.FieldDeletedAt, field.TypeTime, value)

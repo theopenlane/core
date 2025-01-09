@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
@@ -76,6 +76,62 @@ func (patc *PersonalAccessTokenCreate) SetUpdatedByID(s string) *PersonalAccessT
 func (patc *PersonalAccessTokenCreate) SetNillableUpdatedByID(s *string) *PersonalAccessTokenCreate {
 	if s != nil {
 		patc.SetUpdatedByID(*s)
+	}
+	return patc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (patc *PersonalAccessTokenCreate) SetCreatedByUserID(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetCreatedByUserID(s)
+	return patc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableCreatedByUserID(s *string) *PersonalAccessTokenCreate {
+	if s != nil {
+		patc.SetCreatedByUserID(*s)
+	}
+	return patc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (patc *PersonalAccessTokenCreate) SetUpdatedByUserID(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetUpdatedByUserID(s)
+	return patc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableUpdatedByUserID(s *string) *PersonalAccessTokenCreate {
+	if s != nil {
+		patc.SetUpdatedByUserID(*s)
+	}
+	return patc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (patc *PersonalAccessTokenCreate) SetCreatedByServiceID(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetCreatedByServiceID(s)
+	return patc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableCreatedByServiceID(s *string) *PersonalAccessTokenCreate {
+	if s != nil {
+		patc.SetCreatedByServiceID(*s)
+	}
+	return patc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (patc *PersonalAccessTokenCreate) SetUpdatedByServiceID(s string) *PersonalAccessTokenCreate {
+	patc.mutation.SetUpdatedByServiceID(s)
+	return patc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (patc *PersonalAccessTokenCreate) SetNillableUpdatedByServiceID(s *string) *PersonalAccessTokenCreate {
+	if s != nil {
+		patc.SetUpdatedByServiceID(*s)
 	}
 	return patc
 }
@@ -216,14 +272,24 @@ func (patc *PersonalAccessTokenCreate) SetNillableID(s *string) *PersonalAccessT
 	return patc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (patc *PersonalAccessTokenCreate) SetCreatedBy(c *ChangeActor) *PersonalAccessTokenCreate {
-	return patc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (patc *PersonalAccessTokenCreate) SetCreatedByUser(u *User) *PersonalAccessTokenCreate {
+	return patc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (patc *PersonalAccessTokenCreate) SetUpdatedBy(c *ChangeActor) *PersonalAccessTokenCreate {
-	return patc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (patc *PersonalAccessTokenCreate) SetUpdatedByUser(u *User) *PersonalAccessTokenCreate {
+	return patc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (patc *PersonalAccessTokenCreate) SetCreatedByService(a *APIToken) *PersonalAccessTokenCreate {
+	return patc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (patc *PersonalAccessTokenCreate) SetUpdatedByService(a *APIToken) *PersonalAccessTokenCreate {
+	return patc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the User entity.
@@ -406,6 +472,14 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 		_spec.SetField(personalaccesstoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := patc.mutation.CreatedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := patc.mutation.UpdatedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := patc.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -446,40 +520,76 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)
 		_node.LastUsedAt = &value
 	}
-	if nodes := patc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := patc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   personalaccesstoken.CreatedByTable,
-			Columns: []string{personalaccesstoken.CreatedByColumn},
+			Table:   personalaccesstoken.CreatedByUserTable,
+			Columns: []string{personalaccesstoken.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patc.schemaConfig.PersonalAccessToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := patc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := patc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   personalaccesstoken.UpdatedByTable,
-			Columns: []string{personalaccesstoken.UpdatedByColumn},
+			Table:   personalaccesstoken.UpdatedByUserTable,
+			Columns: []string{personalaccesstoken.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = patc.schemaConfig.PersonalAccessToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := patc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.CreatedByServiceTable,
+			Columns: []string{personalaccesstoken.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = patc.schemaConfig.PersonalAccessToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := patc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   personalaccesstoken.UpdatedByServiceTable,
+			Columns: []string{personalaccesstoken.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = patc.schemaConfig.PersonalAccessToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := patc.mutation.OwnerIDs(); len(nodes) > 0 {

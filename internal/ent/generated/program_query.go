@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -43,8 +43,10 @@ type ProgramQuery struct {
 	order                      []program.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.Program
-	withCreatedBy              *ChangeActorQuery
-	withUpdatedBy              *ChangeActorQuery
+	withCreatedByUser          *UserQuery
+	withUpdatedByUser          *UserQuery
+	withCreatedByService       *APITokenQuery
+	withUpdatedByService       *APITokenQuery
 	withOwner                  *OrganizationQuery
 	withBlockedGroups          *GroupQuery
 	withEditors                *GroupQuery
@@ -118,9 +120,9 @@ func (pq *ProgramQuery) Order(o ...program.OrderOption) *ProgramQuery {
 	return pq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (pq *ProgramQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: pq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (pq *ProgramQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -131,11 +133,11 @@ func (pq *ProgramQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, program.CreatedByTable, program.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.CreatedByUserTable, program.CreatedByUserColumn),
 		)
 		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Program
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -143,9 +145,9 @@ func (pq *ProgramQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (pq *ProgramQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: pq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (pq *ProgramQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -156,11 +158,61 @@ func (pq *ProgramQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, program.UpdatedByTable, program.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.UpdatedByUserTable, program.UpdatedByUserColumn),
 		)
 		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Program
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (pq *ProgramQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.CreatedByServiceTable, program.CreatedByServiceColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.Program
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (pq *ProgramQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, program.UpdatedByServiceTable, program.UpdatedByServiceColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.Program
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -810,8 +862,10 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 		order:                 append([]program.OrderOption{}, pq.order...),
 		inters:                append([]Interceptor{}, pq.inters...),
 		predicates:            append([]predicate.Program{}, pq.predicates...),
-		withCreatedBy:         pq.withCreatedBy.Clone(),
-		withUpdatedBy:         pq.withUpdatedBy.Clone(),
+		withCreatedByUser:     pq.withCreatedByUser.Clone(),
+		withUpdatedByUser:     pq.withUpdatedByUser.Clone(),
+		withCreatedByService:  pq.withCreatedByService.Clone(),
+		withUpdatedByService:  pq.withUpdatedByService.Clone(),
 		withOwner:             pq.withOwner.Clone(),
 		withBlockedGroups:     pq.withBlockedGroups.Clone(),
 		withEditors:           pq.withEditors.Clone(),
@@ -837,25 +891,47 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *ProgramQuery {
-	query := (&ChangeActorClient{config: pq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithCreatedByUser(opts ...func(*UserQuery)) *ProgramQuery {
+	query := (&UserClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withCreatedBy = query
+	pq.withCreatedByUser = query
 	return pq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *ProgramQuery {
-	query := (&ChangeActorClient{config: pq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *ProgramQuery {
+	query := (&UserClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withUpdatedBy = query
+	pq.withUpdatedByUser = query
+	return pq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *ProgramQuery {
+	query := (&APITokenClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withCreatedByService = query
+	return pq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *ProgramQuery {
+	query := (&APITokenClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withUpdatedByService = query
 	return pq
 }
 
@@ -1141,9 +1217,11 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	var (
 		nodes       = []*Program{}
 		_spec       = pq.querySpec()
-		loadedTypes = [20]bool{
-			pq.withCreatedBy != nil,
-			pq.withUpdatedBy != nil,
+		loadedTypes = [22]bool{
+			pq.withCreatedByUser != nil,
+			pq.withUpdatedByUser != nil,
+			pq.withCreatedByService != nil,
+			pq.withUpdatedByService != nil,
 			pq.withOwner != nil,
 			pq.withBlockedGroups != nil,
 			pq.withEditors != nil,
@@ -1187,15 +1265,27 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pq.withCreatedBy; query != nil {
-		if err := pq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *Program, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := pq.withCreatedByUser; query != nil {
+		if err := pq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *Program, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withUpdatedBy; query != nil {
-		if err := pq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *Program, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := pq.withUpdatedByUser; query != nil {
+		if err := pq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *Program, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withCreatedByService; query != nil {
+		if err := pq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *Program, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withUpdatedByService; query != nil {
+		if err := pq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *Program, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1453,11 +1543,11 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	return nodes, nil
 }
 
-func (pq *ProgramQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Program, init func(*Program), assign func(*Program, *ChangeActor)) error {
+func (pq *ProgramQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*Program, init func(*Program), assign func(*Program, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Program)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1466,7 +1556,7 @@ func (pq *ProgramQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQue
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1474,7 +1564,7 @@ func (pq *ProgramQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQue
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1482,11 +1572,11 @@ func (pq *ProgramQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQue
 	}
 	return nil
 }
-func (pq *ProgramQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*Program, init func(*Program), assign func(*Program, *ChangeActor)) error {
+func (pq *ProgramQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*Program, init func(*Program), assign func(*Program, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Program)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1495,7 +1585,7 @@ func (pq *ProgramQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQue
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1503,7 +1593,65 @@ func (pq *ProgramQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQue
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *ProgramQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*Program, init func(*Program), assign func(*Program, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Program)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *ProgramQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*Program, init func(*Program), assign func(*Program, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Program)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2593,11 +2741,17 @@ func (pq *ProgramQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if pq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(program.FieldCreatedByID)
+		if pq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(program.FieldCreatedByUserID)
 		}
-		if pq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(program.FieldUpdatedByID)
+		if pq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(program.FieldUpdatedByUserID)
+		}
+		if pq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(program.FieldCreatedByServiceID)
+		}
+		if pq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(program.FieldUpdatedByServiceID)
 		}
 		if pq.withOwner != nil {
 			_spec.Node.AddColumnOnce(program.FieldOwnerID)

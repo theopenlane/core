@@ -35,6 +35,14 @@ type NarrativeHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -65,7 +73,7 @@ func (*NarrativeHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case narrativehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case narrativehistory.FieldID, narrativehistory.FieldRef, narrativehistory.FieldUpdatedBy, narrativehistory.FieldCreatedByID, narrativehistory.FieldUpdatedByID, narrativehistory.FieldDeletedByID, narrativehistory.FieldMappingID, narrativehistory.FieldOwnerID, narrativehistory.FieldName, narrativehistory.FieldDescription, narrativehistory.FieldSatisfies:
+		case narrativehistory.FieldID, narrativehistory.FieldRef, narrativehistory.FieldUpdatedBy, narrativehistory.FieldCreatedByID, narrativehistory.FieldUpdatedByID, narrativehistory.FieldCreatedByUserID, narrativehistory.FieldUpdatedByUserID, narrativehistory.FieldCreatedByServiceID, narrativehistory.FieldUpdatedByServiceID, narrativehistory.FieldDeletedByID, narrativehistory.FieldMappingID, narrativehistory.FieldOwnerID, narrativehistory.FieldName, narrativehistory.FieldDescription, narrativehistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case narrativehistory.FieldHistoryTime, narrativehistory.FieldCreatedAt, narrativehistory.FieldUpdatedAt, narrativehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -138,6 +146,30 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				nh.UpdatedByID = value.String
+			}
+		case narrativehistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				nh.CreatedByUserID = value.String
+			}
+		case narrativehistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				nh.UpdatedByUserID = value.String
+			}
+		case narrativehistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				nh.CreatedByServiceID = value.String
+			}
+		case narrativehistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				nh.UpdatedByServiceID = value.String
 			}
 		case narrativehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -258,6 +290,18 @@ func (nh *NarrativeHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(nh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(nh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(nh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(nh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(nh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(nh.DeletedAt.Format(time.ANSIC))

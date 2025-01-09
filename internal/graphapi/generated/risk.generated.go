@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Risk_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Risk_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Risk_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Risk_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Risk_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
 			case "deletedByID":
@@ -103,10 +111,14 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Risk_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Risk_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Risk_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Risk_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -179,6 +191,14 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Risk_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Risk_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Risk_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Risk_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Risk_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
 			case "deletedByID":
@@ -207,10 +227,14 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Risk_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Risk_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Risk_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Risk_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -327,6 +351,14 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Risk_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Risk_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Risk_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Risk_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Risk_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
 			case "deletedByID":
@@ -355,10 +387,14 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Risk_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Risk_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Risk_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Risk_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":

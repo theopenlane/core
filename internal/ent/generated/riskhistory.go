@@ -36,6 +36,14 @@ type RiskHistory struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -78,7 +86,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case riskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldUpdatedBy, riskhistory.FieldCreatedByID, riskhistory.FieldUpdatedByID, riskhistory.FieldDeletedByID, riskhistory.FieldMappingID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldUpdatedBy, riskhistory.FieldCreatedByID, riskhistory.FieldUpdatedByID, riskhistory.FieldCreatedByUserID, riskhistory.FieldUpdatedByUserID, riskhistory.FieldCreatedByServiceID, riskhistory.FieldUpdatedByServiceID, riskhistory.FieldDeletedByID, riskhistory.FieldMappingID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -151,6 +159,30 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				rh.UpdatedByID = value.String
+			}
+		case riskhistory.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				rh.CreatedByUserID = value.String
+			}
+		case riskhistory.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				rh.UpdatedByUserID = value.String
+			}
+		case riskhistory.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				rh.CreatedByServiceID = value.String
+			}
+		case riskhistory.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				rh.UpdatedByServiceID = value.String
 			}
 		case riskhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -307,6 +339,18 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(rh.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(rh.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(rh.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(rh.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(rh.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(rh.DeletedAt.Format(time.ANSIC))

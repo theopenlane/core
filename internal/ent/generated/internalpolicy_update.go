@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -70,6 +71,46 @@ func (ipu *InternalPolicyUpdate) SetNillableUpdatedByID(s *string) *InternalPoli
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (ipu *InternalPolicyUpdate) ClearUpdatedByID() *InternalPolicyUpdate {
 	ipu.mutation.ClearUpdatedByID()
+	return ipu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ipu *InternalPolicyUpdate) SetUpdatedByUserID(s string) *InternalPolicyUpdate {
+	ipu.mutation.SetUpdatedByUserID(s)
+	return ipu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableUpdatedByUserID(s *string) *InternalPolicyUpdate {
+	if s != nil {
+		ipu.SetUpdatedByUserID(*s)
+	}
+	return ipu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ipu *InternalPolicyUpdate) ClearUpdatedByUserID() *InternalPolicyUpdate {
+	ipu.mutation.ClearUpdatedByUserID()
+	return ipu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ipu *InternalPolicyUpdate) SetUpdatedByServiceID(s string) *InternalPolicyUpdate {
+	ipu.mutation.SetUpdatedByServiceID(s)
+	return ipu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableUpdatedByServiceID(s *string) *InternalPolicyUpdate {
+	if s != nil {
+		ipu.SetUpdatedByServiceID(*s)
+	}
+	return ipu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ipu *InternalPolicyUpdate) ClearUpdatedByServiceID() *InternalPolicyUpdate {
+	ipu.mutation.ClearUpdatedByServiceID()
 	return ipu
 }
 
@@ -257,9 +298,14 @@ func (ipu *InternalPolicyUpdate) ClearDetails() *InternalPolicyUpdate {
 	return ipu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ipu *InternalPolicyUpdate) SetUpdatedBy(c *ChangeActor) *InternalPolicyUpdate {
-	return ipu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ipu *InternalPolicyUpdate) SetUpdatedByUser(u *User) *InternalPolicyUpdate {
+	return ipu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ipu *InternalPolicyUpdate) SetUpdatedByService(a *APIToken) *InternalPolicyUpdate {
+	return ipu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -392,9 +438,15 @@ func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return ipu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (ipu *InternalPolicyUpdate) ClearUpdatedBy() *InternalPolicyUpdate {
-	ipu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (ipu *InternalPolicyUpdate) ClearUpdatedByUser() *InternalPolicyUpdate {
+	ipu.mutation.ClearUpdatedByUser()
+	return ipu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (ipu *InternalPolicyUpdate) ClearUpdatedByService() *InternalPolicyUpdate {
+	ipu.mutation.ClearUpdatedByService()
 	return ipu
 }
 
@@ -656,6 +708,15 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if ipu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedAt, field.TypeTime)
 	}
+	if ipu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(internalpolicy.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := ipu.mutation.UpdatedByID(); ok {
+		_spec.SetField(internalpolicy.FieldUpdatedByID, field.TypeString, value)
+	}
+	if ipu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(internalpolicy.FieldUpdatedByID, field.TypeString)
+	}
 	if ipu.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedAt, field.TypeTime)
 	}
@@ -718,29 +779,60 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if ipu.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeJSON)
 	}
-	if ipu.mutation.UpdatedByCleared() {
+	if ipu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   internalpolicy.UpdatedByTable,
-			Columns: []string{internalpolicy.UpdatedByColumn},
+			Table:   internalpolicy.UpdatedByUserTable,
+			Columns: []string{internalpolicy.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipu.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ipu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   internalpolicy.UpdatedByTable,
-			Columns: []string{internalpolicy.UpdatedByColumn},
+			Table:   internalpolicy.UpdatedByUserTable,
+			Columns: []string{internalpolicy.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByServiceTable,
+			Columns: []string{internalpolicy.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByServiceTable,
+			Columns: []string{internalpolicy.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipu.schemaConfig.InternalPolicy
@@ -1220,6 +1312,46 @@ func (ipuo *InternalPolicyUpdateOne) ClearUpdatedByID() *InternalPolicyUpdateOne
 	return ipuo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ipuo *InternalPolicyUpdateOne) SetUpdatedByUserID(s string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetUpdatedByUserID(s)
+	return ipuo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableUpdatedByUserID(s *string) *InternalPolicyUpdateOne {
+	if s != nil {
+		ipuo.SetUpdatedByUserID(*s)
+	}
+	return ipuo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (ipuo *InternalPolicyUpdateOne) ClearUpdatedByUserID() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearUpdatedByUserID()
+	return ipuo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ipuo *InternalPolicyUpdateOne) SetUpdatedByServiceID(s string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetUpdatedByServiceID(s)
+	return ipuo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableUpdatedByServiceID(s *string) *InternalPolicyUpdateOne {
+	if s != nil {
+		ipuo.SetUpdatedByServiceID(*s)
+	}
+	return ipuo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (ipuo *InternalPolicyUpdateOne) ClearUpdatedByServiceID() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearUpdatedByServiceID()
+	return ipuo
+}
+
 // SetTags sets the "tags" field.
 func (ipuo *InternalPolicyUpdateOne) SetTags(s []string) *InternalPolicyUpdateOne {
 	ipuo.mutation.SetTags(s)
@@ -1404,9 +1536,14 @@ func (ipuo *InternalPolicyUpdateOne) ClearDetails() *InternalPolicyUpdateOne {
 	return ipuo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ipuo *InternalPolicyUpdateOne) SetUpdatedBy(c *ChangeActor) *InternalPolicyUpdateOne {
-	return ipuo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ipuo *InternalPolicyUpdateOne) SetUpdatedByUser(u *User) *InternalPolicyUpdateOne {
+	return ipuo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ipuo *InternalPolicyUpdateOne) SetUpdatedByService(a *APIToken) *InternalPolicyUpdateOne {
+	return ipuo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1539,9 +1676,15 @@ func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return ipuo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (ipuo *InternalPolicyUpdateOne) ClearUpdatedBy() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (ipuo *InternalPolicyUpdateOne) ClearUpdatedByUser() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearUpdatedByUser()
+	return ipuo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (ipuo *InternalPolicyUpdateOne) ClearUpdatedByService() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearUpdatedByService()
 	return ipuo
 }
 
@@ -1833,6 +1976,15 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	if ipuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedAt, field.TypeTime)
 	}
+	if ipuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(internalpolicy.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := ipuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(internalpolicy.FieldUpdatedByID, field.TypeString, value)
+	}
+	if ipuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(internalpolicy.FieldUpdatedByID, field.TypeString)
+	}
 	if ipuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedAt, field.TypeTime)
 	}
@@ -1895,29 +2047,60 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	if ipuo.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeJSON)
 	}
-	if ipuo.mutation.UpdatedByCleared() {
+	if ipuo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   internalpolicy.UpdatedByTable,
-			Columns: []string{internalpolicy.UpdatedByColumn},
+			Table:   internalpolicy.UpdatedByUserTable,
+			Columns: []string{internalpolicy.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ipuo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   internalpolicy.UpdatedByTable,
-			Columns: []string{internalpolicy.UpdatedByColumn},
+			Table:   internalpolicy.UpdatedByUserTable,
+			Columns: []string{internalpolicy.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByServiceTable,
+			Columns: []string{internalpolicy.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByServiceTable,
+			Columns: []string{internalpolicy.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.InternalPolicy

@@ -126,6 +126,62 @@ func (chc *ContactHistoryCreate) SetNillableUpdatedByID(s *string) *ContactHisto
 	return chc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (chc *ContactHistoryCreate) SetCreatedByUserID(s string) *ContactHistoryCreate {
+	chc.mutation.SetCreatedByUserID(s)
+	return chc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (chc *ContactHistoryCreate) SetNillableCreatedByUserID(s *string) *ContactHistoryCreate {
+	if s != nil {
+		chc.SetCreatedByUserID(*s)
+	}
+	return chc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (chc *ContactHistoryCreate) SetUpdatedByUserID(s string) *ContactHistoryCreate {
+	chc.mutation.SetUpdatedByUserID(s)
+	return chc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (chc *ContactHistoryCreate) SetNillableUpdatedByUserID(s *string) *ContactHistoryCreate {
+	if s != nil {
+		chc.SetUpdatedByUserID(*s)
+	}
+	return chc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (chc *ContactHistoryCreate) SetCreatedByServiceID(s string) *ContactHistoryCreate {
+	chc.mutation.SetCreatedByServiceID(s)
+	return chc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (chc *ContactHistoryCreate) SetNillableCreatedByServiceID(s *string) *ContactHistoryCreate {
+	if s != nil {
+		chc.SetCreatedByServiceID(*s)
+	}
+	return chc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (chc *ContactHistoryCreate) SetUpdatedByServiceID(s string) *ContactHistoryCreate {
+	chc.mutation.SetUpdatedByServiceID(s)
+	return chc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (chc *ContactHistoryCreate) SetNillableUpdatedByServiceID(s *string) *ContactHistoryCreate {
+	if s != nil {
+		chc.SetUpdatedByServiceID(*s)
+	}
+	return chc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (chc *ContactHistoryCreate) SetMappingID(s string) *ContactHistoryCreate {
 	chc.mutation.SetMappingID(s)
@@ -469,6 +525,22 @@ func (chc *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.Create
 	if value, ok := chc.mutation.UpdatedByID(); ok {
 		_spec.SetField(contacthistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := chc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(contacthistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := chc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(contacthistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := chc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(contacthistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := chc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(contacthistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := chc.mutation.MappingID(); ok {
 		_spec.SetField(contacthistory.FieldMappingID, field.TypeString, value)

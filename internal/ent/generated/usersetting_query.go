@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -26,19 +26,21 @@ import (
 // UserSettingQuery is the builder for querying UserSetting entities.
 type UserSettingQuery struct {
 	config
-	ctx            *QueryContext
-	order          []usersetting.OrderOption
-	inters         []Interceptor
-	predicates     []predicate.UserSetting
-	withCreatedBy  *ChangeActorQuery
-	withUpdatedBy  *ChangeActorQuery
-	withUser       *UserQuery
-	withDefaultOrg *OrganizationQuery
-	withFiles      *FileQuery
-	withFKs        bool
-	loadTotal      []func(context.Context, []*UserSetting) error
-	modifiers      []func(*sql.Selector)
-	withNamedFiles map[string]*FileQuery
+	ctx                  *QueryContext
+	order                []usersetting.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.UserSetting
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withUser             *UserQuery
+	withDefaultOrg       *OrganizationQuery
+	withFiles            *FileQuery
+	withFKs              bool
+	loadTotal            []func(context.Context, []*UserSetting) error
+	modifiers            []func(*sql.Selector)
+	withNamedFiles       map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -75,9 +77,9 @@ func (usq *UserSettingQuery) Order(o ...usersetting.OrderOption) *UserSettingQue
 	return usq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (usq *UserSettingQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: usq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (usq *UserSettingQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: usq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := usq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -88,11 +90,11 @@ func (usq *UserSettingQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(usersetting.Table, usersetting.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.CreatedByTable, usersetting.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.CreatedByUserTable, usersetting.CreatedByUserColumn),
 		)
 		schemaConfig := usq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserSetting
 		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
 		return fromU, nil
@@ -100,9 +102,9 @@ func (usq *UserSettingQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (usq *UserSettingQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: usq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (usq *UserSettingQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: usq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := usq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -113,11 +115,61 @@ func (usq *UserSettingQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(usersetting.Table, usersetting.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.UpdatedByTable, usersetting.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.UpdatedByUserTable, usersetting.UpdatedByUserColumn),
 		)
 		schemaConfig := usq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserSetting
+		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (usq *UserSettingQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: usq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := usq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := usq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usersetting.Table, usersetting.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.CreatedByServiceTable, usersetting.CreatedByServiceColumn),
+		)
+		schemaConfig := usq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.UserSetting
+		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (usq *UserSettingQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: usq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := usq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := usq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usersetting.Table, usersetting.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.UpdatedByServiceTable, usersetting.UpdatedByServiceColumn),
+		)
+		schemaConfig := usq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.UserSetting
 		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
 		return fromU, nil
@@ -387,16 +439,18 @@ func (usq *UserSettingQuery) Clone() *UserSettingQuery {
 		return nil
 	}
 	return &UserSettingQuery{
-		config:         usq.config,
-		ctx:            usq.ctx.Clone(),
-		order:          append([]usersetting.OrderOption{}, usq.order...),
-		inters:         append([]Interceptor{}, usq.inters...),
-		predicates:     append([]predicate.UserSetting{}, usq.predicates...),
-		withCreatedBy:  usq.withCreatedBy.Clone(),
-		withUpdatedBy:  usq.withUpdatedBy.Clone(),
-		withUser:       usq.withUser.Clone(),
-		withDefaultOrg: usq.withDefaultOrg.Clone(),
-		withFiles:      usq.withFiles.Clone(),
+		config:               usq.config,
+		ctx:                  usq.ctx.Clone(),
+		order:                append([]usersetting.OrderOption{}, usq.order...),
+		inters:               append([]Interceptor{}, usq.inters...),
+		predicates:           append([]predicate.UserSetting{}, usq.predicates...),
+		withCreatedByUser:    usq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    usq.withUpdatedByUser.Clone(),
+		withCreatedByService: usq.withCreatedByService.Clone(),
+		withUpdatedByService: usq.withUpdatedByService.Clone(),
+		withUser:             usq.withUser.Clone(),
+		withDefaultOrg:       usq.withDefaultOrg.Clone(),
+		withFiles:            usq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       usq.sql.Clone(),
 		path:      usq.path,
@@ -404,25 +458,47 @@ func (usq *UserSettingQuery) Clone() *UserSettingQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (usq *UserSettingQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *UserSettingQuery {
-	query := (&ChangeActorClient{config: usq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (usq *UserSettingQuery) WithCreatedByUser(opts ...func(*UserQuery)) *UserSettingQuery {
+	query := (&UserClient{config: usq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	usq.withCreatedBy = query
+	usq.withCreatedByUser = query
 	return usq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (usq *UserSettingQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *UserSettingQuery {
-	query := (&ChangeActorClient{config: usq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (usq *UserSettingQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *UserSettingQuery {
+	query := (&UserClient{config: usq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	usq.withUpdatedBy = query
+	usq.withUpdatedByUser = query
+	return usq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (usq *UserSettingQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *UserSettingQuery {
+	query := (&APITokenClient{config: usq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	usq.withCreatedByService = query
+	return usq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (usq *UserSettingQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *UserSettingQuery {
+	query := (&APITokenClient{config: usq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	usq.withUpdatedByService = query
 	return usq
 }
 
@@ -544,9 +620,11 @@ func (usq *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		nodes       = []*UserSetting{}
 		withFKs     = usq.withFKs
 		_spec       = usq.querySpec()
-		loadedTypes = [5]bool{
-			usq.withCreatedBy != nil,
-			usq.withUpdatedBy != nil,
+		loadedTypes = [7]bool{
+			usq.withCreatedByUser != nil,
+			usq.withUpdatedByUser != nil,
+			usq.withCreatedByService != nil,
+			usq.withUpdatedByService != nil,
 			usq.withUser != nil,
 			usq.withDefaultOrg != nil,
 			usq.withFiles != nil,
@@ -581,15 +659,27 @@ func (usq *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := usq.withCreatedBy; query != nil {
-		if err := usq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *UserSetting, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := usq.withCreatedByUser; query != nil {
+		if err := usq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *UserSetting, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := usq.withUpdatedBy; query != nil {
-		if err := usq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *UserSetting, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := usq.withUpdatedByUser; query != nil {
+		if err := usq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *UserSetting, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := usq.withCreatedByService; query != nil {
+		if err := usq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *UserSetting, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := usq.withUpdatedByService; query != nil {
+		if err := usq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *UserSetting, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -627,11 +717,11 @@ func (usq *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	return nodes, nil
 }
 
-func (usq *UserSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *ChangeActor)) error {
+func (usq *UserSettingQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*UserSetting)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -640,7 +730,7 @@ func (usq *UserSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeAct
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -648,7 +738,7 @@ func (usq *UserSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeAct
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -656,11 +746,11 @@ func (usq *UserSettingQuery) loadCreatedBy(ctx context.Context, query *ChangeAct
 	}
 	return nil
 }
-func (usq *UserSettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *ChangeActor)) error {
+func (usq *UserSettingQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*UserSetting)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -669,7 +759,7 @@ func (usq *UserSettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeAct
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -677,7 +767,65 @@ func (usq *UserSettingQuery) loadUpdatedBy(ctx context.Context, query *ChangeAct
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (usq *UserSettingQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*UserSetting)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (usq *UserSettingQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*UserSetting)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -839,11 +987,17 @@ func (usq *UserSettingQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if usq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(usersetting.FieldCreatedByID)
+		if usq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(usersetting.FieldCreatedByUserID)
 		}
-		if usq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(usersetting.FieldUpdatedByID)
+		if usq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(usersetting.FieldUpdatedByUserID)
+		}
+		if usq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(usersetting.FieldCreatedByServiceID)
+		}
+		if usq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(usersetting.FieldUpdatedByServiceID)
 		}
 		if usq.withUser != nil {
 			_spec.Node.AddColumnOnce(usersetting.FieldUserID)

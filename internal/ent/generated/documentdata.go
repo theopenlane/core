@@ -11,10 +11,12 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/customtypes"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // DocumentData is the model entity for the DocumentData schema.
@@ -30,6 +32,14 @@ type DocumentData struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -48,14 +58,23 @@ type DocumentData struct {
 	// The values are being populated by the DocumentDataQuery when eager-loading is set.
 	Edges        DocumentDataEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // DocumentDataEdges holds the relations/edges for other nodes in the graph.
 type DocumentDataEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Template holds the value of the template edge.
@@ -66,34 +85,56 @@ type DocumentDataEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [8]map[string]int
 
 	namedEntity map[string][]*Entity
 	namedFiles  map[string][]*File
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DocumentDataEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e DocumentDataEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DocumentDataEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e DocumentDataEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DocumentDataEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DocumentDataEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -101,7 +142,7 @@ func (e DocumentDataEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e DocumentDataEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -112,7 +153,7 @@ func (e DocumentDataEdges) OwnerOrErr() (*Organization, error) {
 func (e DocumentDataEdges) TemplateOrErr() (*Template, error) {
 	if e.Template != nil {
 		return e.Template, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: template.Label}
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -121,7 +162,7 @@ func (e DocumentDataEdges) TemplateOrErr() (*Template, error) {
 // EntityOrErr returns the Entity value or an error if the edge
 // was not loaded in eager-loading.
 func (e DocumentDataEdges) EntityOrErr() ([]*Entity, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Entity, nil
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -130,7 +171,7 @@ func (e DocumentDataEdges) EntityOrErr() ([]*Entity, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e DocumentDataEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -143,7 +184,7 @@ func (*DocumentData) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case documentdata.FieldTags, documentdata.FieldData:
 			values[i] = new([]byte)
-		case documentdata.FieldID, documentdata.FieldCreatedByID, documentdata.FieldUpdatedByID, documentdata.FieldMappingID, documentdata.FieldDeletedByID, documentdata.FieldOwnerID, documentdata.FieldTemplateID:
+		case documentdata.FieldID, documentdata.FieldCreatedByID, documentdata.FieldUpdatedByID, documentdata.FieldCreatedByUserID, documentdata.FieldUpdatedByUserID, documentdata.FieldCreatedByServiceID, documentdata.FieldUpdatedByServiceID, documentdata.FieldMappingID, documentdata.FieldDeletedByID, documentdata.FieldOwnerID, documentdata.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case documentdata.FieldCreatedAt, documentdata.FieldUpdatedAt, documentdata.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -191,6 +232,30 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				dd.UpdatedByID = value.String
+			}
+		case documentdata.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				dd.CreatedByUserID = value.String
+			}
+		case documentdata.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				dd.UpdatedByUserID = value.String
+			}
+		case documentdata.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				dd.CreatedByServiceID = value.String
+			}
+		case documentdata.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				dd.UpdatedByServiceID = value.String
 			}
 		case documentdata.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -251,14 +316,24 @@ func (dd *DocumentData) Value(name string) (ent.Value, error) {
 	return dd.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the DocumentData entity.
-func (dd *DocumentData) QueryCreatedBy() *ChangeActorQuery {
-	return NewDocumentDataClient(dd.config).QueryCreatedBy(dd)
+// QueryCreatedByUser queries the "created_by_user" edge of the DocumentData entity.
+func (dd *DocumentData) QueryCreatedByUser() *UserQuery {
+	return NewDocumentDataClient(dd.config).QueryCreatedByUser(dd)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the DocumentData entity.
-func (dd *DocumentData) QueryUpdatedBy() *ChangeActorQuery {
-	return NewDocumentDataClient(dd.config).QueryUpdatedBy(dd)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the DocumentData entity.
+func (dd *DocumentData) QueryUpdatedByUser() *UserQuery {
+	return NewDocumentDataClient(dd.config).QueryUpdatedByUser(dd)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the DocumentData entity.
+func (dd *DocumentData) QueryCreatedByService() *APITokenQuery {
+	return NewDocumentDataClient(dd.config).QueryCreatedByService(dd)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the DocumentData entity.
+func (dd *DocumentData) QueryUpdatedByService() *APITokenQuery {
+	return NewDocumentDataClient(dd.config).QueryUpdatedByService(dd)
 }
 
 // QueryOwner queries the "owner" edge of the DocumentData entity.
@@ -315,6 +390,18 @@ func (dd *DocumentData) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(dd.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(dd.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(dd.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(dd.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(dd.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(dd.MappingID)

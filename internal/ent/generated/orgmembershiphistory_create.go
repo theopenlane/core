@@ -126,6 +126,62 @@ func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedByID(s *string) *OrgMe
 	return omhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (omhc *OrgMembershipHistoryCreate) SetCreatedByUserID(s string) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetCreatedByUserID(s)
+	return omhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (omhc *OrgMembershipHistoryCreate) SetNillableCreatedByUserID(s *string) *OrgMembershipHistoryCreate {
+	if s != nil {
+		omhc.SetCreatedByUserID(*s)
+	}
+	return omhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (omhc *OrgMembershipHistoryCreate) SetUpdatedByUserID(s string) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetUpdatedByUserID(s)
+	return omhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedByUserID(s *string) *OrgMembershipHistoryCreate {
+	if s != nil {
+		omhc.SetUpdatedByUserID(*s)
+	}
+	return omhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (omhc *OrgMembershipHistoryCreate) SetCreatedByServiceID(s string) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetCreatedByServiceID(s)
+	return omhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (omhc *OrgMembershipHistoryCreate) SetNillableCreatedByServiceID(s *string) *OrgMembershipHistoryCreate {
+	if s != nil {
+		omhc.SetCreatedByServiceID(*s)
+	}
+	return omhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (omhc *OrgMembershipHistoryCreate) SetUpdatedByServiceID(s string) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetUpdatedByServiceID(s)
+	return omhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedByServiceID(s *string) *OrgMembershipHistoryCreate {
+	if s != nil {
+		omhc.SetUpdatedByServiceID(*s)
+	}
+	return omhc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (omhc *OrgMembershipHistoryCreate) SetMappingID(s string) *OrgMembershipHistoryCreate {
 	omhc.mutation.SetMappingID(s)
@@ -384,6 +440,22 @@ func (omhc *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sq
 	if value, ok := omhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := omhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := omhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := omhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := omhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := omhc.mutation.MappingID(); ok {
 		_spec.SetField(orgmembershiphistory.FieldMappingID, field.TypeString, value)

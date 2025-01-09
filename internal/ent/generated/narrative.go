@@ -10,9 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Narrative is the model entity for the Narrative schema.
@@ -28,6 +30,14 @@ type Narrative struct {
 	CreatedByID string `json:"created_by_id,omitempty"`
 	// UpdatedByID holds the value of the "updated_by_id" field.
 	UpdatedByID string `json:"updated_by_id,omitempty"`
+	// CreatedByUserID holds the value of the "created_by_user_id" field.
+	CreatedByUserID string `json:"created_by_user_id,omitempty"`
+	// UpdatedByUserID holds the value of the "updated_by_user_id" field.
+	UpdatedByUserID string `json:"updated_by_user_id,omitempty"`
+	// CreatedByServiceID holds the value of the "created_by_service_id" field.
+	CreatedByServiceID string `json:"created_by_service_id,omitempty"`
+	// UpdatedByServiceID holds the value of the "updated_by_service_id" field.
+	UpdatedByServiceID string `json:"updated_by_service_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedByID holds the value of the "deleted_by_id" field.
@@ -50,14 +60,23 @@ type Narrative struct {
 	// The values are being populated by the NarrativeQuery when eager-loading is set.
 	Edges        NarrativeEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"created_by,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updated_by,omitempty"`
 }
 
 // NarrativeEdges holds the relations/edges for other nodes in the graph.
 type NarrativeEdges struct {
-	// CreatedBy holds the value of the created_by edge.
-	CreatedBy *ChangeActor `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the updated_by edge.
-	UpdatedBy *ChangeActor `json:"updated_by,omitempty"`
+	// CreatedByUser holds the value of the created_by_user edge.
+	CreatedByUser *User `json:"created_by_user,omitempty"`
+	// UpdatedByUser holds the value of the updated_by_user edge.
+	UpdatedByUser *User `json:"updated_by_user,omitempty"`
+	// CreatedByService holds the value of the created_by_service edge.
+	CreatedByService *APIToken `json:"created_by_service,omitempty"`
+	// UpdatedByService holds the value of the updated_by_service edge.
+	UpdatedByService *APIToken `json:"updated_by_service,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -78,9 +97,9 @@ type NarrativeEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [13]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -92,26 +111,48 @@ type NarrativeEdges struct {
 	namedPrograms         map[string][]*Program
 }
 
-// CreatedByOrErr returns the CreatedBy value or an error if the edge
+// CreatedByUserOrErr returns the CreatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e NarrativeEdges) CreatedByOrErr() (*ChangeActor, error) {
-	if e.CreatedBy != nil {
-		return e.CreatedBy, nil
+func (e NarrativeEdges) CreatedByUserOrErr() (*User, error) {
+	if e.CreatedByUser != nil {
+		return e.CreatedByUser, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "created_by"}
+	return nil, &NotLoadedError{edge: "created_by_user"}
 }
 
-// UpdatedByOrErr returns the UpdatedBy value or an error if the edge
+// UpdatedByUserOrErr returns the UpdatedByUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e NarrativeEdges) UpdatedByOrErr() (*ChangeActor, error) {
-	if e.UpdatedBy != nil {
-		return e.UpdatedBy, nil
+func (e NarrativeEdges) UpdatedByUserOrErr() (*User, error) {
+	if e.UpdatedByUser != nil {
+		return e.UpdatedByUser, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: changeactor.Label}
+		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "updated_by"}
+	return nil, &NotLoadedError{edge: "updated_by_user"}
+}
+
+// CreatedByServiceOrErr returns the CreatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NarrativeEdges) CreatedByServiceOrErr() (*APIToken, error) {
+	if e.CreatedByService != nil {
+		return e.CreatedByService, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "created_by_service"}
+}
+
+// UpdatedByServiceOrErr returns the UpdatedByService value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NarrativeEdges) UpdatedByServiceOrErr() (*APIToken, error) {
+	if e.UpdatedByService != nil {
+		return e.UpdatedByService, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: apitoken.Label}
+	}
+	return nil, &NotLoadedError{edge: "updated_by_service"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -119,7 +160,7 @@ func (e NarrativeEdges) UpdatedByOrErr() (*ChangeActor, error) {
 func (e NarrativeEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -128,7 +169,7 @@ func (e NarrativeEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -137,7 +178,7 @@ func (e NarrativeEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -146,7 +187,7 @@ func (e NarrativeEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -155,7 +196,7 @@ func (e NarrativeEdges) ViewersOrErr() ([]*Group, error) {
 // InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.InternalPolicy, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy"}
@@ -164,7 +205,7 @@ func (e NarrativeEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -173,7 +214,7 @@ func (e NarrativeEdges) ControlOrErr() ([]*Control, error) {
 // ProcedureOrErr returns the Procedure value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ProcedureOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Procedure, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure"}
@@ -182,7 +223,7 @@ func (e NarrativeEdges) ProcedureOrErr() ([]*Procedure, error) {
 // ControlObjectiveOrErr returns the ControlObjective value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.ControlObjective, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective"}
@@ -191,7 +232,7 @@ func (e NarrativeEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -204,7 +245,7 @@ func (*Narrative) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case narrative.FieldTags, narrative.FieldDetails:
 			values[i] = new([]byte)
-		case narrative.FieldID, narrative.FieldCreatedByID, narrative.FieldUpdatedByID, narrative.FieldDeletedByID, narrative.FieldMappingID, narrative.FieldOwnerID, narrative.FieldName, narrative.FieldDescription, narrative.FieldSatisfies:
+		case narrative.FieldID, narrative.FieldCreatedByID, narrative.FieldUpdatedByID, narrative.FieldCreatedByUserID, narrative.FieldUpdatedByUserID, narrative.FieldCreatedByServiceID, narrative.FieldUpdatedByServiceID, narrative.FieldDeletedByID, narrative.FieldMappingID, narrative.FieldOwnerID, narrative.FieldName, narrative.FieldDescription, narrative.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case narrative.FieldCreatedAt, narrative.FieldUpdatedAt, narrative.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -252,6 +293,30 @@ func (n *Narrative) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
 				n.UpdatedByID = value.String
+			}
+		case narrative.FieldCreatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_user_id", values[i])
+			} else if value.Valid {
+				n.CreatedByUserID = value.String
+			}
+		case narrative.FieldUpdatedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_user_id", values[i])
+			} else if value.Valid {
+				n.UpdatedByUserID = value.String
+			}
+		case narrative.FieldCreatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_service_id", values[i])
+			} else if value.Valid {
+				n.CreatedByServiceID = value.String
+			}
+		case narrative.FieldUpdatedByServiceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_service_id", values[i])
+			} else if value.Valid {
+				n.UpdatedByServiceID = value.String
 			}
 		case narrative.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -324,14 +389,24 @@ func (n *Narrative) Value(name string) (ent.Value, error) {
 	return n.selectValues.Get(name)
 }
 
-// QueryCreatedBy queries the "created_by" edge of the Narrative entity.
-func (n *Narrative) QueryCreatedBy() *ChangeActorQuery {
-	return NewNarrativeClient(n.config).QueryCreatedBy(n)
+// QueryCreatedByUser queries the "created_by_user" edge of the Narrative entity.
+func (n *Narrative) QueryCreatedByUser() *UserQuery {
+	return NewNarrativeClient(n.config).QueryCreatedByUser(n)
 }
 
-// QueryUpdatedBy queries the "updated_by" edge of the Narrative entity.
-func (n *Narrative) QueryUpdatedBy() *ChangeActorQuery {
-	return NewNarrativeClient(n.config).QueryUpdatedBy(n)
+// QueryUpdatedByUser queries the "updated_by_user" edge of the Narrative entity.
+func (n *Narrative) QueryUpdatedByUser() *UserQuery {
+	return NewNarrativeClient(n.config).QueryUpdatedByUser(n)
+}
+
+// QueryCreatedByService queries the "created_by_service" edge of the Narrative entity.
+func (n *Narrative) QueryCreatedByService() *APITokenQuery {
+	return NewNarrativeClient(n.config).QueryCreatedByService(n)
+}
+
+// QueryUpdatedByService queries the "updated_by_service" edge of the Narrative entity.
+func (n *Narrative) QueryUpdatedByService() *APITokenQuery {
+	return NewNarrativeClient(n.config).QueryUpdatedByService(n)
 }
 
 // QueryOwner queries the "owner" edge of the Narrative entity.
@@ -413,6 +488,18 @@ func (n *Narrative) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by_id=")
 	builder.WriteString(n.UpdatedByID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_user_id=")
+	builder.WriteString(n.CreatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_user_id=")
+	builder.WriteString(n.UpdatedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("created_by_service_id=")
+	builder.WriteString(n.CreatedByServiceID)
+	builder.WriteString(", ")
+	builder.WriteString("updated_by_service_id=")
+	builder.WriteString(n.UpdatedByServiceID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(n.DeletedAt.Format(time.ANSIC))

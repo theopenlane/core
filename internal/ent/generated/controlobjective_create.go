@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // ControlObjectiveCreate is the builder for creating a ControlObjective entity.
@@ -84,6 +85,62 @@ func (coc *ControlObjectiveCreate) SetUpdatedByID(s string) *ControlObjectiveCre
 func (coc *ControlObjectiveCreate) SetNillableUpdatedByID(s *string) *ControlObjectiveCreate {
 	if s != nil {
 		coc.SetUpdatedByID(*s)
+	}
+	return coc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (coc *ControlObjectiveCreate) SetCreatedByUserID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetCreatedByUserID(s)
+	return coc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableCreatedByUserID(s *string) *ControlObjectiveCreate {
+	if s != nil {
+		coc.SetCreatedByUserID(*s)
+	}
+	return coc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (coc *ControlObjectiveCreate) SetUpdatedByUserID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetUpdatedByUserID(s)
+	return coc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableUpdatedByUserID(s *string) *ControlObjectiveCreate {
+	if s != nil {
+		coc.SetUpdatedByUserID(*s)
+	}
+	return coc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (coc *ControlObjectiveCreate) SetCreatedByServiceID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetCreatedByServiceID(s)
+	return coc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableCreatedByServiceID(s *string) *ControlObjectiveCreate {
+	if s != nil {
+		coc.SetCreatedByServiceID(*s)
+	}
+	return coc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (coc *ControlObjectiveCreate) SetUpdatedByServiceID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetUpdatedByServiceID(s)
+	return coc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableUpdatedByServiceID(s *string) *ControlObjectiveCreate {
+	if s != nil {
+		coc.SetUpdatedByServiceID(*s)
 	}
 	return coc
 }
@@ -294,14 +351,24 @@ func (coc *ControlObjectiveCreate) SetNillableID(s *string) *ControlObjectiveCre
 	return coc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (coc *ControlObjectiveCreate) SetCreatedBy(c *ChangeActor) *ControlObjectiveCreate {
-	return coc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (coc *ControlObjectiveCreate) SetCreatedByUser(u *User) *ControlObjectiveCreate {
+	return coc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (coc *ControlObjectiveCreate) SetUpdatedBy(c *ChangeActor) *ControlObjectiveCreate {
-	return coc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (coc *ControlObjectiveCreate) SetUpdatedByUser(u *User) *ControlObjectiveCreate {
+	return coc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (coc *ControlObjectiveCreate) SetCreatedByService(a *APIToken) *ControlObjectiveCreate {
+	return coc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (coc *ControlObjectiveCreate) SetUpdatedByService(a *APIToken) *ControlObjectiveCreate {
+	return coc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -629,6 +696,14 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		_spec.SetField(controlobjective.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := coc.mutation.CreatedByID(); ok {
+		_spec.SetField(controlobjective.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := coc.mutation.UpdatedByID(); ok {
+		_spec.SetField(controlobjective.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := coc.mutation.DeletedAt(); ok {
 		_spec.SetField(controlobjective.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -689,40 +764,76 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		_spec.SetField(controlobjective.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
-	if nodes := coc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := coc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   controlobjective.CreatedByTable,
-			Columns: []string{controlobjective.CreatedByColumn},
+			Table:   controlobjective.CreatedByUserTable,
+			Columns: []string{controlobjective.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = coc.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := coc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   controlobjective.UpdatedByTable,
-			Columns: []string{controlobjective.UpdatedByColumn},
+			Table:   controlobjective.UpdatedByUserTable,
+			Columns: []string{controlobjective.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = coc.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := coc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlobjective.CreatedByServiceTable,
+			Columns: []string{controlobjective.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := coc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlobjective.UpdatedByServiceTable,
+			Columns: []string{controlobjective.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := coc.mutation.OwnerIDs(); len(nodes) > 0 {

@@ -126,6 +126,62 @@ func (phc *ProgramHistoryCreate) SetNillableUpdatedByID(s *string) *ProgramHisto
 	return phc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (phc *ProgramHistoryCreate) SetCreatedByUserID(s string) *ProgramHistoryCreate {
+	phc.mutation.SetCreatedByUserID(s)
+	return phc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableCreatedByUserID(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetCreatedByUserID(*s)
+	}
+	return phc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (phc *ProgramHistoryCreate) SetUpdatedByUserID(s string) *ProgramHistoryCreate {
+	phc.mutation.SetUpdatedByUserID(s)
+	return phc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableUpdatedByUserID(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetUpdatedByUserID(*s)
+	}
+	return phc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (phc *ProgramHistoryCreate) SetCreatedByServiceID(s string) *ProgramHistoryCreate {
+	phc.mutation.SetCreatedByServiceID(s)
+	return phc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableCreatedByServiceID(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetCreatedByServiceID(*s)
+	}
+	return phc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (phc *ProgramHistoryCreate) SetUpdatedByServiceID(s string) *ProgramHistoryCreate {
+	phc.mutation.SetUpdatedByServiceID(s)
+	return phc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (phc *ProgramHistoryCreate) SetNillableUpdatedByServiceID(s *string) *ProgramHistoryCreate {
+	if s != nil {
+		phc.SetUpdatedByServiceID(*s)
+	}
+	return phc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (phc *ProgramHistoryCreate) SetMappingID(s string) *ProgramHistoryCreate {
 	phc.mutation.SetMappingID(s)
@@ -504,6 +560,22 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 	if value, ok := phc.mutation.UpdatedByID(); ok {
 		_spec.SetField(programhistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := phc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(programhistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := phc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := phc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(programhistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := phc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := phc.mutation.MappingID(); ok {
 		_spec.SetField(programhistory.FieldMappingID, field.TypeString, value)

@@ -38,8 +38,7 @@ mutation CreateUser($input: CreateUserInput!, $avatarFile: Upload) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -118,8 +117,7 @@ query GetUserByID($userId: ID!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       emailConfirmed
       locked
@@ -170,8 +168,7 @@ query GetUserByIDWithOrgs($userId: ID!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       emailConfirmed
       locked

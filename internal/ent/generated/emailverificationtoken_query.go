@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -23,15 +23,17 @@ import (
 // EmailVerificationTokenQuery is the builder for querying EmailVerificationToken entities.
 type EmailVerificationTokenQuery struct {
 	config
-	ctx           *QueryContext
-	order         []emailverificationtoken.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.EmailVerificationToken
-	withCreatedBy *ChangeActorQuery
-	withUpdatedBy *ChangeActorQuery
-	withOwner     *UserQuery
-	loadTotal     []func(context.Context, []*EmailVerificationToken) error
-	modifiers     []func(*sql.Selector)
+	ctx                  *QueryContext
+	order                []emailverificationtoken.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.EmailVerificationToken
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOwner            *UserQuery
+	loadTotal            []func(context.Context, []*EmailVerificationToken) error
+	modifiers            []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -68,9 +70,9 @@ func (evtq *EmailVerificationTokenQuery) Order(o ...emailverificationtoken.Order
 	return evtq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (evtq *EmailVerificationTokenQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: evtq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (evtq *EmailVerificationTokenQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: evtq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := evtq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -81,11 +83,11 @@ func (evtq *EmailVerificationTokenQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailverificationtoken.Table, emailverificationtoken.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.CreatedByTable, emailverificationtoken.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.CreatedByUserTable, emailverificationtoken.CreatedByUserColumn),
 		)
 		schemaConfig := evtq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.EmailVerificationToken
 		fromU = sqlgraph.SetNeighbors(evtq.driver.Dialect(), step)
 		return fromU, nil
@@ -93,9 +95,9 @@ func (evtq *EmailVerificationTokenQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (evtq *EmailVerificationTokenQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: evtq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (evtq *EmailVerificationTokenQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: evtq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := evtq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -106,11 +108,61 @@ func (evtq *EmailVerificationTokenQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailverificationtoken.Table, emailverificationtoken.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.UpdatedByTable, emailverificationtoken.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.UpdatedByUserTable, emailverificationtoken.UpdatedByUserColumn),
 		)
 		schemaConfig := evtq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.EmailVerificationToken
+		fromU = sqlgraph.SetNeighbors(evtq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (evtq *EmailVerificationTokenQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: evtq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := evtq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := evtq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailverificationtoken.Table, emailverificationtoken.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.CreatedByServiceTable, emailverificationtoken.CreatedByServiceColumn),
+		)
+		schemaConfig := evtq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.EmailVerificationToken
+		fromU = sqlgraph.SetNeighbors(evtq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (evtq *EmailVerificationTokenQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: evtq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := evtq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := evtq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailverificationtoken.Table, emailverificationtoken.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, emailverificationtoken.UpdatedByServiceTable, emailverificationtoken.UpdatedByServiceColumn),
+		)
+		schemaConfig := evtq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.EmailVerificationToken
 		fromU = sqlgraph.SetNeighbors(evtq.driver.Dialect(), step)
 		return fromU, nil
@@ -330,14 +382,16 @@ func (evtq *EmailVerificationTokenQuery) Clone() *EmailVerificationTokenQuery {
 		return nil
 	}
 	return &EmailVerificationTokenQuery{
-		config:        evtq.config,
-		ctx:           evtq.ctx.Clone(),
-		order:         append([]emailverificationtoken.OrderOption{}, evtq.order...),
-		inters:        append([]Interceptor{}, evtq.inters...),
-		predicates:    append([]predicate.EmailVerificationToken{}, evtq.predicates...),
-		withCreatedBy: evtq.withCreatedBy.Clone(),
-		withUpdatedBy: evtq.withUpdatedBy.Clone(),
-		withOwner:     evtq.withOwner.Clone(),
+		config:               evtq.config,
+		ctx:                  evtq.ctx.Clone(),
+		order:                append([]emailverificationtoken.OrderOption{}, evtq.order...),
+		inters:               append([]Interceptor{}, evtq.inters...),
+		predicates:           append([]predicate.EmailVerificationToken{}, evtq.predicates...),
+		withCreatedByUser:    evtq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    evtq.withUpdatedByUser.Clone(),
+		withCreatedByService: evtq.withCreatedByService.Clone(),
+		withUpdatedByService: evtq.withUpdatedByService.Clone(),
+		withOwner:            evtq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       evtq.sql.Clone(),
 		path:      evtq.path,
@@ -345,25 +399,47 @@ func (evtq *EmailVerificationTokenQuery) Clone() *EmailVerificationTokenQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (evtq *EmailVerificationTokenQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *EmailVerificationTokenQuery {
-	query := (&ChangeActorClient{config: evtq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (evtq *EmailVerificationTokenQuery) WithCreatedByUser(opts ...func(*UserQuery)) *EmailVerificationTokenQuery {
+	query := (&UserClient{config: evtq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	evtq.withCreatedBy = query
+	evtq.withCreatedByUser = query
 	return evtq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (evtq *EmailVerificationTokenQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *EmailVerificationTokenQuery {
-	query := (&ChangeActorClient{config: evtq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (evtq *EmailVerificationTokenQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *EmailVerificationTokenQuery {
+	query := (&UserClient{config: evtq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	evtq.withUpdatedBy = query
+	evtq.withUpdatedByUser = query
+	return evtq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (evtq *EmailVerificationTokenQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *EmailVerificationTokenQuery {
+	query := (&APITokenClient{config: evtq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	evtq.withCreatedByService = query
+	return evtq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (evtq *EmailVerificationTokenQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *EmailVerificationTokenQuery {
+	query := (&APITokenClient{config: evtq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	evtq.withUpdatedByService = query
 	return evtq
 }
 
@@ -462,9 +538,11 @@ func (evtq *EmailVerificationTokenQuery) sqlAll(ctx context.Context, hooks ...qu
 	var (
 		nodes       = []*EmailVerificationToken{}
 		_spec       = evtq.querySpec()
-		loadedTypes = [3]bool{
-			evtq.withCreatedBy != nil,
-			evtq.withUpdatedBy != nil,
+		loadedTypes = [5]bool{
+			evtq.withCreatedByUser != nil,
+			evtq.withUpdatedByUser != nil,
+			evtq.withCreatedByService != nil,
+			evtq.withUpdatedByService != nil,
 			evtq.withOwner != nil,
 		}
 	)
@@ -491,15 +569,27 @@ func (evtq *EmailVerificationTokenQuery) sqlAll(ctx context.Context, hooks ...qu
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := evtq.withCreatedBy; query != nil {
-		if err := evtq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *EmailVerificationToken, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := evtq.withCreatedByUser; query != nil {
+		if err := evtq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *EmailVerificationToken, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := evtq.withUpdatedBy; query != nil {
-		if err := evtq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *EmailVerificationToken, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := evtq.withUpdatedByUser; query != nil {
+		if err := evtq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *EmailVerificationToken, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := evtq.withCreatedByService; query != nil {
+		if err := evtq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *EmailVerificationToken, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := evtq.withUpdatedByService; query != nil {
+		if err := evtq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *EmailVerificationToken, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -517,11 +607,11 @@ func (evtq *EmailVerificationTokenQuery) sqlAll(ctx context.Context, hooks ...qu
 	return nodes, nil
 }
 
-func (evtq *EmailVerificationTokenQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*EmailVerificationToken, init func(*EmailVerificationToken), assign func(*EmailVerificationToken, *ChangeActor)) error {
+func (evtq *EmailVerificationTokenQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*EmailVerificationToken, init func(*EmailVerificationToken), assign func(*EmailVerificationToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*EmailVerificationToken)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -530,7 +620,7 @@ func (evtq *EmailVerificationTokenQuery) loadCreatedBy(ctx context.Context, quer
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -538,7 +628,7 @@ func (evtq *EmailVerificationTokenQuery) loadCreatedBy(ctx context.Context, quer
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -546,11 +636,11 @@ func (evtq *EmailVerificationTokenQuery) loadCreatedBy(ctx context.Context, quer
 	}
 	return nil
 }
-func (evtq *EmailVerificationTokenQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*EmailVerificationToken, init func(*EmailVerificationToken), assign func(*EmailVerificationToken, *ChangeActor)) error {
+func (evtq *EmailVerificationTokenQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*EmailVerificationToken, init func(*EmailVerificationToken), assign func(*EmailVerificationToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*EmailVerificationToken)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -559,7 +649,7 @@ func (evtq *EmailVerificationTokenQuery) loadUpdatedBy(ctx context.Context, quer
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -567,7 +657,65 @@ func (evtq *EmailVerificationTokenQuery) loadUpdatedBy(ctx context.Context, quer
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (evtq *EmailVerificationTokenQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*EmailVerificationToken, init func(*EmailVerificationToken), assign func(*EmailVerificationToken, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*EmailVerificationToken)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (evtq *EmailVerificationTokenQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*EmailVerificationToken, init func(*EmailVerificationToken), assign func(*EmailVerificationToken, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*EmailVerificationToken)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -635,11 +783,17 @@ func (evtq *EmailVerificationTokenQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if evtq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(emailverificationtoken.FieldCreatedByID)
+		if evtq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(emailverificationtoken.FieldCreatedByUserID)
 		}
-		if evtq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(emailverificationtoken.FieldUpdatedByID)
+		if evtq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(emailverificationtoken.FieldUpdatedByUserID)
+		}
+		if evtq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(emailverificationtoken.FieldCreatedByServiceID)
+		}
+		if evtq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(emailverificationtoken.FieldUpdatedByServiceID)
 		}
 		if evtq.withOwner != nil {
 			_spec.Node.AddColumnOnce(emailverificationtoken.FieldOwnerID)

@@ -60,6 +60,11 @@ autobind:
 # modelgen, the others will be allowed when binding to fields. Configure them to
 # your liking
 models:
+  Organization:
+    extraFields:
+      SubscriptionURL:
+        description: "A personalized stripe checkout URL"
+        type: github.com/99designs/gqlgen/graphql.String
   ID:
     model:
       - github.com/99designs/gqlgen/graphql.String
@@ -84,3 +89,6 @@ models:
   Any:
     model:
       - github.com/99designs/gqlgen/graphql.Any
+  Actor:
+    model:
+      - github.com/theopenlane/core/pkg/models.Actor

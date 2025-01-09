@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Subcontrol_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Subcontrol_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Subcontrol_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Subcontrol_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Subcontrol_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
 			case "deletedByID":
@@ -115,10 +123,14 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_Subcontrol_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Subcontrol_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Subcontrol_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Subcontrol_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Subcontrol_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
@@ -187,6 +199,14 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Subcontrol_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Subcontrol_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Subcontrol_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Subcontrol_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Subcontrol_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
 			case "deletedByID":
@@ -227,10 +247,14 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_Subcontrol_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Subcontrol_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Subcontrol_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Subcontrol_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Subcontrol_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":
@@ -343,6 +367,14 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Subcontrol_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Subcontrol_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Subcontrol_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Subcontrol_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Subcontrol_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
 			case "deletedByID":
@@ -383,10 +415,14 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_implementationVerificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_Subcontrol_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Subcontrol_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Subcontrol_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Subcontrol_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Subcontrol_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "controls":

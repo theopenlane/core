@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -77,6 +77,46 @@ func (gu *GroupUpdate) SetNillableUpdatedByID(s *string) *GroupUpdate {
 // ClearUpdatedByID clears the value of the "updated_by_id" field.
 func (gu *GroupUpdate) ClearUpdatedByID() *GroupUpdate {
 	gu.mutation.ClearUpdatedByID()
+	return gu
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (gu *GroupUpdate) SetUpdatedByUserID(s string) *GroupUpdate {
+	gu.mutation.SetUpdatedByUserID(s)
+	return gu
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (gu *GroupUpdate) SetNillableUpdatedByUserID(s *string) *GroupUpdate {
+	if s != nil {
+		gu.SetUpdatedByUserID(*s)
+	}
+	return gu
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (gu *GroupUpdate) ClearUpdatedByUserID() *GroupUpdate {
+	gu.mutation.ClearUpdatedByUserID()
+	return gu
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (gu *GroupUpdate) SetUpdatedByServiceID(s string) *GroupUpdate {
+	gu.mutation.SetUpdatedByServiceID(s)
+	return gu
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (gu *GroupUpdate) SetNillableUpdatedByServiceID(s *string) *GroupUpdate {
+	if s != nil {
+		gu.SetUpdatedByServiceID(*s)
+	}
+	return gu
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (gu *GroupUpdate) ClearUpdatedByServiceID() *GroupUpdate {
+	gu.mutation.ClearUpdatedByServiceID()
 	return gu
 }
 
@@ -206,9 +246,14 @@ func (gu *GroupUpdate) SetNillableDisplayName(s *string) *GroupUpdate {
 	return gu
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (gu *GroupUpdate) SetUpdatedBy(c *ChangeActor) *GroupUpdate {
-	return gu.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (gu *GroupUpdate) SetUpdatedByUser(u *User) *GroupUpdate {
+	return gu.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (gu *GroupUpdate) SetUpdatedByService(a *APIToken) *GroupUpdate {
+	return gu.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -742,9 +787,15 @@ func (gu *GroupUpdate) Mutation() *GroupMutation {
 	return gu.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (gu *GroupUpdate) ClearUpdatedBy() *GroupUpdate {
-	gu.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (gu *GroupUpdate) ClearUpdatedByUser() *GroupUpdate {
+	gu.mutation.ClearUpdatedByUser()
+	return gu
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (gu *GroupUpdate) ClearUpdatedByService() *GroupUpdate {
+	gu.mutation.ClearUpdatedByService()
 	return gu
 }
 
@@ -1566,6 +1617,15 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if gu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(group.FieldUpdatedAt, field.TypeTime)
 	}
+	if gu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(group.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := gu.mutation.UpdatedByID(); ok {
+		_spec.SetField(group.FieldUpdatedByID, field.TypeString, value)
+	}
+	if gu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(group.FieldUpdatedByID, field.TypeString)
+	}
 	if gu.mutation.DeletedAtCleared() {
 		_spec.ClearField(group.FieldDeletedAt, field.TypeTime)
 	}
@@ -1607,29 +1667,60 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := gu.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
 	}
-	if gu.mutation.UpdatedByCleared() {
+	if gu.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   group.UpdatedByTable,
-			Columns: []string{group.UpdatedByColumn},
+			Table:   group.UpdatedByUserTable,
+			Columns: []string{group.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gu.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := gu.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := gu.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   group.UpdatedByTable,
-			Columns: []string{group.UpdatedByColumn},
+			Table:   group.UpdatedByUserTable,
+			Columns: []string{group.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByServiceTable,
+			Columns: []string{group.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByServiceTable,
+			Columns: []string{group.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = gu.schemaConfig.Group
@@ -3409,6 +3500,46 @@ func (guo *GroupUpdateOne) ClearUpdatedByID() *GroupUpdateOne {
 	return guo
 }
 
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (guo *GroupUpdateOne) SetUpdatedByUserID(s string) *GroupUpdateOne {
+	guo.mutation.SetUpdatedByUserID(s)
+	return guo
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (guo *GroupUpdateOne) SetNillableUpdatedByUserID(s *string) *GroupUpdateOne {
+	if s != nil {
+		guo.SetUpdatedByUserID(*s)
+	}
+	return guo
+}
+
+// ClearUpdatedByUserID clears the value of the "updated_by_user_id" field.
+func (guo *GroupUpdateOne) ClearUpdatedByUserID() *GroupUpdateOne {
+	guo.mutation.ClearUpdatedByUserID()
+	return guo
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (guo *GroupUpdateOne) SetUpdatedByServiceID(s string) *GroupUpdateOne {
+	guo.mutation.SetUpdatedByServiceID(s)
+	return guo
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (guo *GroupUpdateOne) SetNillableUpdatedByServiceID(s *string) *GroupUpdateOne {
+	if s != nil {
+		guo.SetUpdatedByServiceID(*s)
+	}
+	return guo
+}
+
+// ClearUpdatedByServiceID clears the value of the "updated_by_service_id" field.
+func (guo *GroupUpdateOne) ClearUpdatedByServiceID() *GroupUpdateOne {
+	guo.mutation.ClearUpdatedByServiceID()
+	return guo
+}
+
 // SetTags sets the "tags" field.
 func (guo *GroupUpdateOne) SetTags(s []string) *GroupUpdateOne {
 	guo.mutation.SetTags(s)
@@ -3535,9 +3666,14 @@ func (guo *GroupUpdateOne) SetNillableDisplayName(s *string) *GroupUpdateOne {
 	return guo
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (guo *GroupUpdateOne) SetUpdatedBy(c *ChangeActor) *GroupUpdateOne {
-	return guo.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (guo *GroupUpdateOne) SetUpdatedByUser(u *User) *GroupUpdateOne {
+	return guo.SetUpdatedByUserID(u.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (guo *GroupUpdateOne) SetUpdatedByService(a *APIToken) *GroupUpdateOne {
+	return guo.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -4071,9 +4207,15 @@ func (guo *GroupUpdateOne) Mutation() *GroupMutation {
 	return guo.mutation
 }
 
-// ClearUpdatedBy clears the "updated_by" edge to the ChangeActor entity.
-func (guo *GroupUpdateOne) ClearUpdatedBy() *GroupUpdateOne {
-	guo.mutation.ClearUpdatedBy()
+// ClearUpdatedByUser clears the "updated_by_user" edge to the User entity.
+func (guo *GroupUpdateOne) ClearUpdatedByUser() *GroupUpdateOne {
+	guo.mutation.ClearUpdatedByUser()
+	return guo
+}
+
+// ClearUpdatedByService clears the "updated_by_service" edge to the APIToken entity.
+func (guo *GroupUpdateOne) ClearUpdatedByService() *GroupUpdateOne {
+	guo.mutation.ClearUpdatedByService()
 	return guo
 }
 
@@ -4925,6 +5067,15 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 	if guo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(group.FieldUpdatedAt, field.TypeTime)
 	}
+	if guo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(group.FieldCreatedByID, field.TypeString)
+	}
+	if value, ok := guo.mutation.UpdatedByID(); ok {
+		_spec.SetField(group.FieldUpdatedByID, field.TypeString, value)
+	}
+	if guo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(group.FieldUpdatedByID, field.TypeString)
+	}
 	if guo.mutation.DeletedAtCleared() {
 		_spec.ClearField(group.FieldDeletedAt, field.TypeTime)
 	}
@@ -4966,29 +5117,60 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 	if value, ok := guo.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
 	}
-	if guo.mutation.UpdatedByCleared() {
+	if guo.mutation.UpdatedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   group.UpdatedByTable,
-			Columns: []string{group.UpdatedByColumn},
+			Table:   group.UpdatedByUserTable,
+			Columns: []string{group.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = guo.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := guo.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := guo.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   group.UpdatedByTable,
-			Columns: []string{group.UpdatedByColumn},
+			Table:   group.UpdatedByUserTable,
+			Columns: []string{group.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.UpdatedByServiceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByServiceTable,
+			Columns: []string{group.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.UpdatedByServiceTable,
+			Columns: []string{group.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = guo.schemaConfig.Group

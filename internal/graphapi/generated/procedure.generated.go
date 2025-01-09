@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Procedure_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Procedure_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Procedure_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Procedure_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Procedure_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedByID":
@@ -101,10 +109,14 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Procedure_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Procedure_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Procedure_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Procedure_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -179,6 +191,14 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Procedure_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Procedure_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Procedure_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Procedure_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Procedure_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedByID":
@@ -205,10 +225,14 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Procedure_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Procedure_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Procedure_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Procedure_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -327,6 +351,14 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_Procedure_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_Procedure_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_Procedure_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_Procedure_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_Procedure_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
 			case "deletedByID":
@@ -353,10 +385,14 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_satisfies(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_Procedure_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_Procedure_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_Procedure_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_Procedure_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":

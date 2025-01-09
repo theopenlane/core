@@ -75,6 +75,14 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_InternalPolicy_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_InternalPolicy_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_InternalPolicy_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_InternalPolicy_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_InternalPolicy_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedByID":
@@ -99,10 +107,14 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_background(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_InternalPolicy_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_InternalPolicy_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_InternalPolicy_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_InternalPolicy_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -177,6 +189,14 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_InternalPolicy_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_InternalPolicy_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_InternalPolicy_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_InternalPolicy_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_InternalPolicy_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedByID":
@@ -201,10 +221,14 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_background(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_InternalPolicy_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_InternalPolicy_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_InternalPolicy_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_InternalPolicy_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -323,6 +347,14 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_createdByID(ctx, field)
 			case "updatedByID":
 				return ec.fieldContext_InternalPolicy_updatedByID(ctx, field)
+			case "createdByUserID":
+				return ec.fieldContext_InternalPolicy_createdByUserID(ctx, field)
+			case "updatedByUserID":
+				return ec.fieldContext_InternalPolicy_updatedByUserID(ctx, field)
+			case "createdByServiceID":
+				return ec.fieldContext_InternalPolicy_createdByServiceID(ctx, field)
+			case "updatedByServiceID":
+				return ec.fieldContext_InternalPolicy_updatedByServiceID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
 			case "deletedByID":
@@ -347,10 +379,14 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_background(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "createdByUser":
+				return ec.fieldContext_InternalPolicy_createdByUser(ctx, field)
+			case "updatedByUser":
+				return ec.fieldContext_InternalPolicy_updatedByUser(ctx, field)
+			case "createdByService":
+				return ec.fieldContext_InternalPolicy_createdByService(ctx, field)
+			case "updatedByService":
+				return ec.fieldContext_InternalPolicy_updatedByService(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":

@@ -137,7 +137,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				e.Emitter.Emit(event.Topic(), event)
 			}
 
-			if tx := transactionFromContext(ctx); tx != nil {
+			if tx := TransactionFromContext(ctx); tx != nil {
 				tx.OnCommit(func(next entgen.Committer) entgen.Committer {
 					return entgen.CommitFunc(func(ctx context.Context, tx *entgen.Tx) error {
 						err := next.Commit(ctx, tx)

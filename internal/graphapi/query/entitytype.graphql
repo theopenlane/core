@@ -6,8 +6,7 @@ mutation CreateBulkCSVEntityType($input: Upload!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       id
       name
@@ -26,8 +25,7 @@ mutation CreateBulkEntityType($input: [CreateEntityTypeInput!]) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       id
       name
@@ -46,8 +44,7 @@ mutation CreateEntityType($input: CreateEntityTypeInput!) {
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       id
       name
@@ -79,8 +76,7 @@ query GetAllEntityTypes {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -114,8 +110,7 @@ query GetEntityTypes($where: EntityTypeWhereInput) {
       updatedByID
       updatedBy {
           id
-          name
-          actorType
+
       }
       }
     }
@@ -128,8 +123,7 @@ mutation UpdateEntityType($updateEntityTypeId: ID!, $input: UpdateEntityTypeInpu
       createdByID
       createdBy {
           id
-          name
-          actorType
+
       }
       id
       name

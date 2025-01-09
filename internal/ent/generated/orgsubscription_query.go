@@ -11,10 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -22,15 +23,17 @@ import (
 // OrgSubscriptionQuery is the builder for querying OrgSubscription entities.
 type OrgSubscriptionQuery struct {
 	config
-	ctx           *QueryContext
-	order         []orgsubscription.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.OrgSubscription
-	withCreatedBy *ChangeActorQuery
-	withUpdatedBy *ChangeActorQuery
-	withOwner     *OrganizationQuery
-	loadTotal     []func(context.Context, []*OrgSubscription) error
-	modifiers     []func(*sql.Selector)
+	ctx                  *QueryContext
+	order                []orgsubscription.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.OrgSubscription
+	withCreatedByUser    *UserQuery
+	withUpdatedByUser    *UserQuery
+	withCreatedByService *APITokenQuery
+	withUpdatedByService *APITokenQuery
+	withOwner            *OrganizationQuery
+	loadTotal            []func(context.Context, []*OrgSubscription) error
+	modifiers            []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -67,9 +70,9 @@ func (osq *OrgSubscriptionQuery) Order(o ...orgsubscription.OrderOption) *OrgSub
 	return osq
 }
 
-// QueryCreatedBy chains the current query on the "created_by" edge.
-func (osq *OrgSubscriptionQuery) QueryCreatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: osq.config}).Query()
+// QueryCreatedByUser chains the current query on the "created_by_user" edge.
+func (osq *OrgSubscriptionQuery) QueryCreatedByUser() *UserQuery {
+	query := (&UserClient{config: osq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := osq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -80,11 +83,11 @@ func (osq *OrgSubscriptionQuery) QueryCreatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.CreatedByTable, orgsubscription.CreatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.CreatedByUserTable, orgsubscription.CreatedByUserColumn),
 		)
 		schemaConfig := osq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
@@ -92,9 +95,9 @@ func (osq *OrgSubscriptionQuery) QueryCreatedBy() *ChangeActorQuery {
 	return query
 }
 
-// QueryUpdatedBy chains the current query on the "updated_by" edge.
-func (osq *OrgSubscriptionQuery) QueryUpdatedBy() *ChangeActorQuery {
-	query := (&ChangeActorClient{config: osq.config}).Query()
+// QueryUpdatedByUser chains the current query on the "updated_by_user" edge.
+func (osq *OrgSubscriptionQuery) QueryUpdatedByUser() *UserQuery {
+	query := (&UserClient{config: osq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := osq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -105,11 +108,61 @@ func (osq *OrgSubscriptionQuery) QueryUpdatedBy() *ChangeActorQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
-			sqlgraph.To(changeactor.Table, changeactor.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.UpdatedByTable, orgsubscription.UpdatedByColumn),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.UpdatedByUserTable, orgsubscription.UpdatedByUserColumn),
 		)
 		schemaConfig := osq.schemaConfig
-		step.To.Schema = schemaConfig.ChangeActor
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCreatedByService chains the current query on the "created_by_service" edge.
+func (osq *OrgSubscriptionQuery) QueryCreatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.CreatedByServiceTable, orgsubscription.CreatedByServiceColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
+		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUpdatedByService chains the current query on the "updated_by_service" edge.
+func (osq *OrgSubscriptionQuery) QueryUpdatedByService() *APITokenQuery {
+	query := (&APITokenClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
+			sqlgraph.To(apitoken.Table, apitoken.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, orgsubscription.UpdatedByServiceTable, orgsubscription.UpdatedByServiceColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
@@ -329,14 +382,16 @@ func (osq *OrgSubscriptionQuery) Clone() *OrgSubscriptionQuery {
 		return nil
 	}
 	return &OrgSubscriptionQuery{
-		config:        osq.config,
-		ctx:           osq.ctx.Clone(),
-		order:         append([]orgsubscription.OrderOption{}, osq.order...),
-		inters:        append([]Interceptor{}, osq.inters...),
-		predicates:    append([]predicate.OrgSubscription{}, osq.predicates...),
-		withCreatedBy: osq.withCreatedBy.Clone(),
-		withUpdatedBy: osq.withUpdatedBy.Clone(),
-		withOwner:     osq.withOwner.Clone(),
+		config:               osq.config,
+		ctx:                  osq.ctx.Clone(),
+		order:                append([]orgsubscription.OrderOption{}, osq.order...),
+		inters:               append([]Interceptor{}, osq.inters...),
+		predicates:           append([]predicate.OrgSubscription{}, osq.predicates...),
+		withCreatedByUser:    osq.withCreatedByUser.Clone(),
+		withUpdatedByUser:    osq.withUpdatedByUser.Clone(),
+		withCreatedByService: osq.withCreatedByService.Clone(),
+		withUpdatedByService: osq.withUpdatedByService.Clone(),
+		withOwner:            osq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       osq.sql.Clone(),
 		path:      osq.path,
@@ -344,25 +399,47 @@ func (osq *OrgSubscriptionQuery) Clone() *OrgSubscriptionQuery {
 	}
 }
 
-// WithCreatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "created_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (osq *OrgSubscriptionQuery) WithCreatedBy(opts ...func(*ChangeActorQuery)) *OrgSubscriptionQuery {
-	query := (&ChangeActorClient{config: osq.config}).Query()
+// WithCreatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithCreatedByUser(opts ...func(*UserQuery)) *OrgSubscriptionQuery {
+	query := (&UserClient{config: osq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	osq.withCreatedBy = query
+	osq.withCreatedByUser = query
 	return osq
 }
 
-// WithUpdatedBy tells the query-builder to eager-load the nodes that are connected to
-// the "updated_by" edge. The optional arguments are used to configure the query builder of the edge.
-func (osq *OrgSubscriptionQuery) WithUpdatedBy(opts ...func(*ChangeActorQuery)) *OrgSubscriptionQuery {
-	query := (&ChangeActorClient{config: osq.config}).Query()
+// WithUpdatedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithUpdatedByUser(opts ...func(*UserQuery)) *OrgSubscriptionQuery {
+	query := (&UserClient{config: osq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	osq.withUpdatedBy = query
+	osq.withUpdatedByUser = query
+	return osq
+}
+
+// WithCreatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "created_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithCreatedByService(opts ...func(*APITokenQuery)) *OrgSubscriptionQuery {
+	query := (&APITokenClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withCreatedByService = query
+	return osq
+}
+
+// WithUpdatedByService tells the query-builder to eager-load the nodes that are connected to
+// the "updated_by_service" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithUpdatedByService(opts ...func(*APITokenQuery)) *OrgSubscriptionQuery {
+	query := (&APITokenClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withUpdatedByService = query
 	return osq
 }
 
@@ -455,9 +532,11 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*OrgSubscription{}
 		_spec       = osq.querySpec()
-		loadedTypes = [3]bool{
-			osq.withCreatedBy != nil,
-			osq.withUpdatedBy != nil,
+		loadedTypes = [5]bool{
+			osq.withCreatedByUser != nil,
+			osq.withUpdatedByUser != nil,
+			osq.withCreatedByService != nil,
+			osq.withUpdatedByService != nil,
 			osq.withOwner != nil,
 		}
 	)
@@ -484,15 +563,27 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := osq.withCreatedBy; query != nil {
-		if err := osq.loadCreatedBy(ctx, query, nodes, nil,
-			func(n *OrgSubscription, e *ChangeActor) { n.Edges.CreatedBy = e }); err != nil {
+	if query := osq.withCreatedByUser; query != nil {
+		if err := osq.loadCreatedByUser(ctx, query, nodes, nil,
+			func(n *OrgSubscription, e *User) { n.Edges.CreatedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := osq.withUpdatedBy; query != nil {
-		if err := osq.loadUpdatedBy(ctx, query, nodes, nil,
-			func(n *OrgSubscription, e *ChangeActor) { n.Edges.UpdatedBy = e }); err != nil {
+	if query := osq.withUpdatedByUser; query != nil {
+		if err := osq.loadUpdatedByUser(ctx, query, nodes, nil,
+			func(n *OrgSubscription, e *User) { n.Edges.UpdatedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := osq.withCreatedByService; query != nil {
+		if err := osq.loadCreatedByService(ctx, query, nodes, nil,
+			func(n *OrgSubscription, e *APIToken) { n.Edges.CreatedByService = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := osq.withUpdatedByService; query != nil {
+		if err := osq.loadUpdatedByService(ctx, query, nodes, nil,
+			func(n *OrgSubscription, e *APIToken) { n.Edges.UpdatedByService = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -510,11 +601,11 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	return nodes, nil
 }
 
-func (osq *OrgSubscriptionQuery) loadCreatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *ChangeActor)) error {
+func (osq *OrgSubscriptionQuery) loadCreatedByUser(ctx context.Context, query *UserQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgSubscription)
 	for i := range nodes {
-		fk := nodes[i].CreatedByID
+		fk := nodes[i].CreatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -523,7 +614,7 @@ func (osq *OrgSubscriptionQuery) loadCreatedBy(ctx context.Context, query *Chang
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -531,7 +622,7 @@ func (osq *OrgSubscriptionQuery) loadCreatedBy(ctx context.Context, query *Chang
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "created_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "created_by_user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -539,11 +630,11 @@ func (osq *OrgSubscriptionQuery) loadCreatedBy(ctx context.Context, query *Chang
 	}
 	return nil
 }
-func (osq *OrgSubscriptionQuery) loadUpdatedBy(ctx context.Context, query *ChangeActorQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *ChangeActor)) error {
+func (osq *OrgSubscriptionQuery) loadUpdatedByUser(ctx context.Context, query *UserQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgSubscription)
 	for i := range nodes {
-		fk := nodes[i].UpdatedByID
+		fk := nodes[i].UpdatedByUserID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -552,7 +643,7 @@ func (osq *OrgSubscriptionQuery) loadUpdatedBy(ctx context.Context, query *Chang
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(changeactor.IDIn(ids...))
+	query.Where(user.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -560,7 +651,65 @@ func (osq *OrgSubscriptionQuery) loadUpdatedBy(ctx context.Context, query *Chang
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "updated_by_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "updated_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (osq *OrgSubscriptionQuery) loadCreatedByService(ctx context.Context, query *APITokenQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*OrgSubscription)
+	for i := range nodes {
+		fk := nodes[i].CreatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "created_by_service_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (osq *OrgSubscriptionQuery) loadUpdatedByService(ctx context.Context, query *APITokenQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *APIToken)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*OrgSubscription)
+	for i := range nodes {
+		fk := nodes[i].UpdatedByServiceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(apitoken.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "updated_by_service_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -628,11 +777,17 @@ func (osq *OrgSubscriptionQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if osq.withCreatedBy != nil {
-			_spec.Node.AddColumnOnce(orgsubscription.FieldCreatedByID)
+		if osq.withCreatedByUser != nil {
+			_spec.Node.AddColumnOnce(orgsubscription.FieldCreatedByUserID)
 		}
-		if osq.withUpdatedBy != nil {
-			_spec.Node.AddColumnOnce(orgsubscription.FieldUpdatedByID)
+		if osq.withUpdatedByUser != nil {
+			_spec.Node.AddColumnOnce(orgsubscription.FieldUpdatedByUserID)
+		}
+		if osq.withCreatedByService != nil {
+			_spec.Node.AddColumnOnce(orgsubscription.FieldCreatedByServiceID)
+		}
+		if osq.withUpdatedByService != nil {
+			_spec.Node.AddColumnOnce(orgsubscription.FieldUpdatedByServiceID)
 		}
 		if osq.withOwner != nil {
 			_spec.Node.AddColumnOnce(orgsubscription.FieldOwnerID)

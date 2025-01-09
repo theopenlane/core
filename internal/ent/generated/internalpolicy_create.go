@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // InternalPolicyCreate is the builder for creating a InternalPolicy entity.
@@ -81,6 +82,62 @@ func (ipc *InternalPolicyCreate) SetUpdatedByID(s string) *InternalPolicyCreate 
 func (ipc *InternalPolicyCreate) SetNillableUpdatedByID(s *string) *InternalPolicyCreate {
 	if s != nil {
 		ipc.SetUpdatedByID(*s)
+	}
+	return ipc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (ipc *InternalPolicyCreate) SetCreatedByUserID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetCreatedByUserID(s)
+	return ipc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableCreatedByUserID(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetCreatedByUserID(*s)
+	}
+	return ipc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (ipc *InternalPolicyCreate) SetUpdatedByUserID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetUpdatedByUserID(s)
+	return ipc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableUpdatedByUserID(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetUpdatedByUserID(*s)
+	}
+	return ipc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (ipc *InternalPolicyCreate) SetCreatedByServiceID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetCreatedByServiceID(s)
+	return ipc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableCreatedByServiceID(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetCreatedByServiceID(*s)
+	}
+	return ipc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (ipc *InternalPolicyCreate) SetUpdatedByServiceID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetUpdatedByServiceID(s)
+	return ipc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableUpdatedByServiceID(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetUpdatedByServiceID(*s)
 	}
 	return ipc
 }
@@ -257,14 +314,24 @@ func (ipc *InternalPolicyCreate) SetNillableID(s *string) *InternalPolicyCreate 
 	return ipc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (ipc *InternalPolicyCreate) SetCreatedBy(c *ChangeActor) *InternalPolicyCreate {
-	return ipc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (ipc *InternalPolicyCreate) SetCreatedByUser(u *User) *InternalPolicyCreate {
+	return ipc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (ipc *InternalPolicyCreate) SetUpdatedBy(c *ChangeActor) *InternalPolicyCreate {
-	return ipc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (ipc *InternalPolicyCreate) SetUpdatedByUser(u *User) *InternalPolicyCreate {
+	return ipc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (ipc *InternalPolicyCreate) SetCreatedByService(a *APIToken) *InternalPolicyCreate {
+	return ipc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (ipc *InternalPolicyCreate) SetUpdatedByService(a *APIToken) *InternalPolicyCreate {
+	return ipc.SetUpdatedByServiceID(a.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -526,6 +593,14 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := ipc.mutation.CreatedByID(); ok {
+		_spec.SetField(internalpolicy.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := ipc.mutation.UpdatedByID(); ok {
+		_spec.SetField(internalpolicy.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := ipc.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -574,40 +649,76 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
-	if nodes := ipc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := ipc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   internalpolicy.CreatedByTable,
-			Columns: []string{internalpolicy.CreatedByColumn},
+			Table:   internalpolicy.CreatedByUserTable,
+			Columns: []string{internalpolicy.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipc.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := ipc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   internalpolicy.UpdatedByTable,
-			Columns: []string{internalpolicy.UpdatedByColumn},
+			Table:   internalpolicy.UpdatedByUserTable,
+			Columns: []string{internalpolicy.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = ipc.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.CreatedByServiceTable,
+			Columns: []string{internalpolicy.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.UpdatedByServiceTable,
+			Columns: []string{internalpolicy.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ipc.mutation.OwnerIDs(); len(nodes) > 0 {

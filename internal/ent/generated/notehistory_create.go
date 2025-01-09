@@ -125,6 +125,62 @@ func (nhc *NoteHistoryCreate) SetNillableUpdatedByID(s *string) *NoteHistoryCrea
 	return nhc
 }
 
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (nhc *NoteHistoryCreate) SetCreatedByUserID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetCreatedByUserID(s)
+	return nhc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (nhc *NoteHistoryCreate) SetNillableCreatedByUserID(s *string) *NoteHistoryCreate {
+	if s != nil {
+		nhc.SetCreatedByUserID(*s)
+	}
+	return nhc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (nhc *NoteHistoryCreate) SetUpdatedByUserID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetUpdatedByUserID(s)
+	return nhc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (nhc *NoteHistoryCreate) SetNillableUpdatedByUserID(s *string) *NoteHistoryCreate {
+	if s != nil {
+		nhc.SetUpdatedByUserID(*s)
+	}
+	return nhc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (nhc *NoteHistoryCreate) SetCreatedByServiceID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetCreatedByServiceID(s)
+	return nhc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (nhc *NoteHistoryCreate) SetNillableCreatedByServiceID(s *string) *NoteHistoryCreate {
+	if s != nil {
+		nhc.SetCreatedByServiceID(*s)
+	}
+	return nhc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (nhc *NoteHistoryCreate) SetUpdatedByServiceID(s string) *NoteHistoryCreate {
+	nhc.mutation.SetUpdatedByServiceID(s)
+	return nhc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (nhc *NoteHistoryCreate) SetNillableUpdatedByServiceID(s *string) *NoteHistoryCreate {
+	if s != nil {
+		nhc.SetUpdatedByServiceID(*s)
+	}
+	return nhc
+}
+
 // SetMappingID sets the "mapping_id" field.
 func (nhc *NoteHistoryCreate) SetMappingID(s string) *NoteHistoryCreate {
 	nhc.mutation.SetMappingID(s)
@@ -372,6 +428,22 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 	if value, ok := nhc.mutation.UpdatedByID(); ok {
 		_spec.SetField(notehistory.FieldUpdatedByID, field.TypeString, value)
 		_node.UpdatedByID = value
+	}
+	if value, ok := nhc.mutation.CreatedByUserID(); ok {
+		_spec.SetField(notehistory.FieldCreatedByUserID, field.TypeString, value)
+		_node.CreatedByUserID = value
+	}
+	if value, ok := nhc.mutation.UpdatedByUserID(); ok {
+		_spec.SetField(notehistory.FieldUpdatedByUserID, field.TypeString, value)
+		_node.UpdatedByUserID = value
+	}
+	if value, ok := nhc.mutation.CreatedByServiceID(); ok {
+		_spec.SetField(notehistory.FieldCreatedByServiceID, field.TypeString, value)
+		_node.CreatedByServiceID = value
+	}
+	if value, ok := nhc.mutation.UpdatedByServiceID(); ok {
+		_spec.SetField(notehistory.FieldUpdatedByServiceID, field.TypeString, value)
+		_node.UpdatedByServiceID = value
 	}
 	if value, ok := nhc.mutation.MappingID(); ok {
 		_spec.SetField(notehistory.FieldMappingID, field.TypeString, value)

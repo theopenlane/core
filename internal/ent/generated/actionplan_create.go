@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/changeactor"
+	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -78,6 +78,62 @@ func (apc *ActionPlanCreate) SetUpdatedByID(s string) *ActionPlanCreate {
 func (apc *ActionPlanCreate) SetNillableUpdatedByID(s *string) *ActionPlanCreate {
 	if s != nil {
 		apc.SetUpdatedByID(*s)
+	}
+	return apc
+}
+
+// SetCreatedByUserID sets the "created_by_user_id" field.
+func (apc *ActionPlanCreate) SetCreatedByUserID(s string) *ActionPlanCreate {
+	apc.mutation.SetCreatedByUserID(s)
+	return apc
+}
+
+// SetNillableCreatedByUserID sets the "created_by_user_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableCreatedByUserID(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetCreatedByUserID(*s)
+	}
+	return apc
+}
+
+// SetUpdatedByUserID sets the "updated_by_user_id" field.
+func (apc *ActionPlanCreate) SetUpdatedByUserID(s string) *ActionPlanCreate {
+	apc.mutation.SetUpdatedByUserID(s)
+	return apc
+}
+
+// SetNillableUpdatedByUserID sets the "updated_by_user_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableUpdatedByUserID(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetUpdatedByUserID(*s)
+	}
+	return apc
+}
+
+// SetCreatedByServiceID sets the "created_by_service_id" field.
+func (apc *ActionPlanCreate) SetCreatedByServiceID(s string) *ActionPlanCreate {
+	apc.mutation.SetCreatedByServiceID(s)
+	return apc
+}
+
+// SetNillableCreatedByServiceID sets the "created_by_service_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableCreatedByServiceID(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetCreatedByServiceID(*s)
+	}
+	return apc
+}
+
+// SetUpdatedByServiceID sets the "updated_by_service_id" field.
+func (apc *ActionPlanCreate) SetUpdatedByServiceID(s string) *ActionPlanCreate {
+	apc.mutation.SetUpdatedByServiceID(s)
+	return apc
+}
+
+// SetNillableUpdatedByServiceID sets the "updated_by_service_id" field if the given value is not nil.
+func (apc *ActionPlanCreate) SetNillableUpdatedByServiceID(s *string) *ActionPlanCreate {
+	if s != nil {
+		apc.SetUpdatedByServiceID(*s)
 	}
 	return apc
 }
@@ -226,14 +282,24 @@ func (apc *ActionPlanCreate) SetNillableID(s *string) *ActionPlanCreate {
 	return apc
 }
 
-// SetCreatedBy sets the "created_by" edge to the ChangeActor entity.
-func (apc *ActionPlanCreate) SetCreatedBy(c *ChangeActor) *ActionPlanCreate {
-	return apc.SetCreatedByID(c.ID)
+// SetCreatedByUser sets the "created_by_user" edge to the User entity.
+func (apc *ActionPlanCreate) SetCreatedByUser(u *User) *ActionPlanCreate {
+	return apc.SetCreatedByUserID(u.ID)
 }
 
-// SetUpdatedBy sets the "updated_by" edge to the ChangeActor entity.
-func (apc *ActionPlanCreate) SetUpdatedBy(c *ChangeActor) *ActionPlanCreate {
-	return apc.SetUpdatedByID(c.ID)
+// SetUpdatedByUser sets the "updated_by_user" edge to the User entity.
+func (apc *ActionPlanCreate) SetUpdatedByUser(u *User) *ActionPlanCreate {
+	return apc.SetUpdatedByUserID(u.ID)
+}
+
+// SetCreatedByService sets the "created_by_service" edge to the APIToken entity.
+func (apc *ActionPlanCreate) SetCreatedByService(a *APIToken) *ActionPlanCreate {
+	return apc.SetCreatedByServiceID(a.ID)
+}
+
+// SetUpdatedByService sets the "updated_by_service" edge to the APIToken entity.
+func (apc *ActionPlanCreate) SetUpdatedByService(a *APIToken) *ActionPlanCreate {
+	return apc.SetUpdatedByServiceID(a.ID)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by IDs.
@@ -435,6 +501,14 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := apc.mutation.CreatedByID(); ok {
+		_spec.SetField(actionplan.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
+	}
+	if value, ok := apc.mutation.UpdatedByID(); ok {
+		_spec.SetField(actionplan.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
+	}
 	if value, ok := apc.mutation.DeletedAt(); ok {
 		_spec.SetField(actionplan.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -479,40 +553,76 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
-	if nodes := apc.mutation.CreatedByIDs(); len(nodes) > 0 {
+	if nodes := apc.mutation.CreatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   actionplan.CreatedByTable,
-			Columns: []string{actionplan.CreatedByColumn},
+			Table:   actionplan.CreatedByUserTable,
+			Columns: []string{actionplan.CreatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apc.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.CreatedByID = nodes[0]
+		_node.CreatedByUserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := apc.mutation.UpdatedByIDs(); len(nodes) > 0 {
+	if nodes := apc.mutation.UpdatedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   actionplan.UpdatedByTable,
-			Columns: []string{actionplan.UpdatedByColumn},
+			Table:   actionplan.UpdatedByUserTable,
+			Columns: []string{actionplan.UpdatedByUserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(changeactor.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = apc.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.UpdatedByID = nodes[0]
+		_node.UpdatedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := apc.mutation.CreatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.CreatedByServiceTable,
+			Columns: []string{actionplan.CreatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CreatedByServiceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := apc.mutation.UpdatedByServiceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.UpdatedByServiceTable,
+			Columns: []string{actionplan.UpdatedByServiceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UpdatedByServiceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := apc.mutation.StandardIDs(); len(nodes) > 0 {
