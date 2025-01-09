@@ -22,8 +22,10 @@ func TestCheckForBillingUpdate(t *testing.T) {
 				"billing_phone": "1234567890",
 			},
 			stripeCustomer: &OrganizationCustomer{
-				BillingEmail: "test@example.com",
-				BillingPhone: "1234567890",
+				ContactInfo: ContactInfo{
+					Email: "test@example.com",
+					Phone: "1234567890",
+				},
 			},
 			expectedParams: &stripe.CustomerParams{},
 			expectedUpdate: false,
@@ -35,8 +37,10 @@ func TestCheckForBillingUpdate(t *testing.T) {
 				"billing_phone": "1234567890",
 			},
 			stripeCustomer: &OrganizationCustomer{
-				BillingEmail: "test@example.com",
-				BillingPhone: "1234567890",
+				ContactInfo: ContactInfo{
+					Email: "test@example.com",
+					Phone: "1234567890",
+				},
 			},
 			expectedParams: &stripe.CustomerParams{
 				Email: stripe.String("new@example.com"),
@@ -50,8 +54,10 @@ func TestCheckForBillingUpdate(t *testing.T) {
 				"billing_phone": "0987654321",
 			},
 			stripeCustomer: &OrganizationCustomer{
-				BillingEmail: "test@example.com",
-				BillingPhone: "1234567890",
+				ContactInfo: ContactInfo{
+					Email: "test@example.com",
+					Phone: "1234567890",
+				},
 			},
 			expectedParams: &stripe.CustomerParams{
 				Phone: stripe.String("0987654321"),

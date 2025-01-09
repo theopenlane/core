@@ -24,6 +24,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/organization"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/organizationsetting"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/orgmembers"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/orgsubscription"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/personalaccesstokens"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/procedure"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/program"

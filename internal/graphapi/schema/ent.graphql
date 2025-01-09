@@ -4347,10 +4347,6 @@ input CreateOrganizationSettingInput {
   geographical location of the organization
   """
   geoLocation: OrganizationSettingRegion
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
   organizationID: ID
   fileIDs: [ID!]
 }
@@ -14673,10 +14669,6 @@ type OrganizationSetting implements Node {
   the ID of the organization the settings belong to
   """
   organizationID: ID
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
   organization: Organization
   files: [File!]
 }
@@ -14757,10 +14749,6 @@ type OrganizationSettingHistory implements Node {
   the ID of the organization the settings belong to
   """
   organizationID: String
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
 }
 """
 A connection to a list of items.
@@ -15057,24 +15045,6 @@ input OrganizationSettingHistoryWhereInput {
   organizationIDNotNil: Boolean
   organizationIDEqualFold: String
   organizationIDContainsFold: String
-  """
-  stripe_id field predicates
-  """
-  stripeID: String
-  stripeIDNEQ: String
-  stripeIDIn: [String!]
-  stripeIDNotIn: [String!]
-  stripeIDGT: String
-  stripeIDGTE: String
-  stripeIDLT: String
-  stripeIDLTE: String
-  stripeIDContains: String
-  stripeIDHasPrefix: String
-  stripeIDHasSuffix: String
-  stripeIDIsNil: Boolean
-  stripeIDNotNil: Boolean
-  stripeIDEqualFold: String
-  stripeIDContainsFold: String
 }
 """
 OrganizationSettingRegion is enum for the field geo_location
@@ -15297,24 +15267,6 @@ input OrganizationSettingWhereInput {
   organizationIDNotNil: Boolean
   organizationIDEqualFold: ID
   organizationIDContainsFold: ID
-  """
-  stripe_id field predicates
-  """
-  stripeID: String
-  stripeIDNEQ: String
-  stripeIDIn: [String!]
-  stripeIDNotIn: [String!]
-  stripeIDGT: String
-  stripeIDGTE: String
-  stripeIDLT: String
-  stripeIDLTE: String
-  stripeIDContains: String
-  stripeIDHasPrefix: String
-  stripeIDHasSuffix: String
-  stripeIDIsNil: Boolean
-  stripeIDNotNil: Boolean
-  stripeIDEqualFold: String
-  stripeIDContainsFold: String
   """
   organization edge predicates
   """
@@ -25467,11 +25419,6 @@ input UpdateOrganizationSettingInput {
   """
   geoLocation: OrganizationSettingRegion
   clearGeoLocation: Boolean
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
-  clearStripeID: Boolean
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]

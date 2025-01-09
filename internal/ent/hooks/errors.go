@@ -42,6 +42,8 @@ var (
 	ErrNoControls = errors.New("subcontrol must have at least one control assigned")
 	// ErrUnableToCast is returned when a type assertion fails
 	ErrUnableToCast = errors.New("unable to cast")
+	// ErrTooManySubscriptions is returned when an organization has too many subscriptions
+	ErrTooManySubscriptions = errors.New("organization has too many subscriptions")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

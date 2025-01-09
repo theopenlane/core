@@ -50,6 +50,12 @@ tasks:
     cmds:
       - go run main.go organization-setting get
 
+  orgsub:get:
+    desc: gets the org subscription
+    aliases: [getorgsub]
+    cmds:
+      - go run main.go org-subscription get
+
   token:create:
     desc: creates an api token against a running local instance of the server
     aliases: [tokencreate]
@@ -96,7 +102,7 @@ tasks:
       - task: program:create
       - task: token:create
       - task: pat:create
-      - task: getorgsetting
+      - task: orgsub:get
 
 
   user:all:another:

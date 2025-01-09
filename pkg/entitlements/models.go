@@ -12,8 +12,6 @@ type OrganizationCustomer struct {
 	OrganizationID         string `json:"organization_id"`
 	OrganizationSettingsID string `json:"organization_settings_id"`
 	StripeCustomerID       string `json:"stripe_customer_id"`
-	BillingEmail           string `json:"billing_email"`
-	BillingPhone           string `json:"billing_phone"`
 	OrganizationName       string `json:"organization_name"`
 	Features               []string
 	Subscription
@@ -34,9 +32,9 @@ type ContactInfo struct {
 
 func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 	return &stripe.CustomerParams{
-		Email: &o.BillingEmail,
+		Email: &o.Email,
 		Name:  &o.OrganizationID,
-		Phone: &o.BillingPhone,
+		Phone: &o.Phone,
 		Address: &stripe.AddressParams{
 			Line1:      o.Line1,
 			Line2:      o.Line2,
@@ -56,12 +54,12 @@ func (o *OrganizationCustomer) MapToStripeCustomer() *stripe.CustomerParams {
 // Validate checks if the OrganizationCustomer contains necessary fields
 func (o *OrganizationCustomer) Validate() error {
 	o.OrganizationID = strings.TrimSpace(o.OrganizationID)
-	o.BillingEmail = strings.TrimSpace(o.BillingEmail)
+	o.Email = strings.TrimSpace(o.Email)
 
 	switch {
 	case o.OrganizationID == "":
 		return rout.NewMissingRequiredFieldError("organization_id")
-	case o.BillingEmail == "":
+	case o.Email == "":
 		return rout.NewMissingRequiredFieldError("billing_email")
 	}
 

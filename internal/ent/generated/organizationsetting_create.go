@@ -232,20 +232,6 @@ func (osc *OrganizationSettingCreate) SetNillableOrganizationID(s *string) *Orga
 	return osc
 }
 
-// SetStripeID sets the "stripe_id" field.
-func (osc *OrganizationSettingCreate) SetStripeID(s string) *OrganizationSettingCreate {
-	osc.mutation.SetStripeID(s)
-	return osc
-}
-
-// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableStripeID(s *string) *OrganizationSettingCreate {
-	if s != nil {
-		osc.SetStripeID(*s)
-	}
-	return osc
-}
-
 // SetID sets the "id" field.
 func (osc *OrganizationSettingCreate) SetID(s string) *OrganizationSettingCreate {
 	osc.mutation.SetID(s)
@@ -476,10 +462,6 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	if value, ok := osc.mutation.GeoLocation(); ok {
 		_spec.SetField(organizationsetting.FieldGeoLocation, field.TypeEnum, value)
 		_node.GeoLocation = value
-	}
-	if value, ok := osc.mutation.StripeID(); ok {
-		_spec.SetField(organizationsetting.FieldStripeID, field.TypeString, value)
-		_node.StripeID = value
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

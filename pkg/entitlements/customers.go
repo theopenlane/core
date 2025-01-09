@@ -17,15 +17,15 @@ func (sc *StripeClient) CreateCustomer(c *OrganizationCustomer) (*stripe.Custome
 	}
 
 	customer, err := sc.Client.Customers.New(&stripe.CustomerParams{
-		Email: &c.BillingEmail,
+		Email: &c.Email,
 		Name:  &c.OrganizationID,
-		Phone: &c.BillingPhone,
+		Phone: &c.Phone,
 		Address: &stripe.AddressParams{
-			Line1:      c.ContactInfo.Line1,
-			City:       c.ContactInfo.City,
-			State:      c.ContactInfo.State,
-			PostalCode: c.ContactInfo.PostalCode,
-			Country:    c.ContactInfo.Country,
+			Line1:      c.Line1,
+			City:       c.City,
+			State:      c.State,
+			PostalCode: c.PostalCode,
+			Country:    c.Country,
 		},
 		Metadata: map[string]string{
 			"organization_id":          c.OrganizationID,

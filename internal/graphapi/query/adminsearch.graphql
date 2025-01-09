@@ -230,7 +230,6 @@ query AdminSearch($query: String!) {
           billingAddress
           taxIdentifier
           organizationID
-          stripeID
         }
       }
       ... on PersonalAccessTokenSearchResult {

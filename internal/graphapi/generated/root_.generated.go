@@ -1860,6 +1860,7 @@ type ComplexityRoot struct {
 		StripeProductTierID      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
+		SubscriptionURL          func(childComplexity int) int
 		Tags                     func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
@@ -2043,7 +2044,6 @@ type ComplexityRoot struct {
 		ID             func(childComplexity int) int
 		Organization   func(childComplexity int) int
 		OrganizationID func(childComplexity int) int
-		StripeID       func(childComplexity int) int
 		Tags           func(childComplexity int) int
 		TaxIdentifier  func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
@@ -2089,7 +2089,6 @@ type ComplexityRoot struct {
 		Operation      func(childComplexity int) int
 		OrganizationID func(childComplexity int) int
 		Ref            func(childComplexity int) int
-		StripeID       func(childComplexity int) int
 		Tags           func(childComplexity int) int
 		TaxIdentifier  func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
@@ -12531,6 +12530,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.StripeSubscriptionStatus(childComplexity), true
 
+	case "OrgSubscription.subscriptionURL":
+		if e.complexity.OrgSubscription.SubscriptionURL == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.SubscriptionURL(childComplexity), true
+
 	case "OrgSubscription.tags":
 		if e.complexity.OrgSubscription.Tags == nil {
 			break
@@ -13460,13 +13466,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationSetting.OrganizationID(childComplexity), true
 
-	case "OrganizationSetting.stripeID":
-		if e.complexity.OrganizationSetting.StripeID == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSetting.StripeID(childComplexity), true
-
 	case "OrganizationSetting.tags":
 		if e.complexity.OrganizationSetting.Tags == nil {
 			break
@@ -13655,13 +13654,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrganizationSettingHistory.Ref(childComplexity), true
-
-	case "OrganizationSettingHistory.stripeID":
-		if e.complexity.OrganizationSettingHistory.StripeID == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSettingHistory.StripeID(childComplexity), true
 
 	case "OrganizationSettingHistory.tags":
 		if e.complexity.OrganizationSettingHistory.Tags == nil {
@@ -26098,10 +26090,6 @@ input CreateOrganizationSettingInput {
   geographical location of the organization
   """
   geoLocation: OrganizationSettingRegion
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
   organizationID: ID
   fileIDs: [ID!]
 }
@@ -36424,10 +36412,6 @@ type OrganizationSetting implements Node {
   the ID of the organization the settings belong to
   """
   organizationID: ID
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
   organization: Organization
   files: [File!]
 }
@@ -36508,10 +36492,6 @@ type OrganizationSettingHistory implements Node {
   the ID of the organization the settings belong to
   """
   organizationID: String
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
 }
 """
 A connection to a list of items.
@@ -36808,24 +36788,6 @@ input OrganizationSettingHistoryWhereInput {
   organizationIDNotNil: Boolean
   organizationIDEqualFold: String
   organizationIDContainsFold: String
-  """
-  stripe_id field predicates
-  """
-  stripeID: String
-  stripeIDNEQ: String
-  stripeIDIn: [String!]
-  stripeIDNotIn: [String!]
-  stripeIDGT: String
-  stripeIDGTE: String
-  stripeIDLT: String
-  stripeIDLTE: String
-  stripeIDContains: String
-  stripeIDHasPrefix: String
-  stripeIDHasSuffix: String
-  stripeIDIsNil: Boolean
-  stripeIDNotNil: Boolean
-  stripeIDEqualFold: String
-  stripeIDContainsFold: String
 }
 """
 OrganizationSettingRegion is enum for the field geo_location
@@ -37048,24 +37010,6 @@ input OrganizationSettingWhereInput {
   organizationIDNotNil: Boolean
   organizationIDEqualFold: ID
   organizationIDContainsFold: ID
-  """
-  stripe_id field predicates
-  """
-  stripeID: String
-  stripeIDNEQ: String
-  stripeIDIn: [String!]
-  stripeIDNotIn: [String!]
-  stripeIDGT: String
-  stripeIDGTE: String
-  stripeIDLT: String
-  stripeIDLTE: String
-  stripeIDContains: String
-  stripeIDHasPrefix: String
-  stripeIDHasSuffix: String
-  stripeIDIsNil: Boolean
-  stripeIDNotNil: Boolean
-  stripeIDEqualFold: String
-  stripeIDContainsFold: String
   """
   organization edge predicates
   """
@@ -47218,11 +47162,6 @@ input UpdateOrganizationSettingInput {
   """
   geoLocation: OrganizationSettingRegion
   clearGeoLocation: Boolean
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
-  clearStripeID: Boolean
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]
@@ -51136,6 +51075,9 @@ type OrgMembershipBulkCreatePayload {
     ):  OrgSubscription!
 }
 `, BuiltIn: false},
+	{Name: "../schema/orgsubscriptionextended.graphql", Input: `extend type OrgSubscription {
+    subscriptionURL: String
+}`, BuiltIn: false},
 	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """
     Look up personalAccessToken by ID

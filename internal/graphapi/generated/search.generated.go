@@ -1448,6 +1448,8 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
+			case "subscriptionURL":
+				return ec.fieldContext_OrgSubscription_subscriptionURL(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgSubscription", field.Name)
 		},
@@ -1672,8 +1674,6 @@ func (ec *executionContext) fieldContext_OrganizationSettingSearchResult_organiz
 				return ec.fieldContext_OrganizationSetting_geoLocation(ctx, field)
 			case "organizationID":
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
-			case "stripeID":
-				return ec.fieldContext_OrganizationSetting_stripeID(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

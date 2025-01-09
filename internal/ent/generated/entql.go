@@ -1339,7 +1339,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldTaxIdentifier:  {Type: field.TypeString, Column: organizationsetting.FieldTaxIdentifier},
 			organizationsetting.FieldGeoLocation:    {Type: field.TypeEnum, Column: organizationsetting.FieldGeoLocation},
 			organizationsetting.FieldOrganizationID: {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
-			organizationsetting.FieldStripeID:       {Type: field.TypeString, Column: organizationsetting.FieldStripeID},
 		},
 	}
 	graph.Nodes[44] = &sqlgraph.Node{
@@ -1372,7 +1371,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldTaxIdentifier:  {Type: field.TypeString, Column: organizationsettinghistory.FieldTaxIdentifier},
 			organizationsettinghistory.FieldGeoLocation:    {Type: field.TypeEnum, Column: organizationsettinghistory.FieldGeoLocation},
 			organizationsettinghistory.FieldOrganizationID: {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
-			organizationsettinghistory.FieldStripeID:       {Type: field.TypeString, Column: organizationsettinghistory.FieldStripeID},
 		},
 	}
 	graph.Nodes[45] = &sqlgraph.Node{
@@ -13220,11 +13218,6 @@ func (f *OrganizationSettingFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldOrganizationID))
 }
 
-// WhereStripeID applies the entql string predicate on the stripe_id field.
-func (f *OrganizationSettingFilter) WhereStripeID(p entql.StringP) {
-	f.Where(p.Field(organizationsetting.FieldStripeID))
-}
-
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
 func (f *OrganizationSettingFilter) WhereHasOrganization() {
 	f.Where(entql.HasEdge("organization"))
@@ -13386,11 +13379,6 @@ func (f *OrganizationSettingHistoryFilter) WhereGeoLocation(p entql.StringP) {
 // WhereOrganizationID applies the entql string predicate on the organization_id field.
 func (f *OrganizationSettingHistoryFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldOrganizationID))
-}
-
-// WhereStripeID applies the entql string predicate on the stripe_id field.
-func (f *OrganizationSettingHistoryFilter) WhereStripeID(p entql.StringP) {
-	f.Where(p.Field(organizationsettinghistory.FieldStripeID))
 }
 
 // addPredicate implements the predicateAdder interface.

@@ -692,7 +692,6 @@ func adminSearchOrganizationSettings(ctx context.Context, query string) ([]*gene
 			},
 			organizationsetting.TaxIdentifierContainsFold(query),  // search by TaxIdentifier
 			organizationsetting.OrganizationIDContainsFold(query), // search by OrganizationID
-			organizationsetting.StripeIDContainsFold(query),       // search by StripeID
 		),
 	).All(ctx)
 }

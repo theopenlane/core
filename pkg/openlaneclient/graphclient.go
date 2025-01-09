@@ -2682,7 +2682,6 @@ type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationS
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	ID             string          "json:\"id\" graphql:\"id\""
 	OrganizationID *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
-	StripeID       *string         "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 }
@@ -2734,12 +2733,6 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_Organizat
 		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
 	}
 	return t.OrganizationID
-}
-func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetStripeID() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
-	}
-	return t.StripeID
 }
 func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetTags() []string {
 	if t == nil {
@@ -23215,7 +23208,6 @@ type CreateOrganization_CreateOrganization_Organization_Setting struct {
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
-	StripeID       *string         "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -23275,12 +23267,6 @@ func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetID() str
 		t = &CreateOrganization_CreateOrganization_Organization_Setting{}
 	}
 	return t.ID
-}
-func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetStripeID() *string {
-	if t == nil {
-		t = &CreateOrganization_CreateOrganization_Organization_Setting{}
-	}
-	return t.StripeID
 }
 func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetTags() []string {
 	if t == nil {
@@ -23614,7 +23600,6 @@ type GetAllOrganizations_Organizations_Edges_Node_Setting struct {
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
-	StripeID       *string         "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -23674,12 +23659,6 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetID() string {
 		t = &GetAllOrganizations_Organizations_Edges_Node_Setting{}
 	}
 	return t.ID
-}
-func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetStripeID() *string {
-	if t == nil {
-		t = &GetAllOrganizations_Organizations_Edges_Node_Setting{}
-	}
-	return t.StripeID
 }
 func (t *GetAllOrganizations_Organizations_Edges_Node_Setting) GetTags() []string {
 	if t == nil {
@@ -23948,7 +23927,6 @@ type GetOrganizationByID_Organization_Setting struct {
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
-	StripeID       *string         "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -24008,12 +23986,6 @@ func (t *GetOrganizationByID_Organization_Setting) GetID() string {
 		t = &GetOrganizationByID_Organization_Setting{}
 	}
 	return t.ID
-}
-func (t *GetOrganizationByID_Organization_Setting) GetStripeID() *string {
-	if t == nil {
-		t = &GetOrganizationByID_Organization_Setting{}
-	}
-	return t.StripeID
 }
 func (t *GetOrganizationByID_Organization_Setting) GetTags() []string {
 	if t == nil {
@@ -24274,7 +24246,6 @@ type GetOrganizations_Organizations_Edges_Node_Setting struct {
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
-	StripeID       *string         "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -24334,12 +24305,6 @@ func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetID() string {
 		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
 	}
 	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetStripeID() *string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
-	}
-	return t.StripeID
 }
 func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetTags() []string {
 	if t == nil {
@@ -24511,7 +24476,6 @@ type UpdateOrganization_UpdateOrganization_Organization_Setting struct {
 	Domains        []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	GeoLocation    *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string          "json:\"id\" graphql:\"id\""
-	StripeID       *string         "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -24571,12 +24535,6 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetID() str
 		t = &UpdateOrganization_UpdateOrganization_Organization_Setting{}
 	}
 	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetStripeID() *string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_Setting{}
-	}
-	return t.StripeID
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization_Setting) GetTags() []string {
 	if t == nil {
@@ -24965,7 +24923,6 @@ type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	GeoLocation    *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string                                                                   "json:\"id\" graphql:\"id\""
 	Organization   *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	StripeID       *string                                                                  "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -25031,12 +24988,6 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetOrganiza
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.Organization
-}
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetStripeID() *string {
-	if t == nil {
-		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
-	}
-	return t.StripeID
 }
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -25114,7 +25065,6 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	GeoLocation    *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string                                                       "json:\"id\" graphql:\"id\""
 	Organization   *GetOrganizationSettingByID_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	StripeID       *string                                                      "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -25181,12 +25131,6 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetOrganization() *GetO
 	}
 	return t.Organization
 }
-func (t *GetOrganizationSettingByID_OrganizationSetting) GetStripeID() *string {
-	if t == nil {
-		t = &GetOrganizationSettingByID_OrganizationSetting{}
-	}
-	return t.StripeID
-}
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetTags() []string {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
@@ -25241,7 +25185,6 @@ type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	GeoLocation    *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string                                                                "json:\"id\" graphql:\"id\""
 	Organization   *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	StripeID       *string                                                               "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -25307,12 +25250,6 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetOrganizatio
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.Organization
-}
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetStripeID() *string {
-	if t == nil {
-		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
-	}
-	return t.StripeID
 }
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -25390,7 +25327,6 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	GeoLocation    *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID             string                                                                                "json:\"id\" graphql:\"id\""
 	Organization   *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	StripeID       *string                                                                               "json:\"stripeID,omitempty\" graphql:\"stripeID\""
 	Tags           []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier  *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt      *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -25456,12 +25392,6 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
 	return t.Organization
-}
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetStripeID() *string {
-	if t == nil {
-		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
-	}
-	return t.StripeID
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetTags() []string {
 	if t == nil {
@@ -48736,7 +48666,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					billingAddress
 					taxIdentifier
 					organizationID
-					stripeID
 				}
 			}
 			... on PersonalAccessTokenSearchResult {
@@ -55215,7 +55144,6 @@ const CreateOrganizationDocument = `mutation CreateOrganization ($input: CreateO
 				taxIdentifier
 				geoLocation
 				tags
-				stripeID
 			}
 			parent {
 				id
@@ -55324,7 +55252,6 @@ const GetAllOrganizationsDocument = `query GetAllOrganizations {
 					taxIdentifier
 					geoLocation
 					tags
-					stripeID
 				}
 				createdAt
 				updatedAt
@@ -55394,7 +55321,6 @@ const GetOrganizationByIDDocument = `query GetOrganizationByID ($organizationId:
 			taxIdentifier
 			geoLocation
 			tags
-			stripeID
 		}
 		createdAt
 		createdBy
@@ -55468,7 +55394,6 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 					taxIdentifier
 					geoLocation
 					tags
-					stripeID
 				}
 				createdAt
 				updatedAt
@@ -55523,7 +55448,6 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 				taxIdentifier
 				geoLocation
 				tags
-				stripeID
 			}
 		}
 	}
@@ -55651,7 +55575,6 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 					id
 					name
 				}
-				stripeID
 			}
 		}
 	}
@@ -55692,7 +55615,6 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 			id
 			name
 		}
-		stripeID
 	}
 }
 `
@@ -55735,7 +55657,6 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 					id
 					name
 				}
-				stripeID
 			}
 		}
 	}
@@ -55779,7 +55700,6 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 				id
 				name
 			}
-			stripeID
 		}
 	}
 }

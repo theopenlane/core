@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v81"
-	"github.com/theopenlane/core/pkg/models"
 	"gopkg.in/yaml.v3"
+
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // CheckForBillingUpdate checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
@@ -18,7 +18,7 @@ func CheckForBillingUpdate(props map[string]interface{}, stripeCustomer *Organiz
 	billingEmail, exists := props["billing_email"]
 	if exists && billingEmail != "" {
 		email := billingEmail.(string)
-		if stripeCustomer.BillingEmail != email {
+		if stripeCustomer.Email != email {
 			params.Email = &email
 			hasUpdate = true
 		}
@@ -27,21 +27,17 @@ func CheckForBillingUpdate(props map[string]interface{}, stripeCustomer *Organiz
 	billingPhone, exists := props["billing_phone"]
 	if exists && billingPhone != "" {
 		phone := billingPhone.(string)
-		if stripeCustomer.BillingPhone != phone {
+		if stripeCustomer.Phone != phone {
 			params.Phone = &phone
 			hasUpdate = true
 		}
 	}
 
-	log.Info().Interface("props", props).Msg("props of billing address")
-
 	billingAddress, exists := props["billing_address"]
 	if exists && billingAddress != nil {
 		hasUpdate = true
-		log.Info().Interface("billing_address", billingAddress).Msg("billing address exists")
-		address := billingAddress.(models.Address)
 
-		log.Info().Interface("address", address).Msg("address")
+		address := billingAddress.(models.Address)
 		params.Address = &stripe.AddressParams{
 			Line1:      &address.Line1,
 			Line2:      &address.Line2,
@@ -50,7 +46,6 @@ func CheckForBillingUpdate(props map[string]interface{}, stripeCustomer *Organiz
 			PostalCode: &address.PostalCode,
 			Country:    &address.Country,
 		}
-
 	}
 
 	return params, hasUpdate
