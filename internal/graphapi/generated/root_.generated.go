@@ -1490,7 +1490,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVInvite              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNarrative           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership       func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrgSubscription     func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganization        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationSetting func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVPersonalAccessToken func(childComplexity int, input graphql.Upload) int
@@ -1520,7 +1519,6 @@ type ComplexityRoot struct {
 		CreateBulkInvite                 func(childComplexity int, input []*generated.CreateInviteInput) int
 		CreateBulkNarrative              func(childComplexity int, input []*generated.CreateNarrativeInput) int
 		CreateBulkOrgMembership          func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
-		CreateBulkOrgSubscription        func(childComplexity int, input []*generated.CreateOrgSubscriptionInput) int
 		CreateBulkOrganization           func(childComplexity int, input []*generated.CreateOrganizationInput) int
 		CreateBulkOrganizationSetting    func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
 		CreateBulkPersonalAccessToken    func(childComplexity int, input []*generated.CreatePersonalAccessTokenInput) int
@@ -1552,7 +1550,6 @@ type ComplexityRoot struct {
 		CreateInvite                     func(childComplexity int, input generated.CreateInviteInput) int
 		CreateNarrative                  func(childComplexity int, input generated.CreateNarrativeInput) int
 		CreateOrgMembership              func(childComplexity int, input generated.CreateOrgMembershipInput) int
-		CreateOrgSubscription            func(childComplexity int, input generated.CreateOrgSubscriptionInput) int
 		CreateOrganization               func(childComplexity int, input generated.CreateOrganizationInput) int
 		CreateOrganizationSetting        func(childComplexity int, input generated.CreateOrganizationSettingInput) int
 		CreatePersonalAccessToken        func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
@@ -1588,7 +1585,6 @@ type ComplexityRoot struct {
 		DeleteInvite                     func(childComplexity int, id string) int
 		DeleteNarrative                  func(childComplexity int, id string) int
 		DeleteOrgMembership              func(childComplexity int, id string) int
-		DeleteOrgSubscription            func(childComplexity int, id string) int
 		DeleteOrganization               func(childComplexity int, id string) int
 		DeleteOrganizationSetting        func(childComplexity int, id string) int
 		DeletePersonalAccessToken        func(childComplexity int, id string) int
@@ -1620,7 +1616,6 @@ type ComplexityRoot struct {
 		UpdateInvite                     func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateNarrative                  func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
 		UpdateOrgMembership              func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
-		UpdateOrgSubscription            func(childComplexity int, id string, input generated.UpdateOrgSubscriptionInput) int
 		UpdateOrganization               func(childComplexity int, id string, input generated.UpdateOrganizationInput) int
 		UpdateOrganizationSetting        func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken        func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
@@ -1865,27 +1860,16 @@ type ComplexityRoot struct {
 		StripeProductTierID      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
+		SubscriptionURL          func(childComplexity int) int
 		Tags                     func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
-	}
-
-	OrgSubscriptionBulkCreatePayload struct {
-		OrgSubscriptions func(childComplexity int) int
 	}
 
 	OrgSubscriptionConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
-	}
-
-	OrgSubscriptionCreatePayload struct {
-		OrgSubscription func(childComplexity int) int
-	}
-
-	OrgSubscriptionDeletePayload struct {
-		DeletedID func(childComplexity int) int
 	}
 
 	OrgSubscriptionEdge struct {
@@ -1929,10 +1913,6 @@ type ComplexityRoot struct {
 
 	OrgSubscriptionSearchResult struct {
 		OrgSubscriptions func(childComplexity int) int
-	}
-
-	OrgSubscriptionUpdatePayload struct {
-		OrgSubscription func(childComplexity int) int
 	}
 
 	Organization struct {
@@ -2064,7 +2044,6 @@ type ComplexityRoot struct {
 		ID             func(childComplexity int) int
 		Organization   func(childComplexity int) int
 		OrganizationID func(childComplexity int) int
-		StripeID       func(childComplexity int) int
 		Tags           func(childComplexity int) int
 		TaxIdentifier  func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
@@ -2110,7 +2089,6 @@ type ComplexityRoot struct {
 		Operation      func(childComplexity int) int
 		OrganizationID func(childComplexity int) int
 		Ref            func(childComplexity int) int
-		StripeID       func(childComplexity int) int
 		Tags           func(childComplexity int) int
 		TaxIdentifier  func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
@@ -9845,18 +9823,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateBulkCSVOrgMembership(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVOrgSubscription":
-		if e.complexity.Mutation.CreateBulkCSVOrgSubscription == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVOrgSubscription_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVOrgSubscription(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVOrganization":
 		if e.complexity.Mutation.CreateBulkCSVOrganization == nil {
 			break
@@ -10204,18 +10170,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateBulkOrgMembership(childComplexity, args["input"].([]*generated.CreateOrgMembershipInput)), true
-
-	case "Mutation.createBulkOrgSubscription":
-		if e.complexity.Mutation.CreateBulkOrgSubscription == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkOrgSubscription_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkOrgSubscription(childComplexity, args["input"].([]*generated.CreateOrgSubscriptionInput)), true
 
 	case "Mutation.createBulkOrganization":
 		if e.complexity.Mutation.CreateBulkOrganization == nil {
@@ -10588,18 +10542,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateOrgMembership(childComplexity, args["input"].(generated.CreateOrgMembershipInput)), true
-
-	case "Mutation.createOrgSubscription":
-		if e.complexity.Mutation.CreateOrgSubscription == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createOrgSubscription_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateOrgSubscription(childComplexity, args["input"].(generated.CreateOrgSubscriptionInput)), true
 
 	case "Mutation.createOrganization":
 		if e.complexity.Mutation.CreateOrganization == nil {
@@ -11021,18 +10963,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteOrgMembership(childComplexity, args["id"].(string)), true
 
-	case "Mutation.deleteOrgSubscription":
-		if e.complexity.Mutation.DeleteOrgSubscription == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteOrgSubscription_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteOrgSubscription(childComplexity, args["id"].(string)), true
-
 	case "Mutation.deleteOrganization":
 		if e.complexity.Mutation.DeleteOrganization == nil {
 			break
@@ -11404,18 +11334,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateOrgMembership(childComplexity, args["id"].(string), args["input"].(generated.UpdateOrgMembershipInput)), true
-
-	case "Mutation.updateOrgSubscription":
-		if e.complexity.Mutation.UpdateOrgSubscription == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateOrgSubscription_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateOrgSubscription(childComplexity, args["id"].(string), args["input"].(generated.UpdateOrgSubscriptionInput)), true
 
 	case "Mutation.updateOrganization":
 		if e.complexity.Mutation.UpdateOrganization == nil {
@@ -12612,6 +12530,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.StripeSubscriptionStatus(childComplexity), true
 
+	case "OrgSubscription.subscriptionURL":
+		if e.complexity.OrgSubscription.SubscriptionURL == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.SubscriptionURL(childComplexity), true
+
 	case "OrgSubscription.tags":
 		if e.complexity.OrgSubscription.Tags == nil {
 			break
@@ -12633,13 +12558,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.UpdatedBy(childComplexity), true
 
-	case "OrgSubscriptionBulkCreatePayload.orgSubscriptions":
-		if e.complexity.OrgSubscriptionBulkCreatePayload.OrgSubscriptions == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionBulkCreatePayload.OrgSubscriptions(childComplexity), true
-
 	case "OrgSubscriptionConnection.edges":
 		if e.complexity.OrgSubscriptionConnection.Edges == nil {
 			break
@@ -12660,20 +12578,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscriptionConnection.TotalCount(childComplexity), true
-
-	case "OrgSubscriptionCreatePayload.orgSubscription":
-		if e.complexity.OrgSubscriptionCreatePayload.OrgSubscription == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionCreatePayload.OrgSubscription(childComplexity), true
-
-	case "OrgSubscriptionDeletePayload.deletedID":
-		if e.complexity.OrgSubscriptionDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionDeletePayload.DeletedID(childComplexity), true
 
 	case "OrgSubscriptionEdge.cursor":
 		if e.complexity.OrgSubscriptionEdge.Cursor == nil {
@@ -12870,13 +12774,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscriptionSearchResult.OrgSubscriptions(childComplexity), true
-
-	case "OrgSubscriptionUpdatePayload.orgSubscription":
-		if e.complexity.OrgSubscriptionUpdatePayload.OrgSubscription == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionUpdatePayload.OrgSubscription(childComplexity), true
 
 	case "Organization.apiTokens":
 		if e.complexity.Organization.APITokens == nil {
@@ -13569,13 +13466,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationSetting.OrganizationID(childComplexity), true
 
-	case "OrganizationSetting.stripeID":
-		if e.complexity.OrganizationSetting.StripeID == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSetting.StripeID(childComplexity), true
-
 	case "OrganizationSetting.tags":
 		if e.complexity.OrganizationSetting.Tags == nil {
 			break
@@ -13764,13 +13654,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrganizationSettingHistory.Ref(childComplexity), true
-
-	case "OrganizationSettingHistory.stripeID":
-		if e.complexity.OrganizationSettingHistory.StripeID == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSettingHistory.StripeID(childComplexity), true
 
 	case "OrganizationSettingHistory.tags":
 		if e.complexity.OrganizationSettingHistory.Tags == nil {
@@ -20668,7 +20551,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateNarrativeInput,
 		ec.unmarshalInputCreateNoteInput,
 		ec.unmarshalInputCreateOrgMembershipInput,
-		ec.unmarshalInputCreateOrgSubscriptionInput,
 		ec.unmarshalInputCreateOrganizationInput,
 		ec.unmarshalInputCreateOrganizationSettingInput,
 		ec.unmarshalInputCreatePersonalAccessTokenInput,
@@ -20773,7 +20655,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateNarrativeInput,
 		ec.unmarshalInputUpdateNoteInput,
 		ec.unmarshalInputUpdateOrgMembershipInput,
-		ec.unmarshalInputUpdateOrgSubscriptionInput,
 		ec.unmarshalInputUpdateOrganizationInput,
 		ec.unmarshalInputUpdateOrganizationSettingInput,
 		ec.unmarshalInputUpdatePersonalAccessTokenInput,
@@ -26102,49 +25983,6 @@ input CreateOrgMembershipInput {
   eventIDs: [ID!]
 }
 """
-CreateOrgSubscriptionInput is used for create OrgSubscription object.
-Input was generated by ent.
-"""
-input CreateOrgSubscriptionInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the stripe subscription id
-  """
-  stripeSubscriptionID: String
-  """
-  the common name of the product tier the subscription is associated with, e.g. starter tier
-  """
-  productTier: String
-  """
-  the product id that represents the tier in stripe
-  """
-  stripeProductTierID: String
-  """
-  the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
-  """
-  stripeSubscriptionStatus: String
-  """
-  indicates if the subscription is active
-  """
-  active: Boolean
-  """
-  the customer ID the subscription is associated to
-  """
-  stripeCustomerID: String
-  """
-  the time the subscription is set to expire; only populated if subscription is cancelled
-  """
-  expiresAt: Time
-  """
-  the features associated with the subscription
-  """
-  features: [String!]
-  ownerID: ID
-}
-"""
 CreateOrganizationInput is used for create Organization object.
 Input was generated by ent.
 """
@@ -26241,9 +26079,9 @@ input CreateOrganizationSettingInput {
   """
   billingPhone: String
   """
-  Address to send billing information to
+  the billing address to send billing information to
   """
-  billingAddress: String
+  billingAddress: Address
   """
   Usually government-issued tax ID or business ID such as ABN in Australia
   """
@@ -26252,10 +26090,6 @@ input CreateOrganizationSettingInput {
   geographical location of the organization
   """
   geoLocation: OrganizationSettingRegion
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
   organizationID: ID
   fileIDs: [ID!]
 }
@@ -36563,9 +36397,9 @@ type OrganizationSetting implements Node {
   """
   billingPhone: String
   """
-  Address to send billing information to
+  the billing address to send billing information to
   """
-  billingAddress: String
+  billingAddress: Address
   """
   Usually government-issued tax ID or business ID such as ABN in Australia
   """
@@ -36578,10 +36412,6 @@ type OrganizationSetting implements Node {
   the ID of the organization the settings belong to
   """
   organizationID: ID
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
   organization: Organization
   files: [File!]
 }
@@ -36647,9 +36477,9 @@ type OrganizationSettingHistory implements Node {
   """
   billingPhone: String
   """
-  Address to send billing information to
+  the billing address to send billing information to
   """
-  billingAddress: String
+  billingAddress: Address
   """
   Usually government-issued tax ID or business ID such as ABN in Australia
   """
@@ -36662,10 +36492,6 @@ type OrganizationSettingHistory implements Node {
   the ID of the organization the settings belong to
   """
   organizationID: String
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
 }
 """
 A connection to a list of items.
@@ -36918,24 +36744,6 @@ input OrganizationSettingHistoryWhereInput {
   billingPhoneEqualFold: String
   billingPhoneContainsFold: String
   """
-  billing_address field predicates
-  """
-  billingAddress: String
-  billingAddressNEQ: String
-  billingAddressIn: [String!]
-  billingAddressNotIn: [String!]
-  billingAddressGT: String
-  billingAddressGTE: String
-  billingAddressLT: String
-  billingAddressLTE: String
-  billingAddressContains: String
-  billingAddressHasPrefix: String
-  billingAddressHasSuffix: String
-  billingAddressIsNil: Boolean
-  billingAddressNotNil: Boolean
-  billingAddressEqualFold: String
-  billingAddressContainsFold: String
-  """
   tax_identifier field predicates
   """
   taxIdentifier: String
@@ -36980,24 +36788,6 @@ input OrganizationSettingHistoryWhereInput {
   organizationIDNotNil: Boolean
   organizationIDEqualFold: String
   organizationIDContainsFold: String
-  """
-  stripe_id field predicates
-  """
-  stripeID: String
-  stripeIDNEQ: String
-  stripeIDIn: [String!]
-  stripeIDNotIn: [String!]
-  stripeIDGT: String
-  stripeIDGTE: String
-  stripeIDLT: String
-  stripeIDLTE: String
-  stripeIDContains: String
-  stripeIDHasPrefix: String
-  stripeIDHasSuffix: String
-  stripeIDIsNil: Boolean
-  stripeIDNotNil: Boolean
-  stripeIDEqualFold: String
-  stripeIDContainsFold: String
 }
 """
 OrganizationSettingRegion is enum for the field geo_location
@@ -37176,24 +36966,6 @@ input OrganizationSettingWhereInput {
   billingPhoneEqualFold: String
   billingPhoneContainsFold: String
   """
-  billing_address field predicates
-  """
-  billingAddress: String
-  billingAddressNEQ: String
-  billingAddressIn: [String!]
-  billingAddressNotIn: [String!]
-  billingAddressGT: String
-  billingAddressGTE: String
-  billingAddressLT: String
-  billingAddressLTE: String
-  billingAddressContains: String
-  billingAddressHasPrefix: String
-  billingAddressHasSuffix: String
-  billingAddressIsNil: Boolean
-  billingAddressNotNil: Boolean
-  billingAddressEqualFold: String
-  billingAddressContainsFold: String
-  """
   tax_identifier field predicates
   """
   taxIdentifier: String
@@ -37238,24 +37010,6 @@ input OrganizationSettingWhereInput {
   organizationIDNotNil: Boolean
   organizationIDEqualFold: ID
   organizationIDContainsFold: ID
-  """
-  stripe_id field predicates
-  """
-  stripeID: String
-  stripeIDNEQ: String
-  stripeIDIn: [String!]
-  stripeIDNotIn: [String!]
-  stripeIDGT: String
-  stripeIDGTE: String
-  stripeIDLT: String
-  stripeIDLTE: String
-  stripeIDContains: String
-  stripeIDHasPrefix: String
-  stripeIDHasSuffix: String
-  stripeIDIsNil: Boolean
-  stripeIDNotNil: Boolean
-  stripeIDEqualFold: String
-  stripeIDContainsFold: String
   """
   organization edge predicates
   """
@@ -47225,60 +46979,6 @@ input UpdateOrgMembershipInput {
   clearEvents: Boolean
 }
 """
-UpdateOrgSubscriptionInput is used for update OrgSubscription object.
-Input was generated by ent.
-"""
-input UpdateOrgSubscriptionInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  """
-  the stripe subscription id
-  """
-  stripeSubscriptionID: String
-  clearStripeSubscriptionID: Boolean
-  """
-  the common name of the product tier the subscription is associated with, e.g. starter tier
-  """
-  productTier: String
-  clearProductTier: Boolean
-  """
-  the product id that represents the tier in stripe
-  """
-  stripeProductTierID: String
-  clearStripeProductTierID: Boolean
-  """
-  the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
-  """
-  stripeSubscriptionStatus: String
-  clearStripeSubscriptionStatus: Boolean
-  """
-  indicates if the subscription is active
-  """
-  active: Boolean
-  """
-  the customer ID the subscription is associated to
-  """
-  stripeCustomerID: String
-  clearStripeCustomerID: Boolean
-  """
-  the time the subscription is set to expire; only populated if subscription is cancelled
-  """
-  expiresAt: Time
-  clearExpiresAt: Boolean
-  """
-  the features associated with the subscription
-  """
-  features: [String!]
-  appendFeatures: [String!]
-  clearFeatures: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-}
-"""
 UpdateOrganizationInput is used for update Organization object.
 Input was generated by ent.
 """
@@ -47448,9 +47148,9 @@ input UpdateOrganizationSettingInput {
   billingPhone: String
   clearBillingPhone: Boolean
   """
-  Address to send billing information to
+  the billing address to send billing information to
   """
-  billingAddress: String
+  billingAddress: Address
   clearBillingAddress: Boolean
   """
   Usually government-issued tax ID or business ID such as ABN in Australia
@@ -47462,11 +47162,6 @@ input UpdateOrganizationSettingInput {
   """
   geoLocation: OrganizationSettingRegion
   clearGeoLocation: Boolean
-  """
-  the ID of the stripe customer associated with the organization
-  """
-  stripeID: String
-  clearStripeID: Boolean
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]
@@ -51379,97 +51074,9 @@ type OrgMembershipBulkCreatePayload {
         id: ID!
     ):  OrgSubscription!
 }
-
-extend type Mutation{
-    """
-    Create a new orgSubscription
-    """
-    createOrgSubscription(
-        """
-        values of the orgSubscription
-        """
-        input: CreateOrgSubscriptionInput!
-    ): OrgSubscriptionCreatePayload!
-    """
-    Create multiple new orgSubscriptions
-    """
-    createBulkOrgSubscription(
-        """
-        values of the orgSubscription
-        """
-        input: [CreateOrgSubscriptionInput!]
-    ): OrgSubscriptionBulkCreatePayload!
-    """
-    Create multiple new orgSubscriptions via file upload
-    """
-    createBulkCSVOrgSubscription(
-        """
-        csv file containing values of the orgSubscription
-        """
-        input: Upload!
-    ): OrgSubscriptionBulkCreatePayload!
-    """
-    Update an existing orgSubscription
-    """
-    updateOrgSubscription(
-        """
-        ID of the orgSubscription
-        """
-        id: ID!
-        """
-        New values for the orgSubscription
-        """
-        input: UpdateOrgSubscriptionInput!
-    ): OrgSubscriptionUpdatePayload!
-    """
-    Delete an existing orgSubscription
-    """
-    deleteOrgSubscription(
-        """
-        ID of the orgSubscription
-        """
-        id: ID!
-    ): OrgSubscriptionDeletePayload!
-}
-
-"""
-Return response for createOrgSubscription mutation
-"""
-type OrgSubscriptionCreatePayload {
-    """
-    Created orgSubscription
-    """
-    orgSubscription: OrgSubscription!
-}
-
-"""
-Return response for updateOrgSubscription mutation
-"""
-type OrgSubscriptionUpdatePayload {
-    """
-    Updated orgSubscription
-    """
-    orgSubscription: OrgSubscription!
-}
-
-"""
-Return response for deleteOrgSubscription mutation
-"""
-type OrgSubscriptionDeletePayload {
-    """
-    Deleted orgSubscription ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkOrgSubscription mutation
-"""
-type OrgSubscriptionBulkCreatePayload {
-    """
-    Created orgSubscriptions
-    """
-    orgSubscriptions: [OrgSubscription!]
+`, BuiltIn: false},
+	{Name: "../schema/orgsubscriptionextended.graphql", Input: `extend type OrgSubscription {
+    subscriptionURL: String
 }`, BuiltIn: false},
 	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """
@@ -52049,7 +51656,8 @@ type RiskBulkCreatePayload {
     """
     risks: [Risk!]
 }`, BuiltIn: false},
-	{Name: "../schema/scalars.graphql", Input: `scalar Upload`, BuiltIn: false},
+	{Name: "../schema/scalars.graphql", Input: `scalar Upload
+scalar Address`, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
     Search across APIToken objects

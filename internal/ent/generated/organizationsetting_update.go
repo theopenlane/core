@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -204,15 +205,15 @@ func (osu *OrganizationSettingUpdate) ClearBillingPhone() *OrganizationSettingUp
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (osu *OrganizationSettingUpdate) SetBillingAddress(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetBillingAddress(s)
+func (osu *OrganizationSettingUpdate) SetBillingAddress(m models.Address) *OrganizationSettingUpdate {
+	osu.mutation.SetBillingAddress(m)
 	return osu
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableBillingAddress(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetBillingAddress(*s)
+func (osu *OrganizationSettingUpdate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingUpdate {
+	if m != nil {
+		osu.SetBillingAddress(*m)
 	}
 	return osu
 }
@@ -280,26 +281,6 @@ func (osu *OrganizationSettingUpdate) SetNillableOrganizationID(s *string) *Orga
 // ClearOrganizationID clears the value of the "organization_id" field.
 func (osu *OrganizationSettingUpdate) ClearOrganizationID() *OrganizationSettingUpdate {
 	osu.mutation.ClearOrganizationID()
-	return osu
-}
-
-// SetStripeID sets the "stripe_id" field.
-func (osu *OrganizationSettingUpdate) SetStripeID(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetStripeID(s)
-	return osu
-}
-
-// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableStripeID(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetStripeID(*s)
-	}
-	return osu
-}
-
-// ClearStripeID clears the value of the "stripe_id" field.
-func (osu *OrganizationSettingUpdate) ClearStripeID() *OrganizationSettingUpdate {
-	osu.mutation.ClearStripeID()
 	return osu
 }
 
@@ -511,10 +492,10 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 		_spec.ClearField(organizationsetting.FieldBillingPhone, field.TypeString)
 	}
 	if value, ok := osu.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeJSON, value)
 	}
 	if osu.mutation.BillingAddressCleared() {
-		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeString)
+		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeJSON)
 	}
 	if value, ok := osu.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsetting.FieldTaxIdentifier, field.TypeString, value)
@@ -527,12 +508,6 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if osu.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsetting.FieldGeoLocation, field.TypeEnum)
-	}
-	if value, ok := osu.mutation.StripeID(); ok {
-		_spec.SetField(organizationsetting.FieldStripeID, field.TypeString, value)
-	}
-	if osu.mutation.StripeIDCleared() {
-		_spec.ClearField(organizationsetting.FieldStripeID, field.TypeString)
 	}
 	if osu.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -806,15 +781,15 @@ func (osuo *OrganizationSettingUpdateOne) ClearBillingPhone() *OrganizationSetti
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (osuo *OrganizationSettingUpdateOne) SetBillingAddress(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetBillingAddress(s)
+func (osuo *OrganizationSettingUpdateOne) SetBillingAddress(m models.Address) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetBillingAddress(m)
 	return osuo
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableBillingAddress(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetBillingAddress(*s)
+func (osuo *OrganizationSettingUpdateOne) SetNillableBillingAddress(m *models.Address) *OrganizationSettingUpdateOne {
+	if m != nil {
+		osuo.SetBillingAddress(*m)
 	}
 	return osuo
 }
@@ -882,26 +857,6 @@ func (osuo *OrganizationSettingUpdateOne) SetNillableOrganizationID(s *string) *
 // ClearOrganizationID clears the value of the "organization_id" field.
 func (osuo *OrganizationSettingUpdateOne) ClearOrganizationID() *OrganizationSettingUpdateOne {
 	osuo.mutation.ClearOrganizationID()
-	return osuo
-}
-
-// SetStripeID sets the "stripe_id" field.
-func (osuo *OrganizationSettingUpdateOne) SetStripeID(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetStripeID(s)
-	return osuo
-}
-
-// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableStripeID(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetStripeID(*s)
-	}
-	return osuo
-}
-
-// ClearStripeID clears the value of the "stripe_id" field.
-func (osuo *OrganizationSettingUpdateOne) ClearStripeID() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearStripeID()
 	return osuo
 }
 
@@ -1143,10 +1098,10 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 		_spec.ClearField(organizationsetting.FieldBillingPhone, field.TypeString)
 	}
 	if value, ok := osuo.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeJSON, value)
 	}
 	if osuo.mutation.BillingAddressCleared() {
-		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeString)
+		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeJSON)
 	}
 	if value, ok := osuo.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsetting.FieldTaxIdentifier, field.TypeString, value)
@@ -1159,12 +1114,6 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if osuo.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsetting.FieldGeoLocation, field.TypeEnum)
-	}
-	if value, ok := osuo.mutation.StripeID(); ok {
-		_spec.SetField(organizationsetting.FieldStripeID, field.TypeString, value)
-	}
-	if osuo.mutation.StripeIDCleared() {
-		_spec.ClearField(organizationsetting.FieldStripeID, field.TypeString)
 	}
 	if osuo.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{

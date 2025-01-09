@@ -6,6 +6,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -52,6 +53,32 @@ func (ec *executionContext) marshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋg
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalOAddress2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, v any) (models.Address, error) {
+	var res models.Address
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAddress2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, sel ast.SelectionSet, v models.Address) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, v any) (*models.Address, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.Address)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, sel ast.SelectionSet, v *models.Address) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, v any) (*graphql.Upload, error) {

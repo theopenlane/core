@@ -460,11 +460,9 @@ func WithObjectStorage() ServerOption {
 func WithEntitlements() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Entitlements.Enabled {
-			config := entitlements.NewConfig(entitlements.WithTrialSubscriptionPriceID(s.Config.Settings.Entitlements.TrialSubscriptionPriceID), entitlements.WithStripeWebhookSecret(s.Config.Settings.Entitlements.StripeWebhookSecret))
-
 			client := entitlements.NewStripeClient(
 				entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey),
-				entitlements.WithConfig(*config))
+				entitlements.WithConfig(s.Config.Settings.Entitlements))
 
 			s.Config.Handler.Entitlements = client
 		}

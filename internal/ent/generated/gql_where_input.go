@@ -37474,23 +37474,6 @@ type OrganizationSettingWhereInput struct {
 	BillingPhoneEqualFold    *string  `json:"billingPhoneEqualFold,omitempty"`
 	BillingPhoneContainsFold *string  `json:"billingPhoneContainsFold,omitempty"`
 
-	// "billing_address" field predicates.
-	BillingAddress             *string  `json:"billingAddress,omitempty"`
-	BillingAddressNEQ          *string  `json:"billingAddressNEQ,omitempty"`
-	BillingAddressIn           []string `json:"billingAddressIn,omitempty"`
-	BillingAddressNotIn        []string `json:"billingAddressNotIn,omitempty"`
-	BillingAddressGT           *string  `json:"billingAddressGT,omitempty"`
-	BillingAddressGTE          *string  `json:"billingAddressGTE,omitempty"`
-	BillingAddressLT           *string  `json:"billingAddressLT,omitempty"`
-	BillingAddressLTE          *string  `json:"billingAddressLTE,omitempty"`
-	BillingAddressContains     *string  `json:"billingAddressContains,omitempty"`
-	BillingAddressHasPrefix    *string  `json:"billingAddressHasPrefix,omitempty"`
-	BillingAddressHasSuffix    *string  `json:"billingAddressHasSuffix,omitempty"`
-	BillingAddressIsNil        bool     `json:"billingAddressIsNil,omitempty"`
-	BillingAddressNotNil       bool     `json:"billingAddressNotNil,omitempty"`
-	BillingAddressEqualFold    *string  `json:"billingAddressEqualFold,omitempty"`
-	BillingAddressContainsFold *string  `json:"billingAddressContainsFold,omitempty"`
-
 	// "tax_identifier" field predicates.
 	TaxIdentifier             *string  `json:"taxIdentifier,omitempty"`
 	TaxIdentifierNEQ          *string  `json:"taxIdentifierNEQ,omitempty"`
@@ -37532,23 +37515,6 @@ type OrganizationSettingWhereInput struct {
 	OrganizationIDNotNil       bool     `json:"organizationIDNotNil,omitempty"`
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
-
-	// "stripe_id" field predicates.
-	StripeID             *string  `json:"stripeID,omitempty"`
-	StripeIDNEQ          *string  `json:"stripeIDNEQ,omitempty"`
-	StripeIDIn           []string `json:"stripeIDIn,omitempty"`
-	StripeIDNotIn        []string `json:"stripeIDNotIn,omitempty"`
-	StripeIDGT           *string  `json:"stripeIDGT,omitempty"`
-	StripeIDGTE          *string  `json:"stripeIDGTE,omitempty"`
-	StripeIDLT           *string  `json:"stripeIDLT,omitempty"`
-	StripeIDLTE          *string  `json:"stripeIDLTE,omitempty"`
-	StripeIDContains     *string  `json:"stripeIDContains,omitempty"`
-	StripeIDHasPrefix    *string  `json:"stripeIDHasPrefix,omitempty"`
-	StripeIDHasSuffix    *string  `json:"stripeIDHasSuffix,omitempty"`
-	StripeIDIsNil        bool     `json:"stripeIDIsNil,omitempty"`
-	StripeIDNotNil       bool     `json:"stripeIDNotNil,omitempty"`
-	StripeIDEqualFold    *string  `json:"stripeIDEqualFold,omitempty"`
-	StripeIDContainsFold *string  `json:"stripeIDContainsFold,omitempty"`
 
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
@@ -38020,51 +37986,6 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.BillingPhoneContainsFold != nil {
 		predicates = append(predicates, organizationsetting.BillingPhoneContainsFold(*i.BillingPhoneContainsFold))
 	}
-	if i.BillingAddress != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressEQ(*i.BillingAddress))
-	}
-	if i.BillingAddressNEQ != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressNEQ(*i.BillingAddressNEQ))
-	}
-	if len(i.BillingAddressIn) > 0 {
-		predicates = append(predicates, organizationsetting.BillingAddressIn(i.BillingAddressIn...))
-	}
-	if len(i.BillingAddressNotIn) > 0 {
-		predicates = append(predicates, organizationsetting.BillingAddressNotIn(i.BillingAddressNotIn...))
-	}
-	if i.BillingAddressGT != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressGT(*i.BillingAddressGT))
-	}
-	if i.BillingAddressGTE != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressGTE(*i.BillingAddressGTE))
-	}
-	if i.BillingAddressLT != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressLT(*i.BillingAddressLT))
-	}
-	if i.BillingAddressLTE != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressLTE(*i.BillingAddressLTE))
-	}
-	if i.BillingAddressContains != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressContains(*i.BillingAddressContains))
-	}
-	if i.BillingAddressHasPrefix != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressHasPrefix(*i.BillingAddressHasPrefix))
-	}
-	if i.BillingAddressHasSuffix != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressHasSuffix(*i.BillingAddressHasSuffix))
-	}
-	if i.BillingAddressIsNil {
-		predicates = append(predicates, organizationsetting.BillingAddressIsNil())
-	}
-	if i.BillingAddressNotNil {
-		predicates = append(predicates, organizationsetting.BillingAddressNotNil())
-	}
-	if i.BillingAddressEqualFold != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressEqualFold(*i.BillingAddressEqualFold))
-	}
-	if i.BillingAddressContainsFold != nil {
-		predicates = append(predicates, organizationsetting.BillingAddressContainsFold(*i.BillingAddressContainsFold))
-	}
 	if i.TaxIdentifier != nil {
 		predicates = append(predicates, organizationsetting.TaxIdentifierEQ(*i.TaxIdentifier))
 	}
@@ -38172,51 +38093,6 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	}
 	if i.OrganizationIDContainsFold != nil {
 		predicates = append(predicates, organizationsetting.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
-	}
-	if i.StripeID != nil {
-		predicates = append(predicates, organizationsetting.StripeIDEQ(*i.StripeID))
-	}
-	if i.StripeIDNEQ != nil {
-		predicates = append(predicates, organizationsetting.StripeIDNEQ(*i.StripeIDNEQ))
-	}
-	if len(i.StripeIDIn) > 0 {
-		predicates = append(predicates, organizationsetting.StripeIDIn(i.StripeIDIn...))
-	}
-	if len(i.StripeIDNotIn) > 0 {
-		predicates = append(predicates, organizationsetting.StripeIDNotIn(i.StripeIDNotIn...))
-	}
-	if i.StripeIDGT != nil {
-		predicates = append(predicates, organizationsetting.StripeIDGT(*i.StripeIDGT))
-	}
-	if i.StripeIDGTE != nil {
-		predicates = append(predicates, organizationsetting.StripeIDGTE(*i.StripeIDGTE))
-	}
-	if i.StripeIDLT != nil {
-		predicates = append(predicates, organizationsetting.StripeIDLT(*i.StripeIDLT))
-	}
-	if i.StripeIDLTE != nil {
-		predicates = append(predicates, organizationsetting.StripeIDLTE(*i.StripeIDLTE))
-	}
-	if i.StripeIDContains != nil {
-		predicates = append(predicates, organizationsetting.StripeIDContains(*i.StripeIDContains))
-	}
-	if i.StripeIDHasPrefix != nil {
-		predicates = append(predicates, organizationsetting.StripeIDHasPrefix(*i.StripeIDHasPrefix))
-	}
-	if i.StripeIDHasSuffix != nil {
-		predicates = append(predicates, organizationsetting.StripeIDHasSuffix(*i.StripeIDHasSuffix))
-	}
-	if i.StripeIDIsNil {
-		predicates = append(predicates, organizationsetting.StripeIDIsNil())
-	}
-	if i.StripeIDNotNil {
-		predicates = append(predicates, organizationsetting.StripeIDNotNil())
-	}
-	if i.StripeIDEqualFold != nil {
-		predicates = append(predicates, organizationsetting.StripeIDEqualFold(*i.StripeIDEqualFold))
-	}
-	if i.StripeIDContainsFold != nil {
-		predicates = append(predicates, organizationsetting.StripeIDContainsFold(*i.StripeIDContainsFold))
 	}
 
 	if i.HasOrganization != nil {
@@ -38455,23 +38331,6 @@ type OrganizationSettingHistoryWhereInput struct {
 	BillingPhoneEqualFold    *string  `json:"billingPhoneEqualFold,omitempty"`
 	BillingPhoneContainsFold *string  `json:"billingPhoneContainsFold,omitempty"`
 
-	// "billing_address" field predicates.
-	BillingAddress             *string  `json:"billingAddress,omitempty"`
-	BillingAddressNEQ          *string  `json:"billingAddressNEQ,omitempty"`
-	BillingAddressIn           []string `json:"billingAddressIn,omitempty"`
-	BillingAddressNotIn        []string `json:"billingAddressNotIn,omitempty"`
-	BillingAddressGT           *string  `json:"billingAddressGT,omitempty"`
-	BillingAddressGTE          *string  `json:"billingAddressGTE,omitempty"`
-	BillingAddressLT           *string  `json:"billingAddressLT,omitempty"`
-	BillingAddressLTE          *string  `json:"billingAddressLTE,omitempty"`
-	BillingAddressContains     *string  `json:"billingAddressContains,omitempty"`
-	BillingAddressHasPrefix    *string  `json:"billingAddressHasPrefix,omitempty"`
-	BillingAddressHasSuffix    *string  `json:"billingAddressHasSuffix,omitempty"`
-	BillingAddressIsNil        bool     `json:"billingAddressIsNil,omitempty"`
-	BillingAddressNotNil       bool     `json:"billingAddressNotNil,omitempty"`
-	BillingAddressEqualFold    *string  `json:"billingAddressEqualFold,omitempty"`
-	BillingAddressContainsFold *string  `json:"billingAddressContainsFold,omitempty"`
-
 	// "tax_identifier" field predicates.
 	TaxIdentifier             *string  `json:"taxIdentifier,omitempty"`
 	TaxIdentifierNEQ          *string  `json:"taxIdentifierNEQ,omitempty"`
@@ -38513,23 +38372,6 @@ type OrganizationSettingHistoryWhereInput struct {
 	OrganizationIDNotNil       bool     `json:"organizationIDNotNil,omitempty"`
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
-
-	// "stripe_id" field predicates.
-	StripeID             *string  `json:"stripeID,omitempty"`
-	StripeIDNEQ          *string  `json:"stripeIDNEQ,omitempty"`
-	StripeIDIn           []string `json:"stripeIDIn,omitempty"`
-	StripeIDNotIn        []string `json:"stripeIDNotIn,omitempty"`
-	StripeIDGT           *string  `json:"stripeIDGT,omitempty"`
-	StripeIDGTE          *string  `json:"stripeIDGTE,omitempty"`
-	StripeIDLT           *string  `json:"stripeIDLT,omitempty"`
-	StripeIDLTE          *string  `json:"stripeIDLTE,omitempty"`
-	StripeIDContains     *string  `json:"stripeIDContains,omitempty"`
-	StripeIDHasPrefix    *string  `json:"stripeIDHasPrefix,omitempty"`
-	StripeIDHasSuffix    *string  `json:"stripeIDHasSuffix,omitempty"`
-	StripeIDIsNil        bool     `json:"stripeIDIsNil,omitempty"`
-	StripeIDNotNil       bool     `json:"stripeIDNotNil,omitempty"`
-	StripeIDEqualFold    *string  `json:"stripeIDEqualFold,omitempty"`
-	StripeIDContainsFold *string  `json:"stripeIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39074,51 +38916,6 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	if i.BillingPhoneContainsFold != nil {
 		predicates = append(predicates, organizationsettinghistory.BillingPhoneContainsFold(*i.BillingPhoneContainsFold))
 	}
-	if i.BillingAddress != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressEQ(*i.BillingAddress))
-	}
-	if i.BillingAddressNEQ != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressNEQ(*i.BillingAddressNEQ))
-	}
-	if len(i.BillingAddressIn) > 0 {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressIn(i.BillingAddressIn...))
-	}
-	if len(i.BillingAddressNotIn) > 0 {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressNotIn(i.BillingAddressNotIn...))
-	}
-	if i.BillingAddressGT != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressGT(*i.BillingAddressGT))
-	}
-	if i.BillingAddressGTE != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressGTE(*i.BillingAddressGTE))
-	}
-	if i.BillingAddressLT != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressLT(*i.BillingAddressLT))
-	}
-	if i.BillingAddressLTE != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressLTE(*i.BillingAddressLTE))
-	}
-	if i.BillingAddressContains != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressContains(*i.BillingAddressContains))
-	}
-	if i.BillingAddressHasPrefix != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressHasPrefix(*i.BillingAddressHasPrefix))
-	}
-	if i.BillingAddressHasSuffix != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressHasSuffix(*i.BillingAddressHasSuffix))
-	}
-	if i.BillingAddressIsNil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressIsNil())
-	}
-	if i.BillingAddressNotNil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressNotNil())
-	}
-	if i.BillingAddressEqualFold != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressEqualFold(*i.BillingAddressEqualFold))
-	}
-	if i.BillingAddressContainsFold != nil {
-		predicates = append(predicates, organizationsettinghistory.BillingAddressContainsFold(*i.BillingAddressContainsFold))
-	}
 	if i.TaxIdentifier != nil {
 		predicates = append(predicates, organizationsettinghistory.TaxIdentifierEQ(*i.TaxIdentifier))
 	}
@@ -39226,51 +39023,6 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	}
 	if i.OrganizationIDContainsFold != nil {
 		predicates = append(predicates, organizationsettinghistory.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
-	}
-	if i.StripeID != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDEQ(*i.StripeID))
-	}
-	if i.StripeIDNEQ != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDNEQ(*i.StripeIDNEQ))
-	}
-	if len(i.StripeIDIn) > 0 {
-		predicates = append(predicates, organizationsettinghistory.StripeIDIn(i.StripeIDIn...))
-	}
-	if len(i.StripeIDNotIn) > 0 {
-		predicates = append(predicates, organizationsettinghistory.StripeIDNotIn(i.StripeIDNotIn...))
-	}
-	if i.StripeIDGT != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDGT(*i.StripeIDGT))
-	}
-	if i.StripeIDGTE != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDGTE(*i.StripeIDGTE))
-	}
-	if i.StripeIDLT != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDLT(*i.StripeIDLT))
-	}
-	if i.StripeIDLTE != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDLTE(*i.StripeIDLTE))
-	}
-	if i.StripeIDContains != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDContains(*i.StripeIDContains))
-	}
-	if i.StripeIDHasPrefix != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDHasPrefix(*i.StripeIDHasPrefix))
-	}
-	if i.StripeIDHasSuffix != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDHasSuffix(*i.StripeIDHasSuffix))
-	}
-	if i.StripeIDIsNil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDIsNil())
-	}
-	if i.StripeIDNotNil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDNotNil())
-	}
-	if i.StripeIDEqualFold != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDEqualFold(*i.StripeIDEqualFold))
-	}
-	if i.StripeIDContainsFold != nil {
-		predicates = append(predicates, organizationsettinghistory.StripeIDContainsFold(*i.StripeIDContainsFold))
 	}
 
 	switch len(predicates) {

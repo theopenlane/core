@@ -8,9 +8,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -59,13 +61,7 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 			// set owner on create mutation
 			if m.Op() == ent.OpCreate {
-				orgID, err := auth.GetOrganizationIDFromContext(ctx)
-				if err != nil {
-					return nil, fmt.Errorf("failed to get organization id from context: %w", err)
-				}
-
-				// set owner on mutation
-				if err := m.SetField(ownerFieldName, orgID); err != nil {
+				if err := setOwnerIDField(ctx, m); err != nil {
 					return nil, err
 				}
 			} else {
@@ -98,13 +94,7 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			// set owner on create mutation
 			if m.Op() == ent.OpCreate {
-				orgID, err := auth.GetOrganizationIDFromContext(ctx)
-				if err != nil {
-					return nil, fmt.Errorf("failed to get organization id from context: %w", err)
-				}
-
-				// set owner on mutation
-				if err := m.SetField(ownerFieldName, orgID); err != nil {
+				if err := setOwnerIDField(ctx, m); err != nil {
 					return nil, err
 				}
 			}
@@ -112,6 +102,27 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}
+}
+
+// setOwnerIDField sets the owner id field on the mutation based on the current organization
+func setOwnerIDField(ctx context.Context, m ent.Mutation) error {
+	// if the context has the organization creation context key, skip the hook
+	// because we don't want the owner to be based on the current organization
+	if _, ok := contextx.From[hooks.OrganizationCreationContextKey](ctx); ok {
+		return nil
+	}
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get organization id from context: %w", err)
+	}
+
+	// set owner on mutation
+	if err := m.SetField(ownerFieldName, orgID); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {

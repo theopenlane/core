@@ -686,10 +686,12 @@ func adminSearchOrganizationSettings(ctx context.Context, query string) ([]*gene
 			organizationsetting.BillingContactContainsFold(query), // search by BillingContact
 			organizationsetting.BillingEmailContainsFold(query),   // search by BillingEmail
 			organizationsetting.BillingPhoneContainsFold(query),   // search by BillingPhone
-			organizationsetting.BillingAddressContainsFold(query), // search by BillingAddress
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(billingaddress)::text LIKE $8", likeQuery)) // search by BillingAddress
+			},
 			organizationsetting.TaxIdentifierContainsFold(query),  // search by TaxIdentifier
 			organizationsetting.OrganizationIDContainsFold(query), // search by OrganizationID
-			organizationsetting.StripeIDContainsFold(query),       // search by StripeID
 		),
 	).All(ctx)
 }

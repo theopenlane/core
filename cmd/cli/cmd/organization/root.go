@@ -40,6 +40,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
+		e = nodes
+	case *openlaneclient.GetOrganizations:
+		var nodes []*openlaneclient.GetOrganizations_Organizations_Edges_Node
+
+		for _, i := range v.Organizations.Edges {
+			nodes = append(nodes, i.Node)
+		}
+
+		e = nodes
 	case *openlaneclient.GetOrganizationByID:
 		e = v.Organization
 	case *openlaneclient.CreateOrganization:

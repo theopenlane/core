@@ -94,20 +94,18 @@ func tableOutput(out []openlaneclient.OrganizationSetting) {
 		"TaxIdentifier",
 		"Tags",
 		"Domains",
-		"StripeID",
 	)
 	for _, i := range out {
 		writer.AddRow(i.ID,
 			i.Organization.Name,
 			*i.BillingContact,
-			*i.BillingAddress,
+			i.BillingAddress.String(),
 			*i.BillingEmail,
 			*i.BillingPhone,
 			*i.GeoLocation,
 			*i.TaxIdentifier,
 			strings.Join(i.Tags, ", "),
-			strings.Join(i.Domains, ", "),
-			*i.StripeID)
+			strings.Join(i.Domains, ", "))
 	}
 
 	writer.Render()

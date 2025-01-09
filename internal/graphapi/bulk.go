@@ -389,25 +389,6 @@ func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []
 	}, nil
 }
 
-// bulkCreateOrgSubscription uses the CreateBulk function to create multiple OrgSubscription entities
-func (r *mutationResolver) bulkCreateOrgSubscription(ctx context.Context, input []*generated.CreateOrgSubscriptionInput) (*model.OrgSubscriptionBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.OrgSubscriptionCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.OrgSubscription.Create().SetInput(*data)
-	}
-
-	res, err := c.OrgSubscription.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "orgsubscription"})
-	}
-
-	// return response
-	return &model.OrgSubscriptionBulkCreatePayload{
-		OrgSubscriptions: res,
-	}, nil
-}
-
 // bulkCreatePersonalAccessToken uses the CreateBulk function to create multiple PersonalAccessToken entities
 func (r *mutationResolver) bulkCreatePersonalAccessToken(ctx context.Context, input []*generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

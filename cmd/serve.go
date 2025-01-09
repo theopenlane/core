@@ -114,7 +114,7 @@ func serve(ctx context.Context) error {
 	)
 
 	// Setup DB connection
-	log.Info().Interface("db", so.Config.Settings.DB).Msg("connecting to database")
+	log.Info().Interface("db", so.Config.Settings.DB.DatabaseName).Msg("connecting to database")
 
 	jobOpts := []riverqueue.Option{
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),

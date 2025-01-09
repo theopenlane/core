@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrganizationSetting is the model entity for the OrganizationSetting schema.
@@ -44,16 +45,14 @@ type OrganizationSetting struct {
 	BillingEmail string `json:"billing_email,omitempty"`
 	// Phone number to contact for billing
 	BillingPhone string `json:"billing_phone,omitempty"`
-	// Address to send billing information to
-	BillingAddress string `json:"billing_address,omitempty"`
+	// the billing address to send billing information to
+	BillingAddress models.Address `json:"billing_address,omitempty"`
 	// Usually government-issued tax ID or business ID such as ABN in Australia
 	TaxIdentifier string `json:"tax_identifier,omitempty"`
 	// geographical location of the organization
 	GeoLocation enums.Region `json:"geo_location,omitempty"`
 	// the ID of the organization the settings belong to
 	OrganizationID string `json:"organization_id,omitempty"`
-	// the ID of the stripe customer associated with the organization
-	StripeID string `json:"stripe_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationSettingQuery when eager-loading is set.
 	Edges        OrganizationSettingEdges `json:"edges"`
@@ -100,9 +99,9 @@ func (*OrganizationSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case organizationsetting.FieldTags, organizationsetting.FieldDomains:
+		case organizationsetting.FieldTags, organizationsetting.FieldDomains, organizationsetting.FieldBillingAddress:
 			values[i] = new([]byte)
-		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldMappingID, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldBillingAddress, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID, organizationsetting.FieldStripeID:
+		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldMappingID, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID:
 			values[i] = new(sql.NullString)
 		case organizationsetting.FieldCreatedAt, organizationsetting.FieldUpdatedAt, organizationsetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -204,10 +203,12 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 				os.BillingPhone = value.String
 			}
 		case organizationsetting.FieldBillingAddress:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field billing_address", values[i])
-			} else if value.Valid {
-				os.BillingAddress = value.String
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &os.BillingAddress); err != nil {
+					return fmt.Errorf("unmarshal field billing_address: %w", err)
+				}
 			}
 		case organizationsetting.FieldTaxIdentifier:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -226,12 +227,6 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
 			} else if value.Valid {
 				os.OrganizationID = value.String
-			}
-		case organizationsetting.FieldStripeID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field stripe_id", values[i])
-			} else if value.Valid {
-				os.StripeID = value.String
 			}
 		default:
 			os.selectValues.Set(columns[i], values[i])
@@ -316,7 +311,7 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString(os.BillingPhone)
 	builder.WriteString(", ")
 	builder.WriteString("billing_address=")
-	builder.WriteString(os.BillingAddress)
+	builder.WriteString(fmt.Sprintf("%v", os.BillingAddress))
 	builder.WriteString(", ")
 	builder.WriteString("tax_identifier=")
 	builder.WriteString(os.TaxIdentifier)
@@ -326,9 +321,6 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
 	builder.WriteString(os.OrganizationID)
-	builder.WriteString(", ")
-	builder.WriteString("stripe_id=")
-	builder.WriteString(os.StripeID)
 	builder.WriteByte(')')
 	return builder.String()
 }

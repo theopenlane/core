@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -50,17 +51,15 @@ type OrganizationSettingHistory struct {
 	BillingEmail string `json:"billing_email,omitempty"`
 	// Phone number to contact for billing
 	BillingPhone string `json:"billing_phone,omitempty"`
-	// Address to send billing information to
-	BillingAddress string `json:"billing_address,omitempty"`
+	// the billing address to send billing information to
+	BillingAddress models.Address `json:"billing_address,omitempty"`
 	// Usually government-issued tax ID or business ID such as ABN in Australia
 	TaxIdentifier string `json:"tax_identifier,omitempty"`
 	// geographical location of the organization
 	GeoLocation enums.Region `json:"geo_location,omitempty"`
 	// the ID of the organization the settings belong to
 	OrganizationID string `json:"organization_id,omitempty"`
-	// the ID of the stripe customer associated with the organization
-	StripeID     string `json:"stripe_id,omitempty"`
-	selectValues sql.SelectValues
+	selectValues   sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -68,11 +67,11 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case organizationsettinghistory.FieldTags, organizationsettinghistory.FieldDomains:
+		case organizationsettinghistory.FieldTags, organizationsettinghistory.FieldDomains, organizationsettinghistory.FieldBillingAddress:
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldMappingID, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldBillingAddress, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldStripeID:
+		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldMappingID, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID:
 			values[i] = new(sql.NullString)
 		case organizationsettinghistory.FieldHistoryTime, organizationsettinghistory.FieldCreatedAt, organizationsettinghistory.FieldUpdatedAt, organizationsettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -192,10 +191,12 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 				osh.BillingPhone = value.String
 			}
 		case organizationsettinghistory.FieldBillingAddress:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field billing_address", values[i])
-			} else if value.Valid {
-				osh.BillingAddress = value.String
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &osh.BillingAddress); err != nil {
+					return fmt.Errorf("unmarshal field billing_address: %w", err)
+				}
 			}
 		case organizationsettinghistory.FieldTaxIdentifier:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -214,12 +215,6 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
 			} else if value.Valid {
 				osh.OrganizationID = value.String
-			}
-		case organizationsettinghistory.FieldStripeID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field stripe_id", values[i])
-			} else if value.Valid {
-				osh.StripeID = value.String
 			}
 		default:
 			osh.selectValues.Set(columns[i], values[i])
@@ -303,7 +298,7 @@ func (osh *OrganizationSettingHistory) String() string {
 	builder.WriteString(osh.BillingPhone)
 	builder.WriteString(", ")
 	builder.WriteString("billing_address=")
-	builder.WriteString(osh.BillingAddress)
+	builder.WriteString(fmt.Sprintf("%v", osh.BillingAddress))
 	builder.WriteString(", ")
 	builder.WriteString("tax_identifier=")
 	builder.WriteString(osh.TaxIdentifier)
@@ -313,9 +308,6 @@ func (osh *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
 	builder.WriteString(osh.OrganizationID)
-	builder.WriteString(", ")
-	builder.WriteString("stripe_id=")
-	builder.WriteString(osh.StripeID)
 	builder.WriteByte(')')
 	return builder.String()
 }

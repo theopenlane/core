@@ -118,11 +118,6 @@ func BillingPhone(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldBillingPhone, v))
 }
 
-// BillingAddress applies equality check predicate on the "billing_address" field. It's identical to BillingAddressEQ.
-func BillingAddress(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldEQ(FieldBillingAddress, v))
-}
-
 // TaxIdentifier applies equality check predicate on the "tax_identifier" field. It's identical to TaxIdentifierEQ.
 func TaxIdentifier(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldTaxIdentifier, v))
@@ -131,11 +126,6 @@ func TaxIdentifier(v string) predicate.OrganizationSetting {
 // OrganizationID applies equality check predicate on the "organization_id" field. It's identical to OrganizationIDEQ.
 func OrganizationID(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldOrganizationID, v))
-}
-
-// StripeID applies equality check predicate on the "stripe_id" field. It's identical to StripeIDEQ.
-func StripeID(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldEQ(FieldStripeID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -823,61 +813,6 @@ func BillingPhoneContainsFold(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldContainsFold(FieldBillingPhone, v))
 }
 
-// BillingAddressEQ applies the EQ predicate on the "billing_address" field.
-func BillingAddressEQ(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldEQ(FieldBillingAddress, v))
-}
-
-// BillingAddressNEQ applies the NEQ predicate on the "billing_address" field.
-func BillingAddressNEQ(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldNEQ(FieldBillingAddress, v))
-}
-
-// BillingAddressIn applies the In predicate on the "billing_address" field.
-func BillingAddressIn(vs ...string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldIn(FieldBillingAddress, vs...))
-}
-
-// BillingAddressNotIn applies the NotIn predicate on the "billing_address" field.
-func BillingAddressNotIn(vs ...string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldNotIn(FieldBillingAddress, vs...))
-}
-
-// BillingAddressGT applies the GT predicate on the "billing_address" field.
-func BillingAddressGT(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldGT(FieldBillingAddress, v))
-}
-
-// BillingAddressGTE applies the GTE predicate on the "billing_address" field.
-func BillingAddressGTE(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldGTE(FieldBillingAddress, v))
-}
-
-// BillingAddressLT applies the LT predicate on the "billing_address" field.
-func BillingAddressLT(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldLT(FieldBillingAddress, v))
-}
-
-// BillingAddressLTE applies the LTE predicate on the "billing_address" field.
-func BillingAddressLTE(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldLTE(FieldBillingAddress, v))
-}
-
-// BillingAddressContains applies the Contains predicate on the "billing_address" field.
-func BillingAddressContains(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldContains(FieldBillingAddress, v))
-}
-
-// BillingAddressHasPrefix applies the HasPrefix predicate on the "billing_address" field.
-func BillingAddressHasPrefix(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldHasPrefix(FieldBillingAddress, v))
-}
-
-// BillingAddressHasSuffix applies the HasSuffix predicate on the "billing_address" field.
-func BillingAddressHasSuffix(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldHasSuffix(FieldBillingAddress, v))
-}
-
 // BillingAddressIsNil applies the IsNil predicate on the "billing_address" field.
 func BillingAddressIsNil() predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldIsNull(FieldBillingAddress))
@@ -886,16 +821,6 @@ func BillingAddressIsNil() predicate.OrganizationSetting {
 // BillingAddressNotNil applies the NotNil predicate on the "billing_address" field.
 func BillingAddressNotNil() predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldNotNull(FieldBillingAddress))
-}
-
-// BillingAddressEqualFold applies the EqualFold predicate on the "billing_address" field.
-func BillingAddressEqualFold(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldEqualFold(FieldBillingAddress, v))
-}
-
-// BillingAddressContainsFold applies the ContainsFold predicate on the "billing_address" field.
-func BillingAddressContainsFold(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldContainsFold(FieldBillingAddress, v))
 }
 
 // TaxIdentifierEQ applies the EQ predicate on the "tax_identifier" field.
@@ -1086,81 +1011,6 @@ func OrganizationIDEqualFold(v string) predicate.OrganizationSetting {
 // OrganizationIDContainsFold applies the ContainsFold predicate on the "organization_id" field.
 func OrganizationIDContainsFold(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldContainsFold(FieldOrganizationID, v))
-}
-
-// StripeIDEQ applies the EQ predicate on the "stripe_id" field.
-func StripeIDEQ(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldEQ(FieldStripeID, v))
-}
-
-// StripeIDNEQ applies the NEQ predicate on the "stripe_id" field.
-func StripeIDNEQ(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldNEQ(FieldStripeID, v))
-}
-
-// StripeIDIn applies the In predicate on the "stripe_id" field.
-func StripeIDIn(vs ...string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldIn(FieldStripeID, vs...))
-}
-
-// StripeIDNotIn applies the NotIn predicate on the "stripe_id" field.
-func StripeIDNotIn(vs ...string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldNotIn(FieldStripeID, vs...))
-}
-
-// StripeIDGT applies the GT predicate on the "stripe_id" field.
-func StripeIDGT(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldGT(FieldStripeID, v))
-}
-
-// StripeIDGTE applies the GTE predicate on the "stripe_id" field.
-func StripeIDGTE(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldGTE(FieldStripeID, v))
-}
-
-// StripeIDLT applies the LT predicate on the "stripe_id" field.
-func StripeIDLT(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldLT(FieldStripeID, v))
-}
-
-// StripeIDLTE applies the LTE predicate on the "stripe_id" field.
-func StripeIDLTE(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldLTE(FieldStripeID, v))
-}
-
-// StripeIDContains applies the Contains predicate on the "stripe_id" field.
-func StripeIDContains(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldContains(FieldStripeID, v))
-}
-
-// StripeIDHasPrefix applies the HasPrefix predicate on the "stripe_id" field.
-func StripeIDHasPrefix(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldHasPrefix(FieldStripeID, v))
-}
-
-// StripeIDHasSuffix applies the HasSuffix predicate on the "stripe_id" field.
-func StripeIDHasSuffix(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldHasSuffix(FieldStripeID, v))
-}
-
-// StripeIDIsNil applies the IsNil predicate on the "stripe_id" field.
-func StripeIDIsNil() predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldIsNull(FieldStripeID))
-}
-
-// StripeIDNotNil applies the NotNil predicate on the "stripe_id" field.
-func StripeIDNotNil() predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldNotNull(FieldStripeID))
-}
-
-// StripeIDEqualFold applies the EqualFold predicate on the "stripe_id" field.
-func StripeIDEqualFold(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldEqualFold(FieldStripeID, v))
-}
-
-// StripeIDContainsFold applies the ContainsFold predicate on the "stripe_id" field.
-func StripeIDContainsFold(v string) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldContainsFold(FieldStripeID, v))
 }
 
 // HasOrganization applies the HasEdge predicate on the "organization" edge.

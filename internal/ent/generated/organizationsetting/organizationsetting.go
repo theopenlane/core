@@ -50,8 +50,6 @@ const (
 	FieldGeoLocation = "geo_location"
 	// FieldOrganizationID holds the string denoting the organization_id field in the database.
 	FieldOrganizationID = "organization_id"
-	// FieldStripeID holds the string denoting the stripe_id field in the database.
-	FieldStripeID = "stripe_id"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -91,7 +89,6 @@ var Columns = []string{
 	FieldTaxIdentifier,
 	FieldGeoLocation,
 	FieldOrganizationID,
-	FieldStripeID,
 }
 
 var (
@@ -209,11 +206,6 @@ func ByBillingPhone(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBillingPhone, opts...).ToFunc()
 }
 
-// ByBillingAddress orders the results by the billing_address field.
-func ByBillingAddress(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBillingAddress, opts...).ToFunc()
-}
-
 // ByTaxIdentifier orders the results by the tax_identifier field.
 func ByTaxIdentifier(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTaxIdentifier, opts...).ToFunc()
@@ -227,11 +219,6 @@ func ByGeoLocation(opts ...sql.OrderTermOption) OrderOption {
 // ByOrganizationID orders the results by the organization_id field.
 func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrganizationID, opts...).ToFunc()
-}
-
-// ByStripeID orders the results by the stripe_id field.
-func ByStripeID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStripeID, opts...).ToFunc()
 }
 
 // ByOrganizationField orders the results by organization field.

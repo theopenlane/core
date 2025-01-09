@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrganizationSetting holds the schema definition for the OrganizationSetting entity
@@ -51,8 +52,8 @@ func (OrganizationSetting) Fields() []ent.Field {
 				return err
 			}).
 			Optional(),
-		field.String("billing_address").
-			Comment("Address to send billing information to").
+		field.JSON("billing_address", models.Address{}).
+			Comment("the billing address to send billing information to").
 			Optional(),
 		field.String("tax_identifier").
 			Comment("Usually government-issued tax ID or business ID such as ABN in Australia").
@@ -64,9 +65,6 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Optional(),
 		field.String("organization_id").
 			Comment("the ID of the organization the settings belong to").
-			Optional(),
-		field.String("stripe_id").
-			Comment("the ID of the stripe customer associated with the organization").
 			Optional(),
 	}
 }

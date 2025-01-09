@@ -1335,11 +1335,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldBillingContact: {Type: field.TypeString, Column: organizationsetting.FieldBillingContact},
 			organizationsetting.FieldBillingEmail:   {Type: field.TypeString, Column: organizationsetting.FieldBillingEmail},
 			organizationsetting.FieldBillingPhone:   {Type: field.TypeString, Column: organizationsetting.FieldBillingPhone},
-			organizationsetting.FieldBillingAddress: {Type: field.TypeString, Column: organizationsetting.FieldBillingAddress},
+			organizationsetting.FieldBillingAddress: {Type: field.TypeJSON, Column: organizationsetting.FieldBillingAddress},
 			organizationsetting.FieldTaxIdentifier:  {Type: field.TypeString, Column: organizationsetting.FieldTaxIdentifier},
 			organizationsetting.FieldGeoLocation:    {Type: field.TypeEnum, Column: organizationsetting.FieldGeoLocation},
 			organizationsetting.FieldOrganizationID: {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
-			organizationsetting.FieldStripeID:       {Type: field.TypeString, Column: organizationsetting.FieldStripeID},
 		},
 	}
 	graph.Nodes[44] = &sqlgraph.Node{
@@ -1368,11 +1367,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldBillingContact: {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingContact},
 			organizationsettinghistory.FieldBillingEmail:   {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingEmail},
 			organizationsettinghistory.FieldBillingPhone:   {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingPhone},
-			organizationsettinghistory.FieldBillingAddress: {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingAddress},
+			organizationsettinghistory.FieldBillingAddress: {Type: field.TypeJSON, Column: organizationsettinghistory.FieldBillingAddress},
 			organizationsettinghistory.FieldTaxIdentifier:  {Type: field.TypeString, Column: organizationsettinghistory.FieldTaxIdentifier},
 			organizationsettinghistory.FieldGeoLocation:    {Type: field.TypeEnum, Column: organizationsettinghistory.FieldGeoLocation},
 			organizationsettinghistory.FieldOrganizationID: {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
-			organizationsettinghistory.FieldStripeID:       {Type: field.TypeString, Column: organizationsettinghistory.FieldStripeID},
 		},
 	}
 	graph.Nodes[45] = &sqlgraph.Node{
@@ -13200,8 +13198,8 @@ func (f *OrganizationSettingFilter) WhereBillingPhone(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldBillingPhone))
 }
 
-// WhereBillingAddress applies the entql string predicate on the billing_address field.
-func (f *OrganizationSettingFilter) WhereBillingAddress(p entql.StringP) {
+// WhereBillingAddress applies the entql json.RawMessage predicate on the billing_address field.
+func (f *OrganizationSettingFilter) WhereBillingAddress(p entql.BytesP) {
 	f.Where(p.Field(organizationsetting.FieldBillingAddress))
 }
 
@@ -13218,11 +13216,6 @@ func (f *OrganizationSettingFilter) WhereGeoLocation(p entql.StringP) {
 // WhereOrganizationID applies the entql string predicate on the organization_id field.
 func (f *OrganizationSettingFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldOrganizationID))
-}
-
-// WhereStripeID applies the entql string predicate on the stripe_id field.
-func (f *OrganizationSettingFilter) WhereStripeID(p entql.StringP) {
-	f.Where(p.Field(organizationsetting.FieldStripeID))
 }
 
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
@@ -13368,8 +13361,8 @@ func (f *OrganizationSettingHistoryFilter) WhereBillingPhone(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldBillingPhone))
 }
 
-// WhereBillingAddress applies the entql string predicate on the billing_address field.
-func (f *OrganizationSettingHistoryFilter) WhereBillingAddress(p entql.StringP) {
+// WhereBillingAddress applies the entql json.RawMessage predicate on the billing_address field.
+func (f *OrganizationSettingHistoryFilter) WhereBillingAddress(p entql.BytesP) {
 	f.Where(p.Field(organizationsettinghistory.FieldBillingAddress))
 }
 
@@ -13386,11 +13379,6 @@ func (f *OrganizationSettingHistoryFilter) WhereGeoLocation(p entql.StringP) {
 // WhereOrganizationID applies the entql string predicate on the organization_id field.
 func (f *OrganizationSettingHistoryFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldOrganizationID))
-}
-
-// WhereStripeID applies the entql string predicate on the stripe_id field.
-func (f *OrganizationSettingHistoryFilter) WhereStripeID(p entql.StringP) {
-	f.Where(p.Field(organizationsettinghistory.FieldStripeID))
 }
 
 // addPredicate implements the predicateAdder interface.

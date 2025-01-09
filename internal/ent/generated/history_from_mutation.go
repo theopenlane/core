@@ -4942,10 +4942,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetOrganizationID(organizationID)
 	}
 
-	if stripeID, exists := m.StripeID(); exists {
-		create = create.SetStripeID(stripeID)
-	}
-
 	_, err := create.Save(ctx)
 
 	return err
@@ -5072,12 +5068,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetOrganizationID(organizationsetting.OrganizationID)
 		}
 
-		if stripeID, exists := m.StripeID(); exists {
-			create = create.SetStripeID(stripeID)
-		} else {
-			create = create.SetStripeID(organizationsetting.StripeID)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5126,7 +5116,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetTaxIdentifier(organizationsetting.TaxIdentifier).
 			SetGeoLocation(organizationsetting.GeoLocation).
 			SetOrganizationID(organizationsetting.OrganizationID).
-			SetStripeID(organizationsetting.StripeID).
 			Save(ctx)
 		if err != nil {
 			return err

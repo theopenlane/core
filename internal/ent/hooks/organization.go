@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
 
 	"github.com/theopenlane/riverboat/pkg/jobs"
@@ -21,6 +22,9 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 )
 
+// OrganizationCreationContextKey is the context key name for the organization creation context
+type OrganizationCreationContextKey struct{}
+
 // HookOrganization runs on org mutations to set default values that are not provided
 func HookOrganization() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -31,6 +35,11 @@ func HookOrganization() ent.Hook {
 			}
 
 			if m.Op().Is(ent.OpCreate) {
+				// set the context value to indicate this is an organization creation
+				// this is useful for skipping the hooks on the owner field if its part of the
+				// initial creation of the organization
+				ctx = contextx.With(ctx, OrganizationCreationContextKey{})
+
 				// generate a default org setting schema if not provided
 				if err := createOrgSettings(ctx, m); err != nil {
 					return nil, err

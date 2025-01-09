@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrganizationSettingCreate is the builder for creating a OrganizationSetting entity.
@@ -176,15 +177,15 @@ func (osc *OrganizationSettingCreate) SetNillableBillingPhone(s *string) *Organi
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (osc *OrganizationSettingCreate) SetBillingAddress(s string) *OrganizationSettingCreate {
-	osc.mutation.SetBillingAddress(s)
+func (osc *OrganizationSettingCreate) SetBillingAddress(m models.Address) *OrganizationSettingCreate {
+	osc.mutation.SetBillingAddress(m)
 	return osc
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableBillingAddress(s *string) *OrganizationSettingCreate {
-	if s != nil {
-		osc.SetBillingAddress(*s)
+func (osc *OrganizationSettingCreate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingCreate {
+	if m != nil {
+		osc.SetBillingAddress(*m)
 	}
 	return osc
 }
@@ -227,20 +228,6 @@ func (osc *OrganizationSettingCreate) SetOrganizationID(s string) *OrganizationS
 func (osc *OrganizationSettingCreate) SetNillableOrganizationID(s *string) *OrganizationSettingCreate {
 	if s != nil {
 		osc.SetOrganizationID(*s)
-	}
-	return osc
-}
-
-// SetStripeID sets the "stripe_id" field.
-func (osc *OrganizationSettingCreate) SetStripeID(s string) *OrganizationSettingCreate {
-	osc.mutation.SetStripeID(s)
-	return osc
-}
-
-// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableStripeID(s *string) *OrganizationSettingCreate {
-	if s != nil {
-		osc.SetStripeID(*s)
 	}
 	return osc
 }
@@ -465,7 +452,7 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 		_node.BillingPhone = value
 	}
 	if value, ok := osc.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeJSON, value)
 		_node.BillingAddress = value
 	}
 	if value, ok := osc.mutation.TaxIdentifier(); ok {
@@ -475,10 +462,6 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	if value, ok := osc.mutation.GeoLocation(); ok {
 		_spec.SetField(organizationsetting.FieldGeoLocation, field.TypeEnum, value)
 		_node.GeoLocation = value
-	}
-	if value, ok := osc.mutation.StripeID(); ok {
-		_spec.SetField(organizationsetting.FieldStripeID, field.TypeString, value)
-		_node.StripeID = value
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

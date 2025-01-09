@@ -275,21 +275,42 @@ func fetchOrganizationIDbyOrgSettingID(ctx context.Context, orgsettingID string,
 	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgsettingID)
 	if err != nil {
 		log.Err(err).Msgf("Failed to fetch organization setting ID %s", orgsettingID)
+
 		return nil, err
 	}
 
-	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSetting.OrganizationID)).Only(ctx)
+	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSetting.OrganizationID)).WithOrgSubscriptions().Only(ctx)
 	if err != nil {
 		log.Err(err).Msgf("Failed to fetch organization by organization setting ID %s after 3 attempts", orgsettingID)
+
 		return nil, err
+	}
+
+	if len(org.Edges.OrgSubscriptions) > 1 {
+		log.Warn().Str("organization_id", org.ID).Msg("organization has multiple subscriptions")
+
+		return nil, ErrTooManySubscriptions
+	}
+
+	stripeCustomerID := ""
+	if len(org.Edges.OrgSubscriptions) > 0 {
+		stripeCustomerID = org.Edges.OrgSubscriptions[0].StripeCustomerID
 	}
 
 	return &entitlements.OrganizationCustomer{
 		OrganizationID:         org.ID,
-		StripeCustomerID:       orgSetting.StripeID,
-		BillingEmail:           orgSetting.BillingEmail,
-		BillingPhone:           orgSetting.BillingPhone,
 		OrganizationName:       org.Name,
+		StripeCustomerID:       stripeCustomerID,
 		OrganizationSettingsID: orgSetting.ID,
+		ContactInfo: entitlements.ContactInfo{
+			Email:      orgSetting.BillingEmail,
+			Phone:      orgSetting.BillingPhone,
+			Line1:      &orgSetting.BillingAddress.Line1,
+			Line2:      &orgSetting.BillingAddress.Line2,
+			City:       &orgSetting.BillingAddress.City,
+			State:      &orgSetting.BillingAddress.State,
+			Country:    &orgSetting.BillingAddress.Country,
+			PostalCode: &orgSetting.BillingAddress.PostalCode,
+		},
 	}, nil
 }

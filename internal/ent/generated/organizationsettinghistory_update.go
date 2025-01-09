@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -202,15 +203,15 @@ func (oshu *OrganizationSettingHistoryUpdate) ClearBillingPhone() *OrganizationS
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetBillingAddress(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetBillingAddress(s)
+func (oshu *OrganizationSettingHistoryUpdate) SetBillingAddress(m models.Address) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetBillingAddress(m)
 	return oshu
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingAddress(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetBillingAddress(*s)
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingHistoryUpdate {
+	if m != nil {
+		oshu.SetBillingAddress(*m)
 	}
 	return oshu
 }
@@ -278,26 +279,6 @@ func (oshu *OrganizationSettingHistoryUpdate) SetNillableOrganizationID(s *strin
 // ClearOrganizationID clears the value of the "organization_id" field.
 func (oshu *OrganizationSettingHistoryUpdate) ClearOrganizationID() *OrganizationSettingHistoryUpdate {
 	oshu.mutation.ClearOrganizationID()
-	return oshu
-}
-
-// SetStripeID sets the "stripe_id" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetStripeID(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetStripeID(s)
-	return oshu
-}
-
-// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableStripeID(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetStripeID(*s)
-	}
-	return oshu
-}
-
-// ClearStripeID clears the value of the "stripe_id" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearStripeID() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearStripeID()
 	return oshu
 }
 
@@ -450,10 +431,10 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 		_spec.ClearField(organizationsettinghistory.FieldBillingPhone, field.TypeString)
 	}
 	if value, ok := oshu.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON, value)
 	}
 	if oshu.mutation.BillingAddressCleared() {
-		_spec.ClearField(organizationsettinghistory.FieldBillingAddress, field.TypeString)
+		_spec.ClearField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON)
 	}
 	if value, ok := oshu.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString, value)
@@ -472,12 +453,6 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if oshu.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
-	}
-	if value, ok := oshu.mutation.StripeID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldStripeID, field.TypeString, value)
-	}
-	if oshu.mutation.StripeIDCleared() {
-		_spec.ClearField(organizationsettinghistory.FieldStripeID, field.TypeString)
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
@@ -672,15 +647,15 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) ClearBillingPhone() *Organizat
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingAddress(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetBillingAddress(s)
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingAddress(m models.Address) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetBillingAddress(m)
 	return oshuo
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingAddress(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetBillingAddress(*s)
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingAddress(m *models.Address) *OrganizationSettingHistoryUpdateOne {
+	if m != nil {
+		oshuo.SetBillingAddress(*m)
 	}
 	return oshuo
 }
@@ -748,26 +723,6 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableOrganizationID(s *s
 // ClearOrganizationID clears the value of the "organization_id" field.
 func (oshuo *OrganizationSettingHistoryUpdateOne) ClearOrganizationID() *OrganizationSettingHistoryUpdateOne {
 	oshuo.mutation.ClearOrganizationID()
-	return oshuo
-}
-
-// SetStripeID sets the "stripe_id" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetStripeID(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetStripeID(s)
-	return oshuo
-}
-
-// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableStripeID(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetStripeID(*s)
-	}
-	return oshuo
-}
-
-// ClearStripeID clears the value of the "stripe_id" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearStripeID() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearStripeID()
 	return oshuo
 }
 
@@ -950,10 +905,10 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 		_spec.ClearField(organizationsettinghistory.FieldBillingPhone, field.TypeString)
 	}
 	if value, ok := oshuo.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON, value)
 	}
 	if oshuo.mutation.BillingAddressCleared() {
-		_spec.ClearField(organizationsettinghistory.FieldBillingAddress, field.TypeString)
+		_spec.ClearField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON)
 	}
 	if value, ok := oshuo.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString, value)
@@ -972,12 +927,6 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if oshuo.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
-	}
-	if value, ok := oshuo.mutation.StripeID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldStripeID, field.TypeString, value)
-	}
-	if oshuo.mutation.StripeIDCleared() {
-		_spec.ClearField(organizationsettinghistory.FieldStripeID, field.TypeString)
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)

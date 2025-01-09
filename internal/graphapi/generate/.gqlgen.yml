@@ -84,3 +84,6 @@ models:
   Any:
     model:
       - github.com/99designs/gqlgen/graphql.Any
+  Address:
+    model:
+      - github.com/theopenlane/core/pkg/models.Address

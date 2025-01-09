@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -209,15 +210,15 @@ func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingPhone(s *string)
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (oshc *OrganizationSettingHistoryCreate) SetBillingAddress(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetBillingAddress(s)
+func (oshc *OrganizationSettingHistoryCreate) SetBillingAddress(m models.Address) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetBillingAddress(m)
 	return oshc
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingAddress(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetBillingAddress(*s)
+func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingHistoryCreate {
+	if m != nil {
+		oshc.SetBillingAddress(*m)
 	}
 	return oshc
 }
@@ -260,20 +261,6 @@ func (oshc *OrganizationSettingHistoryCreate) SetOrganizationID(s string) *Organ
 func (oshc *OrganizationSettingHistoryCreate) SetNillableOrganizationID(s *string) *OrganizationSettingHistoryCreate {
 	if s != nil {
 		oshc.SetOrganizationID(*s)
-	}
-	return oshc
-}
-
-// SetStripeID sets the "stripe_id" field.
-func (oshc *OrganizationSettingHistoryCreate) SetStripeID(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetStripeID(s)
-	return oshc
-}
-
-// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableStripeID(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetStripeID(*s)
 	}
 	return oshc
 }
@@ -493,7 +480,7 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 		_node.BillingPhone = value
 	}
 	if value, ok := oshc.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeString, value)
+		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON, value)
 		_node.BillingAddress = value
 	}
 	if value, ok := oshc.mutation.TaxIdentifier(); ok {
@@ -507,10 +494,6 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 	if value, ok := oshc.mutation.OrganizationID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
 		_node.OrganizationID = value
-	}
-	if value, ok := oshc.mutation.StripeID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldStripeID, field.TypeString, value)
-		_node.StripeID = value
 	}
 	return _node, _spec
 }
