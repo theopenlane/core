@@ -93,6 +93,7 @@ func (sc *StripeClient) FindorCreateCustomer(ctx context.Context, o *Organizatio
 		// get features and retry up to 5 times	if we don't have any
 		// there is a delay between creating the customer and the features being available
 		var feats []string
+
 		const maxRetries = 5
 
 		for i := range maxRetries {
