@@ -46,6 +46,7 @@ func getNestedPreloads(ctx *graphql.OperationContext, fields []graphql.Collected
 		preloads = append(preloads, prefixColumn)
 		preloads = append(preloads, getNestedPreloads(ctx, graphql.CollectFields(ctx, column.Selections, nil), prefixColumn)...)
 	}
+
 	return
 }
 
@@ -54,5 +55,6 @@ func getPreloadString(prefix, name string) string {
 	if len(prefix) > 0 {
 		return prefix + "." + name
 	}
+
 	return name
 }

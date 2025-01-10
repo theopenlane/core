@@ -29,7 +29,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			fields := utils.CheckForRequestedField(ctx, "subscriptionURL")
 
 			// if the SubscriptionURL field wasn't queried, return the result as is
-			if fields == false {
+			if !fields {
 				return v, nil
 			}
 
