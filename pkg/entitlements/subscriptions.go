@@ -155,6 +155,7 @@ func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string,
 
 	feat := []string{}
 	featNames := []string{}
+
 	for iter.Next() {
 		feat = append(feat, iter.EntitlementsActiveEntitlement().LookupKey)
 		featNames = append(featNames, iter.EntitlementsActiveEntitlement().Feature.Name)
