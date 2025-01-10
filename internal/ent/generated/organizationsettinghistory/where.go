@@ -136,6 +136,11 @@ func OrganizationID(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldOrganizationID, v))
 }
 
+// EmailNotificationsEnabled applies equality check predicate on the "email_notifications_enabled" field. It's identical to EmailNotificationsEnabledEQ.
+func EmailNotificationsEnabled(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldEmailNotificationsEnabled, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1154,6 +1159,16 @@ func OrganizationIDEqualFold(v string) predicate.OrganizationSettingHistory {
 // OrganizationIDContainsFold applies the ContainsFold predicate on the "organization_id" field.
 func OrganizationIDContainsFold(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldOrganizationID, v))
+}
+
+// EmailNotificationsEnabledEQ applies the EQ predicate on the "email_notifications_enabled" field.
+func EmailNotificationsEnabledEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldEmailNotificationsEnabled, v))
+}
+
+// EmailNotificationsEnabledNEQ applies the NEQ predicate on the "email_notifications_enabled" field.
+func EmailNotificationsEnabledNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldEmailNotificationsEnabled, v))
 }
 
 // And groups predicates with the AND operator between them.

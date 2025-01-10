@@ -4609,6 +4609,10 @@ input CreateOrganizationSettingInput {
 	geographical location of the organization
 	"""
 	geoLocation: OrganizationSettingRegion
+	"""
+	should we send email notifications
+	"""
+	emailNotificationsEnabled: Boolean
 	organizationID: ID
 	fileIDs: [ID!]
 }
@@ -15904,6 +15908,10 @@ type OrgSubscription implements Node {
 	the features associated with the subscription
 	"""
 	features: [String!]
+	"""
+	the features associated with the subscription
+	"""
+	featureLookupKeys: [String!]
 	owner: Organization
 	subscriptionURL: String
 }
@@ -15992,6 +16000,10 @@ type OrgSubscriptionHistory implements Node {
 	the features associated with the subscription
 	"""
 	features: [String!]
+	"""
+	the features associated with the subscription
+	"""
+	featureLookupKeys: [String!]
 }
 """
 A connection to a list of items.
@@ -17122,6 +17134,10 @@ type OrganizationSetting implements Node {
 	the ID of the organization the settings belong to
 	"""
 	organizationID: ID
+	"""
+	should we send email notifications
+	"""
+	emailNotificationsEnabled: Boolean!
 	organization: Organization
 	files: [File!]
 }
@@ -17229,6 +17245,10 @@ type OrganizationSettingHistory implements Node {
 	the ID of the organization the settings belong to
 	"""
 	organizationID: String
+	"""
+	should we send email notifications
+	"""
+	emailNotificationsEnabled: Boolean!
 }
 """
 A connection to a list of items.
@@ -17525,6 +17545,11 @@ input OrganizationSettingHistoryWhereInput {
 	organizationIDNotNil: Boolean
 	organizationIDEqualFold: String
 	organizationIDContainsFold: String
+	"""
+	email_notifications_enabled field predicates
+	"""
+	emailNotificationsEnabled: Boolean
+	emailNotificationsEnabledNEQ: Boolean
 }
 """
 OrganizationSettingRegion is enum for the field geo_location
@@ -17759,6 +17784,11 @@ input OrganizationSettingWhereInput {
 	organizationIDNotNil: Boolean
 	organizationIDEqualFold: ID
 	organizationIDContainsFold: ID
+	"""
+	email_notifications_enabled field predicates
+	"""
+	emailNotificationsEnabled: Boolean
+	emailNotificationsEnabledNEQ: Boolean
 	"""
 	organization edge predicates
 	"""
@@ -29250,6 +29280,10 @@ input UpdateOrganizationSettingInput {
 	"""
 	geoLocation: OrganizationSettingRegion
 	clearGeoLocation: Boolean
+	"""
+	should we send email notifications
+	"""
+	emailNotificationsEnabled: Boolean
 	organizationID: ID
 	clearOrganization: Boolean
 	addFileIDs: [ID!]

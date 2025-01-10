@@ -284,6 +284,20 @@ func (osu *OrganizationSettingUpdate) ClearOrganizationID() *OrganizationSetting
 	return osu
 }
 
+// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
+func (osu *OrganizationSettingUpdate) SetEmailNotificationsEnabled(b bool) *OrganizationSettingUpdate {
+	osu.mutation.SetEmailNotificationsEnabled(b)
+	return osu
+}
+
+// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingUpdate {
+	if b != nil {
+		osu.SetEmailNotificationsEnabled(*b)
+	}
+	return osu
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osu *OrganizationSettingUpdate) SetOrganization(o *Organization) *OrganizationSettingUpdate {
 	return osu.SetOrganizationID(o.ID)
@@ -508,6 +522,9 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if osu.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsetting.FieldGeoLocation, field.TypeEnum)
+	}
+	if value, ok := osu.mutation.EmailNotificationsEnabled(); ok {
+		_spec.SetField(organizationsetting.FieldEmailNotificationsEnabled, field.TypeBool, value)
 	}
 	if osu.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -860,6 +877,20 @@ func (osuo *OrganizationSettingUpdateOne) ClearOrganizationID() *OrganizationSet
 	return osuo
 }
 
+// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
+func (osuo *OrganizationSettingUpdateOne) SetEmailNotificationsEnabled(b bool) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetEmailNotificationsEnabled(b)
+	return osuo
+}
+
+// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingUpdateOne {
+	if b != nil {
+		osuo.SetEmailNotificationsEnabled(*b)
+	}
+	return osuo
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osuo *OrganizationSettingUpdateOne) SetOrganization(o *Organization) *OrganizationSettingUpdateOne {
 	return osuo.SetOrganizationID(o.ID)
@@ -1114,6 +1145,9 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if osuo.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsetting.FieldGeoLocation, field.TypeEnum)
+	}
+	if value, ok := osuo.mutation.EmailNotificationsEnabled(); ok {
+		_spec.SetField(organizationsetting.FieldEmailNotificationsEnabled, field.TypeBool, value)
 	}
 	if osuo.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{

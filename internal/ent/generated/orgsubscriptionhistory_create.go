@@ -292,6 +292,12 @@ func (oshc *OrgSubscriptionHistoryCreate) SetFeatures(s []string) *OrgSubscripti
 	return oshc
 }
 
+// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetFeatureLookupKeys(s []string) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetFeatureLookupKeys(s)
+	return oshc
+}
+
 // SetID sets the "id" field.
 func (oshc *OrgSubscriptionHistoryCreate) SetID(s string) *OrgSubscriptionHistoryCreate {
 	oshc.mutation.SetID(s)
@@ -509,6 +515,10 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 	if value, ok := oshc.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)
 		_node.Features = value
+	}
+	if value, ok := oshc.mutation.FeatureLookupKeys(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON, value)
+		_node.FeatureLookupKeys = value
 	}
 	return _node, _spec
 }

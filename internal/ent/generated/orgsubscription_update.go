@@ -316,6 +316,24 @@ func (osu *OrgSubscriptionUpdate) ClearFeatures() *OrgSubscriptionUpdate {
 	return osu
 }
 
+// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
+func (osu *OrgSubscriptionUpdate) SetFeatureLookupKeys(s []string) *OrgSubscriptionUpdate {
+	osu.mutation.SetFeatureLookupKeys(s)
+	return osu
+}
+
+// AppendFeatureLookupKeys appends s to the "feature_lookup_keys" field.
+func (osu *OrgSubscriptionUpdate) AppendFeatureLookupKeys(s []string) *OrgSubscriptionUpdate {
+	osu.mutation.AppendFeatureLookupKeys(s)
+	return osu
+}
+
+// ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
+func (osu *OrgSubscriptionUpdate) ClearFeatureLookupKeys() *OrgSubscriptionUpdate {
+	osu.mutation.ClearFeatureLookupKeys()
+	return osu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (osu *OrgSubscriptionUpdate) SetOwner(o *Organization) *OrgSubscriptionUpdate {
 	return osu.SetOwnerID(o.ID)
@@ -498,6 +516,17 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if osu.mutation.FeaturesCleared() {
 		_spec.ClearField(orgsubscription.FieldFeatures, field.TypeJSON)
+	}
+	if value, ok := osu.mutation.FeatureLookupKeys(); ok {
+		_spec.SetField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON, value)
+	}
+	if value, ok := osu.mutation.AppendedFeatureLookupKeys(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orgsubscription.FieldFeatureLookupKeys, value)
+		})
+	}
+	if osu.mutation.FeatureLookupKeysCleared() {
+		_spec.ClearField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON)
 	}
 	if osu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -836,6 +865,24 @@ func (osuo *OrgSubscriptionUpdateOne) ClearFeatures() *OrgSubscriptionUpdateOne 
 	return osuo
 }
 
+// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
+func (osuo *OrgSubscriptionUpdateOne) SetFeatureLookupKeys(s []string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.SetFeatureLookupKeys(s)
+	return osuo
+}
+
+// AppendFeatureLookupKeys appends s to the "feature_lookup_keys" field.
+func (osuo *OrgSubscriptionUpdateOne) AppendFeatureLookupKeys(s []string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.AppendFeatureLookupKeys(s)
+	return osuo
+}
+
+// ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
+func (osuo *OrgSubscriptionUpdateOne) ClearFeatureLookupKeys() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearFeatureLookupKeys()
+	return osuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (osuo *OrgSubscriptionUpdateOne) SetOwner(o *Organization) *OrgSubscriptionUpdateOne {
 	return osuo.SetOwnerID(o.ID)
@@ -1048,6 +1095,17 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 	}
 	if osuo.mutation.FeaturesCleared() {
 		_spec.ClearField(orgsubscription.FieldFeatures, field.TypeJSON)
+	}
+	if value, ok := osuo.mutation.FeatureLookupKeys(); ok {
+		_spec.SetField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON, value)
+	}
+	if value, ok := osuo.mutation.AppendedFeatureLookupKeys(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orgsubscription.FieldFeatureLookupKeys, value)
+		})
+	}
+	if osuo.mutation.FeatureLookupKeysCleared() {
+		_spec.ClearField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON)
 	}
 	if osuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -64072,6 +64072,8 @@ type OrgSubscriptionMutation struct {
 	expires_at                 *time.Time
 	features                   *[]string
 	appendfeatures             []string
+	feature_lookup_keys        *[]string
+	appendfeature_lookup_keys  []string
 	clearedFields              map[string]struct{}
 	owner                      *string
 	clearedowner               bool
@@ -65072,6 +65074,71 @@ func (m *OrgSubscriptionMutation) ResetFeatures() {
 	delete(m.clearedFields, orgsubscription.FieldFeatures)
 }
 
+// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
+func (m *OrgSubscriptionMutation) SetFeatureLookupKeys(s []string) {
+	m.feature_lookup_keys = &s
+	m.appendfeature_lookup_keys = nil
+}
+
+// FeatureLookupKeys returns the value of the "feature_lookup_keys" field in the mutation.
+func (m *OrgSubscriptionMutation) FeatureLookupKeys() (r []string, exists bool) {
+	v := m.feature_lookup_keys
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFeatureLookupKeys returns the old "feature_lookup_keys" field's value of the OrgSubscription entity.
+// If the OrgSubscription object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionMutation) OldFeatureLookupKeys(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFeatureLookupKeys is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFeatureLookupKeys requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFeatureLookupKeys: %w", err)
+	}
+	return oldValue.FeatureLookupKeys, nil
+}
+
+// AppendFeatureLookupKeys adds s to the "feature_lookup_keys" field.
+func (m *OrgSubscriptionMutation) AppendFeatureLookupKeys(s []string) {
+	m.appendfeature_lookup_keys = append(m.appendfeature_lookup_keys, s...)
+}
+
+// AppendedFeatureLookupKeys returns the list of values that were appended to the "feature_lookup_keys" field in this mutation.
+func (m *OrgSubscriptionMutation) AppendedFeatureLookupKeys() ([]string, bool) {
+	if len(m.appendfeature_lookup_keys) == 0 {
+		return nil, false
+	}
+	return m.appendfeature_lookup_keys, true
+}
+
+// ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
+func (m *OrgSubscriptionMutation) ClearFeatureLookupKeys() {
+	m.feature_lookup_keys = nil
+	m.appendfeature_lookup_keys = nil
+	m.clearedFields[orgsubscription.FieldFeatureLookupKeys] = struct{}{}
+}
+
+// FeatureLookupKeysCleared returns if the "feature_lookup_keys" field was cleared in this mutation.
+func (m *OrgSubscriptionMutation) FeatureLookupKeysCleared() bool {
+	_, ok := m.clearedFields[orgsubscription.FieldFeatureLookupKeys]
+	return ok
+}
+
+// ResetFeatureLookupKeys resets all changes to the "feature_lookup_keys" field.
+func (m *OrgSubscriptionMutation) ResetFeatureLookupKeys() {
+	m.feature_lookup_keys = nil
+	m.appendfeature_lookup_keys = nil
+	delete(m.clearedFields, orgsubscription.FieldFeatureLookupKeys)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *OrgSubscriptionMutation) ClearOwner() {
 	m.clearedowner = true
@@ -65133,7 +65200,7 @@ func (m *OrgSubscriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgSubscriptionMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.created_at != nil {
 		fields = append(fields, orgsubscription.FieldCreatedAt)
 	}
@@ -65188,6 +65255,9 @@ func (m *OrgSubscriptionMutation) Fields() []string {
 	if m.features != nil {
 		fields = append(fields, orgsubscription.FieldFeatures)
 	}
+	if m.feature_lookup_keys != nil {
+		fields = append(fields, orgsubscription.FieldFeatureLookupKeys)
+	}
 	return fields
 }
 
@@ -65232,6 +65302,8 @@ func (m *OrgSubscriptionMutation) Field(name string) (ent.Value, bool) {
 		return m.ExpiresAt()
 	case orgsubscription.FieldFeatures:
 		return m.Features()
+	case orgsubscription.FieldFeatureLookupKeys:
+		return m.FeatureLookupKeys()
 	}
 	return nil, false
 }
@@ -65277,6 +65349,8 @@ func (m *OrgSubscriptionMutation) OldField(ctx context.Context, name string) (en
 		return m.OldExpiresAt(ctx)
 	case orgsubscription.FieldFeatures:
 		return m.OldFeatures(ctx)
+	case orgsubscription.FieldFeatureLookupKeys:
+		return m.OldFeatureLookupKeys(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrgSubscription field %s", name)
 }
@@ -65412,6 +65486,13 @@ func (m *OrgSubscriptionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetFeatures(v)
 		return nil
+	case orgsubscription.FieldFeatureLookupKeys:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFeatureLookupKeys(v)
+		return nil
 	}
 	return fmt.Errorf("unknown OrgSubscription field %s", name)
 }
@@ -65490,6 +65571,9 @@ func (m *OrgSubscriptionMutation) ClearedFields() []string {
 	if m.FieldCleared(orgsubscription.FieldFeatures) {
 		fields = append(fields, orgsubscription.FieldFeatures)
 	}
+	if m.FieldCleared(orgsubscription.FieldFeatureLookupKeys) {
+		fields = append(fields, orgsubscription.FieldFeatureLookupKeys)
+	}
 	return fields
 }
 
@@ -65552,6 +65636,9 @@ func (m *OrgSubscriptionMutation) ClearField(name string) error {
 	case orgsubscription.FieldFeatures:
 		m.ClearFeatures()
 		return nil
+	case orgsubscription.FieldFeatureLookupKeys:
+		m.ClearFeatureLookupKeys()
+		return nil
 	}
 	return fmt.Errorf("unknown OrgSubscription nullable field %s", name)
 }
@@ -65613,6 +65700,9 @@ func (m *OrgSubscriptionMutation) ResetField(name string) error {
 		return nil
 	case orgsubscription.FieldFeatures:
 		m.ResetFeatures()
+		return nil
+	case orgsubscription.FieldFeatureLookupKeys:
+		m.ResetFeatureLookupKeys()
 		return nil
 	}
 	return fmt.Errorf("unknown OrgSubscription field %s", name)
@@ -65721,6 +65811,8 @@ type OrgSubscriptionHistoryMutation struct {
 	expires_at                 *time.Time
 	features                   *[]string
 	appendfeatures             []string
+	feature_lookup_keys        *[]string
+	appendfeature_lookup_keys  []string
 	clearedFields              map[string]struct{}
 	done                       bool
 	oldValue                   func(context.Context) (*OrgSubscriptionHistory, error)
@@ -66840,6 +66932,71 @@ func (m *OrgSubscriptionHistoryMutation) ResetFeatures() {
 	delete(m.clearedFields, orgsubscriptionhistory.FieldFeatures)
 }
 
+// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
+func (m *OrgSubscriptionHistoryMutation) SetFeatureLookupKeys(s []string) {
+	m.feature_lookup_keys = &s
+	m.appendfeature_lookup_keys = nil
+}
+
+// FeatureLookupKeys returns the value of the "feature_lookup_keys" field in the mutation.
+func (m *OrgSubscriptionHistoryMutation) FeatureLookupKeys() (r []string, exists bool) {
+	v := m.feature_lookup_keys
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFeatureLookupKeys returns the old "feature_lookup_keys" field's value of the OrgSubscriptionHistory entity.
+// If the OrgSubscriptionHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionHistoryMutation) OldFeatureLookupKeys(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFeatureLookupKeys is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFeatureLookupKeys requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFeatureLookupKeys: %w", err)
+	}
+	return oldValue.FeatureLookupKeys, nil
+}
+
+// AppendFeatureLookupKeys adds s to the "feature_lookup_keys" field.
+func (m *OrgSubscriptionHistoryMutation) AppendFeatureLookupKeys(s []string) {
+	m.appendfeature_lookup_keys = append(m.appendfeature_lookup_keys, s...)
+}
+
+// AppendedFeatureLookupKeys returns the list of values that were appended to the "feature_lookup_keys" field in this mutation.
+func (m *OrgSubscriptionHistoryMutation) AppendedFeatureLookupKeys() ([]string, bool) {
+	if len(m.appendfeature_lookup_keys) == 0 {
+		return nil, false
+	}
+	return m.appendfeature_lookup_keys, true
+}
+
+// ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
+func (m *OrgSubscriptionHistoryMutation) ClearFeatureLookupKeys() {
+	m.feature_lookup_keys = nil
+	m.appendfeature_lookup_keys = nil
+	m.clearedFields[orgsubscriptionhistory.FieldFeatureLookupKeys] = struct{}{}
+}
+
+// FeatureLookupKeysCleared returns if the "feature_lookup_keys" field was cleared in this mutation.
+func (m *OrgSubscriptionHistoryMutation) FeatureLookupKeysCleared() bool {
+	_, ok := m.clearedFields[orgsubscriptionhistory.FieldFeatureLookupKeys]
+	return ok
+}
+
+// ResetFeatureLookupKeys resets all changes to the "feature_lookup_keys" field.
+func (m *OrgSubscriptionHistoryMutation) ResetFeatureLookupKeys() {
+	m.feature_lookup_keys = nil
+	m.appendfeature_lookup_keys = nil
+	delete(m.clearedFields, orgsubscriptionhistory.FieldFeatureLookupKeys)
+}
+
 // Where appends a list predicates to the OrgSubscriptionHistoryMutation builder.
 func (m *OrgSubscriptionHistoryMutation) Where(ps ...predicate.OrgSubscriptionHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -66874,7 +67031,7 @@ func (m *OrgSubscriptionHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgSubscriptionHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.history_time != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldHistoryTime)
 	}
@@ -66938,6 +67095,9 @@ func (m *OrgSubscriptionHistoryMutation) Fields() []string {
 	if m.features != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldFeatures)
 	}
+	if m.feature_lookup_keys != nil {
+		fields = append(fields, orgsubscriptionhistory.FieldFeatureLookupKeys)
+	}
 	return fields
 }
 
@@ -66988,6 +67148,8 @@ func (m *OrgSubscriptionHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ExpiresAt()
 	case orgsubscriptionhistory.FieldFeatures:
 		return m.Features()
+	case orgsubscriptionhistory.FieldFeatureLookupKeys:
+		return m.FeatureLookupKeys()
 	}
 	return nil, false
 }
@@ -67039,6 +67201,8 @@ func (m *OrgSubscriptionHistoryMutation) OldField(ctx context.Context, name stri
 		return m.OldExpiresAt(ctx)
 	case orgsubscriptionhistory.FieldFeatures:
 		return m.OldFeatures(ctx)
+	case orgsubscriptionhistory.FieldFeatureLookupKeys:
+		return m.OldFeatureLookupKeys(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrgSubscriptionHistory field %s", name)
 }
@@ -67195,6 +67359,13 @@ func (m *OrgSubscriptionHistoryMutation) SetField(name string, value ent.Value) 
 		}
 		m.SetFeatures(v)
 		return nil
+	case orgsubscriptionhistory.FieldFeatureLookupKeys:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFeatureLookupKeys(v)
+		return nil
 	}
 	return fmt.Errorf("unknown OrgSubscriptionHistory field %s", name)
 }
@@ -67276,6 +67447,9 @@ func (m *OrgSubscriptionHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(orgsubscriptionhistory.FieldFeatures) {
 		fields = append(fields, orgsubscriptionhistory.FieldFeatures)
 	}
+	if m.FieldCleared(orgsubscriptionhistory.FieldFeatureLookupKeys) {
+		fields = append(fields, orgsubscriptionhistory.FieldFeatureLookupKeys)
+	}
 	return fields
 }
 
@@ -67340,6 +67514,9 @@ func (m *OrgSubscriptionHistoryMutation) ClearField(name string) error {
 		return nil
 	case orgsubscriptionhistory.FieldFeatures:
 		m.ClearFeatures()
+		return nil
+	case orgsubscriptionhistory.FieldFeatureLookupKeys:
+		m.ClearFeatureLookupKeys()
 		return nil
 	}
 	return fmt.Errorf("unknown OrgSubscriptionHistory nullable field %s", name)
@@ -67411,6 +67588,9 @@ func (m *OrgSubscriptionHistoryMutation) ResetField(name string) error {
 		return nil
 	case orgsubscriptionhistory.FieldFeatures:
 		m.ResetFeatures()
+		return nil
+	case orgsubscriptionhistory.FieldFeatureLookupKeys:
+		m.ResetFeatureLookupKeys()
 		return nil
 	}
 	return fmt.Errorf("unknown OrgSubscriptionHistory field %s", name)
@@ -73481,35 +73661,36 @@ func (m *OrganizationHistoryMutation) ResetEdge(name string) error {
 // OrganizationSettingMutation represents an operation that mutates the OrganizationSetting nodes in the graph.
 type OrganizationSettingMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *string
-	created_at          *time.Time
-	updated_at          *time.Time
-	created_by          *string
-	updated_by          *string
-	mapping_id          *string
-	tags                *[]string
-	appendtags          []string
-	deleted_at          *time.Time
-	deleted_by          *string
-	domains             *[]string
-	appenddomains       []string
-	billing_contact     *string
-	billing_email       *string
-	billing_phone       *string
-	billing_address     *models.Address
-	tax_identifier      *string
-	geo_location        *enums.Region
-	clearedFields       map[string]struct{}
-	organization        *string
-	clearedorganization bool
-	files               map[string]struct{}
-	removedfiles        map[string]struct{}
-	clearedfiles        bool
-	done                bool
-	oldValue            func(context.Context) (*OrganizationSetting, error)
-	predicates          []predicate.OrganizationSetting
+	op                          Op
+	typ                         string
+	id                          *string
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	created_by                  *string
+	updated_by                  *string
+	mapping_id                  *string
+	tags                        *[]string
+	appendtags                  []string
+	deleted_at                  *time.Time
+	deleted_by                  *string
+	domains                     *[]string
+	appenddomains               []string
+	billing_contact             *string
+	billing_email               *string
+	billing_phone               *string
+	billing_address             *models.Address
+	tax_identifier              *string
+	geo_location                *enums.Region
+	email_notifications_enabled *bool
+	clearedFields               map[string]struct{}
+	organization                *string
+	clearedorganization         bool
+	files                       map[string]struct{}
+	removedfiles                map[string]struct{}
+	clearedfiles                bool
+	done                        bool
+	oldValue                    func(context.Context) (*OrganizationSetting, error)
+	predicates                  []predicate.OrganizationSetting
 }
 
 var _ ent.Mutation = (*OrganizationSettingMutation)(nil)
@@ -74419,6 +74600,42 @@ func (m *OrganizationSettingMutation) ResetOrganizationID() {
 	delete(m.clearedFields, organizationsetting.FieldOrganizationID)
 }
 
+// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
+func (m *OrganizationSettingMutation) SetEmailNotificationsEnabled(b bool) {
+	m.email_notifications_enabled = &b
+}
+
+// EmailNotificationsEnabled returns the value of the "email_notifications_enabled" field in the mutation.
+func (m *OrganizationSettingMutation) EmailNotificationsEnabled() (r bool, exists bool) {
+	v := m.email_notifications_enabled
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailNotificationsEnabled returns the old "email_notifications_enabled" field's value of the OrganizationSetting entity.
+// If the OrganizationSetting object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationSettingMutation) OldEmailNotificationsEnabled(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailNotificationsEnabled is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailNotificationsEnabled requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailNotificationsEnabled: %w", err)
+	}
+	return oldValue.EmailNotificationsEnabled, nil
+}
+
+// ResetEmailNotificationsEnabled resets all changes to the "email_notifications_enabled" field.
+func (m *OrganizationSettingMutation) ResetEmailNotificationsEnabled() {
+	m.email_notifications_enabled = nil
+}
+
 // ClearOrganization clears the "organization" edge to the Organization entity.
 func (m *OrganizationSettingMutation) ClearOrganization() {
 	m.clearedorganization = true
@@ -74534,7 +74751,7 @@ func (m *OrganizationSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, organizationsetting.FieldCreatedAt)
 	}
@@ -74583,6 +74800,9 @@ func (m *OrganizationSettingMutation) Fields() []string {
 	if m.organization != nil {
 		fields = append(fields, organizationsetting.FieldOrganizationID)
 	}
+	if m.email_notifications_enabled != nil {
+		fields = append(fields, organizationsetting.FieldEmailNotificationsEnabled)
+	}
 	return fields
 }
 
@@ -74623,6 +74843,8 @@ func (m *OrganizationSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.GeoLocation()
 	case organizationsetting.FieldOrganizationID:
 		return m.OrganizationID()
+	case organizationsetting.FieldEmailNotificationsEnabled:
+		return m.EmailNotificationsEnabled()
 	}
 	return nil, false
 }
@@ -74664,6 +74886,8 @@ func (m *OrganizationSettingMutation) OldField(ctx context.Context, name string)
 		return m.OldGeoLocation(ctx)
 	case organizationsetting.FieldOrganizationID:
 		return m.OldOrganizationID(ctx)
+	case organizationsetting.FieldEmailNotificationsEnabled:
+		return m.OldEmailNotificationsEnabled(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationSetting field %s", name)
 }
@@ -74784,6 +75008,13 @@ func (m *OrganizationSettingMutation) SetField(name string, value ent.Value) err
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOrganizationID(v)
+		return nil
+	case organizationsetting.FieldEmailNotificationsEnabled:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailNotificationsEnabled(v)
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting field %s", name)
@@ -74975,6 +75206,9 @@ func (m *OrganizationSettingMutation) ResetField(name string) error {
 	case organizationsetting.FieldOrganizationID:
 		m.ResetOrganizationID()
 		return nil
+	case organizationsetting.FieldEmailNotificationsEnabled:
+		m.ResetEmailNotificationsEnabled()
+		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting field %s", name)
 }
@@ -75084,34 +75318,35 @@ func (m *OrganizationSettingMutation) ResetEdge(name string) error {
 // OrganizationSettingHistoryMutation represents an operation that mutates the OrganizationSettingHistory nodes in the graph.
 type OrganizationSettingHistoryMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *string
-	history_time    *time.Time
-	ref             *string
-	operation       *history.OpType
-	created_at      *time.Time
-	updated_at      *time.Time
-	created_by      *string
-	updated_by      *string
-	mapping_id      *string
-	tags            *[]string
-	appendtags      []string
-	deleted_at      *time.Time
-	deleted_by      *string
-	domains         *[]string
-	appenddomains   []string
-	billing_contact *string
-	billing_email   *string
-	billing_phone   *string
-	billing_address *models.Address
-	tax_identifier  *string
-	geo_location    *enums.Region
-	organization_id *string
-	clearedFields   map[string]struct{}
-	done            bool
-	oldValue        func(context.Context) (*OrganizationSettingHistory, error)
-	predicates      []predicate.OrganizationSettingHistory
+	op                          Op
+	typ                         string
+	id                          *string
+	history_time                *time.Time
+	ref                         *string
+	operation                   *history.OpType
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	created_by                  *string
+	updated_by                  *string
+	mapping_id                  *string
+	tags                        *[]string
+	appendtags                  []string
+	deleted_at                  *time.Time
+	deleted_by                  *string
+	domains                     *[]string
+	appenddomains               []string
+	billing_contact             *string
+	billing_email               *string
+	billing_phone               *string
+	billing_address             *models.Address
+	tax_identifier              *string
+	geo_location                *enums.Region
+	organization_id             *string
+	email_notifications_enabled *bool
+	clearedFields               map[string]struct{}
+	done                        bool
+	oldValue                    func(context.Context) (*OrganizationSettingHistory, error)
+	predicates                  []predicate.OrganizationSettingHistory
 }
 
 var _ ent.Mutation = (*OrganizationSettingHistoryMutation)(nil)
@@ -76142,6 +76377,42 @@ func (m *OrganizationSettingHistoryMutation) ResetOrganizationID() {
 	delete(m.clearedFields, organizationsettinghistory.FieldOrganizationID)
 }
 
+// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
+func (m *OrganizationSettingHistoryMutation) SetEmailNotificationsEnabled(b bool) {
+	m.email_notifications_enabled = &b
+}
+
+// EmailNotificationsEnabled returns the value of the "email_notifications_enabled" field in the mutation.
+func (m *OrganizationSettingHistoryMutation) EmailNotificationsEnabled() (r bool, exists bool) {
+	v := m.email_notifications_enabled
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailNotificationsEnabled returns the old "email_notifications_enabled" field's value of the OrganizationSettingHistory entity.
+// If the OrganizationSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationSettingHistoryMutation) OldEmailNotificationsEnabled(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailNotificationsEnabled is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailNotificationsEnabled requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailNotificationsEnabled: %w", err)
+	}
+	return oldValue.EmailNotificationsEnabled, nil
+}
+
+// ResetEmailNotificationsEnabled resets all changes to the "email_notifications_enabled" field.
+func (m *OrganizationSettingHistoryMutation) ResetEmailNotificationsEnabled() {
+	m.email_notifications_enabled = nil
+}
+
 // Where appends a list predicates to the OrganizationSettingHistoryMutation builder.
 func (m *OrganizationSettingHistoryMutation) Where(ps ...predicate.OrganizationSettingHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -76176,7 +76447,7 @@ func (m *OrganizationSettingHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 20)
 	if m.history_time != nil {
 		fields = append(fields, organizationsettinghistory.FieldHistoryTime)
 	}
@@ -76234,6 +76505,9 @@ func (m *OrganizationSettingHistoryMutation) Fields() []string {
 	if m.organization_id != nil {
 		fields = append(fields, organizationsettinghistory.FieldOrganizationID)
 	}
+	if m.email_notifications_enabled != nil {
+		fields = append(fields, organizationsettinghistory.FieldEmailNotificationsEnabled)
+	}
 	return fields
 }
 
@@ -76280,6 +76554,8 @@ func (m *OrganizationSettingHistoryMutation) Field(name string) (ent.Value, bool
 		return m.GeoLocation()
 	case organizationsettinghistory.FieldOrganizationID:
 		return m.OrganizationID()
+	case organizationsettinghistory.FieldEmailNotificationsEnabled:
+		return m.EmailNotificationsEnabled()
 	}
 	return nil, false
 }
@@ -76327,6 +76603,8 @@ func (m *OrganizationSettingHistoryMutation) OldField(ctx context.Context, name 
 		return m.OldGeoLocation(ctx)
 	case organizationsettinghistory.FieldOrganizationID:
 		return m.OldOrganizationID(ctx)
+	case organizationsettinghistory.FieldEmailNotificationsEnabled:
+		return m.OldEmailNotificationsEnabled(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationSettingHistory field %s", name)
 }
@@ -76468,6 +76746,13 @@ func (m *OrganizationSettingHistoryMutation) SetField(name string, value ent.Val
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOrganizationID(v)
+		return nil
+	case organizationsettinghistory.FieldEmailNotificationsEnabled:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailNotificationsEnabled(v)
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory field %s", name)
@@ -76673,6 +76958,9 @@ func (m *OrganizationSettingHistoryMutation) ResetField(name string) error {
 		return nil
 	case organizationsettinghistory.FieldOrganizationID:
 		m.ResetOrganizationID()
+		return nil
+	case organizationsettinghistory.FieldEmailNotificationsEnabled:
+		m.ResetEmailNotificationsEnabled()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory field %s", name)

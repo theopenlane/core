@@ -4426,6 +4426,10 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetFeatures(features)
 	}
 
+	if featureLookupKeys, exists := m.FeatureLookupKeys(); exists {
+		create = create.SetFeatureLookupKeys(featureLookupKeys)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4564,6 +4568,12 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetFeatures(orgsubscription.Features)
 		}
 
+		if featureLookupKeys, exists := m.FeatureLookupKeys(); exists {
+			create = create.SetFeatureLookupKeys(featureLookupKeys)
+		} else {
+			create = create.SetFeatureLookupKeys(orgsubscription.FeatureLookupKeys)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4614,6 +4624,7 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetStripeCustomerID(orgsubscription.StripeCustomerID).
 			SetNillableExpiresAt(orgsubscription.ExpiresAt).
 			SetFeatures(orgsubscription.Features).
+			SetFeatureLookupKeys(orgsubscription.FeatureLookupKeys).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4953,6 +4964,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetOrganizationID(organizationID)
 	}
 
+	if emailNotificationsEnabled, exists := m.EmailNotificationsEnabled(); exists {
+		create = create.SetEmailNotificationsEnabled(emailNotificationsEnabled)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5079,6 +5094,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetOrganizationID(organizationsetting.OrganizationID)
 		}
 
+		if emailNotificationsEnabled, exists := m.EmailNotificationsEnabled(); exists {
+			create = create.SetEmailNotificationsEnabled(emailNotificationsEnabled)
+		} else {
+			create = create.SetEmailNotificationsEnabled(organizationsetting.EmailNotificationsEnabled)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5127,6 +5148,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetTaxIdentifier(organizationsetting.TaxIdentifier).
 			SetGeoLocation(organizationsetting.GeoLocation).
 			SetOrganizationID(organizationsetting.OrganizationID).
+			SetEmailNotificationsEnabled(organizationsetting.EmailNotificationsEnabled).
 			Save(ctx)
 		if err != nil {
 			return err

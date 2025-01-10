@@ -56,6 +56,8 @@ type OrgSubscription struct {
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
+	// the features associated with the subscription
+	FeatureLookupKeys []string `json:"feature_lookup_keys,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrgSubscriptionQuery when eager-loading is set.
 	Edges        OrgSubscriptionEdges `json:"edges"`
@@ -91,7 +93,7 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orgsubscription.FieldTags, orgsubscription.FieldProductPrice, orgsubscription.FieldFeatures:
+		case orgsubscription.FieldTags, orgsubscription.FieldProductPrice, orgsubscription.FieldFeatures, orgsubscription.FieldFeatureLookupKeys:
 			values[i] = new([]byte)
 		case orgsubscription.FieldActive:
 			values[i] = new(sql.NullBool)
@@ -235,6 +237,14 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field features: %w", err)
 				}
 			}
+		case orgsubscription.FieldFeatureLookupKeys:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field feature_lookup_keys", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &os.FeatureLookupKeys); err != nil {
+					return fmt.Errorf("unmarshal field feature_lookup_keys: %w", err)
+				}
+			}
 		default:
 			os.selectValues.Set(columns[i], values[i])
 		}
@@ -331,6 +341,9 @@ func (os *OrgSubscription) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("features=")
 	builder.WriteString(fmt.Sprintf("%v", os.Features))
+	builder.WriteString(", ")
+	builder.WriteString("feature_lookup_keys=")
+	builder.WriteString(fmt.Sprintf("%v", os.FeatureLookupKeys))
 	builder.WriteByte(')')
 	return builder.String()
 }

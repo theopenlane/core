@@ -37516,6 +37516,10 @@ type OrganizationSettingWhereInput struct {
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 
+	// "email_notifications_enabled" field predicates.
+	EmailNotificationsEnabled    *bool `json:"emailNotificationsEnabled,omitempty"`
+	EmailNotificationsEnabledNEQ *bool `json:"emailNotificationsEnabledNEQ,omitempty"`
+
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -38094,6 +38098,12 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.OrganizationIDContainsFold != nil {
 		predicates = append(predicates, organizationsetting.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
 	}
+	if i.EmailNotificationsEnabled != nil {
+		predicates = append(predicates, organizationsetting.EmailNotificationsEnabledEQ(*i.EmailNotificationsEnabled))
+	}
+	if i.EmailNotificationsEnabledNEQ != nil {
+		predicates = append(predicates, organizationsetting.EmailNotificationsEnabledNEQ(*i.EmailNotificationsEnabledNEQ))
+	}
 
 	if i.HasOrganization != nil {
 		p := organizationsetting.HasOrganization()
@@ -38372,6 +38382,10 @@ type OrganizationSettingHistoryWhereInput struct {
 	OrganizationIDNotNil       bool     `json:"organizationIDNotNil,omitempty"`
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+
+	// "email_notifications_enabled" field predicates.
+	EmailNotificationsEnabled    *bool `json:"emailNotificationsEnabled,omitempty"`
+	EmailNotificationsEnabledNEQ *bool `json:"emailNotificationsEnabledNEQ,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39023,6 +39037,12 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	}
 	if i.OrganizationIDContainsFold != nil {
 		predicates = append(predicates, organizationsettinghistory.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
+	}
+	if i.EmailNotificationsEnabled != nil {
+		predicates = append(predicates, organizationsettinghistory.EmailNotificationsEnabledEQ(*i.EmailNotificationsEnabled))
+	}
+	if i.EmailNotificationsEnabledNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.EmailNotificationsEnabledNEQ(*i.EmailNotificationsEnabledNEQ))
 	}
 
 	switch len(predicates) {

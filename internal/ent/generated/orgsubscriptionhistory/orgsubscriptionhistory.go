@@ -58,6 +58,8 @@ const (
 	FieldExpiresAt = "expires_at"
 	// FieldFeatures holds the string denoting the features field in the database.
 	FieldFeatures = "features"
+	// FieldFeatureLookupKeys holds the string denoting the feature_lookup_keys field in the database.
+	FieldFeatureLookupKeys = "feature_lookup_keys"
 	// Table holds the table name of the orgsubscriptionhistory in the database.
 	Table = "org_subscription_history"
 )
@@ -86,6 +88,7 @@ var Columns = []string{
 	FieldStripeCustomerID,
 	FieldExpiresAt,
 	FieldFeatures,
+	FieldFeatureLookupKeys,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

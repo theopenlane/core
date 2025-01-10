@@ -4764,16 +4764,17 @@ func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *Organizatio
 
 // CreateOrganizationSettingInput represents a mutation input for creating organizationsettings.
 type CreateOrganizationSettingInput struct {
-	Tags           []string
-	Domains        []string
-	BillingContact *string
-	BillingEmail   *string
-	BillingPhone   *string
-	BillingAddress *models.Address
-	TaxIdentifier  *string
-	GeoLocation    *enums.Region
-	OrganizationID *string
-	FileIDs        []string
+	Tags                      []string
+	Domains                   []string
+	BillingContact            *string
+	BillingEmail              *string
+	BillingPhone              *string
+	BillingAddress            *models.Address
+	TaxIdentifier             *string
+	GeoLocation               *enums.Region
+	EmailNotificationsEnabled *bool
+	OrganizationID            *string
+	FileIDs                   []string
 }
 
 // Mutate applies the CreateOrganizationSettingInput on the OrganizationSettingMutation builder.
@@ -4802,6 +4803,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.GeoLocation; v != nil {
 		m.SetGeoLocation(*v)
 	}
+	if v := i.EmailNotificationsEnabled; v != nil {
+		m.SetEmailNotificationsEnabled(*v)
+	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
 	}
@@ -4818,29 +4822,30 @@ func (c *OrganizationSettingCreate) SetInput(i CreateOrganizationSettingInput) *
 
 // UpdateOrganizationSettingInput represents a mutation input for updating organizationsettings.
 type UpdateOrganizationSettingInput struct {
-	ClearTags           bool
-	Tags                []string
-	AppendTags          []string
-	ClearDomains        bool
-	Domains             []string
-	AppendDomains       []string
-	ClearBillingContact bool
-	BillingContact      *string
-	ClearBillingEmail   bool
-	BillingEmail        *string
-	ClearBillingPhone   bool
-	BillingPhone        *string
-	ClearBillingAddress bool
-	BillingAddress      *models.Address
-	ClearTaxIdentifier  bool
-	TaxIdentifier       *string
-	ClearGeoLocation    bool
-	GeoLocation         *enums.Region
-	ClearOrganization   bool
-	OrganizationID      *string
-	ClearFiles          bool
-	AddFileIDs          []string
-	RemoveFileIDs       []string
+	ClearTags                 bool
+	Tags                      []string
+	AppendTags                []string
+	ClearDomains              bool
+	Domains                   []string
+	AppendDomains             []string
+	ClearBillingContact       bool
+	BillingContact            *string
+	ClearBillingEmail         bool
+	BillingEmail              *string
+	ClearBillingPhone         bool
+	BillingPhone              *string
+	ClearBillingAddress       bool
+	BillingAddress            *models.Address
+	ClearTaxIdentifier        bool
+	TaxIdentifier             *string
+	ClearGeoLocation          bool
+	GeoLocation               *enums.Region
+	EmailNotificationsEnabled *bool
+	ClearOrganization         bool
+	OrganizationID            *string
+	ClearFiles                bool
+	AddFileIDs                []string
+	RemoveFileIDs             []string
 }
 
 // Mutate applies the UpdateOrganizationSettingInput on the OrganizationSettingMutation builder.
@@ -4898,6 +4903,9 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.GeoLocation; v != nil {
 		m.SetGeoLocation(*v)
+	}
+	if v := i.EmailNotificationsEnabled; v != nil {
+		m.SetEmailNotificationsEnabled(*v)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()

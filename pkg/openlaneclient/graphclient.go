@@ -2533,6 +2533,7 @@ func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult) GetNarratives() []
 
 type AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions struct {
 	DeletedBy                *string       "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
 	OwnerID                  *string       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -2550,6 +2551,12 @@ func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscripti
 		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
 	}
 	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetFeatureLookupKeys() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions{}
+	}
+	return t.FeatureLookupKeys
 }
 func (t *AdminSearch_AdminSearch_Nodes_OrgSubscriptionSearchResult_OrgSubscriptions) GetFeatures() []string {
 	if t == nil {
@@ -48671,6 +48678,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					stripeSubscriptionStatus
 					stripeCustomerID
 					features
+					featureLookupKeys
 				}
 			}
 			... on OrganizationSearchResult {

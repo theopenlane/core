@@ -50,6 +50,9 @@ func (OrgSubscription) Fields() []ent.Field {
 		field.JSON("features", []string{}).
 			Comment("the features associated with the subscription").
 			Optional(),
+		field.JSON("feature_lookup_keys", []string{}).
+			Comment("the features associated with the subscription").
+			Optional(),
 	}
 }
 

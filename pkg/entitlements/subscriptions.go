@@ -141,7 +141,7 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) 
 	}, nil
 }
 
-func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string, error) {
+func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string, []string, error) {
 	params := &stripe.EntitlementsActiveEntitlementListParams{
 		Customer: stripe.String(customerID),
 		Expand:   []*string{stripe.String("data.feature")},
@@ -150,15 +150,17 @@ func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string,
 	iter := sc.Client.EntitlementsActiveEntitlements.List(params)
 
 	if !iter.Next() {
-		return nil, iter.Err()
+		return nil, nil, iter.Err()
 	}
 
 	feat := []string{}
+	featNames := []string{}
 	for iter.Next() {
 		feat = append(feat, iter.EntitlementsActiveEntitlement().LookupKey)
+		featNames = append(featNames, iter.EntitlementsActiveEntitlement().Feature.Name)
 	}
 
-	return feat, nil
+	return feat, featNames, nil
 }
 
 // mapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct

@@ -258,6 +258,12 @@ func (osc *OrgSubscriptionCreate) SetFeatures(s []string) *OrgSubscriptionCreate
 	return osc
 }
 
+// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
+func (osc *OrgSubscriptionCreate) SetFeatureLookupKeys(s []string) *OrgSubscriptionCreate {
+	osc.mutation.SetFeatureLookupKeys(s)
+	return osc
+}
+
 // SetID sets the "id" field.
 func (osc *OrgSubscriptionCreate) SetID(s string) *OrgSubscriptionCreate {
 	osc.mutation.SetID(s)
@@ -469,6 +475,10 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 	if value, ok := osc.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 		_node.Features = value
+	}
+	if value, ok := osc.mutation.FeatureLookupKeys(); ok {
+		_spec.SetField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON, value)
+		_node.FeatureLookupKeys = value
 	}
 	if nodes := osc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

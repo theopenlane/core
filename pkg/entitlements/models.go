@@ -14,6 +14,7 @@ type OrganizationCustomer struct {
 	StripeCustomerID       string `json:"stripe_customer_id"`
 	OrganizationName       string `json:"organization_name"`
 	Features               []string
+	FeatureNames           []string
 	Subscription
 	ContactInfo
 }

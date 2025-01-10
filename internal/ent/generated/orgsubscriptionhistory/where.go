@@ -1265,6 +1265,16 @@ func FeaturesNotNil() predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldFeatures))
 }
 
+// FeatureLookupKeysIsNil applies the IsNil predicate on the "feature_lookup_keys" field.
+func FeatureLookupKeysIsNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldFeatureLookupKeys))
+}
+
+// FeatureLookupKeysNotNil applies the NotNil predicate on the "feature_lookup_keys" field.
+func FeatureLookupKeysNotNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldFeatureLookupKeys))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.OrgSubscriptionHistory) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.AndPredicates(predicates...))

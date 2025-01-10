@@ -232,6 +232,20 @@ func (osc *OrganizationSettingCreate) SetNillableOrganizationID(s *string) *Orga
 	return osc
 }
 
+// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
+func (osc *OrganizationSettingCreate) SetEmailNotificationsEnabled(b bool) *OrganizationSettingCreate {
+	osc.mutation.SetEmailNotificationsEnabled(b)
+	return osc
+}
+
+// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingCreate {
+	if b != nil {
+		osc.SetEmailNotificationsEnabled(*b)
+	}
+	return osc
+}
+
 // SetID sets the "id" field.
 func (osc *OrganizationSettingCreate) SetID(s string) *OrganizationSettingCreate {
 	osc.mutation.SetID(s)
@@ -332,6 +346,10 @@ func (osc *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultGeoLocation
 		osc.mutation.SetGeoLocation(v)
 	}
+	if _, ok := osc.mutation.EmailNotificationsEnabled(); !ok {
+		v := organizationsetting.DefaultEmailNotificationsEnabled
+		osc.mutation.SetEmailNotificationsEnabled(v)
+	}
 	if _, ok := osc.mutation.ID(); !ok {
 		if organizationsetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organizationsetting.DefaultID (forgotten import generated/runtime?)")
@@ -366,6 +384,9 @@ func (osc *OrganizationSettingCreate) check() error {
 		if err := organizationsetting.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.geo_location": %w`, err)}
 		}
+	}
+	if _, ok := osc.mutation.EmailNotificationsEnabled(); !ok {
+		return &ValidationError{Name: "email_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSetting.email_notifications_enabled"`)}
 	}
 	return nil
 }
@@ -462,6 +483,10 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	if value, ok := osc.mutation.GeoLocation(); ok {
 		_spec.SetField(organizationsetting.FieldGeoLocation, field.TypeEnum, value)
 		_node.GeoLocation = value
+	}
+	if value, ok := osc.mutation.EmailNotificationsEnabled(); ok {
+		_spec.SetField(organizationsetting.FieldEmailNotificationsEnabled, field.TypeBool, value)
+		_node.EmailNotificationsEnabled = value
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

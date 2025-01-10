@@ -1851,6 +1851,7 @@ type ComplexityRoot struct {
 		DeletedAt                func(childComplexity int) int
 		DeletedBy                func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
+		FeatureLookupKeys        func(childComplexity int) int
 		Features                 func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		Owner                    func(childComplexity int) int
@@ -1885,6 +1886,7 @@ type ComplexityRoot struct {
 		DeletedAt                func(childComplexity int) int
 		DeletedBy                func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
+		FeatureLookupKeys        func(childComplexity int) int
 		Features                 func(childComplexity int) int
 		HistoryTime              func(childComplexity int) int
 		ID                       func(childComplexity int) int
@@ -2032,24 +2034,25 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSetting struct {
-		BillingAddress func(childComplexity int) int
-		BillingContact func(childComplexity int) int
-		BillingEmail   func(childComplexity int) int
-		BillingPhone   func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedBy      func(childComplexity int) int
-		Domains        func(childComplexity int) int
-		Files          func(childComplexity int) int
-		GeoLocation    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Organization   func(childComplexity int) int
-		OrganizationID func(childComplexity int) int
-		Tags           func(childComplexity int) int
-		TaxIdentifier  func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		BillingAddress            func(childComplexity int) int
+		BillingContact            func(childComplexity int) int
+		BillingEmail              func(childComplexity int) int
+		BillingPhone              func(childComplexity int) int
+		CreatedAt                 func(childComplexity int) int
+		CreatedBy                 func(childComplexity int) int
+		DeletedAt                 func(childComplexity int) int
+		DeletedBy                 func(childComplexity int) int
+		Domains                   func(childComplexity int) int
+		EmailNotificationsEnabled func(childComplexity int) int
+		Files                     func(childComplexity int) int
+		GeoLocation               func(childComplexity int) int
+		ID                        func(childComplexity int) int
+		Organization              func(childComplexity int) int
+		OrganizationID            func(childComplexity int) int
+		Tags                      func(childComplexity int) int
+		TaxIdentifier             func(childComplexity int) int
+		UpdatedAt                 func(childComplexity int) int
+		UpdatedBy                 func(childComplexity int) int
 	}
 
 	OrganizationSettingBulkCreatePayload struct {
@@ -2076,25 +2079,26 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSettingHistory struct {
-		BillingAddress func(childComplexity int) int
-		BillingContact func(childComplexity int) int
-		BillingEmail   func(childComplexity int) int
-		BillingPhone   func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedBy      func(childComplexity int) int
-		Domains        func(childComplexity int) int
-		GeoLocation    func(childComplexity int) int
-		HistoryTime    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Operation      func(childComplexity int) int
-		OrganizationID func(childComplexity int) int
-		Ref            func(childComplexity int) int
-		Tags           func(childComplexity int) int
-		TaxIdentifier  func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		BillingAddress            func(childComplexity int) int
+		BillingContact            func(childComplexity int) int
+		BillingEmail              func(childComplexity int) int
+		BillingPhone              func(childComplexity int) int
+		CreatedAt                 func(childComplexity int) int
+		CreatedBy                 func(childComplexity int) int
+		DeletedAt                 func(childComplexity int) int
+		DeletedBy                 func(childComplexity int) int
+		Domains                   func(childComplexity int) int
+		EmailNotificationsEnabled func(childComplexity int) int
+		GeoLocation               func(childComplexity int) int
+		HistoryTime               func(childComplexity int) int
+		ID                        func(childComplexity int) int
+		Operation                 func(childComplexity int) int
+		OrganizationID            func(childComplexity int) int
+		Ref                       func(childComplexity int) int
+		Tags                      func(childComplexity int) int
+		TaxIdentifier             func(childComplexity int) int
+		UpdatedAt                 func(childComplexity int) int
+		UpdatedBy                 func(childComplexity int) int
 	}
 
 	OrganizationSettingHistoryConnection struct {
@@ -12469,6 +12473,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.ExpiresAt(childComplexity), true
 
+	case "OrgSubscription.featureLookupKeys":
+		if e.complexity.OrgSubscription.FeatureLookupKeys == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.FeatureLookupKeys(childComplexity), true
+
 	case "OrgSubscription.features":
 		if e.complexity.OrgSubscription.Features == nil {
 			break
@@ -12643,6 +12654,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscriptionHistory.ExpiresAt(childComplexity), true
+
+	case "OrgSubscriptionHistory.featureLookupKeys":
+		if e.complexity.OrgSubscriptionHistory.FeatureLookupKeys == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.FeatureLookupKeys(childComplexity), true
 
 	case "OrgSubscriptionHistory.features":
 		if e.complexity.OrgSubscriptionHistory.Features == nil {
@@ -13447,6 +13465,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrganizationSetting.Domains(childComplexity), true
 
+	case "OrganizationSetting.emailNotificationsEnabled":
+		if e.complexity.OrganizationSetting.EmailNotificationsEnabled == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.EmailNotificationsEnabled(childComplexity), true
+
 	case "OrganizationSetting.files":
 		if e.complexity.OrganizationSetting.Files == nil {
 			break
@@ -13628,6 +13653,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrganizationSettingHistory.Domains(childComplexity), true
+
+	case "OrganizationSettingHistory.emailNotificationsEnabled":
+		if e.complexity.OrganizationSettingHistory.EmailNotificationsEnabled == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.EmailNotificationsEnabled(childComplexity), true
 
 	case "OrganizationSettingHistory.geoLocation":
 		if e.complexity.OrganizationSettingHistory.GeoLocation == nil {
@@ -26106,6 +26138,10 @@ input CreateOrganizationSettingInput {
   geographical location of the organization
   """
   geoLocation: OrganizationSettingRegion
+  """
+  should we send email notifications
+  """
+  emailNotificationsEnabled: Boolean
   organizationID: ID
   fileIDs: [ID!]
 }
@@ -35252,6 +35288,10 @@ type OrgSubscription implements Node {
   the features associated with the subscription
   """
   features: [String!]
+  """
+  the features associated with the subscription
+  """
+  featureLookupKeys: [String!]
   owner: Organization
 }
 """
@@ -35339,6 +35379,10 @@ type OrgSubscriptionHistory implements Node {
   the features associated with the subscription
   """
   features: [String!]
+  """
+  the features associated with the subscription
+  """
+  featureLookupKeys: [String!]
 }
 """
 A connection to a list of items.
@@ -36436,6 +36480,10 @@ type OrganizationSetting implements Node {
   the ID of the organization the settings belong to
   """
   organizationID: ID
+  """
+  should we send email notifications
+  """
+  emailNotificationsEnabled: Boolean!
   organization: Organization
   files: [File!]
 }
@@ -36516,6 +36564,10 @@ type OrganizationSettingHistory implements Node {
   the ID of the organization the settings belong to
   """
   organizationID: String
+  """
+  should we send email notifications
+  """
+  emailNotificationsEnabled: Boolean!
 }
 """
 A connection to a list of items.
@@ -36812,6 +36864,11 @@ input OrganizationSettingHistoryWhereInput {
   organizationIDNotNil: Boolean
   organizationIDEqualFold: String
   organizationIDContainsFold: String
+  """
+  email_notifications_enabled field predicates
+  """
+  emailNotificationsEnabled: Boolean
+  emailNotificationsEnabledNEQ: Boolean
 }
 """
 OrganizationSettingRegion is enum for the field geo_location
@@ -37034,6 +37091,11 @@ input OrganizationSettingWhereInput {
   organizationIDNotNil: Boolean
   organizationIDEqualFold: ID
   organizationIDContainsFold: ID
+  """
+  email_notifications_enabled field predicates
+  """
+  emailNotificationsEnabled: Boolean
+  emailNotificationsEnabledNEQ: Boolean
   """
   organization edge predicates
   """
@@ -47186,6 +47248,10 @@ input UpdateOrganizationSettingInput {
   """
   geoLocation: OrganizationSettingRegion
   clearGeoLocation: Boolean
+  """
+  should we send email notifications
+  """
+  emailNotificationsEnabled: Boolean
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]

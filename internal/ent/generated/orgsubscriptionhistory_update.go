@@ -315,6 +315,24 @@ func (oshu *OrgSubscriptionHistoryUpdate) ClearFeatures() *OrgSubscriptionHistor
 	return oshu
 }
 
+// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
+func (oshu *OrgSubscriptionHistoryUpdate) SetFeatureLookupKeys(s []string) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.SetFeatureLookupKeys(s)
+	return oshu
+}
+
+// AppendFeatureLookupKeys appends s to the "feature_lookup_keys" field.
+func (oshu *OrgSubscriptionHistoryUpdate) AppendFeatureLookupKeys(s []string) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.AppendFeatureLookupKeys(s)
+	return oshu
+}
+
+// ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
+func (oshu *OrgSubscriptionHistoryUpdate) ClearFeatureLookupKeys() *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.ClearFeatureLookupKeys()
+	return oshu
+}
+
 // Mutation returns the OrgSubscriptionHistoryMutation object of the builder.
 func (oshu *OrgSubscriptionHistoryUpdate) Mutation() *OrgSubscriptionHistoryMutation {
 	return oshu.mutation
@@ -476,6 +494,17 @@ func (oshu *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if oshu.mutation.FeaturesCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON)
+	}
+	if value, ok := oshu.mutation.FeatureLookupKeys(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON, value)
+	}
+	if value, ok := oshu.mutation.AppendedFeatureLookupKeys(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orgsubscriptionhistory.FieldFeatureLookupKeys, value)
+		})
+	}
+	if oshu.mutation.FeatureLookupKeysCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON)
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrgSubscriptionHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
@@ -783,6 +812,24 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearFeatures() *OrgSubscriptionHi
 	return oshuo
 }
 
+// SetFeatureLookupKeys sets the "feature_lookup_keys" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetFeatureLookupKeys(s []string) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.SetFeatureLookupKeys(s)
+	return oshuo
+}
+
+// AppendFeatureLookupKeys appends s to the "feature_lookup_keys" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) AppendFeatureLookupKeys(s []string) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.AppendFeatureLookupKeys(s)
+	return oshuo
+}
+
+// ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearFeatureLookupKeys() *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.ClearFeatureLookupKeys()
+	return oshuo
+}
+
 // Mutation returns the OrgSubscriptionHistoryMutation object of the builder.
 func (oshuo *OrgSubscriptionHistoryUpdateOne) Mutation() *OrgSubscriptionHistoryMutation {
 	return oshuo.mutation
@@ -974,6 +1021,17 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if oshuo.mutation.FeaturesCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON)
+	}
+	if value, ok := oshuo.mutation.FeatureLookupKeys(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON, value)
+	}
+	if value, ok := oshuo.mutation.AppendedFeatureLookupKeys(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, orgsubscriptionhistory.FieldFeatureLookupKeys, value)
+		})
+	}
+	if oshuo.mutation.FeatureLookupKeysCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON)
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrgSubscriptionHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)

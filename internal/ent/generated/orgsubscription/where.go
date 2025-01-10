@@ -1122,6 +1122,16 @@ func FeaturesNotNil() predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldNotNull(FieldFeatures))
 }
 
+// FeatureLookupKeysIsNil applies the IsNil predicate on the "feature_lookup_keys" field.
+func FeatureLookupKeysIsNil() predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldIsNull(FieldFeatureLookupKeys))
+}
+
+// FeatureLookupKeysNotNil applies the NotNil predicate on the "feature_lookup_keys" field.
+func FeatureLookupKeysNotNil() predicate.OrgSubscription {
+	return predicate.OrgSubscription(sql.FieldNotNull(FieldFeatureLookupKeys))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.OrgSubscription {
 	return predicate.OrgSubscription(func(s *sql.Selector) {

@@ -282,6 +282,20 @@ func (oshu *OrganizationSettingHistoryUpdate) ClearOrganizationID() *Organizatio
 	return oshu
 }
 
+// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetEmailNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetEmailNotificationsEnabled(b)
+	return oshu
+}
+
+// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdate {
+	if b != nil {
+		oshu.SetEmailNotificationsEnabled(*b)
+	}
+	return oshu
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshu *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
 	return oshu.mutation
@@ -453,6 +467,9 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if oshu.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
+	}
+	if value, ok := oshu.mutation.EmailNotificationsEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldEmailNotificationsEnabled, field.TypeBool, value)
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
@@ -726,6 +743,20 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) ClearOrganizationID() *Organiz
 	return oshuo
 }
 
+// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetEmailNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetEmailNotificationsEnabled(b)
+	return oshuo
+}
+
+// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdateOne {
+	if b != nil {
+		oshuo.SetEmailNotificationsEnabled(*b)
+	}
+	return oshuo
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshuo *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
 	return oshuo.mutation
@@ -927,6 +958,9 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if oshuo.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.EmailNotificationsEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldEmailNotificationsEnabled, field.TypeBool, value)
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)

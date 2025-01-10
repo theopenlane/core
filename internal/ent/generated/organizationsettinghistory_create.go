@@ -265,6 +265,20 @@ func (oshc *OrganizationSettingHistoryCreate) SetNillableOrganizationID(s *strin
 	return oshc
 }
 
+// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
+func (oshc *OrganizationSettingHistoryCreate) SetEmailNotificationsEnabled(b bool) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetEmailNotificationsEnabled(b)
+	return oshc
+}
+
+// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingHistoryCreate {
+	if b != nil {
+		oshc.SetEmailNotificationsEnabled(*b)
+	}
+	return oshc
+}
+
 // SetID sets the "id" field.
 func (oshc *OrganizationSettingHistoryCreate) SetID(s string) *OrganizationSettingHistoryCreate {
 	oshc.mutation.SetID(s)
@@ -352,6 +366,10 @@ func (oshc *OrganizationSettingHistoryCreate) defaults() error {
 		v := organizationsettinghistory.DefaultGeoLocation
 		oshc.mutation.SetGeoLocation(v)
 	}
+	if _, ok := oshc.mutation.EmailNotificationsEnabled(); !ok {
+		v := organizationsettinghistory.DefaultEmailNotificationsEnabled
+		oshc.mutation.SetEmailNotificationsEnabled(v)
+	}
 	if _, ok := oshc.mutation.ID(); !ok {
 		if organizationsettinghistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultID (forgotten import generated/runtime?)")
@@ -382,6 +400,9 @@ func (oshc *OrganizationSettingHistoryCreate) check() error {
 		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
 		}
+	}
+	if _, ok := oshc.mutation.EmailNotificationsEnabled(); !ok {
+		return &ValidationError{Name: "email_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSettingHistory.email_notifications_enabled"`)}
 	}
 	return nil
 }
@@ -494,6 +515,10 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 	if value, ok := oshc.mutation.OrganizationID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
 		_node.OrganizationID = value
+	}
+	if value, ok := oshc.mutation.EmailNotificationsEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldEmailNotificationsEnabled, field.TypeBool, value)
+		_node.EmailNotificationsEnabled = value
 	}
 	return _node, _spec
 }
