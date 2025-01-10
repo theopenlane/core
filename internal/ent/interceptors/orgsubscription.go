@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -20,12 +19,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 				return nil, err
 			}
 
-			// get the fields that were queried and check for the SubscriptionURL field
-			// skip if there isn't a graphql context
-			if ok := graphql.HasOperationContext(ctx); !ok {
-				return v, nil
-			}
-
+			// get the fields that were queried and check for the subscriptionURL field
 			fields := utils.CheckForRequestedField(ctx, "subscriptionURL")
 
 			// if the SubscriptionURL field wasn't queried, return the result as is

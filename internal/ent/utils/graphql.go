@@ -27,6 +27,11 @@ func CheckForRequestedField(ctx context.Context, fieldName string) bool {
 
 // GetPreloads returns the preloads for the current graphql operation
 func GetPreloads(ctx context.Context) []string {
+	// skip if the context is not a graphql operation context
+	if ok := graphql.HasOperationContext(ctx); !ok {
+		return nil
+	}
+
 	gCtx := graphql.GetOperationContext(ctx)
 	if gCtx == nil {
 		return nil
