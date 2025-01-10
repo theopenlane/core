@@ -92,7 +92,7 @@ type Plan struct {
 	Status             string
 }
 
-// Plan is the recurring context that holds the payment information
+// Subscription is the recurring context that holds the payment information
 type Subscription struct {
 	ID                 string `json:"plan_id" yaml:"plan_id"`
 	Product            string `json:"product_id" yaml:"product_id"`

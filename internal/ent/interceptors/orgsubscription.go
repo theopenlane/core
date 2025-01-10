@@ -20,6 +20,11 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			}
 
 			// get the fields that were queried and check for the SubscriptionURL field
+			// skip if there isn't a graphql context
+			if ok := graphql.HasOperationContext(ctx); !ok {
+				return v, nil
+			}
+
 			fields := graphql.CollectFieldsCtx(ctx, []string{"SubscriptionURL"})
 
 			// if the SubscriptionURL field wasn't queried, return the result as is
