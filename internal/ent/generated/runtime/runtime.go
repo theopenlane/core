@@ -2463,10 +2463,10 @@ func init() {
 	organizationsettingDescBillingPhone := organizationsettingFields[3].Descriptor()
 	// organizationsetting.BillingPhoneValidator is a validator for the "billing_phone" field. It is called by the builders before save.
 	organizationsetting.BillingPhoneValidator = organizationsettingDescBillingPhone.Validators[0].(func(string) error)
-	// organizationsettingDescEmailNotificationsEnabled is the schema descriptor for email_notifications_enabled field.
-	organizationsettingDescEmailNotificationsEnabled := organizationsettingFields[8].Descriptor()
-	// organizationsetting.DefaultEmailNotificationsEnabled holds the default value on creation for the email_notifications_enabled field.
-	organizationsetting.DefaultEmailNotificationsEnabled = organizationsettingDescEmailNotificationsEnabled.Default.(bool)
+	// organizationsettingDescBillingNotificationsEnabled is the schema descriptor for billing_notifications_enabled field.
+	organizationsettingDescBillingNotificationsEnabled := organizationsettingFields[8].Descriptor()
+	// organizationsetting.DefaultBillingNotificationsEnabled holds the default value on creation for the billing_notifications_enabled field.
+	organizationsetting.DefaultBillingNotificationsEnabled = organizationsettingDescBillingNotificationsEnabled.Default.(bool)
 	// organizationsettingDescID is the schema descriptor for id field.
 	organizationsettingDescID := organizationsettingMixinFields1[0].Descriptor()
 	// organizationsetting.DefaultID holds the default value on creation for the id field.
@@ -2506,10 +2506,10 @@ func init() {
 	organizationsettinghistoryDescTags := organizationsettinghistoryFields[9].Descriptor()
 	// organizationsettinghistory.DefaultTags holds the default value on creation for the tags field.
 	organizationsettinghistory.DefaultTags = organizationsettinghistoryDescTags.Default.([]string)
-	// organizationsettinghistoryDescEmailNotificationsEnabled is the schema descriptor for email_notifications_enabled field.
-	organizationsettinghistoryDescEmailNotificationsEnabled := organizationsettinghistoryFields[20].Descriptor()
-	// organizationsettinghistory.DefaultEmailNotificationsEnabled holds the default value on creation for the email_notifications_enabled field.
-	organizationsettinghistory.DefaultEmailNotificationsEnabled = organizationsettinghistoryDescEmailNotificationsEnabled.Default.(bool)
+	// organizationsettinghistoryDescBillingNotificationsEnabled is the schema descriptor for billing_notifications_enabled field.
+	organizationsettinghistoryDescBillingNotificationsEnabled := organizationsettinghistoryFields[20].Descriptor()
+	// organizationsettinghistory.DefaultBillingNotificationsEnabled holds the default value on creation for the billing_notifications_enabled field.
+	organizationsettinghistory.DefaultBillingNotificationsEnabled = organizationsettinghistoryDescBillingNotificationsEnabled.Default.(bool)
 	// organizationsettinghistoryDescID is the schema descriptor for id field.
 	organizationsettinghistoryDescID := organizationsettinghistoryFields[7].Descriptor()
 	// organizationsettinghistory.DefaultID holds the default value on creation for the id field.

@@ -56,7 +56,7 @@ type OrgSubscription struct {
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
-	// the features associated with the subscription
+	// the feature lookup keys associated with the subscription
 	FeatureLookupKeys []string `json:"feature_lookup_keys,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrgSubscriptionQuery when eager-loading is set.

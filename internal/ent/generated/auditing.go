@@ -1513,8 +1513,8 @@ func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) 
 	if !reflect.DeepEqual(osh.OrganizationID, new.OrganizationID) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldOrganizationID, osh.OrganizationID, new.OrganizationID))
 	}
-	if !reflect.DeepEqual(osh.EmailNotificationsEnabled, new.EmailNotificationsEnabled) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldEmailNotificationsEnabled, osh.EmailNotificationsEnabled, new.EmailNotificationsEnabled))
+	if !reflect.DeepEqual(osh.BillingNotificationsEnabled, new.BillingNotificationsEnabled) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingNotificationsEnabled, osh.BillingNotificationsEnabled, new.BillingNotificationsEnabled))
 	}
 	return changes
 }

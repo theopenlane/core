@@ -1327,23 +1327,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "OrganizationSetting",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			organizationsetting.FieldCreatedAt:                 {Type: field.TypeTime, Column: organizationsetting.FieldCreatedAt},
-			organizationsetting.FieldUpdatedAt:                 {Type: field.TypeTime, Column: organizationsetting.FieldUpdatedAt},
-			organizationsetting.FieldCreatedBy:                 {Type: field.TypeString, Column: organizationsetting.FieldCreatedBy},
-			organizationsetting.FieldUpdatedBy:                 {Type: field.TypeString, Column: organizationsetting.FieldUpdatedBy},
-			organizationsetting.FieldMappingID:                 {Type: field.TypeString, Column: organizationsetting.FieldMappingID},
-			organizationsetting.FieldTags:                      {Type: field.TypeJSON, Column: organizationsetting.FieldTags},
-			organizationsetting.FieldDeletedAt:                 {Type: field.TypeTime, Column: organizationsetting.FieldDeletedAt},
-			organizationsetting.FieldDeletedBy:                 {Type: field.TypeString, Column: organizationsetting.FieldDeletedBy},
-			organizationsetting.FieldDomains:                   {Type: field.TypeJSON, Column: organizationsetting.FieldDomains},
-			organizationsetting.FieldBillingContact:            {Type: field.TypeString, Column: organizationsetting.FieldBillingContact},
-			organizationsetting.FieldBillingEmail:              {Type: field.TypeString, Column: organizationsetting.FieldBillingEmail},
-			organizationsetting.FieldBillingPhone:              {Type: field.TypeString, Column: organizationsetting.FieldBillingPhone},
-			organizationsetting.FieldBillingAddress:            {Type: field.TypeJSON, Column: organizationsetting.FieldBillingAddress},
-			organizationsetting.FieldTaxIdentifier:             {Type: field.TypeString, Column: organizationsetting.FieldTaxIdentifier},
-			organizationsetting.FieldGeoLocation:               {Type: field.TypeEnum, Column: organizationsetting.FieldGeoLocation},
-			organizationsetting.FieldOrganizationID:            {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
-			organizationsetting.FieldEmailNotificationsEnabled: {Type: field.TypeBool, Column: organizationsetting.FieldEmailNotificationsEnabled},
+			organizationsetting.FieldCreatedAt:                   {Type: field.TypeTime, Column: organizationsetting.FieldCreatedAt},
+			organizationsetting.FieldUpdatedAt:                   {Type: field.TypeTime, Column: organizationsetting.FieldUpdatedAt},
+			organizationsetting.FieldCreatedBy:                   {Type: field.TypeString, Column: organizationsetting.FieldCreatedBy},
+			organizationsetting.FieldUpdatedBy:                   {Type: field.TypeString, Column: organizationsetting.FieldUpdatedBy},
+			organizationsetting.FieldMappingID:                   {Type: field.TypeString, Column: organizationsetting.FieldMappingID},
+			organizationsetting.FieldTags:                        {Type: field.TypeJSON, Column: organizationsetting.FieldTags},
+			organizationsetting.FieldDeletedAt:                   {Type: field.TypeTime, Column: organizationsetting.FieldDeletedAt},
+			organizationsetting.FieldDeletedBy:                   {Type: field.TypeString, Column: organizationsetting.FieldDeletedBy},
+			organizationsetting.FieldDomains:                     {Type: field.TypeJSON, Column: organizationsetting.FieldDomains},
+			organizationsetting.FieldBillingContact:              {Type: field.TypeString, Column: organizationsetting.FieldBillingContact},
+			organizationsetting.FieldBillingEmail:                {Type: field.TypeString, Column: organizationsetting.FieldBillingEmail},
+			organizationsetting.FieldBillingPhone:                {Type: field.TypeString, Column: organizationsetting.FieldBillingPhone},
+			organizationsetting.FieldBillingAddress:              {Type: field.TypeJSON, Column: organizationsetting.FieldBillingAddress},
+			organizationsetting.FieldTaxIdentifier:               {Type: field.TypeString, Column: organizationsetting.FieldTaxIdentifier},
+			organizationsetting.FieldGeoLocation:                 {Type: field.TypeEnum, Column: organizationsetting.FieldGeoLocation},
+			organizationsetting.FieldOrganizationID:              {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
+			organizationsetting.FieldBillingNotificationsEnabled: {Type: field.TypeBool, Column: organizationsetting.FieldBillingNotificationsEnabled},
 		},
 	}
 	graph.Nodes[44] = &sqlgraph.Node{
@@ -1357,26 +1357,26 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "OrganizationSettingHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			organizationsettinghistory.FieldHistoryTime:               {Type: field.TypeTime, Column: organizationsettinghistory.FieldHistoryTime},
-			organizationsettinghistory.FieldRef:                       {Type: field.TypeString, Column: organizationsettinghistory.FieldRef},
-			organizationsettinghistory.FieldOperation:                 {Type: field.TypeEnum, Column: organizationsettinghistory.FieldOperation},
-			organizationsettinghistory.FieldCreatedAt:                 {Type: field.TypeTime, Column: organizationsettinghistory.FieldCreatedAt},
-			organizationsettinghistory.FieldUpdatedAt:                 {Type: field.TypeTime, Column: organizationsettinghistory.FieldUpdatedAt},
-			organizationsettinghistory.FieldCreatedBy:                 {Type: field.TypeString, Column: organizationsettinghistory.FieldCreatedBy},
-			organizationsettinghistory.FieldUpdatedBy:                 {Type: field.TypeString, Column: organizationsettinghistory.FieldUpdatedBy},
-			organizationsettinghistory.FieldMappingID:                 {Type: field.TypeString, Column: organizationsettinghistory.FieldMappingID},
-			organizationsettinghistory.FieldTags:                      {Type: field.TypeJSON, Column: organizationsettinghistory.FieldTags},
-			organizationsettinghistory.FieldDeletedAt:                 {Type: field.TypeTime, Column: organizationsettinghistory.FieldDeletedAt},
-			organizationsettinghistory.FieldDeletedBy:                 {Type: field.TypeString, Column: organizationsettinghistory.FieldDeletedBy},
-			organizationsettinghistory.FieldDomains:                   {Type: field.TypeJSON, Column: organizationsettinghistory.FieldDomains},
-			organizationsettinghistory.FieldBillingContact:            {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingContact},
-			organizationsettinghistory.FieldBillingEmail:              {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingEmail},
-			organizationsettinghistory.FieldBillingPhone:              {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingPhone},
-			organizationsettinghistory.FieldBillingAddress:            {Type: field.TypeJSON, Column: organizationsettinghistory.FieldBillingAddress},
-			organizationsettinghistory.FieldTaxIdentifier:             {Type: field.TypeString, Column: organizationsettinghistory.FieldTaxIdentifier},
-			organizationsettinghistory.FieldGeoLocation:               {Type: field.TypeEnum, Column: organizationsettinghistory.FieldGeoLocation},
-			organizationsettinghistory.FieldOrganizationID:            {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
-			organizationsettinghistory.FieldEmailNotificationsEnabled: {Type: field.TypeBool, Column: organizationsettinghistory.FieldEmailNotificationsEnabled},
+			organizationsettinghistory.FieldHistoryTime:                 {Type: field.TypeTime, Column: organizationsettinghistory.FieldHistoryTime},
+			organizationsettinghistory.FieldRef:                         {Type: field.TypeString, Column: organizationsettinghistory.FieldRef},
+			organizationsettinghistory.FieldOperation:                   {Type: field.TypeEnum, Column: organizationsettinghistory.FieldOperation},
+			organizationsettinghistory.FieldCreatedAt:                   {Type: field.TypeTime, Column: organizationsettinghistory.FieldCreatedAt},
+			organizationsettinghistory.FieldUpdatedAt:                   {Type: field.TypeTime, Column: organizationsettinghistory.FieldUpdatedAt},
+			organizationsettinghistory.FieldCreatedBy:                   {Type: field.TypeString, Column: organizationsettinghistory.FieldCreatedBy},
+			organizationsettinghistory.FieldUpdatedBy:                   {Type: field.TypeString, Column: organizationsettinghistory.FieldUpdatedBy},
+			organizationsettinghistory.FieldMappingID:                   {Type: field.TypeString, Column: organizationsettinghistory.FieldMappingID},
+			organizationsettinghistory.FieldTags:                        {Type: field.TypeJSON, Column: organizationsettinghistory.FieldTags},
+			organizationsettinghistory.FieldDeletedAt:                   {Type: field.TypeTime, Column: organizationsettinghistory.FieldDeletedAt},
+			organizationsettinghistory.FieldDeletedBy:                   {Type: field.TypeString, Column: organizationsettinghistory.FieldDeletedBy},
+			organizationsettinghistory.FieldDomains:                     {Type: field.TypeJSON, Column: organizationsettinghistory.FieldDomains},
+			organizationsettinghistory.FieldBillingContact:              {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingContact},
+			organizationsettinghistory.FieldBillingEmail:                {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingEmail},
+			organizationsettinghistory.FieldBillingPhone:                {Type: field.TypeString, Column: organizationsettinghistory.FieldBillingPhone},
+			organizationsettinghistory.FieldBillingAddress:              {Type: field.TypeJSON, Column: organizationsettinghistory.FieldBillingAddress},
+			organizationsettinghistory.FieldTaxIdentifier:               {Type: field.TypeString, Column: organizationsettinghistory.FieldTaxIdentifier},
+			organizationsettinghistory.FieldGeoLocation:                 {Type: field.TypeEnum, Column: organizationsettinghistory.FieldGeoLocation},
+			organizationsettinghistory.FieldOrganizationID:              {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
+			organizationsettinghistory.FieldBillingNotificationsEnabled: {Type: field.TypeBool, Column: organizationsettinghistory.FieldBillingNotificationsEnabled},
 		},
 	}
 	graph.Nodes[45] = &sqlgraph.Node{
@@ -13244,9 +13244,9 @@ func (f *OrganizationSettingFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldOrganizationID))
 }
 
-// WhereEmailNotificationsEnabled applies the entql bool predicate on the email_notifications_enabled field.
-func (f *OrganizationSettingFilter) WhereEmailNotificationsEnabled(p entql.BoolP) {
-	f.Where(p.Field(organizationsetting.FieldEmailNotificationsEnabled))
+// WhereBillingNotificationsEnabled applies the entql bool predicate on the billing_notifications_enabled field.
+func (f *OrganizationSettingFilter) WhereBillingNotificationsEnabled(p entql.BoolP) {
+	f.Where(p.Field(organizationsetting.FieldBillingNotificationsEnabled))
 }
 
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
@@ -13412,9 +13412,9 @@ func (f *OrganizationSettingHistoryFilter) WhereOrganizationID(p entql.StringP) 
 	f.Where(p.Field(organizationsettinghistory.FieldOrganizationID))
 }
 
-// WhereEmailNotificationsEnabled applies the entql bool predicate on the email_notifications_enabled field.
-func (f *OrganizationSettingHistoryFilter) WhereEmailNotificationsEnabled(p entql.BoolP) {
-	f.Where(p.Field(organizationsettinghistory.FieldEmailNotificationsEnabled))
+// WhereBillingNotificationsEnabled applies the entql bool predicate on the billing_notifications_enabled field.
+func (f *OrganizationSettingHistoryFilter) WhereBillingNotificationsEnabled(p entql.BoolP) {
+	f.Where(p.Field(organizationsettinghistory.FieldBillingNotificationsEnabled))
 }
 
 // addPredicate implements the predicateAdder interface.

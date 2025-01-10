@@ -128,9 +128,9 @@ func OrganizationID(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldOrganizationID, v))
 }
 
-// EmailNotificationsEnabled applies equality check predicate on the "email_notifications_enabled" field. It's identical to EmailNotificationsEnabledEQ.
-func EmailNotificationsEnabled(v bool) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldEQ(FieldEmailNotificationsEnabled, v))
+// BillingNotificationsEnabled applies equality check predicate on the "billing_notifications_enabled" field. It's identical to BillingNotificationsEnabledEQ.
+func BillingNotificationsEnabled(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldEQ(FieldBillingNotificationsEnabled, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1018,14 +1018,14 @@ func OrganizationIDContainsFold(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldContainsFold(FieldOrganizationID, v))
 }
 
-// EmailNotificationsEnabledEQ applies the EQ predicate on the "email_notifications_enabled" field.
-func EmailNotificationsEnabledEQ(v bool) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldEQ(FieldEmailNotificationsEnabled, v))
+// BillingNotificationsEnabledEQ applies the EQ predicate on the "billing_notifications_enabled" field.
+func BillingNotificationsEnabledEQ(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldEQ(FieldBillingNotificationsEnabled, v))
 }
 
-// EmailNotificationsEnabledNEQ applies the NEQ predicate on the "email_notifications_enabled" field.
-func EmailNotificationsEnabledNEQ(v bool) predicate.OrganizationSetting {
-	return predicate.OrganizationSetting(sql.FieldNEQ(FieldEmailNotificationsEnabled, v))
+// BillingNotificationsEnabledNEQ applies the NEQ predicate on the "billing_notifications_enabled" field.
+func BillingNotificationsEnabledNEQ(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldNEQ(FieldBillingNotificationsEnabled, v))
 }
 
 // HasOrganization applies the HasEdge predicate on the "organization" edge.

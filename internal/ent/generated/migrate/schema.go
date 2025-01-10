@@ -1575,7 +1575,7 @@ var (
 		{Name: "billing_address", Type: field.TypeJSON, Nullable: true},
 		{Name: "tax_identifier", Type: field.TypeString, Nullable: true},
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
-		{Name: "email_notifications_enabled", Type: field.TypeBool, Default: false},
+		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
@@ -1614,7 +1614,7 @@ var (
 		{Name: "tax_identifier", Type: field.TypeString, Nullable: true},
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "organization_id", Type: field.TypeString, Nullable: true},
-		{Name: "email_notifications_enabled", Type: field.TypeBool, Default: false},
+		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{

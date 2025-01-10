@@ -265,16 +265,16 @@ func (oshc *OrganizationSettingHistoryCreate) SetNillableOrganizationID(s *strin
 	return oshc
 }
 
-// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
-func (oshc *OrganizationSettingHistoryCreate) SetEmailNotificationsEnabled(b bool) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetEmailNotificationsEnabled(b)
+// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
+func (oshc *OrganizationSettingHistoryCreate) SetBillingNotificationsEnabled(b bool) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetBillingNotificationsEnabled(b)
 	return oshc
 }
 
-// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingHistoryCreate {
+// SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingHistoryCreate {
 	if b != nil {
-		oshc.SetEmailNotificationsEnabled(*b)
+		oshc.SetBillingNotificationsEnabled(*b)
 	}
 	return oshc
 }
@@ -366,9 +366,9 @@ func (oshc *OrganizationSettingHistoryCreate) defaults() error {
 		v := organizationsettinghistory.DefaultGeoLocation
 		oshc.mutation.SetGeoLocation(v)
 	}
-	if _, ok := oshc.mutation.EmailNotificationsEnabled(); !ok {
-		v := organizationsettinghistory.DefaultEmailNotificationsEnabled
-		oshc.mutation.SetEmailNotificationsEnabled(v)
+	if _, ok := oshc.mutation.BillingNotificationsEnabled(); !ok {
+		v := organizationsettinghistory.DefaultBillingNotificationsEnabled
+		oshc.mutation.SetBillingNotificationsEnabled(v)
 	}
 	if _, ok := oshc.mutation.ID(); !ok {
 		if organizationsettinghistory.DefaultID == nil {
@@ -401,8 +401,8 @@ func (oshc *OrganizationSettingHistoryCreate) check() error {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
 		}
 	}
-	if _, ok := oshc.mutation.EmailNotificationsEnabled(); !ok {
-		return &ValidationError{Name: "email_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSettingHistory.email_notifications_enabled"`)}
+	if _, ok := oshc.mutation.BillingNotificationsEnabled(); !ok {
+		return &ValidationError{Name: "billing_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSettingHistory.billing_notifications_enabled"`)}
 	}
 	return nil
 }
@@ -516,9 +516,9 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
 		_node.OrganizationID = value
 	}
-	if value, ok := oshc.mutation.EmailNotificationsEnabled(); ok {
-		_spec.SetField(organizationsettinghistory.FieldEmailNotificationsEnabled, field.TypeBool, value)
-		_node.EmailNotificationsEnabled = value
+	if value, ok := oshc.mutation.BillingNotificationsEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
+		_node.BillingNotificationsEnabled = value
 	}
 	return _node, _spec
 }

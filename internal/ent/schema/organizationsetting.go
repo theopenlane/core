@@ -66,9 +66,9 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.String("organization_id").
 			Comment("the ID of the organization the settings belong to").
 			Optional(),
-		field.Bool("email_notifications_enabled").
-			Comment("should we send email notifications").
-			Default(false),
+		field.Bool("billing_notifications_enabled").
+			Comment("should we send email notifications related to billing").
+			Default(true),
 	}
 }
 

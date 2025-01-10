@@ -53,8 +53,8 @@ type OrganizationSetting struct {
 	GeoLocation enums.Region `json:"geo_location,omitempty"`
 	// the ID of the organization the settings belong to
 	OrganizationID string `json:"organization_id,omitempty"`
-	// should we send email notifications
-	EmailNotificationsEnabled bool `json:"email_notifications_enabled,omitempty"`
+	// should we send email notifications related to billing
+	BillingNotificationsEnabled bool `json:"billing_notifications_enabled,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationSettingQuery when eager-loading is set.
 	Edges        OrganizationSettingEdges `json:"edges"`
@@ -103,7 +103,7 @@ func (*OrganizationSetting) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case organizationsetting.FieldTags, organizationsetting.FieldDomains, organizationsetting.FieldBillingAddress:
 			values[i] = new([]byte)
-		case organizationsetting.FieldEmailNotificationsEnabled:
+		case organizationsetting.FieldBillingNotificationsEnabled:
 			values[i] = new(sql.NullBool)
 		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldMappingID, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID:
 			values[i] = new(sql.NullString)
@@ -232,11 +232,11 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				os.OrganizationID = value.String
 			}
-		case organizationsetting.FieldEmailNotificationsEnabled:
+		case organizationsetting.FieldBillingNotificationsEnabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field email_notifications_enabled", values[i])
+				return fmt.Errorf("unexpected type %T for field billing_notifications_enabled", values[i])
 			} else if value.Valid {
-				os.EmailNotificationsEnabled = value.Bool
+				os.BillingNotificationsEnabled = value.Bool
 			}
 		default:
 			os.selectValues.Set(columns[i], values[i])
@@ -332,8 +332,8 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString("organization_id=")
 	builder.WriteString(os.OrganizationID)
 	builder.WriteString(", ")
-	builder.WriteString("email_notifications_enabled=")
-	builder.WriteString(fmt.Sprintf("%v", os.EmailNotificationsEnabled))
+	builder.WriteString("billing_notifications_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", os.BillingNotificationsEnabled))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -4964,8 +4964,8 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetOrganizationID(organizationID)
 	}
 
-	if emailNotificationsEnabled, exists := m.EmailNotificationsEnabled(); exists {
-		create = create.SetEmailNotificationsEnabled(emailNotificationsEnabled)
+	if billingNotificationsEnabled, exists := m.BillingNotificationsEnabled(); exists {
+		create = create.SetBillingNotificationsEnabled(billingNotificationsEnabled)
 	}
 
 	_, err := create.Save(ctx)
@@ -5094,10 +5094,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetOrganizationID(organizationsetting.OrganizationID)
 		}
 
-		if emailNotificationsEnabled, exists := m.EmailNotificationsEnabled(); exists {
-			create = create.SetEmailNotificationsEnabled(emailNotificationsEnabled)
+		if billingNotificationsEnabled, exists := m.BillingNotificationsEnabled(); exists {
+			create = create.SetBillingNotificationsEnabled(billingNotificationsEnabled)
 		} else {
-			create = create.SetEmailNotificationsEnabled(organizationsetting.EmailNotificationsEnabled)
+			create = create.SetBillingNotificationsEnabled(organizationsetting.BillingNotificationsEnabled)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -5148,7 +5148,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetTaxIdentifier(organizationsetting.TaxIdentifier).
 			SetGeoLocation(organizationsetting.GeoLocation).
 			SetOrganizationID(organizationsetting.OrganizationID).
-			SetEmailNotificationsEnabled(organizationsetting.EmailNotificationsEnabled).
+			SetBillingNotificationsEnabled(organizationsetting.BillingNotificationsEnabled).
 			Save(ctx)
 		if err != nil {
 			return err

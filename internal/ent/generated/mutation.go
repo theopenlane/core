@@ -73661,36 +73661,36 @@ func (m *OrganizationHistoryMutation) ResetEdge(name string) error {
 // OrganizationSettingMutation represents an operation that mutates the OrganizationSetting nodes in the graph.
 type OrganizationSettingMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *string
-	created_at                  *time.Time
-	updated_at                  *time.Time
-	created_by                  *string
-	updated_by                  *string
-	mapping_id                  *string
-	tags                        *[]string
-	appendtags                  []string
-	deleted_at                  *time.Time
-	deleted_by                  *string
-	domains                     *[]string
-	appenddomains               []string
-	billing_contact             *string
-	billing_email               *string
-	billing_phone               *string
-	billing_address             *models.Address
-	tax_identifier              *string
-	geo_location                *enums.Region
-	email_notifications_enabled *bool
-	clearedFields               map[string]struct{}
-	organization                *string
-	clearedorganization         bool
-	files                       map[string]struct{}
-	removedfiles                map[string]struct{}
-	clearedfiles                bool
-	done                        bool
-	oldValue                    func(context.Context) (*OrganizationSetting, error)
-	predicates                  []predicate.OrganizationSetting
+	op                            Op
+	typ                           string
+	id                            *string
+	created_at                    *time.Time
+	updated_at                    *time.Time
+	created_by                    *string
+	updated_by                    *string
+	mapping_id                    *string
+	tags                          *[]string
+	appendtags                    []string
+	deleted_at                    *time.Time
+	deleted_by                    *string
+	domains                       *[]string
+	appenddomains                 []string
+	billing_contact               *string
+	billing_email                 *string
+	billing_phone                 *string
+	billing_address               *models.Address
+	tax_identifier                *string
+	geo_location                  *enums.Region
+	billing_notifications_enabled *bool
+	clearedFields                 map[string]struct{}
+	organization                  *string
+	clearedorganization           bool
+	files                         map[string]struct{}
+	removedfiles                  map[string]struct{}
+	clearedfiles                  bool
+	done                          bool
+	oldValue                      func(context.Context) (*OrganizationSetting, error)
+	predicates                    []predicate.OrganizationSetting
 }
 
 var _ ent.Mutation = (*OrganizationSettingMutation)(nil)
@@ -74600,40 +74600,40 @@ func (m *OrganizationSettingMutation) ResetOrganizationID() {
 	delete(m.clearedFields, organizationsetting.FieldOrganizationID)
 }
 
-// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
-func (m *OrganizationSettingMutation) SetEmailNotificationsEnabled(b bool) {
-	m.email_notifications_enabled = &b
+// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
+func (m *OrganizationSettingMutation) SetBillingNotificationsEnabled(b bool) {
+	m.billing_notifications_enabled = &b
 }
 
-// EmailNotificationsEnabled returns the value of the "email_notifications_enabled" field in the mutation.
-func (m *OrganizationSettingMutation) EmailNotificationsEnabled() (r bool, exists bool) {
-	v := m.email_notifications_enabled
+// BillingNotificationsEnabled returns the value of the "billing_notifications_enabled" field in the mutation.
+func (m *OrganizationSettingMutation) BillingNotificationsEnabled() (r bool, exists bool) {
+	v := m.billing_notifications_enabled
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldEmailNotificationsEnabled returns the old "email_notifications_enabled" field's value of the OrganizationSetting entity.
+// OldBillingNotificationsEnabled returns the old "billing_notifications_enabled" field's value of the OrganizationSetting entity.
 // If the OrganizationSetting object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationSettingMutation) OldEmailNotificationsEnabled(ctx context.Context) (v bool, err error) {
+func (m *OrganizationSettingMutation) OldBillingNotificationsEnabled(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEmailNotificationsEnabled is only allowed on UpdateOne operations")
+		return v, errors.New("OldBillingNotificationsEnabled is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEmailNotificationsEnabled requires an ID field in the mutation")
+		return v, errors.New("OldBillingNotificationsEnabled requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEmailNotificationsEnabled: %w", err)
+		return v, fmt.Errorf("querying old value for OldBillingNotificationsEnabled: %w", err)
 	}
-	return oldValue.EmailNotificationsEnabled, nil
+	return oldValue.BillingNotificationsEnabled, nil
 }
 
-// ResetEmailNotificationsEnabled resets all changes to the "email_notifications_enabled" field.
-func (m *OrganizationSettingMutation) ResetEmailNotificationsEnabled() {
-	m.email_notifications_enabled = nil
+// ResetBillingNotificationsEnabled resets all changes to the "billing_notifications_enabled" field.
+func (m *OrganizationSettingMutation) ResetBillingNotificationsEnabled() {
+	m.billing_notifications_enabled = nil
 }
 
 // ClearOrganization clears the "organization" edge to the Organization entity.
@@ -74800,8 +74800,8 @@ func (m *OrganizationSettingMutation) Fields() []string {
 	if m.organization != nil {
 		fields = append(fields, organizationsetting.FieldOrganizationID)
 	}
-	if m.email_notifications_enabled != nil {
-		fields = append(fields, organizationsetting.FieldEmailNotificationsEnabled)
+	if m.billing_notifications_enabled != nil {
+		fields = append(fields, organizationsetting.FieldBillingNotificationsEnabled)
 	}
 	return fields
 }
@@ -74843,8 +74843,8 @@ func (m *OrganizationSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.GeoLocation()
 	case organizationsetting.FieldOrganizationID:
 		return m.OrganizationID()
-	case organizationsetting.FieldEmailNotificationsEnabled:
-		return m.EmailNotificationsEnabled()
+	case organizationsetting.FieldBillingNotificationsEnabled:
+		return m.BillingNotificationsEnabled()
 	}
 	return nil, false
 }
@@ -74886,8 +74886,8 @@ func (m *OrganizationSettingMutation) OldField(ctx context.Context, name string)
 		return m.OldGeoLocation(ctx)
 	case organizationsetting.FieldOrganizationID:
 		return m.OldOrganizationID(ctx)
-	case organizationsetting.FieldEmailNotificationsEnabled:
-		return m.OldEmailNotificationsEnabled(ctx)
+	case organizationsetting.FieldBillingNotificationsEnabled:
+		return m.OldBillingNotificationsEnabled(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationSetting field %s", name)
 }
@@ -75009,12 +75009,12 @@ func (m *OrganizationSettingMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetOrganizationID(v)
 		return nil
-	case organizationsetting.FieldEmailNotificationsEnabled:
+	case organizationsetting.FieldBillingNotificationsEnabled:
 		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetEmailNotificationsEnabled(v)
+		m.SetBillingNotificationsEnabled(v)
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting field %s", name)
@@ -75206,8 +75206,8 @@ func (m *OrganizationSettingMutation) ResetField(name string) error {
 	case organizationsetting.FieldOrganizationID:
 		m.ResetOrganizationID()
 		return nil
-	case organizationsetting.FieldEmailNotificationsEnabled:
-		m.ResetEmailNotificationsEnabled()
+	case organizationsetting.FieldBillingNotificationsEnabled:
+		m.ResetBillingNotificationsEnabled()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSetting field %s", name)
@@ -75318,35 +75318,35 @@ func (m *OrganizationSettingMutation) ResetEdge(name string) error {
 // OrganizationSettingHistoryMutation represents an operation that mutates the OrganizationSettingHistory nodes in the graph.
 type OrganizationSettingHistoryMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *string
-	history_time                *time.Time
-	ref                         *string
-	operation                   *history.OpType
-	created_at                  *time.Time
-	updated_at                  *time.Time
-	created_by                  *string
-	updated_by                  *string
-	mapping_id                  *string
-	tags                        *[]string
-	appendtags                  []string
-	deleted_at                  *time.Time
-	deleted_by                  *string
-	domains                     *[]string
-	appenddomains               []string
-	billing_contact             *string
-	billing_email               *string
-	billing_phone               *string
-	billing_address             *models.Address
-	tax_identifier              *string
-	geo_location                *enums.Region
-	organization_id             *string
-	email_notifications_enabled *bool
-	clearedFields               map[string]struct{}
-	done                        bool
-	oldValue                    func(context.Context) (*OrganizationSettingHistory, error)
-	predicates                  []predicate.OrganizationSettingHistory
+	op                            Op
+	typ                           string
+	id                            *string
+	history_time                  *time.Time
+	ref                           *string
+	operation                     *history.OpType
+	created_at                    *time.Time
+	updated_at                    *time.Time
+	created_by                    *string
+	updated_by                    *string
+	mapping_id                    *string
+	tags                          *[]string
+	appendtags                    []string
+	deleted_at                    *time.Time
+	deleted_by                    *string
+	domains                       *[]string
+	appenddomains                 []string
+	billing_contact               *string
+	billing_email                 *string
+	billing_phone                 *string
+	billing_address               *models.Address
+	tax_identifier                *string
+	geo_location                  *enums.Region
+	organization_id               *string
+	billing_notifications_enabled *bool
+	clearedFields                 map[string]struct{}
+	done                          bool
+	oldValue                      func(context.Context) (*OrganizationSettingHistory, error)
+	predicates                    []predicate.OrganizationSettingHistory
 }
 
 var _ ent.Mutation = (*OrganizationSettingHistoryMutation)(nil)
@@ -76377,40 +76377,40 @@ func (m *OrganizationSettingHistoryMutation) ResetOrganizationID() {
 	delete(m.clearedFields, organizationsettinghistory.FieldOrganizationID)
 }
 
-// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
-func (m *OrganizationSettingHistoryMutation) SetEmailNotificationsEnabled(b bool) {
-	m.email_notifications_enabled = &b
+// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
+func (m *OrganizationSettingHistoryMutation) SetBillingNotificationsEnabled(b bool) {
+	m.billing_notifications_enabled = &b
 }
 
-// EmailNotificationsEnabled returns the value of the "email_notifications_enabled" field in the mutation.
-func (m *OrganizationSettingHistoryMutation) EmailNotificationsEnabled() (r bool, exists bool) {
-	v := m.email_notifications_enabled
+// BillingNotificationsEnabled returns the value of the "billing_notifications_enabled" field in the mutation.
+func (m *OrganizationSettingHistoryMutation) BillingNotificationsEnabled() (r bool, exists bool) {
+	v := m.billing_notifications_enabled
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldEmailNotificationsEnabled returns the old "email_notifications_enabled" field's value of the OrganizationSettingHistory entity.
+// OldBillingNotificationsEnabled returns the old "billing_notifications_enabled" field's value of the OrganizationSettingHistory entity.
 // If the OrganizationSettingHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationSettingHistoryMutation) OldEmailNotificationsEnabled(ctx context.Context) (v bool, err error) {
+func (m *OrganizationSettingHistoryMutation) OldBillingNotificationsEnabled(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEmailNotificationsEnabled is only allowed on UpdateOne operations")
+		return v, errors.New("OldBillingNotificationsEnabled is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEmailNotificationsEnabled requires an ID field in the mutation")
+		return v, errors.New("OldBillingNotificationsEnabled requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEmailNotificationsEnabled: %w", err)
+		return v, fmt.Errorf("querying old value for OldBillingNotificationsEnabled: %w", err)
 	}
-	return oldValue.EmailNotificationsEnabled, nil
+	return oldValue.BillingNotificationsEnabled, nil
 }
 
-// ResetEmailNotificationsEnabled resets all changes to the "email_notifications_enabled" field.
-func (m *OrganizationSettingHistoryMutation) ResetEmailNotificationsEnabled() {
-	m.email_notifications_enabled = nil
+// ResetBillingNotificationsEnabled resets all changes to the "billing_notifications_enabled" field.
+func (m *OrganizationSettingHistoryMutation) ResetBillingNotificationsEnabled() {
+	m.billing_notifications_enabled = nil
 }
 
 // Where appends a list predicates to the OrganizationSettingHistoryMutation builder.
@@ -76505,8 +76505,8 @@ func (m *OrganizationSettingHistoryMutation) Fields() []string {
 	if m.organization_id != nil {
 		fields = append(fields, organizationsettinghistory.FieldOrganizationID)
 	}
-	if m.email_notifications_enabled != nil {
-		fields = append(fields, organizationsettinghistory.FieldEmailNotificationsEnabled)
+	if m.billing_notifications_enabled != nil {
+		fields = append(fields, organizationsettinghistory.FieldBillingNotificationsEnabled)
 	}
 	return fields
 }
@@ -76554,8 +76554,8 @@ func (m *OrganizationSettingHistoryMutation) Field(name string) (ent.Value, bool
 		return m.GeoLocation()
 	case organizationsettinghistory.FieldOrganizationID:
 		return m.OrganizationID()
-	case organizationsettinghistory.FieldEmailNotificationsEnabled:
-		return m.EmailNotificationsEnabled()
+	case organizationsettinghistory.FieldBillingNotificationsEnabled:
+		return m.BillingNotificationsEnabled()
 	}
 	return nil, false
 }
@@ -76603,8 +76603,8 @@ func (m *OrganizationSettingHistoryMutation) OldField(ctx context.Context, name 
 		return m.OldGeoLocation(ctx)
 	case organizationsettinghistory.FieldOrganizationID:
 		return m.OldOrganizationID(ctx)
-	case organizationsettinghistory.FieldEmailNotificationsEnabled:
-		return m.OldEmailNotificationsEnabled(ctx)
+	case organizationsettinghistory.FieldBillingNotificationsEnabled:
+		return m.OldBillingNotificationsEnabled(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationSettingHistory field %s", name)
 }
@@ -76747,12 +76747,12 @@ func (m *OrganizationSettingHistoryMutation) SetField(name string, value ent.Val
 		}
 		m.SetOrganizationID(v)
 		return nil
-	case organizationsettinghistory.FieldEmailNotificationsEnabled:
+	case organizationsettinghistory.FieldBillingNotificationsEnabled:
 		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetEmailNotificationsEnabled(v)
+		m.SetBillingNotificationsEnabled(v)
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory field %s", name)
@@ -76959,8 +76959,8 @@ func (m *OrganizationSettingHistoryMutation) ResetField(name string) error {
 	case organizationsettinghistory.FieldOrganizationID:
 		m.ResetOrganizationID()
 		return nil
-	case organizationsettinghistory.FieldEmailNotificationsEnabled:
-		m.ResetEmailNotificationsEnabled()
+	case organizationsettinghistory.FieldBillingNotificationsEnabled:
+		m.ResetBillingNotificationsEnabled()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationSettingHistory field %s", name)

@@ -50,8 +50,8 @@ const (
 	FieldGeoLocation = "geo_location"
 	// FieldOrganizationID holds the string denoting the organization_id field in the database.
 	FieldOrganizationID = "organization_id"
-	// FieldEmailNotificationsEnabled holds the string denoting the email_notifications_enabled field in the database.
-	FieldEmailNotificationsEnabled = "email_notifications_enabled"
+	// FieldBillingNotificationsEnabled holds the string denoting the billing_notifications_enabled field in the database.
+	FieldBillingNotificationsEnabled = "billing_notifications_enabled"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -91,7 +91,7 @@ var Columns = []string{
 	FieldTaxIdentifier,
 	FieldGeoLocation,
 	FieldOrganizationID,
-	FieldEmailNotificationsEnabled,
+	FieldBillingNotificationsEnabled,
 }
 
 var (
@@ -135,8 +135,8 @@ var (
 	BillingEmailValidator func(string) error
 	// BillingPhoneValidator is a validator for the "billing_phone" field. It is called by the builders before save.
 	BillingPhoneValidator func(string) error
-	// DefaultEmailNotificationsEnabled holds the default value on creation for the "email_notifications_enabled" field.
-	DefaultEmailNotificationsEnabled bool
+	// DefaultBillingNotificationsEnabled holds the default value on creation for the "billing_notifications_enabled" field.
+	DefaultBillingNotificationsEnabled bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -226,9 +226,9 @@ func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrganizationID, opts...).ToFunc()
 }
 
-// ByEmailNotificationsEnabled orders the results by the email_notifications_enabled field.
-func ByEmailNotificationsEnabled(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmailNotificationsEnabled, opts...).ToFunc()
+// ByBillingNotificationsEnabled orders the results by the billing_notifications_enabled field.
+func ByBillingNotificationsEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBillingNotificationsEnabled, opts...).ToFunc()
 }
 
 // ByOrganizationField orders the results by organization field.

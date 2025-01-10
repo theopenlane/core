@@ -282,16 +282,16 @@ func (oshu *OrganizationSettingHistoryUpdate) ClearOrganizationID() *Organizatio
 	return oshu
 }
 
-// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetEmailNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetEmailNotificationsEnabled(b)
+// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetBillingNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetBillingNotificationsEnabled(b)
 	return oshu
 }
 
-// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdate {
+// SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdate {
 	if b != nil {
-		oshu.SetEmailNotificationsEnabled(*b)
+		oshu.SetBillingNotificationsEnabled(*b)
 	}
 	return oshu
 }
@@ -468,8 +468,8 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	if oshu.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
 	}
-	if value, ok := oshu.mutation.EmailNotificationsEnabled(); ok {
-		_spec.SetField(organizationsettinghistory.FieldEmailNotificationsEnabled, field.TypeBool, value)
+	if value, ok := oshu.mutation.BillingNotificationsEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
@@ -743,16 +743,16 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) ClearOrganizationID() *Organiz
 	return oshuo
 }
 
-// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetEmailNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetEmailNotificationsEnabled(b)
+// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetBillingNotificationsEnabled(b)
 	return oshuo
 }
 
-// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdateOne {
+// SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdateOne {
 	if b != nil {
-		oshuo.SetEmailNotificationsEnabled(*b)
+		oshuo.SetBillingNotificationsEnabled(*b)
 	}
 	return oshuo
 }
@@ -959,8 +959,8 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	if oshuo.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.EmailNotificationsEnabled(); ok {
-		_spec.SetField(organizationsettinghistory.FieldEmailNotificationsEnabled, field.TypeBool, value)
+	if value, ok := oshuo.mutation.BillingNotificationsEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)

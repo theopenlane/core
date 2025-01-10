@@ -37516,9 +37516,9 @@ type OrganizationSettingWhereInput struct {
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 
-	// "email_notifications_enabled" field predicates.
-	EmailNotificationsEnabled    *bool `json:"emailNotificationsEnabled,omitempty"`
-	EmailNotificationsEnabledNEQ *bool `json:"emailNotificationsEnabledNEQ,omitempty"`
+	// "billing_notifications_enabled" field predicates.
+	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
+	BillingNotificationsEnabledNEQ *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
 
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
@@ -38098,11 +38098,11 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.OrganizationIDContainsFold != nil {
 		predicates = append(predicates, organizationsetting.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
 	}
-	if i.EmailNotificationsEnabled != nil {
-		predicates = append(predicates, organizationsetting.EmailNotificationsEnabledEQ(*i.EmailNotificationsEnabled))
+	if i.BillingNotificationsEnabled != nil {
+		predicates = append(predicates, organizationsetting.BillingNotificationsEnabledEQ(*i.BillingNotificationsEnabled))
 	}
-	if i.EmailNotificationsEnabledNEQ != nil {
-		predicates = append(predicates, organizationsetting.EmailNotificationsEnabledNEQ(*i.EmailNotificationsEnabledNEQ))
+	if i.BillingNotificationsEnabledNEQ != nil {
+		predicates = append(predicates, organizationsetting.BillingNotificationsEnabledNEQ(*i.BillingNotificationsEnabledNEQ))
 	}
 
 	if i.HasOrganization != nil {
@@ -38383,9 +38383,9 @@ type OrganizationSettingHistoryWhereInput struct {
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 
-	// "email_notifications_enabled" field predicates.
-	EmailNotificationsEnabled    *bool `json:"emailNotificationsEnabled,omitempty"`
-	EmailNotificationsEnabledNEQ *bool `json:"emailNotificationsEnabledNEQ,omitempty"`
+	// "billing_notifications_enabled" field predicates.
+	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
+	BillingNotificationsEnabledNEQ *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39038,11 +39038,11 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	if i.OrganizationIDContainsFold != nil {
 		predicates = append(predicates, organizationsettinghistory.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
 	}
-	if i.EmailNotificationsEnabled != nil {
-		predicates = append(predicates, organizationsettinghistory.EmailNotificationsEnabledEQ(*i.EmailNotificationsEnabled))
+	if i.BillingNotificationsEnabled != nil {
+		predicates = append(predicates, organizationsettinghistory.BillingNotificationsEnabledEQ(*i.BillingNotificationsEnabled))
 	}
-	if i.EmailNotificationsEnabledNEQ != nil {
-		predicates = append(predicates, organizationsettinghistory.EmailNotificationsEnabledNEQ(*i.EmailNotificationsEnabledNEQ))
+	if i.BillingNotificationsEnabledNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.BillingNotificationsEnabledNEQ(*i.BillingNotificationsEnabledNEQ))
 	}
 
 	switch len(predicates) {

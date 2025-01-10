@@ -1,7 +1,7 @@
-h1:TFUttMdvo+P8ttygdoTEfYMjLVmKTHVhzuslX86UG6c=
+h1:qOVARrtau4JhKV7gKSBoYBVqrfJctYhpjEu7VsnI0cY=
 20241211231032_init.sql h1:Cj6GduEDECy6Y+8DfI6767WosqG2AKWybIyJJ6AgKqA=
 20241212223714_consistent_naming.sql h1:RvnNmsStlHkmAdSCnX1fFh/KYgfj1RMYYEc4iCN9JcQ=
 20250109002850_billing_address.sql h1:m0ek3WXqRgS3+ZbSa/DcIMB16vb8Tjm2MgNqyRll3rU=
 20250109054654_remove_stripe_id.sql h1:OfeshKT2+ydfx+36e4uBrdQ31tuurcJsKXyYDp1ZiZg=
 20250110162830_subscription_price.sql h1:ju8ocKPbqtOalaBZ1aGk8qCDLbgxFCDoA0Dmkr9bLzA=
-20250110210056_orgsubsfeaturenames.sql h1:UHZ4IsIOatV2U0WaxCZSf5oknB+WDW4dpgLearm8qbM=
+20250110233413_orgsubsfeatures.sql h1:bEdXn+bDT7GuWRRkCYiFCK6t91DxjeEmkFWme2K/lCw=

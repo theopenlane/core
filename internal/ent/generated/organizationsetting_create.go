@@ -232,16 +232,16 @@ func (osc *OrganizationSettingCreate) SetNillableOrganizationID(s *string) *Orga
 	return osc
 }
 
-// SetEmailNotificationsEnabled sets the "email_notifications_enabled" field.
-func (osc *OrganizationSettingCreate) SetEmailNotificationsEnabled(b bool) *OrganizationSettingCreate {
-	osc.mutation.SetEmailNotificationsEnabled(b)
+// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
+func (osc *OrganizationSettingCreate) SetBillingNotificationsEnabled(b bool) *OrganizationSettingCreate {
+	osc.mutation.SetBillingNotificationsEnabled(b)
 	return osc
 }
 
-// SetNillableEmailNotificationsEnabled sets the "email_notifications_enabled" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableEmailNotificationsEnabled(b *bool) *OrganizationSettingCreate {
+// SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingCreate {
 	if b != nil {
-		osc.SetEmailNotificationsEnabled(*b)
+		osc.SetBillingNotificationsEnabled(*b)
 	}
 	return osc
 }
@@ -346,9 +346,9 @@ func (osc *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultGeoLocation
 		osc.mutation.SetGeoLocation(v)
 	}
-	if _, ok := osc.mutation.EmailNotificationsEnabled(); !ok {
-		v := organizationsetting.DefaultEmailNotificationsEnabled
-		osc.mutation.SetEmailNotificationsEnabled(v)
+	if _, ok := osc.mutation.BillingNotificationsEnabled(); !ok {
+		v := organizationsetting.DefaultBillingNotificationsEnabled
+		osc.mutation.SetBillingNotificationsEnabled(v)
 	}
 	if _, ok := osc.mutation.ID(); !ok {
 		if organizationsetting.DefaultID == nil {
@@ -385,8 +385,8 @@ func (osc *OrganizationSettingCreate) check() error {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.geo_location": %w`, err)}
 		}
 	}
-	if _, ok := osc.mutation.EmailNotificationsEnabled(); !ok {
-		return &ValidationError{Name: "email_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSetting.email_notifications_enabled"`)}
+	if _, ok := osc.mutation.BillingNotificationsEnabled(); !ok {
+		return &ValidationError{Name: "billing_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSetting.billing_notifications_enabled"`)}
 	}
 	return nil
 }
@@ -484,9 +484,9 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 		_spec.SetField(organizationsetting.FieldGeoLocation, field.TypeEnum, value)
 		_node.GeoLocation = value
 	}
-	if value, ok := osc.mutation.EmailNotificationsEnabled(); ok {
-		_spec.SetField(organizationsetting.FieldEmailNotificationsEnabled, field.TypeBool, value)
-		_node.EmailNotificationsEnabled = value
+	if value, ok := osc.mutation.BillingNotificationsEnabled(); ok {
+		_spec.SetField(organizationsetting.FieldBillingNotificationsEnabled, field.TypeBool, value)
+		_node.BillingNotificationsEnabled = value
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

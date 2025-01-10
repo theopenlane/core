@@ -1678,8 +1678,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingSearchResult_organiz
 				return ec.fieldContext_OrganizationSetting_geoLocation(ctx, field)
 			case "organizationID":
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
-			case "emailNotificationsEnabled":
-				return ec.fieldContext_OrganizationSetting_emailNotificationsEnabled(ctx, field)
+			case "billingNotificationsEnabled":
+				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

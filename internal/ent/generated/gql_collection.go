@@ -8606,10 +8606,10 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldOrganizationID)
 				fieldSeen[organizationsetting.FieldOrganizationID] = struct{}{}
 			}
-		case "emailNotificationsEnabled":
-			if _, ok := fieldSeen[organizationsetting.FieldEmailNotificationsEnabled]; !ok {
-				selectedFields = append(selectedFields, organizationsetting.FieldEmailNotificationsEnabled)
-				fieldSeen[organizationsetting.FieldEmailNotificationsEnabled] = struct{}{}
+		case "billingNotificationsEnabled":
+			if _, ok := fieldSeen[organizationsetting.FieldBillingNotificationsEnabled]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldBillingNotificationsEnabled)
+				fieldSeen[organizationsetting.FieldBillingNotificationsEnabled] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -8763,10 +8763,10 @@ func (osh *OrganizationSettingHistoryQuery) collectField(ctx context.Context, on
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldOrganizationID)
 				fieldSeen[organizationsettinghistory.FieldOrganizationID] = struct{}{}
 			}
-		case "emailNotificationsEnabled":
-			if _, ok := fieldSeen[organizationsettinghistory.FieldEmailNotificationsEnabled]; !ok {
-				selectedFields = append(selectedFields, organizationsettinghistory.FieldEmailNotificationsEnabled)
-				fieldSeen[organizationsettinghistory.FieldEmailNotificationsEnabled] = struct{}{}
+		case "billingNotificationsEnabled":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldBillingNotificationsEnabled]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldBillingNotificationsEnabled)
+				fieldSeen[organizationsettinghistory.FieldBillingNotificationsEnabled] = struct{}{}
 			}
 		case "id":
 		case "__typename":
