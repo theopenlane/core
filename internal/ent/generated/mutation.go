@@ -64064,6 +64064,7 @@ type OrgSubscriptionMutation struct {
 	deleted_by                 *string
 	stripe_subscription_id     *string
 	product_tier               *string
+	product_price              *models.Price
 	stripe_product_tier_id     *string
 	stripe_subscription_status *string
 	active                     *bool
@@ -64725,6 +64726,55 @@ func (m *OrgSubscriptionMutation) ResetProductTier() {
 	delete(m.clearedFields, orgsubscription.FieldProductTier)
 }
 
+// SetProductPrice sets the "product_price" field.
+func (m *OrgSubscriptionMutation) SetProductPrice(value models.Price) {
+	m.product_price = &value
+}
+
+// ProductPrice returns the value of the "product_price" field in the mutation.
+func (m *OrgSubscriptionMutation) ProductPrice() (r models.Price, exists bool) {
+	v := m.product_price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProductPrice returns the old "product_price" field's value of the OrgSubscription entity.
+// If the OrgSubscription object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionMutation) OldProductPrice(ctx context.Context) (v models.Price, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProductPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProductPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProductPrice: %w", err)
+	}
+	return oldValue.ProductPrice, nil
+}
+
+// ClearProductPrice clears the value of the "product_price" field.
+func (m *OrgSubscriptionMutation) ClearProductPrice() {
+	m.product_price = nil
+	m.clearedFields[orgsubscription.FieldProductPrice] = struct{}{}
+}
+
+// ProductPriceCleared returns if the "product_price" field was cleared in this mutation.
+func (m *OrgSubscriptionMutation) ProductPriceCleared() bool {
+	_, ok := m.clearedFields[orgsubscription.FieldProductPrice]
+	return ok
+}
+
+// ResetProductPrice resets all changes to the "product_price" field.
+func (m *OrgSubscriptionMutation) ResetProductPrice() {
+	m.product_price = nil
+	delete(m.clearedFields, orgsubscription.FieldProductPrice)
+}
+
 // SetStripeProductTierID sets the "stripe_product_tier_id" field.
 func (m *OrgSubscriptionMutation) SetStripeProductTierID(s string) {
 	m.stripe_product_tier_id = &s
@@ -65083,7 +65133,7 @@ func (m *OrgSubscriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgSubscriptionMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, orgsubscription.FieldCreatedAt)
 	}
@@ -65116,6 +65166,9 @@ func (m *OrgSubscriptionMutation) Fields() []string {
 	}
 	if m.product_tier != nil {
 		fields = append(fields, orgsubscription.FieldProductTier)
+	}
+	if m.product_price != nil {
+		fields = append(fields, orgsubscription.FieldProductPrice)
 	}
 	if m.stripe_product_tier_id != nil {
 		fields = append(fields, orgsubscription.FieldStripeProductTierID)
@@ -65165,6 +65218,8 @@ func (m *OrgSubscriptionMutation) Field(name string) (ent.Value, bool) {
 		return m.StripeSubscriptionID()
 	case orgsubscription.FieldProductTier:
 		return m.ProductTier()
+	case orgsubscription.FieldProductPrice:
+		return m.ProductPrice()
 	case orgsubscription.FieldStripeProductTierID:
 		return m.StripeProductTierID()
 	case orgsubscription.FieldStripeSubscriptionStatus:
@@ -65208,6 +65263,8 @@ func (m *OrgSubscriptionMutation) OldField(ctx context.Context, name string) (en
 		return m.OldStripeSubscriptionID(ctx)
 	case orgsubscription.FieldProductTier:
 		return m.OldProductTier(ctx)
+	case orgsubscription.FieldProductPrice:
+		return m.OldProductPrice(ctx)
 	case orgsubscription.FieldStripeProductTierID:
 		return m.OldStripeProductTierID(ctx)
 	case orgsubscription.FieldStripeSubscriptionStatus:
@@ -65305,6 +65362,13 @@ func (m *OrgSubscriptionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetProductTier(v)
+		return nil
+	case orgsubscription.FieldProductPrice:
+		v, ok := value.(models.Price)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProductPrice(v)
 		return nil
 	case orgsubscription.FieldStripeProductTierID:
 		v, ok := value.(string)
@@ -65408,6 +65472,9 @@ func (m *OrgSubscriptionMutation) ClearedFields() []string {
 	if m.FieldCleared(orgsubscription.FieldProductTier) {
 		fields = append(fields, orgsubscription.FieldProductTier)
 	}
+	if m.FieldCleared(orgsubscription.FieldProductPrice) {
+		fields = append(fields, orgsubscription.FieldProductPrice)
+	}
 	if m.FieldCleared(orgsubscription.FieldStripeProductTierID) {
 		fields = append(fields, orgsubscription.FieldStripeProductTierID)
 	}
@@ -65467,6 +65534,9 @@ func (m *OrgSubscriptionMutation) ClearField(name string) error {
 	case orgsubscription.FieldProductTier:
 		m.ClearProductTier()
 		return nil
+	case orgsubscription.FieldProductPrice:
+		m.ClearProductPrice()
+		return nil
 	case orgsubscription.FieldStripeProductTierID:
 		m.ClearStripeProductTierID()
 		return nil
@@ -65522,6 +65592,9 @@ func (m *OrgSubscriptionMutation) ResetField(name string) error {
 		return nil
 	case orgsubscription.FieldProductTier:
 		m.ResetProductTier()
+		return nil
+	case orgsubscription.FieldProductPrice:
+		m.ResetProductPrice()
 		return nil
 	case orgsubscription.FieldStripeProductTierID:
 		m.ResetStripeProductTierID()
@@ -65640,6 +65713,7 @@ type OrgSubscriptionHistoryMutation struct {
 	owner_id                   *string
 	stripe_subscription_id     *string
 	product_tier               *string
+	product_price              *models.Price
 	stripe_product_tier_id     *string
 	stripe_subscription_status *string
 	active                     *bool
@@ -66420,6 +66494,55 @@ func (m *OrgSubscriptionHistoryMutation) ResetProductTier() {
 	delete(m.clearedFields, orgsubscriptionhistory.FieldProductTier)
 }
 
+// SetProductPrice sets the "product_price" field.
+func (m *OrgSubscriptionHistoryMutation) SetProductPrice(value models.Price) {
+	m.product_price = &value
+}
+
+// ProductPrice returns the value of the "product_price" field in the mutation.
+func (m *OrgSubscriptionHistoryMutation) ProductPrice() (r models.Price, exists bool) {
+	v := m.product_price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProductPrice returns the old "product_price" field's value of the OrgSubscriptionHistory entity.
+// If the OrgSubscriptionHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgSubscriptionHistoryMutation) OldProductPrice(ctx context.Context) (v models.Price, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProductPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProductPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProductPrice: %w", err)
+	}
+	return oldValue.ProductPrice, nil
+}
+
+// ClearProductPrice clears the value of the "product_price" field.
+func (m *OrgSubscriptionHistoryMutation) ClearProductPrice() {
+	m.product_price = nil
+	m.clearedFields[orgsubscriptionhistory.FieldProductPrice] = struct{}{}
+}
+
+// ProductPriceCleared returns if the "product_price" field was cleared in this mutation.
+func (m *OrgSubscriptionHistoryMutation) ProductPriceCleared() bool {
+	_, ok := m.clearedFields[orgsubscriptionhistory.FieldProductPrice]
+	return ok
+}
+
+// ResetProductPrice resets all changes to the "product_price" field.
+func (m *OrgSubscriptionHistoryMutation) ResetProductPrice() {
+	m.product_price = nil
+	delete(m.clearedFields, orgsubscriptionhistory.FieldProductPrice)
+}
+
 // SetStripeProductTierID sets the "stripe_product_tier_id" field.
 func (m *OrgSubscriptionHistoryMutation) SetStripeProductTierID(s string) {
 	m.stripe_product_tier_id = &s
@@ -66751,7 +66874,7 @@ func (m *OrgSubscriptionHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgSubscriptionHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.history_time != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldHistoryTime)
 	}
@@ -66793,6 +66916,9 @@ func (m *OrgSubscriptionHistoryMutation) Fields() []string {
 	}
 	if m.product_tier != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldProductTier)
+	}
+	if m.product_price != nil {
+		fields = append(fields, orgsubscriptionhistory.FieldProductPrice)
 	}
 	if m.stripe_product_tier_id != nil {
 		fields = append(fields, orgsubscriptionhistory.FieldStripeProductTierID)
@@ -66848,6 +66974,8 @@ func (m *OrgSubscriptionHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.StripeSubscriptionID()
 	case orgsubscriptionhistory.FieldProductTier:
 		return m.ProductTier()
+	case orgsubscriptionhistory.FieldProductPrice:
+		return m.ProductPrice()
 	case orgsubscriptionhistory.FieldStripeProductTierID:
 		return m.StripeProductTierID()
 	case orgsubscriptionhistory.FieldStripeSubscriptionStatus:
@@ -66897,6 +67025,8 @@ func (m *OrgSubscriptionHistoryMutation) OldField(ctx context.Context, name stri
 		return m.OldStripeSubscriptionID(ctx)
 	case orgsubscriptionhistory.FieldProductTier:
 		return m.OldProductTier(ctx)
+	case orgsubscriptionhistory.FieldProductPrice:
+		return m.OldProductPrice(ctx)
 	case orgsubscriptionhistory.FieldStripeProductTierID:
 		return m.OldStripeProductTierID(ctx)
 	case orgsubscriptionhistory.FieldStripeSubscriptionStatus:
@@ -67016,6 +67146,13 @@ func (m *OrgSubscriptionHistoryMutation) SetField(name string, value ent.Value) 
 		}
 		m.SetProductTier(v)
 		return nil
+	case orgsubscriptionhistory.FieldProductPrice:
+		v, ok := value.(models.Price)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProductPrice(v)
+		return nil
 	case orgsubscriptionhistory.FieldStripeProductTierID:
 		v, ok := value.(string)
 		if !ok {
@@ -67121,6 +67258,9 @@ func (m *OrgSubscriptionHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(orgsubscriptionhistory.FieldProductTier) {
 		fields = append(fields, orgsubscriptionhistory.FieldProductTier)
 	}
+	if m.FieldCleared(orgsubscriptionhistory.FieldProductPrice) {
+		fields = append(fields, orgsubscriptionhistory.FieldProductPrice)
+	}
 	if m.FieldCleared(orgsubscriptionhistory.FieldStripeProductTierID) {
 		fields = append(fields, orgsubscriptionhistory.FieldStripeProductTierID)
 	}
@@ -67182,6 +67322,9 @@ func (m *OrgSubscriptionHistoryMutation) ClearField(name string) error {
 		return nil
 	case orgsubscriptionhistory.FieldProductTier:
 		m.ClearProductTier()
+		return nil
+	case orgsubscriptionhistory.FieldProductPrice:
+		m.ClearProductPrice()
 		return nil
 	case orgsubscriptionhistory.FieldStripeProductTierID:
 		m.ClearStripeProductTierID()
@@ -67247,6 +67390,9 @@ func (m *OrgSubscriptionHistoryMutation) ResetField(name string) error {
 		return nil
 	case orgsubscriptionhistory.FieldProductTier:
 		m.ResetProductTier()
+		return nil
+	case orgsubscriptionhistory.FieldProductPrice:
+		m.ResetProductPrice()
 		return nil
 	case orgsubscriptionhistory.FieldStripeProductTierID:
 		m.ResetStripeProductTierID()

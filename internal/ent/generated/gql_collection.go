@@ -7338,6 +7338,11 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, orgsubscription.FieldProductTier)
 				fieldSeen[orgsubscription.FieldProductTier] = struct{}{}
 			}
+		case "productPrice":
+			if _, ok := fieldSeen[orgsubscription.FieldProductPrice]; !ok {
+				selectedFields = append(selectedFields, orgsubscription.FieldProductPrice)
+				fieldSeen[orgsubscription.FieldProductPrice] = struct{}{}
+			}
 		case "stripeProductTierID":
 			if _, ok := fieldSeen[orgsubscription.FieldStripeProductTierID]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldStripeProductTierID)
@@ -7494,6 +7499,11 @@ func (osh *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldProductTier]; !ok {
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldProductTier)
 				fieldSeen[orgsubscriptionhistory.FieldProductTier] = struct{}{}
+			}
+		case "productPrice":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldProductPrice]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldProductPrice)
+				fieldSeen[orgsubscriptionhistory.FieldProductPrice] = struct{}{}
 			}
 		case "stripeProductTierID":
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldStripeProductTierID]; !ok {

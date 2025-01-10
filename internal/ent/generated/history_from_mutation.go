@@ -4398,6 +4398,10 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetProductTier(productTier)
 	}
 
+	if productPrice, exists := m.ProductPrice(); exists {
+		create = create.SetProductPrice(productPrice)
+	}
+
 	if stripeProductTierID, exists := m.StripeProductTierID(); exists {
 		create = create.SetStripeProductTierID(stripeProductTierID)
 	}
@@ -4518,6 +4522,12 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetProductTier(orgsubscription.ProductTier)
 		}
 
+		if productPrice, exists := m.ProductPrice(); exists {
+			create = create.SetProductPrice(productPrice)
+		} else {
+			create = create.SetProductPrice(orgsubscription.ProductPrice)
+		}
+
 		if stripeProductTierID, exists := m.StripeProductTierID(); exists {
 			create = create.SetStripeProductTierID(stripeProductTierID)
 		} else {
@@ -4597,6 +4607,7 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetOwnerID(orgsubscription.OwnerID).
 			SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID).
 			SetProductTier(orgsubscription.ProductTier).
+			SetProductPrice(orgsubscription.ProductPrice).
 			SetStripeProductTierID(orgsubscription.StripeProductTierID).
 			SetStripeSubscriptionStatus(orgsubscription.StripeSubscriptionStatus).
 			SetActive(orgsubscription.Active).

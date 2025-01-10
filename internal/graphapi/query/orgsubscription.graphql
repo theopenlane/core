@@ -14,6 +14,7 @@ query GetAllOrgSubscriptions {
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
+        productPrice
         tags
         updatedAt
         updatedBy
@@ -36,6 +37,7 @@ query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
     stripeProductTierID
     stripeSubscriptionID
     stripeSubscriptionStatus
+    productPrice
     tags
     updatedAt
     updatedBy
@@ -58,6 +60,7 @@ query GetOrgSubscriptions($where: OrgSubscriptionWhereInput) {
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
+        productPrice
         tags
         updatedAt
         updatedBy

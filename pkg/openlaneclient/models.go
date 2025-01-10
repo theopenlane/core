@@ -11019,6 +11019,8 @@ type OrgSubscription struct {
 	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty"`
 	// the common name of the product tier the subscription is associated with, e.g. starter tier
 	ProductTier *string `json:"productTier,omitempty"`
+	// the price of the product tier
+	ProductPrice *models.Price `json:"productPrice,omitempty"`
 	// the product id that represents the tier in stripe
 	StripeProductTierID *string `json:"stripeProductTierID,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
@@ -11074,6 +11076,8 @@ type OrgSubscriptionHistory struct {
 	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty"`
 	// the common name of the product tier the subscription is associated with, e.g. starter tier
 	ProductTier *string `json:"productTier,omitempty"`
+	// the price of the product tier
+	ProductPrice *models.Price `json:"productPrice,omitempty"`
 	// the product id that represents the tier in stripe
 	StripeProductTierID *string `json:"stripeProductTierID,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status

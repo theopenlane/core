@@ -15877,6 +15877,10 @@ type OrgSubscription implements Node {
 	"""
 	productTier: String
 	"""
+	the price of the product tier
+	"""
+	productPrice: Price
+	"""
 	the product id that represents the tier in stripe
 	"""
 	stripeProductTierID: String
@@ -15960,6 +15964,10 @@ type OrgSubscriptionHistory implements Node {
 	the common name of the product tier the subscription is associated with, e.g. starter tier
 	"""
 	productTier: String
+	"""
+	the price of the product tier
+	"""
+	productPrice: Price
 	"""
 	the product id that represents the tier in stripe
 	"""
@@ -18437,6 +18445,7 @@ input PersonalAccessTokenWhereInput {
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
 }
+scalar Price
 type Procedure implements Node {
 	id: ID!
 	createdAt: Time

@@ -81,8 +81,7 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.OrgSubscription) {
 	// create a table writer
-	// TODO: add additional columns to the table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "StripeCustomerID", "StripeSubscriptionStatus", "ProductTier", "Features", "ExpiresAt")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Active", "StripeCustomerID", "StripeSubscriptionStatus", "ProductTier", "Features", "Price", "ExpiresAt")
 	for _, i := range out {
 		features := []string{}
 		if i.Features != nil {
@@ -94,11 +93,18 @@ func tableOutput(out []openlaneclient.OrgSubscription) {
 			exp = i.ExpiresAt.String()
 		}
 
+		price := ""
+		if i.ProductPrice != nil {
+			price = i.ProductPrice.String()
+		}
+
 		writer.AddRow(i.ID,
+			i.Active,
 			*i.StripeCustomerID,
 			*i.StripeSubscriptionStatus,
 			*i.ProductTier,
 			strings.Join(features, ", "),
+			price,
 			exp,
 		)
 	}

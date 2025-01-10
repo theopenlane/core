@@ -44,6 +44,8 @@ const (
 	FieldStripeSubscriptionID = "stripe_subscription_id"
 	// FieldProductTier holds the string denoting the product_tier field in the database.
 	FieldProductTier = "product_tier"
+	// FieldProductPrice holds the string denoting the product_price field in the database.
+	FieldProductPrice = "product_price"
 	// FieldStripeProductTierID holds the string denoting the stripe_product_tier_id field in the database.
 	FieldStripeProductTierID = "stripe_product_tier_id"
 	// FieldStripeSubscriptionStatus holds the string denoting the stripe_subscription_status field in the database.
@@ -77,6 +79,7 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldStripeSubscriptionID,
 	FieldProductTier,
+	FieldProductPrice,
 	FieldStripeProductTierID,
 	FieldStripeSubscriptionStatus,
 	FieldActive,

@@ -609,16 +609,20 @@ func adminSearchOrgSubscriptions(ctx context.Context, query string) ([]*generate
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 			},
-			orgsubscription.DeletedByContainsFold(query),                // search by DeletedBy
-			orgsubscription.OwnerIDContainsFold(query),                  // search by OwnerID
-			orgsubscription.StripeSubscriptionIDContainsFold(query),     // search by StripeSubscriptionID
-			orgsubscription.ProductTierContainsFold(query),              // search by ProductTier
+			orgsubscription.DeletedByContainsFold(query),            // search by DeletedBy
+			orgsubscription.OwnerIDContainsFold(query),              // search by OwnerID
+			orgsubscription.StripeSubscriptionIDContainsFold(query), // search by StripeSubscriptionID
+			orgsubscription.ProductTierContainsFold(query),          // search by ProductTier
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(productprice)::text LIKE $7", likeQuery)) // search by ProductPrice
+			},
 			orgsubscription.StripeProductTierIDContainsFold(query),      // search by StripeProductTierID
 			orgsubscription.StripeSubscriptionStatusContainsFold(query), // search by StripeSubscriptionStatus
 			orgsubscription.StripeCustomerIDContainsFold(query),         // search by StripeCustomerID
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(features)::text LIKE $10", likeQuery)) // search by Features
+				s.Where(sql.ExprP("(features)::text LIKE $11", likeQuery)) // search by Features
 			},
 		),
 	).All(ctx)

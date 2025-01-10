@@ -67,9 +67,9 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 	return customers, nil
 }
 
-// FindorCreateCustomer attempts to lookup a customer by the organization ID which is set in both the
+// FindOrCreateCustomer attempts to lookup a customer by the organization ID which is set in both the
 // name field attribute as well as in the object metadata field
-func (sc *StripeClient) FindorCreateCustomer(ctx context.Context, o *OrganizationCustomer) (*OrganizationCustomer, error) {
+func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *OrganizationCustomer) (*OrganizationCustomer, error) {
 	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", o.OrganizationID))
 	if err != nil {
 		return nil, err

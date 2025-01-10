@@ -2191,7 +2191,7 @@ func init() {
 	// orgsubscription.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	orgsubscription.OwnerIDValidator = orgsubscriptionDescOwnerID.Validators[0].(func(string) error)
 	// orgsubscriptionDescActive is the schema descriptor for active field.
-	orgsubscriptionDescActive := orgsubscriptionFields[4].Descriptor()
+	orgsubscriptionDescActive := orgsubscriptionFields[5].Descriptor()
 	// orgsubscription.DefaultActive holds the default value on creation for the active field.
 	orgsubscription.DefaultActive = orgsubscriptionDescActive.Default.(bool)
 	// orgsubscriptionDescID is the schema descriptor for id field.
@@ -2223,7 +2223,7 @@ func init() {
 	// orgsubscriptionhistory.DefaultTags holds the default value on creation for the tags field.
 	orgsubscriptionhistory.DefaultTags = orgsubscriptionhistoryDescTags.Default.([]string)
 	// orgsubscriptionhistoryDescActive is the schema descriptor for active field.
-	orgsubscriptionhistoryDescActive := orgsubscriptionhistoryFields[17].Descriptor()
+	orgsubscriptionhistoryDescActive := orgsubscriptionhistoryFields[18].Descriptor()
 	// orgsubscriptionhistory.DefaultActive holds the default value on creation for the active field.
 	orgsubscriptionhistory.DefaultActive = orgsubscriptionhistoryDescActive.Default.(bool)
 	// orgsubscriptionhistoryDescID is the schema descriptor for id field.

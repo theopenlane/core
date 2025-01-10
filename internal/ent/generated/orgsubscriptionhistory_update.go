@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -179,6 +180,26 @@ func (oshu *OrgSubscriptionHistoryUpdate) SetNillableProductTier(s *string) *Org
 // ClearProductTier clears the value of the "product_tier" field.
 func (oshu *OrgSubscriptionHistoryUpdate) ClearProductTier() *OrgSubscriptionHistoryUpdate {
 	oshu.mutation.ClearProductTier()
+	return oshu
+}
+
+// SetProductPrice sets the "product_price" field.
+func (oshu *OrgSubscriptionHistoryUpdate) SetProductPrice(m models.Price) *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.SetProductPrice(m)
+	return oshu
+}
+
+// SetNillableProductPrice sets the "product_price" field if the given value is not nil.
+func (oshu *OrgSubscriptionHistoryUpdate) SetNillableProductPrice(m *models.Price) *OrgSubscriptionHistoryUpdate {
+	if m != nil {
+		oshu.SetProductPrice(*m)
+	}
+	return oshu
+}
+
+// ClearProductPrice clears the value of the "product_price" field.
+func (oshu *OrgSubscriptionHistoryUpdate) ClearProductPrice() *OrgSubscriptionHistoryUpdate {
+	oshu.mutation.ClearProductPrice()
 	return oshu
 }
 
@@ -412,6 +433,12 @@ func (oshu *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	if oshu.mutation.ProductTierCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldProductTier, field.TypeString)
 	}
+	if value, ok := oshu.mutation.ProductPrice(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
+	}
+	if oshu.mutation.ProductPriceCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON)
+	}
 	if value, ok := oshu.mutation.StripeProductTierID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString, value)
 	}
@@ -621,6 +648,26 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableProductTier(s *string) 
 // ClearProductTier clears the value of the "product_tier" field.
 func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearProductTier() *OrgSubscriptionHistoryUpdateOne {
 	oshuo.mutation.ClearProductTier()
+	return oshuo
+}
+
+// SetProductPrice sets the "product_price" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetProductPrice(m models.Price) *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.SetProductPrice(m)
+	return oshuo
+}
+
+// SetNillableProductPrice sets the "product_price" field if the given value is not nil.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) SetNillableProductPrice(m *models.Price) *OrgSubscriptionHistoryUpdateOne {
+	if m != nil {
+		oshuo.SetProductPrice(*m)
+	}
+	return oshuo
+}
+
+// ClearProductPrice clears the value of the "product_price" field.
+func (oshuo *OrgSubscriptionHistoryUpdateOne) ClearProductPrice() *OrgSubscriptionHistoryUpdateOne {
+	oshuo.mutation.ClearProductPrice()
 	return oshuo
 }
 
@@ -883,6 +930,12 @@ func (oshuo *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if oshuo.mutation.ProductTierCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldProductTier, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.ProductPrice(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
+	}
+	if oshuo.mutation.ProductPriceCleared() {
+		_spec.ClearField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON)
 	}
 	if value, ok := oshuo.mutation.StripeProductTierID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString, value)

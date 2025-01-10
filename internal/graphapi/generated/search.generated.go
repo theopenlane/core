@@ -1434,6 +1434,8 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_stripeSubscriptionID(ctx, field)
 			case "productTier":
 				return ec.fieldContext_OrgSubscription_productTier(ctx, field)
+			case "productPrice":
+				return ec.fieldContext_OrgSubscription_productPrice(ctx, field)
 			case "stripeProductTierID":
 				return ec.fieldContext_OrgSubscription_stripeProductTierID(ctx, field)
 			case "stripeSubscriptionStatus":

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrgSubscriptionCreate is the builder for creating a OrgSubscription entity.
@@ -163,6 +164,20 @@ func (osc *OrgSubscriptionCreate) SetProductTier(s string) *OrgSubscriptionCreat
 func (osc *OrgSubscriptionCreate) SetNillableProductTier(s *string) *OrgSubscriptionCreate {
 	if s != nil {
 		osc.SetProductTier(*s)
+	}
+	return osc
+}
+
+// SetProductPrice sets the "product_price" field.
+func (osc *OrgSubscriptionCreate) SetProductPrice(m models.Price) *OrgSubscriptionCreate {
+	osc.mutation.SetProductPrice(m)
+	return osc
+}
+
+// SetNillableProductPrice sets the "product_price" field if the given value is not nil.
+func (osc *OrgSubscriptionCreate) SetNillableProductPrice(m *models.Price) *OrgSubscriptionCreate {
+	if m != nil {
+		osc.SetProductPrice(*m)
 	}
 	return osc
 }
@@ -426,6 +441,10 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 	if value, ok := osc.mutation.ProductTier(); ok {
 		_spec.SetField(orgsubscription.FieldProductTier, field.TypeString, value)
 		_node.ProductTier = value
+	}
+	if value, ok := osc.mutation.ProductPrice(); ok {
+		_spec.SetField(orgsubscription.FieldProductPrice, field.TypeJSON, value)
+		_node.ProductPrice = value
 	}
 	if value, ok := osc.mutation.StripeProductTierID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeProductTierID, field.TypeString, value)

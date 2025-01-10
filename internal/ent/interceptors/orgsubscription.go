@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/utils"
 )
 
 func InterceptorSubscriptionURL() ent.Interceptor {
@@ -25,10 +26,10 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 				return v, nil
 			}
 
-			fields := graphql.CollectFieldsCtx(ctx, []string{"SubscriptionURL"})
+			fields := utils.CheckForRequestedField(ctx, "subscriptionURL")
 
 			// if the SubscriptionURL field wasn't queried, return the result as is
-			if len(fields) == 0 {
+			if fields == false {
 				return v, nil
 			}
 

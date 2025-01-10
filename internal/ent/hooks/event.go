@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"time"
 
 	"entgo.io/ent"
 
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Eventer is a wrapper struct for having a soiree as well as a list of listeners
@@ -233,7 +235,7 @@ func handleOrganizationSettingsCreate(event soiree.Event) error {
 
 	// our resolvers support creating organizations + settings with attributes in the payload, so in the event this is populated we want to do nothing
 	if orgCust.StripeCustomerID == "" {
-		customer, err := entMgr.FindorCreateCustomer(event.Context(), orgCust)
+		customer, err := entMgr.FindOrCreateCustomer(event.Context(), orgCust)
 		if err != nil {
 			log.Err(err).Msg("Failed to create customer")
 
@@ -254,18 +256,48 @@ func handleOrganizationSettingsCreate(event soiree.Event) error {
 
 // createInternalOrgSubscription creates an internal org subscription
 func createInternalOrgSubscription(ctx context.Context, customer *entitlements.OrganizationCustomer, client interface{}) error {
+	productName := ""
+	productPrice := models.Price{}
+
+	if len(customer.Prices) == 1 {
+		productName = customer.Prices[0].ProductName
+		productPrice.Amount = customer.Prices[0].Price
+		productPrice.Currency = customer.Prices[0].Currency
+		productPrice.Interval = customer.Prices[0].Interval
+	} else {
+		log.Warn().Msgf("Unable to determine product name and price, there are %v prices", len(customer.Prices))
+	}
+
+	expiresAt := time.Time{}
+	if customer.Subscription.EndDate != 0 {
+		expiresAt = time.Unix(customer.Subscription.EndDate, 0)
+	}
+
+	active := false
+
+	// if the subscription is active or trialing, set the active flag to true
+	if customer.Subscription.Status == "active" || customer.Subscription.Status == "trialing" {
+		active = true
+	}
+
 	sub, err := client.(*entgen.Client).OrgSubscription.Create().
 		SetStripeSubscriptionID(customer.Subscription.ID).
 		SetOwnerID(customer.OrganizationID).
 		SetStripeCustomerID(customer.StripeCustomerID).
+		SetStripeSubscriptionStatus(customer.Subscription.Status).
+		SetActive(active).
+		SetProductTier(productName).
 		SetFeatures(customer.Features).
+		SetStripeProductTierID(customer.Subscription.ProductID).
+		SetProductPrice(productPrice).
+		SetExpiresAt(expiresAt).
 		Save(ctx)
 	if err != nil {
 		log.Err(err).Msg("Failed to create internal org subscription")
 		return err
 	}
 
-	log.Info().Msgf("Created internal org subscription with ID %s", sub.ID)
+	log.Info().Str("subscription", sub.ID).Msg("created internal org subscription")
 
 	return nil
 }
