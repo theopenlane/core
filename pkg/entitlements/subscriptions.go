@@ -51,6 +51,16 @@ func (sc *StripeClient) GetSubscriptionByID(id string) (*stripe.Subscription, er
 	return subscription, nil
 }
 
+// GetProductByID gets a product by ID
+func (sc *StripeClient) GetProductByID(id string) (*stripe.Product, error) {
+	product, err := sc.Client.Products.Get(id, &stripe.ProductParams{})
+	if err != nil {
+		return nil, err
+	}
+
+	return product, nil
+}
+
 // UpdateSubscription updates a subscription
 func (sc *StripeClient) UpdateSubscription(id string, params *stripe.SubscriptionParams) (*stripe.Subscription, error) {
 	subscription, err := sc.Client.Subscriptions.Update(id, params)
@@ -156,13 +166,27 @@ func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscr
 	subscript := Subscription{}
 
 	prices := []Price{}
+	productID := ""
+
+	if len(subs.Items.Data) > 1 {
+		log.Warn().Msg("customer has more than one subscription")
+	}
 
 	for _, item := range subs.Items.Data {
+		productID = item.Price.Product.ID
+
+		product, err := sc.GetProductByID(productID)
+		if err != nil {
+			log.Warn().Err(err).Msg("failed to get product by ID")
+		}
+
 		prices = append(prices, Price{
-			ID:        item.Price.ID,
-			Price:     float64(item.Price.UnitAmount) / 100, // nolint:mnd
-			ProductID: item.Price.Product.ID,
-			Interval:  string(item.Price.Recurring.Interval),
+			ID:          item.Price.ID,
+			Price:       float64(item.Price.UnitAmount) / 100, // nolint:mnd
+			ProductID:   productID,
+			ProductName: product.Name,
+			Interval:    string(item.Price.Recurring.Interval),
+			Currency:    string(item.Price.Currency),
 		})
 
 		subscript.Prices = append(subscript.Prices, prices...)
@@ -174,6 +198,7 @@ func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscr
 		StartDate:        subs.CurrentPeriodStart,
 		EndDate:          subs.CurrentPeriodEnd,
 		TrialEnd:         subs.TrialEnd,
+		ProductID:        productID,
 		Status:           string(subs.Status),
 		StripeCustomerID: subs.Customer.ID,
 		OrganizationID:   subs.Metadata["organization_id"],

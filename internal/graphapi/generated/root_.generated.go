@@ -1855,6 +1855,7 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		ProductPrice             func(childComplexity int) int
 		ProductTier              func(childComplexity int) int
 		StripeCustomerID         func(childComplexity int) int
 		StripeProductTierID      func(childComplexity int) int
@@ -1889,6 +1890,7 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		ProductPrice             func(childComplexity int) int
 		ProductTier              func(childComplexity int) int
 		Ref                      func(childComplexity int) int
 		StripeCustomerID         func(childComplexity int) int
@@ -12495,6 +12497,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OrgSubscription.OwnerID(childComplexity), true
 
+	case "OrgSubscription.productPrice":
+		if e.complexity.OrgSubscription.ProductPrice == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.ProductPrice(childComplexity), true
+
 	case "OrgSubscription.productTier":
 		if e.complexity.OrgSubscription.ProductTier == nil {
 			break
@@ -12669,6 +12678,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrgSubscriptionHistory.OwnerID(childComplexity), true
+
+	case "OrgSubscriptionHistory.productPrice":
+		if e.complexity.OrgSubscriptionHistory.ProductPrice == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscriptionHistory.ProductPrice(childComplexity), true
 
 	case "OrgSubscriptionHistory.productTier":
 		if e.complexity.OrgSubscriptionHistory.ProductTier == nil {
@@ -35209,6 +35225,10 @@ type OrgSubscription implements Node {
   """
   productTier: String
   """
+  the price of the product tier
+  """
+  productPrice: Price
+  """
   the product id that represents the tier in stripe
   """
   stripeProductTierID: String
@@ -35291,6 +35311,10 @@ type OrgSubscriptionHistory implements Node {
   the common name of the product tier the subscription is associated with, e.g. starter tier
   """
   productTier: String
+  """
+  the price of the product tier
+  """
+  productPrice: Price
   """
   the product id that represents the tier in stripe
   """
@@ -51657,7 +51681,8 @@ type RiskBulkCreatePayload {
     risks: [Risk!]
 }`, BuiltIn: false},
 	{Name: "../schema/scalars.graphql", Input: `scalar Upload
-scalar Address`, BuiltIn: false},
+scalar Address
+scalar Price`, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
     Search across APIToken objects

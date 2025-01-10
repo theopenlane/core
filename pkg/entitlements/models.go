@@ -92,11 +92,11 @@ type Plan struct {
 	Status             string
 }
 
-// Plan is the recurring context that holds the payment information
+// Subscription is the recurring context that holds the payment information
 type Subscription struct {
 	ID                 string `json:"plan_id" yaml:"plan_id"`
-	Product            string `json:"product_id" yaml:"product_id"`
-	Price              string `json:"price_id" yaml:"price_id"`
+	ProductID          string `json:"product_id" yaml:"product_id"`
+	PriceID            string `json:"price_id" yaml:"price_id"`
 	StartDate          int64  `json:"start_date" yaml:"start_date"`
 	EndDate            int64  `json:"end_date" yaml:"end_date"`
 	StripeParams       *stripe.SubscriptionParams
@@ -128,7 +128,9 @@ type Product struct {
 type Price struct {
 	ID           string              `json:"price_id" yaml:"price_id"`
 	Price        float64             `json:"price" yaml:"price"`
+	Currency     string              `json:"currency" yaml:"currency"`
 	ProductID    string              `json:"product_id" yaml:"-"`
+	ProductName  string              `json:"product_name" yaml:"product_name"`
 	Interval     string              `json:"interval" yaml:"interval"`
 	StripeParams *stripe.PriceParams `json:"stripe_params,omitempty" yaml:"stripe_params,omitempty"`
 	StripePrice  []stripe.Price      `json:"stripe_price,omitempty" yaml:"stripe_price,omitempty"`

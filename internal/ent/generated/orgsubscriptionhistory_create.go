@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -197,6 +198,20 @@ func (oshc *OrgSubscriptionHistoryCreate) SetProductTier(s string) *OrgSubscript
 func (oshc *OrgSubscriptionHistoryCreate) SetNillableProductTier(s *string) *OrgSubscriptionHistoryCreate {
 	if s != nil {
 		oshc.SetProductTier(*s)
+	}
+	return oshc
+}
+
+// SetProductPrice sets the "product_price" field.
+func (oshc *OrgSubscriptionHistoryCreate) SetProductPrice(m models.Price) *OrgSubscriptionHistoryCreate {
+	oshc.mutation.SetProductPrice(m)
+	return oshc
+}
+
+// SetNillableProductPrice sets the "product_price" field if the given value is not nil.
+func (oshc *OrgSubscriptionHistoryCreate) SetNillableProductPrice(m *models.Price) *OrgSubscriptionHistoryCreate {
+	if m != nil {
+		oshc.SetProductPrice(*m)
 	}
 	return oshc
 }
@@ -466,6 +481,10 @@ func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory,
 	if value, ok := oshc.mutation.ProductTier(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldProductTier, field.TypeString, value)
 		_node.ProductTier = value
+	}
+	if value, ok := oshc.mutation.ProductPrice(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
+		_node.ProductPrice = value
 	}
 	if value, ok := oshc.mutation.StripeProductTierID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString, value)

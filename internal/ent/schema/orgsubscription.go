@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrgSubscription holds the schema definition for the OrgSubscription entity
@@ -25,6 +26,9 @@ func (OrgSubscription) Fields() []ent.Field {
 			Optional(),
 		field.String("product_tier").
 			Comment("the common name of the product tier the subscription is associated with, e.g. starter tier").
+			Optional(),
+		field.JSON("product_price", models.Price{}).
+			Comment("the price of the product tier").
 			Optional(),
 		field.String("stripe_product_tier_id").
 			Comment("the product id that represents the tier in stripe").

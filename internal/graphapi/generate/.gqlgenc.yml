@@ -17,6 +17,9 @@ models:
   Address:
     model:
       - github.com/theopenlane/core/pkg/models.Address
+  Price:
+    model:
+      - github.com/theopenlane/core/pkg/models.Price
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

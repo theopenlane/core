@@ -960,6 +960,16 @@ func ProductTierContainsFold(v string) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldContainsFold(FieldProductTier, v))
 }
 
+// ProductPriceIsNil applies the IsNil predicate on the "product_price" field.
+func ProductPriceIsNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldProductPrice))
+}
+
+// ProductPriceNotNil applies the NotNil predicate on the "product_price" field.
+func ProductPriceNotNil() predicate.OrgSubscriptionHistory {
+	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldProductPrice))
+}
+
 // StripeProductTierIDEQ applies the EQ predicate on the "stripe_product_tier_id" field.
 func StripeProductTierIDEQ(v string) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldStripeProductTierID, v))

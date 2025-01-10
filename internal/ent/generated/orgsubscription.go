@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OrgSubscription is the model entity for the OrgSubscription schema.
@@ -41,6 +42,8 @@ type OrgSubscription struct {
 	StripeSubscriptionID string `json:"stripe_subscription_id,omitempty"`
 	// the common name of the product tier the subscription is associated with, e.g. starter tier
 	ProductTier string `json:"product_tier,omitempty"`
+	// the price of the product tier
+	ProductPrice models.Price `json:"product_price,omitempty"`
 	// the product id that represents the tier in stripe
 	StripeProductTierID string `json:"stripe_product_tier_id,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
@@ -88,7 +91,7 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orgsubscription.FieldTags, orgsubscription.FieldFeatures:
+		case orgsubscription.FieldTags, orgsubscription.FieldProductPrice, orgsubscription.FieldFeatures:
 			values[i] = new([]byte)
 		case orgsubscription.FieldActive:
 			values[i] = new(sql.NullBool)
@@ -184,6 +187,14 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field product_tier", values[i])
 			} else if value.Valid {
 				os.ProductTier = value.String
+			}
+		case orgsubscription.FieldProductPrice:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field product_price", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &os.ProductPrice); err != nil {
+					return fmt.Errorf("unmarshal field product_price: %w", err)
+				}
 			}
 		case orgsubscription.FieldStripeProductTierID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -297,6 +308,9 @@ func (os *OrgSubscription) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("product_tier=")
 	builder.WriteString(os.ProductTier)
+	builder.WriteString(", ")
+	builder.WriteString("product_price=")
+	builder.WriteString(fmt.Sprintf("%v", os.ProductPrice))
 	builder.WriteString(", ")
 	builder.WriteString("stripe_product_tier_id=")
 	builder.WriteString(os.StripeProductTierID)

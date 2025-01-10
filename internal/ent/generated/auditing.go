@@ -1342,6 +1342,9 @@ func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change
 	if !reflect.DeepEqual(osh.ProductTier, new.ProductTier) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductTier, osh.ProductTier, new.ProductTier))
 	}
+	if !reflect.DeepEqual(osh.ProductPrice, new.ProductPrice) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductPrice, osh.ProductPrice, new.ProductPrice))
+	}
 	if !reflect.DeepEqual(osh.StripeProductTierID, new.StripeProductTierID) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeProductTierID, osh.StripeProductTierID, new.StripeProductTierID))
 	}

@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/utils"
 )
 
 func InterceptorSubscriptionURL() ent.Interceptor {
@@ -19,11 +19,11 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 				return nil, err
 			}
 
-			// get the fields that were queried and check for the SubscriptionURL field
-			fields := graphql.CollectFieldsCtx(ctx, []string{"SubscriptionURL"})
+			// get the fields that were queried and check for the subscriptionURL field
+			fields := utils.CheckForRequestedField(ctx, "subscriptionURL")
 
 			// if the SubscriptionURL field wasn't queried, return the result as is
-			if len(fields) == 0 {
+			if !fields {
 				return v, nil
 			}
 

@@ -1416,6 +1416,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
 		{Name: "product_tier", Type: field.TypeString, Nullable: true},
+		{Name: "product_price", Type: field.TypeJSON, Nullable: true},
 		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
@@ -1432,7 +1433,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[17]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1455,6 +1456,7 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
 		{Name: "product_tier", Type: field.TypeString, Nullable: true},
+		{Name: "product_price", Type: field.TypeJSON, Nullable: true},
 		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
