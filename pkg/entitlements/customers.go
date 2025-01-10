@@ -3,6 +3,7 @@ package entitlements
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v81"
@@ -89,10 +90,32 @@ func (sc *StripeClient) FindorCreateCustomer(ctx context.Context, o *Organizatio
 		o.StripeCustomerID = customer.ID
 		o.Subscription = *subs
 
-		feats, err := sc.retrieveActiveEntitlements(customer.ID)
-		if err != nil {
-			return nil, err
+		// get features and retry up to 5 times	if we don't have any
+		// there is a delay between creating the customer and the features being available
+		var feats []string
+		const maxRetries = 5
+
+		for i := range maxRetries {
+			feats, err = sc.retrieveActiveEntitlements(customer.ID)
+			if err != nil {
+				return nil, err
+			}
+
+			// if we have features, break out of the loop
+			if len(feats) > 0 {
+				break
+			}
+
+			log.Debug().Str("customer_id", customer.ID).Msg("no features found for customer, retrying")
+
+			time.Sleep(time.Duration(i+1) * time.Second) // backoff retry
 		}
+
+		if len(feats) == 0 {
+			log.Warn().Str("customer_id", customer.ID).Msg("no features found for customer")
+		}
+
+		log.Debug().Strs("features", feats).Str("customer_id", customer.ID).Msg("found features for customer")
 
 		o.Features = feats
 
