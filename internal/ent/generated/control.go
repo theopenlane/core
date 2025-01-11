@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Control is the model entity for the Control schema.
@@ -23,14 +24,14 @@ type Control struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -67,6 +68,11 @@ type Control struct {
 	control_objective_controls *string
 	internal_policy_controls   *string
 	selectValues               sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // ControlEdges holds the relations/edges for other nodes in the graph.
@@ -243,7 +249,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case control.FieldTags, control.FieldDetails:
 			values[i] = new([]byte)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldMappingID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
+		case control.FieldID, control.FieldCreatedByID, control.FieldUpdatedByID, control.FieldDeletedByID, control.FieldMappingID, control.FieldOwnerID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -284,17 +290,17 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.UpdatedAt = value.Time
 			}
-		case control.FieldCreatedBy:
+		case control.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				c.CreatedBy = value.String
+				c.CreatedByID = value.String
 			}
-		case control.FieldUpdatedBy:
+		case control.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				c.UpdatedBy = value.String
+				c.UpdatedByID = value.String
 			}
 		case control.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -302,11 +308,11 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.DeletedAt = value.Time
 			}
-		case control.FieldDeletedBy:
+		case control.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				c.DeletedBy = value.String
+				c.DeletedByID = value.String
 			}
 		case control.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -523,17 +529,17 @@ func (c *Control) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(c.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(c.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(c.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(c.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(c.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(c.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(c.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(c.MappingID)

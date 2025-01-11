@@ -51,30 +51,30 @@ func (ic *InviteCreate) SetNillableUpdatedAt(t *time.Time) *InviteCreate {
 	return ic
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ic *InviteCreate) SetCreatedBy(s string) *InviteCreate {
-	ic.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ic *InviteCreate) SetCreatedByID(s string) *InviteCreate {
+	ic.mutation.SetCreatedByID(s)
 	return ic
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableCreatedBy(s *string) *InviteCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ic *InviteCreate) SetNillableCreatedByID(s *string) *InviteCreate {
 	if s != nil {
-		ic.SetCreatedBy(*s)
+		ic.SetCreatedByID(*s)
 	}
 	return ic
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ic *InviteCreate) SetUpdatedBy(s string) *InviteCreate {
-	ic.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ic *InviteCreate) SetUpdatedByID(s string) *InviteCreate {
+	ic.mutation.SetUpdatedByID(s)
 	return ic
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableUpdatedBy(s *string) *InviteCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ic *InviteCreate) SetNillableUpdatedByID(s *string) *InviteCreate {
 	if s != nil {
-		ic.SetUpdatedBy(*s)
+		ic.SetUpdatedByID(*s)
 	}
 	return ic
 }
@@ -107,16 +107,16 @@ func (ic *InviteCreate) SetNillableDeletedAt(t *time.Time) *InviteCreate {
 	return ic
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ic *InviteCreate) SetDeletedBy(s string) *InviteCreate {
-	ic.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ic *InviteCreate) SetDeletedByID(s string) *InviteCreate {
+	ic.mutation.SetDeletedByID(s)
 	return ic
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableDeletedBy(s *string) *InviteCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ic *InviteCreate) SetNillableDeletedByID(s *string) *InviteCreate {
 	if s != nil {
-		ic.SetDeletedBy(*s)
+		ic.SetDeletedByID(*s)
 	}
 	return ic
 }
@@ -446,13 +446,13 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 		_spec.SetField(invite.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ic.mutation.CreatedBy(); ok {
-		_spec.SetField(invite.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ic.mutation.CreatedByID(); ok {
+		_spec.SetField(invite.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ic.mutation.UpdatedBy(); ok {
-		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ic.mutation.UpdatedByID(); ok {
+		_spec.SetField(invite.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ic.mutation.MappingID(); ok {
 		_spec.SetField(invite.FieldMappingID, field.TypeString, value)
@@ -462,9 +462,9 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ic.mutation.DeletedBy(); ok {
-		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ic.mutation.DeletedByID(); ok {
+		_spec.SetField(invite.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ic.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)

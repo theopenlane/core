@@ -1,20 +1,19 @@
-
 mutation CreateBulkCSVTask($input: Upload!) {
   createBulkCSVTask(input: $input) {
     tasks {
-      assignee{
+      assignee {
         id
         firstName
         lastName
       }
-      assigner{
+      assigner {
         id
         firstName
         lastName
       }
       completed
       createdAt
-      createdBy
+      createdByID
       description
       details
       due
@@ -23,7 +22,7 @@ mutation CreateBulkCSVTask($input: Upload!) {
       tags
       title
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -31,19 +30,19 @@ mutation CreateBulkCSVTask($input: Upload!) {
 mutation CreateBulkTask($input: [CreateTaskInput!]) {
   createBulkTask(input: $input) {
     tasks {
-      assignee{
+      assignee {
         id
         firstName
         lastName
       }
-      assigner{
+      assigner {
         id
         firstName
         lastName
       }
       completed
       createdAt
-      createdBy
+      createdByID
       description
       details
       due
@@ -52,7 +51,7 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
       tags
       title
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -60,19 +59,19 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
 mutation CreateTask($input: CreateTaskInput!) {
   createTask(input: $input) {
     task {
-      assignee{
+      assignee {
         id
         firstName
         lastName
       }
-      assigner{
+      assigner {
         id
         firstName
         lastName
       }
       completed
       createdAt
-      createdBy
+      createdByID
       description
       details
       due
@@ -81,7 +80,7 @@ mutation CreateTask($input: CreateTaskInput!) {
       tags
       title
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -96,23 +95,23 @@ query GetAllTasks {
   tasks {
     edges {
       node {
-        assignee{
+        assignee {
           id
           firstName
           lastName
         }
-        assigner{
+        assigner {
           id
           firstName
           lastName
         }
-        organization{
+        organization {
           id
           name
         }
         completed
         createdAt
-        createdBy
+        createdByID
         description
         details
         due
@@ -121,30 +120,31 @@ query GetAllTasks {
         tags
         title
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
 }
+
 query GetTaskByID($taskId: ID!) {
   task(id: $taskId) {
-    assignee{
+    assignee {
       id
       firstName
       lastName
     }
-    assigner{
+    assigner {
       id
       firstName
       lastName
     }
-    organization{
+    organization {
       id
       name
     }
     completed
     createdAt
-    createdBy
+    createdByID
     description
     details
     due
@@ -153,7 +153,7 @@ query GetTaskByID($taskId: ID!) {
     tags
     title
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -161,19 +161,19 @@ query GetTasks($where: TaskWhereInput) {
   tasks(where: $where) {
     edges {
       node {
-        assignee{
+        assignee {
           id
           firstName
           lastName
         }
-        assigner{
+        assigner {
           id
           firstName
           lastName
         }
         completed
         createdAt
-        createdBy
+        createdByID
         description
         details
         due
@@ -182,27 +182,28 @@ query GetTasks($where: TaskWhereInput) {
         tags
         title
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
 }
+
 mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
   updateTask(id: $updateTaskId, input: $input) {
     task {
-      assignee{
+      assignee {
         id
         firstName
         lastName
       }
-      assigner{
+      assigner {
         id
         firstName
         lastName
       }
       completed
       createdAt
-      createdBy
+      createdByID
       description
       details
       due
@@ -211,7 +212,7 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
       tags
       title
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }

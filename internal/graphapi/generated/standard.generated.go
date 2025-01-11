@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Standard_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Standard_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Standard_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Standard_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Standard_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Standard_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
 			case "name":
@@ -111,6 +111,10 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Standard_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Standard_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Standard_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -163,14 +167,14 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Standard_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Standard_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Standard_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Standard_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Standard_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Standard_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
 			case "name":
@@ -203,6 +207,10 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Standard_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Standard_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Standard_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -299,14 +307,14 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Standard_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Standard_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Standard_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Standard_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Standard_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Standard_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
 			case "name":
@@ -339,6 +347,10 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Standard_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Standard_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Standard_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},

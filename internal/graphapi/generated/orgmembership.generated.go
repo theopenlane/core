@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_OrgMembershipBulkCreatePayload_orgMembe
 				return ec.fieldContext_OrgMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrgMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrgMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrgMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrgMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_OrgMembership_role(ctx, field)
 			case "organizationID":
@@ -91,6 +91,10 @@ func (ec *executionContext) fieldContext_OrgMembershipBulkCreatePayload_orgMembe
 				return ec.fieldContext_OrgMembership_user(ctx, field)
 			case "events":
 				return ec.fieldContext_OrgMembership_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgMembership", field.Name)
 		},
@@ -143,14 +147,14 @@ func (ec *executionContext) fieldContext_OrgMembershipCreatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrgMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrgMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrgMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrgMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_OrgMembership_role(ctx, field)
 			case "organizationID":
@@ -163,6 +167,10 @@ func (ec *executionContext) fieldContext_OrgMembershipCreatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_user(ctx, field)
 			case "events":
 				return ec.fieldContext_OrgMembership_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgMembership", field.Name)
 		},
@@ -259,14 +267,14 @@ func (ec *executionContext) fieldContext_OrgMembershipUpdatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrgMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrgMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrgMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrgMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_OrgMembership_role(ctx, field)
 			case "organizationID":
@@ -279,6 +287,10 @@ func (ec *executionContext) fieldContext_OrgMembershipUpdatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_user(ctx, field)
 			case "events":
 				return ec.fieldContext_OrgMembership_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgMembership", field.Name)
 		},

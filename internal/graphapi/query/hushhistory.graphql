@@ -3,7 +3,7 @@ query GetAllHushHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         historyTime
         id
@@ -13,7 +13,7 @@ query GetAllHushHistories {
         ref
         secretName
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -24,7 +24,7 @@ query GetHushHistories($where: HushHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         description
         historyTime
         id
@@ -34,7 +34,7 @@ query GetHushHistories($where: HushHistoryWhereInput) {
         ref
         secretName
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

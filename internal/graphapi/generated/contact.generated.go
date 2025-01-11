@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 				return ec.fieldContext_Contact_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contact_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Contact_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Contact_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Contact_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Contact_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Contact_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Contact_tags(ctx, field)
 			case "ownerID":
@@ -103,6 +103,10 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 				return ec.fieldContext_Contact_entities(ctx, field)
 			case "files":
 				return ec.fieldContext_Contact_files(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
 		},
@@ -155,14 +159,14 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 				return ec.fieldContext_Contact_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contact_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Contact_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Contact_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Contact_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Contact_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Contact_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Contact_tags(ctx, field)
 			case "ownerID":
@@ -187,6 +191,10 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 				return ec.fieldContext_Contact_entities(ctx, field)
 			case "files":
 				return ec.fieldContext_Contact_files(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
 		},
@@ -283,14 +291,14 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 				return ec.fieldContext_Contact_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contact_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Contact_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Contact_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Contact_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Contact_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Contact_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Contact_tags(ctx, field)
 			case "ownerID":
@@ -315,6 +323,10 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 				return ec.fieldContext_Contact_entities(ctx, field)
 			case "files":
 				return ec.fieldContext_Contact_files(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
 		},

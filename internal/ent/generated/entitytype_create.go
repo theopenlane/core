@@ -50,30 +50,30 @@ func (etc *EntityTypeCreate) SetNillableUpdatedAt(t *time.Time) *EntityTypeCreat
 	return etc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (etc *EntityTypeCreate) SetCreatedBy(s string) *EntityTypeCreate {
-	etc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (etc *EntityTypeCreate) SetCreatedByID(s string) *EntityTypeCreate {
+	etc.mutation.SetCreatedByID(s)
 	return etc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (etc *EntityTypeCreate) SetNillableCreatedBy(s *string) *EntityTypeCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (etc *EntityTypeCreate) SetNillableCreatedByID(s *string) *EntityTypeCreate {
 	if s != nil {
-		etc.SetCreatedBy(*s)
+		etc.SetCreatedByID(*s)
 	}
 	return etc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (etc *EntityTypeCreate) SetUpdatedBy(s string) *EntityTypeCreate {
-	etc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (etc *EntityTypeCreate) SetUpdatedByID(s string) *EntityTypeCreate {
+	etc.mutation.SetUpdatedByID(s)
 	return etc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (etc *EntityTypeCreate) SetNillableUpdatedBy(s *string) *EntityTypeCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (etc *EntityTypeCreate) SetNillableUpdatedByID(s *string) *EntityTypeCreate {
 	if s != nil {
-		etc.SetUpdatedBy(*s)
+		etc.SetUpdatedByID(*s)
 	}
 	return etc
 }
@@ -106,16 +106,16 @@ func (etc *EntityTypeCreate) SetNillableDeletedAt(t *time.Time) *EntityTypeCreat
 	return etc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (etc *EntityTypeCreate) SetDeletedBy(s string) *EntityTypeCreate {
-	etc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (etc *EntityTypeCreate) SetDeletedByID(s string) *EntityTypeCreate {
+	etc.mutation.SetDeletedByID(s)
 	return etc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (etc *EntityTypeCreate) SetNillableDeletedBy(s *string) *EntityTypeCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (etc *EntityTypeCreate) SetNillableDeletedByID(s *string) *EntityTypeCreate {
 	if s != nil {
-		etc.SetDeletedBy(*s)
+		etc.SetDeletedByID(*s)
 	}
 	return etc
 }
@@ -314,13 +314,13 @@ func (etc *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 		_spec.SetField(entitytype.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := etc.mutation.CreatedBy(); ok {
-		_spec.SetField(entitytype.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := etc.mutation.CreatedByID(); ok {
+		_spec.SetField(entitytype.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := etc.mutation.UpdatedBy(); ok {
-		_spec.SetField(entitytype.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := etc.mutation.UpdatedByID(); ok {
+		_spec.SetField(entitytype.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := etc.mutation.MappingID(); ok {
 		_spec.SetField(entitytype.FieldMappingID, field.TypeString, value)
@@ -330,9 +330,9 @@ func (etc *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 		_spec.SetField(entitytype.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := etc.mutation.DeletedBy(); ok {
-		_spec.SetField(entitytype.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := etc.mutation.DeletedByID(); ok {
+		_spec.SetField(entitytype.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := etc.mutation.Tags(); ok {
 		_spec.SetField(entitytype.FieldTags, field.TypeJSON, value)

@@ -59,30 +59,30 @@ func (fc *FileCreate) SetNillableUpdatedAt(t *time.Time) *FileCreate {
 	return fc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (fc *FileCreate) SetCreatedBy(s string) *FileCreate {
-	fc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (fc *FileCreate) SetCreatedByID(s string) *FileCreate {
+	fc.mutation.SetCreatedByID(s)
 	return fc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (fc *FileCreate) SetNillableCreatedBy(s *string) *FileCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableCreatedByID(s *string) *FileCreate {
 	if s != nil {
-		fc.SetCreatedBy(*s)
+		fc.SetCreatedByID(*s)
 	}
 	return fc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fc *FileCreate) SetUpdatedBy(s string) *FileCreate {
-	fc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (fc *FileCreate) SetUpdatedByID(s string) *FileCreate {
+	fc.mutation.SetUpdatedByID(s)
 	return fc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fc *FileCreate) SetNillableUpdatedBy(s *string) *FileCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableUpdatedByID(s *string) *FileCreate {
 	if s != nil {
-		fc.SetUpdatedBy(*s)
+		fc.SetUpdatedByID(*s)
 	}
 	return fc
 }
@@ -101,16 +101,16 @@ func (fc *FileCreate) SetNillableDeletedAt(t *time.Time) *FileCreate {
 	return fc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (fc *FileCreate) SetDeletedBy(s string) *FileCreate {
-	fc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (fc *FileCreate) SetDeletedByID(s string) *FileCreate {
+	fc.mutation.SetDeletedByID(s)
 	return fc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fc *FileCreate) SetNillableDeletedBy(s *string) *FileCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableDeletedByID(s *string) *FileCreate {
 	if s != nil {
-		fc.SetDeletedBy(*s)
+		fc.SetDeletedByID(*s)
 	}
 	return fc
 }
@@ -618,21 +618,21 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := fc.mutation.CreatedBy(); ok {
-		_spec.SetField(file.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := fc.mutation.CreatedByID(); ok {
+		_spec.SetField(file.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := fc.mutation.UpdatedBy(); ok {
-		_spec.SetField(file.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := fc.mutation.UpdatedByID(); ok {
+		_spec.SetField(file.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := fc.mutation.DeletedAt(); ok {
 		_spec.SetField(file.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := fc.mutation.DeletedBy(); ok {
-		_spec.SetField(file.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := fc.mutation.DeletedByID(); ok {
+		_spec.SetField(file.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := fc.mutation.MappingID(); ok {
 		_spec.SetField(file.FieldMappingID, field.TypeString, value)

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Group is the model entity for the Group schema.
@@ -24,14 +25,14 @@ type Group struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -52,6 +53,11 @@ type Group struct {
 	// The values are being populated by the GroupQuery when eager-loading is set.
 	Edges        GroupEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // GroupEdges holds the relations/edges for other nodes in the graph.
@@ -505,7 +511,7 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case group.FieldTags:
 			values[i] = new([]byte)
-		case group.FieldID, group.FieldCreatedBy, group.FieldUpdatedBy, group.FieldDeletedBy, group.FieldMappingID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldDisplayName:
+		case group.FieldID, group.FieldCreatedByID, group.FieldUpdatedByID, group.FieldDeletedByID, group.FieldMappingID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldDisplayName:
 			values[i] = new(sql.NullString)
 		case group.FieldCreatedAt, group.FieldUpdatedAt, group.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -542,17 +548,17 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				gr.UpdatedAt = value.Time
 			}
-		case group.FieldCreatedBy:
+		case group.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				gr.CreatedBy = value.String
+				gr.CreatedByID = value.String
 			}
-		case group.FieldUpdatedBy:
+		case group.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				gr.UpdatedBy = value.String
+				gr.UpdatedByID = value.String
 			}
 		case group.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -560,11 +566,11 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				gr.DeletedAt = value.Time
 			}
-		case group.FieldDeletedBy:
+		case group.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				gr.DeletedBy = value.String
+				gr.DeletedByID = value.String
 			}
 		case group.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -838,17 +844,17 @@ func (gr *Group) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(gr.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(gr.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(gr.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(gr.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(gr.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(gr.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gr.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(gr.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(gr.MappingID)

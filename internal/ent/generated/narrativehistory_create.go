@@ -55,6 +55,20 @@ func (nhc *NarrativeHistoryCreate) SetOperation(ht history.OpType) *NarrativeHis
 	return nhc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (nhc *NarrativeHistoryCreate) SetUpdatedBy(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetUpdatedBy(s)
+	return nhc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableUpdatedBy(s *string) *NarrativeHistoryCreate {
+	if s != nil {
+		nhc.SetUpdatedBy(*s)
+	}
+	return nhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (nhc *NarrativeHistoryCreate) SetCreatedAt(t time.Time) *NarrativeHistoryCreate {
 	nhc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (nhc *NarrativeHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Narrative
 	return nhc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (nhc *NarrativeHistoryCreate) SetCreatedBy(s string) *NarrativeHistoryCreate {
-	nhc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (nhc *NarrativeHistoryCreate) SetCreatedByID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetCreatedByID(s)
 	return nhc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (nhc *NarrativeHistoryCreate) SetNillableCreatedBy(s *string) *NarrativeHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableCreatedByID(s *string) *NarrativeHistoryCreate {
 	if s != nil {
-		nhc.SetCreatedBy(*s)
+		nhc.SetCreatedByID(*s)
 	}
 	return nhc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nhc *NarrativeHistoryCreate) SetUpdatedBy(s string) *NarrativeHistoryCreate {
-	nhc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nhc *NarrativeHistoryCreate) SetUpdatedByID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetUpdatedByID(s)
 	return nhc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nhc *NarrativeHistoryCreate) SetNillableUpdatedBy(s *string) *NarrativeHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableUpdatedByID(s *string) *NarrativeHistoryCreate {
 	if s != nil {
-		nhc.SetUpdatedBy(*s)
+		nhc.SetUpdatedByID(*s)
 	}
 	return nhc
 }
@@ -125,16 +139,16 @@ func (nhc *NarrativeHistoryCreate) SetNillableDeletedAt(t *time.Time) *Narrative
 	return nhc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (nhc *NarrativeHistoryCreate) SetDeletedBy(s string) *NarrativeHistoryCreate {
-	nhc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (nhc *NarrativeHistoryCreate) SetDeletedByID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetDeletedByID(s)
 	return nhc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nhc *NarrativeHistoryCreate) SetNillableDeletedBy(s *string) *NarrativeHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (nhc *NarrativeHistoryCreate) SetNillableDeletedByID(s *string) *NarrativeHistoryCreate {
 	if s != nil {
-		nhc.SetDeletedBy(*s)
+		nhc.SetDeletedByID(*s)
 	}
 	return nhc
 }
@@ -368,6 +382,10 @@ func (nhc *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cr
 		_spec.SetField(narrativehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := nhc.mutation.UpdatedBy(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := nhc.mutation.CreatedAt(); ok {
 		_spec.SetField(narrativehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -376,21 +394,21 @@ func (nhc *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cr
 		_spec.SetField(narrativehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := nhc.mutation.CreatedBy(); ok {
-		_spec.SetField(narrativehistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := nhc.mutation.CreatedByID(); ok {
+		_spec.SetField(narrativehistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := nhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(narrativehistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := nhc.mutation.UpdatedByID(); ok {
+		_spec.SetField(narrativehistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := nhc.mutation.DeletedAt(); ok {
 		_spec.SetField(narrativehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := nhc.mutation.DeletedBy(); ok {
-		_spec.SetField(narrativehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := nhc.mutation.DeletedByID(); ok {
+		_spec.SetField(narrativehistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := nhc.mutation.MappingID(); ok {
 		_spec.SetField(narrativehistory.FieldMappingID, field.TypeString, value)

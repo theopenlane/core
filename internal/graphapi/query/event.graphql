@@ -128,8 +128,8 @@ query GetAllEvents {
         id
         createdAt
         updatedAt
-        createdBy
-        updatedBy
+        createdByID
+        updatedByID
         eventID
         correlationID
         eventType
@@ -171,8 +171,8 @@ query GetEventByID($eventId: ID!) {
     id
     createdAt
     updatedAt
-    createdBy
-    updatedBy
+    createdByID
+    updatedByID
     eventID
     correlationID
     eventType
@@ -227,8 +227,8 @@ mutation UpdateEvent($updateEventId: ID!, $input: UpdateEventInput!) {
       id
       createdAt
       updatedAt
-      createdBy
-      updatedBy
+      createdByID
+      updatedByID
       eventID
       correlationID
       eventType

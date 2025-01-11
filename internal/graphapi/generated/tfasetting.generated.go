@@ -73,14 +73,14 @@ func (ec *executionContext) fieldContext_TFASettingCreatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_TFASetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TFASetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_TFASetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_TFASetting_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_TFASetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_TFASetting_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_TFASetting_tags(ctx, field)
 			case "tfaSecret":
@@ -93,6 +93,10 @@ func (ec *executionContext) fieldContext_TFASettingCreatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
 			case "owner":
 				return ec.fieldContext_TFASetting_owner(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_TFASetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TFASetting", field.Name)
 		},
@@ -145,14 +149,14 @@ func (ec *executionContext) fieldContext_TFASettingUpdatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_TFASetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TFASetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_TFASetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_TFASetting_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_TFASetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_TFASetting_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_TFASetting_tags(ctx, field)
 			case "tfaSecret":
@@ -165,6 +169,10 @@ func (ec *executionContext) fieldContext_TFASettingUpdatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
 			case "owner":
 				return ec.fieldContext_TFASetting_owner(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_TFASetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TFASetting", field.Name)
 		},

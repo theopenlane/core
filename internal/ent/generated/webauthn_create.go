@@ -49,30 +49,30 @@ func (wc *WebauthnCreate) SetNillableUpdatedAt(t *time.Time) *WebauthnCreate {
 	return wc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (wc *WebauthnCreate) SetCreatedBy(s string) *WebauthnCreate {
-	wc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (wc *WebauthnCreate) SetCreatedByID(s string) *WebauthnCreate {
+	wc.mutation.SetCreatedByID(s)
 	return wc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (wc *WebauthnCreate) SetNillableCreatedBy(s *string) *WebauthnCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (wc *WebauthnCreate) SetNillableCreatedByID(s *string) *WebauthnCreate {
 	if s != nil {
-		wc.SetCreatedBy(*s)
+		wc.SetCreatedByID(*s)
 	}
 	return wc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (wc *WebauthnCreate) SetUpdatedBy(s string) *WebauthnCreate {
-	wc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (wc *WebauthnCreate) SetUpdatedByID(s string) *WebauthnCreate {
+	wc.mutation.SetUpdatedByID(s)
 	return wc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (wc *WebauthnCreate) SetNillableUpdatedBy(s *string) *WebauthnCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (wc *WebauthnCreate) SetNillableUpdatedByID(s *string) *WebauthnCreate {
 	if s != nil {
-		wc.SetUpdatedBy(*s)
+		wc.SetUpdatedByID(*s)
 	}
 	return wc
 }
@@ -386,13 +386,13 @@ func (wc *WebauthnCreate) createSpec() (*Webauthn, *sqlgraph.CreateSpec) {
 		_spec.SetField(webauthn.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := wc.mutation.CreatedBy(); ok {
-		_spec.SetField(webauthn.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := wc.mutation.CreatedByID(); ok {
+		_spec.SetField(webauthn.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := wc.mutation.UpdatedBy(); ok {
-		_spec.SetField(webauthn.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := wc.mutation.UpdatedByID(); ok {
+		_spec.SetField(webauthn.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := wc.mutation.MappingID(); ok {
 		_spec.SetField(webauthn.FieldMappingID, field.TypeString, value)

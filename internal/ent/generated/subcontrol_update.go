@@ -50,23 +50,23 @@ func (su *SubcontrolUpdate) ClearUpdatedAt() *SubcontrolUpdate {
 	return su
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (su *SubcontrolUpdate) SetUpdatedBy(s string) *SubcontrolUpdate {
-	su.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (su *SubcontrolUpdate) SetUpdatedByID(s string) *SubcontrolUpdate {
+	su.mutation.SetUpdatedByID(s)
 	return su
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableUpdatedBy(s *string) *SubcontrolUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableUpdatedByID(s *string) *SubcontrolUpdate {
 	if s != nil {
-		su.SetUpdatedBy(*s)
+		su.SetUpdatedByID(*s)
 	}
 	return su
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (su *SubcontrolUpdate) ClearUpdatedBy() *SubcontrolUpdate {
-	su.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (su *SubcontrolUpdate) ClearUpdatedByID() *SubcontrolUpdate {
+	su.mutation.ClearUpdatedByID()
 	return su
 }
 
@@ -90,23 +90,23 @@ func (su *SubcontrolUpdate) ClearDeletedAt() *SubcontrolUpdate {
 	return su
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (su *SubcontrolUpdate) SetDeletedBy(s string) *SubcontrolUpdate {
-	su.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (su *SubcontrolUpdate) SetDeletedByID(s string) *SubcontrolUpdate {
+	su.mutation.SetDeletedByID(s)
 	return su
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableDeletedBy(s *string) *SubcontrolUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableDeletedByID(s *string) *SubcontrolUpdate {
 	if s != nil {
-		su.SetDeletedBy(*s)
+		su.SetDeletedByID(*s)
 	}
 	return su
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *SubcontrolUpdate) ClearDeletedBy() *SubcontrolUpdate {
-	su.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (su *SubcontrolUpdate) ClearDeletedByID() *SubcontrolUpdate {
+	su.mutation.ClearDeletedByID()
 	return su
 }
 
@@ -720,14 +720,14 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subcontrol.FieldUpdatedAt, field.TypeTime)
 	}
-	if su.mutation.CreatedByCleared() {
-		_spec.ClearField(subcontrol.FieldCreatedBy, field.TypeString)
+	if su.mutation.CreatedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := su.mutation.UpdatedBy(); ok {
-		_spec.SetField(subcontrol.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := su.mutation.UpdatedByID(); ok {
+		_spec.SetField(subcontrol.FieldUpdatedByID, field.TypeString, value)
 	}
-	if su.mutation.UpdatedByCleared() {
-		_spec.ClearField(subcontrol.FieldUpdatedBy, field.TypeString)
+	if su.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := su.mutation.DeletedAt(); ok {
 		_spec.SetField(subcontrol.FieldDeletedAt, field.TypeTime, value)
@@ -735,11 +735,11 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.DeletedAtCleared() {
 		_spec.ClearField(subcontrol.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.DeletedBy(); ok {
-		_spec.SetField(subcontrol.FieldDeletedBy, field.TypeString, value)
+	if value, ok := su.mutation.DeletedByID(); ok {
+		_spec.SetField(subcontrol.FieldDeletedByID, field.TypeString, value)
 	}
-	if su.mutation.DeletedByCleared() {
-		_spec.ClearField(subcontrol.FieldDeletedBy, field.TypeString)
+	if su.mutation.DeletedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := su.mutation.Tags(); ok {
 		_spec.SetField(subcontrol.FieldTags, field.TypeJSON, value)
@@ -1135,23 +1135,23 @@ func (suo *SubcontrolUpdateOne) ClearUpdatedAt() *SubcontrolUpdateOne {
 	return suo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (suo *SubcontrolUpdateOne) SetUpdatedBy(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (suo *SubcontrolUpdateOne) SetUpdatedByID(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetUpdatedByID(s)
 	return suo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableUpdatedBy(s *string) *SubcontrolUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableUpdatedByID(s *string) *SubcontrolUpdateOne {
 	if s != nil {
-		suo.SetUpdatedBy(*s)
+		suo.SetUpdatedByID(*s)
 	}
 	return suo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (suo *SubcontrolUpdateOne) ClearUpdatedBy() *SubcontrolUpdateOne {
-	suo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (suo *SubcontrolUpdateOne) ClearUpdatedByID() *SubcontrolUpdateOne {
+	suo.mutation.ClearUpdatedByID()
 	return suo
 }
 
@@ -1175,23 +1175,23 @@ func (suo *SubcontrolUpdateOne) ClearDeletedAt() *SubcontrolUpdateOne {
 	return suo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (suo *SubcontrolUpdateOne) SetDeletedBy(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (suo *SubcontrolUpdateOne) SetDeletedByID(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetDeletedByID(s)
 	return suo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableDeletedBy(s *string) *SubcontrolUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableDeletedByID(s *string) *SubcontrolUpdateOne {
 	if s != nil {
-		suo.SetDeletedBy(*s)
+		suo.SetDeletedByID(*s)
 	}
 	return suo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *SubcontrolUpdateOne) ClearDeletedBy() *SubcontrolUpdateOne {
-	suo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (suo *SubcontrolUpdateOne) ClearDeletedByID() *SubcontrolUpdateOne {
+	suo.mutation.ClearDeletedByID()
 	return suo
 }
 
@@ -1835,14 +1835,14 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	if suo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subcontrol.FieldUpdatedAt, field.TypeTime)
 	}
-	if suo.mutation.CreatedByCleared() {
-		_spec.ClearField(subcontrol.FieldCreatedBy, field.TypeString)
+	if suo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := suo.mutation.UpdatedBy(); ok {
-		_spec.SetField(subcontrol.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := suo.mutation.UpdatedByID(); ok {
+		_spec.SetField(subcontrol.FieldUpdatedByID, field.TypeString, value)
 	}
-	if suo.mutation.UpdatedByCleared() {
-		_spec.ClearField(subcontrol.FieldUpdatedBy, field.TypeString)
+	if suo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := suo.mutation.DeletedAt(); ok {
 		_spec.SetField(subcontrol.FieldDeletedAt, field.TypeTime, value)
@@ -1850,11 +1850,11 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	if suo.mutation.DeletedAtCleared() {
 		_spec.ClearField(subcontrol.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.DeletedBy(); ok {
-		_spec.SetField(subcontrol.FieldDeletedBy, field.TypeString, value)
+	if value, ok := suo.mutation.DeletedByID(); ok {
+		_spec.SetField(subcontrol.FieldDeletedByID, field.TypeString, value)
 	}
-	if suo.mutation.DeletedByCleared() {
-		_spec.ClearField(subcontrol.FieldDeletedBy, field.TypeString)
+	if suo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(subcontrol.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := suo.mutation.Tags(); ok {
 		_spec.SetField(subcontrol.FieldTags, field.TypeJSON, value)

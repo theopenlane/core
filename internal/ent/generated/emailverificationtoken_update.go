@@ -44,23 +44,23 @@ func (evtu *EmailVerificationTokenUpdate) ClearUpdatedAt() *EmailVerificationTok
 	return evtu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (evtu *EmailVerificationTokenUpdate) SetUpdatedBy(s string) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (evtu *EmailVerificationTokenUpdate) SetUpdatedByID(s string) *EmailVerificationTokenUpdate {
+	evtu.mutation.SetUpdatedByID(s)
 	return evtu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableUpdatedBy(s *string) *EmailVerificationTokenUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (evtu *EmailVerificationTokenUpdate) SetNillableUpdatedByID(s *string) *EmailVerificationTokenUpdate {
 	if s != nil {
-		evtu.SetUpdatedBy(*s)
+		evtu.SetUpdatedByID(*s)
 	}
 	return evtu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (evtu *EmailVerificationTokenUpdate) ClearUpdatedBy() *EmailVerificationTokenUpdate {
-	evtu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (evtu *EmailVerificationTokenUpdate) ClearUpdatedByID() *EmailVerificationTokenUpdate {
+	evtu.mutation.ClearUpdatedByID()
 	return evtu
 }
 
@@ -84,23 +84,23 @@ func (evtu *EmailVerificationTokenUpdate) ClearDeletedAt() *EmailVerificationTok
 	return evtu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (evtu *EmailVerificationTokenUpdate) SetDeletedBy(s string) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (evtu *EmailVerificationTokenUpdate) SetDeletedByID(s string) *EmailVerificationTokenUpdate {
+	evtu.mutation.SetDeletedByID(s)
 	return evtu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableDeletedBy(s *string) *EmailVerificationTokenUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (evtu *EmailVerificationTokenUpdate) SetNillableDeletedByID(s *string) *EmailVerificationTokenUpdate {
 	if s != nil {
-		evtu.SetDeletedBy(*s)
+		evtu.SetDeletedByID(*s)
 	}
 	return evtu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (evtu *EmailVerificationTokenUpdate) ClearDeletedBy() *EmailVerificationTokenUpdate {
-	evtu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (evtu *EmailVerificationTokenUpdate) ClearDeletedByID() *EmailVerificationTokenUpdate {
+	evtu.mutation.ClearDeletedByID()
 	return evtu
 }
 
@@ -274,14 +274,14 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 	if evtu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if evtu.mutation.CreatedByCleared() {
-		_spec.ClearField(emailverificationtoken.FieldCreatedBy, field.TypeString)
+	if evtu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := evtu.mutation.UpdatedBy(); ok {
-		_spec.SetField(emailverificationtoken.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := evtu.mutation.UpdatedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldUpdatedByID, field.TypeString, value)
 	}
-	if evtu.mutation.UpdatedByCleared() {
-		_spec.ClearField(emailverificationtoken.FieldUpdatedBy, field.TypeString)
+	if evtu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := evtu.mutation.DeletedAt(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedAt, field.TypeTime, value)
@@ -289,11 +289,11 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 	if evtu.mutation.DeletedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := evtu.mutation.DeletedBy(); ok {
-		_spec.SetField(emailverificationtoken.FieldDeletedBy, field.TypeString, value)
+	if value, ok := evtu.mutation.DeletedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldDeletedByID, field.TypeString, value)
 	}
-	if evtu.mutation.DeletedByCleared() {
-		_spec.ClearField(emailverificationtoken.FieldDeletedBy, field.TypeString)
+	if evtu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := evtu.mutation.Token(); ok {
 		_spec.SetField(emailverificationtoken.FieldToken, field.TypeString, value)
@@ -374,23 +374,23 @@ func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedAt() *EmailVerificatio
 	return evtuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedBy(s string) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedByID(s string) *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.SetUpdatedByID(s)
 	return evtuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableUpdatedBy(s *string) *EmailVerificationTokenUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (evtuo *EmailVerificationTokenUpdateOne) SetNillableUpdatedByID(s *string) *EmailVerificationTokenUpdateOne {
 	if s != nil {
-		evtuo.SetUpdatedBy(*s)
+		evtuo.SetUpdatedByID(*s)
 	}
 	return evtuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedBy() *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedByID() *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.ClearUpdatedByID()
 	return evtuo
 }
 
@@ -414,23 +414,23 @@ func (evtuo *EmailVerificationTokenUpdateOne) ClearDeletedAt() *EmailVerificatio
 	return evtuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetDeletedBy(s string) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (evtuo *EmailVerificationTokenUpdateOne) SetDeletedByID(s string) *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.SetDeletedByID(s)
 	return evtuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableDeletedBy(s *string) *EmailVerificationTokenUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (evtuo *EmailVerificationTokenUpdateOne) SetNillableDeletedByID(s *string) *EmailVerificationTokenUpdateOne {
 	if s != nil {
-		evtuo.SetDeletedBy(*s)
+		evtuo.SetDeletedByID(*s)
 	}
 	return evtuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (evtuo *EmailVerificationTokenUpdateOne) ClearDeletedBy() *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (evtuo *EmailVerificationTokenUpdateOne) ClearDeletedByID() *EmailVerificationTokenUpdateOne {
+	evtuo.mutation.ClearDeletedByID()
 	return evtuo
 }
 
@@ -634,14 +634,14 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 	if evtuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if evtuo.mutation.CreatedByCleared() {
-		_spec.ClearField(emailverificationtoken.FieldCreatedBy, field.TypeString)
+	if evtuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := evtuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(emailverificationtoken.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := evtuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldUpdatedByID, field.TypeString, value)
 	}
-	if evtuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(emailverificationtoken.FieldUpdatedBy, field.TypeString)
+	if evtuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := evtuo.mutation.DeletedAt(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedAt, field.TypeTime, value)
@@ -649,11 +649,11 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 	if evtuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := evtuo.mutation.DeletedBy(); ok {
-		_spec.SetField(emailverificationtoken.FieldDeletedBy, field.TypeString, value)
+	if value, ok := evtuo.mutation.DeletedByID(); ok {
+		_spec.SetField(emailverificationtoken.FieldDeletedByID, field.TypeString, value)
 	}
-	if evtuo.mutation.DeletedByCleared() {
-		_spec.ClearField(emailverificationtoken.FieldDeletedBy, field.TypeString)
+	if evtuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(emailverificationtoken.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := evtuo.mutation.Token(); ok {
 		_spec.SetField(emailverificationtoken.FieldToken, field.TypeString, value)

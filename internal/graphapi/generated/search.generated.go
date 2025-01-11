@@ -73,14 +73,14 @@ func (ec *executionContext) fieldContext_APITokenSearchResult_apiTokens(_ contex
 				return ec.fieldContext_APIToken_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_APIToken_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_APIToken_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_APIToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_APIToken_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_APIToken_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_APIToken_tags(ctx, field)
 			case "ownerID":
@@ -99,6 +99,10 @@ func (ec *executionContext) fieldContext_APITokenSearchResult_apiTokens(_ contex
 				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_APIToken_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_APIToken_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type APIToken", field.Name)
 		},
@@ -148,14 +152,14 @@ func (ec *executionContext) fieldContext_ActionPlanSearchResult_actionPlans(_ co
 				return ec.fieldContext_ActionPlan_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ActionPlan_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ActionPlan_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ActionPlan_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ActionPlan_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "name":
@@ -182,6 +186,10 @@ func (ec *executionContext) fieldContext_ActionPlanSearchResult_actionPlans(_ co
 				return ec.fieldContext_ActionPlan_user(ctx, field)
 			case "program":
 				return ec.fieldContext_ActionPlan_program(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -231,14 +239,14 @@ func (ec *executionContext) fieldContext_ContactSearchResult_contacts(_ context.
 				return ec.fieldContext_Contact_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contact_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Contact_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Contact_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Contact_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Contact_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Contact_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Contact_tags(ctx, field)
 			case "ownerID":
@@ -263,6 +271,10 @@ func (ec *executionContext) fieldContext_ContactSearchResult_contacts(_ context.
 				return ec.fieldContext_Contact_entities(ctx, field)
 			case "files":
 				return ec.fieldContext_Contact_files(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
 		},
@@ -312,14 +324,14 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ControlObjective_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ControlObjective_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ControlObjective_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ControlObjective_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlObjective_tags(ctx, field)
 			case "ownerID":
@@ -372,6 +384,10 @@ func (ec *executionContext) fieldContext_ControlObjectiveSearchResult_controlObj
 				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -421,14 +437,14 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Control_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Control_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Control_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Control_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Control_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Control_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
 			case "ownerID":
@@ -483,6 +499,10 @@ func (ec *executionContext) fieldContext_ControlSearchResult_controls(_ context.
 				return ec.fieldContext_Control_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Control_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Control_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -532,16 +552,16 @@ func (ec *executionContext) fieldContext_DocumentDataSearchResult_documentData(_
 				return ec.fieldContext_DocumentData_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_DocumentData_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_DocumentData_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_DocumentData_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_DocumentData_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_DocumentData_ownerID(ctx, field)
 			case "templateID":
@@ -556,6 +576,10 @@ func (ec *executionContext) fieldContext_DocumentDataSearchResult_documentData(_
 				return ec.fieldContext_DocumentData_entity(ctx, field)
 			case "files":
 				return ec.fieldContext_DocumentData_files(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_DocumentData_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DocumentData", field.Name)
 		},
@@ -605,14 +629,14 @@ func (ec *executionContext) fieldContext_EntitySearchResult_entities(_ context.C
 				return ec.fieldContext_Entity_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Entity_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Entity_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Entity_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Entity_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Entity_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
@@ -641,6 +665,10 @@ func (ec *executionContext) fieldContext_EntitySearchResult_entities(_ context.C
 				return ec.fieldContext_Entity_files(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Entity_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Entity_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -690,14 +718,14 @@ func (ec *executionContext) fieldContext_EntityTypeSearchResult_entityTypes(_ co
 				return ec.fieldContext_EntityType_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_EntityType_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_EntityType_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_EntityType_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_EntityType_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_EntityType_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_EntityType_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_EntityType_tags(ctx, field)
 			case "ownerID":
@@ -708,6 +736,10 @@ func (ec *executionContext) fieldContext_EntityTypeSearchResult_entityTypes(_ co
 				return ec.fieldContext_EntityType_owner(ctx, field)
 			case "entities":
 				return ec.fieldContext_EntityType_entities(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_EntityType_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_EntityType_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EntityType", field.Name)
 		},
@@ -757,10 +789,10 @@ func (ec *executionContext) fieldContext_EventSearchResult_events(_ context.Cont
 				return ec.fieldContext_Event_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Event_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Event_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Event_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Event_tags(ctx, field)
 			case "eventID":
@@ -793,6 +825,10 @@ func (ec *executionContext) fieldContext_EventSearchResult_events(_ context.Cont
 				return ec.fieldContext_Event_subscriber(ctx, field)
 			case "file":
 				return ec.fieldContext_Event_file(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Event_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Event_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
 		},
@@ -842,14 +878,14 @@ func (ec *executionContext) fieldContext_FileSearchResult_files(_ context.Contex
 				return ec.fieldContext_File_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_File_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_File_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_File_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_File_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_File_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_File_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_File_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_File_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_File_tags(ctx, field)
 			case "providedFileName":
@@ -900,6 +936,10 @@ func (ec *executionContext) fieldContext_FileSearchResult_files(_ context.Contex
 				return ec.fieldContext_File_events(ctx, field)
 			case "program":
 				return ec.fieldContext_File_program(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_File_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_File_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type File", field.Name)
 		},
@@ -949,14 +989,14 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Group_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Group_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Group_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Group_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Group_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Group_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Group_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Group_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Group_tags(ctx, field)
 			case "ownerID":
@@ -1043,6 +1083,10 @@ func (ec *executionContext) fieldContext_GroupSearchResult_groups(_ context.Cont
 				return ec.fieldContext_Group_tasks(ctx, field)
 			case "members":
 				return ec.fieldContext_Group_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Group_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Group_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Group", field.Name)
 		},
@@ -1092,16 +1136,16 @@ func (ec *executionContext) fieldContext_GroupSettingSearchResult_groupSettings(
 				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_GroupSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_GroupSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_GroupSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_GroupSetting_deletedByID(ctx, field)
 			case "visibility":
 				return ec.fieldContext_GroupSetting_visibility(ctx, field)
 			case "joinPolicy":
@@ -1114,6 +1158,10 @@ func (ec *executionContext) fieldContext_GroupSettingSearchResult_groupSettings(
 				return ec.fieldContext_GroupSetting_groupID(ctx, field)
 			case "group":
 				return ec.fieldContext_GroupSetting_group(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
 		},
@@ -1163,16 +1211,16 @@ func (ec *executionContext) fieldContext_IntegrationSearchResult_integrations(_ 
 				return ec.fieldContext_Integration_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Integration_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Integration_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Integration_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Integration_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Integration_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Integration_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Integration_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Integration_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Integration_ownerID(ctx, field)
 			case "name":
@@ -1187,6 +1235,10 @@ func (ec *executionContext) fieldContext_IntegrationSearchResult_integrations(_ 
 				return ec.fieldContext_Integration_secrets(ctx, field)
 			case "events":
 				return ec.fieldContext_Integration_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Integration_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Integration_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Integration", field.Name)
 		},
@@ -1236,14 +1288,14 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 				return ec.fieldContext_InternalPolicy_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_InternalPolicy_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_InternalPolicy_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_InternalPolicy_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_InternalPolicy_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_InternalPolicy_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_InternalPolicy_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_InternalPolicy_tags(ctx, field)
 			case "ownerID":
@@ -1282,6 +1334,10 @@ func (ec *executionContext) fieldContext_InternalPolicySearchResult_internalPoli
 				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -1331,14 +1387,14 @@ func (ec *executionContext) fieldContext_NarrativeSearchResult_narratives(_ cont
 				return ec.fieldContext_Narrative_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Narrative_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Narrative_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Narrative_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Narrative_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Narrative_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Narrative_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Narrative_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Narrative_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Narrative_tags(ctx, field)
 			case "ownerID":
@@ -1369,6 +1425,10 @@ func (ec *executionContext) fieldContext_NarrativeSearchResult_narratives(_ cont
 				return ec.fieldContext_Narrative_controlObjective(ctx, field)
 			case "programs":
 				return ec.fieldContext_Narrative_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Narrative_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Narrative_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Narrative", field.Name)
 		},
@@ -1418,16 +1478,16 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrgSubscription_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrgSubscription_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrgSubscription_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrgSubscription_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrgSubscription_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgSubscription_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrgSubscription_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_OrgSubscription_ownerID(ctx, field)
 			case "stripeSubscriptionID":
@@ -1454,6 +1514,10 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			case "subscriptionURL":
 				return ec.fieldContext_OrgSubscription_subscriptionURL(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrgSubscription_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrgSubscription_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgSubscription", field.Name)
 		},
@@ -1503,16 +1567,16 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Organization_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Organization_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Organization_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Organization_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Organization_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Organization_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Organization_deletedByID(ctx, field)
 			case "name":
 				return ec.fieldContext_Organization_name(ctx, field)
 			case "displayName":
@@ -1603,6 +1667,10 @@ func (ec *executionContext) fieldContext_OrganizationSearchResult_organizations(
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},
@@ -1652,16 +1720,16 @@ func (ec *executionContext) fieldContext_OrganizationSettingSearchResult_organiz
 				return ec.fieldContext_OrganizationSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_OrganizationSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_OrganizationSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_OrganizationSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_OrganizationSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrganizationSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_OrganizationSetting_deletedByID(ctx, field)
 			case "domains":
 				return ec.fieldContext_OrganizationSetting_domains(ctx, field)
 			case "billingContact":
@@ -1684,6 +1752,10 @@ func (ec *executionContext) fieldContext_OrganizationSettingSearchResult_organiz
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
 				return ec.fieldContext_OrganizationSetting_files(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrganizationSetting", field.Name)
 		},
@@ -1733,14 +1805,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenSearchResult_persona
 				return ec.fieldContext_PersonalAccessToken_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_PersonalAccessToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_PersonalAccessToken_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_PersonalAccessToken_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_PersonalAccessToken_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_PersonalAccessToken_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
 			case "name":
@@ -1761,6 +1833,10 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenSearchResult_persona
 				return ec.fieldContext_PersonalAccessToken_organizations(ctx, field)
 			case "events":
 				return ec.fieldContext_PersonalAccessToken_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type PersonalAccessToken", field.Name)
 		},
@@ -1810,14 +1886,14 @@ func (ec *executionContext) fieldContext_ProcedureSearchResult_procedures(_ cont
 				return ec.fieldContext_Procedure_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Procedure_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Procedure_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Procedure_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Procedure_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Procedure_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Procedure_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Procedure_tags(ctx, field)
 			case "ownerID":
@@ -1858,6 +1934,10 @@ func (ec *executionContext) fieldContext_ProcedureSearchResult_procedures(_ cont
 				return ec.fieldContext_Procedure_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Procedure_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Procedure_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Procedure_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -1907,14 +1987,14 @@ func (ec *executionContext) fieldContext_ProgramSearchResult_programs(_ context.
 				return ec.fieldContext_Program_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Program_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Program_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Program_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Program_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Program_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Program_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
@@ -1971,6 +2051,10 @@ func (ec *executionContext) fieldContext_ProgramSearchResult_programs(_ context.
 				return ec.fieldContext_Program_users(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Program_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Program_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Program", field.Name)
 		},
@@ -2020,14 +2104,14 @@ func (ec *executionContext) fieldContext_RiskSearchResult_risks(_ context.Contex
 				return ec.fieldContext_Risk_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Risk_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Risk_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Risk_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Risk_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Risk_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Risk_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Risk_tags(ctx, field)
 			case "ownerID":
@@ -2068,6 +2152,10 @@ func (ec *executionContext) fieldContext_RiskSearchResult_risks(_ context.Contex
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Risk_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Risk_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -2259,14 +2347,14 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Standard_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Standard_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Standard_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Standard_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Standard_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Standard_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
 			case "name":
@@ -2299,6 +2387,10 @@ func (ec *executionContext) fieldContext_StandardSearchResult_standards(_ contex
 				return ec.fieldContext_Standard_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_Standard_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Standard_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Standard_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -2348,14 +2440,14 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Subcontrol_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Subcontrol_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Subcontrol_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subcontrol_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Subcontrol_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Subcontrol_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
 			case "ownerID":
@@ -2404,6 +2496,10 @@ func (ec *executionContext) fieldContext_SubcontrolSearchResult_subcontrols(_ co
 				return ec.fieldContext_Subcontrol_notes(ctx, field)
 			case "programs":
 				return ec.fieldContext_Subcontrol_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Subcontrol_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Subcontrol_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -2453,16 +2549,16 @@ func (ec *executionContext) fieldContext_SubscriberSearchResult_subscribers(_ co
 				return ec.fieldContext_Subscriber_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Subscriber_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subscriber_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Subscriber_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Subscriber_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subscriber_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Subscriber_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Subscriber_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Subscriber_deletedByID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subscriber_ownerID(ctx, field)
 			case "email":
@@ -2479,6 +2575,10 @@ func (ec *executionContext) fieldContext_SubscriberSearchResult_subscribers(_ co
 				return ec.fieldContext_Subscriber_owner(ctx, field)
 			case "events":
 				return ec.fieldContext_Subscriber_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Subscriber_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subscriber", field.Name)
 		},
@@ -2528,14 +2628,14 @@ func (ec *executionContext) fieldContext_TFASettingSearchResult_tFASettings(_ co
 				return ec.fieldContext_TFASetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_TFASetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TFASetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_TFASetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_TFASetting_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_TFASetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_TFASetting_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_TFASetting_tags(ctx, field)
 			case "tfaSecret":
@@ -2548,6 +2648,10 @@ func (ec *executionContext) fieldContext_TFASettingSearchResult_tFASettings(_ co
 				return ec.fieldContext_TFASetting_totpAllowed(ctx, field)
 			case "owner":
 				return ec.fieldContext_TFASetting_owner(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_TFASetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TFASetting", field.Name)
 		},
@@ -2597,14 +2701,14 @@ func (ec *executionContext) fieldContext_TaskSearchResult_tasks(_ context.Contex
 				return ec.fieldContext_Task_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Task_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Task_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Task_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Task_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Task_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Task_tags(ctx, field)
 			case "title":
@@ -2639,6 +2743,10 @@ func (ec *executionContext) fieldContext_TaskSearchResult_tasks(_ context.Contex
 				return ec.fieldContext_Task_subcontrol(ctx, field)
 			case "program":
 				return ec.fieldContext_Task_program(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Task_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Task_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
@@ -2688,14 +2796,14 @@ func (ec *executionContext) fieldContext_TemplateSearchResult_templates(_ contex
 				return ec.fieldContext_Template_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Template_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Template_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Template_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Template_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Template_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Template_tags(ctx, field)
 			case "ownerID":
@@ -2716,6 +2824,10 @@ func (ec *executionContext) fieldContext_TemplateSearchResult_templates(_ contex
 				return ec.fieldContext_Template_documents(ctx, field)
 			case "files":
 				return ec.fieldContext_Template_files(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Template_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Template_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},
@@ -2765,14 +2877,14 @@ func (ec *executionContext) fieldContext_UserSearchResult_users(_ context.Contex
 				return ec.fieldContext_User_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_User_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_User_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_User_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_User_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_User_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_User_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_User_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_User_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_User_tags(ctx, field)
 			case "email":
@@ -2831,6 +2943,10 @@ func (ec *executionContext) fieldContext_UserSearchResult_users(_ context.Contex
 				return ec.fieldContext_User_orgMemberships(ctx, field)
 			case "programMemberships":
 				return ec.fieldContext_User_programMemberships(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_User_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_User_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -2880,16 +2996,16 @@ func (ec *executionContext) fieldContext_UserSettingSearchResult_userSettings(_ 
 				return ec.fieldContext_UserSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_UserSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_UserSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_UserSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_UserSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_UserSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_UserSetting_deletedByID(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
 			case "locked":
@@ -2912,6 +3028,10 @@ func (ec *executionContext) fieldContext_UserSettingSearchResult_userSettings(_ 
 				return ec.fieldContext_UserSetting_defaultOrg(ctx, field)
 			case "files":
 				return ec.fieldContext_UserSetting_files(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_UserSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
 		},

@@ -55,6 +55,20 @@ func (hhc *HushHistoryCreate) SetOperation(ht history.OpType) *HushHistoryCreate
 	return hhc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (hhc *HushHistoryCreate) SetUpdatedBy(s string) *HushHistoryCreate {
+	hhc.mutation.SetUpdatedBy(s)
+	return hhc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableUpdatedBy(s *string) *HushHistoryCreate {
+	if s != nil {
+		hhc.SetUpdatedBy(*s)
+	}
+	return hhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (hhc *HushHistoryCreate) SetCreatedAt(t time.Time) *HushHistoryCreate {
 	hhc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (hhc *HushHistoryCreate) SetNillableUpdatedAt(t *time.Time) *HushHistoryCre
 	return hhc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (hhc *HushHistoryCreate) SetCreatedBy(s string) *HushHistoryCreate {
-	hhc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (hhc *HushHistoryCreate) SetCreatedByID(s string) *HushHistoryCreate {
+	hhc.mutation.SetCreatedByID(s)
 	return hhc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableCreatedBy(s *string) *HushHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableCreatedByID(s *string) *HushHistoryCreate {
 	if s != nil {
-		hhc.SetCreatedBy(*s)
+		hhc.SetCreatedByID(*s)
 	}
 	return hhc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (hhc *HushHistoryCreate) SetUpdatedBy(s string) *HushHistoryCreate {
-	hhc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (hhc *HushHistoryCreate) SetUpdatedByID(s string) *HushHistoryCreate {
+	hhc.mutation.SetUpdatedByID(s)
 	return hhc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableUpdatedBy(s *string) *HushHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableUpdatedByID(s *string) *HushHistoryCreate {
 	if s != nil {
-		hhc.SetUpdatedBy(*s)
+		hhc.SetUpdatedByID(*s)
 	}
 	return hhc
 }
@@ -139,16 +153,16 @@ func (hhc *HushHistoryCreate) SetNillableDeletedAt(t *time.Time) *HushHistoryCre
 	return hhc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (hhc *HushHistoryCreate) SetDeletedBy(s string) *HushHistoryCreate {
-	hhc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (hhc *HushHistoryCreate) SetDeletedByID(s string) *HushHistoryCreate {
+	hhc.mutation.SetDeletedByID(s)
 	return hhc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableDeletedBy(s *string) *HushHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (hhc *HushHistoryCreate) SetNillableDeletedByID(s *string) *HushHistoryCreate {
 	if s != nil {
-		hhc.SetDeletedBy(*s)
+		hhc.SetDeletedByID(*s)
 	}
 	return hhc
 }
@@ -353,6 +367,10 @@ func (hhc *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(hushhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := hhc.mutation.UpdatedBy(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := hhc.mutation.CreatedAt(); ok {
 		_spec.SetField(hushhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -361,13 +379,13 @@ func (hhc *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(hushhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := hhc.mutation.CreatedBy(); ok {
-		_spec.SetField(hushhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := hhc.mutation.CreatedByID(); ok {
+		_spec.SetField(hushhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := hhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := hhc.mutation.UpdatedByID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := hhc.mutation.MappingID(); ok {
 		_spec.SetField(hushhistory.FieldMappingID, field.TypeString, value)
@@ -377,9 +395,9 @@ func (hhc *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := hhc.mutation.DeletedBy(); ok {
-		_spec.SetField(hushhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := hhc.mutation.DeletedByID(); ok {
+		_spec.SetField(hushhistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := hhc.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)

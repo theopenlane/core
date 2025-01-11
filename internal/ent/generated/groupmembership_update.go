@@ -45,23 +45,23 @@ func (gmu *GroupMembershipUpdate) ClearUpdatedAt() *GroupMembershipUpdate {
 	return gmu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gmu *GroupMembershipUpdate) SetUpdatedBy(s string) *GroupMembershipUpdate {
-	gmu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gmu *GroupMembershipUpdate) SetUpdatedByID(s string) *GroupMembershipUpdate {
+	gmu.mutation.SetUpdatedByID(s)
 	return gmu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmu *GroupMembershipUpdate) SetNillableUpdatedBy(s *string) *GroupMembershipUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gmu *GroupMembershipUpdate) SetNillableUpdatedByID(s *string) *GroupMembershipUpdate {
 	if s != nil {
-		gmu.SetUpdatedBy(*s)
+		gmu.SetUpdatedByID(*s)
 	}
 	return gmu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gmu *GroupMembershipUpdate) ClearUpdatedBy() *GroupMembershipUpdate {
-	gmu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gmu *GroupMembershipUpdate) ClearUpdatedByID() *GroupMembershipUpdate {
+	gmu.mutation.ClearUpdatedByID()
 	return gmu
 }
 
@@ -85,23 +85,23 @@ func (gmu *GroupMembershipUpdate) ClearDeletedAt() *GroupMembershipUpdate {
 	return gmu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (gmu *GroupMembershipUpdate) SetDeletedBy(s string) *GroupMembershipUpdate {
-	gmu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (gmu *GroupMembershipUpdate) SetDeletedByID(s string) *GroupMembershipUpdate {
+	gmu.mutation.SetDeletedByID(s)
 	return gmu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmu *GroupMembershipUpdate) SetNillableDeletedBy(s *string) *GroupMembershipUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (gmu *GroupMembershipUpdate) SetNillableDeletedByID(s *string) *GroupMembershipUpdate {
 	if s != nil {
-		gmu.SetDeletedBy(*s)
+		gmu.SetDeletedByID(*s)
 	}
 	return gmu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gmu *GroupMembershipUpdate) ClearDeletedBy() *GroupMembershipUpdate {
-	gmu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (gmu *GroupMembershipUpdate) ClearDeletedByID() *GroupMembershipUpdate {
+	gmu.mutation.ClearDeletedByID()
 	return gmu
 }
 
@@ -245,14 +245,14 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 	if gmu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if gmu.mutation.CreatedByCleared() {
-		_spec.ClearField(groupmembership.FieldCreatedBy, field.TypeString)
+	if gmu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := gmu.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupmembership.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := gmu.mutation.UpdatedByID(); ok {
+		_spec.SetField(groupmembership.FieldUpdatedByID, field.TypeString, value)
 	}
-	if gmu.mutation.UpdatedByCleared() {
-		_spec.ClearField(groupmembership.FieldUpdatedBy, field.TypeString)
+	if gmu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := gmu.mutation.DeletedAt(); ok {
 		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
@@ -260,11 +260,11 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 	if gmu.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupmembership.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gmu.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
+	if value, ok := gmu.mutation.DeletedByID(); ok {
+		_spec.SetField(groupmembership.FieldDeletedByID, field.TypeString, value)
 	}
-	if gmu.mutation.DeletedByCleared() {
-		_spec.ClearField(groupmembership.FieldDeletedBy, field.TypeString)
+	if gmu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gmu.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)
@@ -353,23 +353,23 @@ func (gmuo *GroupMembershipUpdateOne) ClearUpdatedAt() *GroupMembershipUpdateOne
 	return gmuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gmuo *GroupMembershipUpdateOne) SetUpdatedBy(s string) *GroupMembershipUpdateOne {
-	gmuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gmuo *GroupMembershipUpdateOne) SetUpdatedByID(s string) *GroupMembershipUpdateOne {
+	gmuo.mutation.SetUpdatedByID(s)
 	return gmuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmuo *GroupMembershipUpdateOne) SetNillableUpdatedBy(s *string) *GroupMembershipUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gmuo *GroupMembershipUpdateOne) SetNillableUpdatedByID(s *string) *GroupMembershipUpdateOne {
 	if s != nil {
-		gmuo.SetUpdatedBy(*s)
+		gmuo.SetUpdatedByID(*s)
 	}
 	return gmuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gmuo *GroupMembershipUpdateOne) ClearUpdatedBy() *GroupMembershipUpdateOne {
-	gmuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gmuo *GroupMembershipUpdateOne) ClearUpdatedByID() *GroupMembershipUpdateOne {
+	gmuo.mutation.ClearUpdatedByID()
 	return gmuo
 }
 
@@ -393,23 +393,23 @@ func (gmuo *GroupMembershipUpdateOne) ClearDeletedAt() *GroupMembershipUpdateOne
 	return gmuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (gmuo *GroupMembershipUpdateOne) SetDeletedBy(s string) *GroupMembershipUpdateOne {
-	gmuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (gmuo *GroupMembershipUpdateOne) SetDeletedByID(s string) *GroupMembershipUpdateOne {
+	gmuo.mutation.SetDeletedByID(s)
 	return gmuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmuo *GroupMembershipUpdateOne) SetNillableDeletedBy(s *string) *GroupMembershipUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (gmuo *GroupMembershipUpdateOne) SetNillableDeletedByID(s *string) *GroupMembershipUpdateOne {
 	if s != nil {
-		gmuo.SetDeletedBy(*s)
+		gmuo.SetDeletedByID(*s)
 	}
 	return gmuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gmuo *GroupMembershipUpdateOne) ClearDeletedBy() *GroupMembershipUpdateOne {
-	gmuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (gmuo *GroupMembershipUpdateOne) ClearDeletedByID() *GroupMembershipUpdateOne {
+	gmuo.mutation.ClearDeletedByID()
 	return gmuo
 }
 
@@ -583,14 +583,14 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 	if gmuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if gmuo.mutation.CreatedByCleared() {
-		_spec.ClearField(groupmembership.FieldCreatedBy, field.TypeString)
+	if gmuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := gmuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupmembership.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := gmuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(groupmembership.FieldUpdatedByID, field.TypeString, value)
 	}
-	if gmuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(groupmembership.FieldUpdatedBy, field.TypeString)
+	if gmuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := gmuo.mutation.DeletedAt(); ok {
 		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
@@ -598,11 +598,11 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 	if gmuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupmembership.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gmuo.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
+	if value, ok := gmuo.mutation.DeletedByID(); ok {
+		_spec.SetField(groupmembership.FieldDeletedByID, field.TypeString, value)
 	}
-	if gmuo.mutation.DeletedByCleared() {
-		_spec.ClearField(groupmembership.FieldDeletedBy, field.TypeString)
+	if gmuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(groupmembership.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gmuo.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)

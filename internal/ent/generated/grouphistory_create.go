@@ -55,6 +55,20 @@ func (ghc *GroupHistoryCreate) SetOperation(ht history.OpType) *GroupHistoryCrea
 	return ghc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (ghc *GroupHistoryCreate) SetUpdatedBy(s string) *GroupHistoryCreate {
+	ghc.mutation.SetUpdatedBy(s)
+	return ghc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableUpdatedBy(s *string) *GroupHistoryCreate {
+	if s != nil {
+		ghc.SetUpdatedBy(*s)
+	}
+	return ghc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (ghc *GroupHistoryCreate) SetCreatedAt(t time.Time) *GroupHistoryCreate {
 	ghc.mutation.SetCreatedAt(t)
@@ -83,30 +97,30 @@ func (ghc *GroupHistoryCreate) SetNillableUpdatedAt(t *time.Time) *GroupHistoryC
 	return ghc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ghc *GroupHistoryCreate) SetCreatedBy(s string) *GroupHistoryCreate {
-	ghc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ghc *GroupHistoryCreate) SetCreatedByID(s string) *GroupHistoryCreate {
+	ghc.mutation.SetCreatedByID(s)
 	return ghc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ghc *GroupHistoryCreate) SetNillableCreatedBy(s *string) *GroupHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableCreatedByID(s *string) *GroupHistoryCreate {
 	if s != nil {
-		ghc.SetCreatedBy(*s)
+		ghc.SetCreatedByID(*s)
 	}
 	return ghc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ghc *GroupHistoryCreate) SetUpdatedBy(s string) *GroupHistoryCreate {
-	ghc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ghc *GroupHistoryCreate) SetUpdatedByID(s string) *GroupHistoryCreate {
+	ghc.mutation.SetUpdatedByID(s)
 	return ghc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ghc *GroupHistoryCreate) SetNillableUpdatedBy(s *string) *GroupHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableUpdatedByID(s *string) *GroupHistoryCreate {
 	if s != nil {
-		ghc.SetUpdatedBy(*s)
+		ghc.SetUpdatedByID(*s)
 	}
 	return ghc
 }
@@ -125,16 +139,16 @@ func (ghc *GroupHistoryCreate) SetNillableDeletedAt(t *time.Time) *GroupHistoryC
 	return ghc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ghc *GroupHistoryCreate) SetDeletedBy(s string) *GroupHistoryCreate {
-	ghc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ghc *GroupHistoryCreate) SetDeletedByID(s string) *GroupHistoryCreate {
+	ghc.mutation.SetDeletedByID(s)
 	return ghc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ghc *GroupHistoryCreate) SetNillableDeletedBy(s *string) *GroupHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ghc *GroupHistoryCreate) SetNillableDeletedByID(s *string) *GroupHistoryCreate {
 	if s != nil {
-		ghc.SetDeletedBy(*s)
+		ghc.SetDeletedByID(*s)
 	}
 	return ghc
 }
@@ -402,6 +416,10 @@ func (ghc *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec
 		_spec.SetField(grouphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := ghc.mutation.UpdatedBy(); ok {
+		_spec.SetField(grouphistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := ghc.mutation.CreatedAt(); ok {
 		_spec.SetField(grouphistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -410,21 +428,21 @@ func (ghc *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec
 		_spec.SetField(grouphistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ghc.mutation.CreatedBy(); ok {
-		_spec.SetField(grouphistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ghc.mutation.CreatedByID(); ok {
+		_spec.SetField(grouphistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ghc.mutation.UpdatedBy(); ok {
-		_spec.SetField(grouphistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ghc.mutation.UpdatedByID(); ok {
+		_spec.SetField(grouphistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ghc.mutation.DeletedAt(); ok {
 		_spec.SetField(grouphistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ghc.mutation.DeletedBy(); ok {
-		_spec.SetField(grouphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := ghc.mutation.DeletedByID(); ok {
+		_spec.SetField(grouphistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := ghc.mutation.MappingID(); ok {
 		_spec.SetField(grouphistory.FieldMappingID, field.TypeString, value)

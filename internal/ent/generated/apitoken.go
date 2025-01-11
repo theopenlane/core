@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // APIToken is the model entity for the APIToken schema.
@@ -23,14 +24,14 @@ type APIToken struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -53,6 +54,11 @@ type APIToken struct {
 	// The values are being populated by the APITokenQuery when eager-loading is set.
 	Edges        APITokenEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // APITokenEdges holds the relations/edges for other nodes in the graph.
@@ -84,7 +90,7 @@ func (*APIToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case apitoken.FieldTags, apitoken.FieldScopes:
 			values[i] = new([]byte)
-		case apitoken.FieldID, apitoken.FieldCreatedBy, apitoken.FieldUpdatedBy, apitoken.FieldDeletedBy, apitoken.FieldMappingID, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription:
+		case apitoken.FieldID, apitoken.FieldCreatedByID, apitoken.FieldUpdatedByID, apitoken.FieldDeletedByID, apitoken.FieldMappingID, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription:
 			values[i] = new(sql.NullString)
 		case apitoken.FieldCreatedAt, apitoken.FieldUpdatedAt, apitoken.FieldDeletedAt, apitoken.FieldExpiresAt, apitoken.FieldLastUsedAt:
 			values[i] = new(sql.NullTime)
@@ -121,17 +127,17 @@ func (at *APIToken) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				at.UpdatedAt = value.Time
 			}
-		case apitoken.FieldCreatedBy:
+		case apitoken.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				at.CreatedBy = value.String
+				at.CreatedByID = value.String
 			}
-		case apitoken.FieldUpdatedBy:
+		case apitoken.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				at.UpdatedBy = value.String
+				at.UpdatedByID = value.String
 			}
 		case apitoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -139,11 +145,11 @@ func (at *APIToken) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				at.DeletedAt = value.Time
 			}
-		case apitoken.FieldDeletedBy:
+		case apitoken.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				at.DeletedBy = value.String
+				at.DeletedByID = value.String
 			}
 		case apitoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -253,17 +259,17 @@ func (at *APIToken) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(at.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(at.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(at.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(at.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(at.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(at.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(at.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(at.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(at.MappingID)

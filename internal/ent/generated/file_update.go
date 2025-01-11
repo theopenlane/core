@@ -55,23 +55,23 @@ func (fu *FileUpdate) ClearUpdatedAt() *FileUpdate {
 	return fu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fu *FileUpdate) SetUpdatedBy(s string) *FileUpdate {
-	fu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (fu *FileUpdate) SetUpdatedByID(s string) *FileUpdate {
+	fu.mutation.SetUpdatedByID(s)
 	return fu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableUpdatedBy(s *string) *FileUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableUpdatedByID(s *string) *FileUpdate {
 	if s != nil {
-		fu.SetUpdatedBy(*s)
+		fu.SetUpdatedByID(*s)
 	}
 	return fu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (fu *FileUpdate) ClearUpdatedBy() *FileUpdate {
-	fu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (fu *FileUpdate) ClearUpdatedByID() *FileUpdate {
+	fu.mutation.ClearUpdatedByID()
 	return fu
 }
 
@@ -95,23 +95,23 @@ func (fu *FileUpdate) ClearDeletedAt() *FileUpdate {
 	return fu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (fu *FileUpdate) SetDeletedBy(s string) *FileUpdate {
-	fu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (fu *FileUpdate) SetDeletedByID(s string) *FileUpdate {
+	fu.mutation.SetDeletedByID(s)
 	return fu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableDeletedBy(s *string) *FileUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableDeletedByID(s *string) *FileUpdate {
 	if s != nil {
-		fu.SetDeletedBy(*s)
+		fu.SetDeletedByID(*s)
 	}
 	return fu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (fu *FileUpdate) ClearDeletedBy() *FileUpdate {
-	fu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (fu *FileUpdate) ClearDeletedByID() *FileUpdate {
+	fu.mutation.ClearDeletedByID()
 	return fu
 }
 
@@ -886,14 +886,14 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(file.FieldUpdatedAt, field.TypeTime)
 	}
-	if fu.mutation.CreatedByCleared() {
-		_spec.ClearField(file.FieldCreatedBy, field.TypeString)
+	if fu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(file.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := fu.mutation.UpdatedBy(); ok {
-		_spec.SetField(file.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := fu.mutation.UpdatedByID(); ok {
+		_spec.SetField(file.FieldUpdatedByID, field.TypeString, value)
 	}
-	if fu.mutation.UpdatedByCleared() {
-		_spec.ClearField(file.FieldUpdatedBy, field.TypeString)
+	if fu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(file.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := fu.mutation.DeletedAt(); ok {
 		_spec.SetField(file.FieldDeletedAt, field.TypeTime, value)
@@ -901,11 +901,11 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.DeletedAtCleared() {
 		_spec.ClearField(file.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := fu.mutation.DeletedBy(); ok {
-		_spec.SetField(file.FieldDeletedBy, field.TypeString, value)
+	if value, ok := fu.mutation.DeletedByID(); ok {
+		_spec.SetField(file.FieldDeletedByID, field.TypeString, value)
 	}
-	if fu.mutation.DeletedByCleared() {
-		_spec.ClearField(file.FieldDeletedBy, field.TypeString)
+	if fu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(file.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := fu.mutation.Tags(); ok {
 		_spec.SetField(file.FieldTags, field.TypeJSON, value)
@@ -1563,23 +1563,23 @@ func (fuo *FileUpdateOne) ClearUpdatedAt() *FileUpdateOne {
 	return fuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fuo *FileUpdateOne) SetUpdatedBy(s string) *FileUpdateOne {
-	fuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (fuo *FileUpdateOne) SetUpdatedByID(s string) *FileUpdateOne {
+	fuo.mutation.SetUpdatedByID(s)
 	return fuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableUpdatedBy(s *string) *FileUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableUpdatedByID(s *string) *FileUpdateOne {
 	if s != nil {
-		fuo.SetUpdatedBy(*s)
+		fuo.SetUpdatedByID(*s)
 	}
 	return fuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (fuo *FileUpdateOne) ClearUpdatedBy() *FileUpdateOne {
-	fuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (fuo *FileUpdateOne) ClearUpdatedByID() *FileUpdateOne {
+	fuo.mutation.ClearUpdatedByID()
 	return fuo
 }
 
@@ -1603,23 +1603,23 @@ func (fuo *FileUpdateOne) ClearDeletedAt() *FileUpdateOne {
 	return fuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (fuo *FileUpdateOne) SetDeletedBy(s string) *FileUpdateOne {
-	fuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (fuo *FileUpdateOne) SetDeletedByID(s string) *FileUpdateOne {
+	fuo.mutation.SetDeletedByID(s)
 	return fuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableDeletedBy(s *string) *FileUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableDeletedByID(s *string) *FileUpdateOne {
 	if s != nil {
-		fuo.SetDeletedBy(*s)
+		fuo.SetDeletedByID(*s)
 	}
 	return fuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (fuo *FileUpdateOne) ClearDeletedBy() *FileUpdateOne {
-	fuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (fuo *FileUpdateOne) ClearDeletedByID() *FileUpdateOne {
+	fuo.mutation.ClearDeletedByID()
 	return fuo
 }
 
@@ -2424,14 +2424,14 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 	if fuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(file.FieldUpdatedAt, field.TypeTime)
 	}
-	if fuo.mutation.CreatedByCleared() {
-		_spec.ClearField(file.FieldCreatedBy, field.TypeString)
+	if fuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(file.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := fuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(file.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := fuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(file.FieldUpdatedByID, field.TypeString, value)
 	}
-	if fuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(file.FieldUpdatedBy, field.TypeString)
+	if fuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(file.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := fuo.mutation.DeletedAt(); ok {
 		_spec.SetField(file.FieldDeletedAt, field.TypeTime, value)
@@ -2439,11 +2439,11 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 	if fuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(file.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := fuo.mutation.DeletedBy(); ok {
-		_spec.SetField(file.FieldDeletedBy, field.TypeString, value)
+	if value, ok := fuo.mutation.DeletedByID(); ok {
+		_spec.SetField(file.FieldDeletedByID, field.TypeString, value)
 	}
-	if fuo.mutation.DeletedByCleared() {
-		_spec.ClearField(file.FieldDeletedBy, field.TypeString)
+	if fuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(file.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := fuo.mutation.Tags(); ok {
 		_spec.SetField(file.FieldTags, field.TypeJSON, value)

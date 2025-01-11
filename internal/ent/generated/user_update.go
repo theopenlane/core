@@ -62,23 +62,23 @@ func (uu *UserUpdate) ClearUpdatedAt() *UserUpdate {
 	return uu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (uu *UserUpdate) SetUpdatedBy(s string) *UserUpdate {
-	uu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (uu *UserUpdate) SetUpdatedByID(s string) *UserUpdate {
+	uu.mutation.SetUpdatedByID(s)
 	return uu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableUpdatedBy(s *string) *UserUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableUpdatedByID(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetUpdatedBy(*s)
+		uu.SetUpdatedByID(*s)
 	}
 	return uu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (uu *UserUpdate) ClearUpdatedBy() *UserUpdate {
-	uu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (uu *UserUpdate) ClearUpdatedByID() *UserUpdate {
+	uu.mutation.ClearUpdatedByID()
 	return uu
 }
 
@@ -102,23 +102,23 @@ func (uu *UserUpdate) ClearDeletedAt() *UserUpdate {
 	return uu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (uu *UserUpdate) SetDeletedBy(s string) *UserUpdate {
-	uu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (uu *UserUpdate) SetDeletedByID(s string) *UserUpdate {
+	uu.mutation.SetDeletedByID(s)
 	return uu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableDeletedBy(s *string) *UserUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableDeletedByID(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetDeletedBy(*s)
+		uu.SetDeletedByID(*s)
 	}
 	return uu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (uu *UserUpdate) ClearDeletedBy() *UserUpdate {
-	uu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (uu *UserUpdate) ClearDeletedByID() *UserUpdate {
+	uu.mutation.ClearDeletedByID()
 	return uu
 }
 
@@ -1156,14 +1156,14 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(user.FieldUpdatedAt, field.TypeTime)
 	}
-	if uu.mutation.CreatedByCleared() {
-		_spec.ClearField(user.FieldCreatedBy, field.TypeString)
+	if uu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(user.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := uu.mutation.UpdatedBy(); ok {
-		_spec.SetField(user.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := uu.mutation.UpdatedByID(); ok {
+		_spec.SetField(user.FieldUpdatedByID, field.TypeString, value)
 	}
-	if uu.mutation.UpdatedByCleared() {
-		_spec.ClearField(user.FieldUpdatedBy, field.TypeString)
+	if uu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(user.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := uu.mutation.DeletedAt(); ok {
 		_spec.SetField(user.FieldDeletedAt, field.TypeTime, value)
@@ -1171,11 +1171,11 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uu.mutation.DeletedAtCleared() {
 		_spec.ClearField(user.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := uu.mutation.DeletedBy(); ok {
-		_spec.SetField(user.FieldDeletedBy, field.TypeString, value)
+	if value, ok := uu.mutation.DeletedByID(); ok {
+		_spec.SetField(user.FieldDeletedByID, field.TypeString, value)
 	}
-	if uu.mutation.DeletedByCleared() {
-		_spec.ClearField(user.FieldDeletedBy, field.TypeString)
+	if uu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(user.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := uu.mutation.Tags(); ok {
 		_spec.SetField(user.FieldTags, field.TypeJSON, value)
@@ -2228,23 +2228,23 @@ func (uuo *UserUpdateOne) ClearUpdatedAt() *UserUpdateOne {
 	return uuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (uuo *UserUpdateOne) SetUpdatedBy(s string) *UserUpdateOne {
-	uuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (uuo *UserUpdateOne) SetUpdatedByID(s string) *UserUpdateOne {
+	uuo.mutation.SetUpdatedByID(s)
 	return uuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableUpdatedBy(s *string) *UserUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableUpdatedByID(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetUpdatedBy(*s)
+		uuo.SetUpdatedByID(*s)
 	}
 	return uuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (uuo *UserUpdateOne) ClearUpdatedBy() *UserUpdateOne {
-	uuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (uuo *UserUpdateOne) ClearUpdatedByID() *UserUpdateOne {
+	uuo.mutation.ClearUpdatedByID()
 	return uuo
 }
 
@@ -2268,23 +2268,23 @@ func (uuo *UserUpdateOne) ClearDeletedAt() *UserUpdateOne {
 	return uuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (uuo *UserUpdateOne) SetDeletedBy(s string) *UserUpdateOne {
-	uuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (uuo *UserUpdateOne) SetDeletedByID(s string) *UserUpdateOne {
+	uuo.mutation.SetDeletedByID(s)
 	return uuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableDeletedBy(s *string) *UserUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableDeletedByID(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetDeletedBy(*s)
+		uuo.SetDeletedByID(*s)
 	}
 	return uuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (uuo *UserUpdateOne) ClearDeletedBy() *UserUpdateOne {
-	uuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (uuo *UserUpdateOne) ClearDeletedByID() *UserUpdateOne {
+	uuo.mutation.ClearDeletedByID()
 	return uuo
 }
 
@@ -3352,14 +3352,14 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if uuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(user.FieldUpdatedAt, field.TypeTime)
 	}
-	if uuo.mutation.CreatedByCleared() {
-		_spec.ClearField(user.FieldCreatedBy, field.TypeString)
+	if uuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(user.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := uuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(user.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := uuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(user.FieldUpdatedByID, field.TypeString, value)
 	}
-	if uuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(user.FieldUpdatedBy, field.TypeString)
+	if uuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(user.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := uuo.mutation.DeletedAt(); ok {
 		_spec.SetField(user.FieldDeletedAt, field.TypeTime, value)
@@ -3367,11 +3367,11 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if uuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(user.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := uuo.mutation.DeletedBy(); ok {
-		_spec.SetField(user.FieldDeletedBy, field.TypeString, value)
+	if value, ok := uuo.mutation.DeletedByID(); ok {
+		_spec.SetField(user.FieldDeletedByID, field.TypeString, value)
 	}
-	if uuo.mutation.DeletedByCleared() {
-		_spec.ClearField(user.FieldDeletedBy, field.TypeString)
+	if uuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(user.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := uuo.mutation.Tags(); ok {
 		_spec.SetField(user.FieldTags, field.TypeJSON, value)

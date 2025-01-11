@@ -52,30 +52,30 @@ func (omc *OrgMembershipCreate) SetNillableUpdatedAt(t *time.Time) *OrgMembershi
 	return omc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (omc *OrgMembershipCreate) SetCreatedBy(s string) *OrgMembershipCreate {
-	omc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (omc *OrgMembershipCreate) SetCreatedByID(s string) *OrgMembershipCreate {
+	omc.mutation.SetCreatedByID(s)
 	return omc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (omc *OrgMembershipCreate) SetNillableCreatedBy(s *string) *OrgMembershipCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (omc *OrgMembershipCreate) SetNillableCreatedByID(s *string) *OrgMembershipCreate {
 	if s != nil {
-		omc.SetCreatedBy(*s)
+		omc.SetCreatedByID(*s)
 	}
 	return omc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (omc *OrgMembershipCreate) SetUpdatedBy(s string) *OrgMembershipCreate {
-	omc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (omc *OrgMembershipCreate) SetUpdatedByID(s string) *OrgMembershipCreate {
+	omc.mutation.SetUpdatedByID(s)
 	return omc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omc *OrgMembershipCreate) SetNillableUpdatedBy(s *string) *OrgMembershipCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (omc *OrgMembershipCreate) SetNillableUpdatedByID(s *string) *OrgMembershipCreate {
 	if s != nil {
-		omc.SetUpdatedBy(*s)
+		omc.SetUpdatedByID(*s)
 	}
 	return omc
 }
@@ -108,16 +108,16 @@ func (omc *OrgMembershipCreate) SetNillableDeletedAt(t *time.Time) *OrgMembershi
 	return omc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (omc *OrgMembershipCreate) SetDeletedBy(s string) *OrgMembershipCreate {
-	omc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (omc *OrgMembershipCreate) SetDeletedByID(s string) *OrgMembershipCreate {
+	omc.mutation.SetDeletedByID(s)
 	return omc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omc *OrgMembershipCreate) SetNillableDeletedBy(s *string) *OrgMembershipCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (omc *OrgMembershipCreate) SetNillableDeletedByID(s *string) *OrgMembershipCreate {
 	if s != nil {
-		omc.SetDeletedBy(*s)
+		omc.SetDeletedByID(*s)
 	}
 	return omc
 }
@@ -328,13 +328,13 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 		_spec.SetField(orgmembership.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := omc.mutation.CreatedBy(); ok {
-		_spec.SetField(orgmembership.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := omc.mutation.CreatedByID(); ok {
+		_spec.SetField(orgmembership.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := omc.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgmembership.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := omc.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgmembership.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := omc.mutation.MappingID(); ok {
 		_spec.SetField(orgmembership.FieldMappingID, field.TypeString, value)
@@ -344,9 +344,9 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 		_spec.SetField(orgmembership.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := omc.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := omc.mutation.DeletedByID(); ok {
+		_spec.SetField(orgmembership.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := omc.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)

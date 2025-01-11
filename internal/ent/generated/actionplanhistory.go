@@ -25,18 +25,20 @@ type ActionPlanHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -67,7 +69,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldMappingID, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldCreatedByID, actionplanhistory.FieldUpdatedByID, actionplanhistory.FieldDeletedByID, actionplanhistory.FieldMappingID, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -110,6 +112,13 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			} else if value != nil {
 				aph.Operation = *value
 			}
+		case actionplanhistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				aph.UpdatedBy = new(string)
+				*aph.UpdatedBy = value.String
+			}
 		case actionplanhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -122,17 +131,17 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				aph.UpdatedAt = value.Time
 			}
-		case actionplanhistory.FieldCreatedBy:
+		case actionplanhistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				aph.CreatedBy = value.String
+				aph.CreatedByID = value.String
 			}
-		case actionplanhistory.FieldUpdatedBy:
+		case actionplanhistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				aph.UpdatedBy = value.String
+				aph.UpdatedByID = value.String
 			}
 		case actionplanhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -140,11 +149,11 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				aph.DeletedAt = value.Time
 			}
-		case actionplanhistory.FieldDeletedBy:
+		case actionplanhistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				aph.DeletedBy = value.String
+				aph.DeletedByID = value.String
 			}
 		case actionplanhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -249,23 +258,28 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", aph.Operation))
 	builder.WriteString(", ")
+	if v := aph.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(aph.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(aph.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(aph.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(aph.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(aph.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(aph.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(aph.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(aph.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(aph.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(aph.MappingID)

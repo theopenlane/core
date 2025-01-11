@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ActionPlan is the model entity for the ActionPlan schema.
@@ -22,14 +23,14 @@ type ActionPlan struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -52,6 +53,11 @@ type ActionPlan struct {
 	// The values are being populated by the ActionPlanQuery when eager-loading is set.
 	Edges        ActionPlanEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // ActionPlanEdges holds the relations/edges for other nodes in the graph.
@@ -131,7 +137,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case actionplan.FieldTags, actionplan.FieldDetails:
 			values[i] = new([]byte)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldMappingID, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedByID, actionplan.FieldUpdatedByID, actionplan.FieldDeletedByID, actionplan.FieldMappingID, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldPriority, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -168,17 +174,17 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ap.UpdatedAt = value.Time
 			}
-		case actionplan.FieldCreatedBy:
+		case actionplan.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				ap.CreatedBy = value.String
+				ap.CreatedByID = value.String
 			}
-		case actionplan.FieldUpdatedBy:
+		case actionplan.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				ap.UpdatedBy = value.String
+				ap.UpdatedByID = value.String
 			}
 		case actionplan.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -186,11 +192,11 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ap.DeletedAt = value.Time
 			}
-		case actionplan.FieldDeletedBy:
+		case actionplan.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				ap.DeletedBy = value.String
+				ap.DeletedByID = value.String
 			}
 		case actionplan.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -317,17 +323,17 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(ap.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(ap.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(ap.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(ap.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(ap.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ap.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ap.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(ap.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ap.MappingID)

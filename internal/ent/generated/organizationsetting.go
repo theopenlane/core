@@ -25,18 +25,18 @@ type OrganizationSetting struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// domains associated with the organization
 	Domains []string `json:"domains,omitempty"`
 	// Name of the person to contact for billing
@@ -59,6 +59,11 @@ type OrganizationSetting struct {
 	// The values are being populated by the OrganizationSettingQuery when eager-loading is set.
 	Edges        OrganizationSettingEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // OrganizationSettingEdges holds the relations/edges for other nodes in the graph.
@@ -105,7 +110,7 @@ func (*OrganizationSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsetting.FieldBillingNotificationsEnabled:
 			values[i] = new(sql.NullBool)
-		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldMappingID, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID:
+		case organizationsetting.FieldID, organizationsetting.FieldCreatedByID, organizationsetting.FieldUpdatedByID, organizationsetting.FieldMappingID, organizationsetting.FieldDeletedByID, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID:
 			values[i] = new(sql.NullString)
 		case organizationsetting.FieldCreatedAt, organizationsetting.FieldUpdatedAt, organizationsetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -142,17 +147,17 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				os.UpdatedAt = value.Time
 			}
-		case organizationsetting.FieldCreatedBy:
+		case organizationsetting.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				os.CreatedBy = value.String
+				os.CreatedByID = value.String
 			}
-		case organizationsetting.FieldUpdatedBy:
+		case organizationsetting.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				os.UpdatedBy = value.String
+				os.UpdatedByID = value.String
 			}
 		case organizationsetting.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -174,11 +179,11 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				os.DeletedAt = value.Time
 			}
-		case organizationsetting.FieldDeletedBy:
+		case organizationsetting.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				os.DeletedBy = value.String
+				os.DeletedByID = value.String
 			}
 		case organizationsetting.FieldDomains:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -290,11 +295,11 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(os.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(os.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(os.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(os.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(os.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(os.MappingID)
@@ -305,8 +310,8 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(os.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(os.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(os.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
 	builder.WriteString(fmt.Sprintf("%v", os.Domains))

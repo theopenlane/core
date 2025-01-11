@@ -52,30 +52,30 @@ func (osc *OrganizationSettingCreate) SetNillableUpdatedAt(t *time.Time) *Organi
 	return osc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (osc *OrganizationSettingCreate) SetCreatedBy(s string) *OrganizationSettingCreate {
-	osc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (osc *OrganizationSettingCreate) SetCreatedByID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetCreatedByID(s)
 	return osc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableCreatedBy(s *string) *OrganizationSettingCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableCreatedByID(s *string) *OrganizationSettingCreate {
 	if s != nil {
-		osc.SetCreatedBy(*s)
+		osc.SetCreatedByID(*s)
 	}
 	return osc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (osc *OrganizationSettingCreate) SetUpdatedBy(s string) *OrganizationSettingCreate {
-	osc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (osc *OrganizationSettingCreate) SetUpdatedByID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetUpdatedByID(s)
 	return osc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableUpdatedBy(s *string) *OrganizationSettingCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableUpdatedByID(s *string) *OrganizationSettingCreate {
 	if s != nil {
-		osc.SetUpdatedBy(*s)
+		osc.SetUpdatedByID(*s)
 	}
 	return osc
 }
@@ -114,16 +114,16 @@ func (osc *OrganizationSettingCreate) SetNillableDeletedAt(t *time.Time) *Organi
 	return osc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (osc *OrganizationSettingCreate) SetDeletedBy(s string) *OrganizationSettingCreate {
-	osc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (osc *OrganizationSettingCreate) SetDeletedByID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetDeletedByID(s)
 	return osc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osc *OrganizationSettingCreate) SetNillableDeletedBy(s *string) *OrganizationSettingCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableDeletedByID(s *string) *OrganizationSettingCreate {
 	if s != nil {
-		osc.SetDeletedBy(*s)
+		osc.SetDeletedByID(*s)
 	}
 	return osc
 }
@@ -432,13 +432,13 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 		_spec.SetField(organizationsetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := osc.mutation.CreatedBy(); ok {
-		_spec.SetField(organizationsetting.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := osc.mutation.CreatedByID(); ok {
+		_spec.SetField(organizationsetting.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := osc.mutation.UpdatedBy(); ok {
-		_spec.SetField(organizationsetting.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := osc.mutation.UpdatedByID(); ok {
+		_spec.SetField(organizationsetting.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := osc.mutation.MappingID(); ok {
 		_spec.SetField(organizationsetting.FieldMappingID, field.TypeString, value)
@@ -452,9 +452,9 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 		_spec.SetField(organizationsetting.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := osc.mutation.DeletedBy(); ok {
-		_spec.SetField(organizationsetting.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := osc.mutation.DeletedByID(); ok {
+		_spec.SetField(organizationsetting.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := osc.mutation.Domains(); ok {
 		_spec.SetField(organizationsetting.FieldDomains, field.TypeJSON, value)

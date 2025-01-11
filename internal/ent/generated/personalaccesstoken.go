@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // PersonalAccessToken is the model entity for the PersonalAccessToken schema.
@@ -23,14 +24,14 @@ type PersonalAccessToken struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -53,6 +54,11 @@ type PersonalAccessToken struct {
 	// The values are being populated by the PersonalAccessTokenQuery when eager-loading is set.
 	Edges        PersonalAccessTokenEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // PersonalAccessTokenEdges holds the relations/edges for other nodes in the graph.
@@ -109,7 +115,7 @@ func (*PersonalAccessToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case personalaccesstoken.FieldTags, personalaccesstoken.FieldScopes:
 			values[i] = new([]byte)
-		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedBy, personalaccesstoken.FieldUpdatedBy, personalaccesstoken.FieldDeletedBy, personalaccesstoken.FieldMappingID, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
+		case personalaccesstoken.FieldID, personalaccesstoken.FieldCreatedByID, personalaccesstoken.FieldUpdatedByID, personalaccesstoken.FieldDeletedByID, personalaccesstoken.FieldMappingID, personalaccesstoken.FieldOwnerID, personalaccesstoken.FieldName, personalaccesstoken.FieldToken, personalaccesstoken.FieldDescription:
 			values[i] = new(sql.NullString)
 		case personalaccesstoken.FieldCreatedAt, personalaccesstoken.FieldUpdatedAt, personalaccesstoken.FieldDeletedAt, personalaccesstoken.FieldExpiresAt, personalaccesstoken.FieldLastUsedAt:
 			values[i] = new(sql.NullTime)
@@ -146,17 +152,17 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				pat.UpdatedAt = value.Time
 			}
-		case personalaccesstoken.FieldCreatedBy:
+		case personalaccesstoken.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				pat.CreatedBy = value.String
+				pat.CreatedByID = value.String
 			}
-		case personalaccesstoken.FieldUpdatedBy:
+		case personalaccesstoken.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				pat.UpdatedBy = value.String
+				pat.UpdatedByID = value.String
 			}
 		case personalaccesstoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -164,11 +170,11 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				pat.DeletedAt = value.Time
 			}
-		case personalaccesstoken.FieldDeletedBy:
+		case personalaccesstoken.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				pat.DeletedBy = value.String
+				pat.DeletedByID = value.String
 			}
 		case personalaccesstoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -288,17 +294,17 @@ func (pat *PersonalAccessToken) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(pat.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(pat.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(pat.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(pat.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(pat.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pat.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pat.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(pat.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(pat.MappingID)

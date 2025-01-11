@@ -40,7 +40,7 @@ type User struct {
 // Mixin of the User
 func (User) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
@@ -192,7 +192,7 @@ func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		// Delete users from groups and orgs when the user is deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

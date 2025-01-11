@@ -25,20 +25,22 @@ type ProgramMembershipHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// ProgramID holds the value of the "program_id" field.
@@ -55,7 +57,7 @@ func (*ProgramMembershipHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case programmembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case programmembershiphistory.FieldID, programmembershiphistory.FieldRef, programmembershiphistory.FieldCreatedBy, programmembershiphistory.FieldUpdatedBy, programmembershiphistory.FieldMappingID, programmembershiphistory.FieldDeletedBy, programmembershiphistory.FieldRole, programmembershiphistory.FieldProgramID, programmembershiphistory.FieldUserID:
+		case programmembershiphistory.FieldID, programmembershiphistory.FieldRef, programmembershiphistory.FieldUpdatedBy, programmembershiphistory.FieldCreatedByID, programmembershiphistory.FieldUpdatedByID, programmembershiphistory.FieldMappingID, programmembershiphistory.FieldDeletedByID, programmembershiphistory.FieldRole, programmembershiphistory.FieldProgramID, programmembershiphistory.FieldUserID:
 			values[i] = new(sql.NullString)
 		case programmembershiphistory.FieldHistoryTime, programmembershiphistory.FieldCreatedAt, programmembershiphistory.FieldUpdatedAt, programmembershiphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -98,6 +100,13 @@ func (pmh *ProgramMembershipHistory) assignValues(columns []string, values []any
 			} else if value != nil {
 				pmh.Operation = *value
 			}
+		case programmembershiphistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				pmh.UpdatedBy = new(string)
+				*pmh.UpdatedBy = value.String
+			}
 		case programmembershiphistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -110,17 +119,17 @@ func (pmh *ProgramMembershipHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				pmh.UpdatedAt = value.Time
 			}
-		case programmembershiphistory.FieldCreatedBy:
+		case programmembershiphistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				pmh.CreatedBy = value.String
+				pmh.CreatedByID = value.String
 			}
-		case programmembershiphistory.FieldUpdatedBy:
+		case programmembershiphistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				pmh.UpdatedBy = value.String
+				pmh.UpdatedByID = value.String
 			}
 		case programmembershiphistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -134,11 +143,11 @@ func (pmh *ProgramMembershipHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				pmh.DeletedAt = value.Time
 			}
-		case programmembershiphistory.FieldDeletedBy:
+		case programmembershiphistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				pmh.DeletedBy = value.String
+				pmh.DeletedByID = value.String
 			}
 		case programmembershiphistory.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -203,17 +212,22 @@ func (pmh *ProgramMembershipHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", pmh.Operation))
 	builder.WriteString(", ")
+	if v := pmh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(pmh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(pmh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(pmh.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(pmh.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(pmh.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(pmh.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(pmh.MappingID)
@@ -221,8 +235,8 @@ func (pmh *ProgramMembershipHistory) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pmh.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pmh.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(pmh.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", pmh.Role))

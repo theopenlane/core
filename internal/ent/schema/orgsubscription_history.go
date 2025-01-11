@@ -48,6 +48,10 @@ func (OrgSubscriptionHistory) Fields() []ent.Field {
 		field.Enum("operation").
 			GoType(history.OpType("")).
 			Immutable(),
+		field.String("updated_by").
+			Optional().
+			Immutable().
+			Nillable(),
 	}
 
 	// get the fields from the mixins

@@ -29,6 +29,43 @@ func main() {
 	execSchema := gqlgenerated.NewExecutableSchema(gqlgenerated.Config{})
 	schema := execSchema.Schema()
 
+	// for i, t := range schema.Types {
+	// 	log.Debug().Str("type", t.Name).Msg("type")
+
+	// 	if t.Kind == ast.Object && !strings.Contains(t.Name, "History") && !strings.Contains(t.Name, "Connection") &&
+	// 		!strings.Contains(t.Name, "Edge") && !strings.Contains(t.Name, "Payload") {
+	// 		log.Debug().Str("type", t.Name).Msg("type")
+
+	// 		if t.Fields.ForName("createdBy") != nil {
+	// 			newField := &ast.FieldDefinition{
+	// 				Name: "createdByMeow",
+	// 				Type: &ast.Type{
+	// 					NamedType: "String",
+	// 				},
+	// 			}
+
+	// 			log.Debug().Msg("adding updatedByMeow field")
+
+	// 			t.Fields = append(t.Fields, newField)
+	// 		}
+
+	// 		if t.Fields.ForName("updatedBy") != nil {
+	// 			newField := &ast.FieldDefinition{
+	// 				Name: "updatedByMeow",
+	// 				Type: &ast.Type{
+	// 					NamedType: "String",
+	// 				},
+	// 			}
+
+	// 			log.Debug().Msg("adding updatedByMeow field")
+
+	// 			t.Fields = append(t.Fields, newField)
+	// 		}
+
+	// 		schema.Types[i] = t
+	// 	}
+	// }
+
 	f, err := os.Create("internal/graphapi/clientschema/schema.graphql")
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create schema file")

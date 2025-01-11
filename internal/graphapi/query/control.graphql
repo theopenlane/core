@@ -6,7 +6,7 @@ mutation CreateBulkCSVControl($input: Upload!) {
       controlNumber
       controlType
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -18,7 +18,7 @@ mutation CreateBulkCSVControl($input: Upload!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -31,7 +31,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
       controlNumber
       controlType
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -43,7 +43,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -56,7 +56,7 @@ mutation CreateControl($input: CreateControlInput!) {
       controlNumber
       controlType
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -68,7 +68,7 @@ mutation CreateControl($input: CreateControlInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       subcontrols {
         id
@@ -108,7 +108,7 @@ query GetAllControls {
         controlNumber
         controlType
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -120,7 +120,7 @@ query GetAllControls {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
         subcontrols {
           id
@@ -152,7 +152,7 @@ query GetControlByID($controlId: ID!) {
     controlNumber
     controlType
     createdAt
-    createdBy
+    createdByID
     description
     details
     family
@@ -164,7 +164,7 @@ query GetControlByID($controlId: ID!) {
     status
     tags
     updatedAt
-    updatedBy
+    updatedByID
     version
     subcontrols {
       id
@@ -197,7 +197,7 @@ query GetControls($where: ControlWhereInput) {
         controlNumber
         controlType
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -209,7 +209,7 @@ query GetControls($where: ControlWhereInput) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
         subcontrols {
           id
@@ -242,7 +242,7 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       controlNumber
       controlType
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -254,7 +254,7 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       subcontrols {
         id

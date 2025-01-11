@@ -61,7 +61,7 @@ func (Webauthn) Edges() []ent.Edge {
 // Mixin of the Webauthn
 func (Webauthn) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		UserOwnedMixin{

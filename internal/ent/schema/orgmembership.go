@@ -61,7 +61,7 @@ func (OrgMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.MembershipChecks("organization"),
 	}
 }
@@ -76,7 +76,7 @@ func (OrgMembership) Indexes() []ent.Index {
 // Mixin of the OrgMembership
 func (OrgMembership) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 	}

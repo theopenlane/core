@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Entity_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Entity_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Entity_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Entity_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Entity_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
@@ -107,6 +107,10 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_files(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Entity_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Entity_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -159,14 +163,14 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Entity_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Entity_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Entity_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Entity_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Entity_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
@@ -195,6 +199,10 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_files(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Entity_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Entity_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -291,14 +299,14 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Entity_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Entity_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Entity_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Entity_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Entity_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Entity_tags(ctx, field)
 			case "ownerID":
@@ -327,6 +335,10 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_files(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Entity_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Entity_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},

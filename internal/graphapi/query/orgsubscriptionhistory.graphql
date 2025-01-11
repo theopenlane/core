@@ -6,7 +6,7 @@ query GetAllOrgSubscriptionHistories {
       node {
         active
         createdAt
-        createdBy
+        createdByID
         expiresAt
         features
         historyTime
@@ -21,7 +21,7 @@ query GetAllOrgSubscriptionHistories {
         stripeSubscriptionStatus
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -33,7 +33,7 @@ query GetOrgSubscriptionHistories($where: OrgSubscriptionHistoryWhereInput) {
       node {
         active
         createdAt
-        createdBy
+        createdByID
         expiresAt
         features
         historyTime
@@ -48,7 +48,7 @@ query GetOrgSubscriptionHistories($where: OrgSubscriptionHistoryWhereInput) {
         stripeSubscriptionStatus
         tags
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

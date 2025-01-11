@@ -44,23 +44,23 @@ func (omhu *OrgMembershipHistoryUpdate) ClearUpdatedAt() *OrgMembershipHistoryUp
 	return omhu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (omhu *OrgMembershipHistoryUpdate) SetUpdatedBy(s string) *OrgMembershipHistoryUpdate {
-	omhu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (omhu *OrgMembershipHistoryUpdate) SetUpdatedByID(s string) *OrgMembershipHistoryUpdate {
+	omhu.mutation.SetUpdatedByID(s)
 	return omhu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omhu *OrgMembershipHistoryUpdate) SetNillableUpdatedBy(s *string) *OrgMembershipHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (omhu *OrgMembershipHistoryUpdate) SetNillableUpdatedByID(s *string) *OrgMembershipHistoryUpdate {
 	if s != nil {
-		omhu.SetUpdatedBy(*s)
+		omhu.SetUpdatedByID(*s)
 	}
 	return omhu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (omhu *OrgMembershipHistoryUpdate) ClearUpdatedBy() *OrgMembershipHistoryUpdate {
-	omhu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (omhu *OrgMembershipHistoryUpdate) ClearUpdatedByID() *OrgMembershipHistoryUpdate {
+	omhu.mutation.ClearUpdatedByID()
 	return omhu
 }
 
@@ -84,23 +84,23 @@ func (omhu *OrgMembershipHistoryUpdate) ClearDeletedAt() *OrgMembershipHistoryUp
 	return omhu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (omhu *OrgMembershipHistoryUpdate) SetDeletedBy(s string) *OrgMembershipHistoryUpdate {
-	omhu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (omhu *OrgMembershipHistoryUpdate) SetDeletedByID(s string) *OrgMembershipHistoryUpdate {
+	omhu.mutation.SetDeletedByID(s)
 	return omhu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omhu *OrgMembershipHistoryUpdate) SetNillableDeletedBy(s *string) *OrgMembershipHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (omhu *OrgMembershipHistoryUpdate) SetNillableDeletedByID(s *string) *OrgMembershipHistoryUpdate {
 	if s != nil {
-		omhu.SetDeletedBy(*s)
+		omhu.SetDeletedByID(*s)
 	}
 	return omhu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (omhu *OrgMembershipHistoryUpdate) ClearDeletedBy() *OrgMembershipHistoryUpdate {
-	omhu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (omhu *OrgMembershipHistoryUpdate) ClearDeletedByID() *OrgMembershipHistoryUpdate {
+	omhu.mutation.ClearDeletedByID()
 	return omhu
 }
 
@@ -196,6 +196,9 @@ func (omhu *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	if omhu.mutation.RefCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldRef, field.TypeString)
 	}
+	if omhu.mutation.UpdatedByCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
+	}
 	if omhu.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -205,14 +208,14 @@ func (omhu *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	if omhu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if omhu.mutation.CreatedByCleared() {
-		_spec.ClearField(orgmembershiphistory.FieldCreatedBy, field.TypeString)
+	if omhu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := omhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := omhu.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if omhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
+	if omhu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := omhu.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldDeletedAt, field.TypeTime, value)
@@ -220,11 +223,11 @@ func (omhu *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	if omhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := omhu.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := omhu.mutation.DeletedByID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if omhu.mutation.DeletedByCleared() {
-		_spec.ClearField(orgmembershiphistory.FieldDeletedBy, field.TypeString)
+	if omhu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := omhu.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
@@ -265,23 +268,23 @@ func (omhuo *OrgMembershipHistoryUpdateOne) ClearUpdatedAt() *OrgMembershipHisto
 	return omhuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetUpdatedBy(s string) *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (omhuo *OrgMembershipHistoryUpdateOne) SetUpdatedByID(s string) *OrgMembershipHistoryUpdateOne {
+	omhuo.mutation.SetUpdatedByID(s)
 	return omhuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetNillableUpdatedBy(s *string) *OrgMembershipHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (omhuo *OrgMembershipHistoryUpdateOne) SetNillableUpdatedByID(s *string) *OrgMembershipHistoryUpdateOne {
 	if s != nil {
-		omhuo.SetUpdatedBy(*s)
+		omhuo.SetUpdatedByID(*s)
 	}
 	return omhuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) ClearUpdatedBy() *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (omhuo *OrgMembershipHistoryUpdateOne) ClearUpdatedByID() *OrgMembershipHistoryUpdateOne {
+	omhuo.mutation.ClearUpdatedByID()
 	return omhuo
 }
 
@@ -305,23 +308,23 @@ func (omhuo *OrgMembershipHistoryUpdateOne) ClearDeletedAt() *OrgMembershipHisto
 	return omhuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetDeletedBy(s string) *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (omhuo *OrgMembershipHistoryUpdateOne) SetDeletedByID(s string) *OrgMembershipHistoryUpdateOne {
+	omhuo.mutation.SetDeletedByID(s)
 	return omhuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetNillableDeletedBy(s *string) *OrgMembershipHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (omhuo *OrgMembershipHistoryUpdateOne) SetNillableDeletedByID(s *string) *OrgMembershipHistoryUpdateOne {
 	if s != nil {
-		omhuo.SetDeletedBy(*s)
+		omhuo.SetDeletedByID(*s)
 	}
 	return omhuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) ClearDeletedBy() *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (omhuo *OrgMembershipHistoryUpdateOne) ClearDeletedByID() *OrgMembershipHistoryUpdateOne {
+	omhuo.mutation.ClearDeletedByID()
 	return omhuo
 }
 
@@ -447,6 +450,9 @@ func (omhuo *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	if omhuo.mutation.RefCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldRef, field.TypeString)
 	}
+	if omhuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
+	}
 	if omhuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -456,14 +462,14 @@ func (omhuo *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	if omhuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if omhuo.mutation.CreatedByCleared() {
-		_spec.ClearField(orgmembershiphistory.FieldCreatedBy, field.TypeString)
+	if omhuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := omhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := omhuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if omhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
+	if omhuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := omhuo.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldDeletedAt, field.TypeTime, value)
@@ -471,11 +477,11 @@ func (omhuo *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	if omhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := omhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := omhuo.mutation.DeletedByID(); ok {
+		_spec.SetField(orgmembershiphistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if omhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(orgmembershiphistory.FieldDeletedBy, field.TypeString)
+	if omhuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := omhuo.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)

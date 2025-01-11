@@ -4,7 +4,7 @@ mutation CreateBulkContact($input: [CreateContactInput!]) {
       address
       company
       createdAt
-      createdBy
+      createdByID
       email
       fullName
       id
@@ -14,7 +14,7 @@ mutation CreateBulkContact($input: [CreateContactInput!]) {
       tags
       title
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -25,7 +25,7 @@ mutation CreateBulkCSVContact($input: Upload!) {
       address
       company
       createdAt
-      createdBy
+      createdByID
       email
       fullName
       id
@@ -35,7 +35,7 @@ mutation CreateBulkCSVContact($input: Upload!) {
       tags
       title
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -46,7 +46,7 @@ mutation CreateContact($input: CreateContactInput!) {
       address
       company
       createdAt
-      createdBy
+      createdByID
       email
       fullName
       id
@@ -56,7 +56,7 @@ mutation CreateContact($input: CreateContactInput!) {
       tags
       title
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -74,7 +74,7 @@ query GetAllContacts {
         address
         company
         createdAt
-        createdBy
+        createdByID
         email
         fullName
         id
@@ -84,7 +84,7 @@ query GetAllContacts {
         tags
         title
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -95,7 +95,7 @@ query GetContactByID($contactId: ID!) {
     address
     company
     createdAt
-    createdBy
+    createdByID
     email
     fullName
     id
@@ -105,7 +105,7 @@ query GetContactByID($contactId: ID!) {
     tags
     title
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -116,7 +116,7 @@ query GetContacts($where: ContactWhereInput) {
         address
         company
         createdAt
-        createdBy
+        createdByID
         email
         fullName
         id
@@ -126,7 +126,7 @@ query GetContacts($where: ContactWhereInput) {
         tags
         title
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -138,7 +138,7 @@ mutation UpdateContact($updateContactId: ID!, $input: UpdateContactInput!) {
       address
       company
       createdAt
-      createdBy
+      createdByID
       email
       fullName
       id
@@ -148,7 +148,7 @@ mutation UpdateContact($updateContactId: ID!, $input: UpdateContactInput!) {
       tags
       title
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }

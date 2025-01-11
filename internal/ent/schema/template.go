@@ -27,7 +27,7 @@ type Template struct {
 // Mixin of the Template
 func (Template) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
@@ -92,7 +92,7 @@ func (Template) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.OrganizationInheritedChecks(),
 	}
 }

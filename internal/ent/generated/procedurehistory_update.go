@@ -44,23 +44,23 @@ func (phu *ProcedureHistoryUpdate) ClearUpdatedAt() *ProcedureHistoryUpdate {
 	return phu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (phu *ProcedureHistoryUpdate) SetUpdatedBy(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (phu *ProcedureHistoryUpdate) SetUpdatedByID(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetUpdatedByID(s)
 	return phu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableUpdatedBy(s *string) *ProcedureHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableUpdatedByID(s *string) *ProcedureHistoryUpdate {
 	if s != nil {
-		phu.SetUpdatedBy(*s)
+		phu.SetUpdatedByID(*s)
 	}
 	return phu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (phu *ProcedureHistoryUpdate) ClearUpdatedBy() *ProcedureHistoryUpdate {
-	phu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (phu *ProcedureHistoryUpdate) ClearUpdatedByID() *ProcedureHistoryUpdate {
+	phu.mutation.ClearUpdatedByID()
 	return phu
 }
 
@@ -84,23 +84,23 @@ func (phu *ProcedureHistoryUpdate) ClearDeletedAt() *ProcedureHistoryUpdate {
 	return phu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (phu *ProcedureHistoryUpdate) SetDeletedBy(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (phu *ProcedureHistoryUpdate) SetDeletedByID(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetDeletedByID(s)
 	return phu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableDeletedBy(s *string) *ProcedureHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableDeletedByID(s *string) *ProcedureHistoryUpdate {
 	if s != nil {
-		phu.SetDeletedBy(*s)
+		phu.SetDeletedByID(*s)
 	}
 	return phu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (phu *ProcedureHistoryUpdate) ClearDeletedBy() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (phu *ProcedureHistoryUpdate) ClearDeletedByID() *ProcedureHistoryUpdate {
+	phu.mutation.ClearDeletedByID()
 	return phu
 }
 
@@ -373,6 +373,9 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if phu.mutation.RefCleared() {
 		_spec.ClearField(procedurehistory.FieldRef, field.TypeString)
 	}
+	if phu.mutation.UpdatedByCleared() {
+		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if phu.mutation.CreatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -382,14 +385,14 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if phu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if phu.mutation.CreatedByCleared() {
-		_spec.ClearField(procedurehistory.FieldCreatedBy, field.TypeString)
+	if phu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(procedurehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := phu.mutation.UpdatedBy(); ok {
-		_spec.SetField(procedurehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := phu.mutation.UpdatedByID(); ok {
+		_spec.SetField(procedurehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if phu.mutation.UpdatedByCleared() {
-		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
+	if phu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(procedurehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := phu.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
@@ -397,11 +400,11 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if phu.mutation.DeletedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := phu.mutation.DeletedBy(); ok {
-		_spec.SetField(procedurehistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := phu.mutation.DeletedByID(); ok {
+		_spec.SetField(procedurehistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if phu.mutation.DeletedByCleared() {
-		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
+	if phu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(procedurehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := phu.mutation.Tags(); ok {
 		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
@@ -507,23 +510,23 @@ func (phuo *ProcedureHistoryUpdateOne) ClearUpdatedAt() *ProcedureHistoryUpdateO
 	return phuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (phuo *ProcedureHistoryUpdateOne) SetUpdatedBy(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (phuo *ProcedureHistoryUpdateOne) SetUpdatedByID(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetUpdatedByID(s)
 	return phuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ProcedureHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableUpdatedByID(s *string) *ProcedureHistoryUpdateOne {
 	if s != nil {
-		phuo.SetUpdatedBy(*s)
+		phuo.SetUpdatedByID(*s)
 	}
 	return phuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearUpdatedBy() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearUpdatedByID() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearUpdatedByID()
 	return phuo
 }
 
@@ -547,23 +550,23 @@ func (phuo *ProcedureHistoryUpdateOne) ClearDeletedAt() *ProcedureHistoryUpdateO
 	return phuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDeletedBy(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (phuo *ProcedureHistoryUpdateOne) SetDeletedByID(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetDeletedByID(s)
 	return phuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableDeletedBy(s *string) *ProcedureHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableDeletedByID(s *string) *ProcedureHistoryUpdateOne {
 	if s != nil {
-		phuo.SetDeletedBy(*s)
+		phuo.SetDeletedByID(*s)
 	}
 	return phuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDeletedBy() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearDeletedByID() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearDeletedByID()
 	return phuo
 }
 
@@ -866,6 +869,9 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if phuo.mutation.RefCleared() {
 		_spec.ClearField(procedurehistory.FieldRef, field.TypeString)
 	}
+	if phuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
+	}
 	if phuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -875,14 +881,14 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if phuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if phuo.mutation.CreatedByCleared() {
-		_spec.ClearField(procedurehistory.FieldCreatedBy, field.TypeString)
+	if phuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(procedurehistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := phuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(procedurehistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := phuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(procedurehistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if phuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
+	if phuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(procedurehistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := phuo.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
@@ -890,11 +896,11 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if phuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.DeletedBy(); ok {
-		_spec.SetField(procedurehistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := phuo.mutation.DeletedByID(); ok {
+		_spec.SetField(procedurehistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if phuo.mutation.DeletedByCleared() {
-		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
+	if phuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(procedurehistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := phuo.mutation.Tags(); ok {
 		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)

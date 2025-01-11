@@ -47,23 +47,23 @@ func (patu *PersonalAccessTokenUpdate) ClearUpdatedAt() *PersonalAccessTokenUpda
 	return patu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (patu *PersonalAccessTokenUpdate) SetUpdatedBy(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (patu *PersonalAccessTokenUpdate) SetUpdatedByID(s string) *PersonalAccessTokenUpdate {
+	patu.mutation.SetUpdatedByID(s)
 	return patu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableUpdatedBy(s *string) *PersonalAccessTokenUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (patu *PersonalAccessTokenUpdate) SetNillableUpdatedByID(s *string) *PersonalAccessTokenUpdate {
 	if s != nil {
-		patu.SetUpdatedBy(*s)
+		patu.SetUpdatedByID(*s)
 	}
 	return patu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (patu *PersonalAccessTokenUpdate) ClearUpdatedBy() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (patu *PersonalAccessTokenUpdate) ClearUpdatedByID() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearUpdatedByID()
 	return patu
 }
 
@@ -87,23 +87,23 @@ func (patu *PersonalAccessTokenUpdate) ClearDeletedAt() *PersonalAccessTokenUpda
 	return patu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (patu *PersonalAccessTokenUpdate) SetDeletedBy(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (patu *PersonalAccessTokenUpdate) SetDeletedByID(s string) *PersonalAccessTokenUpdate {
+	patu.mutation.SetDeletedByID(s)
 	return patu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableDeletedBy(s *string) *PersonalAccessTokenUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (patu *PersonalAccessTokenUpdate) SetNillableDeletedByID(s *string) *PersonalAccessTokenUpdate {
 	if s != nil {
-		patu.SetDeletedBy(*s)
+		patu.SetDeletedByID(*s)
 	}
 	return patu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (patu *PersonalAccessTokenUpdate) ClearDeletedBy() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (patu *PersonalAccessTokenUpdate) ClearDeletedByID() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearDeletedByID()
 	return patu
 }
 
@@ -401,14 +401,14 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 	if patu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if patu.mutation.CreatedByCleared() {
-		_spec.ClearField(personalaccesstoken.FieldCreatedBy, field.TypeString)
+	if patu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := patu.mutation.UpdatedBy(); ok {
-		_spec.SetField(personalaccesstoken.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := patu.mutation.UpdatedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldUpdatedByID, field.TypeString, value)
 	}
-	if patu.mutation.UpdatedByCleared() {
-		_spec.ClearField(personalaccesstoken.FieldUpdatedBy, field.TypeString)
+	if patu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := patu.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
@@ -416,11 +416,11 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 	if patu.mutation.DeletedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := patu.mutation.DeletedBy(); ok {
-		_spec.SetField(personalaccesstoken.FieldDeletedBy, field.TypeString, value)
+	if value, ok := patu.mutation.DeletedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldDeletedByID, field.TypeString, value)
 	}
-	if patu.mutation.DeletedByCleared() {
-		_spec.ClearField(personalaccesstoken.FieldDeletedBy, field.TypeString)
+	if patu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := patu.mutation.Tags(); ok {
 		_spec.SetField(personalaccesstoken.FieldTags, field.TypeJSON, value)
@@ -628,23 +628,23 @@ func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedAt() *PersonalAccessToken
 	return patuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedBy(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedByID(s string) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetUpdatedByID(s)
 	return patuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableUpdatedBy(s *string) *PersonalAccessTokenUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (patuo *PersonalAccessTokenUpdateOne) SetNillableUpdatedByID(s *string) *PersonalAccessTokenUpdateOne {
 	if s != nil {
-		patuo.SetUpdatedBy(*s)
+		patuo.SetUpdatedByID(*s)
 	}
 	return patuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedBy() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedByID() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearUpdatedByID()
 	return patuo
 }
 
@@ -668,23 +668,23 @@ func (patuo *PersonalAccessTokenUpdateOne) ClearDeletedAt() *PersonalAccessToken
 	return patuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetDeletedBy(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetDeletedByID(s string) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetDeletedByID(s)
 	return patuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableDeletedBy(s *string) *PersonalAccessTokenUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (patuo *PersonalAccessTokenUpdateOne) SetNillableDeletedByID(s *string) *PersonalAccessTokenUpdateOne {
 	if s != nil {
-		patuo.SetDeletedBy(*s)
+		patuo.SetDeletedByID(*s)
 	}
 	return patuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearDeletedBy() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearDeletedByID() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearDeletedByID()
 	return patuo
 }
 
@@ -1012,14 +1012,14 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 	if patuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if patuo.mutation.CreatedByCleared() {
-		_spec.ClearField(personalaccesstoken.FieldCreatedBy, field.TypeString)
+	if patuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := patuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(personalaccesstoken.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := patuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldUpdatedByID, field.TypeString, value)
 	}
-	if patuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(personalaccesstoken.FieldUpdatedBy, field.TypeString)
+	if patuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := patuo.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
@@ -1027,11 +1027,11 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 	if patuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := patuo.mutation.DeletedBy(); ok {
-		_spec.SetField(personalaccesstoken.FieldDeletedBy, field.TypeString, value)
+	if value, ok := patuo.mutation.DeletedByID(); ok {
+		_spec.SetField(personalaccesstoken.FieldDeletedByID, field.TypeString, value)
 	}
-	if patuo.mutation.DeletedByCleared() {
-		_spec.ClearField(personalaccesstoken.FieldDeletedBy, field.TypeString)
+	if patuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := patuo.mutation.Tags(); ok {
 		_spec.SetField(personalaccesstoken.FieldTags, field.TypeJSON, value)

@@ -25,22 +25,24 @@ type IntegrationHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the integration - must be unique within the organization
@@ -61,7 +63,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case integrationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldMappingID, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind:
+		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldUpdatedBy, integrationhistory.FieldCreatedByID, integrationhistory.FieldUpdatedByID, integrationhistory.FieldMappingID, integrationhistory.FieldDeletedByID, integrationhistory.FieldOwnerID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind:
 			values[i] = new(sql.NullString)
 		case integrationhistory.FieldHistoryTime, integrationhistory.FieldCreatedAt, integrationhistory.FieldUpdatedAt, integrationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -104,6 +106,13 @@ func (ih *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value != nil {
 				ih.Operation = *value
 			}
+		case integrationhistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				ih.UpdatedBy = new(string)
+				*ih.UpdatedBy = value.String
+			}
 		case integrationhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -116,17 +125,17 @@ func (ih *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				ih.UpdatedAt = value.Time
 			}
-		case integrationhistory.FieldCreatedBy:
+		case integrationhistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				ih.CreatedBy = value.String
+				ih.CreatedByID = value.String
 			}
-		case integrationhistory.FieldUpdatedBy:
+		case integrationhistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				ih.UpdatedBy = value.String
+				ih.UpdatedByID = value.String
 			}
 		case integrationhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -148,11 +157,11 @@ func (ih *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				ih.DeletedAt = value.Time
 			}
-		case integrationhistory.FieldDeletedBy:
+		case integrationhistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				ih.DeletedBy = value.String
+				ih.DeletedByID = value.String
 			}
 		case integrationhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -223,17 +232,22 @@ func (ih *IntegrationHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", ih.Operation))
 	builder.WriteString(", ")
+	if v := ih.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(ih.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(ih.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(ih.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(ih.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(ih.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(ih.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ih.MappingID)
@@ -244,8 +258,8 @@ func (ih *IntegrationHistory) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ih.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ih.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(ih.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ih.OwnerID)

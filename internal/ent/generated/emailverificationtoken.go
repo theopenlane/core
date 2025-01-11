@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // EmailVerificationToken is the model entity for the EmailVerificationToken schema.
@@ -22,16 +23,16 @@ type EmailVerificationToken struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// The user id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the verification token sent to the user via email which should only be provided to the /verify endpoint + handler
@@ -46,6 +47,11 @@ type EmailVerificationToken struct {
 	// The values are being populated by the EmailVerificationTokenQuery when eager-loading is set.
 	Edges        EmailVerificationTokenEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // EmailVerificationTokenEdges holds the relations/edges for other nodes in the graph.
@@ -77,7 +83,7 @@ func (*EmailVerificationToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case emailverificationtoken.FieldSecret:
 			values[i] = new([]byte)
-		case emailverificationtoken.FieldID, emailverificationtoken.FieldCreatedBy, emailverificationtoken.FieldUpdatedBy, emailverificationtoken.FieldMappingID, emailverificationtoken.FieldDeletedBy, emailverificationtoken.FieldOwnerID, emailverificationtoken.FieldToken, emailverificationtoken.FieldEmail:
+		case emailverificationtoken.FieldID, emailverificationtoken.FieldCreatedByID, emailverificationtoken.FieldUpdatedByID, emailverificationtoken.FieldMappingID, emailverificationtoken.FieldDeletedByID, emailverificationtoken.FieldOwnerID, emailverificationtoken.FieldToken, emailverificationtoken.FieldEmail:
 			values[i] = new(sql.NullString)
 		case emailverificationtoken.FieldCreatedAt, emailverificationtoken.FieldUpdatedAt, emailverificationtoken.FieldDeletedAt, emailverificationtoken.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -114,17 +120,17 @@ func (evt *EmailVerificationToken) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				evt.UpdatedAt = value.Time
 			}
-		case emailverificationtoken.FieldCreatedBy:
+		case emailverificationtoken.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				evt.CreatedBy = value.String
+				evt.CreatedByID = value.String
 			}
-		case emailverificationtoken.FieldUpdatedBy:
+		case emailverificationtoken.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				evt.UpdatedBy = value.String
+				evt.UpdatedByID = value.String
 			}
 		case emailverificationtoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -138,11 +144,11 @@ func (evt *EmailVerificationToken) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				evt.DeletedAt = value.Time
 			}
-		case emailverificationtoken.FieldDeletedBy:
+		case emailverificationtoken.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				evt.DeletedBy = value.String
+				evt.DeletedByID = value.String
 			}
 		case emailverificationtoken.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -222,11 +228,11 @@ func (evt *EmailVerificationToken) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(evt.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(evt.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(evt.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(evt.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(evt.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(evt.MappingID)
@@ -234,8 +240,8 @@ func (evt *EmailVerificationToken) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(evt.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(evt.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(evt.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(evt.OwnerID)

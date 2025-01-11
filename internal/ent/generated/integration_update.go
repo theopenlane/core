@@ -47,23 +47,23 @@ func (iu *IntegrationUpdate) ClearUpdatedAt() *IntegrationUpdate {
 	return iu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iu *IntegrationUpdate) SetUpdatedBy(s string) *IntegrationUpdate {
-	iu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iu *IntegrationUpdate) SetUpdatedByID(s string) *IntegrationUpdate {
+	iu.mutation.SetUpdatedByID(s)
 	return iu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableUpdatedBy(s *string) *IntegrationUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iu *IntegrationUpdate) SetNillableUpdatedByID(s *string) *IntegrationUpdate {
 	if s != nil {
-		iu.SetUpdatedBy(*s)
+		iu.SetUpdatedByID(*s)
 	}
 	return iu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iu *IntegrationUpdate) ClearUpdatedBy() *IntegrationUpdate {
-	iu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iu *IntegrationUpdate) ClearUpdatedByID() *IntegrationUpdate {
+	iu.mutation.ClearUpdatedByID()
 	return iu
 }
 
@@ -105,23 +105,23 @@ func (iu *IntegrationUpdate) ClearDeletedAt() *IntegrationUpdate {
 	return iu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (iu *IntegrationUpdate) SetDeletedBy(s string) *IntegrationUpdate {
-	iu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (iu *IntegrationUpdate) SetDeletedByID(s string) *IntegrationUpdate {
+	iu.mutation.SetDeletedByID(s)
 	return iu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableDeletedBy(s *string) *IntegrationUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (iu *IntegrationUpdate) SetNillableDeletedByID(s *string) *IntegrationUpdate {
 	if s != nil {
-		iu.SetDeletedBy(*s)
+		iu.SetDeletedByID(*s)
 	}
 	return iu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iu *IntegrationUpdate) ClearDeletedBy() *IntegrationUpdate {
-	iu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (iu *IntegrationUpdate) ClearDeletedByID() *IntegrationUpdate {
+	iu.mutation.ClearDeletedByID()
 	return iu
 }
 
@@ -371,14 +371,14 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if iu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integration.FieldUpdatedAt, field.TypeTime)
 	}
-	if iu.mutation.CreatedByCleared() {
-		_spec.ClearField(integration.FieldCreatedBy, field.TypeString)
+	if iu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(integration.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := iu.mutation.UpdatedBy(); ok {
-		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := iu.mutation.UpdatedByID(); ok {
+		_spec.SetField(integration.FieldUpdatedByID, field.TypeString, value)
 	}
-	if iu.mutation.UpdatedByCleared() {
-		_spec.ClearField(integration.FieldUpdatedBy, field.TypeString)
+	if iu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(integration.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := iu.mutation.Tags(); ok {
 		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
@@ -397,11 +397,11 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if iu.mutation.DeletedAtCleared() {
 		_spec.ClearField(integration.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iu.mutation.DeletedBy(); ok {
-		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
+	if value, ok := iu.mutation.DeletedByID(); ok {
+		_spec.SetField(integration.FieldDeletedByID, field.TypeString, value)
 	}
-	if iu.mutation.DeletedByCleared() {
-		_spec.ClearField(integration.FieldDeletedBy, field.TypeString)
+	if iu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(integration.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iu.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
@@ -581,23 +581,23 @@ func (iuo *IntegrationUpdateOne) ClearUpdatedAt() *IntegrationUpdateOne {
 	return iuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iuo *IntegrationUpdateOne) SetUpdatedBy(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iuo *IntegrationUpdateOne) SetUpdatedByID(s string) *IntegrationUpdateOne {
+	iuo.mutation.SetUpdatedByID(s)
 	return iuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableUpdatedBy(s *string) *IntegrationUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iuo *IntegrationUpdateOne) SetNillableUpdatedByID(s *string) *IntegrationUpdateOne {
 	if s != nil {
-		iuo.SetUpdatedBy(*s)
+		iuo.SetUpdatedByID(*s)
 	}
 	return iuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iuo *IntegrationUpdateOne) ClearUpdatedBy() *IntegrationUpdateOne {
-	iuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iuo *IntegrationUpdateOne) ClearUpdatedByID() *IntegrationUpdateOne {
+	iuo.mutation.ClearUpdatedByID()
 	return iuo
 }
 
@@ -639,23 +639,23 @@ func (iuo *IntegrationUpdateOne) ClearDeletedAt() *IntegrationUpdateOne {
 	return iuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (iuo *IntegrationUpdateOne) SetDeletedBy(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (iuo *IntegrationUpdateOne) SetDeletedByID(s string) *IntegrationUpdateOne {
+	iuo.mutation.SetDeletedByID(s)
 	return iuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableDeletedBy(s *string) *IntegrationUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (iuo *IntegrationUpdateOne) SetNillableDeletedByID(s *string) *IntegrationUpdateOne {
 	if s != nil {
-		iuo.SetDeletedBy(*s)
+		iuo.SetDeletedByID(*s)
 	}
 	return iuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iuo *IntegrationUpdateOne) ClearDeletedBy() *IntegrationUpdateOne {
-	iuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (iuo *IntegrationUpdateOne) ClearDeletedByID() *IntegrationUpdateOne {
+	iuo.mutation.ClearDeletedByID()
 	return iuo
 }
 
@@ -935,14 +935,14 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 	if iuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integration.FieldUpdatedAt, field.TypeTime)
 	}
-	if iuo.mutation.CreatedByCleared() {
-		_spec.ClearField(integration.FieldCreatedBy, field.TypeString)
+	if iuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(integration.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := iuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := iuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(integration.FieldUpdatedByID, field.TypeString, value)
 	}
-	if iuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(integration.FieldUpdatedBy, field.TypeString)
+	if iuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(integration.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := iuo.mutation.Tags(); ok {
 		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
@@ -961,11 +961,11 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 	if iuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(integration.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.DeletedBy(); ok {
-		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
+	if value, ok := iuo.mutation.DeletedByID(); ok {
+		_spec.SetField(integration.FieldDeletedByID, field.TypeString, value)
 	}
-	if iuo.mutation.DeletedByCleared() {
-		_spec.ClearField(integration.FieldDeletedBy, field.TypeString)
+	if iuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(integration.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iuo.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)

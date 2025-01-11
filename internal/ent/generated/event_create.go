@@ -59,30 +59,30 @@ func (ec *EventCreate) SetNillableUpdatedAt(t *time.Time) *EventCreate {
 	return ec
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (ec *EventCreate) SetCreatedBy(s string) *EventCreate {
-	ec.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (ec *EventCreate) SetCreatedByID(s string) *EventCreate {
+	ec.mutation.SetCreatedByID(s)
 	return ec
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ec *EventCreate) SetNillableCreatedBy(s *string) *EventCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (ec *EventCreate) SetNillableCreatedByID(s *string) *EventCreate {
 	if s != nil {
-		ec.SetCreatedBy(*s)
+		ec.SetCreatedByID(*s)
 	}
 	return ec
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ec *EventCreate) SetUpdatedBy(s string) *EventCreate {
-	ec.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ec *EventCreate) SetUpdatedByID(s string) *EventCreate {
+	ec.mutation.SetUpdatedByID(s)
 	return ec
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ec *EventCreate) SetNillableUpdatedBy(s *string) *EventCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ec *EventCreate) SetNillableUpdatedByID(s *string) *EventCreate {
 	if s != nil {
-		ec.SetUpdatedBy(*s)
+		ec.SetUpdatedByID(*s)
 	}
 	return ec
 }
@@ -450,13 +450,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		_spec.SetField(event.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ec.mutation.CreatedBy(); ok {
-		_spec.SetField(event.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := ec.mutation.CreatedByID(); ok {
+		_spec.SetField(event.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := ec.mutation.UpdatedBy(); ok {
-		_spec.SetField(event.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := ec.mutation.UpdatedByID(); ok {
+		_spec.SetField(event.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := ec.mutation.MappingID(); ok {
 		_spec.SetField(event.FieldMappingID, field.TypeString, value)

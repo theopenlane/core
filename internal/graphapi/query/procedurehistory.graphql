@@ -4,7 +4,7 @@ query GetAllProcedureHistories {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         historyTime
@@ -18,7 +18,7 @@ query GetAllProcedureHistories {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
     }
@@ -31,7 +31,7 @@ query GetProcedureHistories($where: ProcedureHistoryWhereInput) {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         historyTime
@@ -45,7 +45,7 @@ query GetProcedureHistories($where: ProcedureHistoryWhereInput) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
     }

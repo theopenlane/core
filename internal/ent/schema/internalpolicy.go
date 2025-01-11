@@ -75,7 +75,7 @@ func (InternalPolicy) Edges() []ent.Edge {
 // Mixin of the InternalPolicy
 func (InternalPolicy) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
@@ -91,7 +91,7 @@ func (InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.SelfAccessChecks(),
 	}
 }

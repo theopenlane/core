@@ -3,7 +3,7 @@ query GetAllDocumentDataHistories {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         data
         historyTime
         id
@@ -13,7 +13,7 @@ query GetAllDocumentDataHistories {
         tags
         templateID
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }
@@ -24,7 +24,7 @@ query GetDocumentDataHistories($where: DocumentDataHistoryWhereInput) {
     edges {
       node {
         createdAt
-        createdBy
+        createdByID
         data
         historyTime
         id
@@ -34,7 +34,7 @@ query GetDocumentDataHistories($where: DocumentDataHistoryWhereInput) {
         tags
         templateID
         updatedAt
-        updatedBy
+        updatedByID
       }
     }
   }

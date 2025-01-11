@@ -25,18 +25,20 @@ type GroupHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -65,7 +67,7 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case grouphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldMappingID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName:
+		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldUpdatedBy, grouphistory.FieldCreatedByID, grouphistory.FieldUpdatedByID, grouphistory.FieldDeletedByID, grouphistory.FieldMappingID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName:
 			values[i] = new(sql.NullString)
 		case grouphistory.FieldHistoryTime, grouphistory.FieldCreatedAt, grouphistory.FieldUpdatedAt, grouphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -108,6 +110,13 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				gh.Operation = *value
 			}
+		case grouphistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				gh.UpdatedBy = new(string)
+				*gh.UpdatedBy = value.String
+			}
 		case grouphistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -120,17 +129,17 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				gh.UpdatedAt = value.Time
 			}
-		case grouphistory.FieldCreatedBy:
+		case grouphistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				gh.CreatedBy = value.String
+				gh.CreatedByID = value.String
 			}
-		case grouphistory.FieldUpdatedBy:
+		case grouphistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				gh.UpdatedBy = value.String
+				gh.UpdatedByID = value.String
 			}
 		case grouphistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -138,11 +147,11 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				gh.DeletedAt = value.Time
 			}
-		case grouphistory.FieldDeletedBy:
+		case grouphistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				gh.DeletedBy = value.String
+				gh.DeletedByID = value.String
 			}
 		case grouphistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -239,23 +248,28 @@ func (gh *GroupHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", gh.Operation))
 	builder.WriteString(", ")
+	if v := gh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(gh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(gh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(gh.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(gh.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(gh.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(gh.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(gh.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gh.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(gh.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(gh.MappingID)

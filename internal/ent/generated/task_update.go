@@ -54,23 +54,23 @@ func (tu *TaskUpdate) ClearUpdatedAt() *TaskUpdate {
 	return tu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tu *TaskUpdate) SetUpdatedBy(s string) *TaskUpdate {
-	tu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tu *TaskUpdate) SetUpdatedByID(s string) *TaskUpdate {
+	tu.mutation.SetUpdatedByID(s)
 	return tu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableUpdatedBy(s *string) *TaskUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableUpdatedByID(s *string) *TaskUpdate {
 	if s != nil {
-		tu.SetUpdatedBy(*s)
+		tu.SetUpdatedByID(*s)
 	}
 	return tu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tu *TaskUpdate) ClearUpdatedBy() *TaskUpdate {
-	tu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tu *TaskUpdate) ClearUpdatedByID() *TaskUpdate {
+	tu.mutation.ClearUpdatedByID()
 	return tu
 }
 
@@ -94,23 +94,23 @@ func (tu *TaskUpdate) ClearDeletedAt() *TaskUpdate {
 	return tu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tu *TaskUpdate) SetDeletedBy(s string) *TaskUpdate {
-	tu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tu *TaskUpdate) SetDeletedByID(s string) *TaskUpdate {
+	tu.mutation.SetDeletedByID(s)
 	return tu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableDeletedBy(s *string) *TaskUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableDeletedByID(s *string) *TaskUpdate {
 	if s != nil {
-		tu.SetDeletedBy(*s)
+		tu.SetDeletedByID(*s)
 	}
 	return tu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tu *TaskUpdate) ClearDeletedBy() *TaskUpdate {
-	tu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (tu *TaskUpdate) ClearDeletedByID() *TaskUpdate {
+	tu.mutation.ClearDeletedByID()
 	return tu
 }
 
@@ -654,14 +654,14 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(task.FieldUpdatedAt, field.TypeTime)
 	}
-	if tu.mutation.CreatedByCleared() {
-		_spec.ClearField(task.FieldCreatedBy, field.TypeString)
+	if tu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(task.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := tu.mutation.UpdatedBy(); ok {
-		_spec.SetField(task.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := tu.mutation.UpdatedByID(); ok {
+		_spec.SetField(task.FieldUpdatedByID, field.TypeString, value)
 	}
-	if tu.mutation.UpdatedByCleared() {
-		_spec.ClearField(task.FieldUpdatedBy, field.TypeString)
+	if tu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(task.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := tu.mutation.DeletedAt(); ok {
 		_spec.SetField(task.FieldDeletedAt, field.TypeTime, value)
@@ -669,11 +669,11 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.DeletedAtCleared() {
 		_spec.ClearField(task.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tu.mutation.DeletedBy(); ok {
-		_spec.SetField(task.FieldDeletedBy, field.TypeString, value)
+	if value, ok := tu.mutation.DeletedByID(); ok {
+		_spec.SetField(task.FieldDeletedByID, field.TypeString, value)
 	}
-	if tu.mutation.DeletedByCleared() {
-		_spec.ClearField(task.FieldDeletedBy, field.TypeString)
+	if tu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(task.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tu.mutation.Tags(); ok {
 		_spec.SetField(task.FieldTags, field.TypeJSON, value)
@@ -1198,23 +1198,23 @@ func (tuo *TaskUpdateOne) ClearUpdatedAt() *TaskUpdateOne {
 	return tuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (tuo *TaskUpdateOne) SetUpdatedBy(s string) *TaskUpdateOne {
-	tuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (tuo *TaskUpdateOne) SetUpdatedByID(s string) *TaskUpdateOne {
+	tuo.mutation.SetUpdatedByID(s)
 	return tuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableUpdatedBy(s *string) *TaskUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableUpdatedByID(s *string) *TaskUpdateOne {
 	if s != nil {
-		tuo.SetUpdatedBy(*s)
+		tuo.SetUpdatedByID(*s)
 	}
 	return tuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (tuo *TaskUpdateOne) ClearUpdatedBy() *TaskUpdateOne {
-	tuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (tuo *TaskUpdateOne) ClearUpdatedByID() *TaskUpdateOne {
+	tuo.mutation.ClearUpdatedByID()
 	return tuo
 }
 
@@ -1238,23 +1238,23 @@ func (tuo *TaskUpdateOne) ClearDeletedAt() *TaskUpdateOne {
 	return tuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (tuo *TaskUpdateOne) SetDeletedBy(s string) *TaskUpdateOne {
-	tuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (tuo *TaskUpdateOne) SetDeletedByID(s string) *TaskUpdateOne {
+	tuo.mutation.SetDeletedByID(s)
 	return tuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableDeletedBy(s *string) *TaskUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableDeletedByID(s *string) *TaskUpdateOne {
 	if s != nil {
-		tuo.SetDeletedBy(*s)
+		tuo.SetDeletedByID(*s)
 	}
 	return tuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (tuo *TaskUpdateOne) ClearDeletedBy() *TaskUpdateOne {
-	tuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (tuo *TaskUpdateOne) ClearDeletedByID() *TaskUpdateOne {
+	tuo.mutation.ClearDeletedByID()
 	return tuo
 }
 
@@ -1828,14 +1828,14 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if tuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(task.FieldUpdatedAt, field.TypeTime)
 	}
-	if tuo.mutation.CreatedByCleared() {
-		_spec.ClearField(task.FieldCreatedBy, field.TypeString)
+	if tuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(task.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := tuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(task.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := tuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(task.FieldUpdatedByID, field.TypeString, value)
 	}
-	if tuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(task.FieldUpdatedBy, field.TypeString)
+	if tuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(task.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := tuo.mutation.DeletedAt(); ok {
 		_spec.SetField(task.FieldDeletedAt, field.TypeTime, value)
@@ -1843,11 +1843,11 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if tuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(task.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tuo.mutation.DeletedBy(); ok {
-		_spec.SetField(task.FieldDeletedBy, field.TypeString, value)
+	if value, ok := tuo.mutation.DeletedByID(); ok {
+		_spec.SetField(task.FieldDeletedByID, field.TypeString, value)
 	}
-	if tuo.mutation.DeletedByCleared() {
-		_spec.ClearField(task.FieldDeletedBy, field.TypeString)
+	if tuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(task.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Tags(); ok {
 		_spec.SetField(task.FieldTags, field.TypeJSON, value)

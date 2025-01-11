@@ -43,23 +43,23 @@ func (hhu *HushHistoryUpdate) ClearUpdatedAt() *HushHistoryUpdate {
 	return hhu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (hhu *HushHistoryUpdate) SetUpdatedBy(s string) *HushHistoryUpdate {
-	hhu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (hhu *HushHistoryUpdate) SetUpdatedByID(s string) *HushHistoryUpdate {
+	hhu.mutation.SetUpdatedByID(s)
 	return hhu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (hhu *HushHistoryUpdate) SetNillableUpdatedBy(s *string) *HushHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (hhu *HushHistoryUpdate) SetNillableUpdatedByID(s *string) *HushHistoryUpdate {
 	if s != nil {
-		hhu.SetUpdatedBy(*s)
+		hhu.SetUpdatedByID(*s)
 	}
 	return hhu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (hhu *HushHistoryUpdate) ClearUpdatedBy() *HushHistoryUpdate {
-	hhu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (hhu *HushHistoryUpdate) ClearUpdatedByID() *HushHistoryUpdate {
+	hhu.mutation.ClearUpdatedByID()
 	return hhu
 }
 
@@ -83,23 +83,23 @@ func (hhu *HushHistoryUpdate) ClearDeletedAt() *HushHistoryUpdate {
 	return hhu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (hhu *HushHistoryUpdate) SetDeletedBy(s string) *HushHistoryUpdate {
-	hhu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (hhu *HushHistoryUpdate) SetDeletedByID(s string) *HushHistoryUpdate {
+	hhu.mutation.SetDeletedByID(s)
 	return hhu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (hhu *HushHistoryUpdate) SetNillableDeletedBy(s *string) *HushHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (hhu *HushHistoryUpdate) SetNillableDeletedByID(s *string) *HushHistoryUpdate {
 	if s != nil {
-		hhu.SetDeletedBy(*s)
+		hhu.SetDeletedByID(*s)
 	}
 	return hhu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (hhu *HushHistoryUpdate) ClearDeletedBy() *HushHistoryUpdate {
-	hhu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (hhu *HushHistoryUpdate) ClearDeletedByID() *HushHistoryUpdate {
+	hhu.mutation.ClearDeletedByID()
 	return hhu
 }
 
@@ -216,6 +216,9 @@ func (hhu *HushHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hhu.mutation.RefCleared() {
 		_spec.ClearField(hushhistory.FieldRef, field.TypeString)
 	}
+	if hhu.mutation.UpdatedByCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if hhu.mutation.CreatedAtCleared() {
 		_spec.ClearField(hushhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -225,14 +228,14 @@ func (hhu *HushHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hhu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if hhu.mutation.CreatedByCleared() {
-		_spec.ClearField(hushhistory.FieldCreatedBy, field.TypeString)
+	if hhu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(hushhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := hhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := hhu.mutation.UpdatedByID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if hhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(hushhistory.FieldUpdatedBy, field.TypeString)
+	if hhu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := hhu.mutation.DeletedAt(); ok {
 		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)
@@ -240,11 +243,11 @@ func (hhu *HushHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if hhu.mutation.DeletedAtCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := hhu.mutation.DeletedBy(); ok {
-		_spec.SetField(hushhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := hhu.mutation.DeletedByID(); ok {
+		_spec.SetField(hushhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if hhu.mutation.DeletedByCleared() {
-		_spec.ClearField(hushhistory.FieldDeletedBy, field.TypeString)
+	if hhu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(hushhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := hhu.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)
@@ -303,23 +306,23 @@ func (hhuo *HushHistoryUpdateOne) ClearUpdatedAt() *HushHistoryUpdateOne {
 	return hhuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (hhuo *HushHistoryUpdateOne) SetUpdatedBy(s string) *HushHistoryUpdateOne {
-	hhuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (hhuo *HushHistoryUpdateOne) SetUpdatedByID(s string) *HushHistoryUpdateOne {
+	hhuo.mutation.SetUpdatedByID(s)
 	return hhuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (hhuo *HushHistoryUpdateOne) SetNillableUpdatedBy(s *string) *HushHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (hhuo *HushHistoryUpdateOne) SetNillableUpdatedByID(s *string) *HushHistoryUpdateOne {
 	if s != nil {
-		hhuo.SetUpdatedBy(*s)
+		hhuo.SetUpdatedByID(*s)
 	}
 	return hhuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (hhuo *HushHistoryUpdateOne) ClearUpdatedBy() *HushHistoryUpdateOne {
-	hhuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (hhuo *HushHistoryUpdateOne) ClearUpdatedByID() *HushHistoryUpdateOne {
+	hhuo.mutation.ClearUpdatedByID()
 	return hhuo
 }
 
@@ -343,23 +346,23 @@ func (hhuo *HushHistoryUpdateOne) ClearDeletedAt() *HushHistoryUpdateOne {
 	return hhuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (hhuo *HushHistoryUpdateOne) SetDeletedBy(s string) *HushHistoryUpdateOne {
-	hhuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (hhuo *HushHistoryUpdateOne) SetDeletedByID(s string) *HushHistoryUpdateOne {
+	hhuo.mutation.SetDeletedByID(s)
 	return hhuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (hhuo *HushHistoryUpdateOne) SetNillableDeletedBy(s *string) *HushHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (hhuo *HushHistoryUpdateOne) SetNillableDeletedByID(s *string) *HushHistoryUpdateOne {
 	if s != nil {
-		hhuo.SetDeletedBy(*s)
+		hhuo.SetDeletedByID(*s)
 	}
 	return hhuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (hhuo *HushHistoryUpdateOne) ClearDeletedBy() *HushHistoryUpdateOne {
-	hhuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (hhuo *HushHistoryUpdateOne) ClearDeletedByID() *HushHistoryUpdateOne {
+	hhuo.mutation.ClearDeletedByID()
 	return hhuo
 }
 
@@ -506,6 +509,9 @@ func (hhuo *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHisto
 	if hhuo.mutation.RefCleared() {
 		_spec.ClearField(hushhistory.FieldRef, field.TypeString)
 	}
+	if hhuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if hhuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(hushhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -515,14 +521,14 @@ func (hhuo *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHisto
 	if hhuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if hhuo.mutation.CreatedByCleared() {
-		_spec.ClearField(hushhistory.FieldCreatedBy, field.TypeString)
+	if hhuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(hushhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := hhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := hhuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if hhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(hushhistory.FieldUpdatedBy, field.TypeString)
+	if hhuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := hhuo.mutation.DeletedAt(); ok {
 		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)
@@ -530,11 +536,11 @@ func (hhuo *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHisto
 	if hhuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := hhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(hushhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := hhuo.mutation.DeletedByID(); ok {
+		_spec.SetField(hushhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if hhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(hushhistory.FieldDeletedBy, field.TypeString)
+	if hhuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(hushhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := hhuo.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)

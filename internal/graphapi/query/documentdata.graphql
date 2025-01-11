@@ -5,9 +5,9 @@ mutation CreateDocumentData($input: CreateDocumentDataInput!) {
       templateID
       data
       createdAt
-      createdBy
+      createdByID
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }
@@ -24,9 +24,9 @@ query GetDocumentDataByID($documentDataId: ID!) {
     templateID
     data
     createdAt
-    createdBy
+    createdByID
     updatedAt
-    updatedBy
+    updatedByID
   }
 }
 
@@ -37,9 +37,9 @@ mutation UpdateDocumentData($updateDocumentDataId: ID!, $input: UpdateDocumentDa
       templateID
       data
       createdAt
-      createdBy
+      createdByID
       updatedAt
-      updatedBy
+      updatedByID
     }
   }
 }

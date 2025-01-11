@@ -26,20 +26,22 @@ type ProgramHistory struct {
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation history.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -74,7 +76,7 @@ func (*ProgramHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case programhistory.FieldAuditorReady, programhistory.FieldAuditorWriteComments, programhistory.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldMappingID, programhistory.FieldDeletedBy, programhistory.FieldOwnerID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus:
+		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldUpdatedBy, programhistory.FieldCreatedByID, programhistory.FieldUpdatedByID, programhistory.FieldMappingID, programhistory.FieldDeletedByID, programhistory.FieldOwnerID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case programhistory.FieldHistoryTime, programhistory.FieldCreatedAt, programhistory.FieldUpdatedAt, programhistory.FieldDeletedAt, programhistory.FieldStartDate, programhistory.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -117,6 +119,13 @@ func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				ph.Operation = *value
 			}
+		case programhistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				ph.UpdatedBy = new(string)
+				*ph.UpdatedBy = value.String
+			}
 		case programhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -129,17 +138,17 @@ func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.UpdatedAt = value.Time
 			}
-		case programhistory.FieldCreatedBy:
+		case programhistory.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				ph.CreatedBy = value.String
+				ph.CreatedByID = value.String
 			}
-		case programhistory.FieldUpdatedBy:
+		case programhistory.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				ph.UpdatedBy = value.String
+				ph.UpdatedByID = value.String
 			}
 		case programhistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -153,11 +162,11 @@ func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.DeletedAt = value.Time
 			}
-		case programhistory.FieldDeletedBy:
+		case programhistory.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				ph.DeletedBy = value.String
+				ph.DeletedByID = value.String
 			}
 		case programhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -266,17 +275,22 @@ func (ph *ProgramHistory) String() string {
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", ph.Operation))
 	builder.WriteString(", ")
+	if v := ph.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(ph.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(ph.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(ph.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(ph.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(ph.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(ph.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(ph.MappingID)
@@ -284,8 +298,8 @@ func (ph *ProgramHistory) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(ph.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ph.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(ph.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ph.Tags))

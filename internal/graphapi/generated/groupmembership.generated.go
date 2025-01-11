@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_GroupMembershipBulkCreatePayload_groupM
 				return ec.fieldContext_GroupMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_GroupMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_GroupMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_GroupMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_GroupMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_GroupMembership_role(ctx, field)
 			case "groupID":
@@ -91,6 +91,10 @@ func (ec *executionContext) fieldContext_GroupMembershipBulkCreatePayload_groupM
 				return ec.fieldContext_GroupMembership_user(ctx, field)
 			case "events":
 				return ec.fieldContext_GroupMembership_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupMembership", field.Name)
 		},
@@ -143,14 +147,14 @@ func (ec *executionContext) fieldContext_GroupMembershipCreatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_GroupMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_GroupMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_GroupMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_GroupMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_GroupMembership_role(ctx, field)
 			case "groupID":
@@ -163,6 +167,10 @@ func (ec *executionContext) fieldContext_GroupMembershipCreatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_user(ctx, field)
 			case "events":
 				return ec.fieldContext_GroupMembership_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupMembership", field.Name)
 		},
@@ -259,14 +267,14 @@ func (ec *executionContext) fieldContext_GroupMembershipUpdatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_GroupMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_GroupMembership_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_GroupMembership_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupMembership_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_GroupMembership_deletedByID(ctx, field)
 			case "role":
 				return ec.fieldContext_GroupMembership_role(ctx, field)
 			case "groupID":
@@ -279,6 +287,10 @@ func (ec *executionContext) fieldContext_GroupMembershipUpdatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_user(ctx, field)
 			case "events":
 				return ec.fieldContext_GroupMembership_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupMembership", field.Name)
 		},

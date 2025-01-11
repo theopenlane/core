@@ -7,6 +7,7 @@ import (
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/gqlgen-plugins/bulkgen"
+	"github.com/theopenlane/gqlgen-plugins/fieldgen"
 	"github.com/theopenlane/gqlgen-plugins/resolvergen"
 	"github.com/theopenlane/gqlgen-plugins/searchgen"
 
@@ -16,6 +17,27 @@ import (
 const (
 	graphapiGenDir = "internal/graphapi/generate/"
 )
+
+// extraFields is a list of fields to add to the schema
+// dynamically. This is useful for adding fields that are
+// not part of the ent db schema but are needed in the graphql
+// schema (used in conjunction with the additional fields in ent)
+var extraFields = []fieldgen.AdditionalField{
+	{
+		Name:                         "createdBy",
+		CustomType:                   "Actor",
+		NonNull:                      true,
+		Description:                  "The user or service who created the object",
+		AddToSchemaWithExistingField: "createdByID",
+	},
+	{
+		Name:                         "updatedBy",
+		CustomType:                   "Actor",
+		NonNull:                      true,
+		Description:                  "The user or service who last updated the object",
+		AddToSchemaWithExistingField: "updatedByID",
+	},
+}
 
 func main() {
 	genhelpers.SetupLogging()
@@ -32,7 +54,8 @@ func main() {
 	entPackage := "github.com/theopenlane/core/internal/ent/generated"
 
 	if err := api.Generate(cfg,
-		api.ReplacePlugin(resolvergen.New()), // replace the resolvergen plugin
+		api.AddPlugin(fieldgen.NewExtraFieldsGen(extraFields)), // add the fieldgen plugin
+		api.ReplacePlugin(resolvergen.New()),                   // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),
 			bulkgen.WithEntGeneratedPackage(entPackage),

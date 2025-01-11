@@ -56,6 +56,20 @@ func (thc *TaskHistoryCreate) SetOperation(ht history.OpType) *TaskHistoryCreate
 	return thc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (thc *TaskHistoryCreate) SetUpdatedBy(s string) *TaskHistoryCreate {
+	thc.mutation.SetUpdatedBy(s)
+	return thc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableUpdatedBy(s *string) *TaskHistoryCreate {
+	if s != nil {
+		thc.SetUpdatedBy(*s)
+	}
+	return thc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (thc *TaskHistoryCreate) SetCreatedAt(t time.Time) *TaskHistoryCreate {
 	thc.mutation.SetCreatedAt(t)
@@ -84,30 +98,30 @@ func (thc *TaskHistoryCreate) SetNillableUpdatedAt(t *time.Time) *TaskHistoryCre
 	return thc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (thc *TaskHistoryCreate) SetCreatedBy(s string) *TaskHistoryCreate {
-	thc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (thc *TaskHistoryCreate) SetCreatedByID(s string) *TaskHistoryCreate {
+	thc.mutation.SetCreatedByID(s)
 	return thc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableCreatedBy(s *string) *TaskHistoryCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableCreatedByID(s *string) *TaskHistoryCreate {
 	if s != nil {
-		thc.SetCreatedBy(*s)
+		thc.SetCreatedByID(*s)
 	}
 	return thc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (thc *TaskHistoryCreate) SetUpdatedBy(s string) *TaskHistoryCreate {
-	thc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (thc *TaskHistoryCreate) SetUpdatedByID(s string) *TaskHistoryCreate {
+	thc.mutation.SetUpdatedByID(s)
 	return thc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableUpdatedBy(s *string) *TaskHistoryCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableUpdatedByID(s *string) *TaskHistoryCreate {
 	if s != nil {
-		thc.SetUpdatedBy(*s)
+		thc.SetUpdatedByID(*s)
 	}
 	return thc
 }
@@ -140,16 +154,16 @@ func (thc *TaskHistoryCreate) SetNillableDeletedAt(t *time.Time) *TaskHistoryCre
 	return thc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (thc *TaskHistoryCreate) SetDeletedBy(s string) *TaskHistoryCreate {
-	thc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (thc *TaskHistoryCreate) SetDeletedByID(s string) *TaskHistoryCreate {
+	thc.mutation.SetDeletedByID(s)
 	return thc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableDeletedBy(s *string) *TaskHistoryCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (thc *TaskHistoryCreate) SetNillableDeletedByID(s *string) *TaskHistoryCreate {
 	if s != nil {
-		thc.SetDeletedBy(*s)
+		thc.SetDeletedByID(*s)
 	}
 	return thc
 }
@@ -400,6 +414,10 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(taskhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := thc.mutation.UpdatedBy(); ok {
+		_spec.SetField(taskhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
+	}
 	if value, ok := thc.mutation.CreatedAt(); ok {
 		_spec.SetField(taskhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -408,13 +426,13 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(taskhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := thc.mutation.CreatedBy(); ok {
-		_spec.SetField(taskhistory.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := thc.mutation.CreatedByID(); ok {
+		_spec.SetField(taskhistory.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := thc.mutation.UpdatedBy(); ok {
-		_spec.SetField(taskhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := thc.mutation.UpdatedByID(); ok {
+		_spec.SetField(taskhistory.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := thc.mutation.MappingID(); ok {
 		_spec.SetField(taskhistory.FieldMappingID, field.TypeString, value)
@@ -424,9 +442,9 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(taskhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := thc.mutation.DeletedBy(); ok {
-		_spec.SetField(taskhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := thc.mutation.DeletedByID(); ok {
+		_spec.SetField(taskhistory.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := thc.mutation.Tags(); ok {
 		_spec.SetField(taskhistory.FieldTags, field.TypeJSON, value)

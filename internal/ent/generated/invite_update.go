@@ -46,23 +46,23 @@ func (iu *InviteUpdate) ClearUpdatedAt() *InviteUpdate {
 	return iu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iu *InviteUpdate) SetUpdatedBy(s string) *InviteUpdate {
-	iu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iu *InviteUpdate) SetUpdatedByID(s string) *InviteUpdate {
+	iu.mutation.SetUpdatedByID(s)
 	return iu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableUpdatedBy(s *string) *InviteUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iu *InviteUpdate) SetNillableUpdatedByID(s *string) *InviteUpdate {
 	if s != nil {
-		iu.SetUpdatedBy(*s)
+		iu.SetUpdatedByID(*s)
 	}
 	return iu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iu *InviteUpdate) ClearUpdatedBy() *InviteUpdate {
-	iu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iu *InviteUpdate) ClearUpdatedByID() *InviteUpdate {
+	iu.mutation.ClearUpdatedByID()
 	return iu
 }
 
@@ -86,23 +86,23 @@ func (iu *InviteUpdate) ClearDeletedAt() *InviteUpdate {
 	return iu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (iu *InviteUpdate) SetDeletedBy(s string) *InviteUpdate {
-	iu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (iu *InviteUpdate) SetDeletedByID(s string) *InviteUpdate {
+	iu.mutation.SetDeletedByID(s)
 	return iu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableDeletedBy(s *string) *InviteUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (iu *InviteUpdate) SetNillableDeletedByID(s *string) *InviteUpdate {
 	if s != nil {
-		iu.SetDeletedBy(*s)
+		iu.SetDeletedByID(*s)
 	}
 	return iu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iu *InviteUpdate) ClearDeletedBy() *InviteUpdate {
-	iu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (iu *InviteUpdate) ClearDeletedByID() *InviteUpdate {
+	iu.mutation.ClearDeletedByID()
 	return iu
 }
 
@@ -366,14 +366,14 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if iu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(invite.FieldUpdatedAt, field.TypeTime)
 	}
-	if iu.mutation.CreatedByCleared() {
-		_spec.ClearField(invite.FieldCreatedBy, field.TypeString)
+	if iu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(invite.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := iu.mutation.UpdatedBy(); ok {
-		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := iu.mutation.UpdatedByID(); ok {
+		_spec.SetField(invite.FieldUpdatedByID, field.TypeString, value)
 	}
-	if iu.mutation.UpdatedByCleared() {
-		_spec.ClearField(invite.FieldUpdatedBy, field.TypeString)
+	if iu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(invite.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := iu.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
@@ -381,11 +381,11 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if iu.mutation.DeletedAtCleared() {
 		_spec.ClearField(invite.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iu.mutation.DeletedBy(); ok {
-		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
+	if value, ok := iu.mutation.DeletedByID(); ok {
+		_spec.SetField(invite.FieldDeletedByID, field.TypeString, value)
 	}
-	if iu.mutation.DeletedByCleared() {
-		_spec.ClearField(invite.FieldDeletedBy, field.TypeString)
+	if iu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(invite.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iu.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
@@ -529,23 +529,23 @@ func (iuo *InviteUpdateOne) ClearUpdatedAt() *InviteUpdateOne {
 	return iuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (iuo *InviteUpdateOne) SetUpdatedBy(s string) *InviteUpdateOne {
-	iuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (iuo *InviteUpdateOne) SetUpdatedByID(s string) *InviteUpdateOne {
+	iuo.mutation.SetUpdatedByID(s)
 	return iuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableUpdatedBy(s *string) *InviteUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (iuo *InviteUpdateOne) SetNillableUpdatedByID(s *string) *InviteUpdateOne {
 	if s != nil {
-		iuo.SetUpdatedBy(*s)
+		iuo.SetUpdatedByID(*s)
 	}
 	return iuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (iuo *InviteUpdateOne) ClearUpdatedBy() *InviteUpdateOne {
-	iuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (iuo *InviteUpdateOne) ClearUpdatedByID() *InviteUpdateOne {
+	iuo.mutation.ClearUpdatedByID()
 	return iuo
 }
 
@@ -569,23 +569,23 @@ func (iuo *InviteUpdateOne) ClearDeletedAt() *InviteUpdateOne {
 	return iuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (iuo *InviteUpdateOne) SetDeletedBy(s string) *InviteUpdateOne {
-	iuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (iuo *InviteUpdateOne) SetDeletedByID(s string) *InviteUpdateOne {
+	iuo.mutation.SetDeletedByID(s)
 	return iuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableDeletedBy(s *string) *InviteUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (iuo *InviteUpdateOne) SetNillableDeletedByID(s *string) *InviteUpdateOne {
 	if s != nil {
-		iuo.SetDeletedBy(*s)
+		iuo.SetDeletedByID(*s)
 	}
 	return iuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (iuo *InviteUpdateOne) ClearDeletedBy() *InviteUpdateOne {
-	iuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (iuo *InviteUpdateOne) ClearDeletedByID() *InviteUpdateOne {
+	iuo.mutation.ClearDeletedByID()
 	return iuo
 }
 
@@ -879,14 +879,14 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	if iuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(invite.FieldUpdatedAt, field.TypeTime)
 	}
-	if iuo.mutation.CreatedByCleared() {
-		_spec.ClearField(invite.FieldCreatedBy, field.TypeString)
+	if iuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(invite.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := iuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := iuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(invite.FieldUpdatedByID, field.TypeString, value)
 	}
-	if iuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(invite.FieldUpdatedBy, field.TypeString)
+	if iuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(invite.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := iuo.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
@@ -894,11 +894,11 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	if iuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(invite.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.DeletedBy(); ok {
-		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
+	if value, ok := iuo.mutation.DeletedByID(); ok {
+		_spec.SetField(invite.FieldDeletedByID, field.TypeString, value)
 	}
-	if iuo.mutation.DeletedByCleared() {
-		_spec.ClearField(invite.FieldDeletedBy, field.TypeString)
+	if iuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(invite.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := iuo.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)

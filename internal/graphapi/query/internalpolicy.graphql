@@ -3,7 +3,7 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
     internalPolicies {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -13,7 +13,7 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -24,7 +24,7 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
     internalPolicies {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -34,7 +34,7 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -45,7 +45,7 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
     internalPolicy {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -55,7 +55,7 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       editors {
         id
@@ -81,7 +81,7 @@ query GetAllInternalPolicies {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -91,7 +91,7 @@ query GetAllInternalPolicies {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
         editors {
           id
@@ -112,7 +112,7 @@ query GetInternalPolicies($where: InternalPolicyWhereInput) {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         id
@@ -122,7 +122,7 @@ query GetInternalPolicies($where: InternalPolicyWhereInput) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
         editors {
           id
@@ -141,7 +141,7 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
   internalPolicy(id: $internalPolicyId) {
     background
     createdAt
-    createdBy
+    createdByID
     description
     details
     id
@@ -151,7 +151,7 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
     status
     tags
     updatedAt
-    updatedBy
+    updatedByID
     version
     editors {
       id
@@ -169,7 +169,7 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
     internalPolicy {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       id
@@ -179,7 +179,7 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
       editors {
         id

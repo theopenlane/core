@@ -6,7 +6,7 @@ query GetAllSubcontrolHistories {
       node {
         class
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -27,7 +27,7 @@ query GetAllSubcontrolHistories {
         subcontrolType
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
     }
@@ -40,7 +40,7 @@ query GetSubcontrolHistories($where: SubcontrolHistoryWhereInput) {
       node {
         class
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -61,7 +61,7 @@ query GetSubcontrolHistories($where: SubcontrolHistoryWhereInput) {
         subcontrolType
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
     }

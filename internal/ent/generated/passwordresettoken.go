@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // PasswordResetToken is the model entity for the PasswordResetToken schema.
@@ -22,16 +23,16 @@ type PasswordResetToken struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// The user id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the reset token sent to the user via email which should only be provided to the /forgot-password endpoint + handler
@@ -46,6 +47,11 @@ type PasswordResetToken struct {
 	// The values are being populated by the PasswordResetTokenQuery when eager-loading is set.
 	Edges        PasswordResetTokenEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // PasswordResetTokenEdges holds the relations/edges for other nodes in the graph.
@@ -77,7 +83,7 @@ func (*PasswordResetToken) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case passwordresettoken.FieldSecret:
 			values[i] = new([]byte)
-		case passwordresettoken.FieldID, passwordresettoken.FieldCreatedBy, passwordresettoken.FieldUpdatedBy, passwordresettoken.FieldMappingID, passwordresettoken.FieldDeletedBy, passwordresettoken.FieldOwnerID, passwordresettoken.FieldToken, passwordresettoken.FieldEmail:
+		case passwordresettoken.FieldID, passwordresettoken.FieldCreatedByID, passwordresettoken.FieldUpdatedByID, passwordresettoken.FieldMappingID, passwordresettoken.FieldDeletedByID, passwordresettoken.FieldOwnerID, passwordresettoken.FieldToken, passwordresettoken.FieldEmail:
 			values[i] = new(sql.NullString)
 		case passwordresettoken.FieldCreatedAt, passwordresettoken.FieldUpdatedAt, passwordresettoken.FieldDeletedAt, passwordresettoken.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -114,17 +120,17 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				prt.UpdatedAt = value.Time
 			}
-		case passwordresettoken.FieldCreatedBy:
+		case passwordresettoken.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				prt.CreatedBy = value.String
+				prt.CreatedByID = value.String
 			}
-		case passwordresettoken.FieldUpdatedBy:
+		case passwordresettoken.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				prt.UpdatedBy = value.String
+				prt.UpdatedByID = value.String
 			}
 		case passwordresettoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -138,11 +144,11 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				prt.DeletedAt = value.Time
 			}
-		case passwordresettoken.FieldDeletedBy:
+		case passwordresettoken.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				prt.DeletedBy = value.String
+				prt.DeletedByID = value.String
 			}
 		case passwordresettoken.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -222,11 +228,11 @@ func (prt *PasswordResetToken) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(prt.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(prt.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(prt.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(prt.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(prt.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(prt.MappingID)
@@ -234,8 +240,8 @@ func (prt *PasswordResetToken) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(prt.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(prt.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(prt.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(prt.OwnerID)

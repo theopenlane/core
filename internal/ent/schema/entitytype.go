@@ -42,7 +42,7 @@ func (EntityType) Fields() []ent.Field {
 // Mixin of the EntityType
 func (EntityType) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
@@ -71,7 +71,7 @@ func (EntityType) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.OrganizationInheritedChecks(),
 	}
 }

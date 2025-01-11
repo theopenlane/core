@@ -55,30 +55,30 @@ func (rc *RiskCreate) SetNillableUpdatedAt(t *time.Time) *RiskCreate {
 	return rc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (rc *RiskCreate) SetCreatedBy(s string) *RiskCreate {
-	rc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (rc *RiskCreate) SetCreatedByID(s string) *RiskCreate {
+	rc.mutation.SetCreatedByID(s)
 	return rc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableCreatedBy(s *string) *RiskCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableCreatedByID(s *string) *RiskCreate {
 	if s != nil {
-		rc.SetCreatedBy(*s)
+		rc.SetCreatedByID(*s)
 	}
 	return rc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (rc *RiskCreate) SetUpdatedBy(s string) *RiskCreate {
-	rc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (rc *RiskCreate) SetUpdatedByID(s string) *RiskCreate {
+	rc.mutation.SetUpdatedByID(s)
 	return rc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableUpdatedBy(s *string) *RiskCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableUpdatedByID(s *string) *RiskCreate {
 	if s != nil {
-		rc.SetUpdatedBy(*s)
+		rc.SetUpdatedByID(*s)
 	}
 	return rc
 }
@@ -97,16 +97,16 @@ func (rc *RiskCreate) SetNillableDeletedAt(t *time.Time) *RiskCreate {
 	return rc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (rc *RiskCreate) SetDeletedBy(s string) *RiskCreate {
-	rc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (rc *RiskCreate) SetDeletedByID(s string) *RiskCreate {
+	rc.mutation.SetDeletedByID(s)
 	return rc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableDeletedBy(s *string) *RiskCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (rc *RiskCreate) SetNillableDeletedByID(s *string) *RiskCreate {
 	if s != nil {
-		rc.SetDeletedBy(*s)
+		rc.SetDeletedByID(*s)
 	}
 	return rc
 }
@@ -543,21 +543,21 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := rc.mutation.CreatedBy(); ok {
-		_spec.SetField(risk.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := rc.mutation.CreatedByID(); ok {
+		_spec.SetField(risk.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := rc.mutation.UpdatedBy(); ok {
-		_spec.SetField(risk.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := rc.mutation.UpdatedByID(); ok {
+		_spec.SetField(risk.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := rc.mutation.DeletedAt(); ok {
 		_spec.SetField(risk.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := rc.mutation.DeletedBy(); ok {
-		_spec.SetField(risk.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := rc.mutation.DeletedByID(); ok {
+		_spec.SetField(risk.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := rc.mutation.MappingID(); ok {
 		_spec.SetField(risk.FieldMappingID, field.TypeString, value)

@@ -80,7 +80,7 @@ func (Procedure) Edges() []ent.Edge {
 // Mixin of the Procedure
 func (Procedure) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
@@ -95,7 +95,7 @@ func (Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		entfga.SelfAccessChecks(),
 	}
 }

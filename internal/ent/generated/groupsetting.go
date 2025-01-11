@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // GroupSetting is the model entity for the GroupSetting schema.
@@ -24,18 +25,18 @@ type GroupSetting struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility,omitempty"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
@@ -50,6 +51,11 @@ type GroupSetting struct {
 	// The values are being populated by the GroupSettingQuery when eager-loading is set.
 	Edges        GroupSettingEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // GroupSettingEdges holds the relations/edges for other nodes in the graph.
@@ -83,7 +89,7 @@ func (*GroupSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case groupsetting.FieldSyncToSlack, groupsetting.FieldSyncToGithub:
 			values[i] = new(sql.NullBool)
-		case groupsetting.FieldID, groupsetting.FieldCreatedBy, groupsetting.FieldUpdatedBy, groupsetting.FieldMappingID, groupsetting.FieldDeletedBy, groupsetting.FieldVisibility, groupsetting.FieldJoinPolicy, groupsetting.FieldGroupID:
+		case groupsetting.FieldID, groupsetting.FieldCreatedByID, groupsetting.FieldUpdatedByID, groupsetting.FieldMappingID, groupsetting.FieldDeletedByID, groupsetting.FieldVisibility, groupsetting.FieldJoinPolicy, groupsetting.FieldGroupID:
 			values[i] = new(sql.NullString)
 		case groupsetting.FieldCreatedAt, groupsetting.FieldUpdatedAt, groupsetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -120,17 +126,17 @@ func (gs *GroupSetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				gs.UpdatedAt = value.Time
 			}
-		case groupsetting.FieldCreatedBy:
+		case groupsetting.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				gs.CreatedBy = value.String
+				gs.CreatedByID = value.String
 			}
-		case groupsetting.FieldUpdatedBy:
+		case groupsetting.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				gs.UpdatedBy = value.String
+				gs.UpdatedByID = value.String
 			}
 		case groupsetting.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -152,11 +158,11 @@ func (gs *GroupSetting) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				gs.DeletedAt = value.Time
 			}
-		case groupsetting.FieldDeletedBy:
+		case groupsetting.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				gs.DeletedBy = value.String
+				gs.DeletedByID = value.String
 			}
 		case groupsetting.FieldVisibility:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -235,11 +241,11 @@ func (gs *GroupSetting) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(gs.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(gs.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(gs.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(gs.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(gs.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(gs.MappingID)
@@ -250,8 +256,8 @@ func (gs *GroupSetting) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(gs.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gs.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(gs.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
 	builder.WriteString(fmt.Sprintf("%v", gs.Visibility))

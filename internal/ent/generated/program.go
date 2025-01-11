@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Program is the model entity for the Program schema.
@@ -24,16 +25,16 @@ type Program struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -58,6 +59,11 @@ type Program struct {
 	// The values are being populated by the ProgramQuery when eager-loading is set.
 	Edges        ProgramEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // ProgramEdges holds the relations/edges for other nodes in the graph.
@@ -296,7 +302,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldMappingID, program.FieldDeletedBy, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
+		case program.FieldID, program.FieldCreatedByID, program.FieldUpdatedByID, program.FieldMappingID, program.FieldDeletedByID, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -333,17 +339,17 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.UpdatedAt = value.Time
 			}
-		case program.FieldCreatedBy:
+		case program.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				pr.CreatedBy = value.String
+				pr.CreatedByID = value.String
 			}
-		case program.FieldUpdatedBy:
+		case program.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				pr.UpdatedBy = value.String
+				pr.UpdatedByID = value.String
 			}
 		case program.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -357,11 +363,11 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.DeletedAt = value.Time
 			}
-		case program.FieldDeletedBy:
+		case program.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				pr.DeletedBy = value.String
+				pr.DeletedByID = value.String
 			}
 		case program.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -557,11 +563,11 @@ func (pr *Program) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(pr.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(pr.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(pr.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(pr.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(pr.MappingID)
@@ -569,8 +575,8 @@ func (pr *Program) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(pr.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pr.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(pr.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Tags))

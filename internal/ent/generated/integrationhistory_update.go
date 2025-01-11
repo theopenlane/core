@@ -44,23 +44,23 @@ func (ihu *IntegrationHistoryUpdate) ClearUpdatedAt() *IntegrationHistoryUpdate 
 	return ihu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ihu *IntegrationHistoryUpdate) SetUpdatedBy(s string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ihu *IntegrationHistoryUpdate) SetUpdatedByID(s string) *IntegrationHistoryUpdate {
+	ihu.mutation.SetUpdatedByID(s)
 	return ihu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableUpdatedBy(s *string) *IntegrationHistoryUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ihu *IntegrationHistoryUpdate) SetNillableUpdatedByID(s *string) *IntegrationHistoryUpdate {
 	if s != nil {
-		ihu.SetUpdatedBy(*s)
+		ihu.SetUpdatedByID(*s)
 	}
 	return ihu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ihu *IntegrationHistoryUpdate) ClearUpdatedBy() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ihu *IntegrationHistoryUpdate) ClearUpdatedByID() *IntegrationHistoryUpdate {
+	ihu.mutation.ClearUpdatedByID()
 	return ihu
 }
 
@@ -102,23 +102,23 @@ func (ihu *IntegrationHistoryUpdate) ClearDeletedAt() *IntegrationHistoryUpdate 
 	return ihu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ihu *IntegrationHistoryUpdate) SetDeletedBy(s string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ihu *IntegrationHistoryUpdate) SetDeletedByID(s string) *IntegrationHistoryUpdate {
+	ihu.mutation.SetDeletedByID(s)
 	return ihu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableDeletedBy(s *string) *IntegrationHistoryUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ihu *IntegrationHistoryUpdate) SetNillableDeletedByID(s *string) *IntegrationHistoryUpdate {
 	if s != nil {
-		ihu.SetDeletedBy(*s)
+		ihu.SetDeletedByID(*s)
 	}
 	return ihu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ihu *IntegrationHistoryUpdate) ClearDeletedBy() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (ihu *IntegrationHistoryUpdate) ClearDeletedByID() *IntegrationHistoryUpdate {
+	ihu.mutation.ClearDeletedByID()
 	return ihu
 }
 
@@ -261,6 +261,9 @@ func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if ihu.mutation.RefCleared() {
 		_spec.ClearField(integrationhistory.FieldRef, field.TypeString)
 	}
+	if ihu.mutation.UpdatedByCleared() {
+		_spec.ClearField(integrationhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if ihu.mutation.CreatedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -270,14 +273,14 @@ func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if ihu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ihu.mutation.CreatedByCleared() {
-		_spec.ClearField(integrationhistory.FieldCreatedBy, field.TypeString)
+	if ihu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(integrationhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ihu.mutation.UpdatedBy(); ok {
-		_spec.SetField(integrationhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ihu.mutation.UpdatedByID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ihu.mutation.UpdatedByCleared() {
-		_spec.ClearField(integrationhistory.FieldUpdatedBy, field.TypeString)
+	if ihu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(integrationhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ihu.mutation.Tags(); ok {
 		_spec.SetField(integrationhistory.FieldTags, field.TypeJSON, value)
@@ -296,11 +299,11 @@ func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if ihu.mutation.DeletedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ihu.mutation.DeletedBy(); ok {
-		_spec.SetField(integrationhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := ihu.mutation.DeletedByID(); ok {
+		_spec.SetField(integrationhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if ihu.mutation.DeletedByCleared() {
-		_spec.ClearField(integrationhistory.FieldDeletedBy, field.TypeString)
+	if ihu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(integrationhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ihu.mutation.OwnerID(); ok {
 		_spec.SetField(integrationhistory.FieldOwnerID, field.TypeString, value)
@@ -359,23 +362,23 @@ func (ihuo *IntegrationHistoryUpdateOne) ClearUpdatedAt() *IntegrationHistoryUpd
 	return ihuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetUpdatedBy(s string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (ihuo *IntegrationHistoryUpdateOne) SetUpdatedByID(s string) *IntegrationHistoryUpdateOne {
+	ihuo.mutation.SetUpdatedByID(s)
 	return ihuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableUpdatedBy(s *string) *IntegrationHistoryUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (ihuo *IntegrationHistoryUpdateOne) SetNillableUpdatedByID(s *string) *IntegrationHistoryUpdateOne {
 	if s != nil {
-		ihuo.SetUpdatedBy(*s)
+		ihuo.SetUpdatedByID(*s)
 	}
 	return ihuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearUpdatedBy() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (ihuo *IntegrationHistoryUpdateOne) ClearUpdatedByID() *IntegrationHistoryUpdateOne {
+	ihuo.mutation.ClearUpdatedByID()
 	return ihuo
 }
 
@@ -417,23 +420,23 @@ func (ihuo *IntegrationHistoryUpdateOne) ClearDeletedAt() *IntegrationHistoryUpd
 	return ihuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetDeletedBy(s string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (ihuo *IntegrationHistoryUpdateOne) SetDeletedByID(s string) *IntegrationHistoryUpdateOne {
+	ihuo.mutation.SetDeletedByID(s)
 	return ihuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableDeletedBy(s *string) *IntegrationHistoryUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (ihuo *IntegrationHistoryUpdateOne) SetNillableDeletedByID(s *string) *IntegrationHistoryUpdateOne {
 	if s != nil {
-		ihuo.SetDeletedBy(*s)
+		ihuo.SetDeletedByID(*s)
 	}
 	return ihuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearDeletedBy() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (ihuo *IntegrationHistoryUpdateOne) ClearDeletedByID() *IntegrationHistoryUpdateOne {
+	ihuo.mutation.ClearDeletedByID()
 	return ihuo
 }
 
@@ -606,6 +609,9 @@ func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *In
 	if ihuo.mutation.RefCleared() {
 		_spec.ClearField(integrationhistory.FieldRef, field.TypeString)
 	}
+	if ihuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(integrationhistory.FieldUpdatedBy, field.TypeString)
+	}
 	if ihuo.mutation.CreatedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldCreatedAt, field.TypeTime)
 	}
@@ -615,14 +621,14 @@ func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *In
 	if ihuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ihuo.mutation.CreatedByCleared() {
-		_spec.ClearField(integrationhistory.FieldCreatedBy, field.TypeString)
+	if ihuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(integrationhistory.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := ihuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(integrationhistory.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := ihuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByID, field.TypeString, value)
 	}
-	if ihuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(integrationhistory.FieldUpdatedBy, field.TypeString)
+	if ihuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(integrationhistory.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := ihuo.mutation.Tags(); ok {
 		_spec.SetField(integrationhistory.FieldTags, field.TypeJSON, value)
@@ -641,11 +647,11 @@ func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *In
 	if ihuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ihuo.mutation.DeletedBy(); ok {
-		_spec.SetField(integrationhistory.FieldDeletedBy, field.TypeString, value)
+	if value, ok := ihuo.mutation.DeletedByID(); ok {
+		_spec.SetField(integrationhistory.FieldDeletedByID, field.TypeString, value)
 	}
-	if ihuo.mutation.DeletedByCleared() {
-		_spec.ClearField(integrationhistory.FieldDeletedBy, field.TypeString)
+	if ihuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(integrationhistory.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := ihuo.mutation.OwnerID(); ok {
 		_spec.SetField(integrationhistory.FieldOwnerID, field.TypeString, value)

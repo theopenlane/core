@@ -86,7 +86,7 @@ func (Group) Edges() []ent.Edge {
 // Mixin of the Group
 func (Group) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		emixin.AuditMixin{},
+		NewAuditMixin(),
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
@@ -152,7 +152,7 @@ func (Group) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

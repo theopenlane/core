@@ -59,23 +59,23 @@ func (gu *GroupUpdate) ClearUpdatedAt() *GroupUpdate {
 	return gu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (gu *GroupUpdate) SetUpdatedBy(s string) *GroupUpdate {
-	gu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (gu *GroupUpdate) SetUpdatedByID(s string) *GroupUpdate {
+	gu.mutation.SetUpdatedByID(s)
 	return gu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gu *GroupUpdate) SetNillableUpdatedBy(s *string) *GroupUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (gu *GroupUpdate) SetNillableUpdatedByID(s *string) *GroupUpdate {
 	if s != nil {
-		gu.SetUpdatedBy(*s)
+		gu.SetUpdatedByID(*s)
 	}
 	return gu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (gu *GroupUpdate) ClearUpdatedBy() *GroupUpdate {
-	gu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (gu *GroupUpdate) ClearUpdatedByID() *GroupUpdate {
+	gu.mutation.ClearUpdatedByID()
 	return gu
 }
 
@@ -99,23 +99,23 @@ func (gu *GroupUpdate) ClearDeletedAt() *GroupUpdate {
 	return gu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (gu *GroupUpdate) SetDeletedBy(s string) *GroupUpdate {
-	gu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (gu *GroupUpdate) SetDeletedByID(s string) *GroupUpdate {
+	gu.mutation.SetDeletedByID(s)
 	return gu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gu *GroupUpdate) SetNillableDeletedBy(s *string) *GroupUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (gu *GroupUpdate) SetNillableDeletedByID(s *string) *GroupUpdate {
 	if s != nil {
-		gu.SetDeletedBy(*s)
+		gu.SetDeletedByID(*s)
 	}
 	return gu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gu *GroupUpdate) ClearDeletedBy() *GroupUpdate {
-	gu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (gu *GroupUpdate) ClearDeletedByID() *GroupUpdate {
+	gu.mutation.ClearDeletedByID()
 	return gu
 }
 
@@ -1594,14 +1594,14 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if gu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(group.FieldUpdatedAt, field.TypeTime)
 	}
-	if gu.mutation.CreatedByCleared() {
-		_spec.ClearField(group.FieldCreatedBy, field.TypeString)
+	if gu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(group.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := gu.mutation.UpdatedBy(); ok {
-		_spec.SetField(group.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := gu.mutation.UpdatedByID(); ok {
+		_spec.SetField(group.FieldUpdatedByID, field.TypeString, value)
 	}
-	if gu.mutation.UpdatedByCleared() {
-		_spec.ClearField(group.FieldUpdatedBy, field.TypeString)
+	if gu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(group.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := gu.mutation.DeletedAt(); ok {
 		_spec.SetField(group.FieldDeletedAt, field.TypeTime, value)
@@ -1609,11 +1609,11 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if gu.mutation.DeletedAtCleared() {
 		_spec.ClearField(group.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gu.mutation.DeletedBy(); ok {
-		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
+	if value, ok := gu.mutation.DeletedByID(); ok {
+		_spec.SetField(group.FieldDeletedByID, field.TypeString, value)
 	}
-	if gu.mutation.DeletedByCleared() {
-		_spec.ClearField(group.FieldDeletedBy, field.TypeString)
+	if gu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(group.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := gu.mutation.Tags(); ok {
 		_spec.SetField(group.FieldTags, field.TypeJSON, value)
@@ -3401,23 +3401,23 @@ func (guo *GroupUpdateOne) ClearUpdatedAt() *GroupUpdateOne {
 	return guo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (guo *GroupUpdateOne) SetUpdatedBy(s string) *GroupUpdateOne {
-	guo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (guo *GroupUpdateOne) SetUpdatedByID(s string) *GroupUpdateOne {
+	guo.mutation.SetUpdatedByID(s)
 	return guo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (guo *GroupUpdateOne) SetNillableUpdatedBy(s *string) *GroupUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (guo *GroupUpdateOne) SetNillableUpdatedByID(s *string) *GroupUpdateOne {
 	if s != nil {
-		guo.SetUpdatedBy(*s)
+		guo.SetUpdatedByID(*s)
 	}
 	return guo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (guo *GroupUpdateOne) ClearUpdatedBy() *GroupUpdateOne {
-	guo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (guo *GroupUpdateOne) ClearUpdatedByID() *GroupUpdateOne {
+	guo.mutation.ClearUpdatedByID()
 	return guo
 }
 
@@ -3441,23 +3441,23 @@ func (guo *GroupUpdateOne) ClearDeletedAt() *GroupUpdateOne {
 	return guo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (guo *GroupUpdateOne) SetDeletedBy(s string) *GroupUpdateOne {
-	guo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (guo *GroupUpdateOne) SetDeletedByID(s string) *GroupUpdateOne {
+	guo.mutation.SetDeletedByID(s)
 	return guo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (guo *GroupUpdateOne) SetNillableDeletedBy(s *string) *GroupUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (guo *GroupUpdateOne) SetNillableDeletedByID(s *string) *GroupUpdateOne {
 	if s != nil {
-		guo.SetDeletedBy(*s)
+		guo.SetDeletedByID(*s)
 	}
 	return guo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (guo *GroupUpdateOne) ClearDeletedBy() *GroupUpdateOne {
-	guo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (guo *GroupUpdateOne) ClearDeletedByID() *GroupUpdateOne {
+	guo.mutation.ClearDeletedByID()
 	return guo
 }
 
@@ -4966,14 +4966,14 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 	if guo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(group.FieldUpdatedAt, field.TypeTime)
 	}
-	if guo.mutation.CreatedByCleared() {
-		_spec.ClearField(group.FieldCreatedBy, field.TypeString)
+	if guo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(group.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := guo.mutation.UpdatedBy(); ok {
-		_spec.SetField(group.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := guo.mutation.UpdatedByID(); ok {
+		_spec.SetField(group.FieldUpdatedByID, field.TypeString, value)
 	}
-	if guo.mutation.UpdatedByCleared() {
-		_spec.ClearField(group.FieldUpdatedBy, field.TypeString)
+	if guo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(group.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := guo.mutation.DeletedAt(); ok {
 		_spec.SetField(group.FieldDeletedAt, field.TypeTime, value)
@@ -4981,11 +4981,11 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 	if guo.mutation.DeletedAtCleared() {
 		_spec.ClearField(group.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := guo.mutation.DeletedBy(); ok {
-		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
+	if value, ok := guo.mutation.DeletedByID(); ok {
+		_spec.SetField(group.FieldDeletedByID, field.TypeString, value)
 	}
-	if guo.mutation.DeletedByCleared() {
-		_spec.ClearField(group.FieldDeletedBy, field.TypeString)
+	if guo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(group.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := guo.mutation.Tags(); ok {
 		_spec.SetField(group.FieldTags, field.TypeJSON, value)

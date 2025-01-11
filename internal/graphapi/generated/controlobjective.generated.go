@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ControlObjective_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ControlObjective_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ControlObjective_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ControlObjective_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlObjective_tags(ctx, field)
 			case "ownerID":
@@ -131,6 +131,10 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -183,14 +187,14 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ControlObjective_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ControlObjective_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ControlObjective_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ControlObjective_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlObjective_tags(ctx, field)
 			case "ownerID":
@@ -243,6 +247,10 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},
@@ -339,14 +347,14 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_ControlObjective_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_ControlObjective_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_ControlObjective_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_ControlObjective_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ControlObjective_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_ControlObjective_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlObjective_tags(ctx, field)
 			case "ownerID":
@@ -399,6 +407,10 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_ControlObjective_programs(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_ControlObjective_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_ControlObjective_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjective", field.Name)
 		},

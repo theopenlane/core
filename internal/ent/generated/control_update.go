@@ -55,23 +55,23 @@ func (cu *ControlUpdate) ClearUpdatedAt() *ControlUpdate {
 	return cu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cu *ControlUpdate) SetUpdatedBy(s string) *ControlUpdate {
-	cu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cu *ControlUpdate) SetUpdatedByID(s string) *ControlUpdate {
+	cu.mutation.SetUpdatedByID(s)
 	return cu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableUpdatedBy(s *string) *ControlUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cu *ControlUpdate) SetNillableUpdatedByID(s *string) *ControlUpdate {
 	if s != nil {
-		cu.SetUpdatedBy(*s)
+		cu.SetUpdatedByID(*s)
 	}
 	return cu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cu *ControlUpdate) ClearUpdatedBy() *ControlUpdate {
-	cu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cu *ControlUpdate) ClearUpdatedByID() *ControlUpdate {
+	cu.mutation.ClearUpdatedByID()
 	return cu
 }
 
@@ -95,23 +95,23 @@ func (cu *ControlUpdate) ClearDeletedAt() *ControlUpdate {
 	return cu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (cu *ControlUpdate) SetDeletedBy(s string) *ControlUpdate {
-	cu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (cu *ControlUpdate) SetDeletedByID(s string) *ControlUpdate {
+	cu.mutation.SetDeletedByID(s)
 	return cu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableDeletedBy(s *string) *ControlUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (cu *ControlUpdate) SetNillableDeletedByID(s *string) *ControlUpdate {
 	if s != nil {
-		cu.SetDeletedBy(*s)
+		cu.SetDeletedByID(*s)
 	}
 	return cu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cu *ControlUpdate) ClearDeletedBy() *ControlUpdate {
-	cu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (cu *ControlUpdate) ClearDeletedByID() *ControlUpdate {
+	cu.mutation.ClearDeletedByID()
 	return cu
 }
 
@@ -908,14 +908,14 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(control.FieldUpdatedAt, field.TypeTime)
 	}
-	if cu.mutation.CreatedByCleared() {
-		_spec.ClearField(control.FieldCreatedBy, field.TypeString)
+	if cu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(control.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := cu.mutation.UpdatedBy(); ok {
-		_spec.SetField(control.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := cu.mutation.UpdatedByID(); ok {
+		_spec.SetField(control.FieldUpdatedByID, field.TypeString, value)
 	}
-	if cu.mutation.UpdatedByCleared() {
-		_spec.ClearField(control.FieldUpdatedBy, field.TypeString)
+	if cu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(control.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := cu.mutation.DeletedAt(); ok {
 		_spec.SetField(control.FieldDeletedAt, field.TypeTime, value)
@@ -923,11 +923,11 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.DeletedAtCleared() {
 		_spec.ClearField(control.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cu.mutation.DeletedBy(); ok {
-		_spec.SetField(control.FieldDeletedBy, field.TypeString, value)
+	if value, ok := cu.mutation.DeletedByID(); ok {
+		_spec.SetField(control.FieldDeletedByID, field.TypeString, value)
 	}
-	if cu.mutation.DeletedByCleared() {
-		_spec.ClearField(control.FieldDeletedBy, field.TypeString)
+	if cu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(control.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cu.mutation.Tags(); ok {
 		_spec.SetField(control.FieldTags, field.TypeJSON, value)
@@ -1652,23 +1652,23 @@ func (cuo *ControlUpdateOne) ClearUpdatedAt() *ControlUpdateOne {
 	return cuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (cuo *ControlUpdateOne) SetUpdatedBy(s string) *ControlUpdateOne {
-	cuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (cuo *ControlUpdateOne) SetUpdatedByID(s string) *ControlUpdateOne {
+	cuo.mutation.SetUpdatedByID(s)
 	return cuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableUpdatedBy(s *string) *ControlUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (cuo *ControlUpdateOne) SetNillableUpdatedByID(s *string) *ControlUpdateOne {
 	if s != nil {
-		cuo.SetUpdatedBy(*s)
+		cuo.SetUpdatedByID(*s)
 	}
 	return cuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cuo *ControlUpdateOne) ClearUpdatedBy() *ControlUpdateOne {
-	cuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (cuo *ControlUpdateOne) ClearUpdatedByID() *ControlUpdateOne {
+	cuo.mutation.ClearUpdatedByID()
 	return cuo
 }
 
@@ -1692,23 +1692,23 @@ func (cuo *ControlUpdateOne) ClearDeletedAt() *ControlUpdateOne {
 	return cuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (cuo *ControlUpdateOne) SetDeletedBy(s string) *ControlUpdateOne {
-	cuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (cuo *ControlUpdateOne) SetDeletedByID(s string) *ControlUpdateOne {
+	cuo.mutation.SetDeletedByID(s)
 	return cuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableDeletedBy(s *string) *ControlUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (cuo *ControlUpdateOne) SetNillableDeletedByID(s *string) *ControlUpdateOne {
 	if s != nil {
-		cuo.SetDeletedBy(*s)
+		cuo.SetDeletedByID(*s)
 	}
 	return cuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (cuo *ControlUpdateOne) ClearDeletedBy() *ControlUpdateOne {
-	cuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (cuo *ControlUpdateOne) ClearDeletedByID() *ControlUpdateOne {
+	cuo.mutation.ClearDeletedByID()
 	return cuo
 }
 
@@ -2535,14 +2535,14 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 	if cuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(control.FieldUpdatedAt, field.TypeTime)
 	}
-	if cuo.mutation.CreatedByCleared() {
-		_spec.ClearField(control.FieldCreatedBy, field.TypeString)
+	if cuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(control.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := cuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(control.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := cuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(control.FieldUpdatedByID, field.TypeString, value)
 	}
-	if cuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(control.FieldUpdatedBy, field.TypeString)
+	if cuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(control.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := cuo.mutation.DeletedAt(); ok {
 		_spec.SetField(control.FieldDeletedAt, field.TypeTime, value)
@@ -2550,11 +2550,11 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 	if cuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(control.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cuo.mutation.DeletedBy(); ok {
-		_spec.SetField(control.FieldDeletedBy, field.TypeString, value)
+	if value, ok := cuo.mutation.DeletedByID(); ok {
+		_spec.SetField(control.FieldDeletedByID, field.TypeString, value)
 	}
-	if cuo.mutation.DeletedByCleared() {
-		_spec.ClearField(control.FieldDeletedBy, field.TypeString)
+	if cuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(control.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := cuo.mutation.Tags(); ok {
 		_spec.SetField(control.FieldTags, field.TypeJSON, value)

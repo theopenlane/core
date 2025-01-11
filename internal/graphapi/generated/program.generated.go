@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Program_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Program_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Program_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Program_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Program_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Program_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
@@ -135,6 +135,10 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_users(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Program_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Program_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Program", field.Name)
 		},
@@ -187,14 +191,14 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Program_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Program_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Program_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Program_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Program_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Program_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
@@ -251,6 +255,10 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_users(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Program_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Program_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Program", field.Name)
 		},
@@ -347,14 +355,14 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Program_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Program_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_Program_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_Program_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_Program_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Program_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_Program_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Program_tags(ctx, field)
 			case "ownerID":
@@ -411,6 +419,10 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_users(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Program_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Program_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Program", field.Name)
 		},

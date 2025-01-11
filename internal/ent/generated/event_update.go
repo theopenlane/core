@@ -55,23 +55,23 @@ func (eu *EventUpdate) ClearUpdatedAt() *EventUpdate {
 	return eu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (eu *EventUpdate) SetUpdatedBy(s string) *EventUpdate {
-	eu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (eu *EventUpdate) SetUpdatedByID(s string) *EventUpdate {
+	eu.mutation.SetUpdatedByID(s)
 	return eu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (eu *EventUpdate) SetNillableUpdatedBy(s *string) *EventUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (eu *EventUpdate) SetNillableUpdatedByID(s *string) *EventUpdate {
 	if s != nil {
-		eu.SetUpdatedBy(*s)
+		eu.SetUpdatedByID(*s)
 	}
 	return eu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (eu *EventUpdate) ClearUpdatedBy() *EventUpdate {
-	eu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (eu *EventUpdate) ClearUpdatedByID() *EventUpdate {
+	eu.mutation.ClearUpdatedByID()
 	return eu
 }
 
@@ -626,14 +626,14 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if eu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(event.FieldUpdatedAt, field.TypeTime)
 	}
-	if eu.mutation.CreatedByCleared() {
-		_spec.ClearField(event.FieldCreatedBy, field.TypeString)
+	if eu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(event.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := eu.mutation.UpdatedBy(); ok {
-		_spec.SetField(event.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := eu.mutation.UpdatedByID(); ok {
+		_spec.SetField(event.FieldUpdatedByID, field.TypeString, value)
 	}
-	if eu.mutation.UpdatedByCleared() {
-		_spec.ClearField(event.FieldUpdatedBy, field.TypeString)
+	if eu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(event.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := eu.mutation.Tags(); ok {
 		_spec.SetField(event.FieldTags, field.TypeJSON, value)
@@ -1231,23 +1231,23 @@ func (euo *EventUpdateOne) ClearUpdatedAt() *EventUpdateOne {
 	return euo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (euo *EventUpdateOne) SetUpdatedBy(s string) *EventUpdateOne {
-	euo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (euo *EventUpdateOne) SetUpdatedByID(s string) *EventUpdateOne {
+	euo.mutation.SetUpdatedByID(s)
 	return euo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (euo *EventUpdateOne) SetNillableUpdatedBy(s *string) *EventUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (euo *EventUpdateOne) SetNillableUpdatedByID(s *string) *EventUpdateOne {
 	if s != nil {
-		euo.SetUpdatedBy(*s)
+		euo.SetUpdatedByID(*s)
 	}
 	return euo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (euo *EventUpdateOne) ClearUpdatedBy() *EventUpdateOne {
-	euo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (euo *EventUpdateOne) ClearUpdatedByID() *EventUpdateOne {
+	euo.mutation.ClearUpdatedByID()
 	return euo
 }
 
@@ -1832,14 +1832,14 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 	if euo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(event.FieldUpdatedAt, field.TypeTime)
 	}
-	if euo.mutation.CreatedByCleared() {
-		_spec.ClearField(event.FieldCreatedBy, field.TypeString)
+	if euo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(event.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := euo.mutation.UpdatedBy(); ok {
-		_spec.SetField(event.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := euo.mutation.UpdatedByID(); ok {
+		_spec.SetField(event.FieldUpdatedByID, field.TypeString, value)
 	}
-	if euo.mutation.UpdatedByCleared() {
-		_spec.ClearField(event.FieldUpdatedBy, field.TypeString)
+	if euo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(event.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := euo.mutation.Tags(); ok {
 		_spec.SetField(event.FieldTags, field.TypeJSON, value)

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Hush is the model entity for the Hush schema.
@@ -21,16 +22,16 @@ type Hush struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name,omitempty"`
 	// a description of the hush value or purpose, such as github PAT
@@ -45,6 +46,11 @@ type Hush struct {
 	// The values are being populated by the HushQuery when eager-loading is set.
 	Edges        HushEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // HushEdges holds the relations/edges for other nodes in the graph.
@@ -98,7 +104,7 @@ func (*Hush) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case hush.FieldID, hush.FieldCreatedBy, hush.FieldUpdatedBy, hush.FieldMappingID, hush.FieldDeletedBy, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
+		case hush.FieldID, hush.FieldCreatedByID, hush.FieldUpdatedByID, hush.FieldMappingID, hush.FieldDeletedByID, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hush.FieldCreatedAt, hush.FieldUpdatedAt, hush.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -135,17 +141,17 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				h.UpdatedAt = value.Time
 			}
-		case hush.FieldCreatedBy:
+		case hush.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				h.CreatedBy = value.String
+				h.CreatedByID = value.String
 			}
-		case hush.FieldUpdatedBy:
+		case hush.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				h.UpdatedBy = value.String
+				h.UpdatedByID = value.String
 			}
 		case hush.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -159,11 +165,11 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				h.DeletedAt = value.Time
 			}
-		case hush.FieldDeletedBy:
+		case hush.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				h.DeletedBy = value.String
+				h.DeletedByID = value.String
 			}
 		case hush.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -252,11 +258,11 @@ func (h *Hush) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(h.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(h.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(h.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(h.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(h.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(h.MappingID)
@@ -264,8 +270,8 @@ func (h *Hush) String() string {
 	builder.WriteString("deleted_at=")
 	builder.WriteString(h.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(h.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(h.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(h.Name)

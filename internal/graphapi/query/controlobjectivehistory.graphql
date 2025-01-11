@@ -8,7 +8,7 @@ query GetAllControlObjectiveHistories {
         controlNumber
         controlObjectiveType
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -22,7 +22,7 @@ query GetAllControlObjectiveHistories {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
     }
@@ -37,7 +37,7 @@ query GetControlObjectiveHistories($where: ControlObjectiveHistoryWhereInput) {
         controlNumber
         controlObjectiveType
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -51,7 +51,7 @@ query GetControlObjectiveHistories($where: ControlObjectiveHistoryWhereInput) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
     }

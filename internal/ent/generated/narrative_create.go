@@ -55,30 +55,30 @@ func (nc *NarrativeCreate) SetNillableUpdatedAt(t *time.Time) *NarrativeCreate {
 	return nc
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (nc *NarrativeCreate) SetCreatedBy(s string) *NarrativeCreate {
-	nc.mutation.SetCreatedBy(s)
+// SetCreatedByID sets the "created_by_id" field.
+func (nc *NarrativeCreate) SetCreatedByID(s string) *NarrativeCreate {
+	nc.mutation.SetCreatedByID(s)
 	return nc
 }
 
-// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableCreatedBy(s *string) *NarrativeCreate {
+// SetNillableCreatedByID sets the "created_by_id" field if the given value is not nil.
+func (nc *NarrativeCreate) SetNillableCreatedByID(s *string) *NarrativeCreate {
 	if s != nil {
-		nc.SetCreatedBy(*s)
+		nc.SetCreatedByID(*s)
 	}
 	return nc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (nc *NarrativeCreate) SetUpdatedBy(s string) *NarrativeCreate {
-	nc.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (nc *NarrativeCreate) SetUpdatedByID(s string) *NarrativeCreate {
+	nc.mutation.SetUpdatedByID(s)
 	return nc
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableUpdatedBy(s *string) *NarrativeCreate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (nc *NarrativeCreate) SetNillableUpdatedByID(s *string) *NarrativeCreate {
 	if s != nil {
-		nc.SetUpdatedBy(*s)
+		nc.SetUpdatedByID(*s)
 	}
 	return nc
 }
@@ -97,16 +97,16 @@ func (nc *NarrativeCreate) SetNillableDeletedAt(t *time.Time) *NarrativeCreate {
 	return nc
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (nc *NarrativeCreate) SetDeletedBy(s string) *NarrativeCreate {
-	nc.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (nc *NarrativeCreate) SetDeletedByID(s string) *NarrativeCreate {
+	nc.mutation.SetDeletedByID(s)
 	return nc
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableDeletedBy(s *string) *NarrativeCreate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (nc *NarrativeCreate) SetNillableDeletedByID(s *string) *NarrativeCreate {
 	if s != nil {
-		nc.SetDeletedBy(*s)
+		nc.SetDeletedByID(*s)
 	}
 	return nc
 }
@@ -456,21 +456,21 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		_spec.SetField(narrative.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := nc.mutation.CreatedBy(); ok {
-		_spec.SetField(narrative.FieldCreatedBy, field.TypeString, value)
-		_node.CreatedBy = value
+	if value, ok := nc.mutation.CreatedByID(); ok {
+		_spec.SetField(narrative.FieldCreatedByID, field.TypeString, value)
+		_node.CreatedByID = value
 	}
-	if value, ok := nc.mutation.UpdatedBy(); ok {
-		_spec.SetField(narrative.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = value
+	if value, ok := nc.mutation.UpdatedByID(); ok {
+		_spec.SetField(narrative.FieldUpdatedByID, field.TypeString, value)
+		_node.UpdatedByID = value
 	}
 	if value, ok := nc.mutation.DeletedAt(); ok {
 		_spec.SetField(narrative.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := nc.mutation.DeletedBy(); ok {
-		_spec.SetField(narrative.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+	if value, ok := nc.mutation.DeletedByID(); ok {
+		_spec.SetField(narrative.FieldDeletedByID, field.TypeString, value)
+		_node.DeletedByID = value
 	}
 	if value, ok := nc.mutation.MappingID(); ok {
 		_spec.SetField(narrative.FieldMappingID, field.TypeString, value)

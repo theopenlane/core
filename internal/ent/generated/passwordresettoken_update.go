@@ -44,23 +44,23 @@ func (prtu *PasswordResetTokenUpdate) ClearUpdatedAt() *PasswordResetTokenUpdate
 	return prtu
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (prtu *PasswordResetTokenUpdate) SetUpdatedBy(s string) *PasswordResetTokenUpdate {
-	prtu.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (prtu *PasswordResetTokenUpdate) SetUpdatedByID(s string) *PasswordResetTokenUpdate {
+	prtu.mutation.SetUpdatedByID(s)
 	return prtu
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableUpdatedBy(s *string) *PasswordResetTokenUpdate {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (prtu *PasswordResetTokenUpdate) SetNillableUpdatedByID(s *string) *PasswordResetTokenUpdate {
 	if s != nil {
-		prtu.SetUpdatedBy(*s)
+		prtu.SetUpdatedByID(*s)
 	}
 	return prtu
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (prtu *PasswordResetTokenUpdate) ClearUpdatedBy() *PasswordResetTokenUpdate {
-	prtu.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (prtu *PasswordResetTokenUpdate) ClearUpdatedByID() *PasswordResetTokenUpdate {
+	prtu.mutation.ClearUpdatedByID()
 	return prtu
 }
 
@@ -84,23 +84,23 @@ func (prtu *PasswordResetTokenUpdate) ClearDeletedAt() *PasswordResetTokenUpdate
 	return prtu
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (prtu *PasswordResetTokenUpdate) SetDeletedBy(s string) *PasswordResetTokenUpdate {
-	prtu.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (prtu *PasswordResetTokenUpdate) SetDeletedByID(s string) *PasswordResetTokenUpdate {
+	prtu.mutation.SetDeletedByID(s)
 	return prtu
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableDeletedBy(s *string) *PasswordResetTokenUpdate {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (prtu *PasswordResetTokenUpdate) SetNillableDeletedByID(s *string) *PasswordResetTokenUpdate {
 	if s != nil {
-		prtu.SetDeletedBy(*s)
+		prtu.SetDeletedByID(*s)
 	}
 	return prtu
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (prtu *PasswordResetTokenUpdate) ClearDeletedBy() *PasswordResetTokenUpdate {
-	prtu.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (prtu *PasswordResetTokenUpdate) ClearDeletedByID() *PasswordResetTokenUpdate {
+	prtu.mutation.ClearDeletedByID()
 	return prtu
 }
 
@@ -274,14 +274,14 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 	if prtu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if prtu.mutation.CreatedByCleared() {
-		_spec.ClearField(passwordresettoken.FieldCreatedBy, field.TypeString)
+	if prtu.mutation.CreatedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := prtu.mutation.UpdatedBy(); ok {
-		_spec.SetField(passwordresettoken.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := prtu.mutation.UpdatedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldUpdatedByID, field.TypeString, value)
 	}
-	if prtu.mutation.UpdatedByCleared() {
-		_spec.ClearField(passwordresettoken.FieldUpdatedBy, field.TypeString)
+	if prtu.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := prtu.mutation.DeletedAt(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedAt, field.TypeTime, value)
@@ -289,11 +289,11 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 	if prtu.mutation.DeletedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := prtu.mutation.DeletedBy(); ok {
-		_spec.SetField(passwordresettoken.FieldDeletedBy, field.TypeString, value)
+	if value, ok := prtu.mutation.DeletedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldDeletedByID, field.TypeString, value)
 	}
-	if prtu.mutation.DeletedByCleared() {
-		_spec.ClearField(passwordresettoken.FieldDeletedBy, field.TypeString)
+	if prtu.mutation.DeletedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := prtu.mutation.Token(); ok {
 		_spec.SetField(passwordresettoken.FieldToken, field.TypeString, value)
@@ -374,23 +374,23 @@ func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedAt() *PasswordResetTokenUp
 	return prtuo
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedBy(s string) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetUpdatedBy(s)
+// SetUpdatedByID sets the "updated_by_id" field.
+func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedByID(s string) *PasswordResetTokenUpdateOne {
+	prtuo.mutation.SetUpdatedByID(s)
 	return prtuo
 }
 
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableUpdatedBy(s *string) *PasswordResetTokenUpdateOne {
+// SetNillableUpdatedByID sets the "updated_by_id" field if the given value is not nil.
+func (prtuo *PasswordResetTokenUpdateOne) SetNillableUpdatedByID(s *string) *PasswordResetTokenUpdateOne {
 	if s != nil {
-		prtuo.SetUpdatedBy(*s)
+		prtuo.SetUpdatedByID(*s)
 	}
 	return prtuo
 }
 
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedBy() *PasswordResetTokenUpdateOne {
-	prtuo.mutation.ClearUpdatedBy()
+// ClearUpdatedByID clears the value of the "updated_by_id" field.
+func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedByID() *PasswordResetTokenUpdateOne {
+	prtuo.mutation.ClearUpdatedByID()
 	return prtuo
 }
 
@@ -414,23 +414,23 @@ func (prtuo *PasswordResetTokenUpdateOne) ClearDeletedAt() *PasswordResetTokenUp
 	return prtuo
 }
 
-// SetDeletedBy sets the "deleted_by" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetDeletedBy(s string) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetDeletedBy(s)
+// SetDeletedByID sets the "deleted_by_id" field.
+func (prtuo *PasswordResetTokenUpdateOne) SetDeletedByID(s string) *PasswordResetTokenUpdateOne {
+	prtuo.mutation.SetDeletedByID(s)
 	return prtuo
 }
 
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableDeletedBy(s *string) *PasswordResetTokenUpdateOne {
+// SetNillableDeletedByID sets the "deleted_by_id" field if the given value is not nil.
+func (prtuo *PasswordResetTokenUpdateOne) SetNillableDeletedByID(s *string) *PasswordResetTokenUpdateOne {
 	if s != nil {
-		prtuo.SetDeletedBy(*s)
+		prtuo.SetDeletedByID(*s)
 	}
 	return prtuo
 }
 
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (prtuo *PasswordResetTokenUpdateOne) ClearDeletedBy() *PasswordResetTokenUpdateOne {
-	prtuo.mutation.ClearDeletedBy()
+// ClearDeletedByID clears the value of the "deleted_by_id" field.
+func (prtuo *PasswordResetTokenUpdateOne) ClearDeletedByID() *PasswordResetTokenUpdateOne {
+	prtuo.mutation.ClearDeletedByID()
 	return prtuo
 }
 
@@ -634,14 +634,14 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 	if prtuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if prtuo.mutation.CreatedByCleared() {
-		_spec.ClearField(passwordresettoken.FieldCreatedBy, field.TypeString)
+	if prtuo.mutation.CreatedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldCreatedByID, field.TypeString)
 	}
-	if value, ok := prtuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(passwordresettoken.FieldUpdatedBy, field.TypeString, value)
+	if value, ok := prtuo.mutation.UpdatedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldUpdatedByID, field.TypeString, value)
 	}
-	if prtuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(passwordresettoken.FieldUpdatedBy, field.TypeString)
+	if prtuo.mutation.UpdatedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldUpdatedByID, field.TypeString)
 	}
 	if value, ok := prtuo.mutation.DeletedAt(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedAt, field.TypeTime, value)
@@ -649,11 +649,11 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 	if prtuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := prtuo.mutation.DeletedBy(); ok {
-		_spec.SetField(passwordresettoken.FieldDeletedBy, field.TypeString, value)
+	if value, ok := prtuo.mutation.DeletedByID(); ok {
+		_spec.SetField(passwordresettoken.FieldDeletedByID, field.TypeString, value)
 	}
-	if prtuo.mutation.DeletedByCleared() {
-		_spec.ClearField(passwordresettoken.FieldDeletedBy, field.TypeString)
+	if prtuo.mutation.DeletedByIDCleared() {
+		_spec.ClearField(passwordresettoken.FieldDeletedByID, field.TypeString)
 	}
 	if value, ok := prtuo.mutation.Token(); ok {
 		_spec.SetField(passwordresettoken.FieldToken, field.TypeString, value)

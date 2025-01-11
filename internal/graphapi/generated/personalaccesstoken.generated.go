@@ -71,14 +71,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 				return ec.fieldContext_PersonalAccessToken_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_PersonalAccessToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_PersonalAccessToken_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_PersonalAccessToken_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_PersonalAccessToken_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_PersonalAccessToken_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
 			case "name":
@@ -99,6 +99,10 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 				return ec.fieldContext_PersonalAccessToken_organizations(ctx, field)
 			case "events":
 				return ec.fieldContext_PersonalAccessToken_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type PersonalAccessToken", field.Name)
 		},
@@ -151,14 +155,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 				return ec.fieldContext_PersonalAccessToken_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_PersonalAccessToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_PersonalAccessToken_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_PersonalAccessToken_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_PersonalAccessToken_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_PersonalAccessToken_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
 			case "name":
@@ -179,6 +183,10 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 				return ec.fieldContext_PersonalAccessToken_organizations(ctx, field)
 			case "events":
 				return ec.fieldContext_PersonalAccessToken_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type PersonalAccessToken", field.Name)
 		},
@@ -275,14 +283,14 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 				return ec.fieldContext_PersonalAccessToken_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_PersonalAccessToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_PersonalAccessToken_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_PersonalAccessToken_updatedByID(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_PersonalAccessToken_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_PersonalAccessToken_deletedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
 			case "name":
@@ -303,6 +311,10 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 				return ec.fieldContext_PersonalAccessToken_organizations(ctx, field)
 			case "events":
 				return ec.fieldContext_PersonalAccessToken_events(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type PersonalAccessToken", field.Name)
 		},

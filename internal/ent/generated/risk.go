@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Risk is the model entity for the Risk schema.
@@ -24,14 +25,14 @@ type Risk struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// CreatedBy holds the value of the "created_by" field.
-	CreatedBy string `json:"created_by,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
+	// CreatedByID holds the value of the "created_by_id" field.
+	CreatedByID string `json:"created_by_id,omitempty"`
+	// UpdatedByID holds the value of the "updated_by_id" field.
+	UpdatedByID string `json:"updated_by_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	// DeletedByID holds the value of the "deleted_by_id" field.
+	DeletedByID string `json:"deleted_by_id,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -63,6 +64,11 @@ type Risk struct {
 	Edges                   RiskEdges `json:"edges"`
 	control_objective_risks *string
 	selectValues            sql.SelectValues
+
+	// CreatedBy includes the details about the user or service that created the object
+	CreatedBy models.Actor `json:"createdBy,omitempty"`
+	// UpdatedBy includes the details about the user or service that last updated the object
+	UpdatedBy models.Actor `json:"updatedBy,omitempty"`
 }
 
 // RiskEdges holds the relations/edges for other nodes in the graph.
@@ -179,7 +185,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case risk.FieldTags, risk.FieldDetails:
 			values[i] = new([]byte)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldMappingID, risk.FieldOwnerID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies:
+		case risk.FieldID, risk.FieldCreatedByID, risk.FieldUpdatedByID, risk.FieldDeletedByID, risk.FieldMappingID, risk.FieldOwnerID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -218,17 +224,17 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.UpdatedAt = value.Time
 			}
-		case risk.FieldCreatedBy:
+		case risk.FieldCreatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by_id", values[i])
 			} else if value.Valid {
-				r.CreatedBy = value.String
+				r.CreatedByID = value.String
 			}
-		case risk.FieldUpdatedBy:
+		case risk.FieldUpdatedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by_id", values[i])
 			} else if value.Valid {
-				r.UpdatedBy = value.String
+				r.UpdatedByID = value.String
 			}
 		case risk.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -236,11 +242,11 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.DeletedAt = value.Time
 			}
-		case risk.FieldDeletedBy:
+		case risk.FieldDeletedByID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+				return fmt.Errorf("unexpected type %T for field deleted_by_id", values[i])
 			} else if value.Valid {
-				r.DeletedBy = value.String
+				r.DeletedByID = value.String
 			}
 		case risk.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -413,17 +419,17 @@ func (r *Risk) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(r.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(r.CreatedBy)
+	builder.WriteString("created_by_id=")
+	builder.WriteString(r.CreatedByID)
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(r.UpdatedBy)
+	builder.WriteString("updated_by_id=")
+	builder.WriteString(r.UpdatedByID)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(r.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(r.DeletedBy)
+	builder.WriteString("deleted_by_id=")
+	builder.WriteString(r.DeletedByID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(r.MappingID)

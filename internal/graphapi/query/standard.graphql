@@ -3,7 +3,7 @@ mutation CreateBulkCSVStandard($input: Upload!) {
     standards {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -15,7 +15,7 @@ mutation CreateBulkCSVStandard($input: Upload!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -26,7 +26,7 @@ mutation CreateBulkStandard($input: [CreateStandardInput!]) {
     standards {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -38,7 +38,7 @@ mutation CreateBulkStandard($input: [CreateStandardInput!]) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -49,7 +49,7 @@ mutation CreateStandard($input: CreateStandardInput!) {
     standard {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -61,7 +61,7 @@ mutation CreateStandard($input: CreateStandardInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }
@@ -79,7 +79,7 @@ query GetAllStandards {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -91,7 +91,7 @@ query GetAllStandards {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
     }
@@ -102,7 +102,7 @@ query GetStandardByID($standardId: ID!) {
   standard(id: $standardId) {
     background
     createdAt
-    createdBy
+    createdByID
     description
     details
     family
@@ -114,7 +114,7 @@ query GetStandardByID($standardId: ID!) {
     status
     tags
     updatedAt
-    updatedBy
+    updatedByID
     version
   }
 }
@@ -125,7 +125,7 @@ query GetStandards($where: StandardWhereInput) {
       node {
         background
         createdAt
-        createdBy
+        createdByID
         description
         details
         family
@@ -137,7 +137,7 @@ query GetStandards($where: StandardWhereInput) {
         status
         tags
         updatedAt
-        updatedBy
+        updatedByID
         version
       }
     }
@@ -149,7 +149,7 @@ mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
     standard {
       background
       createdAt
-      createdBy
+      createdByID
       description
       details
       family
@@ -161,7 +161,7 @@ mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
       status
       tags
       updatedAt
-      updatedBy
+      updatedByID
       version
     }
   }

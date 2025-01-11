@@ -71,16 +71,16 @@ func (ec *executionContext) fieldContext_GroupSettingBulkCreatePayload_groupSett
 				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_GroupSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_GroupSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_GroupSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_GroupSetting_deletedByID(ctx, field)
 			case "visibility":
 				return ec.fieldContext_GroupSetting_visibility(ctx, field)
 			case "joinPolicy":
@@ -93,6 +93,10 @@ func (ec *executionContext) fieldContext_GroupSettingBulkCreatePayload_groupSett
 				return ec.fieldContext_GroupSetting_groupID(ctx, field)
 			case "group":
 				return ec.fieldContext_GroupSetting_group(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
 		},
@@ -145,16 +149,16 @@ func (ec *executionContext) fieldContext_GroupSettingCreatePayload_groupSetting(
 				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_GroupSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_GroupSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_GroupSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_GroupSetting_deletedByID(ctx, field)
 			case "visibility":
 				return ec.fieldContext_GroupSetting_visibility(ctx, field)
 			case "joinPolicy":
@@ -167,6 +171,10 @@ func (ec *executionContext) fieldContext_GroupSettingCreatePayload_groupSetting(
 				return ec.fieldContext_GroupSetting_groupID(ctx, field)
 			case "group":
 				return ec.fieldContext_GroupSetting_group(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
 		},
@@ -263,16 +271,16 @@ func (ec *executionContext) fieldContext_GroupSettingUpdatePayload_groupSetting(
 				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
+			case "createdByID":
+				return ec.fieldContext_GroupSetting_createdByID(ctx, field)
+			case "updatedByID":
+				return ec.fieldContext_GroupSetting_updatedByID(ctx, field)
 			case "tags":
 				return ec.fieldContext_GroupSetting_tags(ctx, field)
 			case "deletedAt":
 				return ec.fieldContext_GroupSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupSetting_deletedBy(ctx, field)
+			case "deletedByID":
+				return ec.fieldContext_GroupSetting_deletedByID(ctx, field)
 			case "visibility":
 				return ec.fieldContext_GroupSetting_visibility(ctx, field)
 			case "joinPolicy":
@@ -285,6 +293,10 @@ func (ec *executionContext) fieldContext_GroupSettingUpdatePayload_groupSetting(
 				return ec.fieldContext_GroupSetting_groupID(ctx, field)
 			case "group":
 				return ec.fieldContext_GroupSetting_group(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
 		},
