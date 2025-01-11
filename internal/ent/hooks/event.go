@@ -287,7 +287,8 @@ func createInternalOrgSubscription(ctx context.Context, customer *entitlements.O
 		SetStripeSubscriptionStatus(customer.Subscription.Status).
 		SetActive(active).
 		SetProductTier(productName).
-		SetFeatures(customer.Features).
+		SetFeatures(customer.FeatureNames).
+		SetFeatureLookupKeys(customer.Features).
 		SetStripeProductTierID(customer.Subscription.ProductID).
 		SetProductPrice(productPrice).
 		SetExpiresAt(expiresAt).

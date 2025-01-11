@@ -1448,6 +1448,8 @@ func (ec *executionContext) fieldContext_OrgSubscriptionSearchResult_orgSubscrip
 				return ec.fieldContext_OrgSubscription_expiresAt(ctx, field)
 			case "features":
 				return ec.fieldContext_OrgSubscription_features(ctx, field)
+			case "featureLookupKeys":
+				return ec.fieldContext_OrgSubscription_featureLookupKeys(ctx, field)
 			case "owner":
 				return ec.fieldContext_OrgSubscription_owner(ctx, field)
 			case "subscriptionURL":
@@ -1676,6 +1678,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingSearchResult_organiz
 				return ec.fieldContext_OrganizationSetting_geoLocation(ctx, field)
 			case "organizationID":
 				return ec.fieldContext_OrganizationSetting_organizationID(ctx, field)
+			case "billingNotificationsEnabled":
+				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

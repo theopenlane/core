@@ -59,7 +59,9 @@ type OrganizationSettingHistory struct {
 	GeoLocation enums.Region `json:"geo_location,omitempty"`
 	// the ID of the organization the settings belong to
 	OrganizationID string `json:"organization_id,omitempty"`
-	selectValues   sql.SelectValues
+	// should we send email notifications related to billing
+	BillingNotificationsEnabled bool `json:"billing_notifications_enabled,omitempty"`
+	selectValues                sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -71,6 +73,8 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case organizationsettinghistory.FieldBillingNotificationsEnabled:
+			values[i] = new(sql.NullBool)
 		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldMappingID, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID:
 			values[i] = new(sql.NullString)
 		case organizationsettinghistory.FieldHistoryTime, organizationsettinghistory.FieldCreatedAt, organizationsettinghistory.FieldUpdatedAt, organizationsettinghistory.FieldDeletedAt:
@@ -216,6 +220,12 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 			} else if value.Valid {
 				osh.OrganizationID = value.String
 			}
+		case organizationsettinghistory.FieldBillingNotificationsEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field billing_notifications_enabled", values[i])
+			} else if value.Valid {
+				osh.BillingNotificationsEnabled = value.Bool
+			}
 		default:
 			osh.selectValues.Set(columns[i], values[i])
 		}
@@ -308,6 +318,9 @@ func (osh *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
 	builder.WriteString(osh.OrganizationID)
+	builder.WriteString(", ")
+	builder.WriteString("billing_notifications_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", osh.BillingNotificationsEnabled))
 	builder.WriteByte(')')
 	return builder.String()
 }

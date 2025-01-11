@@ -1423,6 +1423,7 @@ var (
 		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
+		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrgSubscriptionsTable holds the schema information for the "org_subscriptions" table.
@@ -1433,7 +1434,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[18]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1463,6 +1464,7 @@ var (
 		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
+		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 	}
 	// OrgSubscriptionHistoryTable holds the schema information for the "org_subscription_history" table.
 	OrgSubscriptionHistoryTable = &schema.Table{
@@ -1573,6 +1575,7 @@ var (
 		{Name: "billing_address", Type: field.TypeJSON, Nullable: true},
 		{Name: "tax_identifier", Type: field.TypeString, Nullable: true},
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
+		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
@@ -1583,7 +1586,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[16]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1611,6 +1614,7 @@ var (
 		{Name: "tax_identifier", Type: field.TypeString, Nullable: true},
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{

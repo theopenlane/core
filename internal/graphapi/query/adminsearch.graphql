@@ -207,6 +207,7 @@ query AdminSearch($query: String!) {
           stripeSubscriptionStatus
           stripeCustomerID
           features
+          featureLookupKeys
         }
       }
       ... on OrganizationSearchResult {

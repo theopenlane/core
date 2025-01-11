@@ -56,6 +56,8 @@ const (
 	FieldGeoLocation = "geo_location"
 	// FieldOrganizationID holds the string denoting the organization_id field in the database.
 	FieldOrganizationID = "organization_id"
+	// FieldBillingNotificationsEnabled holds the string denoting the billing_notifications_enabled field in the database.
+	FieldBillingNotificationsEnabled = "billing_notifications_enabled"
 	// Table holds the table name of the organizationsettinghistory in the database.
 	Table = "organization_setting_history"
 )
@@ -82,6 +84,7 @@ var Columns = []string{
 	FieldTaxIdentifier,
 	FieldGeoLocation,
 	FieldOrganizationID,
+	FieldBillingNotificationsEnabled,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -115,6 +118,8 @@ var (
 	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultBillingNotificationsEnabled holds the default value on creation for the "billing_notifications_enabled" field.
+	DefaultBillingNotificationsEnabled bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -227,6 +232,11 @@ func ByGeoLocation(opts ...sql.OrderTermOption) OrderOption {
 // ByOrganizationID orders the results by the organization_id field.
 func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrganizationID, opts...).ToFunc()
+}
+
+// ByBillingNotificationsEnabled orders the results by the billing_notifications_enabled field.
+func ByBillingNotificationsEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBillingNotificationsEnabled, opts...).ToFunc()
 }
 
 var (

@@ -51,6 +51,8 @@ const (
 	FieldExpiresAt = "expires_at"
 	// FieldFeatures holds the string denoting the features field in the database.
 	FieldFeatures = "features"
+	// FieldFeatureLookupKeys holds the string denoting the feature_lookup_keys field in the database.
+	FieldFeatureLookupKeys = "feature_lookup_keys"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// Table holds the table name of the orgsubscription in the database.
@@ -85,6 +87,7 @@ var Columns = []string{
 	FieldStripeCustomerID,
 	FieldExpiresAt,
 	FieldFeatures,
+	FieldFeatureLookupKeys,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

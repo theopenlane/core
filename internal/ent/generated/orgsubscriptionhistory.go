@@ -61,8 +61,10 @@ type OrgSubscriptionHistory struct {
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// the features associated with the subscription
-	Features     []string `json:"features,omitempty"`
-	selectValues sql.SelectValues
+	Features []string `json:"features,omitempty"`
+	// the feature lookup keys associated with the subscription
+	FeatureLookupKeys []string `json:"feature_lookup_keys,omitempty"`
+	selectValues      sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -70,7 +72,7 @@ func (*OrgSubscriptionHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orgsubscriptionhistory.FieldTags, orgsubscriptionhistory.FieldProductPrice, orgsubscriptionhistory.FieldFeatures:
+		case orgsubscriptionhistory.FieldTags, orgsubscriptionhistory.FieldProductPrice, orgsubscriptionhistory.FieldFeatures, orgsubscriptionhistory.FieldFeatureLookupKeys:
 			values[i] = new([]byte)
 		case orgsubscriptionhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -234,6 +236,14 @@ func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) 
 					return fmt.Errorf("unmarshal field features: %w", err)
 				}
 			}
+		case orgsubscriptionhistory.FieldFeatureLookupKeys:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field feature_lookup_keys", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &osh.FeatureLookupKeys); err != nil {
+					return fmt.Errorf("unmarshal field feature_lookup_keys: %w", err)
+				}
+			}
 		default:
 			osh.selectValues.Set(columns[i], values[i])
 		}
@@ -334,6 +344,9 @@ func (osh *OrgSubscriptionHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("features=")
 	builder.WriteString(fmt.Sprintf("%v", osh.Features))
+	builder.WriteString(", ")
+	builder.WriteString("feature_lookup_keys=")
+	builder.WriteString(fmt.Sprintf("%v", osh.FeatureLookupKeys))
 	builder.WriteByte(')')
 	return builder.String()
 }

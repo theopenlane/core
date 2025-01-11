@@ -624,6 +624,10 @@ func adminSearchOrgSubscriptions(ctx context.Context, query string) ([]*generate
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(features)::text LIKE $11", likeQuery)) // search by Features
 			},
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(featurelookupkeys)::text LIKE $12", likeQuery)) // search by FeatureLookupKeys
+			},
 		),
 	).All(ctx)
 }

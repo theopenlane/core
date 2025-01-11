@@ -282,6 +282,20 @@ func (oshu *OrganizationSettingHistoryUpdate) ClearOrganizationID() *Organizatio
 	return oshu
 }
 
+// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetBillingNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetBillingNotificationsEnabled(b)
+	return oshu
+}
+
+// SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdate {
+	if b != nil {
+		oshu.SetBillingNotificationsEnabled(*b)
+	}
+	return oshu
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshu *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
 	return oshu.mutation
@@ -453,6 +467,9 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if oshu.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
+	}
+	if value, ok := oshu.mutation.BillingNotificationsEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
@@ -726,6 +743,20 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) ClearOrganizationID() *Organiz
 	return oshuo
 }
 
+// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetBillingNotificationsEnabled(b)
+	return oshuo
+}
+
+// SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdateOne {
+	if b != nil {
+		oshuo.SetBillingNotificationsEnabled(*b)
+	}
+	return oshuo
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshuo *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
 	return oshuo.mutation
@@ -927,6 +958,9 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if oshuo.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.BillingNotificationsEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)

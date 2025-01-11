@@ -1363,6 +1363,9 @@ func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change
 	if !reflect.DeepEqual(osh.Features, new.Features) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatures, osh.Features, new.Features))
 	}
+	if !reflect.DeepEqual(osh.FeatureLookupKeys, new.FeatureLookupKeys) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatureLookupKeys, osh.FeatureLookupKeys, new.FeatureLookupKeys))
+	}
 	return changes
 }
 
@@ -1509,6 +1512,9 @@ func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) 
 	}
 	if !reflect.DeepEqual(osh.OrganizationID, new.OrganizationID) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldOrganizationID, osh.OrganizationID, new.OrganizationID))
+	}
+	if !reflect.DeepEqual(osh.BillingNotificationsEnabled, new.BillingNotificationsEnabled) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingNotificationsEnabled, osh.BillingNotificationsEnabled, new.BillingNotificationsEnabled))
 	}
 	return changes
 }

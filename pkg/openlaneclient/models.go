@@ -3588,9 +3588,11 @@ type CreateOrganizationSettingInput struct {
 	// Usually government-issued tax ID or business ID such as ABN in Australia
 	TaxIdentifier *string `json:"taxIdentifier,omitempty"`
 	// geographical location of the organization
-	GeoLocation    *enums.Region `json:"geoLocation,omitempty"`
-	OrganizationID *string       `json:"organizationID,omitempty"`
-	FileIDs        []string      `json:"fileIDs,omitempty"`
+	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
+	// should we send email notifications related to billing
+	BillingNotificationsEnabled *bool    `json:"billingNotificationsEnabled,omitempty"`
+	OrganizationID              *string  `json:"organizationID,omitempty"`
+	FileIDs                     []string `json:"fileIDs,omitempty"`
 }
 
 // CreatePersonalAccessTokenInput is used for create PersonalAccessToken object.
@@ -11032,9 +11034,11 @@ type OrgSubscription struct {
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// the features associated with the subscription
-	Features        []string      `json:"features,omitempty"`
-	Owner           *Organization `json:"owner,omitempty"`
-	SubscriptionURL *string       `json:"subscriptionURL,omitempty"`
+	Features []string `json:"features,omitempty"`
+	// the feature lookup keys associated with the subscription
+	FeatureLookupKeys []string      `json:"featureLookupKeys,omitempty"`
+	Owner             *Organization `json:"owner,omitempty"`
+	SubscriptionURL   *string       `json:"subscriptionURL,omitempty"`
 }
 
 func (OrgSubscription) IsNode() {}
@@ -11090,6 +11094,8 @@ type OrgSubscriptionHistory struct {
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
+	// the feature lookup keys associated with the subscription
+	FeatureLookupKeys []string `json:"featureLookupKeys,omitempty"`
 }
 
 func (OrgSubscriptionHistory) IsNode() {}
@@ -11956,9 +11962,11 @@ type OrganizationSetting struct {
 	// geographical location of the organization
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// the ID of the organization the settings belong to
-	OrganizationID *string       `json:"organizationID,omitempty"`
-	Organization   *Organization `json:"organization,omitempty"`
-	Files          []*File       `json:"files,omitempty"`
+	OrganizationID *string `json:"organizationID,omitempty"`
+	// should we send email notifications related to billing
+	BillingNotificationsEnabled bool          `json:"billingNotificationsEnabled"`
+	Organization                *Organization `json:"organization,omitempty"`
+	Files                       []*File       `json:"files,omitempty"`
 }
 
 func (OrganizationSetting) IsNode() {}
@@ -12028,6 +12036,8 @@ type OrganizationSettingHistory struct {
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// the ID of the organization the settings belong to
 	OrganizationID *string `json:"organizationID,omitempty"`
+	// should we send email notifications related to billing
+	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
 }
 
 func (OrganizationSettingHistory) IsNode() {}
@@ -12265,6 +12275,9 @@ type OrganizationSettingHistoryWhereInput struct {
 	OrganizationIDNotNil       *bool    `json:"organizationIDNotNil,omitempty"`
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+	// billing_notifications_enabled field predicates
+	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
+	BillingNotificationsEnabledNeq *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
 }
 
 type OrganizationSettingSearchResult struct {
@@ -12464,6 +12477,9 @@ type OrganizationSettingWhereInput struct {
 	OrganizationIDNotNil       *bool    `json:"organizationIDNotNil,omitempty"`
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+	// billing_notifications_enabled field predicates
+	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
+	BillingNotificationsEnabledNeq *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -19279,13 +19295,15 @@ type UpdateOrganizationSettingInput struct {
 	TaxIdentifier      *string `json:"taxIdentifier,omitempty"`
 	ClearTaxIdentifier *bool   `json:"clearTaxIdentifier,omitempty"`
 	// geographical location of the organization
-	GeoLocation       *enums.Region `json:"geoLocation,omitempty"`
-	ClearGeoLocation  *bool         `json:"clearGeoLocation,omitempty"`
-	OrganizationID    *string       `json:"organizationID,omitempty"`
-	ClearOrganization *bool         `json:"clearOrganization,omitempty"`
-	AddFileIDs        []string      `json:"addFileIDs,omitempty"`
-	RemoveFileIDs     []string      `json:"removeFileIDs,omitempty"`
-	ClearFiles        *bool         `json:"clearFiles,omitempty"`
+	GeoLocation      *enums.Region `json:"geoLocation,omitempty"`
+	ClearGeoLocation *bool         `json:"clearGeoLocation,omitempty"`
+	// should we send email notifications related to billing
+	BillingNotificationsEnabled *bool    `json:"billingNotificationsEnabled,omitempty"`
+	OrganizationID              *string  `json:"organizationID,omitempty"`
+	ClearOrganization           *bool    `json:"clearOrganization,omitempty"`
+	AddFileIDs                  []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs               []string `json:"removeFileIDs,omitempty"`
+	ClearFiles                  *bool    `json:"clearFiles,omitempty"`
 }
 
 // UpdatePersonalAccessTokenInput is used for update PersonalAccessToken object.
