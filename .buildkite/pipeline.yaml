@@ -195,7 +195,7 @@ steps:
 
           # ignore exit code for now
           set +e
-          result=$(rover graph check --schema internal/graphapi/clientschema/schema.graphql Openlane-2fwyqq@current --format plain -o $$lint_result_file 2>&1 > /dev/null)          status=$$?
+          result=$(rover graph check --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME --format plain -o $$lint_result_file 2>&1 > /dev/null)
           set -e
 
           output=$$(cat $$lint_result_file)
