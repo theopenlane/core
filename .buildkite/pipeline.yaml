@@ -9,6 +9,8 @@ env:
   SMALL_RUNNER_QUEUE: self-hosted-garage-vms
   RUNNER_LARGE: "large"
   RUNNER_SMALL: "small"
+  GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
+  GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
 
 steps:
   - group: ":knife: Pre-check"
@@ -165,7 +167,7 @@ steps:
                 - GOOS=darwin
                 - GOARCH=arm64
               command: ["task", "go:build-cli:ci"]
-  - group: ":database: atlas migrate"
+  - group: ":database: schema lint"
     key: "database"
     if: build.branch !~ /^renovate\//
     steps:
@@ -182,18 +184,50 @@ steps:
               dev-url: "docker://postgres/17/dev?search_path=public"
               dir: "file://db/migrations"
               step: lint
-      - label: ":rocket: atlas push"
-        if: build.branch == "main" && build.tag == null
-        key: "atlas_migrate"
+      - label: ":graphql: lint graphql schema"
+        key: "apollo-lint-schema"
+        soft_fail:
+          - exit_status: 1
+        cancel_on_build_failing: true
+        command: |
+          #!/bin/sh
+          lint_result_file=$$(mktemp)
+
+          # ignore exit code for now
+          set +e
+          result=$(rover graph check --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME --format plain -o $$lint_result_file 2>&1 > /dev/null)
+          set -e
+
+          output=$$(cat $$lint_result_file)
+
+          if [[ "$$output" = "" ]]; then
+              echo ""
+              echo "Linting Failed:"
+              echo "$${result#*error\[E043\]: }"
+
+              echo -e ":graphql: **Graphql Lint Failure**   <br /> $${result#*error\[E043\]: }" |  buildkite-agent annotate --context apollo-lint-schema --style error
+
+              exit 1
+          else
+              echo ""
+              echo "Linting Passed. See annotation for details."
+
+              echo -e ":graphql: **Graphql Lint Results** \n <details><summary> Linter Result </summary><code>$$output</code></details>" |  buildkite-agent annotate --context apollo-lint-schema --style success
+
+              exit 0
+          fi
+        artifact_paths: linter-result.txt
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
-                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.1.0:
-              project: core
-              dev-url: "docker://postgres/17/dev?search_path=public"
-              dir: "file://db/migrations"
-              step: migrate
+                APOLLO_KEY: APOLLO_KEY
+          - docker#v5.12.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              propagate-environment: true
+              environment:
+                - "APOLLO_KEY"
+                - "BUILDKITE_AGENT_ACCESS_TOKEN"
   - group: ":docker: Image Build"
     depends_on: "go-builds"
     if: build.branch !~ /^renovate\//
@@ -362,15 +396,12 @@ steps:
                 - NAME=${APP_NAME}
   - group: ":rocket: Publish"
     key: "publish"
-    if: build.tag != null
     steps:
       - label: ":graphql: publish graphql schema"
         key: "apollo-publish-schema"
+        if: build.tag != null
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
-        env:
-          GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
-          GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -381,3 +412,15 @@ steps:
               propagate-environment: true
               environment:
                 - "APOLLO_KEY"
+      - label: ":rocket: atlas push"
+        if: build.branch == "main" && build.tag == null
+        key: "atlas_migrate"
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
+          - theopenlane/atlas#v1.1.0:
+              project: core
+              dev-url: "docker://postgres/17/dev?search_path=public"
+              dir: "file://db/migrations"
+              step: migrate
