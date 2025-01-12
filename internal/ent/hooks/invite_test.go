@@ -7,11 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/iam/auth"
-
-	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 )
@@ -23,7 +22,7 @@ func TestSetRequestor(t *testing.T) {
 	require.NoError(t, err)
 
 	// create parent context
-	ctx := context.WithValue(userCtx.Request().Context(), echocontext.EchoContextKey, userCtx)
+	ctx := contextx.With(userCtx.Request().Context(), userCtx)
 
 	tests := []struct {
 		name    string
