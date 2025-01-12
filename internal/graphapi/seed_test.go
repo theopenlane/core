@@ -8,8 +8,8 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 )
 
 var (
@@ -147,7 +147,7 @@ func userContextWithID(userID string) (context.Context, error) {
 		return nil, err
 	}
 
-	reqCtx := context.WithValue(ec.Request().Context(), echocontext.EchoContextKey, ec)
+	reqCtx := contextx.With(ec.Request().Context(), ec)
 
 	ec.SetRequest(ec.Request().WithContext(reqCtx))
 
