@@ -57,7 +57,7 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 			}
 
 			q.WhereP(
-				sql.FieldIn("id", filter...),
+				sql.FieldIn("ref", filter...),
 			)
 		}
 
