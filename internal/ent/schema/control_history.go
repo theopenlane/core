@@ -99,6 +99,6 @@ func (ControlHistory) Indexes() []ent.Index {
 // Interceptors of the ControlHistory
 func (ControlHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, "control"),
+		interceptors.FilterListQuery(),
 	}
 }
