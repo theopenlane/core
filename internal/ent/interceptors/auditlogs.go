@@ -2,6 +2,7 @@ package interceptors
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -56,8 +57,10 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 				return err
 			}
 
+			idField := strings.ToLower(objectOwner + "_id")
+
 			q.WhereP(
-				sql.FieldIn("ref", filter...),
+				sql.FieldIn(idField, filter...),
 			)
 		}
 
