@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (gshq *GroupSettingHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		gshq.sql = prev
-	}
-	if groupsettinghistory.Policy == nil {
-		return errors.New("generated: uninitialized groupsettinghistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := groupsettinghistory.Policy.EvalQuery(ctx, gshq); err != nil {
-		return err
 	}
 	return nil
 }

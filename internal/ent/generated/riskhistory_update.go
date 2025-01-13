@@ -330,9 +330,7 @@ func (rhu *RiskHistoryUpdate) Mutation() *RiskHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (rhu *RiskHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := rhu.defaults(); err != nil {
-		return 0, err
-	}
+	rhu.defaults()
 	return withHooks(ctx, rhu.sqlSave, rhu.mutation, rhu.hooks)
 }
 
@@ -359,15 +357,11 @@ func (rhu *RiskHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (rhu *RiskHistoryUpdate) defaults() error {
+func (rhu *RiskHistoryUpdate) defaults() {
 	if _, ok := rhu.mutation.UpdatedAt(); !ok && !rhu.mutation.UpdatedAtCleared() {
-		if riskhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized riskhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := riskhistory.UpdateDefaultUpdatedAt()
 		rhu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -841,9 +835,7 @@ func (rhuo *RiskHistoryUpdateOne) Select(field string, fields ...string) *RiskHi
 
 // Save executes the query and returns the updated RiskHistory entity.
 func (rhuo *RiskHistoryUpdateOne) Save(ctx context.Context) (*RiskHistory, error) {
-	if err := rhuo.defaults(); err != nil {
-		return nil, err
-	}
+	rhuo.defaults()
 	return withHooks(ctx, rhuo.sqlSave, rhuo.mutation, rhuo.hooks)
 }
 
@@ -870,15 +862,11 @@ func (rhuo *RiskHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (rhuo *RiskHistoryUpdateOne) defaults() error {
+func (rhuo *RiskHistoryUpdateOne) defaults() {
 	if _, ok := rhuo.mutation.UpdatedAt(); !ok && !rhuo.mutation.UpdatedAtCleared() {
-		if riskhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized riskhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := riskhistory.UpdateDefaultUpdatedAt()
 		rhuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

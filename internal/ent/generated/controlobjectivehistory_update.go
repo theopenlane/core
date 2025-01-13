@@ -349,9 +349,7 @@ func (cohu *ControlObjectiveHistoryUpdate) Mutation() *ControlObjectiveHistoryMu
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cohu *ControlObjectiveHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := cohu.defaults(); err != nil {
-		return 0, err
-	}
+	cohu.defaults()
 	return withHooks(ctx, cohu.sqlSave, cohu.mutation, cohu.hooks)
 }
 
@@ -378,15 +376,11 @@ func (cohu *ControlObjectiveHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cohu *ControlObjectiveHistoryUpdate) defaults() error {
+func (cohu *ControlObjectiveHistoryUpdate) defaults() {
 	if _, ok := cohu.mutation.UpdatedAt(); !ok && !cohu.mutation.UpdatedAtCleared() {
-		if controlobjectivehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized controlobjectivehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := controlobjectivehistory.UpdateDefaultUpdatedAt()
 		cohu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -868,9 +862,7 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) Select(field string, fields ...st
 
 // Save executes the query and returns the updated ControlObjectiveHistory entity.
 func (cohuo *ControlObjectiveHistoryUpdateOne) Save(ctx context.Context) (*ControlObjectiveHistory, error) {
-	if err := cohuo.defaults(); err != nil {
-		return nil, err
-	}
+	cohuo.defaults()
 	return withHooks(ctx, cohuo.sqlSave, cohuo.mutation, cohuo.hooks)
 }
 
@@ -897,15 +889,11 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cohuo *ControlObjectiveHistoryUpdateOne) defaults() error {
+func (cohuo *ControlObjectiveHistoryUpdateOne) defaults() {
 	if _, ok := cohuo.mutation.UpdatedAt(); !ok && !cohuo.mutation.UpdatedAtCleared() {
-		if controlobjectivehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized controlobjectivehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := controlobjectivehistory.UpdateDefaultUpdatedAt()
 		cohuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

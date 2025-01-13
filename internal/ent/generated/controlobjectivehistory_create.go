@@ -324,9 +324,7 @@ func (cohc *ControlObjectiveHistoryCreate) Mutation() *ControlObjectiveHistoryMu
 
 // Save creates the ControlObjectiveHistory in the database.
 func (cohc *ControlObjectiveHistoryCreate) Save(ctx context.Context) (*ControlObjectiveHistory, error) {
-	if err := cohc.defaults(); err != nil {
-		return nil, err
-	}
+	cohc.defaults()
 	return withHooks(ctx, cohc.sqlSave, cohc.mutation, cohc.hooks)
 }
 
@@ -353,32 +351,20 @@ func (cohc *ControlObjectiveHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cohc *ControlObjectiveHistoryCreate) defaults() error {
+func (cohc *ControlObjectiveHistoryCreate) defaults() {
 	if _, ok := cohc.mutation.HistoryTime(); !ok {
-		if controlobjectivehistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := controlobjectivehistory.DefaultHistoryTime()
 		cohc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := cohc.mutation.CreatedAt(); !ok {
-		if controlobjectivehistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := controlobjectivehistory.DefaultCreatedAt()
 		cohc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := cohc.mutation.UpdatedAt(); !ok {
-		if controlobjectivehistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := controlobjectivehistory.DefaultUpdatedAt()
 		cohc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := cohc.mutation.MappingID(); !ok {
-		if controlobjectivehistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := controlobjectivehistory.DefaultMappingID()
 		cohc.mutation.SetMappingID(v)
 	}
@@ -387,13 +373,9 @@ func (cohc *ControlObjectiveHistoryCreate) defaults() error {
 		cohc.mutation.SetTags(v)
 	}
 	if _, ok := cohc.mutation.ID(); !ok {
-		if controlobjectivehistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := controlobjectivehistory.DefaultID()
 		cohc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -125,9 +125,7 @@ func (gmhu *GroupMembershipHistoryUpdate) Mutation() *GroupMembershipHistoryMuta
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (gmhu *GroupMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := gmhu.defaults(); err != nil {
-		return 0, err
-	}
+	gmhu.defaults()
 	return withHooks(ctx, gmhu.sqlSave, gmhu.mutation, gmhu.hooks)
 }
 
@@ -154,15 +152,11 @@ func (gmhu *GroupMembershipHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (gmhu *GroupMembershipHistoryUpdate) defaults() error {
+func (gmhu *GroupMembershipHistoryUpdate) defaults() {
 	if _, ok := gmhu.mutation.UpdatedAt(); !ok && !gmhu.mutation.UpdatedAtCleared() {
-		if groupmembershiphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized groupmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := groupmembershiphistory.UpdateDefaultUpdatedAt()
 		gmhu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -359,9 +353,7 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) Select(field string, fields ...str
 
 // Save executes the query and returns the updated GroupMembershipHistory entity.
 func (gmhuo *GroupMembershipHistoryUpdateOne) Save(ctx context.Context) (*GroupMembershipHistory, error) {
-	if err := gmhuo.defaults(); err != nil {
-		return nil, err
-	}
+	gmhuo.defaults()
 	return withHooks(ctx, gmhuo.sqlSave, gmhuo.mutation, gmhuo.hooks)
 }
 
@@ -388,15 +380,11 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (gmhuo *GroupMembershipHistoryUpdateOne) defaults() error {
+func (gmhuo *GroupMembershipHistoryUpdateOne) defaults() {
 	if _, ok := gmhuo.mutation.UpdatedAt(); !ok && !gmhuo.mutation.UpdatedAtCleared() {
-		if groupmembershiphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized groupmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := groupmembershiphistory.UpdateDefaultUpdatedAt()
 		gmhuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

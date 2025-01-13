@@ -310,15 +310,6 @@ func init() {
 	contactDescID := contactMixinFields1[0].Descriptor()
 	// contact.DefaultID holds the default value on creation for the id field.
 	contact.DefaultID = contactDescID.Default.(func() string)
-	contacthistory.Policy = privacy.NewPolicies(schema.ContactHistory{})
-	contacthistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := contacthistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	contacthistoryInters := schema.ContactHistory{}.Interceptors()
 	contacthistory.Interceptors[0] = contacthistoryInters[0]
 	contacthistoryFields := schema.ContactHistory{}.Fields()
@@ -423,15 +414,6 @@ func init() {
 	controlDescID := controlMixinFields2[0].Descriptor()
 	// control.DefaultID holds the default value on creation for the id field.
 	control.DefaultID = controlDescID.Default.(func() string)
-	controlhistory.Policy = privacy.NewPolicies(schema.ControlHistory{})
-	controlhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := controlhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	controlhistoryInters := schema.ControlHistory{}.Interceptors()
 	controlhistory.Interceptors[0] = controlhistoryInters[0]
 	controlhistoryFields := schema.ControlHistory{}.Fields()
@@ -536,15 +518,6 @@ func init() {
 	controlobjectiveDescID := controlobjectiveMixinFields2[0].Descriptor()
 	// controlobjective.DefaultID holds the default value on creation for the id field.
 	controlobjective.DefaultID = controlobjectiveDescID.Default.(func() string)
-	controlobjectivehistory.Policy = privacy.NewPolicies(schema.ControlObjectiveHistory{})
-	controlobjectivehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := controlobjectivehistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	controlobjectivehistoryInters := schema.ControlObjectiveHistory{}.Interceptors()
 	controlobjectivehistory.Interceptors[0] = controlobjectivehistoryInters[0]
 	controlobjectivehistoryFields := schema.ControlObjectiveHistory{}.Fields()
@@ -634,15 +607,6 @@ func init() {
 	documentdataDescID := documentdataMixinFields1[0].Descriptor()
 	// documentdata.DefaultID holds the default value on creation for the id field.
 	documentdata.DefaultID = documentdataDescID.Default.(func() string)
-	documentdatahistory.Policy = privacy.NewPolicies(schema.DocumentDataHistory{})
-	documentdatahistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := documentdatahistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	documentdatahistoryInters := schema.DocumentDataHistory{}.Interceptors()
 	documentdatahistory.Interceptors[0] = documentdatahistoryInters[0]
 	documentdatahistoryFields := schema.DocumentDataHistory{}.Fields()
@@ -855,15 +819,6 @@ func init() {
 	entityDescID := entityMixinFields1[0].Descriptor()
 	// entity.DefaultID holds the default value on creation for the id field.
 	entity.DefaultID = entityDescID.Default.(func() string)
-	entityhistory.Policy = privacy.NewPolicies(schema.EntityHistory{})
-	entityhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := entityhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	entityhistoryInters := schema.EntityHistory{}.Interceptors()
 	entityhistory.Interceptors[0] = entityhistoryInters[0]
 	entityhistoryFields := schema.EntityHistory{}.Fields()
@@ -975,15 +930,6 @@ func init() {
 	entitytypeDescID := entitytypeMixinFields1[0].Descriptor()
 	// entitytype.DefaultID holds the default value on creation for the id field.
 	entitytype.DefaultID = entitytypeDescID.Default.(func() string)
-	entitytypehistory.Policy = privacy.NewPolicies(schema.EntityTypeHistory{})
-	entitytypehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := entitytypehistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	entitytypehistoryInters := schema.EntityTypeHistory{}.Interceptors()
 	entitytypehistory.Interceptors[0] = entitytypehistoryInters[0]
 	entitytypehistoryFields := schema.EntityTypeHistory{}.Fields()
@@ -1133,15 +1079,6 @@ func init() {
 	fileDescID := fileMixinFields2[0].Descriptor()
 	// file.DefaultID holds the default value on creation for the id field.
 	file.DefaultID = fileDescID.Default.(func() string)
-	filehistory.Policy = privacy.NewPolicies(schema.FileHistory{})
-	filehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := filehistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	filehistoryInters := schema.FileHistory{}.Interceptors()
 	filehistory.Interceptors[0] = filehistoryInters[0]
 	filehistoryFields := schema.FileHistory{}.Fields()
@@ -1248,15 +1185,6 @@ func init() {
 	groupDescID := groupMixinFields2[0].Descriptor()
 	// group.DefaultID holds the default value on creation for the id field.
 	group.DefaultID = groupDescID.Default.(func() string)
-	grouphistory.Policy = privacy.NewPolicies(schema.GroupHistory{})
-	grouphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := grouphistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	grouphistoryInters := schema.GroupHistory{}.Interceptors()
 	grouphistory.Interceptors[0] = grouphistoryInters[0]
 	grouphistoryFields := schema.GroupHistory{}.Fields()
@@ -1336,15 +1264,6 @@ func init() {
 	groupmembershipDescID := groupmembershipMixinFields1[0].Descriptor()
 	// groupmembership.DefaultID holds the default value on creation for the id field.
 	groupmembership.DefaultID = groupmembershipDescID.Default.(func() string)
-	groupmembershiphistory.Policy = privacy.NewPolicies(schema.GroupMembershipHistory{})
-	groupmembershiphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := groupmembershiphistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	groupmembershiphistoryInters := schema.GroupMembershipHistory{}.Interceptors()
 	groupmembershiphistory.Interceptors[0] = groupmembershiphistoryInters[0]
 	groupmembershiphistoryFields := schema.GroupMembershipHistory{}.Fields()
@@ -1427,15 +1346,6 @@ func init() {
 	groupsettingDescID := groupsettingMixinFields1[0].Descriptor()
 	// groupsetting.DefaultID holds the default value on creation for the id field.
 	groupsetting.DefaultID = groupsettingDescID.Default.(func() string)
-	groupsettinghistory.Policy = privacy.NewPolicies(schema.GroupSettingHistory{})
-	groupsettinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := groupsettinghistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	groupsettinghistoryInters := schema.GroupSettingHistory{}.Interceptors()
 	groupsettinghistory.Interceptors[0] = groupsettinghistoryInters[0]
 	groupsettinghistoryFields := schema.GroupSettingHistory{}.Fields()
@@ -1600,15 +1510,6 @@ func init() {
 	integrationDescID := integrationMixinFields1[0].Descriptor()
 	// integration.DefaultID holds the default value on creation for the id field.
 	integration.DefaultID = integrationDescID.Default.(func() string)
-	integrationhistory.Policy = privacy.NewPolicies(schema.IntegrationHistory{})
-	integrationhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := integrationhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	integrationhistoryInters := schema.IntegrationHistory{}.Interceptors()
 	integrationhistory.Interceptors[0] = integrationhistoryInters[0]
 	integrationhistoryFields := schema.IntegrationHistory{}.Fields()
@@ -1710,15 +1611,6 @@ func init() {
 	internalpolicyDescID := internalpolicyMixinFields2[0].Descriptor()
 	// internalpolicy.DefaultID holds the default value on creation for the id field.
 	internalpolicy.DefaultID = internalpolicyDescID.Default.(func() string)
-	internalpolicyhistory.Policy = privacy.NewPolicies(schema.InternalPolicyHistory{})
-	internalpolicyhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := internalpolicyhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	internalpolicyhistoryInters := schema.InternalPolicyHistory{}.Interceptors()
 	internalpolicyhistory.Interceptors[0] = internalpolicyhistoryInters[0]
 	internalpolicyhistoryFields := schema.InternalPolicyHistory{}.Fields()
@@ -1919,15 +1811,6 @@ func init() {
 	narrativeDescID := narrativeMixinFields2[0].Descriptor()
 	// narrative.DefaultID holds the default value on creation for the id field.
 	narrative.DefaultID = narrativeDescID.Default.(func() string)
-	narrativehistory.Policy = privacy.NewPolicies(schema.NarrativeHistory{})
-	narrativehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := narrativehistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	narrativehistoryInters := schema.NarrativeHistory{}.Interceptors()
 	narrativehistory.Interceptors[0] = narrativehistoryInters[0]
 	narrativehistoryFields := schema.NarrativeHistory{}.Fields()
@@ -2021,15 +1904,6 @@ func init() {
 	noteDescID := noteMixinFields1[0].Descriptor()
 	// note.DefaultID holds the default value on creation for the id field.
 	note.DefaultID = noteDescID.Default.(func() string)
-	notehistory.Policy = privacy.NewPolicies(schema.NoteHistory{})
-	notehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := notehistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	notehistoryInters := schema.NoteHistory{}.Interceptors()
 	notehistory.Interceptors[0] = notehistoryInters[0]
 	notehistoryFields := schema.NoteHistory{}.Fields()
@@ -2110,15 +1984,6 @@ func init() {
 	orgmembershipDescID := orgmembershipMixinFields1[0].Descriptor()
 	// orgmembership.DefaultID holds the default value on creation for the id field.
 	orgmembership.DefaultID = orgmembershipDescID.Default.(func() string)
-	orgmembershiphistory.Policy = privacy.NewPolicies(schema.OrgMembershipHistory{})
-	orgmembershiphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := orgmembershiphistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	orgmembershiphistoryInters := schema.OrgMembershipHistory{}.Interceptors()
 	orgmembershiphistory.Interceptors[0] = orgmembershiphistoryInters[0]
 	orgmembershiphistoryFields := schema.OrgMembershipHistory{}.Fields()
@@ -2354,15 +2219,6 @@ func init() {
 	organizationDescID := organizationMixinFields1[0].Descriptor()
 	// organization.DefaultID holds the default value on creation for the id field.
 	organization.DefaultID = organizationDescID.Default.(func() string)
-	organizationhistory.Policy = privacy.NewPolicies(schema.OrganizationHistory{})
-	organizationhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := organizationhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	organizationhistoryInters := schema.OrganizationHistory{}.Interceptors()
 	organizationhistory.Interceptors[0] = organizationhistoryInters[0]
 	organizationhistoryFields := schema.OrganizationHistory{}.Fields()
@@ -2471,15 +2327,6 @@ func init() {
 	organizationsettingDescID := organizationsettingMixinFields1[0].Descriptor()
 	// organizationsetting.DefaultID holds the default value on creation for the id field.
 	organizationsetting.DefaultID = organizationsettingDescID.Default.(func() string)
-	organizationsettinghistory.Policy = privacy.NewPolicies(schema.OrganizationSettingHistory{})
-	organizationsettinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := organizationsettinghistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	organizationsettinghistoryInters := schema.OrganizationSettingHistory{}.Interceptors()
 	organizationsettinghistory.Interceptors[0] = organizationsettinghistoryInters[0]
 	organizationsettinghistoryFields := schema.OrganizationSettingHistory{}.Fields()
@@ -2729,15 +2576,6 @@ func init() {
 	procedureDescID := procedureMixinFields2[0].Descriptor()
 	// procedure.DefaultID holds the default value on creation for the id field.
 	procedure.DefaultID = procedureDescID.Default.(func() string)
-	procedurehistory.Policy = privacy.NewPolicies(schema.ProcedureHistory{})
-	procedurehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := procedurehistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	procedurehistoryInters := schema.ProcedureHistory{}.Interceptors()
 	procedurehistory.Interceptors[0] = procedurehistoryInters[0]
 	procedurehistoryFields := schema.ProcedureHistory{}.Fields()
@@ -2855,15 +2693,6 @@ func init() {
 	programDescID := programMixinFields1[0].Descriptor()
 	// program.DefaultID holds the default value on creation for the id field.
 	program.DefaultID = programDescID.Default.(func() string)
-	programhistory.Policy = privacy.NewPolicies(schema.ProgramHistory{})
-	programhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := programhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	programhistoryInters := schema.ProgramHistory{}.Interceptors()
 	programhistory.Interceptors[0] = programhistoryInters[0]
 	programhistoryFields := schema.ProgramHistory{}.Fields()
@@ -2951,15 +2780,6 @@ func init() {
 	programmembershipDescID := programmembershipMixinFields1[0].Descriptor()
 	// programmembership.DefaultID holds the default value on creation for the id field.
 	programmembership.DefaultID = programmembershipDescID.Default.(func() string)
-	programmembershiphistory.Policy = privacy.NewPolicies(schema.ProgramMembershipHistory{})
-	programmembershiphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := programmembershiphistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	programmembershiphistoryInters := schema.ProgramMembershipHistory{}.Interceptors()
 	programmembershiphistory.Interceptors[0] = programmembershiphistoryInters[0]
 	programmembershiphistoryFields := schema.ProgramMembershipHistory{}.Fields()
@@ -3060,15 +2880,6 @@ func init() {
 	riskDescID := riskMixinFields2[0].Descriptor()
 	// risk.DefaultID holds the default value on creation for the id field.
 	risk.DefaultID = riskDescID.Default.(func() string)
-	riskhistory.Policy = privacy.NewPolicies(schema.RiskHistory{})
-	riskhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := riskhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	riskhistoryInters := schema.RiskHistory{}.Interceptors()
 	riskhistory.Interceptors[0] = riskhistoryInters[0]
 	riskhistoryFields := schema.RiskHistory{}.Fields()
@@ -3238,15 +3049,6 @@ func init() {
 	subcontrolDescID := subcontrolMixinFields2[0].Descriptor()
 	// subcontrol.DefaultID holds the default value on creation for the id field.
 	subcontrol.DefaultID = subcontrolDescID.Default.(func() string)
-	subcontrolhistory.Policy = privacy.NewPolicies(schema.SubcontrolHistory{})
-	subcontrolhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := subcontrolhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	subcontrolhistoryInters := schema.SubcontrolHistory{}.Interceptors()
 	subcontrolhistory.Interceptors[0] = subcontrolhistoryInters[0]
 	subcontrolhistoryFields := schema.SubcontrolHistory{}.Fields()
@@ -3488,15 +3290,6 @@ func init() {
 	taskDescID := taskMixinFields1[0].Descriptor()
 	// task.DefaultID holds the default value on creation for the id field.
 	task.DefaultID = taskDescID.Default.(func() string)
-	taskhistory.Policy = privacy.NewPolicies(schema.TaskHistory{})
-	taskhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := taskhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	taskhistoryInters := schema.TaskHistory{}.Interceptors()
 	taskhistory.Interceptors[0] = taskhistoryInters[0]
 	taskhistoryFields := schema.TaskHistory{}.Fields()
@@ -3590,15 +3383,6 @@ func init() {
 	templateDescID := templateMixinFields2[0].Descriptor()
 	// template.DefaultID holds the default value on creation for the id field.
 	template.DefaultID = templateDescID.Default.(func() string)
-	templatehistory.Policy = privacy.NewPolicies(schema.TemplateHistory{})
-	templatehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := templatehistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	templatehistoryInters := schema.TemplateHistory{}.Interceptors()
 	templatehistory.Interceptors[0] = templatehistoryInters[0]
 	templatehistoryFields := schema.TemplateHistory{}.Fields()

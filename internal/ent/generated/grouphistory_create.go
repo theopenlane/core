@@ -256,9 +256,7 @@ func (ghc *GroupHistoryCreate) Mutation() *GroupHistoryMutation {
 
 // Save creates the GroupHistory in the database.
 func (ghc *GroupHistoryCreate) Save(ctx context.Context) (*GroupHistory, error) {
-	if err := ghc.defaults(); err != nil {
-		return nil, err
-	}
+	ghc.defaults()
 	return withHooks(ctx, ghc.sqlSave, ghc.mutation, ghc.hooks)
 }
 
@@ -285,32 +283,20 @@ func (ghc *GroupHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ghc *GroupHistoryCreate) defaults() error {
+func (ghc *GroupHistoryCreate) defaults() {
 	if _, ok := ghc.mutation.HistoryTime(); !ok {
-		if grouphistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized grouphistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := grouphistory.DefaultHistoryTime()
 		ghc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := ghc.mutation.CreatedAt(); !ok {
-		if grouphistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized grouphistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := grouphistory.DefaultCreatedAt()
 		ghc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ghc.mutation.UpdatedAt(); !ok {
-		if grouphistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized grouphistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := grouphistory.DefaultUpdatedAt()
 		ghc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := ghc.mutation.MappingID(); !ok {
-		if grouphistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized grouphistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := grouphistory.DefaultMappingID()
 		ghc.mutation.SetMappingID(v)
 	}
@@ -323,13 +309,9 @@ func (ghc *GroupHistoryCreate) defaults() error {
 		ghc.mutation.SetDisplayName(v)
 	}
 	if _, ok := ghc.mutation.ID(); !ok {
-		if grouphistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized grouphistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := grouphistory.DefaultID()
 		ghc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

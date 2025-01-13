@@ -2,9 +2,11 @@ package interceptors
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -28,9 +30,20 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 		return nil
 	}
 
+	isHistory := strings.Contains(q.Type(), "History")
+
 	objectIDs, err := GetAuthorizedObjectIDs(ctx, q.Type())
 	if err != nil {
 		return err
+	}
+
+	// if the query is a history query, we need to filter by the ref field
+	if isHistory {
+		q.WhereP(
+			sql.FieldIn("ref", objectIDs...),
+		)
+
+		return nil
 	}
 
 	// filter the query to only include the files that the user has access to
@@ -43,17 +56,28 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 
 // GetAuthorizedObjectIDs does a list objects request to pull all ids the current user
 // has access to within the FGA system
-func GetAuthorizedObjectIDs(ctx context.Context, objectType string) ([]string, error) {
+func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, error) {
 	userID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
 		return []string{}, nil
 	}
+
+	// get the type of the query, removing the History suffix
+	objectType := strings.Replace(queryType, "History", "", 1)
 
 	req := fgax.ListRequest{
 		SubjectID:   userID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		ObjectType:  strcase.SnakeCase(objectType),
 	}
+
+	if strings.Contains(queryType, "History") {
+		log.Warn().Msg("adding relation to list request")
+
+		req.Relation = fgax.CanViewAuditLog
+	}
+
+	log.Info().Interface("req", req).Msg("getting authorized object ids")
 
 	resp, err := utils.AuthzClientFromContext(ctx).ListObjectsRequest(ctx, req)
 	if err != nil {

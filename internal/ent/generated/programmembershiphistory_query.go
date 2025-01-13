@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (pmhq *ProgramMembershipHistoryQuery) prepareQuery(ctx context.Context) err
 			return err
 		}
 		pmhq.sql = prev
-	}
-	if programmembershiphistory.Policy == nil {
-		return errors.New("generated: uninitialized programmembershiphistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := programmembershiphistory.Policy.EvalQuery(ctx, pmhq); err != nil {
-		return err
 	}
 	return nil
 }

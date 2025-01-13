@@ -40,7 +40,7 @@ type organization
     define can_view: [service] or member or admin or owner or can_edit or can_view from parent
     # additional fine-grained permissions
     # allow owner and assigned users to view audit logs
-    define audit_log_viewer: [user] or owner or audit_log_viewer from parent
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     # allow members to invite other members
     define can_invite_members: [user] or member or can_edit or can_invite_members from parent
     # only allow users with edit access to the org to invite other admins
@@ -98,13 +98,14 @@ type group
     define can_edit: [service] or admin or owner from parent or can_edit from parent
     define can_view: [service] or member or admin or can_view from parent
     # additional fine-grained permissions
-    define audit_log_viewer: [user] or audit_log_viewer from parent
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
 # files have their permissions defined by the parent object (like a control or a procedure), users with access to the parent object will have access to the file
 type file
   relations
     define can_view: [user] or can_delete or can_edit or can_view from parent
     define can_edit: [user] or can_delete or can_edit from parent
     define can_delete: [user] or can_delete from parent
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, program, organization, control, procedure, group, template, document_data, contact, internal_policy, narrative]
 # programs are associated with an organization but do not inherit access from the organization with
 # the exception of the owner of the organization who will have access to all programs
@@ -131,7 +132,7 @@ type program
     # allow users or groups to be blocked from view + edit access
     define blocked: [user, group#member]
     # allow owner and assigned users to view audit logs
-    define audit_log_viewer: [user] or admin
+    define audit_log_viewer: ([user, service] or admin or audit_log_viewer from parent) and can_view
     # allow members to invite other members
     define can_invite_members: [user] or member or can_edit
     # only allow users with edit access to the org to invite other admins
@@ -146,6 +147,7 @@ type control
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
     define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program]
     define viewer: [group#member]
     define editor: [group#member]
@@ -157,6 +159,7 @@ type subcontrol
     define can_view: [user] or can_view from parent
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, control]
 # control objectives inherit access from the associated program or from associated groups
 # the control objective author will be assigned as an admin of the control objective
@@ -165,6 +168,7 @@ type control_objective
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
     define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program]
     define viewer: [group#member]
     define editor: [group#member]
@@ -177,6 +181,7 @@ type risk
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
     define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program]
     define viewer: [group#member]
     define editor: [group#member]
@@ -189,6 +194,7 @@ type narrative
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
     define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program]
     define viewer: [group#member]
     define editor: [group#member]
@@ -201,6 +207,7 @@ type internal_policy
     define can_view: ([user] and member from parent) or admin or ((can_view from parent or viewer) but not blocked)
     define can_edit: ([user] and member from parent) or admin or (editor but not blocked)
     define can_delete: ([user] and member from parent) or admin or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     # the parent of the policy will be the organization, not all permissions will be inherited
     define parent: [organization]
     # allow a user or service to be assigned to add edit permissions
@@ -219,6 +226,7 @@ type procedure
     define can_view: ([user] and member from parent) or admin or ((can_view from parent or viewer) but not blocked)
     define can_edit: ([user] and member from parent) or admin or (editor but not blocked)
     define can_delete: ([user] and member from parent) or admin or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     # the parent of the procedure will be the organization, not all permissions will be inherited
     define parent: [organization]
     # allow a user or service to be assigned to add edit permissions
@@ -238,6 +246,7 @@ type template
     define can_view: [user] or ((can_view from parent or viewer) but not blocked)
     define can_edit: [user] or (editor but not blocked)
     define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [organization]
     # allow a group to be assigned to add edit/view permissions for a set of users
     define editor: [group#member]
@@ -251,6 +260,7 @@ type document_data
     define can_view: [user] or  ((can_view from parent or viewer) but not blocked)
     define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [template]
     # allow a group to be assigned to add edit/view permissions for a set of users
     define editor: [group#member]
@@ -263,6 +273,7 @@ type contact
   relations
     define can_view: ([user] and member from parent) or ((can_view from parent or viewer) but not blocked)
     define can_edit: ([user] and member from parent) or ((can_edit from parent or editor) but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define can_delete: ([user] and member from parent) or can_delete from parent
     # allow a group to be assigned to add edit permissions for a set of users
     define editor: [group#member]
@@ -278,4 +289,5 @@ type task
     define can_edit: [user, service] or assignee or can_delete or can_edit from parent
     define can_delete: [user, service] or can_delete from parent
     define assignee: [user]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program, organization, control, procedure, group, internal_policy, subcontrol, control_objective]

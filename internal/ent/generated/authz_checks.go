@@ -427,7 +427,7 @@ func (q *ContactHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -646,7 +646,7 @@ func (q *ControlHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "control",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -865,7 +865,7 @@ func (q *ControlObjectiveHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "control_objective",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -1112,7 +1112,7 @@ func (q *DocumentDataHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -1359,7 +1359,7 @@ func (q *EntityHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -1606,7 +1606,7 @@ func (q *EntityTypeHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -1825,7 +1825,7 @@ func (q *FileHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "file",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -2044,7 +2044,7 @@ func (q *GroupHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "group",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -2303,7 +2303,7 @@ func (q *GroupMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "group",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -2562,7 +2562,7 @@ func (q *GroupSettingHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "group",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -2809,7 +2809,7 @@ func (q *IntegrationHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -3028,7 +3028,7 @@ func (q *InternalPolicyHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "internal_policy",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -3421,7 +3421,7 @@ func (q *NarrativeHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "narrative",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -3668,7 +3668,7 @@ func (q *NoteHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -3927,7 +3927,7 @@ func (q *OrgMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -4146,7 +4146,7 @@ func (q *OrganizationHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -4405,7 +4405,7 @@ func (q *OrganizationSettingHistoryQuery) CheckAccess(ctx context.Context) error
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -4624,7 +4624,7 @@ func (q *ProcedureHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "procedure",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -4843,7 +4843,7 @@ func (q *ProgramHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "program",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -5102,7 +5102,7 @@ func (q *ProgramMembershipHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "program",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -5321,7 +5321,7 @@ func (q *RiskHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "risk",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -5540,7 +5540,7 @@ func (q *SubcontrolHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "subcontrol",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -5933,7 +5933,7 @@ func (q *TaskHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "task",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,
@@ -6180,7 +6180,7 @@ func (q *TemplateHistoryQuery) CheckAccess(ctx context.Context) error {
 
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
+		Relation:    fgax.CanViewAuditLog,
 		ObjectType:  "organization",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		SubjectID:   subjectID,

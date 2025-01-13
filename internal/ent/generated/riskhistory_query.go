@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -332,12 +331,6 @@ func (rhq *RiskHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		rhq.sql = prev
-	}
-	if riskhistory.Policy == nil {
-		return errors.New("generated: uninitialized riskhistory.Policy (forgotten import generated/runtime?)")
-	}
-	if err := riskhistory.Policy.EvalQuery(ctx, rhq); err != nil {
-		return err
 	}
 	return nil
 }

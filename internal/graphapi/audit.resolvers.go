@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"entgo.io/contrib/entgql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
@@ -20,15 +21,15 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 		err       error
 	)
 
-	if where.Table != nil {
+	if where != nil && where.Table != nil {
 		auditLogs, err = withTransactionalMutation(ctx).AuditWithFilter(ctx, *where.Table)
 		if err != nil {
-			return nil, err
+			return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
 		}
 	} else {
 		auditLogs, err = withTransactionalMutation(ctx).Audit(ctx)
 		if err != nil {
-			return nil, err
+			return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
 		}
 	}
 
@@ -38,6 +39,8 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 		Edges:      []*model.AuditLogEdge{},
 		TotalCount: count,
 	}
+
+	log.Warn().Msgf("audit logs: %d", count)
 
 	for i, auditLog := range auditLogs {
 		// skip the header
@@ -54,7 +57,7 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 		// Thu Jul 18 17:30:19 2024
 		ts, err := time.Parse("Mon Jan 02 15:04:05 2006", auditLog[2])
 		if err != nil {
-			return nil, err
+			return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
 		}
 
 		op := auditLog[3]

@@ -394,9 +394,7 @@ func (shc *SubcontrolHistoryCreate) Mutation() *SubcontrolHistoryMutation {
 
 // Save creates the SubcontrolHistory in the database.
 func (shc *SubcontrolHistoryCreate) Save(ctx context.Context) (*SubcontrolHistory, error) {
-	if err := shc.defaults(); err != nil {
-		return nil, err
-	}
+	shc.defaults()
 	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
 }
 
@@ -423,32 +421,20 @@ func (shc *SubcontrolHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *SubcontrolHistoryCreate) defaults() error {
+func (shc *SubcontrolHistoryCreate) defaults() {
 	if _, ok := shc.mutation.HistoryTime(); !ok {
-		if subcontrolhistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := subcontrolhistory.DefaultHistoryTime()
 		shc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := shc.mutation.CreatedAt(); !ok {
-		if subcontrolhistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := subcontrolhistory.DefaultCreatedAt()
 		shc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := shc.mutation.UpdatedAt(); !ok {
-		if subcontrolhistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := subcontrolhistory.DefaultUpdatedAt()
 		shc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := shc.mutation.MappingID(); !ok {
-		if subcontrolhistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := subcontrolhistory.DefaultMappingID()
 		shc.mutation.SetMappingID(v)
 	}
@@ -457,13 +443,9 @@ func (shc *SubcontrolHistoryCreate) defaults() error {
 		shc.mutation.SetTags(v)
 	}
 	if _, ok := shc.mutation.ID(); !ok {
-		if subcontrolhistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := subcontrolhistory.DefaultID()
 		shc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

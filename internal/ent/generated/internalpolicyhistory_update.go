@@ -295,9 +295,7 @@ func (iphu *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutati
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (iphu *InternalPolicyHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := iphu.defaults(); err != nil {
-		return 0, err
-	}
+	iphu.defaults()
 	return withHooks(ctx, iphu.sqlSave, iphu.mutation, iphu.hooks)
 }
 
@@ -324,15 +322,11 @@ func (iphu *InternalPolicyHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (iphu *InternalPolicyHistoryUpdate) defaults() error {
+func (iphu *InternalPolicyHistoryUpdate) defaults() {
 	if _, ok := iphu.mutation.UpdatedAt(); !ok && !iphu.mutation.UpdatedAtCleared() {
-		if internalpolicyhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized internalpolicyhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := internalpolicyhistory.UpdateDefaultUpdatedAt()
 		iphu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -745,9 +739,7 @@ func (iphuo *InternalPolicyHistoryUpdateOne) Select(field string, fields ...stri
 
 // Save executes the query and returns the updated InternalPolicyHistory entity.
 func (iphuo *InternalPolicyHistoryUpdateOne) Save(ctx context.Context) (*InternalPolicyHistory, error) {
-	if err := iphuo.defaults(); err != nil {
-		return nil, err
-	}
+	iphuo.defaults()
 	return withHooks(ctx, iphuo.sqlSave, iphuo.mutation, iphuo.hooks)
 }
 
@@ -774,15 +766,11 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (iphuo *InternalPolicyHistoryUpdateOne) defaults() error {
+func (iphuo *InternalPolicyHistoryUpdateOne) defaults() {
 	if _, ok := iphuo.mutation.UpdatedAt(); !ok && !iphuo.mutation.UpdatedAtCleared() {
-		if internalpolicyhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized internalpolicyhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := internalpolicyhistory.UpdateDefaultUpdatedAt()
 		iphuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

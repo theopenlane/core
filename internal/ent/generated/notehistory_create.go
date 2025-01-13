@@ -200,9 +200,7 @@ func (nhc *NoteHistoryCreate) Mutation() *NoteHistoryMutation {
 
 // Save creates the NoteHistory in the database.
 func (nhc *NoteHistoryCreate) Save(ctx context.Context) (*NoteHistory, error) {
-	if err := nhc.defaults(); err != nil {
-		return nil, err
-	}
+	nhc.defaults()
 	return withHooks(ctx, nhc.sqlSave, nhc.mutation, nhc.hooks)
 }
 
@@ -229,32 +227,20 @@ func (nhc *NoteHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhc *NoteHistoryCreate) defaults() error {
+func (nhc *NoteHistoryCreate) defaults() {
 	if _, ok := nhc.mutation.HistoryTime(); !ok {
-		if notehistory.DefaultHistoryTime == nil {
-			return fmt.Errorf("generated: uninitialized notehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
-		}
 		v := notehistory.DefaultHistoryTime()
 		nhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := nhc.mutation.CreatedAt(); !ok {
-		if notehistory.DefaultCreatedAt == nil {
-			return fmt.Errorf("generated: uninitialized notehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
-		}
 		v := notehistory.DefaultCreatedAt()
 		nhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := nhc.mutation.UpdatedAt(); !ok {
-		if notehistory.DefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized notehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := notehistory.DefaultUpdatedAt()
 		nhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := nhc.mutation.MappingID(); !ok {
-		if notehistory.DefaultMappingID == nil {
-			return fmt.Errorf("generated: uninitialized notehistory.DefaultMappingID (forgotten import generated/runtime?)")
-		}
 		v := notehistory.DefaultMappingID()
 		nhc.mutation.SetMappingID(v)
 	}
@@ -263,13 +249,9 @@ func (nhc *NoteHistoryCreate) defaults() error {
 		nhc.mutation.SetTags(v)
 	}
 	if _, ok := nhc.mutation.ID(); !ok {
-		if notehistory.DefaultID == nil {
-			return fmt.Errorf("generated: uninitialized notehistory.DefaultID (forgotten import generated/runtime?)")
-		}
 		v := notehistory.DefaultID()
 		nhc.mutation.SetID(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

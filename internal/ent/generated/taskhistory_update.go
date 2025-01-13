@@ -230,9 +230,7 @@ func (thu *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (thu *TaskHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := thu.defaults(); err != nil {
-		return 0, err
-	}
+	thu.defaults()
 	return withHooks(ctx, thu.sqlSave, thu.mutation, thu.hooks)
 }
 
@@ -259,15 +257,11 @@ func (thu *TaskHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (thu *TaskHistoryUpdate) defaults() error {
+func (thu *TaskHistoryUpdate) defaults() {
 	if _, ok := thu.mutation.UpdatedAt(); !ok && !thu.mutation.UpdatedAtCleared() {
-		if taskhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized taskhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := taskhistory.UpdateDefaultUpdatedAt()
 		thu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -606,9 +600,7 @@ func (thuo *TaskHistoryUpdateOne) Select(field string, fields ...string) *TaskHi
 
 // Save executes the query and returns the updated TaskHistory entity.
 func (thuo *TaskHistoryUpdateOne) Save(ctx context.Context) (*TaskHistory, error) {
-	if err := thuo.defaults(); err != nil {
-		return nil, err
-	}
+	thuo.defaults()
 	return withHooks(ctx, thuo.sqlSave, thuo.mutation, thuo.hooks)
 }
 
@@ -635,15 +627,11 @@ func (thuo *TaskHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (thuo *TaskHistoryUpdateOne) defaults() error {
+func (thuo *TaskHistoryUpdateOne) defaults() {
 	if _, ok := thuo.mutation.UpdatedAt(); !ok && !thuo.mutation.UpdatedAtCleared() {
-		if taskhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized taskhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
-		}
 		v := taskhistory.UpdateDefaultUpdatedAt()
 		thuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
