@@ -40,7 +40,7 @@ type organization
     define can_view: [service] or member or admin or owner or can_edit or can_view from parent
     # additional fine-grained permissions
     # allow owner and assigned users to view audit logs
-    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define audit_log_viewer: ([user, service] or owner or audit_log_viewer from parent) and can_view
     # allow members to invite other members
     define can_invite_members: [user] or member or can_edit or can_invite_members from parent
     # only allow users with edit access to the org to invite other admins
