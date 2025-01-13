@@ -70,6 +70,8 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 // FindOrCreateCustomer attempts to lookup a customer by the organization ID which is set in both the
 // name field attribute as well as in the object metadata field
 func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *OrganizationCustomer) (*OrganizationCustomer, error) {
+	log.Debug().Str("organization_id", o.OrganizationID).Msg("searching for customer")
+
 	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", o.OrganizationID))
 	if err != nil {
 		return nil, err
@@ -77,15 +79,21 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 	switch len(customers) {
 	case 0:
+		log.Debug().Str("organization_id", o.OrganizationID).Msg("no customer found, creating")
+
 		customer, err := sc.CreateCustomer(o)
 		if err != nil {
 			return nil, err
 		}
 
+		log.Debug().Str("customer_id", customer.ID).Msg("customer created")
+
 		subs, err := sc.CreateTrialSubscription(customer.ID)
 		if err != nil {
 			return nil, err
 		}
+
+		log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subs.ID).Msg("trial subscription created")
 
 		o.StripeCustomerID = customer.ID
 		o.Subscription = *subs
@@ -104,10 +112,12 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 			// if we have features, break out of the loop
 			if len(feats) > 0 {
+				log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customer.ID).Msg("features found for customer")
+
 				break
 			}
 
-			log.Debug().Str("customer_id", customer.ID).Msg("no features found for customer, retrying")
+			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customer.ID).Msg("no features found for customer, retrying")
 
 			time.Sleep(time.Duration(i+1) * time.Second) // backoff retry
 		}
@@ -116,17 +126,37 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			log.Warn().Str("customer_id", customer.ID).Msg("no features found for customer")
 		}
 
-		log.Debug().Strs("features", feats).Str("customer_id", customer.ID).Msg("found features for customer")
+		log.Debug().Str("organization_id", o.OrganizationID).Strs("features", feats).Str("customer_id", customer.ID).Msg("found features for customer")
 
 		o.Features = feats
 		o.FeatureNames = featNames
 
 		return o, nil
 	case 1:
+		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("customer found, not creating a new one")
 		o.StripeCustomerID = customers[0].ID
+
+		feats, featNames, err := sc.retrieveActiveEntitlements(customers[0].ID)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(feats) > 0 {
+			// if we have feats, lets update the customer object in case things have changed or we missed something
+			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Strs("features", feats).Msg("found features for customer")
+			o.Features = feats
+		}
+
+		if len(featNames) > 0 {
+			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Strs("features_names", featNames).Msg("found features for customer")
+
+			o.FeatureNames = featNames
+		}
 
 		return o, nil
 	default:
+		log.Error().Err(ErrFoundMultipleCustomers).Str("organization_id", o.OrganizationID).Interface("customers", customers).Msg("found multiple customers, skipping all updates")
+
 		return nil, ErrFoundMultipleCustomers
 	}
 }
