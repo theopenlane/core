@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"entgo.io/contrib/entgql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
@@ -39,8 +38,6 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 		Edges:      []*model.AuditLogEdge{},
 		TotalCount: count,
 	}
-
-	log.Warn().Msgf("audit logs: %d", count)
 
 	for i, auditLog := range auditLogs {
 		// skip the header

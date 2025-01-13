@@ -72,7 +72,7 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, er
 	}
 
 	if strings.Contains(queryType, "History") {
-		log.Warn().Msg("adding relation to list request")
+		log.Debug().Msg("adding history relation to list request")
 
 		req.Relation = fgax.CanViewAuditLog
 	}
