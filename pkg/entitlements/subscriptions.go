@@ -149,16 +149,18 @@ func (sc *StripeClient) retrieveActiveEntitlements(customerID string) ([]string,
 
 	iter := sc.Client.EntitlementsActiveEntitlements.List(params)
 
-	if !iter.Next() {
-		return nil, nil, iter.Err()
-	}
-
 	feat := []string{}
 	featNames := []string{}
 
 	for iter.Next() {
 		feat = append(feat, iter.EntitlementsActiveEntitlement().LookupKey)
 		featNames = append(featNames, iter.EntitlementsActiveEntitlement().Feature.Name)
+	}
+
+	if iter.Err() != nil {
+		log.Err(iter.Err()).Msg("failed to find active entitlements")
+
+		return nil, nil, iter.Err()
 	}
 
 	return feat, featNames, nil
